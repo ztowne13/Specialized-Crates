@@ -1,0 +1,94 @@
+Diamond:
+  name: 'Diamond'
+  commands:
+    - give {name} minecraft:diamond 1
+  item: DIAMOND;0
+  glow: true
+  chance: 10
+  rarity: rare
+  receive-limit: -1
+Dirt:
+  name: 'Dirt'
+  commands:
+    - give {name} minecraft:dirt 1
+  item: DIRT;0
+  glow: true
+  chance: 20
+  rarity: common
+  receive-limit: -1
+DiamondSword:
+  name: 'Diamond Sword'
+  enchantments:
+    - DURABILITY;10
+    - DAMAGE_ALL;5
+    - FIRE_ASPECT;2
+  commands:
+    - give {name} minecraft:diamond_sword 1
+  item: DIAMOND_SWORD;0
+  chance: 3
+  rarity: legendary
+  receive-limit: -1
+Speed:
+  name: 'Speed'
+  commands:
+    - effect {name} 1 60 1
+    - give {name} minecraft:milk 1
+  item: POTION
+  nbt-tags:
+    - 'swiftness'
+  chance: 5
+  rarity: legendary
+  receive-limit: 1
+GODApple:
+  name: 'Super Golden Apple'
+  commands:
+    - give {name} minecraft:GOLDEN_APPLE 1
+  item: GOLDEN_APPLE;1
+  chance: 7
+  rarity: legendary
+  receive-limit: 5
+GoldenApple:
+  name: 'Golden Apple'
+  commands:
+    - give {name} minecraft:golden_apple 0
+  item: GOLDEN_APPLE;0
+  chance: 10
+  rarity: legendary
+  receive-limit: -1
+Grass:
+  name: 'Grass'
+  commands:
+    - give {name} minecraft:grass -
+  item: GRASS;0
+  glow: true
+  chance: 20
+  rarity: common
+  receive-limit: -1
+SpecialDirt:
+  name: 'Special Dirt'
+  commands:
+    - give {name} minecraft:dirt 1
+  item: DIRT;1
+  chance: 15
+  rarity: uncommon
+  receive-limit: 1
+Jump:
+  name: 'Jump Potion'
+  commands:
+    - effect {name} 8 60 1
+    - give {name} minecraft:milk_bucket 1
+  item: POTION
+  nbt-tags:
+    - 'leaping'
+  chance: 7
+  rarity: rare
+  receive-limit: 1
+SpecialDirt2:
+  name: 'More Special Dirt'
+  commands:
+    - give {name} minecraft:dirt 2
+  item: DIRT;2
+  chance: 10
+  rarity: rare
+  receive-limit: -1
+  

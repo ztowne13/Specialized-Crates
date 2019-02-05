@@ -1,0 +1,13 @@
+name: SpecializedCrates
+author: Ztowne13
+version: 2.8.3.0
+main: me.ztowne13.customcrates.CustomCrates
+description: A 100% customizable crate plugin for your server.
+softdepend: [HolographicDisplays,IndividualHolograms,Holograms,Citizens]
+commands:
+  scrates:
+    description: All commands for the specialized crates plugin.
+    aliases: [ccrates,crates,specializedcrates,sc]
+  keys:
+    description: See how many virtual keys you have for your crates.
+    aliases: [skeys,cratekey,cratekeys]

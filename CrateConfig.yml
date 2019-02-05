@@ -1,0 +1,61 @@
+CrateType:
+  Inventory:
+    Roulette:
+      inv-name: '&8&l> &6&l%crate%'
+      tick-sound: BLOCK_IRON_DOOR_CLOSE, 5, 5
+      tile-update-ticks: 2
+      tick-speed-per-run: 3
+      final-crate-tick-length: 11
+      random-blocks:
+        - STAINED_GLASS_PANE;1
+        - STAINED_GLASS_PANE;2
+        - STAINED_GLASS_PANE;3
+        - STAINED_GLASS_PANE;4
+        - STAINED_GLASS_PANE;5
+        - STAINED_GLASS_PANE;6
+        - STAINED_GLASS_PANE;7
+        - STAINED_GLASS_PANE;8
+        - STAINED_GLASS_PANE;9
+    CSGO:
+      inv-name: '&8&l> &6&l%crate%'
+      tick-sound: BLOCK_CHEST_LOCKED, 5, 5
+      identifier-block: REDSTONE_TORCH_ON;0
+      tick-speed-per-run: 3
+      final-crate-tick-length: 11
+      tile-update-ticks: 2
+      close-speed: 3
+      filler-blocks:
+        - STAINED_GLASS_PANE;1
+        - STAINED_GLASS_PANE;2
+        - STAINED_GLASS_PANE;3
+        - STAINED_GLASS_PANE;4
+        - STAINED_GLASS_PANE;5
+        - STAINED_GLASS_PANE;6
+        - STAINED_GLASS_PANE;7
+        - STAINED_GLASS_PANE;8
+        - STAINED_GLASS_PANE;9
+    Menu:
+      inv-name: '&8&l> &6&l%crate%'
+      inventory-rows: 3
+      minimum-rewards: 1
+      maximum-rewards: 8
+    Enclose:
+      inv-name: '&8&l> &6&l%crate%'
+      tick-sound: ENTITY_PLAYER_LEVELUP, 5, 5
+      fill-block: STAINED_GLASS_PANE;2
+      reward-amount: 1
+      update-speed: 2
+      inventory-rows: 2
+    Discover:
+      inv-name: '&8&l> &6&l%crate%'
+      tick-sound: ENTITY_ITEM_PICKUP, 3, 10
+      click-sound: BLOCK_TRIPWIRE_CLICK_ON, 5, 5
+      uncover-sound: ENTITY_PLAYER_LEVELUP, 5, 5
+      inventory-rows: 3
+      minimum-rewards: 1
+      maximum-rewards: 4
+      count: true
+      random-display-duration: 50
+      cover-block: CHEST;0
+
+      

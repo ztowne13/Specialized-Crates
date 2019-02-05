@@ -1,0 +1,142 @@
+enabled: true
+cooldown: -1
+permission: crates.expertcrate
+inventory-name: '&5&lExpert Crate'
+auto-close: true
+hologram offset: .1
+
+obtain-method: STATIC
+
+display:
+  type: mob
+  creature: Zombie
+
+crate:
+  material: Ender_chest;0
+  name: '&5&lExpert Crate'
+  enchantment: DURABILITY;0
+  lore:
+    - ''
+    - '&5&lCrate&e&l:'
+    - ''
+    - '&7This crate will be used'
+    - '&7when you place it.'
+
+key:
+  require: true
+  material: TRIPWIRE_HOOK
+  enchantment: DURABILITY;0
+  name: '&5&lExpert Crate Key'
+  lore:
+    - ''
+    - '&5&lKey&e&l:'
+    - ''
+    - '&7This key is only usable'
+    - '&7on the &eMaster Crate&7.'
+
+rewards:
+  - Diamond
+  - Dirt
+  - DiamondSword
+  - Speed
+  - GODApple
+  - GoldenApple
+  - Grass
+  - SpecialDirt
+  - Jump
+  - SpecialDirt2
+
+hologram:
+  reward-hologram: '&a[&e%reward%&a]'
+  lines:
+    - ''
+  animation:
+    type: SINGLELINE_CHANGE
+    speed: 10
+    prefixes:
+      - '&6&lE'
+      - '&6&lEx'
+      - '&6&lExp'
+      - '&6&lExpe'
+      - '&6&lExper'
+      - '&6&lExpert'
+      - '&6&lExpert &e&lC'
+      - '&6&lExpert &e&lCr'
+      - '&6&lExpert &e&lCra'
+      - '&6&lExpert &e&lCrat'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrate'
+      - '&6&lExpert &e&lCrat'
+      - '&6&lExpert &e&lCra'
+      - '&6&lExpert &e&lCr'
+      - '&6&lExpert &e&lC'
+      - '&6&lExpert'
+      - '&6&lExper'
+      - '&6&lExpe'
+      - '&6&lExp'
+      - '&6&lEx'
+      - '&6&lE'
+      - ''
+play:
+  particles:
+    - 'PORTAL, 2, 2, 2, 0, 20'
+    - 'FLAME, 0, 0, 0, .05, 1'
+    - SMOKE_NORMAL, 1.0, 0.0, 0.0, 20.0, 3, TILTED_RINGS
+
+open:
+  crate-animation: INV_ENCLOSE
+
+  particles:
+    - 'SUSPENDED_DEPTH, 3, 2, 3, 1, 30'
+    - 'CRIT_MAGIC, 3, 2, 3, 1, 10'
+    - 'EXPLOSION_HUGE, 0, 0, 0, 1, 1'
+  fireworks:
+    - BLUE;AQUA, WHITE;YELLOW;ORANGE, false, true, STAR, 0
+
+  sounds:
+    - ENTITY_PLAYER_LEVELUP, 10, 10
+
+  actions:
+    - 'MESSAGE, &7&lCrates &3&l> &eYou won %reward%'
+    - 'BROADCAST, &7&lCrates &3&l> &e&l%player% just unboxed a case!'
+    - 'ACTIONBAR, &eYou have won an award!'
+    - 'TITLE, &6You just opened'
+    - 'SUBTITLE, &c%reward%'
+    - 'PRE_BROADCAST, &7&lCrates &3&l> &e&l%player% is unboxing a case!'
+
+  crate-tiers:
+    rare:
+      actions:
+        - 'MESSAGE, &7&lCrates &3&l> &eYou won %reward%'
+        - 'BROADCAST, &aCrates &3&l> &e&l%player% just won a &eRARE &eitem.'
+      particles:
+        - 'SPELL_WITCH, 3, 3, 3, .01, 100'
+        - 'FLAME, 3, 3, 3, .05, 50'
+      sounds:
+        - ENTITY_ENDERDRAGON_GROWL, 1, 5
+        - AMBIENT_CAVE, 1, 5
+    legendary:
+      actions:
+        - 'MESSAGE, &7&lCrates &3&l> &eYou won %reward%'
+        - 'BROADCAST, &aCrates &3&l> &e&l%player% just won a &eLEGENDARY &eitem.'
+      particles:
+        - 'SPELL_WITCH, 3, 3, 3, .01, 100'
+        - 'FLAME, 3, 3, 3, .05, 50'
+      sounds:
+        - ENTITY_ENDERDRAGON_GROWL, 1, 5
+        - AMBIENT_CAVE, 1, 5
+      fireworks:
+        - BLACK, WHITE, false, true, STAR, 1

@@ -1,0 +1,46 @@
+enabled: true
+cooldown: 10
+inventory-name: '&b&lMULTI&7Crate'
+permission: multicrates.allcrates
+hologram-offset: .2
+
+obtain-method: STATIC
+
+display:
+  type: block
+
+crate:
+  material: Ender_chest;0
+  name: '&5&lMulti Crate'
+  enchantment: DURABILITY;0
+  lore:
+    - ''
+    - '&5&lCrates&e&l:'
+    - '&7BeginnerCrate'
+    - '&7MediumCrate'
+    - '&7MasterCrate'
+
+gui:
+  rows:
+    - '#########'
+    - '#1##2##3#'
+    - '#########'
+  objects:
+    '#': AIR;0
+    '1': BeginnerCrate
+    '2': MiddleCrate
+    '3': MasterCrate
+
+hologram:
+  lines:
+    - '&a&lMulti Crate'
+    - '&4&l---'
+    - '&e&oBeginnerCrate'
+    - '&e&oMiddleCrate'
+    - '&e&oMasterCrate'
+
+play:
+  particles:
+    - 'FLAME, .7, .7, .7, .05, 1'
+    - 'VILLAGER_ANGRY, .7, .7, .7, .05, 1'
+    - 'PORTAL, .5, .5, .5, 1, 2'

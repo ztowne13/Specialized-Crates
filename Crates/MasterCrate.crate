@@ -1,0 +1,103 @@
+enabled: true
+obtain-method: STATIC
+inventory-name: '&5&l> &dMaster Crate &5&l<'
+
+display:
+  type: block
+
+crate:
+  material: Chest;0
+  name: '&5&l> &dMaster Crate &5&l<'
+  enchantment: DURABILITY;0
+  lore:
+    - ''
+    - '&5&lCrate&e&l:'
+    - ''
+    - '&7This crate will be used'
+    - '&7when you place it.'
+
+key:
+  require: true
+  material: TRIPWIRE_HOOK
+  enchantment: DURABILITY;0
+  name: '&5&l> &dMaster Crate Key &5&l<'
+  lore:
+    - ''
+    - '&5&lKey&e&l:'
+    - ''
+    - '&7This key is only usable'
+    - '&7on the &eMaster Crate&7.'
+
+rewards:
+  - Diamond
+  - Dirt
+  - DiamondSword
+  - Speed
+  - GODApple
+  - GoldenApple
+  - Grass
+  - SpecialDirt
+  - Jump
+  - SpecialDirt2
+
+hologram:
+  reward-hologram: '&a+ &c%reward% &a+'
+  lines:
+    - '&5&l> &dMaster Crate &5&l<'
+    - '&c--'
+    - '&e&oBuy me on store.website.com'
+
+play:
+  particles:
+    - 'FLAME, .7, .7, .7, .05, 1'
+    - 'SMOKE_NORMAL, 1.0, 0, 0, 0, 1, TILTED_RINGS'
+    
+open:
+  crate-animation: INV_ROULETTE
+  
+  tier-actions-override-defaults: true
+    
+  particles:
+    - 'SUSPENDED_DEPTH, 3, 2, 3, 1, 30'
+    - 'CRIT_MAGIC, 3, 2, 3, 1, 10'
+    - 'EXPLOSION_HUGE, 0, 0, 0, 1, 1'
+  
+  fireworks:
+    - BLUE;AQUA, WHITE;YELLOW;ORANGE, false, true, STAR, 1
+      
+  sounds:
+    - ENTITY_PLAYER_LEVELUP, 10, 10
+      
+  actions:
+    - 'MESSAGE, &7&lCrates &3&l> &eYou won %reward%'
+    - 'BROADCAST, &7&lCrates &3&l> &e&l%player% just unboxed a case!'
+    - 'ACTIONBAR, &eYou have won an award!'
+    - 'TITLE, &6You just opened'
+    - 'SUBTITLE, &c%reward%'
+    - 'PRE_BROADCAST, &6&l%player% &7is unboxing a &cMaster Crate!'
+    
+      
+  crate-tiers:
+    rare:
+      actions:
+        - 'MESSAGE, &7&lCrates &3&l> &eYou won %reward%'
+        - 'BROADCAST, &aCrates &3&l> &e&l%player% just won a &eRARE &eitem.'
+      particles:
+        - 'SPELL_WITCH, 3, 3, 3, .01, 100'
+        - 'FLAME, 3, 3, 3, .05, 50'
+      sounds:
+        - ENTITY_ENDERDRAGON_GROWL, 1, 5
+        - AMBIENT_CAVE, 1, 5
+        
+    legendary:
+      actions:
+        - 'MESSAGE, &7&lCrates &3&l> &eYou won %reward%'
+        - 'BROADCAST, &aCrates &3&l> &e&l%player% just won a &eLEGENDARY &eitem.'
+      particles:
+        - 'SPELL_WITCH, 3, 3, 3, .01, 100'
+        - 'FLAME, 3, 3, 3, .05, 50'
+      sounds:
+        - ENTITY_ENDERDRAGON_GROWL, 1, 5
+        - AMBIENT_CAVE, 1, 5
+      fireworks:
+        - BLACK, WHITE, false, true, STAR, 1

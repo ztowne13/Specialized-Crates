@@ -1,0 +1,41 @@
+enabled: true
+obtain-method: STATIC
+cooldown: 300
+
+display:
+  type: block
+
+crate:
+  material: Chest;0
+  name: '&c&lBeginner Crate &7[&eTier 2&7]'
+
+key:
+  require: true
+  material: TRIPWIRE_HOOK
+  name: '&c&lBeginner Key &7[&eTier 2&7]'
+
+rewards:
+  - Diamond
+  - Dirt
+
+hologram:
+  lines:
+    - '&6&lBeginner Crate'
+    - '&eTier: &72'
+
+play:
+  particles:
+    - 'CRIT, .2, 0, .2, .05, 1'
+    - 'SMOKE_NORMAL, 1, 1, 1, .01, 1'
+open:
+  crate-animation: INV_MENU
+
+  tier-actions-override-defaults: false
+    
+  particles:
+    - 'VILLAGER_HAPPY, 1, 1, 1, 1, 10'
+    - 'CLOUD, 1, 1, 1, 1, 10'
+      
+  actions:
+    - 'MESSAGE, &7&lCrates &3&l> &eYou won %reward%'
+    - 'BROADCAST, &7&lCrates &3&l> &e&l%player% just unboxed a case!'

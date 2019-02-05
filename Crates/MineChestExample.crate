@@ -1,0 +1,56 @@
+enabled: false
+obtain-method: LUCKYCHEST
+inventory-name: '&7&lCrate &3&l>> &eMine Chest'
+
+lucky-chest:
+  chance: 1/100
+  is-block-list-whitelist: true
+  block-list:
+    - IRON_ORE
+    - GOLD_ORE
+    - DIAMOND_ORE
+    - COAL_ORE
+    - EMERALD_ORE
+  worlds:
+    - world
+    - world_nether
+    - world_the_end
+
+display:
+  type: block
+
+crate:
+  material: Chest;0
+  name: '&7&lCrate &3&l>> &eMine Chest'
+
+key:
+  require: false
+  material: TRIPWIRE_HOOK
+  name: '&7&lKey &3&l>> &eMine Chest'
+
+rewards:
+  - Diamond
+  - Dirt
+
+hologram:
+  lines:
+    - '&6&l[&bMine Chest&6&l]'
+    - '&eTier: &72'
+
+play:
+  particles:
+    - 'CRIT, 1, 1, 1, .05, 1'
+    - 'SMOKE_NORMAL, 0, .2, 0, .01, 1'
+
+open:
+  crate-animation: INV_CSGO
+
+  tier-actions-override-defaults: false
+    
+  particles:
+    - VILLAGER_HAPPY, 1, 1, 1, 1, 10
+    - HEART, 1, 1, 1, 1, 10
+      
+  actions:
+    - 'MESSAGE, &7&lCrates &3&l> &eYou won %reward%'
+    - 'BROADCAST, &7&lCrates &3&l> &e&l%player% just unboxed a case!'
