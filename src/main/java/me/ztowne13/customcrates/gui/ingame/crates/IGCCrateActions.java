@@ -62,11 +62,11 @@ public class IGCCrateActions extends IGCTierMenu
 		ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 		if (!deleteMode)
 		{
-			getIb().setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&aEnable 'delete' mode").setLore("&7By enabling 'delete' mode").addLore("&7you can just click on rewards").addLore("&7to remove "));
+			getIb().setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&aEnable 'delete' mode").setLore("&7By enabling 'delete' mode").addLore("&7you can just click on actions").addLore("&7to remove "));
 		}
 		else
 		{
-			getIb().setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&cDisable 'delete' mode").setLore("&7This will stop you from").addLore("&7removing rewards"));
+			getIb().setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&cDisable 'delete' mode").setLore("&7This will stop you from").addLore("&7removing actions"));
 		}
 		ib.setItem(17, new ItemBuilder(Material.PAPER, 1, 0).setName("&aAdd a new action"));
 
