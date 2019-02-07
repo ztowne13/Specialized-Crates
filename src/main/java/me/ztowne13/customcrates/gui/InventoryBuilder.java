@@ -8,14 +8,20 @@ import org.bukkit.inventory.ItemStack;
 
 public class InventoryBuilder 
 {
-
 	Inventory inv;
 	Player p;
+	int minimumSlots = 0;
+
 	public InventoryBuilder(Player p, int slots, String invName)
 	{
 		super();
 		this.p = p;
 		setInv(Bukkit.createInventory(p, slots, ChatColor.translateAlternateColorCodes('&', invName)));
+	}
+
+	public InventoryBuilder(Player p, int slots, String invName, int minimumSlots) {
+		this(p, slots, invName);
+		this.minimumSlots = minimumSlots;
 	}
 	
 	public void setItem(int slot, ItemStack stack)
