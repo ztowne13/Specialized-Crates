@@ -2,11 +2,14 @@ package me.ztowne13.customcrates.crates.options.actions;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.SettingsValues;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.entity.Player;
 
 /**
- * Created by ztown on 2/14/2017.
+ * Created by ztowne13 on 2/14/2017.
  */
+@Deprecated
 public class BukkitActionEffect extends ActionEffect
 {
     String title, subtitle;
@@ -26,7 +29,7 @@ public class BukkitActionEffect extends ActionEffect
 
     public void playTitle(Player p)
     {
-        p.sendTitle(title, subtitle, fadeIn*20, stay*20, fadeOut*20);
+        //p.sendTitle(title, subtitle, fadeIn*20, stay*20, fadeOut*20);
         resetData();
     }
 
