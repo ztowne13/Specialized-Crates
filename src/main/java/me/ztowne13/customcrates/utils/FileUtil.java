@@ -84,11 +84,10 @@ public class FileUtil
 			{
 				if (data.saveToString() != null && !data.saveToString().equalsIgnoreCase(""))
 				{
-
-					InputStream defConfigStream = getCc().getResource(getName());
-					if (defConfigStream != null)
+                    File defConfigFile = new File(getCc().getDataFolder(), getName());
+					if (defConfigFile.exists())
 					{
-						YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+						YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigFile);
 						getData().setDefaults(defConfig);
 					}
 
@@ -113,7 +112,7 @@ public class FileUtil
 		catch(Exception exc)
 		{
 			exc.printStackTrace();
-			ChatUtils.log(new String[]{"Failed to load the " + name + " file due to a critical fatal error. Please fix the file and restart your server."});
+			ChatUtils.log(new String[]{"Failed to load the " + name + " file due to a critical error. Please fix the file and restart your server."});
 			properLoad = false;
 		}
 	}
