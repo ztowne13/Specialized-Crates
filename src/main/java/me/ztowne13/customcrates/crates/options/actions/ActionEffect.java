@@ -22,6 +22,7 @@ public abstract class ActionEffect
 
     public void playActionBar(Player player, String msg)
     {
+        String serverVersion = NMSUtils.getServerVersion();
         try
         {
             Class c1 = Class.forName("org.bukkit.craftbukkit." + NMSUtils.getServerVersion() + ".entity.CraftPlayer");
@@ -32,16 +33,21 @@ public abstract class ActionEffect
 
             Object ppoc = null;
 
-            if (NMSUtils.getServerVersion().contains("v1_8") || NMSUtils.getServerVersion().contains("v1_7"))
+            if (serverVersion.contains("v1_8") || serverVersion.contains("v1_7"))
             {
                 Method m3 = NMSUtils.getNmsClass("IChatBaseComponent$ChatSerializer").getDeclaredMethod("a", new Class[] { String.class });
                 Object cbc = NMSUtils.getNmsClass("IChatBaseComponent").cast(m3.invoke(NMSUtils.getNmsClass("IChatBaseComponent$ChatSerializer"), new Object[] { "{\"text\": \"" + msg + "\"}" }));
                 ppoc = c4.getConstructor(new Class[] { NMSUtils.getNmsClass("IChatBaseComponent"), Byte.TYPE }).newInstance(new Object[] { cbc, (byte)2 });
             }
-            else
+            else if(serverVersion.contains("v1_9") || serverVersion.contains("v1_10") || serverVersion.contains("v1_11"))
             {
                 Object o = NMSUtils.getNmsClass("ChatComponentText").getConstructor(new Class[] { String.class }).newInstance(new Object[] { msg });
                 ppoc = c4.getConstructor(new Class[] { NMSUtils.getNmsClass("IChatBaseComponent"), Byte.TYPE }).newInstance(new Object[] { o, (byte)2 });
+            }
+            else
+            {
+                System.out.println("Too update: support for 1.12+!");
+                return;
             }
 
             Method m1 = c1.getDeclaredMethod("getHandle", new Class[0]);
