@@ -47,6 +47,12 @@ public abstract class IGCMenu
 		return ib;
 	}
 
+	public InventoryBuilder createDefault(int slots, int minSlots)
+	{
+		ib = new InventoryBuilder(p, slots, inventoryName, minSlots);
+		return ib;
+	}
+
 	public void up()
 	{
 		p.closeInventory();
