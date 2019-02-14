@@ -248,15 +248,7 @@ public class Reward
 	{
 		String[] split = getFc().getString(getPath("item")).split(";");
 
-		Material m;
-		if (Utils.isInt(split[0]))
-		{
-			m = Material.getMaterial(Integer.parseInt(split[0]));
-		}
-		else
-		{
-			m = Material.valueOf(split[0].toUpperCase());
-		}
+		Material m = Material.valueOf(split[0].toUpperCase());
 
 		int byt = getFc().getString(getPath("item")).contains(";") ? Integer.valueOf(split[1]) : 0;
 
