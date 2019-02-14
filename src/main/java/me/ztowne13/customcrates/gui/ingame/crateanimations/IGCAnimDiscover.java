@@ -2,6 +2,7 @@ package me.ztowne13.customcrates.gui.ingame.crateanimations;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.types.CrateType;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
@@ -47,7 +48,7 @@ public class IGCAnimDiscover extends IGCAnimation
 		{
 
 		}
-		ib.setItem(20, new ItemBuilder(Material.WOOL , 1, b ? 5 : 14).setName("&acount").setLore(getcVal() + b).addLore("").addLore("&7Do the 'cover-block's display numbers?"));
+		ib.setItem(20, new ItemBuilder(b ? DynamicMaterial.LIME_WOOL : DynamicMaterial.RED_WOOL, 1).setName("&acount").setLore(getcVal() + b).addLore("").addLore("&7Do the 'cover-block's display numbers?"));
 		ib.setItem(21, new ItemBuilder(Material.ENDER_CHEST , 1, 0).setName("&acover-block").setLore(getcVal() + getString("cover-block")));
 
 		ib.setItem(23, new ItemBuilder(Material.NOTE_BLOCK , 1, 0).setName("&atick-sound").setLore(getcVal() + getString("tick-sound")));
@@ -83,7 +84,7 @@ public class IGCAnimDiscover extends IGCAnimation
 			case 20:
 				boolean b = !Boolean.valueOf(getString("count"));
 				fc.set(getPath("count"), b);
-				getIb().setItem(20, new ItemBuilder(Material.WOOL , 1, b ? 5 : 14).setName("&acount").setLore(getcVal() + b).addLore("").addLore("&7Do the 'cover-block's display numbers?"));
+				getIb().setItem(20, new ItemBuilder(b ? DynamicMaterial.LIME_WOOL : DynamicMaterial.RED_WOOL, 1).setName("&acount").setLore(getcVal() + b).addLore("").addLore("&7Do the 'cover-block's display numbers?"));
 				break;
 			case 21:
 				new InputMenu(getCc(), getP(), "cover-block", getString("cover-block"), "Formatted: MATERIAL;DURABILITY", String.class, this);

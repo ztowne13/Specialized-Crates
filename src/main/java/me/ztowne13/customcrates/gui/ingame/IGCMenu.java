@@ -5,6 +5,7 @@ import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import org.bukkit.entity.Player;
 
 /**

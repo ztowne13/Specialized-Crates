@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.gui.ingame.crates;
 
 import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
@@ -57,16 +58,16 @@ public class IGCCrateActions extends IGCTierMenu
 			}
 		}
 
-		InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4, count) + 9);
+		InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4, count) + 9, 18);
 
 		ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 		if (!deleteMode)
 		{
-			getIb().setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&aEnable 'delete' mode").setLore("&7By enabling 'delete' mode").addLore("&7you can just click on actions").addLore("&7to remove "));
+			getIb().setItem(8, new ItemBuilder(DynamicMaterial.fromString("CARPET").parseMaterial(), 1, 14).setName("&aEnable 'delete' mode").setLore("&7By enabling 'delete' mode").addLore("&7you can just click on actions").addLore("&7to remove "));
 		}
 		else
 		{
-			getIb().setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&cDisable 'delete' mode").setLore("&7This will stop you from").addLore("&7removing actions"));
+			getIb().setItem(8, new ItemBuilder(DynamicMaterial.fromString("CARPET").parseMaterial(), 1, 14).setName("&cDisable 'delete' mode").setLore("&7This will stop you from").addLore("&7removing actions"));
 		}
 		ib.setItem(17, new ItemBuilder(Material.PAPER, 1, 0).setName("&aAdd a new action"));
 
@@ -103,11 +104,11 @@ public class IGCCrateActions extends IGCTierMenu
 			deleteMode = !deleteMode;
 			if (!deleteMode)
 			{
-				getIb().setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&aEnable 'delete' mode").setLore("&7By enabling 'delete' mode").addLore("&7you can just click on rewards").addLore("&7to remove "));
+				getIb().setItem(8, new ItemBuilder(DynamicMaterial.fromString("CARPET").parseMaterial(), 1, 14).setName("&aEnable 'delete' mode").setLore("&7By enabling 'delete' mode").addLore("&7you can just click on rewards").addLore("&7to remove "));
 			}
 			else
 			{
-				getIb().setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&cDisable 'delete' mode").setLore("&7This will stop you from").addLore("&7removing rewards"));
+				getIb().setItem(8, new ItemBuilder(DynamicMaterial.fromString("CARPET").parseMaterial(), 1, 14).setName("&cDisable 'delete' mode").setLore("&7This will stop you from").addLore("&7removing rewards"));
 			}
 		}
 		else if(slot == 17)

@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.gui.ingame;
 
 import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.Settings;
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
@@ -9,8 +10,6 @@ import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.InventoryUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -33,8 +32,8 @@ public class IGCMenuConfig extends IGCMenu
 	{
 		super(cc, p, lastMenu, "&7&l> &6&lConfig.YML");
 
-		red = new ItemBuilder(Material.WOOL, 1, 14);
-		green = new ItemBuilder(Material.WOOL, 1, 5);
+		red = new ItemBuilder(DynamicMaterial.WOOL.toMaterial(), 1, 14);
+		green = new ItemBuilder(DynamicMaterial.WOOL.toMaterial(), 1, 5);
 	}
 
 	@Override
@@ -92,7 +91,7 @@ public class IGCMenuConfig extends IGCMenu
 			else
 			{
 				boolean canBeUsed = !(map.get(sv) instanceof Collection);
-				ItemBuilder newBuilder = new ItemBuilder(Material.WOOL, 1, canBeUsed ? 1 : 8).setName((canBeUsed ? "&a" : "&c") + sv).setLore(canBeUsed ? "&e&oCurrent value: " + map.get(sv) : "&cThis value cannot currently be edited in game").addLore("");
+				ItemBuilder newBuilder = new ItemBuilder(DynamicMaterial.WOOL.toMaterial(), 1, canBeUsed ? 1 : 8).setName((canBeUsed ? "&a" : "&c") + sv).setLore(canBeUsed ? "&e&oCurrent value: " + map.get(sv) : "&cThis value cannot currently be edited in game").addLore("");
 				for(String lore : SettingsValues.getByPath(sv).getDescriptor())
 				{
 					newBuilder.addLore("&7" + lore);
@@ -122,7 +121,7 @@ public class IGCMenuConfig extends IGCMenu
 			getCc().getSettings().getConfigValues().put(sv.getPath(), newBuilder.getStack().getDurability() == 5);
 			open();
 		}
-		else if(inv.getItem(slot).getType().equals(Material.WOOL))
+		else if(inv.getItem(slot).getType().equals(DynamicMaterial.WOOL.toMaterial()))
 		{
 			ItemStack item = inv.getItem(slot);
 			SettingsValues sv = SettingsValues.getByPath(new ItemBuilder(item).getName(true));

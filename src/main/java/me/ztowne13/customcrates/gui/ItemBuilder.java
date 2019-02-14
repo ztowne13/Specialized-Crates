@@ -26,12 +26,18 @@ public class ItemBuilder
 
 	public ItemBuilder(Material m, int amnt, int byt)
 	{
-		create(m, amnt, byt);
+		create(DynamicMaterial.requestXMaterial(m.name(), (byte) byt), amnt);
 	}
 
-	public void create(Material m, int amnt, int byt)
+	public ItemBuilder(DynamicMaterial m, int amnt)
 	{
-		stack = new ItemStack(m, amnt, (byte)byt);
+		create(m, amnt);
+	}
+
+	public void create(DynamicMaterial m, int amnt)
+	{
+		stack = m.parseItem();
+		stack.setAmount(amnt);
 	}
 	
 	public ItemMeta im()

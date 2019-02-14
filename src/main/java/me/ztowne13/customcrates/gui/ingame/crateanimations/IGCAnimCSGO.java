@@ -2,6 +2,7 @@ package me.ztowne13.customcrates.gui.ingame.crateanimations;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.types.CrateType;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
@@ -60,7 +61,7 @@ public class IGCAnimCSGO extends IGCAnimation
 		ib.setItem(15, new ItemBuilder(Material.PAPER, 1, 0).setName("&atile-update-ticks").addLore(getcVal() + getString("tile-update-ticks")));
 		ib.setItem(16, new ItemBuilder(Material.PAPER, 1, 0).setName("&aclose-speed").addLore(getcVal() + getString("close-speed")));
 		ib.setItem(20, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&atick-sound").addLore(getcVal() + getString("tick-sound")));
-		ib.setItem(21, new ItemBuilder(Material.REDSTONE_TORCH_ON, 1, 0).setName("&aidentifier-block").addLore(getcVal() + getString("identifier-block")));
+		ib.setItem(21, new ItemBuilder(DynamicMaterial.REDSTONE_TORCH, 1).setName("&aidentifier-block").addLore(getcVal() + getString("identifier-block")));
 
 		ItemBuilder fillerBlocks = new ItemBuilder(Material.ENDER_CHEST, 1, 0).setName("&aAdd new filler-blocks").setLore("&7Current values: ");
 		for(String s: fc.getStringList(getPath("filler-blocks")))

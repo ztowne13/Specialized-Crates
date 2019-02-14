@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.crates.types.animations;
 
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
@@ -127,7 +128,7 @@ public class InvDiscover extends InventoryCrate
 		{
 			case 1:
 				ItemBuilder uncoverBlockIb = new ItemBuilder(uncoverBlock).setLore("").addLore("&7You have &f" + ddh.getRemainingClicks() + " rewards to chose from.");
-				ItemBuilder alreadyUncoveredIb = new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 5).setName("&aUncover all rewards to unlock");
+				ItemBuilder alreadyUncoveredIb = new ItemBuilder(DynamicMaterial.LIME_STAINED_GLASS_PANE, 1).setName("&aUncover all rewards to unlock");
 				for(int i = 0; i < ib.getInv().getSize(); i++)
 				{
 					if(ddh.getAlreadyChosenSlots().contains(i))
@@ -149,7 +150,7 @@ public class InvDiscover extends InventoryCrate
 				correctDisplay = true;
 			case 2:
 				ib.getInv().clear();
-				ItemBuilder reward = new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 5).setName("&Reward");
+				ItemBuilder reward = new ItemBuilder(DynamicMaterial.LIME_STAINED_GLASS_PANE, 1).setName("&Reward");
 				Random r = new Random();
 				if(!correctDisplay)
 				{

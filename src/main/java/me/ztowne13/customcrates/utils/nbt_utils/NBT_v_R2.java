@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.utils.nbt_utils;
 
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import net.minecraft.server.v1_9_R2.NBTTagCompound;
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -22,7 +22,7 @@ public class NBT_v_R2
 			tagCompound = new NBTTagCompound();
 		}
 
-		if(item.getType().equals(Material.MONSTER_EGG))
+		if(item.getType().equals(DynamicMaterial.MONSTER_EGG.toMaterial()))
 		{
 			NBTTagCompound id = new NBTTagCompound();
 			id.setString("id", EntityType.valueOf(tag.toUpperCase()).getName());
@@ -44,7 +44,7 @@ public class NBT_v_R2
 		net.minecraft.server.v1_9_R2.ItemStack stack = CraftItemStack.asNMSCopy(item);
 		net.minecraft.server.v1_9_R2.NBTTagCompound tagCompound = stack.getTag();
 
-		if(item.getType().equals(Material.MONSTER_EGG))
+		if(item.getType().equals(DynamicMaterial.MONSTER_EGG.toMaterial()))
 		{
 			list.add(tagCompound.getCompound("EntityTag").getString("id"));
 		}

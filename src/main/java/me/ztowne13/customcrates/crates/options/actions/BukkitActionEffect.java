@@ -29,7 +29,7 @@ public class BukkitActionEffect extends ActionEffect
 
     public void playTitle(Player p)
     {
-        //p.sendTitle(title, subtitle, fadeIn*20, stay*20, fadeOut*20);
+        p.sendTitle(title, subtitle, fadeIn*20, stay*20, fadeOut*20);
         resetData();
     }
 

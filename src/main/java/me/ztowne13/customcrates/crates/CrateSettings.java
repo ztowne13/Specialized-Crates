@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.crates;
 
 import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.crates.options.*;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
@@ -13,16 +14,12 @@ import me.ztowne13.customcrates.utils.CrateUtils;
 import me.ztowne13.customcrates.utils.FileUtil;
 import me.ztowne13.customcrates.visuals.CrateDisplayType;
 import me.ztowne13.customcrates.visuals.DynamicCratePlaceholder;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
@@ -65,8 +62,8 @@ public class CrateSettings
 		this.name = crates.getName();
 		this.sl = new StatusLogger(cc);
 
-		crate = new ItemBuilder(Material.WOOL, 1, 14).setName("&4Please set me!").get();
-		key = new ItemBuilder(Material.REDSTONE_TORCH_ON, 1, 0).setName("&4Please set me!").get();
+		crate = new ItemBuilder(DynamicMaterial.RED_WOOL.parseMaterial(), 1, 14).setName("&4Please set me!").get();
+		key = new ItemBuilder(DynamicMaterial.REDSTONE_TORCH.parseMaterial(), 1, 0).setName("&4Please set me!").get();
 
 		this.fu = new FileUtil(cc, crates.getName() + (crates.isMultiCrate() ? ".multicrate" : ".crate"), "/Crates", true, true, newFile);
 		this.fc = fu.get();

@@ -46,7 +46,7 @@ public abstract class ActionEffect
             }
             else
             {
-                System.out.println("Too update: support for 1.12+!");
+                ChatUtils.log("Too update: support for 1.12+!");
                 return;
             }
 

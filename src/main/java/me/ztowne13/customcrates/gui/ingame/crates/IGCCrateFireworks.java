@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.gui.ingame.crates;
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.particles.FireworkData;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
@@ -35,14 +36,9 @@ public class IGCCrateFireworks extends IGCTierMenu
 
 		ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 		ib.setItem(17, new ItemBuilder(Material.PAPER, 1, 0).setName("&aAdd a new firework").setLore("&7Please hold the firework in").addLore("&7your hand. Type 'add' to").addLore("&7add a particle and 'done'").addLore("&7to finish editing and return").addLore("&7to this menu."));
-		if (!deleteMode)
-		{
-			getIb().setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&aEnable 'delete' mode").setLore("&7By enabling 'delete' mode").addLore("&7you can just click on fireworks").addLore("&7to remove them"));
-		}
-		else
-		{
-			getIb().setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&cDisable 'delete' mode").setLore("&7This will stop you from").addLore("&7removing fireworks"));
-		}
+
+		ItemBuilder deleteModeItem = new ItemBuilder(DynamicMaterial.RED_CARPET, 1);
+		updateDeleteModeItem();
 
 		if(cs.getCf().getFireworks().containsKey(tier))
 		{
@@ -72,14 +68,7 @@ public class IGCCrateFireworks extends IGCTierMenu
 		else if(slot == 8)
 		{
 			deleteMode = !deleteMode;
-			if (!deleteMode)
-			{
-				getIb().setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&aEnable 'delete' mode").setLore("&7By enabling 'delete' mode").addLore("&7you can just click on fireworks").addLore("&7to remove them"));
-			}
-			else
-			{
-				getIb().setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&cDisable 'delete' mode").setLore("&7This will stop you from").addLore("&7removing fireworks"));
-			}
+			updateDeleteModeItem();
 		}
 		else if(slot == 17)
 		{
@@ -124,5 +113,18 @@ public class IGCCrateFireworks extends IGCTierMenu
 			}
 		}
 		return false;
+	}
+
+	void updateDeleteModeItem()
+	{
+		ItemBuilder deleteModeItem = new ItemBuilder(DynamicMaterial.RED_CARPET, 1);
+		if (!deleteMode)
+		{
+			getIb().setItem(8, deleteModeItem.setName("&aEnable 'delete' mode").setLore("&7By enabling 'delete' mode").addLore("&7you can just click on fireworks").addLore("&7to remove them"));
+		}
+		else
+		{
+			getIb().setItem(8, deleteModeItem.setName("&cDisable 'delete' mode").setLore("&7This will stop you from").addLore("&7removing fireworks"));
+		}
 	}
 }

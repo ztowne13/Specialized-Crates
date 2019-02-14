@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.gui.ingame.rewards;
 
 import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
@@ -50,13 +51,13 @@ public class IGCMenuReward extends IGCMenu
 		getIb().setItem(0, IGCDefaultItems.SAVE_BUTTON.getIb().setName("&aSave the reward to file").setLore("&7Save your current changes"));
 		getIb().setItem(18, IGCDefaultItems.EXIT_BUTTON.getIb());
 
-		ib.setItem(4, new ItemBuilder(Material.INK_SACK, 1, 12).setName("&a" + r.getRewardName()));
-		ib.setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&cDelete this reward").setLore("&7You will have confirmation").addLore("&7before deleting."));
+		ib.setItem(4, new ItemBuilder(DynamicMaterial.INK_SAC.parseMaterial(), 1, 12).setName("&a" + r.getRewardName()));
+		ib.setItem(8, new ItemBuilder(DynamicMaterial.fromString("CARPET").parseMaterial(), 1, 14).setName("&cDelete this reward").setLore("&7You will have confirmation").addLore("&7before deleting."));
 
 		ib.setItem(10, new ItemBuilder(getMat(Material.PAPER, r.getDisplayName() == null), 1, getByt(0, r.getDisplayName() == null)).setLore("&7Current value: ").addLore("&f" + getName(r.getDisplayName())).setName("&aSet the display name."));
 
-		ItemBuilder commands = new ItemBuilder(getMat(Material.COMMAND, r.getCommands() == null || r.getCommands().isEmpty()), 1, getByt(0, r.getCommands() == null || r.getCommands().isEmpty())).setName("&aAdd a new command").setLore("&7Current value: ");
-		if(commands.getStack().getType() != Material.INK_SACK)
+		ItemBuilder commands = new ItemBuilder(getMat(DynamicMaterial.COMMAND_BLOCK.parseMaterial(), r.getCommands() == null || r.getCommands().isEmpty()), 1, getByt(0, r.getCommands() == null || r.getCommands().isEmpty())).setName("&aAdd a new command").setLore("&7Current value: ");
+		if(commands.getStack().getType() != DynamicMaterial.INK_SAC.parseMaterial())
 		{
 			for (String cmds : r.getCommands())
 			{
@@ -65,7 +66,7 @@ public class IGCMenuReward extends IGCMenu
 		}
 		ib.setItem(11, commands);
 		ib.setItem(12, commands.setName("&aRemove an existing command"));
-		ib.setItem(13, (r == null || r.getDisplayItem() == null ? new ItemBuilder(Material.INK_SACK, 1, 1) : new ItemBuilder(r.getDisplayItem())).setName("&aSet the display item.").setLore("&7By clicking this object you will").addLore("&7set the display item to your").addLore("&7item you are currently holding."));
+		ib.setItem(13, (r == null || r.getDisplayItem() == null ? new ItemBuilder(DynamicMaterial.INK_SAC.parseMaterial(), 1, 1) : new ItemBuilder(r.getDisplayItem())).setName("&aSet the display item.").setLore("&7By clicking this object you will").addLore("&7set the display item to your").addLore("&7item you are currently holding."));
 		ib.setItem(14, new ItemBuilder(getMat(Material.FISHING_ROD, r.getChance() == null), 1, getByt(0, r.getChance() == null)).setName("&aSet the chance").setLore("&7Current value: ").addLore("&f" + getName(r.getChance() + "")));
 		ib.setItem(15, new ItemBuilder(getMat(Material.DIAMOND_BLOCK, r.getRarity() == null), 1, getByt(0, r.getRarity() == null)).setName("&aSet the rarity level").setLore("&7Current value: ").addLore("&f" + getName(r.getRarity())));
 		ib.setItem(16, new ItemBuilder(getMat(Material.DARK_OAK_FENCE, false), 1, getByt(0, false)).setName("&cSet the receive-limit").setLore("&cThis value is currently non-usable."));
@@ -128,7 +129,7 @@ public class IGCMenuReward extends IGCMenu
 		else if(slot == 13)
 		{
 			ItemStack stack = getP().getItemInHand();
-			if(stack == null || stack.getTypeId() == 0)
+			if(stack == null || stack.getType() == DynamicMaterial.AIR.parseMaterial())
 			{
 				getIb().setItem(slot, new ItemBuilder(getIb().getInv().getItem(slot)).setName("&cNo item in hand"));
 				ChatUtils.msgError(getP(), "You do not have an item in your hand!");
@@ -280,7 +281,7 @@ public class IGCMenuReward extends IGCMenu
 
 	public Material getMat(Material m, boolean otherValueNull)
 	{
-		return r == null || otherValueNull ? Material.INK_SACK : m;
+		return r == null || otherValueNull ? DynamicMaterial.INK_SAC.parseMaterial() : m;
 	}
 
 	public int getByt(int byt, boolean otherValueNull)

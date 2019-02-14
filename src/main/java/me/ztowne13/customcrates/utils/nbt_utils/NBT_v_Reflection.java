@@ -1,8 +1,8 @@
 package me.ztowne13.customcrates.utils.nbt_utils;
 
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -74,7 +74,7 @@ public class NBT_v_Reflection
 			tagCompound = getNewNBTTagCompound();
 		}
 
-		if(item.getType().equals(Material.MONSTER_EGG))
+		if(item.getType().equals(DynamicMaterial.MONSTER_EGG.toMaterial()))
 		{
 			Object idNTC = getNewNBTTagCompound();
 			try
@@ -118,7 +118,7 @@ public class NBT_v_Reflection
 		Object stack = getNMSItemStack(item);
 		Object tagCompound = getNBTTagCompound(stack);
 
-		if(item.getType().equals(Material.MONSTER_EGG))
+		if(item.getType().equals(DynamicMaterial.MONSTER_EGG.toMaterial()))
 		{
 			try
 			{

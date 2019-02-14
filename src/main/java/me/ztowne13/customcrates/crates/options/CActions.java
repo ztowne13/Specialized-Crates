@@ -142,8 +142,8 @@ public class CActions extends CSetting
 
 	public void playAll(Player p, PlacedCrate placedCrate, ArrayList<Reward> rewards, boolean pre)
 	{
-		ActionEffect actionEffect = new NMSActionEffect(cc);
-		//ActionEffect actionEffect = NMSUtils.serverVersion111OrLater() ? new BukkitActionEffect(cc) : new NMSActionEffect(cc);
+		//ActionEffect actionEffect = new NMSActionEffect(cc);
+		ActionEffect actionEffect = NMSUtils.serverVersion111OrLater() ? new BukkitActionEffect(cc) : new NMSActionEffect(cc);
 		actionEffect.newTitle();
 		boolean toRunTitle = false;
 

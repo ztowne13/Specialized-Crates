@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.gui.ingame.rewards;
 
 import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
@@ -86,7 +87,7 @@ public class IGCMenuRewards extends IGCMenu
 
 			r.checkIsNeedMoreConfig();
 
-			ItemBuilder newR = new ItemBuilder(Material.INK_SACK, 1, r.isNeedsMoreConfig() ? 1 : 12).setName("&a" + rName).setLore(r.isNeedsMoreConfig() ? "&7This reward isn't fully configured" : "&7Click to edit.");
+			ItemBuilder newR = new ItemBuilder(DynamicMaterial.INK_SACK.toMaterial(), 1, r.isNeedsMoreConfig() ? 1 : 12).setName("&a" + rName).setLore(r.isNeedsMoreConfig() ? "&7This reward isn't fully configured" : "&7Click to edit.");
 			newR.addLore("").addLore("&7Used by crates:").addLore("");
 			for (String s : r.delete(false).replace("[", "").replace("]", "").split(", "))
 			{
@@ -140,7 +141,7 @@ public class IGCMenuRewards extends IGCMenu
 		{
 			up();
 		}
-		else if(!(getIb().getInv().getItem(slot) == null) && getIb().getInv().getItem(slot).getType().equals(Material.INK_SACK))
+		else if(!(getIb().getInv().getItem(slot) == null) && getIb().getInv().getItem(slot).getType().equals(DynamicMaterial.INK_SACK.toMaterial()))
 		{
 			String rName = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
 			getP().closeInventory();
