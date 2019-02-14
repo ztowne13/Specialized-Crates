@@ -257,15 +257,7 @@ public class CrateSettingsBuilder
 					String[] args = getFc().getString(("crate.material")).split(";");
 					cause = "The material '" + args[0] + "' does not exist.";
 
-					Material m;
-					if (Utils.isInt(args[0]))
-					{
-						m = Material.getMaterial(Integer.parseInt(args[0]));
-					}
-					else
-					{
-						m = Material.valueOf(args[0].toUpperCase());
-					}
+					Material m = Material.valueOf(args[0].toUpperCase());
 
 					cause = "NONE";
 					String name = ChatUtils.toChatColor(getFc().getString(("crate.name")));
@@ -336,15 +328,8 @@ public class CrateSettingsBuilder
 					String[] args = getFc().getString(("key.material")).split(";");
 					cause = "The material '" + args[0] + "' does not exist.";
 
-					Material m;
-					if(Utils.isInt(args[0]))
-					{
-						m = Material.getMaterial(Integer.parseInt(args[0]));
-					}
-					else
-					{
-						m = Material.valueOf(args[0].toUpperCase());
-					}
+					Material m = Material.valueOf(args[0].toUpperCase());
+
 					cause = "NONE";
 					String name = ChatUtils.toChatColor(getFc().getString(("key.name")));
 					ItemBuilder ib = new ItemBuilder(m, 1, args.length == 1 ? 0 : Integer.parseInt(args[1])).setName(name);
