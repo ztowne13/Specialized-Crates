@@ -2,6 +2,7 @@ package me.ztowne13.customcrates.gui.ingame.crates;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.Crate;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
@@ -33,7 +34,7 @@ public class IGCMultiCrateMain extends IGCMenuCrate
 		ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 		ib.setItem(2, new ItemBuilder(Material.PAPER, 1, 0).setName("&aEdit the current GUI").setLore("&7Put the actual crate items in").addLore("&7the inventory where you want them to").addLore("&7display and put normal blocks in the ").addLore("&7inventory where you want them to").addLore("&7also display."));
 		ib.setItem(4, new ItemBuilder(Material.BOOK, 1, 0).setName("&aEdit the amount of rows").setLore("&7Set the amount of rows").addLore("&7the inventory will have."));
-		ib.setItem(6, new ItemBuilder(Material.WOOL, 1, 14).setName("&aClear the inventory").setLore("&4&lWARNING: &cThis clears the entire").addLore("&cinventory."));
+		ib.setItem(6, new ItemBuilder(DynamicMaterial.RED_WOOL, 1).setName("&aClear the inventory").setLore("&4&lWARNING: &cThis clears the entire").addLore("&cinventory."));
 
 		getIb().open();
 	}

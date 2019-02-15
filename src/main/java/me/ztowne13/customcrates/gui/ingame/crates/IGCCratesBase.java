@@ -4,6 +4,7 @@ import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.crates.types.CrateType;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
@@ -20,40 +21,6 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
-/**
- * Created by ztowne13 on 3/25/16.
- *
- * enabled: true
- obtain-method: STATIC
- inventory-name: '&5&l> &dMaster Crate &5&l<'
-
- display:
- type: block
-
- crate:
- material: Chest;0
- name: '&5&l> &dMaster Crate &5&l<'
- enchantment: DURABILITY;0
- lore:
- - ''
- - '&5&lCrate&e&l:'
- - ''
- - '&7This crate will be used'
- - '&7when you place it.'
-
- key:
- require: true
- material: TRIPWIRE_HOOK
- enchantment: DURABILITY;0
- name: '&5&l> &dMaster Crate Key &5&l<'
- lore:
- - ''
- - '&5&lKey&e&l:'
- - ''
- - '&7This key is only usable'
- - '&7on the &eMaster Crate&7.'
-
- */
 public class IGCCratesBase extends IGCMenuCrate
 {
 	public IGCCratesBase(CustomCrates cc, Player p, IGCMenu lastMenu, Crate crates)
@@ -72,20 +39,20 @@ public class IGCCratesBase extends IGCMenuCrate
 		ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
 		//9-17 (11-15)
-		ib.setItem(9, new ItemBuilder(Material.WOOL, 1, crates.isEnabled() ? 5 : 14).setName(crates.isEnabled() ? "&aEnabled" : "&cDisabled").addLore("&7Click me to toggle the crate."));
+		ib.setItem(9, new ItemBuilder(crates.isEnabled() ? DynamicMaterial.LIME_WOOL : DynamicMaterial.RED_WOOL, 1).setName(crates.isEnabled() ? "&aEnabled" : "&cDisabled").addLore("&7Click me to toggle the crate."));
 		ib.setItem(2, new ItemBuilder(Material.BOOK, 1, 0).setName("&aSet the crate permission").setLore("&7Current value: ").addLore("&f" + cs.getPermission()));
 		ib.setItem(3, new ItemBuilder(Material.BUCKET, 1, 0).setName("&aSet the obtain-method").setLore("&7Current value: ").addLore("&f" + cs.getOt().name()));
 		ib.setItem(4, new ItemBuilder(Material.PAPER, 1, 0).setName("&aSet the inventory-name").setLore("&7Current value: ").addLore("&f" + cs.getCrateInventoryName()));
-		ib.setItem(8, new ItemBuilder(Material.WOOD_BUTTON, 1, 0).setName("&aSet the display.type").setLore("&7Current value: ").addLore("&f" + cs.getDcp()));
+		ib.setItem(8, new ItemBuilder(DynamicMaterial.BIRCH_BUTTON, 1).setName("&aSet the display.type").setLore("&7Current value: ").addLore("&f" + cs.getDcp()));
 
 		if(crates.getCs().getDcp().toString().equalsIgnoreCase("mob") || crates.getCs().getDcp().toString().equalsIgnoreCase("npc"))
 		{
 			ib.setItem(17, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aSet the " + cs.getDcp() + " type").setLore("&7Current value: ").addLore("&f" + cs.getDcp().getType()));
 		}
 
-		ib.setItem(12, new ItemBuilder(Material.FENCE_GATE, 1, 0).setName("&aSet auto-close").setLore("&7Current value: ").addLore("&f" + cs.isAutoClose()));
+		ib.setItem(12, new ItemBuilder(DynamicMaterial.BIRCH_FENCE_GATE, 1).setName("&aSet auto-close").setLore("&7Current value: ").addLore("&f" + cs.isAutoClose()));
 		ib.setItem(13, new ItemBuilder(Material.ARMOR_STAND, 1, 0).setName("&aSet hologram-offset").setLore("&7Current value: ").addLore("&f" + cs.getHologramOffset()));
-		ib.setItem(11, new ItemBuilder(Material.SNOW_BALL, 1, 0).setName("&aSet the cooldown").setLore("&7Current value: ").addLore("&f" + cs.getCooldown()));
+		ib.setItem(11, new ItemBuilder(DynamicMaterial.SNOWBALL, 1).setName("&aSet the cooldown").setLore("&7Current value: ").addLore("&f" + cs.getCooldown()));
 		ib.setItem(14, new ItemBuilder(cs.getCrate()).setName("&aSet the crate item.").setLore("&7By clicking this object you will").addLore("&7set the crate item to your").addLore("&7item you are currently holding."));
 		if(!crates.isMultiCrate())
 		{
@@ -114,7 +81,7 @@ public class IGCCratesBase extends IGCMenuCrate
 				if(crates.isCanBeEnabled())
 				{
 					crates.setEnabled(!crates.isEnabled());
-					getIb().setItem(9, new ItemBuilder(Material.WOOL, 1, crates.isEnabled() ? 5 : 14).setName(crates.isEnabled() ? "&aEnabled" : "&cDisabled").addLore("&7Click me to toggle the crate."));
+					getIb().setItem(9, new ItemBuilder(crates.isEnabled() ? DynamicMaterial.LIME_WOOL : DynamicMaterial.RED_WOOL, 1).setName(crates.isEnabled() ? "&aEnabled" : "&cDisabled").addLore("&7Click me to toggle the crate."));
 				}
 				else
 				{

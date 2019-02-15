@@ -260,7 +260,7 @@ public class Reward
 			ib.addLore(applyVariablesTo(s.toString()));
 		}
 
-		if(!NMSUtils.getServerVersion().contains("v1_7"))
+		if(NMSUtils.Version.v1_12.isServerVersionEarlier() && NMSUtils.Version.v1_8.isServerVersionOrLater())
 		{
 			if(getFc().contains(getPath("nbt-tags")))
 			{

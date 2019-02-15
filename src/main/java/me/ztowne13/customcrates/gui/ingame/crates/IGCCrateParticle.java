@@ -5,6 +5,7 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import me.ztowne13.customcrates.crates.options.particles.ParticleEffect;
 import me.ztowne13.customcrates.crates.options.particles.effects.PEAnimationType;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
@@ -39,7 +40,7 @@ public class IGCCrateParticle extends IGCTierMenu
 		InventoryBuilder ib = createDefault(27);
 
 		ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
-		ib.setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&cDelete this particle").setLore("&7NOTE: This action cannot").addLore("&7be undone!"));
+		ib.setItem(8, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&cDelete this particle").setLore("&7NOTE: This action cannot").addLore("&7be undone!"));
 
 		ib.setItem(10, new ItemBuilder(Material.BEACON, 1, 0).setName("&aParticle Animation").setLore("&7Current value: ").addLore("&7" + (pd.getParticleAnimationEffect() == null ? "none" : PEAnimationType.getFromParticleAnimationEffect(pd.getParticleAnimationEffect()).name())).addLore("&f&oSet this value to 'none'").addLore("&f&oto have no animation."));
 		ib.setItem(11, new ItemBuilder(Material.NETHER_STAR, 1, 0).setName("&aParticle Type").setLore("&7Current value: ").addLore("&7" + pd.getParticleName()));

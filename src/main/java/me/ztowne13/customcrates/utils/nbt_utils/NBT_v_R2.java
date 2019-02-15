@@ -12,9 +12,10 @@ import java.util.List;
 /**
  * Created by ztowne13 on 5/13/16.
  */
+@Deprecated
 public class NBT_v_R2
 {
-	public static ItemStack applyToV_R2(ItemStack item, String tag)
+	/*public static ItemStack applyToV_R2(ItemStack item, String tag)
 	{
 		net.minecraft.server.v1_9_R2.ItemStack stack = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound tagCompound = stack.getTag();
@@ -60,5 +61,5 @@ public class NBT_v_R2
 			}
 		}
 		return list;
-	}
+	}*/
 }

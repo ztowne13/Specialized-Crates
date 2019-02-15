@@ -2,6 +2,7 @@ package me.ztowne13.customcrates.gui.ingame.crates;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.Crate;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.gui.ingame.IGCDefaultItems;
@@ -52,7 +53,7 @@ public class IGCTierSelector extends IGCMenuCrate
 					i += 4;
 				}
 
-				ib.setItem(i, new ItemBuilder(Material.WOOD_BUTTON, 1, 0).setName("&a" + s).setLore("&7Click me to view values for this tier."));
+				ib.setItem(i, new ItemBuilder(DynamicMaterial.ACACIA_BUTTON, 1).setName("&a" + s).setLore("&7Click me to view values for this tier."));
 				i++;
 			}
 		}
@@ -67,7 +68,7 @@ public class IGCTierSelector extends IGCMenuCrate
 		{
 			up();
 		}
-		else if(getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType().equals(Material.WOOD_BUTTON))
+		else if(getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType().equals(DynamicMaterial.ACACIA_BUTTON.parseMaterial()))
 		{
 			String tier = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
 			igcTierMenu.setTier(tier);

@@ -53,6 +53,19 @@ public class NMSUtils
 			return false;
 		}
 
+		public boolean isServerVersionOrLater() {
+			boolean found = false;
+
+			for (Version version : Version.values()) {
+				if (this == version && !found)
+						found = true;
+
+				if (found && NMSUtils.getServerVersion().contains(version.toString()))
+					return true;
+			}
+			return false;
+		}
+
 	}
 
 }

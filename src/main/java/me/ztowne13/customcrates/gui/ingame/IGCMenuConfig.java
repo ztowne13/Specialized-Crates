@@ -32,8 +32,8 @@ public class IGCMenuConfig extends IGCMenu
 	{
 		super(cc, p, lastMenu, "&7&l> &6&lConfig.YML");
 
-		red = new ItemBuilder(DynamicMaterial.WOOL.toMaterial(), 1, 14);
-		green = new ItemBuilder(DynamicMaterial.WOOL.toMaterial(), 1, 5);
+		red = new ItemBuilder(DynamicMaterial.RED_WOOL, 1);
+		green = new ItemBuilder(DynamicMaterial.LIME_WOOL, 1);
 	}
 
 	@Override
@@ -91,7 +91,12 @@ public class IGCMenuConfig extends IGCMenu
 			else
 			{
 				boolean canBeUsed = !(map.get(sv) instanceof Collection);
-				ItemBuilder newBuilder = new ItemBuilder(DynamicMaterial.WOOL.toMaterial(), 1, canBeUsed ? 1 : 8).setName((canBeUsed ? "&a" : "&c") + sv).setLore(canBeUsed ? "&e&oCurrent value: " + map.get(sv) : "&cThis value cannot currently be edited in game").addLore("");
+
+				ItemBuilder newBuilder = new ItemBuilder(canBeUsed ? DynamicMaterial.ORANGE_WOOL : DynamicMaterial.LIGHT_GRAY_WOOL, 1)
+						.setName((canBeUsed ? "&a" : "&c") + sv)
+						.setLore(canBeUsed ? "&e&oCurrent value: " + map.get(sv) : "&cThis value cannot currently be edited in game")
+						.addLore("");
+
 				for(String lore : SettingsValues.getByPath(sv).getDescriptor())
 				{
 					newBuilder.addLore("&7" + lore);
@@ -121,12 +126,12 @@ public class IGCMenuConfig extends IGCMenu
 			getCc().getSettings().getConfigValues().put(sv.getPath(), newBuilder.getStack().getDurability() == 5);
 			open();
 		}
-		else if(inv.getItem(slot).getType().equals(DynamicMaterial.WOOL.toMaterial()))
+		else if(inv.getItem(slot).getType().equals(DynamicMaterial.ORANGE_WOOL) || inv.getItem(slot).getType().equals(DynamicMaterial.LIGHT_GRAY_WOOL))
 		{
 			ItemStack item = inv.getItem(slot);
 			SettingsValues sv = SettingsValues.getByPath(new ItemBuilder(item).getName(true));
 
-			if(item.getDurability() == 8)
+			if(inv.getItem(slot).getType().equals(DynamicMaterial.LIGHT_GRAY_WOOL))
 			{
 				ChatUtils.msgError(p, "This value cannot be configured in game.");
 			}

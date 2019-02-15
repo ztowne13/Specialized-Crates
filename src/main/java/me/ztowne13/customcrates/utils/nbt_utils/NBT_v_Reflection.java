@@ -74,7 +74,7 @@ public class NBT_v_Reflection
 			tagCompound = getNewNBTTagCompound();
 		}
 
-		if(item.getType().equals(DynamicMaterial.MONSTER_EGG.toMaterial()))
+		if(DynamicMaterial.BAT_SPAWN_EGG.isSameMaterial(item))
 		{
 			Object idNTC = getNewNBTTagCompound();
 			try
@@ -118,7 +118,7 @@ public class NBT_v_Reflection
 		Object stack = getNMSItemStack(item);
 		Object tagCompound = getNBTTagCompound(stack);
 
-		if(item.getType().equals(DynamicMaterial.MONSTER_EGG.toMaterial()))
+		if(DynamicMaterial.BAT_SPAWN_EGG.isSameMaterial(item))
 		{
 			try
 			{

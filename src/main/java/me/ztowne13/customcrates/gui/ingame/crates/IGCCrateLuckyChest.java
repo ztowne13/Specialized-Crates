@@ -2,6 +2,7 @@ package me.ztowne13.customcrates.gui.ingame.crates;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.Crate;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
@@ -35,7 +36,7 @@ public class IGCCrateLuckyChest extends IGCMenuCrate
 		ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
 
 		ib.setItem(11, new ItemBuilder(Material.FISHING_ROD, 1, 0).setName("&aChance").setLore("&7Current value: ").addLore("&7" + cs.getClc().getChance() + "/" + cs.getClc().getOutOfChance()));
-		ib.setItem(12, new ItemBuilder(Material.INK_SACK, 1, 7).setName("&aBlacklist?").setLore("Is block-list a blacklist? (false)").addLore("or whitelist? (true)").addLore("").addLore("&7Current value: ").addLore("&7" + cs.getClc().isBLWL() + ""));
+		ib.setItem(12, new ItemBuilder(DynamicMaterial.LIGHT_GRAY_DYE, 1).setName("&aBlacklist?").setLore("Is block-list a blacklist? (false)").addLore("or whitelist? (true)").addLore("").addLore("&7Current value: ").addLore("&7" + cs.getClc().isBLWL() + ""));
 		ItemBuilder bList = new ItemBuilder(Material.STONE, 1, 0).setName("&aAdd to the block-list").setLore("&7Current values: ");
 
 		for(Material m : cs.getClc().getWhiteList())
@@ -45,7 +46,7 @@ public class IGCCrateLuckyChest extends IGCMenuCrate
 		ib.setItem(13, bList);
 		ib.setItem(14, bList.setName("&aRemove from the block-list"));
 
-		ItemBuilder wList = new ItemBuilder(Material.INK_SACK, 1, 5).setName("&aAdd to the worlds").setLore("&7Current values: ");
+		ItemBuilder wList = new ItemBuilder(DynamicMaterial.PURPLE_DYE, 1).setName("&aAdd to the worlds").setLore("&7Current values: ");
 		for(World w : cs.getClc().getWorlds())
 		{
 			if(w != null)

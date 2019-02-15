@@ -87,7 +87,7 @@ public class IGCMenuRewards extends IGCMenu
 
 			r.checkIsNeedMoreConfig();
 
-			ItemBuilder newR = new ItemBuilder(DynamicMaterial.INK_SACK.toMaterial(), 1, r.isNeedsMoreConfig() ? 1 : 12).setName("&a" + rName).setLore(r.isNeedsMoreConfig() ? "&7This reward isn't fully configured" : "&7Click to edit.");
+			ItemBuilder newR = new ItemBuilder(r.isNeedsMoreConfig() ? DynamicMaterial.ROSE_RED : DynamicMaterial.LIGHT_BLUE_DYE, 1).setName("&a" + rName).setLore(r.isNeedsMoreConfig() ? "&7This reward isn't fully configured" : "&7Click to edit.");
 			newR.addLore("").addLore("&7Used by crates:").addLore("");
 			for (String s : r.delete(false).replace("[", "").replace("]", "").split(", "))
 			{
@@ -141,7 +141,8 @@ public class IGCMenuRewards extends IGCMenu
 		{
 			up();
 		}
-		else if(!(getIb().getInv().getItem(slot) == null) && getIb().getInv().getItem(slot).getType().equals(DynamicMaterial.INK_SACK.toMaterial()))
+
+		else if(!(getIb().getInv().getItem(slot) == null) && (DynamicMaterial.ROSE_RED.isSameMaterial(getIb().getInv().getItem(slot)) || DynamicMaterial.LIGHT_BLUE_DYE.isSameMaterial(getIb().getInv().getItem(slot))))
 		{
 			String rName = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
 			getP().closeInventory();

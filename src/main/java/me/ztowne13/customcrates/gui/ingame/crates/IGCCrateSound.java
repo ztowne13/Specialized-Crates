@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.gui.ingame.crates;
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
@@ -37,7 +38,7 @@ public class IGCCrateSound extends IGCTierMenu
 		InventoryBuilder ib = createDefault(27);
 
 		ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
-		ib.setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&cDelete this particle").setLore("&7NOTE: This action cannot").addLore("&7be undone!"));
+		ib.setItem(8, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&cDelete this particle").setLore("&7NOTE: This action cannot").addLore("&7be undone!"));
 
 		ib.setItem(11, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&aSound type").setLore("&7Current value: ").addLore("&7" + sd.getSound().name()));
 		ib.setItem(13, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aSound pitch").setLore("&7Current value: ").addLore("&7" + sd.getPitch()));

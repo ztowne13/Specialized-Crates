@@ -2,6 +2,7 @@ package me.ztowne13.customcrates.gui.ingame.crates;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.Crate;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
@@ -33,8 +34,8 @@ public class IGCCrateHolograms extends IGCMenuCrate
 
 		ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 		ib.setItem(8, new ItemBuilder(Material.PAPER, 1, 0).setName("&aAdd a line to the hologram"));
-		ib.setItem(9, new ItemBuilder(Material.BOOK_AND_QUILL, 1, 0).setName("&aSet reward-hologram").setLore("&7Current value:").addLore("&f" + cs.getCholoCopy().getRewardHologram()).addLore("").addLore("&7This is the hologram that").addLore("&7appears when someone wins").addLore("&7a reward."));
-		ib.setItem(17, new ItemBuilder(Material.CARPET, 1, 14).setName("&aTo remove a line, edit a").setLore("&aline and set it to 'delete'").addLore("&7&owithout the quotes"));
+		ib.setItem(9, new ItemBuilder(DynamicMaterial.WRITABLE_BOOK, 1).setName("&aSet reward-hologram").setLore("&7Current value:").addLore("&f" + cs.getCholoCopy().getRewardHologram()).addLore("").addLore("&7This is the hologram that").addLore("&7appears when someone wins").addLore("&7a reward."));
+		ib.setItem(17, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&aTo remove a line, edit a").setLore("&aline and set it to 'delete'").addLore("&7&owithout the quotes"));
 
 		if(cs.getCholoCopy().getLines() != null)
 		{

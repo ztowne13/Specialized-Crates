@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.gui.ingame.crates;
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.ObtainType;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
@@ -37,10 +38,10 @@ public class IGCCratesMain extends IGCMenuCrate
 		ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
 		ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
 		ib.setItem(crates.isMultiCrate() ? 18 : 36, IGCDefaultItems.EXIT_BUTTON.getIb());
-		ib.setItem(3, new ItemBuilder(Material.INK_SACK, 1, 1).setName("&4&lDelete this crate").setLore("&cThis action CANNOT be undone.").addLore("&e&oNote: This does not delete rewards").addLore("").addLore("&7This will delete the entire").addLore("&7file for this crate and will").addLore("&7erase all data for it."));
+		ib.setItem(3, new ItemBuilder(DynamicMaterial.ROSE_RED, 1).setName("&4&lDelete this crate").setLore("&cThis action CANNOT be undone.").addLore("&e&oNote: This does not delete rewards").addLore("").addLore("&7This will delete the entire").addLore("&7file for this crate and will").addLore("&7erase all data for it."));
 		//ib.setItem(5, new ItemBuilder(Material.BOOK_AND_QUILL, 1, 0).setName("&aRename this crate").setLore("&cNOTE: &7This will remove all").addLore("&7placed crates of this type."));
 
-		ib.setItem(8, new ItemBuilder(Material.CARPET, 1, 14).setName("&aDelete all placed instances").setLore("&7Click this runs the command:").addLore("&7/ccrates delallcratetype " + crates.getName()).addLore("").addLore("&7It deletes all crates").addLore("&7of this type that have been").addLore("&7placed."));
+		ib.setItem(8, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&aDelete all placed instances").setLore("&7Click this runs the command:").addLore("&7/ccrates delallcratetype " + crates.getName()).addLore("").addLore("&7It deletes all crates").addLore("&7of this type that have been").addLore("&7placed."));
 		ib.setItem(4, new ItemBuilder(Material.CHEST, 1, 0).setName("&a" + crates.getName()));
 
 		ib.setItem(10, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aThe Defaults").setLore("&7This includes things such as").addLore("&7crate / key material,").addLore("&7crate-animation, obtain methods").addLore("&7and more"));
@@ -50,9 +51,9 @@ public class IGCCratesMain extends IGCMenuCrate
 		if(!crates.isMultiCrate())
 		{
 			ib.setItem(23, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&aSounds").setLore("&7Modify the sounds for when").addLore("&7the crate is opened and").addLore("&7reward is given."));
-			ib.setItem(28, new ItemBuilder(Material.FIREWORK, 1, 0).setName("&aFireworks").setLore("&7Modify the fireworks."));
+			ib.setItem(28, new ItemBuilder(DynamicMaterial.FIREWORK_ROCKET, 1).setName("&aFireworks").setLore("&7Modify the fireworks."));
 			ib.setItem(34, new ItemBuilder(Material.PAPER, 1, 0).setName("&aActions").setLore("&7Modify messages, broadcasts,").addLore("&7titles, subtitles, and").addLore("&7actionbars."));
-			ib.setItem(40, new ItemBuilder(Material.INK_SACK, 1, 12).setName("&aRewards").setLore("&7Add and remove rewards that").addLore("&7players will receive from").addLore("&7this crate."));
+			ib.setItem(40, new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1).setName("&aRewards").setLore("&7Add and remove rewards that").addLore("&7players will receive from").addLore("&7this crate."));
 		}
 		else
 		{
@@ -99,7 +100,7 @@ public class IGCCratesMain extends IGCMenuCrate
 			case 3:
 				if(ChatUtils.removeColor(getIb().getInv().getItem(3).getItemMeta().getDisplayName()).equalsIgnoreCase("Delete this crate"))
 				{
-					getIb().setItem(3, new ItemBuilder(Material.INK_SACK, 1, 1).setName("&6CONFIRM DELETE").setLore("&4&lTHIS CANNOT BE UNDONE!"));
+					getIb().setItem(3, new ItemBuilder(DynamicMaterial.ROSE_RED, 1).setName("&6CONFIRM DELETE").setLore("&4&lTHIS CANNOT BE UNDONE!"));
 				}
 				else
 				{
