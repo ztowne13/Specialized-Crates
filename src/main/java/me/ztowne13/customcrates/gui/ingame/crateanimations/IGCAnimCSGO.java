@@ -150,7 +150,7 @@ public class IGCAnimCSGO extends IGCAnimation
 				try
 				{
 					String[] split = input.split(";");
-					Material m = Material.valueOf(split[0].toUpperCase());
+					Material m = DynamicMaterial.fromString(split[0].toUpperCase()).parseMaterial();
 					if(Utils.isInt(split[1]))
 					{
 						int id = Integer.parseInt(split[1]);

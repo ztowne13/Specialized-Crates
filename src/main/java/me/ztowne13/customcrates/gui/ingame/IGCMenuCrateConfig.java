@@ -2,6 +2,7 @@ package me.ztowne13.customcrates.gui.ingame;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.types.CrateType;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.gui.ingame.crateanimations.*;
@@ -251,7 +252,7 @@ public class IGCMenuCrateConfig extends IGCMenu
 				try
 				{
 					String[] split = input.split(";");
-					Material m = Material.valueOf(split[0].toUpperCase());
+					Material m = DynamicMaterial.fromString(split[0].toUpperCase()).parseMaterial();
 					if(Utils.isInt(split[1]))
 					{
 						int id = Integer.parseInt(split[1]);

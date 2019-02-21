@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.crates;
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.crates.types.CrateType;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
@@ -257,7 +258,7 @@ public class CrateSettingsBuilder
 					String[] args = getFc().getString(("crate.material")).split(";");
 					cause = "The material '" + args[0] + "' does not exist.";
 
-					Material m = Material.valueOf(args[0].toUpperCase());
+					Material m = DynamicMaterial.fromString(args[0].toUpperCase()).parseMaterial();
 
 					cause = "NONE";
 					String name = ChatUtils.toChatColor(getFc().getString(("crate.name")));
@@ -328,7 +329,7 @@ public class CrateSettingsBuilder
 					String[] args = getFc().getString(("key.material")).split(";");
 					cause = "The material '" + args[0] + "' does not exist.";
 
-					Material m = Material.valueOf(args[0].toUpperCase());
+					Material m = DynamicMaterial.fromString(args[0].toUpperCase()).parseMaterial();
 
 					cause = "NONE";
 					String name = ChatUtils.toChatColor(getFc().getString(("key.name")));

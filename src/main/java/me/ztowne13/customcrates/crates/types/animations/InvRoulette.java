@@ -6,6 +6,7 @@ import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.crates.types.InventoryCrate;
 import me.ztowne13.customcrates.crates.types.animations.dataholders.RouletteDataHolder;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
@@ -251,7 +252,7 @@ public class InvRoulette extends InventoryCrate
 					Material m = null;
 					try
 					{
-						m = Material.valueOf(args[0]);
+						m = DynamicMaterial.fromString(args[0]).parseMaterial();
 					}
 					catch (Exception exc)
 					{

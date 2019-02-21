@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.utils;
 
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import org.bukkit.Material;
@@ -20,7 +21,7 @@ public class FileUtils
 			Material m = null;
 			try
 			{
-				m = Material.valueOf(args[0].toUpperCase());
+				m = DynamicMaterial.fromString(args[0].toUpperCase()).parseMaterial();
 			}
 			catch(Exception exc)
 			{

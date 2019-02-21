@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.crates.options.rewards;
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.CRewards;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.*;
@@ -248,7 +249,7 @@ public class Reward
 	{
 		String[] split = getFc().getString(getPath("item")).split(";");
 
-		Material m = Material.valueOf(split[0].toUpperCase());
+		Material m = DynamicMaterial.fromString(split[0].toUpperCase()).parseMaterial();
 
 		int byt = getFc().getString(getPath("item")).contains(";") ? Integer.valueOf(split[1]) : 0;
 

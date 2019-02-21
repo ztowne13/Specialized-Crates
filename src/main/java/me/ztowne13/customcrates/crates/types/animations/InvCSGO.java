@@ -2,6 +2,7 @@ package me.ztowne13.customcrates.crates.types.animations;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
@@ -257,7 +258,7 @@ public class InvCSGO extends InventoryCrate
 			String[] args = unParsed.split(";");
 			try
 			{
-				Material m = Material.valueOf(args[0].toUpperCase());
+				Material m = DynamicMaterial.fromString(args[0].toUpperCase()).parseMaterial();
 				setIdentifierBlock(new ItemBuilder(new ItemStack(m, 1, unParsed.contains(";") ? Byte.valueOf(args[1]) : 0)).setName(" ").get());
 				StatusLoggerEvent.ANIMATION_CSGO_IDBLOCK_SUCCESS.log(getSl());
 			}
@@ -326,7 +327,7 @@ public class InvCSGO extends InventoryCrate
 					Material m = null;
 					try
 					{
-						m = Material.valueOf(args[0].toUpperCase());
+						m = DynamicMaterial.fromString(args[0].toUpperCase()).parseMaterial();
 					}
 					catch(Exception exc)
 					{

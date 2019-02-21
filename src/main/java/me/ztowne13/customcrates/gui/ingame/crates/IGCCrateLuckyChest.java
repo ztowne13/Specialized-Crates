@@ -139,7 +139,7 @@ public class IGCCrateLuckyChest extends IGCMenuCrate
 		{
 			try
 			{
-				Material m = Material.valueOf(input.toUpperCase());
+				Material m = DynamicMaterial.fromString(input.toUpperCase()).parseMaterial();
 				cs.getClc().getWhiteList().add(m);
 				ChatUtils.msgSuccess(getP(), "Added " + input + " to the whitelist / blacklist.");
 				return true;
@@ -153,7 +153,7 @@ public class IGCCrateLuckyChest extends IGCMenuCrate
 		{
 			try
 			{
-				Material m = Material.valueOf(input.toUpperCase());
+				Material m = DynamicMaterial.fromString(input.toUpperCase()).parseMaterial();
 				if(cs.getClc().getWhiteList().contains(m))
 				{
 					cs.getClc().getWhiteList().remove(m);

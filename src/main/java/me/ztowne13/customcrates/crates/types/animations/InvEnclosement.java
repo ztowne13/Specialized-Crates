@@ -7,6 +7,7 @@ import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.crates.types.InventoryCrate;
 import me.ztowne13.customcrates.crates.types.animations.dataholders.EnclosementDataHolder;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
@@ -160,7 +161,7 @@ public class InvEnclosement extends InventoryCrate
 			String[] split = s.split(";");
 			cause = split[0] + " is not a valid material.";
 
-			Material m = Material.valueOf(split[0]);
+			Material m = DynamicMaterial.fromString(split[0]).parseMaterial();
 			short byt = 0;
 
 			if(split.length > 1)

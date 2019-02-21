@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.crates.options;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import org.bukkit.Bukkit;
@@ -102,7 +103,7 @@ public class CLuckyChest extends CSetting
                     {
                         try
                         {
-                            Material m = Material.valueOf(mat.toUpperCase());
+                            Material m = DynamicMaterial.fromString(mat.toUpperCase()).parseMaterial();
                             getWhiteList().add(m);
                         }
                         catch(Exception exc)

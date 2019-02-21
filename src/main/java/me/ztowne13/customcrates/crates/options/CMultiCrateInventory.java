@@ -7,6 +7,7 @@ import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.rewards.RewardDisplayer;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
@@ -81,7 +82,7 @@ public class CMultiCrateInventory extends CSetting
 						else
 						{
 							cause = args[0] + " is not a valid Material";
-							Material m = Material.valueOf(args[0].toUpperCase());
+							Material m = DynamicMaterial.fromString(args[0].toUpperCase()).parseMaterial();
 							int byt = 0;
 
 							if (Utils.isInt(args[1]))
