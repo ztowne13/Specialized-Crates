@@ -24,6 +24,8 @@
 package me.ztowne13.customcrates.gui;
 
 import java.util.HashMap;
+
+import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
