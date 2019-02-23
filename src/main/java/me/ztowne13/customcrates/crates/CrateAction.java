@@ -5,15 +5,14 @@ import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.crates.options.rewards.RewardDisplayer;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
@@ -97,14 +96,14 @@ public class CrateAction
 		return false;
 	}
 
-	public boolean attempt_use_crate(Player p, Location l)
+	public boolean attempt_use_crate(final Player p, final Location l)
 	{
 		PlayerManager pm = PlayerManager.get(cc, p);
-		PlayerDataManager pdm = pm.getPdm();
+		final PlayerDataManager pdm = pm.getPdm();
 
 		if(Utils.hasItemInHand(p)) // Has an item in hand
 		{
-			Crate crates = CrateUtils.searchByCrate(p.getItemInHand());
+			final Crate crates = CrateUtils.searchByCrate(p.getItemInHand());
 			if(!(crates == null)) // Are they holding a crate
 			{
 				if(l.getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR))
@@ -145,14 +144,18 @@ public class CrateAction
 											CrateCooldownEvent cce = pdm.getCrateCooldownEventByCrates(crates);
 											if (cce == null || cce.isCooldownOverAsBoolean())
 											{
-
-												PlacedCrate cm = PlacedCrate.get(cc, l);
-												cm.setup(crates, false);
-												cm.getCrates().getCs().getCh().tick(p, l, CrateState.OPEN, !cm.getCrates().isMultiCrate());
-												cm.getCrates().getCs().getCh().takeKeyFromPlayer(p, false);
-												cm.delete();
-												l.getBlock().setType(Material.AIR);
-												new CrateCooldownEvent(crates, System.currentTimeMillis(), true).addTo(pdm);
+												Bukkit.getScheduler().runTaskLater(cc, new Runnable() {
+													@Override
+													public void run() {
+														PlacedCrate cm = PlacedCrate.get(cc, l);
+														cm.setup(crates, false);
+														cm.getCrates().getCs().getCh().tick(p, l, CrateState.OPEN, !cm.getCrates().isMultiCrate());
+														cm.getCrates().getCs().getCh().takeKeyFromPlayer(p, false);
+														cm.delete();
+														l.getBlock().setType(Material.AIR);
+														new CrateCooldownEvent(crates, System.currentTimeMillis(), true).addTo(pdm);
+													}
+												}, 1);
 												return true;
 											}
 											cce.playFailure(pdm);

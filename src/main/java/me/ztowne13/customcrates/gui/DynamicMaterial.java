@@ -942,6 +942,8 @@ public enum DynamicMaterial {
 
     public static DynamicMaterial fromString(String key)
     {
+        if(key.startsWith("LEGACY_"))
+            key = key.replaceAll("LEGACY_", "");
         DynamicMaterial xmat = null;
 
         try
