@@ -10,10 +10,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-public class FileUtil
+public class FileHandler
 {
 
-	static HashMap<String,FileUtil> map = new HashMap<String,FileUtil>();
+	static HashMap<String, FileHandler> map = new HashMap<String, FileHandler>();
 	
 	String name;
 	String directory = "";
@@ -29,7 +29,7 @@ public class FileUtil
 	FileConfiguration data = null;
 	File dataFile = null;
 	
-	public FileUtil(CustomCrates cc, String name, String directory, boolean canBeEdited, boolean saveWithCustomSave, boolean newFile)
+	public FileHandler(CustomCrates cc, String name, String directory, boolean canBeEdited, boolean saveWithCustomSave, boolean newFile)
 	{
 		this.name = name;
 		this.cc = cc;
@@ -41,7 +41,7 @@ public class FileUtil
 		map.put(name, this);
 	}
 	
-	public FileUtil(CustomCrates cc, String name, boolean canBeEdited, boolean saveWithCustomSave)
+	public FileHandler(CustomCrates cc, String name, boolean canBeEdited, boolean saveWithCustomSave)
 	{
 		this.name = name;
 		this.canBeEdited = canBeEdited;
@@ -298,17 +298,17 @@ public class FileUtil
 	public static void clearLoaded()
 	{
 		map.clear();
-		map = new HashMap<String,FileUtil>();
+		map = new HashMap<String, FileHandler>();
 	}
 
-	public static HashMap<String, FileUtil> getMap()
+	public static HashMap<String, FileHandler> getMap()
 	{
 		return map;
 	}
 
-	public static void setMap(HashMap<String, FileUtil> map)
+	public static void setMap(HashMap<String, FileHandler> map)
 	{
-		FileUtil.map = map;
+		FileHandler.map = map;
 	}
 
 	public String getName()
