@@ -63,23 +63,24 @@ public class PlayerManager
 			StorageType st = StorageType.valueOf(ChatUtils.stripFromWhitespace(SettingsValues.STORE_DATA.getValue(getCc()).toString().toUpperCase()));
 			switch(st)
 			{
-			case MYSQL:
-				Utils.addToInfoLog(cc, "Storage Type", "MYSQL");
-				return new SQLDataHandler(this);
-			case FLATFILE:
-				Utils.addToInfoLog(cc, "Storage Type", "FLATFILE");
-				return new FlatFileDataHandler(this);
-			case PLAYERFILES:
-				Utils.addToInfoLog(cc, "Storage Type", "PLAYERFILES");
-				return new IndividualFileDataHandler(this);
-			default:
-				ChatUtils.log(new String[]{"store-data value in the config.YML is not a valid storage type.", "  It must be: MYSQL, FLATFILE, PLAYERFILES"});
-				Utils.addToInfoLog(cc, "StorageType", "FLATFILE");
-				return new FlatFileDataHandler(this);
+				case MYSQL:
+					Utils.addToInfoLog(cc, "Storage Type", "MYSQL");
+					return new SQLDataHandler(this);
+				case FLATFILE:
+					Utils.addToInfoLog(cc, "Storage Type", "FLATFILE");
+					return new FlatFileDataHandler(this);
+				case PLAYERFILES:
+					Utils.addToInfoLog(cc, "Storage Type", "PLAYERFILES");
+					return new IndividualFileDataHandler(this);
+				default:
+					ChatUtils.log(new String[]{"store-data value in the config.YML is not a valid storage type.", "  It must be: MYSQL, FLATFILE, PLAYERFILES"});
+					Utils.addToInfoLog(cc, "StorageType", "FLATFILE");
+					return new FlatFileDataHandler(this);
 			}
 		}
 		catch(Exception exc)
 		{
+			exc.printStackTrace();
 			ChatUtils.log(new String[]{"store-data value in the config.YML is not a valid storage type.", "  It must be: MYSQL, FLATFILE, PLAYERFILES"});
 		}
 		return null;
