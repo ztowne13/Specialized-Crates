@@ -62,34 +62,30 @@ public class CrateAction
 		{
 			PlacedCrate cm = PlacedCrate.get(cc, l);
 			Crate crates = cm.getCrates();
-
-			if(!p.getGameMode().equals(GameMode.CREATIVE) || (Boolean) cc.getSettings().getConfigValues().get("open-creative"))
+            if (crates.isMultiCrate())
+            {
+                crates.getCs().getCmci().getInventory(p, crates.getCs().getCrateInventoryName() == null ? crates.getName() : crates.getCs().getCrateInventoryName()).open();
+                pm.setLastOpenCrate(l);
+                pm.setLastOpenedPlacedCrate(cm);
+                pm.openCrate(crates);
+                return true;
+            }
+			else if(!p.getGameMode().equals(GameMode.CREATIVE) || (Boolean) cc.getSettings().getConfigValues().get("open-creative"))
 			{
-				if (crates.isMultiCrate())
-				{
-					crates.getCs().getCmci().getInventory(p, crates.getCs().getCrateInventoryName() == null ? crates.getName() : crates.getCs().getCrateInventoryName()).open();
-					pm.setLastOpenCrate(l);
-					pm.setLastOpenedPlacedCrate(cm);
-					pm.openCrate(crates);
-					return true;
-				}
-				else
-				{
-					if (CrateUtils.isCrateUsable(cm))
-					{
-						useCrate(pm, cm);
-						return true;
-					}
-					else
-					{
-						Messages.CRATE_DISABLED.msgSpecified(cc, p);
-						if (p.hasPermission("customcrates.admin") || p.isOp())
-						{
-							Messages.CRATE_DISABLED_ADMIN.msgSpecified(cc, p);
-						}
-						return true;
-					}
-				}
+                if (CrateUtils.isCrateUsable(cm))
+                {
+                    useCrate(pm, cm);
+                    return true;
+                }
+                else
+                {
+                    Messages.CRATE_DISABLED.msgSpecified(cc, p);
+                    if (p.hasPermission("customcrates.admin") || p.isOp())
+                    {
+                        Messages.CRATE_DISABLED_ADMIN.msgSpecified(cc, p);
+                    }
+                    return true;
+                }
 			}
 			else
 			{
