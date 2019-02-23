@@ -13,6 +13,7 @@ import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.VirtualCrateData;
+import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import me.ztowne13.customcrates.utils.Utils;
@@ -386,22 +387,33 @@ public class CMultiCrateInventory extends CSetting
 			{
 				if(!p.getGameMode().equals(GameMode.CREATIVE) || (Boolean) cc.getSettings().getConfigValues().get("open-creative"))
 				{
-					if (crate.getCs().getCmci().getCrateSpots().get(slot).getCs().getCh().tick(p, pm.getLastOpenCrate(), CrateState.OPEN, false))
+					CrateCooldownEvent cce = pm.getPdm().getCrateCooldownEventByCrates(clickedCrate);
+					if (cce == null || cce.isCooldownOverAsBoolean())
 					{
-						if(pm.isUseVirtualCrate())
+						if (clickedCrate.getCs().getCh().tick(p, pm.getLastOpenCrate(), CrateState.OPEN, false))
 						{
-							pm.getPdm().setVirtualCrateCrates(clickedCrate, pm.getPdm().getVCCrateData(clickedCrate).getCrates() - 1);
-						}
-						else if (!crates.getCs().getOt().equals(ObtainType.STATIC))
-						{
-							try
+							if(pm.isUseVirtualCrate())
 							{
-								PlacedCrate pc = PlacedCrate.get(cc, pm.getLastOpenCrate());
-								pc.delete();
+								pm.getPdm().setVirtualCrateCrates(clickedCrate, pm.getPdm().getVCCrateData(clickedCrate).getCrates() - 1);
 							}
-							catch(Exception exc)
+							else if (!crates.getCs().getOt().equals(ObtainType.STATIC))
 							{
+								try
+								{
+									PlacedCrate pc = PlacedCrate.get(cc, pm.getLastOpenCrate());
+									pc.delete();
+								}
+								catch(Exception exc)
+								{
 
+								}
+							}
+						}
+						else
+						{
+							if (p.getLocation().distance(pm.getLastOpenCrate()) > 10)
+							{
+								p.closeInventory();
 							}
 						}
 					}
@@ -411,6 +423,7 @@ public class CMultiCrateInventory extends CSetting
 						{
 							p.closeInventory();
 						}
+						cce.playFailure(pm.getPdm());
 					}
 				}
 				else

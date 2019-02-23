@@ -36,10 +36,10 @@ public class InventoryActionListener implements Listener
 		if(pm.isInCrate() || pm.isInRewardMenu())
 		{
 			if(!(e.getClickedInventory() == null || e.getWhoClicked().getInventory() == null))
-			if(!e.getClickedInventory().equals(e.getWhoClicked().getInventory()))
-			{
-				e.setCancelled(true);
-			}
+				if(!e.getClickedInventory().equals(e.getWhoClicked().getInventory()))
+				{
+					e.setCancelled(true);
+				}
 
 			if(pm.isInCrate() && pm.getOpenCrate().isMultiCrate())
 			{

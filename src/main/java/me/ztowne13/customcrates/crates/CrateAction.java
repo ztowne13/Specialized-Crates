@@ -143,7 +143,7 @@ public class CrateAction
 										if (isInventoryTooEmpty(cc, p)) //Inventory has at least 1 space open
 										{
 											CrateCooldownEvent cce = pdm.getCrateCooldownEventByCrates(crates);
-											if (cce == null || cce.isCooldownOverAsBoolean(pdm))
+											if (cce == null || cce.isCooldownOverAsBoolean())
 											{
 
 												PlacedCrate cm = PlacedCrate.get(cc, l);
@@ -155,10 +155,7 @@ public class CrateAction
 												new CrateCooldownEvent(crates, System.currentTimeMillis(), true).addTo(pdm);
 												return true;
 											}
-											crates.getCs().getCh().playFailToOpen(p, false);
-											int seconds = Math.round(cce.isCooldownOver(pdm));
-											String cdTimeFormatted = Utils.ConvertSecondToHHMMString(seconds);
-											p.sendMessage(Messages.CRATE_ON_COOLDOWN.getFromConf(cc).replace("%crate%", crates.getName()).replace("%seconds%",  cdTimeFormatted));
+											cce.playFailure(pdm);
 											return true;
 										}
 										Messages.INVENTORY_TOO_FULL.msgSpecified(cc, p);
@@ -264,7 +261,7 @@ public class CrateAction
 			if (isInventoryTooEmpty(cc, p))
 			{
 				CrateCooldownEvent cce = pdm.getCrateCooldownEventByCrates(cs.getCrates());
-				if (cce == null || cce.isCooldownOverAsBoolean(pdm))
+				if (cce == null || cce.isCooldownOverAsBoolean())
 				{
 					pm.setLastOpenedPlacedCrate(cm);
 					if (cm.getCrates().getCs().getCh().tick(p, l, CrateState.OPEN, !cm.getCrates().isMultiCrate()))
@@ -280,9 +277,7 @@ public class CrateAction
 					pm.setLastOpenedPlacedCrate(null);
 					return;
 				}
-				int seconds = Math.round(cce.isCooldownOver(pdm));
-				String cdTimeFormatted = Utils.ConvertSecondToHHMMString(seconds);
-				p.sendMessage(Messages.CRATE_ON_COOLDOWN.getFromConf(cc).replace("%crate%", cs.getCrates().getName()).replace("%seconds%", cdTimeFormatted));
+				cce.playFailure(pdm);
 				return;
 			}
 			Messages.INVENTORY_TOO_FULL.msgSpecified(cc, p);
