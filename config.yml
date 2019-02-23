@@ -37,7 +37,7 @@ debug: false
 #           Crate Settings           #
 #------------------------------------#
 
-# How many open inventory slots are required to open an inventory?
+# How many open inventory slots are required to open a crate?
 required-slots: 1
 
 # Do you want explosions to destroy dynamic crates?

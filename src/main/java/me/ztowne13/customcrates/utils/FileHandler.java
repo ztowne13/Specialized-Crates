@@ -50,31 +50,36 @@ public class FileHandler
 
 		map.put(name, this);	
 	}
+
+	public void loadFile()
+	{
+		if (getDataFile() == null)
+		{
+			setDataFile(new File(new File(getCc().getDataFolder().getPath() + getDirectory()), getName()));
+
+			if(getName().equalsIgnoreCase("Messages.yml"))
+			{
+				if(!folderExists("Crates"))
+				{
+					new File(getCc().getDataFolder().getPath() + getDirectory()).mkdir();
+
+					try
+					{
+						getCc().firstLoadFiles();
+					}
+					catch(Exception exc)
+					{
+						exc.printStackTrace();
+					}
+
+				}
+			}
+		}
+	}
 	
 	public void reload()
 	{
-	    if (getDataFile() == null)
-	    {
-			setDataFile(new File(new File(getCc().getDataFolder().getPath() + getDirectory()), getName()));
-
-	    	if(getName().equalsIgnoreCase("Messages.yml"))
-	    	{
-	    		if(!folderExists("Crates"))
-	    		{
-	    			new File(getCc().getDataFolder().getPath() + getDirectory()).mkdir();
-
-	    			try
-		    		{
-		    			getCc().firstLoadFiles();
-		    		}
-		    		catch(Exception exc)
-		    		{
-		    			exc.printStackTrace();
-		    		}
-
-	    		}
-	    	}
-	    }
+		loadFile();
 
 		try
 		{
@@ -101,7 +106,7 @@ public class FileHandler
 				}
 				else
 				{
-					throw new Exception("");
+					throw new NullPointerException("Failed to load the file " + getName());
 				}
 			}
 			else
@@ -112,7 +117,8 @@ public class FileHandler
 		catch(Exception exc)
 		{
 			exc.printStackTrace();
-			ChatUtils.log(new String[]{"Failed to load the " + name + " file due to a critical error. Please fix the file and restart your server."});
+			ChatUtils.log(new String[]{"Failed to load the " + name + " file due to a critical error. Please fix the file and restart your server.",
+										"Oftentimes, if this is your first time loading the server, a simple reload or restart fixes the issue!"});
 			properLoad = false;
 		}
 	}
@@ -279,15 +285,17 @@ public class FileHandler
 
 	public void saveDefaults() 
 	{
-        if(dataFile == null)
-        {
-            reload();
-        }
+		loadFile();
         
         if(!dataFile.exists())
         {
-            cc.saveResource(directory + name, false);
+        	cc.saveResource(directory + name, false);
         }
+
+		if(dataFile == null)
+		{
+			reload();
+		}
     }
 
 	public boolean isCommentLine(String s)
