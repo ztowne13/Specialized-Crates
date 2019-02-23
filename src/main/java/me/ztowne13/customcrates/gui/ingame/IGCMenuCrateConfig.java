@@ -7,7 +7,7 @@ import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.gui.ingame.crateanimations.*;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.FileUtil;
+import me.ztowne13.customcrates.utils.FileHandler;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -32,7 +32,7 @@ public class IGCMenuCrateConfig extends IGCMenu
 		p.closeInventory();
 		putInMenu();
 
-		FileUtil fu = cc.getCrateconfigFile();
+		FileHandler fu = cc.getCrateconfigFile();
 		FileConfiguration fc = fu.get();
 
 		InventoryBuilder ib = createDefault(27);
@@ -323,7 +323,7 @@ public class IGCMenuCrateConfig extends IGCMenu
 
 	public String getValue(String crateType, String value)
 	{
-		FileUtil fu = cc.getCrateconfigFile();
+		FileHandler fu = cc.getCrateconfigFile();
 		FileConfiguration fc = fu.get();
 		return fc.get("CrateType.Inventory." + crateType + "." + value).toString();
 	}

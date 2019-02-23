@@ -13,9 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -63,7 +61,7 @@ public class Reward
 
 	public void writeToFile()
 	{
-		FileUtil fu = getCc().getRewardsFile();
+		FileHandler fu = getCc().getRewardsFile();
 		FileConfiguration fc = fu.get();
 		fc.set(getPath("name"), getDisplayName());
 		fc.set(getPath("commands"), getCommands());

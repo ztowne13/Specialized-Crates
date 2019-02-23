@@ -5,7 +5,7 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
-import me.ztowne13.customcrates.utils.FileUtil;
+import me.ztowne13.customcrates.utils.FileHandler;
 
 public abstract class CSetting 
 {
@@ -22,7 +22,7 @@ public abstract class CSetting
 
 	public abstract void saveToFile();
 
-	public FileUtil getFu()
+	public FileHandler getFu()
 	{
 		return getCrates().getCs().getFu();
 	}

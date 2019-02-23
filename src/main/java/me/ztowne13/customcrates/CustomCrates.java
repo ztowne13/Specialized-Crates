@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class CustomCrates extends JavaPlugin
 {
-	FileUtil messageFile, rewardsFile, activecratesFile, crateconfigFile;
+	FileHandler messageFile, rewardsFile, activecratesFile, crateconfigFile;
 	Settings settings;
 	UpdateChecker updateChecker;
 	
@@ -119,7 +119,7 @@ public class CustomCrates extends JavaPlugin
 
 		setTick(0);
 
-		FileUtil.clearLoaded();
+		FileHandler.clearLoaded();
 		PlacedCrate.clearLoaded();
 		PlayerManager.clearLoaded();
 		Crate.clearLoaded();
@@ -173,10 +173,10 @@ public class CustomCrates extends JavaPlugin
 	
 	public void loadFiles()
 	{
-		setRewardsFile(new FileUtil(this, "Rewards.yml", true, false));
-		setActivecratesFile(new FileUtil(this, "ActiveCrates.db", false, false));
-		setCrateconfigFile(new FileUtil(this, "CrateConfig.yml", true, false));
-		setMessageFile(new FileUtil(this, "Messages.yml", true, false));
+		setRewardsFile(new FileHandler(this, "Rewards.yml", true, false));
+		setActivecratesFile(new FileHandler(this, "ActiveCrates.db", false, false));
+		setCrateconfigFile(new FileHandler(this, "CrateConfig.yml", true, false));
+		setMessageFile(new FileHandler(this, "Messages.yml", true, false));
 		
 		getMessageFile().saveDefaults();
 		getRewardsFile().saveDefaults();
@@ -189,10 +189,10 @@ public class CustomCrates extends JavaPlugin
 		String[] firstFiles = new String[]{"BasicCrate", "BeginnerCrate", "MiddleCrate", "MasterCrate", "MineChestExample", "ExpertCrate"};
 		for(String newFile: firstFiles)
 		{
-			new FileUtil(this, newFile + ".crate", "Crates/", true, true, false).saveDefaults();
+			new FileHandler(this, newFile + ".crate", "Crates/", true, true, false).saveDefaults();
 		}
 
-		new FileUtil(this, "AllCrates.multicrate", "Crates/", true, true, false).saveDefaults();
+		new FileHandler(this, "AllCrates.multicrate", "Crates/", true, true, false).saveDefaults();
 	}
 	
 	public void tick()
@@ -310,42 +310,42 @@ public class CustomCrates extends JavaPlugin
 		this.tick = tick;
 	}
 
-	public FileUtil getMessageFile()
+	public FileHandler getMessageFile()
 	{
 		return messageFile;
 	}
 
-	public void setMessageFile(FileUtil messageFile)
+	public void setMessageFile(FileHandler messageFile)
 	{
 		this.messageFile = messageFile;
 	}
 
-	public FileUtil getRewardsFile()
+	public FileHandler getRewardsFile()
 	{
 		return rewardsFile;
 	}
 
-	public void setRewardsFile(FileUtil rewardsFile)
+	public void setRewardsFile(FileHandler rewardsFile)
 	{
 		this.rewardsFile = rewardsFile;
 	}
 
-	public FileUtil getActivecratesFile()
+	public FileHandler getActivecratesFile()
 	{
 		return activecratesFile;
 	}
 
-	public void setActivecratesFile(FileUtil activecratesFile)
+	public void setActivecratesFile(FileHandler activecratesFile)
 	{
 		this.activecratesFile = activecratesFile;
 	}
 
-	public FileUtil getCrateconfigFile()
+	public FileHandler getCrateconfigFile()
 	{
 		return crateconfigFile;
 	}
 
-	public void setCrateconfigFile(FileUtil crateconfigFile)
+	public void setCrateconfigFile(FileHandler crateconfigFile)
 	{
 		this.crateconfigFile = crateconfigFile;
 	}

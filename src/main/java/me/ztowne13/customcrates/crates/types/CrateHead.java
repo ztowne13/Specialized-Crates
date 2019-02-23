@@ -13,7 +13,7 @@ import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.events.HistoryEvent;
-import me.ztowne13.customcrates.utils.FileUtil;
+import me.ztowne13.customcrates.utils.FileHandler;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -27,7 +27,7 @@ public abstract class CrateHead
 {
 	protected CustomCrates cc;
 	protected Crate crates;
-	protected FileUtil fu;
+	protected FileHandler fu;
 	
 	public CrateHead(Crate crates)
 	{
@@ -334,12 +334,12 @@ public abstract class CrateHead
 		this.cc = cc;
 	}
 
-	public FileUtil getFu()
+	public FileHandler getFu()
 	{
 		return fu;
 	}
 
-	public void setFu(FileUtil fu) {
+	public void setFu(FileHandler fu) {
 		this.fu = fu;
 	}
 

@@ -3,7 +3,7 @@ package me.ztowne13.customcrates.gui.ingame.crateanimations;
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.gui.ingame.IGCMenu;
-import me.ztowne13.customcrates.utils.FileUtil;
+import me.ztowne13.customcrates.utils.FileHandler;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  */
 public abstract class IGCAnimation extends IGCMenu
 {
-	FileUtil fu;
+	FileHandler fu;
 	FileConfiguration fc;
 	CrateType crateType;
 

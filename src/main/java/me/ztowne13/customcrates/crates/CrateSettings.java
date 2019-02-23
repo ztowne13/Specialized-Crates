@@ -11,7 +11,7 @@ import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
-import me.ztowne13.customcrates.utils.FileUtil;
+import me.ztowne13.customcrates.utils.FileHandler;
 import me.ztowne13.customcrates.visuals.CrateDisplayType;
 import me.ztowne13.customcrates.visuals.DynamicCratePlaceholder;
 import org.bukkit.Location;
@@ -31,7 +31,7 @@ public class CrateSettings
 	
 	String name, crateInventoryName = "", permission = "no permission";
 	FileConfiguration fc;
-	FileUtil fu;
+	FileHandler fu;
 	CrateSettingsBuilder csb;
 
 	ItemStack crate, key;
@@ -65,7 +65,7 @@ public class CrateSettings
 		crate = new ItemBuilder(DynamicMaterial.RED_WOOL.parseMaterial(), 1, 14).setName("&4Please set me!").get();
 		key = new ItemBuilder(DynamicMaterial.REDSTONE_TORCH.parseMaterial(), 1, 0).setName("&4Please set me!").get();
 
-		this.fu = new FileUtil(cc, crates.getName() + (crates.isMultiCrate() ? ".multicrate" : ".crate"), "/Crates", true, true, newFile);
+		this.fu = new FileHandler(cc, crates.getName() + (crates.isMultiCrate() ? ".multicrate" : ".crate"), "/Crates", true, true, newFile);
 		this.fc = fu.get();
 
 		this.csb = new CrateSettingsBuilder(this);
@@ -580,12 +580,12 @@ public class CrateSettings
 		this.cdt = cdt;
 	}
 
-	public FileUtil getFu()
+	public FileHandler getFu()
 	{
 		return fu;
 	}
 
-	public void setFu(FileUtil fu)
+	public void setFu(FileHandler fu)
 	{
 		this.fu = fu;
 	}

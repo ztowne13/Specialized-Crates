@@ -1,19 +1,19 @@
 package me.ztowne13.customcrates.players.data;
 
 import me.ztowne13.customcrates.players.PlayerManager;
-import me.ztowne13.customcrates.utils.FileUtil;
+import me.ztowne13.customcrates.utils.FileHandler;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class FlatFileDataHandler extends DataHandler
 {
-	FileUtil fu;
+	FileHandler fu;
 	FileConfiguration fc;
 	
 	public FlatFileDataHandler(PlayerManager pm) 
 	{
 		super(pm);
 		cc.getDu().log("Loading flat file data handler for " + pm.getP().getName());
-		this.fu = new FileUtil(getCc(), "PlayerData.db", false, false);
+		this.fu = new FileHandler(getCc(), "PlayerData.db", false, false);
 		this.fc = getFu().get();
 	}
 
@@ -54,12 +54,12 @@ public class FlatFileDataHandler extends DataHandler
 		return getUuid() + "." + value;
 	}
 
-	public FileUtil getFu()
+	public FileHandler getFu()
 	{
 		return fu;
 	}
 
-	public void setFu(FileUtil fu)
+	public void setFu(FileHandler fu)
 	{
 		this.fu = fu;
 	}

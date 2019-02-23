@@ -1,19 +1,19 @@
 package me.ztowne13.customcrates.players.data;
 
 import me.ztowne13.customcrates.players.PlayerManager;
-import me.ztowne13.customcrates.utils.FileUtil;
+import me.ztowne13.customcrates.utils.FileHandler;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class IndividualFileDataHandler extends DataHandler
 {
-	FileUtil fu;
+	FileHandler fu;
 	FileConfiguration fc;
 
 	public IndividualFileDataHandler(PlayerManager pm) 
 	{
 		super(pm);
 		cc.getDu().log("Loading individual file data handler for " + pm.getP().getName());
-		this.fu = new FileUtil(pm.getCc(), pm.getP().getUniqueId().toString() + ".stats", "/PlayerStats/", false, false, false);
+		this.fu = new FileHandler(pm.getCc(), pm.getP().getUniqueId().toString() + ".stats", "/PlayerStats/", false, false, false);
 		this.fc = getFu().get();
 		cc.getDu().log(fu.getDataFile().getAbsolutePath());
 	}
@@ -49,12 +49,12 @@ public class IndividualFileDataHandler extends DataHandler
 		return true;
 	}
 
-	public FileUtil getFu()
+	public FileHandler getFu()
 	{
 		return fu;
 	}
 
-	public void setFu(FileUtil fu)
+	public void setFu(FileHandler fu)
 	{
 		this.fu = fu;
 	}

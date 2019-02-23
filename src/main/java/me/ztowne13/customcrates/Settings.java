@@ -66,7 +66,7 @@ public class Settings
 	{
 		for(String s: getCc().getActivecratesFile().get().getKeys(false))
 		{
-			FileUtil activeCrates = getCc().getActivecratesFile();
+			FileHandler activeCrates = getCc().getActivecratesFile();
 			String crateName = activeCrates.get().getString(s + ".crate");
 			Location l = LocationUtils.stringToLoc(s);
 
@@ -144,7 +144,7 @@ public class Settings
 
 	public void writeSettingsValues()
 	{
-		FileUtil fu = new FileUtil(cc, "config.yml", true, true);
+		FileHandler fu = new FileHandler(cc, "config.yml", true, true);
 		for(String s: getConfigValues().keySet())
 		{
 			fu.get().set(s, getConfigValues().get(s));
