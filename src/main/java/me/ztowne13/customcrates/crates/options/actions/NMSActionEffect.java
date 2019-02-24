@@ -2,12 +2,8 @@ package me.ztowne13.customcrates.crates.options.actions;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.SettingsValues;
-import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
 import org.bukkit.entity.Player;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * Created by ztowne13 on 2/14/2017.
@@ -23,7 +19,20 @@ public class NMSActionEffect extends ActionEffect
 
     public void newTitle()
     {
-        title = new Title("", "", (Integer.parseInt(SettingsValues.CA_FADE_IN.getValue(cc).toString())), (Integer.parseInt(SettingsValues.CA_STAY.getValue(cc).toString())), (Integer.parseInt(SettingsValues.CA_FADE_OUT.getValue(cc).toString())));
+        if(NMSUtils.Version.v1_10.isServerVersionEarlier())
+        {
+            title = new TitleV1_7_8_9_10("", "",
+                    (Integer.parseInt(SettingsValues.CA_FADE_IN.getValue(cc).toString())),
+                    (Integer.parseInt(SettingsValues.CA_STAY.getValue(cc).toString())),
+                    (Integer.parseInt(SettingsValues.CA_FADE_OUT.getValue(cc).toString())));
+        }
+        else
+        {
+            title = new TitleV1_11("", "",
+                    (Integer.parseInt(SettingsValues.CA_FADE_IN.getValue(cc).toString())),
+                    (Integer.parseInt(SettingsValues.CA_STAY.getValue(cc).toString())),
+                    (Integer.parseInt(SettingsValues.CA_FADE_OUT.getValue(cc).toString())));
+        }
     }
 
     public void playTitle(Player p)

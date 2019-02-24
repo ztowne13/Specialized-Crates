@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 2/14/2017.
  */
-@Deprecated
 public class BukkitActionEffect extends ActionEffect
 {
     String title, subtitle;

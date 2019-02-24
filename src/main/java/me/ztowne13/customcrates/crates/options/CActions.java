@@ -10,7 +10,6 @@ import me.ztowne13.customcrates.crates.options.actions.BukkitActionEffect;
 import me.ztowne13.customcrates.crates.options.actions.NMSActionEffect;
 import me.ztowne13.customcrates.crates.options.holograms.DynamicHologram;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.crates.options.actions.Title;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -142,8 +141,7 @@ public class CActions extends CSetting
 
 	public void playAll(Player p, PlacedCrate placedCrate, ArrayList<Reward> rewards, boolean pre)
 	{
-		//ActionEffect actionEffect = new NMSActionEffect(cc);
-		ActionEffect actionEffect = NMSUtils.serverVersion111OrLater() ? new BukkitActionEffect(cc) : new NMSActionEffect(cc);
+		ActionEffect actionEffect = NMSUtils.Version.v1_12.isServerVersionOrLater() ? new BukkitActionEffect(cc) : new NMSActionEffect(cc);
 		actionEffect.newTitle();
 		boolean toRunTitle = false;
 

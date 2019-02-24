@@ -44,11 +44,10 @@ public class NMSUtils
 
 		public boolean isServerVersionEarlier() {
 			for (Version version : Version.values()) {
-				if (this == version)
-					break;
-
 				if (NMSUtils.getServerVersion().contains(version.toString()))
 					return true;
+				if (this == version)
+					break;
 			}
 			return false;
 		}
