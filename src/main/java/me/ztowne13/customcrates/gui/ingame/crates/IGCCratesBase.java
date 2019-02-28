@@ -85,7 +85,7 @@ public class IGCCratesBase extends IGCMenuCrate
 				}
 				else
 				{
-					getIb().setItem(9, new ItemBuilder(getIb().getInv().getItem(10)).setName("&cYou cannot do this").setLore("&7This crate cannot be enabled").addLore("&7for it failed to load,").addLore("due to a misconfiguration, on").addLore("&7startup. Please fix any errors,").addLore("&7reload the plugin, and try again."));
+					getIb().setItem(9, new ItemBuilder(getIb().getInv().getItem(9)).setName("&4You cannot do this").setLore("&4This crate cannot be enabled").addLore("&4for it failed to load,").addLore("&4due to a misconfiguration, on").addLore("&4startup. Please fix any errors,").addLore("&4reload the plugin, and try again."));
 				}
 				break;
 			case 2:
