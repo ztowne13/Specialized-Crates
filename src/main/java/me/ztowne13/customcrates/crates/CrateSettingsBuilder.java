@@ -17,6 +17,7 @@ import me.ztowne13.customcrates.visuals.npcs.MobPlaceholder;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 public class CrateSettingsBuilder
 {	
@@ -255,15 +256,17 @@ public class CrateSettingsBuilder
 				cause = "NONE";
 				try
 				{
-					String[] args = getFc().getString(("crate.material")).split(";");
+					String unsplitMaterial = getFc().getString("crate.material");
+					String[] args = unsplitMaterial.split(";");
 					cause = "The material '" + args[0] + "' does not exist.";
 
-					Material m = DynamicMaterial.fromString(args[0].toUpperCase()).parseMaterial();
+					DynamicMaterial m = DynamicMaterial.fromString(unsplitMaterial);
 
-					cause = "NONE";
+					cause = "The crate.name value does not exist.";
 					String name = ChatUtils.toChatColor(getFc().getString(("crate.name")));
-					ItemBuilder ib = new ItemBuilder(m, 1, args[1] == null ? 0 : Integer.parseInt(args[1])).setName(name);
+					ItemBuilder ib = new ItemBuilder(m, 1).setName(name);
 					cause = "NONE";
+
 					if (hasV("crate.lore"))
 					{
 						for (String value : getFc().getStringList(("crate.lore")))
@@ -326,14 +329,15 @@ public class CrateSettingsBuilder
 				cause = "NONE";
 				try
 				{
-					String[] args = getFc().getString(("key.material")).split(";");
+					String unsplitMaterial = getFc().getString("key.material");
+					String[] args = unsplitMaterial.split(";");
 					cause = "The material '" + args[0] + "' does not exist.";
 
-					Material m = DynamicMaterial.fromString(args[0].toUpperCase()).parseMaterial();
+					DynamicMaterial m = DynamicMaterial.fromString(unsplitMaterial);
 
 					cause = "NONE";
 					String name = ChatUtils.toChatColor(getFc().getString(("key.name")));
-					ItemBuilder ib = new ItemBuilder(m, 1, args.length == 1 ? 0 : Integer.parseInt(args[1])).setName(name);
+					ItemBuilder ib = new ItemBuilder(m, 1).setName(name);
 
 					if(hasV("key.lore"))
 					{

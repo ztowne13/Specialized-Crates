@@ -262,7 +262,7 @@ public class CrateSettings
 	{
 		if(!toLog.equalsIgnoreCase("NOTHING")) {
 			ChatUtils.log("");
-			ChatUtils.log("Loading crate '" + getCrates().getName() + "'");
+			ChatUtils.log("Loading the '" + getCrates().getName() + "' crate");
 			ChatUtils.log("");
 			if(!CrateUtils.isCrateUsable(getCrates()))
 			{
