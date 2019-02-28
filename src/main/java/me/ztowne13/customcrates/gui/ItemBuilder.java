@@ -26,7 +26,7 @@ public class ItemBuilder
 
 	public ItemBuilder(Material m, int amnt, int byt)
 	{
-		create(DynamicMaterial.requestXMaterial(m.name(), (byte) byt), amnt);
+		create(DynamicMaterial.fromString(m.name() + ";" + byt), amnt);
 	}
 
 	public ItemBuilder(DynamicMaterial m, int amnt)

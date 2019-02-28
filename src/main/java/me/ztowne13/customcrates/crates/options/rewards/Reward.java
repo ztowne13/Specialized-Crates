@@ -245,13 +245,11 @@ public class Reward
 	
 	public void buildDisplayItemFromConfig()
 	{
-		String[] split = getFc().getString(getPath("item")).split(";");
+		String unsplitMat = getFc().getString(getPath("item"));
 
-		Material m = DynamicMaterial.fromString(split[0].toUpperCase()).parseMaterial();
+		DynamicMaterial m = DynamicMaterial.fromString(unsplitMat);
 
-		int byt = getFc().getString(getPath("item")).contains(";") ? Integer.valueOf(split[1]) : 0;
-
-		ItemBuilder ib = new ItemBuilder(m, 1, byt);
+		ItemBuilder ib = new ItemBuilder(m, 1);
 		ib.setName(applyVariablesTo(cc.getSettings().getConfigValues().get("inv-reward-item-name").toString()));
 
 		for(Object s: (ArrayList<String>) cc.getSettings().getConfigValues().get("inv-reward-item-lore"))

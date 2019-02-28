@@ -32,7 +32,7 @@ import org.bukkit.inventory.ItemStack;
 public enum DynamicMaterial {
     ACACIA_BOAT(0, "BOAT_ACACIA"),
     ACACIA_BUTTON(0, "WOOD_BUTTON"),
-    ACACIA_DOOR(0, "ACACIA_DOOR","ACACIA_DOOR_ITEM"),
+    ACACIA_DOOR(0, "ACACIA_DOOR", "ACACIA_DOOR_ITEM"),
     ACACIA_FENCE(0, "ACACIA_FENCE"),
     ACACIA_FENCE_GATE(0, "ACACIA_FENCE_GATE"),
     ACACIA_LEAVES(0, "LEAVES_2"),
@@ -40,7 +40,7 @@ public enum DynamicMaterial {
     ACACIA_PLANKS(4, "WOOD"),
     ACACIA_PRESSURE_PLATE(0, "WOOD_PLATE"),
     ACACIA_SAPLING(4, "SAPLING"),
-    ACACIA_SLAB(4,"WOODEN_SLAB", "WOOD_STEP", "WOOD_DOUBLE_STEP"),
+    ACACIA_SLAB(4, "WOODEN_SLAB", "WOOD_STEP", "WOOD_DOUBLE_STEP"),
     ACACIA_STAIRS(4, "ACACIA_STAIRS"),
     ACACIA_TRAPDOOR(0, "TRAP_DOOR"),
     ACACIA_WOOD(0, "LOG_2"),
@@ -75,7 +75,7 @@ public enum DynamicMaterial {
     BIRCH_PLANKS(2, "WOOD"),
     BIRCH_PRESSURE_PLATE(0, "WOOD_PLATE"),
     BIRCH_SAPLING(2, "SAPLING"),
-    BIRCH_SLAB(2,"WOODEN_SLAB", "WOOD_STEP", "WOOD_DOUBLE_STEP"),
+    BIRCH_SLAB(2, "WOODEN_SLAB", "WOOD_STEP", "WOOD_DOUBLE_STEP"),
     BIRCH_STAIRS(0, "BIRCH_WOOD_STAIRS"),
     BIRCH_TRAPDOOR(0, "TRAP_DOOR"),
     BIRCH_WOOD(2, "LOG"),
@@ -204,9 +204,9 @@ public enum DynamicMaterial {
     COW_SPAWN_EGG(0, "MONSTER_EGG"),
     CRACKED_STONE_BRICKS(2, "SMOOTH_BRICK"),
     CRAFTING_TABLE(0, "WORKBENCH"),
-    CREEPER_HEAD(0, "SKULL","SKULL_ITEM"),
+    CREEPER_HEAD(0, "SKULL", "SKULL_ITEM"),
     CREEPER_SPAWN_EGG(0, "MONSTER_EGG"),
-    CREEPER_WALL_HEAD(0, "SKULL","SKULL_ITEM"),
+    CREEPER_WALL_HEAD(0, "SKULL", "SKULL_ITEM"),
     CUT_RED_SANDSTONE(0, "STONE"),
     CUT_SANDSTONE(0, "STONE"),
     CYAN_BANNER(6, "BANNER", "STANDING_BANNER"),
@@ -235,7 +235,7 @@ public enum DynamicMaterial {
     DARK_OAK_PLANKS(5, "WOOD"),
     DARK_OAK_PRESSURE_PLATE(0, "WOOD_PLATE"),
     DARK_OAK_SAPLING(5, "SAPLING"),
-    DARK_OAK_SLAB(0,"WOODEN_SLAB", "WOOD_STEP", "WOOD_DOUBLE_STEP"),
+    DARK_OAK_SLAB(0, "WOODEN_SLAB", "WOOD_STEP", "WOOD_DOUBLE_STEP"),
     DARK_OAK_STAIRS(0, "DARK_OAK_STAIRS"),
     DARK_OAK_TRAPDOOR(0, "TRAP_DOOR"),
     DARK_OAK_WOOD(1, "LOG_2"),
@@ -271,8 +271,8 @@ public enum DynamicMaterial {
     DONKEY_SPAWN_EGG(0, "MONSTER_EGG"),
     DRAGON_BREATH(0, "DRAGONS_BREATH"),
     DRAGON_EGG(0, "DRAGON_EGG"),
-    DRAGON_HEAD(5, "SKULL","SKULL_ITEM"),
-    DRAGON_WALL_HEAD(0, "SKULL","SKULL_ITEM"),
+    DRAGON_HEAD(5, "SKULL", "SKULL_ITEM"),
+    DRAGON_WALL_HEAD(0, "SKULL", "SKULL_ITEM"),
     DRIED_KELP(0, "STONE"),
     DRIED_KELP_BLOCK(0, "STONE"),
     DROPPER(0, "DROPPER"),
@@ -315,7 +315,7 @@ public enum DynamicMaterial {
     FISHING_ROD(0, "FISHING_ROD"),
     FLINT(0, "FLINT"),
     FLINT_AND_STEEL(0, "FLINT_AND_STEEL"),
-    FLOWER_POT(0, "FLOWER_POT","FLOWER_POT_ITEM"),
+    FLOWER_POT(0, "FLOWER_POT", "FLOWER_POT_ITEM"),
     FROSTED_ICE(0, "FROSTED_ICE"),
     FURNACE(0, "FURNACE", "BURNING_FURNACE"),
     FURNACE_MINECART(0, "POWERED_MINECART"),
@@ -423,7 +423,7 @@ public enum DynamicMaterial {
     JUNGLE_PLANKS(3, "WOOD"),
     JUNGLE_PRESSURE_PLATE(0, "WOOD_PLATE"),
     JUNGLE_SAPLING(3, "SAPLING"),
-    JUNGLE_SLAB(3,"WOODEN_SLAB", "WOOD_STEP", "WOOD_DOUBLE_STEP"),
+    JUNGLE_SLAB(3, "WOODEN_SLAB", "WOOD_STEP", "WOOD_DOUBLE_STEP"),
     JUNGLE_STAIRS(0, "JUNGLE_WOOD_STAIRS"),
     JUNGLE_TRAPDOOR(0, "TRAP_DOOR"),
     JUNGLE_WOOD(3, "LOG"),
@@ -557,7 +557,7 @@ public enum DynamicMaterial {
     OAK_PLANKS(0, "WOOD"),
     OAK_PRESSURE_PLATE(0, "WOOD_PLATE"),
     OAK_SAPLING(0, "SAPLING"),
-    OAK_SLAB(0,"WOODEN_SLAB", "WOOD_STEP", "WOOD_DOUBLE_STEP"),
+    OAK_SLAB(0, "WOODEN_SLAB", "WOOD_STEP", "WOOD_DOUBLE_STEP"),
     OAK_STAIRS(0, "WOOD_STAIRS"),
     OAK_TRAPDOOR(0, "TRAP_DOOR"),
     OAK_WOOD(0, "LOG"),
@@ -604,8 +604,8 @@ public enum DynamicMaterial {
     PINK_WOOL(6, "WOOL"),
     PISTON(0, "PISTON_BASE"),
     PISTON_HEAD(0, "PISTON_EXTENSION"),
-    PLAYER_HEAD(0, "SKULL","SKULL_ITEM"),
-    PLAYER_WALL_HEAD(0, "SKULL","SKULL_ITEM"),
+    PLAYER_HEAD(0, "SKULL", "SKULL_ITEM"),
+    PLAYER_WALL_HEAD(0, "SKULL", "SKULL_ITEM"),
     PODZOL(2, "DIRT"),
     POISONOUS_POTATO(0, "POISONOUS_POTATO"),
     POLAR_BEAR_SPAWN_EGG(0, "MONSTER_EGG"),
@@ -736,9 +736,9 @@ public enum DynamicMaterial {
     SIGN(0, "SIGN"),
     SILVERFISH_SPAWN_EGG(0, "MONSTER_EGG"),
     SKELETON_HORSE_SPAWN_EGG(0, "MONSTER_EGG"),
-    SKELETON_SKULL(0, "SKULL","SKULL_ITEM"),
+    SKELETON_SKULL(0, "SKULL", "SKULL_ITEM"),
     SKELETON_SPAWN_EGG(0, "MONSTER_EGG"),
-    SKELETON_WALL_SKULL(0, "SKULL","SKULL_ITEM"),
+    SKELETON_WALL_SKULL(0, "SKULL", "SKULL_ITEM"),
     SLIME_BALL(0, "SLIME_BALL"),
     SLIME_BLOCK(0, "SLIME_BLOCK"),
     SLIME_SPAWN_EGG(0, "MONSTER_EGG"),
@@ -766,7 +766,7 @@ public enum DynamicMaterial {
     SPRUCE_PLANKS(1, "WOOD"),
     SPRUCE_PRESSURE_PLATE(0, "WOOD_PLATE"),
     SPRUCE_SAPLING(1, "SAPLING"),
-    SPRUCE_SLAB(1,"WOODEN_SLAB", "WOOD_STEP", "WOOD_DOUBLE_STEP"),
+    SPRUCE_SLAB(1, "WOODEN_SLAB", "WOOD_STEP", "WOOD_DOUBLE_STEP"),
     SPRUCE_STAIRS(0, "SPRUCE_WOOD_STAIRS"),
     SPRUCE_TRAPDOOR(0, "TRAP_DOOR"),
     SPRUCE_WOOD(1, "LOG"),
@@ -851,9 +851,9 @@ public enum DynamicMaterial {
     WHITE_WALL_BANNER(0, "WALL_BANNER"),
     WHITE_WOOL(0, "WOOL"),
     WITCH_SPAWN_EGG(0, "MONSTER_EGG"),
-    WITHER_SKELETON_SKULL(0, "SKULL","SKULL_ITEM"),
+    WITHER_SKELETON_SKULL(0, "SKULL", "SKULL_ITEM"),
     WITHER_SKELETON_SPAWN_EGG(0, "MONSTER_EGG"),
-    WITHER_SKELETON_WALL_SKULL(0, "SKULL","SKULL_ITEM"),
+    WITHER_SKELETON_WALL_SKULL(0, "SKULL", "SKULL_ITEM"),
     WOLF_SPAWN_EGG(0, "MONSTER_EGG"),
     WOODEN_AXE(0, "WOOD_AXE"),
     WOODEN_HOE(0, "WOOD_HOE"),
@@ -874,107 +874,99 @@ public enum DynamicMaterial {
     YELLOW_TERRACOTTA(4, "STAINED_CLAY"),
     YELLOW_WALL_BANNER(0, "WALL_BANNER"),
     YELLOW_WOOL(4, "WOOL"),
-    ZOMBIE_HEAD(0, "SKULL","SKULL_ITEM"),
+    ZOMBIE_HEAD(0, "SKULL", "SKULL_ITEM"),
     ZOMBIE_HORSE_SPAWN_EGG(0, "MONSTER_EGG"),
     ZOMBIE_PIGMAN_SPAWN_EGG(0, "MONSTER_EGG"),
     ZOMBIE_SPAWN_EGG(0, "MONSTER_EGG"),
     ZOMBIE_VILLAGER_SPAWN_EGG(0, "MONSTER_EGG"),
-    ZOMBIE_WALL_HEAD(0, "SKULL","SKULL_ITEM"),
+    ZOMBIE_WALL_HEAD(0, "SKULL", "SKULL_ITEM"),
     ;
 
     String[] m;
     int data;
 
-    DynamicMaterial(int data, String... m)
-    {
+    DynamicMaterial(int data, String... m) {
         this.m = m;
         this.data = data;
     }
 
-    public ItemStack parseItem()
-    {
+    public ItemStack parseItem() {
         Material mat = parseMaterial();
 
-        if(isNewVersion())
+        if (isNewVersion())
             return new ItemStack(mat);
 
-        return new ItemStack(mat,1,(byte) data);
+        return new ItemStack(mat, 1, (byte) data);
     }
 
-    public static boolean isNewVersion()
-    {
+    public static boolean isNewVersion() {
         return Material.getMaterial("RED_WOOL") != null;
     }
 
-    public boolean isSameMaterial(ItemStack comp)
-    {
-        if(isNewVersion())
+    public boolean isSameMaterial(ItemStack comp) {
+        if (isNewVersion())
             return comp.getType() == this.parseMaterial();
 
-        if(comp.getType() == this.parseMaterial() && (int) comp.getData().getData() == (int) this.data)
+        if (comp.getType() == this.parseMaterial() && (int) comp.getData().getData() == (int) this.data)
             return true;
 
         DynamicMaterial xmat = fromMaterial(comp.getType());
 
-        if(isDamageable(xmat))
-            if(this.parseMaterial() == comp.getType())
+        if (isDamageable(xmat))
+            if (this.parseMaterial() == comp.getType())
                 return true;
 
         return false;
     }
 
-    public DynamicMaterial fromMaterial(Material mat)
-    {
-        try
-        {
+    public DynamicMaterial fromMaterial(Material mat) {
+        try {
             return DynamicMaterial.valueOf(mat.toString());
-        }
-        catch(IllegalArgumentException e)
-        {
-            for(DynamicMaterial xmat : DynamicMaterial.values())
-                for(String test : xmat.m)
-                    if(test.equalsIgnoreCase(mat.toString()))
+        } catch (IllegalArgumentException e) {
+            for (DynamicMaterial xmat : DynamicMaterial.values())
+                for (String test : xmat.m)
+                    if (test.equalsIgnoreCase(mat.toString()))
                         return xmat;
         }
 
         return null;
     }
 
-    public static DynamicMaterial fromString(String key)
-    {
-        if(key.startsWith("LEGACY_"))
-            key = key.replaceAll("LEGACY_", "");
+    public static DynamicMaterial fromString(String key) {
+        key = key.toUpperCase();
+        String[] split = key.split(";");
+        String keyMat = split[0];
+
+        if (keyMat.startsWith("LEGACY_"))
+            keyMat = keyMat.replaceAll("LEGACY_", "");
+
         DynamicMaterial xmat = null;
 
-        try
-        {
-            xmat = DynamicMaterial.valueOf(key);
+        try {
+            xmat = DynamicMaterial.valueOf(keyMat);
             return xmat;
-        }
-        catch(IllegalArgumentException e)
-        {
-            String[] split = key.split(":");
-
-            if(split.length == 1)
-                xmat = requestXMaterial(key,(byte) 0);
+        } catch (IllegalArgumentException e) {
+            if (split.length == 1)
+                xmat = requestXMaterial(keyMat, (byte) 0);
             else
-                xmat = requestXMaterial(split[0],(byte) Integer.parseInt(split[1]));
+                xmat = requestXMaterial(keyMat, (byte) Integer.parseInt(split[1]));
+
+            if (xmat == null)
+                throw new NullPointerException("Could not find material " + keyMat);
 
             return xmat;
         }
 
     }
 
-    public boolean isDamageable(DynamicMaterial type)
-    {
-        if(type == null)
+    public boolean isDamageable(DynamicMaterial type) {
+        if (type == null)
             return false;
 
         String[] split = type.toString().split("_");
         int length = split.length;
 
-        switch(split[length-1])
-        {
+        switch (split[length - 1]) {
             case "HELMET":
                 return true;
             case "CHESTPLATE":
@@ -1010,13 +1002,50 @@ public enum DynamicMaterial {
 
     public Material parseMaterial()
     {
-        Material mat = Material.matchMaterial(this.toString());
-
+        Material mat = Material.matchMaterial(toString());
         if(mat != null)
             return mat;
 
         return Material.matchMaterial(m[0]);
     }
+
+    /*public Material parseMaterial()
+    {
+        System.out.println("toString: '" + toString() + "'");
+        Material mat = null;
+        try
+        {
+            System.out.println("Attempt original");
+            Material test = Material.matchMaterial("DRIED_KELP_BLOCK");
+            System.out.println("Passed test: " + test.toString());
+            mat = Material.matchMaterial(toString());
+            System.out.println("Success!");
+        }
+        catch(Exception exc)
+        {
+            System.out.println("Catch");
+            for(String names : m)
+            {
+                System.out.println("names: " + names);
+                try
+                {
+                    System.out.println("Trying");
+                    mat = Material.valueOf(names);
+                    System.out.println("Found!");
+                    break;
+                }
+                catch(Exception exc2) {}
+                System.out.println("Fail");
+            }
+            System.out.println("Done");
+        }
+        System.out.println("Returning... ");
+        if(mat != null)
+            System.out.println(mat.toString());
+        else
+            System.out.println("null");
+        return mat;
+    }*/
 
     private static HashMap<String, DynamicMaterial> cachedSearch = new HashMap<>();
     public static DynamicMaterial requestXMaterial(String name, byte data)
