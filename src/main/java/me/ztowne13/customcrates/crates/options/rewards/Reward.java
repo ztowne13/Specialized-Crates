@@ -257,7 +257,7 @@ public class Reward
 			ib.addLore(applyVariablesTo(s.toString()));
 		}
 
-		if(NMSUtils.Version.v1_12.isServerVersionEarlier() && NMSUtils.Version.v1_8.isServerVersionOrLater())
+		if(NMSUtils.Version.v1_12.isServerVersionOrEarlier() && NMSUtils.Version.v1_8.isServerVersionOrLater())
 		{
 			if(getFc().contains(getPath("nbt-tags")))
 			{
@@ -302,7 +302,7 @@ public class Reward
 
 		if(glow)
 		{
-			ib.setStack(NMSUtils.serverVersion17OrLater() ? new BukkitGlowEffect(ib.get()).apply() : new NMSGlowEffect(ib.get()).apply());
+			ib.setStack(NMSUtils.Version.v1_7.isServerVersionOrLater() ? new BukkitGlowEffect(ib.get()).apply() : new NMSGlowEffect(ib.get()).apply());
 		}
 
 		setDisplayItem(ib.get());

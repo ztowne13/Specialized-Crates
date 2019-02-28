@@ -90,7 +90,7 @@ public class CParticles extends CSetting
 
 				ParticleData pd;
 
-				if(!NMSUtils.serverVersion110OrLater())
+				if(!NMSUtils.Version.v1_10.isServerVersionOrLater())
 				{
 					ParticleEffect pe = null;
 					try
