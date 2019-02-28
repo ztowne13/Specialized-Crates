@@ -258,9 +258,7 @@ public class InvRoulette extends InventoryCrate
 						StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_NONEXISTENT.log(getSl(), new String[]{s});
 						continue;
 					}
-					int durability = Integer.valueOf(s);
-					getItems().add(new ItemBuilder(m, 1).getStack());
-
+					getItems().add(new ItemBuilder(m, 1).get());
 					StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_SUCCESS.log(getSl(), new String[]{s});
 				}
 				catch (Exception exc)
