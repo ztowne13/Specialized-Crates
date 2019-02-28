@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by ztowne13 on 6/11/16.
  */
-public class NBT_v_Reflection
+public class NBTTagReflection
 {
 	public static Class getCraftItemStack()
 	{

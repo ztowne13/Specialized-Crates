@@ -1,6 +1,8 @@
 package me.ztowne13.customcrates.gui;
 
 import me.ztowne13.customcrates.utils.ChatUtils;
+import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
+import me.ztowne13.customcrates.utils.nbt_utils.NBTTagReflection;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -38,6 +40,9 @@ public class ItemBuilder
 	{
 		stack = m.parseItem();
 		stack.setAmount(amnt);
+
+		if(m.preProgrammedNBTTag)
+			applyNBTTag(m.nbtTag);
 	}
 	
 	public ItemMeta im()
@@ -96,6 +101,12 @@ public class ItemBuilder
 	public ItemBuilder addEnchantment(Enchantment ench, int level)
 	{
 		getStack().addUnsafeEnchantment(ench, level);
+		return this;
+	}
+
+	public ItemBuilder applyNBTTag(String tag)
+	{
+		stack = NBTTagManager.applyTo(stack, tag);
 		return this;
 	}
 

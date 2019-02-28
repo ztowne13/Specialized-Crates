@@ -886,10 +886,18 @@ public enum DynamicMaterial {
 
     String[] m;
     int data;
+    boolean preProgrammedNBTTag = false;
+    String nbtTag = "";
 
     DynamicMaterial(int data, String... m) {
         this.m = m;
         this.data = data;
+
+        if(name().endsWith("_SPAWN_EGG"))
+        {
+            preProgrammedNBTTag = true;
+            nbtTag = name().replaceAll("_SPAWN_EGG", "");
+        }
     }
 
     public ItemStack parseItem() {

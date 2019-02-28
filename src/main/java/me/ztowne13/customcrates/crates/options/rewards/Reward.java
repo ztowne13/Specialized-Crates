@@ -7,7 +7,7 @@ import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.*;
-import me.ztowne13.customcrates.utils.nbt_utils.NBTUtilsV1_9;
+import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -83,9 +83,9 @@ public class Reward
 		fc.set(getPath("rarity"), getRarity());
 		fc.set(getPath("receive-limit"), getTotalUses());
 
-		if(NMSUtils.getServerVersion().contains("v1_9"))
+		if(NMSUtils.Version.v1_12.isServerVersionOrEarlier() && NMSUtils.Version.v1_8.isServerVersionOrLater())
 		{
-			fc.set(getPath("nbt-tags"), NBTUtilsV1_9.getFrom(getDisplayItem()));
+			fc.set(getPath("nbt-tags"), NBTTagManager.getFrom(getDisplayItem()));
 		}
 
 		fu.save();
@@ -263,7 +263,7 @@ public class Reward
 			{
 				for(String s : fc.getStringList(getPath("nbt-tags")))
 				{
-					ib.setStack(NBTUtilsV1_9.applyTo(ib.getStack(), s));
+					ib.applyNBTTag(s);
 				}
 			}
 		}
