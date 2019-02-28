@@ -190,7 +190,7 @@ public class CActions extends CSetting
 						}
 						else if (s.equalsIgnoreCase("ACTIONBAR"))
 						{
-							actionEffect.playActionBar(p, msg);
+							actionEffect.getActionBarExecutor().play(p, msg);
 						}
 						else if (s.equalsIgnoreCase("TITLE"))
 						{

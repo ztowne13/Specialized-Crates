@@ -1,20 +1,17 @@
-package me.ztowne13.customcrates.crates.options.actions;
+package me.ztowne13.customcrates.crates.options.actions.title;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 public abstract class Title
 {
-    abstract void setTitle(String title);
+    public abstract void setTitle(String title);
 
-    abstract String getTitle();
+    public abstract String getTitle();
 
-    abstract void setSubtitle(String subtitle);
+    public abstract void setSubtitle(String subtitle);
 
-    abstract String getSubtitle();
+    public abstract String getSubtitle();
 
     abstract void setTitleColor(ChatColor color);
 
@@ -30,7 +27,7 @@ public abstract class Title
 
     abstract void setTimingsToSeconds();
 
-    abstract void send(Player player);
+    public abstract void send(Player player);
 
     abstract void updateTimes(Player player);
 

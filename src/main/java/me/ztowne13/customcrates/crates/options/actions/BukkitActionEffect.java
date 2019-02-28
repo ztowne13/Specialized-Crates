@@ -2,6 +2,7 @@ package me.ztowne13.customcrates.crates.options.actions;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.crates.options.actions.actionbar.ActionBar;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.entity.Player;
@@ -17,6 +18,11 @@ public class BukkitActionEffect extends ActionEffect
     public BukkitActionEffect(CustomCrates cc)
     {
         super(cc);
+    }
+
+    public ActionBar getActionBarExecutor()
+    {
+        return new ActionBar();
     }
 
     public void newTitle()

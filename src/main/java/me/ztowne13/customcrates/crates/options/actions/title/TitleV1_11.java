@@ -1,4 +1,4 @@
-package me.ztowne13.customcrates.crates.options.actions;
+package me.ztowne13.customcrates.crates.options.actions.title;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
