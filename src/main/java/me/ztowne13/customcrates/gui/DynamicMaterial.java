@@ -146,8 +146,9 @@ public enum DynamicMaterial {
     CACTUS(0, "CACTUS"),
     CACTUS_GREEN(2, "INK_SACK"),
     CAKE(0, "CAKE", "CAKE_BLOCK"),
-    CARROT(0, "CARROT_ITEM"),
-    CARROTS(0, "CARROT"),
+//    CARROT(0, "CARROT_ITEM"),
+//    CARROTS(0, "CARROT"),
+    CARROT(0, "CARROT_ITEM", "CARROTS"),
     CARROT_ON_A_STICK(0, "CARROT_STICK"),
     CARVED_PUMPKIN(0, "PUMPKIN"),
     CAULDRON(0, "CAULDRON", "CAULDRON_ITEM"),
@@ -615,8 +616,9 @@ public enum DynamicMaterial {
     POPPED_CHORUS_FRUIT(0, "CHORUS_FRUIT_POPPED"),
     POPPY(0, "RED_ROSE"),
     PORKCHOP(0, "PORK"),
-    POTATO(0, "POTATO_ITEM"),
-    POTATOES(0, "POTATO"),
+//    POTATO(0, "POTATO_ITEM"),
+//    POTATOES(0, "POTATO"),
+    POTATO(0, "POTATO_ITEM", "POTATOES"),
     POTION(0, "POTION"),
     POTTED_ACACIA_SAPLING(0, "FLOWER_POT"),
     POTTED_ALLIUM(0, "FLOWER_POT"),
@@ -1055,7 +1057,7 @@ public enum DynamicMaterial {
 
         for(DynamicMaterial mat : DynamicMaterial.values())
         {
-            for(String test:mat.m)
+            for(String test : mat.m)
             {
                 if(name.toUpperCase().equals(test) && ((byte)mat.data) == data)
                 {

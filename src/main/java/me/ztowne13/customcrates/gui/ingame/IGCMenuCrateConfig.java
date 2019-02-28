@@ -252,7 +252,7 @@ public class IGCMenuCrateConfig extends IGCMenu
 				try
 				{
 					String[] split = input.split(";");
-					Material m = DynamicMaterial.fromString(split[0].toUpperCase()).parseMaterial();
+					DynamicMaterial m = DynamicMaterial.fromString(input.toUpperCase());
 					if(Utils.isInt(split[1]))
 					{
 						int id = Integer.parseInt(split[1]);

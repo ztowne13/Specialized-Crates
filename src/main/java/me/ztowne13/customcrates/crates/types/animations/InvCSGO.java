@@ -255,16 +255,15 @@ public class InvCSGO extends InventoryCrate
 		try
 		{
 			String unParsed = fu.get().getString("CrateType.Inventory.CSGO.identifier-block");
-			String[] args = unParsed.split(";");
 			try
 			{
-				Material m = DynamicMaterial.fromString(args[0].toUpperCase()).parseMaterial();
-				setIdentifierBlock(new ItemBuilder(new ItemStack(m, 1, unParsed.contains(";") ? Byte.valueOf(args[1]) : 0)).setName(" ").get());
+				DynamicMaterial m = DynamicMaterial.fromString(unParsed.toUpperCase());
+				setIdentifierBlock(new ItemBuilder(m, 1).setName(" ").get());
 				StatusLoggerEvent.ANIMATION_CSGO_IDBLOCK_SUCCESS.log(getSl());
 			}
 			catch(Exception exc)
 			{
-				StatusLoggerEvent.ANIMATION_CSGO_IDBLOCK_INVALID.log(getSl(), new String[]{args[0]});
+				StatusLoggerEvent.ANIMATION_CSGO_IDBLOCK_INVALID.log(getSl(), new String[]{unParsed});
 			}
 		}
 		catch(Exception exc)
@@ -324,10 +323,10 @@ public class InvCSGO extends InventoryCrate
 				String[] args = unParsed.split(";");
 				try
 				{
-					Material m = null;
+					DynamicMaterial m = null;
 					try
 					{
-						m = DynamicMaterial.fromString(args[0].toUpperCase()).parseMaterial();
+						m = DynamicMaterial.fromString(unParsed.toUpperCase());
 					}
 					catch(Exception exc)
 					{
@@ -335,7 +334,7 @@ public class InvCSGO extends InventoryCrate
 						continue;
 					}
 					int byt = unParsed.contains(";") ? Byte.valueOf(args[1]) : 0;
-					getFillerBlocks().add(new ItemStack(m, 1, (short) byt));
+					getFillerBlocks().add(new ItemBuilder(m, 1).get());
 
 					StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_MATERIAL_SUCCESS.log(getSl(), new String[]{unParsed});
 				}

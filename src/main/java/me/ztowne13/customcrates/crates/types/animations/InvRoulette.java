@@ -248,19 +248,18 @@ public class InvRoulette extends InventoryCrate
 			{
 				try
 				{
-					String[] args = s.split(";");
-					Material m = null;
+					DynamicMaterial m = null;
 					try
 					{
-						m = DynamicMaterial.fromString(args[0]).parseMaterial();
+						m = DynamicMaterial.fromString(s.toUpperCase());
 					}
 					catch (Exception exc)
 					{
-						StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_NONEXISTENT.log(getSl(), new String[]{args[0]});
+						StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_NONEXISTENT.log(getSl(), new String[]{s});
 						continue;
 					}
-					int durability = Integer.valueOf(args[1]);
-					getItems().add(new ItemStack(m, 1, (byte) durability));
+					int durability = Integer.valueOf(s);
+					getItems().add(new ItemBuilder(m, 1).getStack());
 
 					StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_SUCCESS.log(getSl(), new String[]{s});
 				}

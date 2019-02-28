@@ -158,19 +158,11 @@ public class InvEnclosement extends InventoryCrate
 		try
 		{
 			String s = fc.getString(prefix + "fill-block");
-			String[] split = s.split(";");
-			cause = split[0] + " is not a valid material.";
+			cause = s + " is not a valid material.";
 
-			Material m = DynamicMaterial.fromString(split[0]).parseMaterial();
-			short byt = 0;
+			DynamicMaterial m = DynamicMaterial.fromString(s);
 
-			if(split.length > 1)
-			{
-				cause = "The durability value is not a valid number";
-				byt = Short.valueOf(split[1]);
-			}
-
-			fillerItem = new ItemBuilder(m, 1, byt).setName(" ").get();
+			fillerItem = new ItemBuilder(m, 1).setName(" ").get();
 			StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_SUCCESS.log(getSl());
 		}
 		catch(Exception exc)
