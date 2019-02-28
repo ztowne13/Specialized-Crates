@@ -201,13 +201,16 @@ public class CustomCrates extends JavaPlugin
 		{
 			for (PlacedCrate cm : new ArrayList<PlacedCrate>(PlacedCrate.getPlacedCrates().values()))
 			{
-				try
+				if(cm.isCratesEnabled())
 				{
-					cm.tick(CrateState.PLAY);
-				}
-				catch (Exception exc)
-				{
-					exc.printStackTrace();
+					try
+					{
+						cm.tick(CrateState.PLAY);
+					}
+					catch (Exception exc)
+					{
+						exc.printStackTrace();
+					}
 				}
 			}
 
