@@ -139,6 +139,8 @@ mc-reward-display-leftclick: true
 inv-reward-display-name: '&4%crate% &cRewards'
 
 # The format for the name and lore of the item(s) being displayed in the inventory
+#   note: If a reward has a custom lore value set for it, this will be ignored.
+#
 # > %rewardname% - Name of the reward
 # > %displayname% - Display name of the reward
 # > %chance% - The actual calculated percent chance of winning that reward

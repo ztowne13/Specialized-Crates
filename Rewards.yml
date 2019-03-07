@@ -12,6 +12,10 @@ Dirt:
   commands:
     - give {name} minecraft:dirt 1
   item: DIRT;0
+  lore:
+    - 'This is a custom lore!'
+    - 'Make me unique to the default lore'
+    - 'That you can set in the config.yml'
   glow: true
   chance: 20
   rarity: common
@@ -47,7 +51,7 @@ Speed:
   chance: 5
   rarity: legendary
   receive-limit: 1
-GODApple:
+SuperGoldenApple:
   name: 'Super Golden Apple'
   commands:
     - give {name} minecraft:GOLDEN_APPLE 1
@@ -66,7 +70,7 @@ GoldenApple:
 Grass:
   name: 'Grass'
   commands:
-    - give {name} minecraft:grass -
+    - give {name} minecraft:grass
   item: GRASS;0
   glow: true
   chance: 20
@@ -77,6 +81,12 @@ SpecialDirt:
   commands:
     - give {name} minecraft:dirt 1
   item: DIRT;1
+  lore:
+    - '&6I'
+    - '&eam'
+    - '&cspecial!'
+    - '&7-'
+    - '&eChance: &6%writtenchance%%'
   chance: 15
   rarity: uncommon
   receive-limit: 1
@@ -96,6 +106,11 @@ SpecialDirt2:
   commands:
     - give {name} minecraft:dirt 2
   item: DIRT;2
+  lore:
+    - ''
+    - '&4&lSUPER RARE: &6%writtenchance%%% &lCHANCE'
+    - ''
+    - '&7Get Special Dirt if you win this!'
   chance: 10
   rarity: rare
   receive-limit: -1

@@ -242,7 +242,7 @@ public class Reward
 
 		return true;
 	}
-	
+
 	public void buildDisplayItemFromConfig()
 	{
 		String unsplitMat = getFc().getString(getPath("item"));
@@ -252,9 +252,20 @@ public class Reward
 		ItemBuilder ib = new ItemBuilder(m, 1);
 		ib.setName(applyVariablesTo(cc.getSettings().getConfigValues().get("inv-reward-item-name").toString()));
 
-		for(Object s: (ArrayList<String>) cc.getSettings().getConfigValues().get("inv-reward-item-lore"))
+		// If an item has a custom lore, apply that. Otherwise apply the general lore.
+		if(getFc().contains(getPath("lore")))
 		{
-			ib.addLore(applyVariablesTo(s.toString()));
+			for (String s : getFc().getStringList("lore"))
+			{
+				ib.addLore(applyVariablesTo(s));
+			}
+		}
+		else
+		{
+			for (Object s : (ArrayList<String>) cc.getSettings().getConfigValues().get("inv-reward-item-lore"))
+			{
+				ib.addLore(applyVariablesTo(s.toString()));
+			}
 		}
 
 		if(NMSUtils.Version.v1_12.isServerVersionOrEarlier() && NMSUtils.Version.v1_8.isServerVersionOrLater())
