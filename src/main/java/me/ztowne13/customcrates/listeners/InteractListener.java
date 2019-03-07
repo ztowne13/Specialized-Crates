@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.listeners;
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateAction;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,6 +29,8 @@ public class InteractListener implements Listener
 			if (!e.getHand().equals(EquipmentSlot.HAND))
 				return;
 		} catch(Throwable exc) {}
+
+		Bukkit.broadcastMessage("type;id: " + e.getItem().getType() + ";" + e.getItem().getDurability());
 
 		if(!e.isCancelled())
 		{

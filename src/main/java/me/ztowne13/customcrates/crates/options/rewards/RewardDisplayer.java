@@ -5,6 +5,8 @@ import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class RewardDisplayer 

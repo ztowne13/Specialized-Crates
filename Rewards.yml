@@ -28,6 +28,14 @@ DiamondSword:
   chance: 3
   rarity: legendary
   receive-limit: -1
+MonsterEggsInAllVersions:
+  name: 'Monster-specific spawn eggs for all versions'
+  commands:
+    - give {name} minecraft:milk 1
+  item: CREEPER_SPAWN_EGG
+  chance: 5
+  rarity: legendary
+  receive-limit: 1
 Speed:
   name: 'Speed'
   commands:

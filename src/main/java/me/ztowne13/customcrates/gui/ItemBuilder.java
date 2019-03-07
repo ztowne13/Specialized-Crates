@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.gui;
 
 import me.ztowne13.customcrates.utils.ChatUtils;
+import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
 import me.ztowne13.customcrates.utils.nbt_utils.NBTTagReflection;
 import org.bukkit.Material;
@@ -40,9 +41,8 @@ public class ItemBuilder
 	{
 		stack = m.parseItem();
 		stack.setAmount(amnt);
-
-		if(m.preProgrammedNBTTag)
-			applyNBTTag(m.nbtTag);
+		//if(m.preProgrammedNBTTag && NMSUtils.Version.v1_8.isServerVersionOrLater())
+		//	applyNBTTag(m.nbtTag);
 	}
 	
 	public ItemMeta im()
