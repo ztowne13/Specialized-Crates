@@ -94,7 +94,7 @@ public class IGCCrateParticles extends IGCTierMenu
 		{
 			try
 			{
-				if(NMSUtils.getServerVersion().contains("v1_7") || NMSUtils.getServerVersion().contains("v1_8"))
+				if(NMSUtils.Version.v1_7.isServerVersionOrLater() && NMSUtils.Version.v1_8.isServerVersionOrEarlier())
 				{
 					ParticleEffect pe = ParticleEffect.valueOf(input.toUpperCase());
 					pd = new NMSParticleEffect(pe, false);
