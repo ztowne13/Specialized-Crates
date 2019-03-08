@@ -165,6 +165,7 @@ public class Reward
 	public boolean loadFromConfig()
 	{
 		setFc(getCc().getRewardsFile().get());
+		boolean success = true;
 
 		try
 		{
@@ -177,7 +178,7 @@ public class Reward
 			if(toLog)
 			{
 				StatusLoggerEvent.REWARD_NAME_NONEXISTENT.log(getCr().getCrates(), new String[]{this.toString()});
-				return false;
+				success = false;
 			}
 		}
 
@@ -191,7 +192,7 @@ public class Reward
 			if (toLog)
 			{
 				StatusLoggerEvent.REWARD_RARITY_NONEXISTENT.log(getCr().getCrates(), new String[]{this.toString()});
-				return false;
+				success =  false;
 			}
 		}
 
@@ -206,20 +207,6 @@ public class Reward
 
 		try
 		{
-			buildDisplayItemFromConfig();
-		}
-		catch(Exception exc)
-		{
-			needsMoreConfig = true;
-			if(toLog)
-			{
-				StatusLoggerEvent.REWARD_ITEM_NONEXISTENT.log(getCr().getCrates(), new String[]{this.toString()});
-				return false;
-			}
-		}
-
-		try
-		{
 			setCommands(getFc().getStringList(getPath("commands")));
 		}
 		catch(Exception exc)
@@ -227,7 +214,7 @@ public class Reward
 			if(toLog)
 			{
 				StatusLoggerEvent.REWARD_COMMAND_INVALID.log(getCr().getCrates(), new String[]{this.toString()});
-				return false;
+				success =  false;
 			}
 		}
 
@@ -240,7 +227,21 @@ public class Reward
 			setTotalUses(-1);
 		}
 
-		return true;
+		try
+		{
+			buildDisplayItemFromConfig();
+		}
+		catch(Exception exc)
+		{
+			needsMoreConfig = true;
+			if(toLog)
+			{
+				StatusLoggerEvent.REWARD_ITEM_NONEXISTENT.log(getCr().getCrates(), new String[]{this.toString()});
+				success =  false;
+			}
+		}
+
+		return success;
 	}
 
 	public void buildDisplayItemFromConfig()
@@ -255,7 +256,7 @@ public class Reward
 		// If an item has a custom lore, apply that. Otherwise apply the general lore.
 		if(getFc().contains(getPath("lore")))
 		{
-			for (String s : getFc().getStringList("lore"))
+			for (String s : getFc().getStringList(getPath("lore")))
 			{
 				ib.addLore(applyVariablesTo(s));
 			}

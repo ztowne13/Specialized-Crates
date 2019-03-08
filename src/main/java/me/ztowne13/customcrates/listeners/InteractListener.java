@@ -30,8 +30,6 @@ public class InteractListener implements Listener
 				return;
 		} catch(Throwable exc) {}
 
-		Bukkit.broadcastMessage("type;id: " + e.getItem().getType() + ";" + e.getItem().getDurability());
-
 		if(!e.isCancelled())
 		{
 			Player p = e.getPlayer();

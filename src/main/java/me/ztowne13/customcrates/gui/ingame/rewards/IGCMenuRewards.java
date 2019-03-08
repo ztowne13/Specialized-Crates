@@ -86,8 +86,13 @@ public class IGCMenuRewards extends IGCMenu
 			}
 
 			r.checkIsNeedMoreConfig();
+			ItemBuilder newR;
 
-			ItemBuilder newR = new ItemBuilder(r.isNeedsMoreConfig() ? DynamicMaterial.ROSE_RED : DynamicMaterial.LIGHT_BLUE_DYE, 1).setName("&a" + rName).setLore(r.isNeedsMoreConfig() ? "&7This reward isn't fully configured" : "&7Click to edit.");
+			if(r.isNeedsMoreConfig())
+				newR = new ItemBuilder(DynamicMaterial.BARRIER, 1).setName("&4&l" + rName).setLore("&cThis reward isn't fully configured,").addLore("&cplease fix it and reload the plugin.");
+			else
+				newR = new ItemBuilder(r.getDisplayItem()).setName("&a" + rName).setLore("&7Click to edit.");
+
 			newR.addLore("").addLore("&7Used by crates:").addLore("");
 			for (String s : r.delete(false).replace("[", "").replace("]", "").split(", "))
 			{
@@ -141,16 +146,15 @@ public class IGCMenuRewards extends IGCMenu
 		{
 			up();
 		}
-
-		else if(!(getIb().getInv().getItem(slot) == null) && (DynamicMaterial.ROSE_RED.isSameMaterial(getIb().getInv().getItem(slot)) || DynamicMaterial.LIGHT_BLUE_DYE.isSameMaterial(getIb().getInv().getItem(slot))))
+		else if(slot == 4)
+		{
+			new InputMenu(getCc(), getP(), "rewardName", "null", "No spaces allowed. No duplicate names. &7&oNote: These 'reward names' will never be seen by your player: they are just an 'identifier'.", String.class, this);
+		}
+		else if(getIb().getInv().getItem(slot) != null)
 		{
 			String rName = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
 			getP().closeInventory();
 			new IGCMenuReward(getCc(), getP(), this, rName).open();
-		}
-		else if(slot == 4)
-		{
-			new InputMenu(getCc(), getP(), "rewardName", "null", "No spaces allowed. No duplicate names. &7&oNote: These 'reward names' will never be seen by your player: they are just an 'identifier'.", String.class, this);
 		}
 	}
 

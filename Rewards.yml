@@ -13,9 +13,9 @@ Dirt:
     - give {name} minecraft:dirt 1
   item: DIRT;0
   lore:
-    - 'This is a custom lore!'
-    - 'Make me unique to the default lore'
-    - 'That you can set in the config.yml'
+    - '&5This is a &a&lcustom lore!'
+    - '&c&oMake me unique to the default lore'
+    - '&c&oThat you can set in the config.yml'
   glow: true
   chance: 20
   rarity: common
@@ -108,7 +108,7 @@ SpecialDirt2:
   item: DIRT;2
   lore:
     - ''
-    - '&4&lSUPER RARE: &6%writtenchance%%% &lCHANCE'
+    - '&4&lSUPER RARE: &6%writtenchance%% &lCHANCE'
     - ''
     - '&7Get Special Dirt if you win this!'
   chance: 10

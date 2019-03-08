@@ -26,7 +26,7 @@ public abstract class IGCMenu
 	{
 		this.cc = cc;
 		this.p = p;
-		this.inventoryName = inventoryName;
+		this.inventoryName = inventoryName.length() >= 32 ? inventoryName.substring(0, 31) : inventoryName;
 		this.lastMenu = lastMenu;
 	}
 
