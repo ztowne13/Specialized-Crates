@@ -153,6 +153,8 @@ public class IGCMenuReward extends IGCMenu
 		else if(slot == 16)
 		{
 			ChatUtils.msgError(getP(), "This value is currently unusable and non-settable.");
+			unsavedChanges = false;
+			return;
 		}
 		else if(slot == 0)
 		{
@@ -188,7 +190,7 @@ public class IGCMenuReward extends IGCMenu
 			unsavedChanges = false;
 			return;
 		}
-		else if(slot == getIb().getInv().getSize()-9)
+		else if(slot == 18)
 		{
 			if(!unsavedChanges || ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName()).equalsIgnoreCase("Are you sure?"))
 			{
@@ -196,7 +198,7 @@ public class IGCMenuReward extends IGCMenu
 			}
 			else
 			{
-				new ItemBuilder(getIb().getInv().getItem(slot)).setName("&4Are you sure?").setLore("&cYou have unsaved changes.").addLore("&7The changes will only be").addLore("&7temporary if not saved later").addLore("&7and will delete upon reload.");
+				getIb().setItem(18, new ItemBuilder(getIb().getInv().getItem(slot)).setName("&4Are you sure?").setLore("&cYou have unsaved changes.").addLore("&7The changes will only be").addLore("&7temporary if not saved later").addLore("&7and will delete upon reload."));
 			}
 		}
 		else
