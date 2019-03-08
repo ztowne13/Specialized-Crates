@@ -27,17 +27,20 @@ public class Reward
 	CRewards cr;
 	String rewardName, displayName, rarity;
 	ItemStack displayItem;
+    List<String> customLore;
 
-	double chance = -1;
+    double chance;
 	List<String> commands;
 	int totalUses;
 	Material m;
-	boolean needsMoreConfig = false, glow = false;
+	boolean needsMoreConfig, glow;
 
-	boolean toLog = false;
+	boolean toLog;
 
 	public Reward(CustomCrates cc, String rewardName)
 	{
+	    init();
+	    needsMoreConfig = true;
 		this.cc = cc;
 		setRewardName(rewardName);
 	}
@@ -45,11 +48,23 @@ public class Reward
 	public Reward(CustomCrates cc, CRewards cr, String rewardName)
 	{
 		this(cc, rewardName);
-		this.cr = cr;
+        init();
+        this.cr = cr;
 		toLog = true;
 		loadChance();
 	}
-	
+
+
+	public void init()
+    {
+        commands = new ArrayList<String>();
+        customLore = new ArrayList<String>();
+        needsMoreConfig = false;
+        glow = false;
+        toLog = false;
+        chance = -1;
+    }
+
 	public void runCommands(Player p)
 	{
 		for(String command : getCommands())
@@ -77,6 +92,15 @@ public class Reward
 				parsedEnchs.add(ench.getName() + ";" + getDisplayItem().getEnchantments().get(ench));
 			}
 			fc.set(getPath("enchantments"), parsedEnchs);
+		}
+
+		if(!customLore.isEmpty())
+		{
+			fc.set(getPath("lore"), customLore);
+		}
+		else
+		{
+			fc.set(getPath("lore"), null);
 		}
 
 		fc.set(getPath("chance"), getChance());
@@ -259,6 +283,7 @@ public class Reward
 			for (String s : getFc().getStringList(getPath("lore")))
 			{
 				ib.addLore(applyVariablesTo(s));
+                customLore.add(applyVariablesTo(s));
 			}
 		}
 		else
@@ -318,6 +343,21 @@ public class Reward
 		}
 
 		setDisplayItem(ib.get());
+	}
+
+	public void reapplyLore()
+	{
+		ItemBuilder itemBuilder = new ItemBuilder(getDisplayItem());
+		itemBuilder.clearLore();
+		if(!getCustomLore().isEmpty())
+		{
+			for(String loreLine : getCustomLore())
+			{
+				itemBuilder.addLore(loreLine);
+			}
+		}
+
+		setDisplayItem(itemBuilder.get());
 	}
 
 	public void checkIsNeedMoreConfig()
@@ -470,4 +510,14 @@ public class Reward
 	{
 		this.glow = glow;
 	}
+
+    public List<String> getCustomLore()
+    {
+        return customLore;
+    }
+
+    public void setCustomLore(List<String> customLore)
+    {
+        this.customLore = customLore;
+    }
 }

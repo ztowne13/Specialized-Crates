@@ -87,12 +87,17 @@ public class ItemBuilder
 		return this;
 	}
 
-	public ItemBuilder setLore(String s)
+	public ItemBuilder clearLore()
 	{
 		ItemMeta im = im();
 		im.setLore(null);
 		setIm(im);
+		return this;
+	}
 
+	public ItemBuilder setLore(String s)
+	{
+		clearLore();
 		addLore(s);
 
 		return this;

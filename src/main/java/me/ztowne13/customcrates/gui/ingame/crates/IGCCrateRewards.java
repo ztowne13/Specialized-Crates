@@ -116,6 +116,9 @@ public class IGCCrateRewards extends IGCMenuCrate
 	@Override
 	public void manageClick(int slot)
 	{
+		if(getIb().getInv().getItem(slot) == null)
+			return;
+
 		if(slot == 0)
 		{
 			up();

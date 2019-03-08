@@ -37,9 +37,9 @@ public class IGCMenuCrateConfig extends IGCMenu
 
 		InventoryBuilder ib = createDefault(27);
 
-		ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
-		ib.setItem(9, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
-		ib.setItem(18, IGCDefaultItems.RELOAD_BUTTON.getIb());
+		ib.setItem(18, IGCDefaultItems.EXIT_BUTTON.getIb());
+		ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
+		ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
 
 		ib.setItem(11, new ItemBuilder(Material.PAPER, 1, 0).setName("&aCSGO Animation").setLore("&7Animation name: &fINV_CSGO").addLore("").addLore("&7Used by crates: &f" + CrateType.INV_CSGO.getUses()));
 		ib.setItem(12, new ItemBuilder(Material.PAPER, 1, 0).setName("&aRoulette Animation").setLore("&7Animation name: &fINV_ROULETTE").addLore("").addLore("&7Used by crates: &f" + CrateType.INV_ROULETTE.getUses()));
@@ -100,14 +100,14 @@ public class IGCMenuCrateConfig extends IGCMenu
 	{
 		switch(slot)
 		{
-			case 0:
+			case 18:
 				up();
 				break;
-			case 9:
+			case 0:
 				cc.getCrateconfigFile().save();
 				ChatUtils.msgSuccess(p, "CrateConfig.YML saved!");
 				break;
-			case 18:
+			case 9:
 				reload();
 				break;
 			case 11:
