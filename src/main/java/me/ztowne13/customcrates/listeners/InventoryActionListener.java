@@ -33,8 +33,6 @@ public class InventoryActionListener implements Listener
 	public void onInventoryClick(InventoryClickEvent e)
 	{
 
-		Bukkit.broadcastMessage("NBT Tags: " + NBTTagManager.getFrom(e.getCurrentItem()).toString());
-
 		Player p = (Player) e.getWhoClicked();
 		PlayerManager pm = PlayerManager.get(cc, p);
 				
