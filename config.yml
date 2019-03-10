@@ -63,6 +63,9 @@ place-effect: true
 # Should the lore for a key be required to match the crate's key to work?
 require-key-lore: false
 
+# Should the crates automatically close when their animations is done playing?
+auto-close: true
+
 #-------------------------------------------#
 #           Crate Action Settings           #
 #-------------------------------------------#

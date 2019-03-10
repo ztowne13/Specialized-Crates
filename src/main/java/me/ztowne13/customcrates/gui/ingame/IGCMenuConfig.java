@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.gui.ingame;
 
+import com.mojang.datafixers.Dynamic;
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.Settings;
@@ -9,7 +10,9 @@ import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.InventoryUtils;
+import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by ztowne13 on 3/11/16.
@@ -90,12 +94,22 @@ public class IGCMenuConfig extends IGCMenu
 			}
 			else
 			{
-				boolean canBeUsed = !(map.get(sv) instanceof Collection);
+				boolean isCollection = map.get(sv) instanceof Collection;
 
-				ItemBuilder newBuilder = new ItemBuilder(canBeUsed ? DynamicMaterial.ORANGE_WOOL : DynamicMaterial.LIGHT_GRAY_WOOL, 1)
-						.setName((canBeUsed ? "&a" : "&c") + sv)
-						.setLore(canBeUsed ? "&e&oCurrent value: " + map.get(sv) : "&cThis value cannot currently be edited in game")
-						.addLore("");
+				ItemBuilder newBuilder = new ItemBuilder(!isCollection ? DynamicMaterial.ORANGE_WOOL : DynamicMaterial.LIGHT_GRAY_WOOL, 1).setName("&a" + sv);
+				if(isCollection)
+				{
+					newBuilder.setLore("&e&oCurrent value: ");
+					List<String> objects = (List<String>) map.get(sv);
+					for(String obj : objects)
+						newBuilder.addLore(obj);
+				}
+				else
+				{
+					newBuilder.setLore("&e&oCurrent value: " + map.get(sv));
+				}
+
+				newBuilder.addLore("");
 
 				for(String lore : SettingsValues.getByPath(sv).getDescriptor())
 				{
@@ -119,26 +133,35 @@ public class IGCMenuConfig extends IGCMenu
 			ItemBuilder newBuilder = new ItemBuilder(inv.getItem(slot));
 			SettingsValues sv = SettingsValues.getByPath(newBuilder.getName(true));
 
-			newBuilder.getStack().setDurability((byte) (newBuilder.getStack().getDurability() == 5 ? 14 : 5));
+			if(NMSUtils.Version.v1_12.isServerVersionOrEarlier())
+			{
+				newBuilder.getStack().setDurability((byte) (newBuilder.getStack().getDurability() == 5 ? 14 : 5));
+			}
+			else
+			{
+				if (DynamicMaterial.RED_WOOL.isSameMaterial(newBuilder.getStack()))
+					newBuilder.getStack().setType(DynamicMaterial.LIME_WOOL.parseMaterial());
+				else
+					newBuilder.getStack().setType(DynamicMaterial.RED_WOOL.parseMaterial());
+			}
 
 			getIb().setItem(slot, newBuilder);
 
-			getCc().getSettings().getConfigValues().put(sv.getPath(), newBuilder.getStack().getDurability() == 5);
+			getCc().getSettings().getConfigValues().put(sv.getPath(), newBuilder.getStack().getDurability() == 5 || DynamicMaterial.LIME_WOOL.isSameMaterial(newBuilder.getStack()));
 			open();
 		}
-		else if(inv.getItem(slot).getType().equals(DynamicMaterial.ORANGE_WOOL) || inv.getItem(slot).getType().equals(DynamicMaterial.LIGHT_GRAY_WOOL))
+		else if(DynamicMaterial.ORANGE_WOOL.isSameMaterial(inv.getItem(slot)))
 		{
 			ItemStack item = inv.getItem(slot);
 			SettingsValues sv = SettingsValues.getByPath(new ItemBuilder(item).getName(true));
 
-			if(inv.getItem(slot).getType().equals(DynamicMaterial.LIGHT_GRAY_WOOL))
-			{
-				ChatUtils.msgError(p, "This value cannot be configured in game.");
-			}
-			else
-			{
-				new InputMenu(cc, getP(), sv.getPath(), sv.getValue(cc).toString(), sv.getObj(), this);
-			}
+			new InputMenu(cc, getP(), sv.getPath(), sv.getValue(cc).toString(), sv.getObj(), this);
+		}
+		else if(DynamicMaterial.LIGHT_GRAY_WOOL.isSameMaterial(inv.getItem(slot)))
+		{
+			ItemStack item = inv.getItem(slot);
+			SettingsValues sv = SettingsValues.getByPath(new ItemBuilder(item).getName(true));
+			new IGCListEditor(getCc(), getP(), this, "inv-reward-item-lore", "Line", (List<String>)sv.getValue(cc), DynamicMaterial.BOOK, 1).open();
 		}
 		else
 		{

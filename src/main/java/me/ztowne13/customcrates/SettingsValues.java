@@ -106,7 +106,7 @@ public enum SettingsValues
 	
 	REWARD_ITEM_LORE("inv-reward-item-lore", Collection.class,
 			new String[]{
-					"Set the reward display item's lore."
+					"Edit the reward display item's lore."
 	}),
 	
 	EXPLODE_DYNAMIC("explosions-destroy-dynamic-crates", Boolean.class,
