@@ -53,20 +53,20 @@ public class IGCMenuReward extends IGCMenu
                 .setLore("&7Save your current changes"));
         getIb().setItem(18, IGCDefaultItems.EXIT_BUTTON.getIb());
 
-        ib.setItem(4, new ItemBuilder(DynamicMaterial.INK_SAC.parseMaterial(), 1, 12).setName("&a" + r.getRewardName()));
+        ib.setItem(4, new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1).setName("&a" + r.getRewardName()));
         ib.setItem(8,
                 new ItemBuilder(DynamicMaterial.fromString("CARPET").parseMaterial(), 1, 14).setName("&cDelete this reward")
                         .setLore("&7You will have confirmation").addLore("&7before deleting."));
 
         ib.setItem(10,
-                new ItemBuilder(getMat(Material.PAPER, r.getDisplayName() == null), 1, getByt(0, r.getDisplayName() == null))
+                new ItemBuilder(r.getDisplayName() == null ? DynamicMaterial.ROSE_RED : DynamicMaterial.PAPER, 1)
                         .setLore("&7Current value: ").addLore("&f" + getName(r.getDisplayName()))
                         .setName("&aSet the display name."));
 
-        ItemBuilder commands = new ItemBuilder(
-                getMat(DynamicMaterial.COMMAND_BLOCK.parseMaterial(), r.getCommands() == null || r.getCommands().isEmpty()),
-                1, getByt(0, r.getCommands() == null || r.getCommands().isEmpty())).setName("&aEdit the commands")
-                .setLore("&7Current value: ");
+        ItemBuilder commands =
+                new ItemBuilder(r.getCommands() == null ? DynamicMaterial.ROSE_RED : DynamicMaterial.COMMAND_BLOCK, 1)
+                        .setName("&aEdit the commands")
+                        .setLore("&7Current value: ");
         if (commands.getStack().getType() != DynamicMaterial.INK_SAC.parseMaterial())
         {
             for (String cmds : r.getCommands())
@@ -76,9 +76,9 @@ public class IGCMenuReward extends IGCMenu
         }
         ib.setItem(12, commands);
 
-        ItemBuilder lore = new ItemBuilder(getMat(DynamicMaterial.WRITABLE_BOOK.parseMaterial(),
-                r.getCustomLore() == null || r.getCustomLore().isEmpty()), 1,
-                getByt(0, r.getCustomLore() == null || r.getCustomLore().isEmpty())).setName("&aEdit the lore")
+        ItemBuilder lore = new ItemBuilder(
+                r.getCustomLore() == null || r.getCustomLore().isEmpty() ? DynamicMaterial.ROSE_RED :
+                        DynamicMaterial.WRITABLE_BOOK, 1).setName("&aEdit the lore")
                 .setLore("&7Current value: ");
         if (lore.getStack().getType() != DynamicMaterial.INK_SAC.parseMaterial())
         {
@@ -100,14 +100,14 @@ public class IGCMenuReward extends IGCMenu
                         .setLore("&7By clicking this object you will").addLore("&7set the display item to your")
                         .addLore("&7item you are currently holding."));
         ib.setItem(14,
-                new ItemBuilder(getMat(Material.FISHING_ROD, r.getChance() == null), 1, getByt(0, r.getChance() == null))
+                new ItemBuilder(r.getChance() == null ? DynamicMaterial.ROSE_RED : DynamicMaterial.FISHING_ROD, 1)
                         .setName("&aSet the chance").setLore("&7Current value: ")
                         .addLore("&f" + getName(r.getChance() + "")));
         ib.setItem(15,
-                new ItemBuilder(getMat(Material.DIAMOND_BLOCK, r.getRarity() == null), 1, getByt(0, r.getRarity() == null))
+                new ItemBuilder(r.getRarity() == null ? DynamicMaterial.ROSE_RED : DynamicMaterial.DIAMOND_BLOCK, 1)
                         .setName("&aSet the rarity level").setLore("&7Current value: ")
                         .addLore("&f" + getName(r.getRarity())));
-        ib.setItem(16, new ItemBuilder(getMat(Material.DARK_OAK_FENCE, false), 1, getByt(0, false))
+        ib.setItem(16, new ItemBuilder(DynamicMaterial.DARK_OAK_FENCE, 1)
                 .setName("&cSet the receive-limit").setLore("&cThis value is currently non-usable."));
 
         getIb().open();
@@ -327,16 +327,6 @@ public class IGCMenuReward extends IGCMenu
     public String getName(String val)
     {
         return r == null || val == null ? "&cSet this value." : val;
-    }
-
-    public Material getMat(Material m, boolean otherValueNull)
-    {
-        return r == null || otherValueNull ? DynamicMaterial.INK_SAC.parseMaterial() : m;
-    }
-
-    public int getByt(int byt, boolean otherValueNull)
-    {
-        return r == null || otherValueNull ? 1 : byt;
     }
 
 }

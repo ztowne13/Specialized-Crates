@@ -41,8 +41,8 @@ public class ItemBuilder
 	{
 		stack = m.parseItem();
 		stack.setAmount(amnt);
-		//if(m.preProgrammedNBTTag && NMSUtils.Version.v1_8.isServerVersionOrLater())
-		//	applyNBTTag(m.nbtTag);
+		if(m.preProgrammedNBTTag && NMSUtils.Version.v1_12.isServerVersionOrEarlier())
+			applyNBTTag(m.nbtTag);
 	}
 	
 	public ItemMeta im()

@@ -10,6 +10,8 @@ import me.ztowne13.customcrates.crates.types.animations.InvMenu;
 import me.ztowne13.customcrates.crates.types.animations.dataholders.DiscoverDataHolder;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
+import net.citizensnpcs.api.jnbt.NBTUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,7 +31,10 @@ public class InventoryActionListener implements Listener
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e)
-	{ 
+	{
+
+		Bukkit.broadcastMessage("NBT Tags: " + NBTTagManager.getFrom(e.getCurrentItem()).toString());
+
 		Player p = (Player) e.getWhoClicked();
 		PlayerManager pm = PlayerManager.get(cc, p);
 				
