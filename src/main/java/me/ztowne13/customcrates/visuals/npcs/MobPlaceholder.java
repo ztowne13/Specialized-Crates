@@ -34,6 +34,8 @@ public class MobPlaceholder extends DynamicCratePlaceholder
 		NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
 		NPC npc = npcRegistry.createNPC(ent.getEt(), "Specialized Crate - Crate");
 
+		npc.addTrait(new IdentifierTrait());
+
 		NPCUtils.applyDefaultInfo(npc);
 
 		npc.spawn(LocationUtils.getLocationCentered(cm.getL()));

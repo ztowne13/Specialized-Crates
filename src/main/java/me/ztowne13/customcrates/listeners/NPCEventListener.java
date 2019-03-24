@@ -4,6 +4,7 @@ import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.CrateAction;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -9,8 +9,10 @@ import me.ztowne13.customcrates.visuals.EntityTypes;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
+import net.citizensnpcs.npc.skin.Skin;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
 import net.citizensnpcs.util.NMS;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -36,22 +38,17 @@ public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
 		LocationUtils.removeDubBlocks(cm.getL());
 
 		NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
-		NPC npc = npcRegistry.createNPC(EntityType.PLAYER, "");
-
-		NPCUtils.applyDefaultInfo(npc);
+		NPC npc = npcRegistry.createNPC(EntityType.PLAYER, name);
 
 		npc.data().setPersistent(NPC.PLAYER_SKIN_UUID_METADATA, name);
 		npc.data().setPersistent(NPC.PLAYER_SKIN_USE_LATEST, true);
 
+		npc.addTrait(new IdentifierTrait());
+
 		npc.spawn(LocationUtils.getLocationCentered(cm.getL()));
 
 		applySkin(npc, getName());
-
-		Entity bat = cm.getL().getWorld().spawnEntity(cm.getL(), EntityType.ARMOR_STAND);
-		bat.setCustomNameVisible(false);
-
-		npc.getEntity().setPassenger(bat);
-
+		NPCUtils.applyDefaultInfo(npc);
 
 		getNpcs().put(cm, npc);
 
@@ -83,7 +80,7 @@ public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
 	{
 		if (npc.isSpawned()) {
 
-			SkinnableEntity skinnable = NMS.getSkinnable(npc.getEntity());
+			SkinnableEntity skinnable = (SkinnableEntity) npc.getEntity();
 			if (skinnable != null) {
 				skinnable.setSkinName(name);
 			}

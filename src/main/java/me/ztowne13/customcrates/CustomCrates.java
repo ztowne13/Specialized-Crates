@@ -14,6 +14,8 @@ import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.utils.*;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.trait.TraitInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -45,6 +47,7 @@ public class CustomCrates extends JavaPlugin
 	
 	public void onEnable(boolean register)
 	{
+
 		reloadConfig();
 		saveDefaultConfig();
 		loadFiles();
@@ -70,6 +73,7 @@ public class CustomCrates extends JavaPlugin
 			PlayerManager.get(this, p);
 		}
 
+		NPCUtils.load(register);
 		NPCUtils.checkUncheckMobs(this, false, 20);
 
 		run();

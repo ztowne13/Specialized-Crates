@@ -1,11 +1,14 @@
 package me.ztowne13.customcrates.utils;
 
 import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.visuals.npcs.IdentifierTrait;
 import me.ztowne13.customcrates.visuals.npcs.MobPlaceholder;
 import me.ztowne13.customcrates.visuals.npcs.Citizens2NPCPlaceHolder;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
+import net.citizensnpcs.api.trait.Trait;
+import net.citizensnpcs.api.trait.TraitInfo;
 import net.citizensnpcs.trait.LookClose;
 import org.bukkit.Bukkit;
 
@@ -27,7 +30,8 @@ public class NPCUtils
 				for (Object obj : Utils.iteratorToList(npcs))
 				{
 					NPC npc = (NPC) obj;
-					if (npc.getName().equals("Specialized Crate - Crate"))
+
+					if(npc.hasTrait(IdentifierTrait.class) && npc.getTrait(IdentifierTrait.class).isCrate())
 					{
 						if (!b)
 						{
@@ -79,5 +83,13 @@ public class NPCUtils
 
 		npc.data().set(NPC.AMBIENT_SOUND_METADATA, null);
 		npc.data().set(NPC.DEFAULT_PROTECTED_METADATA, true);
+	}
+
+	public static void load(boolean firstEnable)
+	{
+		if(firstEnable && Utils.isPLInstalled("Citizens"))
+		{
+			CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(IdentifierTrait.class).withName("isCrate"));
+		}
 	}
 }
