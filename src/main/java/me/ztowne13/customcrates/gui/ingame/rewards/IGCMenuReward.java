@@ -110,6 +110,12 @@ public class IGCMenuReward extends IGCMenu
         ib.setItem(16, new ItemBuilder(DynamicMaterial.DARK_OAK_FENCE, 1)
                 .setName("&cSet the receive-limit").setLore("&cThis value is currently non-usable."));
 
+        if (DynamicMaterial.PLAYER_HEAD.isSameMaterial(r.getDisplayItem()))
+        {
+            ib.setItem(22, new ItemBuilder(DynamicMaterial.NAME_TAG, 1).setName("&aSet the player-head name")
+                    .setLore("&7Current value:").addLore("&f" + getName(r.getHeadName())));
+        }
+
         getIb().open();
     }
 
@@ -186,6 +192,12 @@ public class IGCMenuReward extends IGCMenu
                 getIb().setItem(slot, ib);
                 r.setDisplayItem(ib.get());
             }
+
+            if (DynamicMaterial.PLAYER_HEAD.isSameMaterial(r.getDisplayItem()))
+            {
+                getIb().setItem(22, new ItemBuilder(DynamicMaterial.NAME_TAG, 1).setName("&aSet the player-head name")
+                        .setLore("&7Current value:").addLore("&f" + getName(r.getHeadName())));
+            }
         }
         else if (slot == 14)
         {
@@ -200,6 +212,10 @@ public class IGCMenuReward extends IGCMenu
             ChatUtils.msgError(getP(), "This value is currently unusable and non-settable.");
             unsavedChanges = false;
             return;
+        }
+        else if(slot == 22)
+        {
+            new InputMenu(getCc(), getP(), "head-player-name", r.getHeadName(), String.class, this);
         }
         else if (slot == 0)
         {
@@ -318,6 +334,11 @@ public class IGCMenuReward extends IGCMenu
             else if (value.equalsIgnoreCase("rarity"))
             {
                 r.setRarity(input);
+                ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
+            }
+            else if(value.equalsIgnoreCase("head-player-name"))
+            {
+                r.setHeadName(input);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
             }
         }

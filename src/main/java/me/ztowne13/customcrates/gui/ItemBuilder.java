@@ -1,13 +1,18 @@
 package me.ztowne13.customcrates.gui;
 
+import com.mojang.datafixers.Dynamic;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
 import me.ztowne13.customcrates.utils.nbt_utils.NBTTagReflection;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Skull;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 
@@ -113,6 +118,27 @@ public class ItemBuilder
 	{
 		stack = NBTTagManager.applyTo(stack, tag);
 		return this;
+	}
+
+	public void applyPlayerHeadName(String name)
+	{
+		if(DynamicMaterial.PLAYER_HEAD.isSameMaterial(get()))
+		{
+			SkullMeta skullMeta = (SkullMeta) im();
+			skullMeta.setOwner(name);
+			setIm(skullMeta);
+		}
+	}
+
+	public String getPlayerHeadName()
+	{
+		if(DynamicMaterial.PLAYER_HEAD.isSameMaterial(get()))
+		{
+			SkullMeta skullMeta = (SkullMeta) im();
+			return skullMeta.getOwner();
+		}
+
+		return null;
 	}
 
 	public ItemStack getStack()

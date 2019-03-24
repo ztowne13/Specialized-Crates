@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -84,6 +85,7 @@ public class Reward
 		fc.set(getPath("item"), asDynamicMaterial().toString());
 		fc.set(getPath("glow"), glow);
 		fc.set(getPath("amount"), getDisplayItem().getAmount());
+		fc.set(getPath("head-player-name"), getHeadName());
 
 		ArrayList<String> parsedEnchs = new ArrayList<>();
 
@@ -297,6 +299,11 @@ public class Reward
 			}
 		}
 
+		if(getFc().contains(getPath("head-player-name")))
+        {
+            ib.applyPlayerHeadName(getFc().getString(getPath("head-player-name")));
+        }
+
 		if(getFc().contains(getPath("amount")))
 		{
 			try
@@ -358,21 +365,6 @@ public class Reward
 		setDisplayItem(ib.get());
 	}
 
-	public void reapplyLore()
-	{
-		ItemBuilder itemBuilder = new ItemBuilder(getDisplayItem());
-		itemBuilder.clearLore();
-		if(!getCustomLore().isEmpty())
-		{
-			for(String loreLine : getCustomLore())
-			{
-				itemBuilder.addLore(loreLine);
-			}
-		}
-
-		setDisplayItem(itemBuilder.get());
-	}
-
 	public void checkIsNeedMoreConfig()
 	{
 		needsMoreConfig = !(chance != -1 && getDisplayName() != null && rarity != null && displayItem != null);
@@ -382,6 +374,23 @@ public class Reward
 	{
 		return DynamicMaterial.fromString(getDisplayItem().getType().toString() + ";" + getDisplayItem().getDurability());
 	}
+
+    public String getHeadName()
+    {
+        return new ItemBuilder(getDisplayItem()).getPlayerHeadName();
+    }
+
+    public void setHeadName(String headName)
+    {
+        ItemBuilder ib = new ItemBuilder(getDisplayItem());
+        ib.applyPlayerHeadName(headName);
+        setDisplayItem(ib.get());
+    }
+
+    public void setDisplayItem(ItemStack displayItem)
+    {
+        this.displayItem = displayItem;
+    }
 
 	public boolean equals(Reward r)
 	{
@@ -401,11 +410,6 @@ public class Reward
 	public ItemStack getDisplayItem() 
 	{
 		return displayItem;
-	}
-
-	public void setDisplayItem(ItemStack displayItem)
-	{
-		this.displayItem = displayItem;
 	}
 
 	public List<String> getCommands() 
