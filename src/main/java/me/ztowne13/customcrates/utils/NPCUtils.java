@@ -21,7 +21,7 @@ public class NPCUtils
 {
 	public static void checkUncheckMobs(boolean b)
 	{
-		if(Utils.isPLInstalled("Citizens"))
+		if(isCitizensInstalled())
 		{
 			for (NPCRegistry npcr : CitizensAPI.getNPCRegistries())
 			{
@@ -85,9 +85,14 @@ public class NPCUtils
 		npc.data().set(NPC.DEFAULT_PROTECTED_METADATA, true);
 	}
 
+	public static boolean isCitizensInstalled()
+	{
+		return Utils.isPLInstalled("Citizens");
+	}
+
 	public static void load(boolean firstEnable)
 	{
-		if(firstEnable && Utils.isPLInstalled("Citizens"))
+		if(firstEnable && isCitizensInstalled())
 		{
 			CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(IdentifierTrait.class).withName("isCrate"));
 		}

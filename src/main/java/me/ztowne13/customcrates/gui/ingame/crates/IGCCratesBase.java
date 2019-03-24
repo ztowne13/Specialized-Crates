@@ -11,11 +11,13 @@ import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
 import me.ztowne13.customcrates.gui.ingame.IGCDefaultItems;
 import me.ztowne13.customcrates.gui.ingame.IGCMenu;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import me.ztowne13.customcrates.utils.NPCUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import me.ztowne13.customcrates.visuals.EntityTypes;
 import me.ztowne13.customcrates.visuals.MaterialPlaceholder;
 import me.ztowne13.customcrates.visuals.npcs.Citizens2NPCPlaceHolder;
 import me.ztowne13.customcrates.visuals.npcs.MobPlaceholder;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -100,10 +102,10 @@ public class IGCCratesBase extends IGCMenuCrate
 			case 8:
 				new InputMenu(getCc(), getP(), "display.type", cs.getOt().name(), "Available display types: block, mob, npc", String.class, this);
 				break;
-			case 18:
+			case 17:
 				if(cs.getDcp().toString().equalsIgnoreCase("mob") || cs.getDcp().toString().equalsIgnoreCase("npc"))
 				{
-					new InputMenu(getCc(), getP(), "display." + (cs.getDcp().toString().equalsIgnoreCase("mob") ? "creature" : "name"), cs.getDcp().getType(), cs.getDcp().toString().equalsIgnoreCase("mob") ? "Available mob types: " + Arrays.toString(EntityTypes.values()) : "Use a pkayer's name", String.class, this);
+					new InputMenu(getCc(), getP(), "display." + (cs.getDcp().toString().equalsIgnoreCase("mob") ? "creature" : "name"), cs.getDcp().getType(), cs.getDcp().toString().equalsIgnoreCase("mob") ? "Available mob types: " + Arrays.toString(EntityTypes.values()) : "Use a player's name", String.class, this);
 				}
 				break;
 			case 11:
@@ -228,11 +230,21 @@ public class IGCCratesBase extends IGCMenuCrate
 					cs.setDcp(new MaterialPlaceholder(getCc()));
 					return true;
 				case "NPC":
+					if(!NPCUtils.isCitizensInstalled())
+					{
+						ChatUtils.msgError(getP(), "Citizens is not installed!");
+						return false;
+					}
 					cs.setDcp(new Citizens2NPCPlaceHolder(getCc()));
 					ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
 					manageClick(18);
 					break;
 				case "MOB":
+					if(!NPCUtils.isCitizensInstalled())
+					{
+						ChatUtils.msgError(getP(), "Citizens is not installed!");
+						return false;
+					}
 					cs.setDcp(new MobPlaceholder(getCc()));
 					ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
 					manageClick(18);

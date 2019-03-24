@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.crates.options.rewards;
 
+import com.mojang.datafixers.Dynamic;
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.CRewards;
@@ -80,8 +81,9 @@ public class Reward
 		FileConfiguration fc = fu.get();
 		fc.set(getPath("name"), getDisplayName());
 		fc.set(getPath("commands"), getCommands());
-		fc.set(getPath("item"), getDisplayItem().getType() + ";" + getDisplayItem().getDurability());
+		fc.set(getPath("item"), asDynamicMaterial().toString());
 		fc.set(getPath("glow"), glow);
+		fc.set(getPath("amount"), getDisplayItem().getAmount());
 
 		ArrayList<String> parsedEnchs = new ArrayList<>();
 
@@ -275,6 +277,7 @@ public class Reward
 		DynamicMaterial m = DynamicMaterial.fromString(unsplitMat);
 
 		ItemBuilder ib = new ItemBuilder(m, 1);
+
 		ib.setName(applyVariablesTo(cc.getSettings().getConfigValues().get("inv-reward-item-name").toString()));
 
 		// If an item has a custom lore, apply that. Otherwise apply the general lore.
@@ -292,6 +295,16 @@ public class Reward
 			{
 				ib.addLore(applyVariablesTo(s.toString()));
 			}
+		}
+
+		if(getFc().contains(getPath("amount")))
+		{
+			try
+			{
+				int amnt = getFc().getInt(getPath("amount"));
+				ib.getStack().setAmount(amnt);
+			}
+			catch(Exception exc) {}
 		}
 
 		if(NMSUtils.Version.v1_12.isServerVersionOrEarlier() && NMSUtils.Version.v1_8.isServerVersionOrLater())
@@ -363,6 +376,11 @@ public class Reward
 	public void checkIsNeedMoreConfig()
 	{
 		needsMoreConfig = !(chance != -1 && getDisplayName() != null && rarity != null && displayItem != null);
+	}
+
+	public DynamicMaterial asDynamicMaterial()
+	{
+		return DynamicMaterial.fromString(getDisplayItem().getType().toString() + ";" + getDisplayItem().getDurability());
 	}
 
 	public boolean equals(Reward r)

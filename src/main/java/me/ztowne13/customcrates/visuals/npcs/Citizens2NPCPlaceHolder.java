@@ -14,6 +14,7 @@ import net.citizensnpcs.npc.skin.SkinnableEntity;
 import net.citizensnpcs.util.NMS;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
@@ -38,8 +39,9 @@ public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
 		LocationUtils.removeDubBlocks(cm.getL());
 
 		NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
-		NPC npc = npcRegistry.createNPC(EntityType.PLAYER, name);
+		final NPC npc = npcRegistry.createNPC(EntityType.PLAYER, name);
 
+		NPCUtils.applyDefaultInfo(npc);
 		npc.data().setPersistent(NPC.PLAYER_SKIN_UUID_METADATA, name);
 		npc.data().setPersistent(NPC.PLAYER_SKIN_USE_LATEST, true);
 
@@ -47,8 +49,7 @@ public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
 
 		npc.spawn(LocationUtils.getLocationCentered(cm.getL()));
 
-		applySkin(npc, getName());
-		NPCUtils.applyDefaultInfo(npc);
+		//applySkin(npc, getName());
 
 		getNpcs().put(cm, npc);
 
