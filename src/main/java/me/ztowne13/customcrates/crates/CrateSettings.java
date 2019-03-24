@@ -156,8 +156,14 @@ public class CrateSettings
 
 		if(getKey().getEnchantments().keySet().iterator().hasNext())
 		{
-			Enchantment e = getKey().getEnchantments().keySet().iterator().next();
-			fc.set("key.enchantment", e.getName() + ";" + getKey().getEnchantments().get(e));
+			ArrayList<String> enchants = new ArrayList<String>();
+			for(Enchantment enchant : getKey().getEnchantments().keySet())
+			{
+				int lvl = getKey().getEnchantments().get(enchant);
+				enchants.add(enchant.getName() + ";" + lvl);
+			}
+			String updatedPath = fc.contains("key.enchantment") ? "key.enchantment" : "key.enchantments";
+			fc.set(updatedPath, enchants);
 		}
 
 		if(getKey().getItemMeta().hasLore())

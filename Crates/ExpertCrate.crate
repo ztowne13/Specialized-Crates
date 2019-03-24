@@ -25,7 +25,8 @@ crate:
 key:
   require: true
   material: TRIPWIRE_HOOK
-  enchantment: DURABILITY;0
+  enchantments:
+    - DURABILITY;0
   name: '&5&lExpert Crate Key'
   lore:
     - ''
