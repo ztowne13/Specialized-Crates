@@ -79,10 +79,10 @@ public class NPCUtils
 	{
 		npc.getTrait(LookClose.class).toggle();
 
-		npc.data().setPersistent(NPC.NAMEPLATE_VISIBLE_METADATA, false);
-
 		npc.data().set(NPC.AMBIENT_SOUND_METADATA, null);
 		npc.data().set(NPC.DEFAULT_PROTECTED_METADATA, true);
+
+		npc.data().setPersistent(NPC.NAMEPLATE_VISIBLE_METADATA, false);
 	}
 
 	public static boolean isCitizensInstalled()

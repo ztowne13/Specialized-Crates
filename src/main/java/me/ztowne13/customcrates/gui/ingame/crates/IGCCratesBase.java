@@ -237,7 +237,7 @@ public class IGCCratesBase extends IGCMenuCrate
 					}
 					cs.setDcp(new Citizens2NPCPlaceHolder(getCc()));
 					ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
-					manageClick(18);
+					manageClick(17);
 					break;
 				case "MOB":
 					if(!NPCUtils.isCitizensInstalled())
@@ -247,7 +247,7 @@ public class IGCCratesBase extends IGCMenuCrate
 					}
 					cs.setDcp(new MobPlaceholder(getCc()));
 					ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
-					manageClick(18);
+					manageClick(17);
 					break;
 				default:
 					ChatUtils.msgError(getP(), input + " is not BLOCK, NPC, or MOB");

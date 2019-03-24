@@ -6,6 +6,7 @@ import me.ztowne13.customcrates.crates.options.CHolograms;
 import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import me.ztowne13.customcrates.utils.LocationUtils;
+import me.ztowne13.customcrates.visuals.npcs.Citizens2NPCPlaceHolder;
 import org.bukkit.Location;
 
 import java.util.HashMap;

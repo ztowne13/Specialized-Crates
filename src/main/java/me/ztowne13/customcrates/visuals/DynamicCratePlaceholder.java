@@ -15,6 +15,11 @@ public abstract class DynamicCratePlaceholder
 		this.cc = cc;
 	}
 
+	public CustomCrates getCc()
+	{
+		return cc;
+	}
+
 	public abstract void place(PlacedCrate cm);
 
 	public abstract void remove(PlacedCrate cm);
@@ -26,5 +31,4 @@ public abstract class DynamicCratePlaceholder
 	public abstract void fixHologram(PlacedCrate cm);
 
 	public abstract String toString();
-
 }

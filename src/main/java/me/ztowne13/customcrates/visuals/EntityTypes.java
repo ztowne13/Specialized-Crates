@@ -1,6 +1,8 @@
 package me.ztowne13.customcrates.visuals;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Monster;
 
 /**
  * Created by ztowne13 on 2/27/16.

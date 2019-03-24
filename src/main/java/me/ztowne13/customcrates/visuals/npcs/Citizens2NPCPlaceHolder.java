@@ -34,24 +34,30 @@ public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
 		super(cc);
 	}
 
-	public void place(PlacedCrate cm)
+	public void place(final PlacedCrate cm)
 	{
-		LocationUtils.removeDubBlocks(cm.getL());
+	    Bukkit.getScheduler().runTaskLater(getCc(), new Runnable(){
+	        @Override
+            public void run()
+            {
+                LocationUtils.removeDubBlocks(cm.getL());
 
-		NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
-		final NPC npc = npcRegistry.createNPC(EntityType.PLAYER, name);
+                NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
+                final NPC npc = npcRegistry.createNPC(EntityType.PLAYER, name);
+                npc.addTrait(new IdentifierTrait());
 
-		NPCUtils.applyDefaultInfo(npc);
-		npc.data().setPersistent(NPC.PLAYER_SKIN_UUID_METADATA, name);
-		npc.data().setPersistent(NPC.PLAYER_SKIN_USE_LATEST, true);
+                //npc.data().setPersistent(NPC.PLAYER_SKIN_UUID_METADATA, name);
+                //npc.data().setPersistent(NPC.PLAYER_SKIN_USE_LATEST, false);
 
-		npc.addTrait(new IdentifierTrait());
+                npc.spawn(LocationUtils.getLocationCentered(cm.getL()));
 
-		npc.spawn(LocationUtils.getLocationCentered(cm.getL()));
+                NPCUtils.applyDefaultInfo(npc);
 
-		//applySkin(npc, getName());
+                //applySkin(npc, getName());
 
-		getNpcs().put(cm, npc);
+                getNpcs().put(cm, npc);
+            }
+        }, 60);
 
 	}
 
@@ -88,7 +94,7 @@ public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
 		}
 	}
 
-	public static HashMap<PlacedCrate, NPC> getNpcs()
+    public static HashMap<PlacedCrate, NPC> getNpcs()
 	{
 		return npcs;
 	}

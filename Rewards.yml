@@ -114,4 +114,16 @@ SpecialDirt2:
   chance: 10
   rarity: rare
   receive-limit: -1
+MyHead:
+  name: 'Ztowne13s Head'
+  item: PLAYER_HEAD
+  head-player-name: Ztowne13
+  commands:
+    - 'say hi'
+  glow: false
+  amount: 1
+  chance: 1.0
+  rarity: '1'
+  receive-limit: 0
+  nbt-tags: []
   
