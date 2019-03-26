@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.crates.options.rewards;
 
+import me.ztowne13.customcrates.utils.NMSUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -20,10 +21,14 @@ public class BukkitGlowEffect extends GlowEffect
     @Override
     public ItemStack apply()
     {
-        stack.addUnsafeEnchantment(Enchantment.DURABILITY, 0);
-        ItemMeta im = stack.getItemMeta();
-        im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        stack.setItemMeta(im);
+        if(NMSUtils.Version.v1_8.isServerVersionOrLater())
+        {
+            stack.addUnsafeEnchantment(Enchantment.DURABILITY, 0);
+            ItemMeta im = stack.getItemMeta();
+            im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            stack.setItemMeta(im);
+            return stack;
+        }
         return stack;
     }
 }
