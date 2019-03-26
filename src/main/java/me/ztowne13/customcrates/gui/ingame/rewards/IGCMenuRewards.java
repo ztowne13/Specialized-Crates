@@ -47,7 +47,7 @@ public class IGCMenuRewards extends IGCMenu
         slots = InventoryUtils.getRowsFor(2, slots) + 9;
 
         setInventoryName("&7&l> &6&lRewards.YML PG" + page);
-        InventoryBuilder ib = createDefault(slots);
+        InventoryBuilder ib = createDefault(slots, 18);
 
         ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
         ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());

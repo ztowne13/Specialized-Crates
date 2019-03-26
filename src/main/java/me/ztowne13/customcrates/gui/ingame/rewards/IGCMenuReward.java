@@ -55,7 +55,7 @@ public class IGCMenuReward extends IGCMenu
 
         ib.setItem(4, new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1).setName("&a" + r.getRewardName()));
         ib.setItem(8,
-                new ItemBuilder(DynamicMaterial.fromString("CARPET").parseMaterial(), 1, 14).setName("&cDelete this reward")
+                new ItemBuilder(DynamicMaterial.RED_CARPET.parseMaterial(), 1, 14).setName("&cDelete this reward")
                         .setLore("&7You will have confirmation").addLore("&7before deleting."));
 
         ib.setItem(10,
@@ -95,7 +95,7 @@ public class IGCMenuReward extends IGCMenu
         ib.setItem(11, lore);
 
         ib.setItem(13,
-                (r == null || r.getDisplayItem() == null ? new ItemBuilder(DynamicMaterial.INK_SAC.parseMaterial(), 1, 1) :
+                (r == null || r.getDisplayItem() == null ? new ItemBuilder(DynamicMaterial.ROSE_RED, 1) :
                         new ItemBuilder(r.getDisplayItem())).setName("&aSet the display item.")
                         .setLore("&7By clicking this object you will").addLore("&7set the display item to your")
                         .addLore("&7item you are currently holding."));
@@ -110,7 +110,8 @@ public class IGCMenuReward extends IGCMenu
         ib.setItem(16, new ItemBuilder(DynamicMaterial.DARK_OAK_FENCE, 1)
                 .setName("&cSet the receive-limit").setLore("&cThis value is currently non-usable."));
 
-        if (DynamicMaterial.PLAYER_HEAD.isSameMaterial(r.getDisplayItem()))
+
+        if (r.getDisplayItem() != null && DynamicMaterial.PLAYER_HEAD.isSameMaterial(r.getDisplayItem()))
         {
             ib.setItem(22, new ItemBuilder(DynamicMaterial.NAME_TAG, 1).setName("&aSet the player-head name")
                     .setLore("&7Current value:").addLore("&f" + getName(r.getHeadName())));

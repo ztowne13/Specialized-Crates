@@ -123,7 +123,7 @@ public class Settings
 	public void loadInfo()
 	{
 		Utils.addToInfoLog(cc, "Server version", NMSUtils.getServerVersion());
-		Utils.addToInfoLog(cc, "Citizens Installed", (Utils.isPLInstalled("Citizens") ? "" : "&c") + Utils.isPLInstalled("Citizens") + "");
+		Utils.addToInfoLog(cc, "Citizens Installed", (NPCUtils.isCitizensInstalled() ? "" : "&c") + Utils.isPLInstalled("Citizens") + "");
 
 		int enabled = 0, disabled = 0;
 		for(Crate crates : Crate.getLoadedCrates().values())

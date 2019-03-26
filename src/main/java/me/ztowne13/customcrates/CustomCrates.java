@@ -164,7 +164,7 @@ public class CustomCrates extends JavaPlugin
 		rl(new CommandPreprocessListener(this));
 		rl(new ChatListener(this));
 
-		if(Utils.isPLInstalled("Citizens"))
+		if(NPCUtils.isCitizensInstalled())
 		{
 			rl(new NPCEventListener(this));
 		}

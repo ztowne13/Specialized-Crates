@@ -19,6 +19,8 @@ import java.util.Iterator;
  */
 public class NPCUtils
 {
+	static boolean failedLoad = false;
+
 	public static void checkUncheckMobs(boolean b)
 	{
 		if(isCitizensInstalled())
@@ -87,14 +89,22 @@ public class NPCUtils
 
 	public static boolean isCitizensInstalled()
 	{
-		return Utils.isPLInstalled("Citizens");
+		return Utils.isPLInstalled("Citizens") && !failedLoad;
 	}
 
 	public static void load(boolean firstEnable)
 	{
-		if(firstEnable && isCitizensInstalled())
+		try
 		{
-			CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(IdentifierTrait.class).withName("isCrate"));
+			if (firstEnable && isCitizensInstalled())
+			{
+				CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(IdentifierTrait.class).withName("isCrate"));
+			}
+		}
+		catch(Exception exc)
+		{
+			failedLoad = true;
+			ChatUtils.log("ERROR: FAILED TO ESTABLISH LINK WITH CITIZENS, DISABLING CITIZENS FEATURES");
 		}
 	}
 }

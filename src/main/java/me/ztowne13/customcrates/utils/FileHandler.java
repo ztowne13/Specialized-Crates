@@ -87,7 +87,7 @@ public class FileHandler
 
 			if(canBeEdited)
 			{
-				if (data.saveToString() != null && !data.saveToString().equalsIgnoreCase(""))
+				if (data.saveToString() != null && (name.equalsIgnoreCase("Rewards.YML") || !data.saveToString().equalsIgnoreCase("")))
 				{
                     File defConfigFile = new File(getCc().getDataFolder(), getName());
 					if (defConfigFile.exists())
