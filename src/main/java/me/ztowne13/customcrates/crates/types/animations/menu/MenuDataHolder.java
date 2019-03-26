@@ -1,8 +1,7 @@
-package me.ztowne13.customcrates.crates.types.animations.dataholders;
+package me.ztowne13.customcrates.crates.types.animations.menu;
 
 
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.crates.types.animations.InvMenu;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -25,7 +24,7 @@ public class MenuDataHolder
 
 	InventoryBuilder inv;
 
-	public MenuDataHolder(Player p, Location l, InvMenu im)
+	public MenuDataHolder(Player p, Location l, MenuAnimation im)
 	{
 		this.p = p;
 		this.l = l;

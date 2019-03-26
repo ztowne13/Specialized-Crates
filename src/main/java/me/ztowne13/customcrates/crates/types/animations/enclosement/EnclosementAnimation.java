@@ -1,4 +1,4 @@
-package me.ztowne13.customcrates.crates.types.animations;
+package me.ztowne13.customcrates.crates.types.animations.enclosement;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
@@ -6,7 +6,7 @@ import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.crates.types.InventoryCrate;
-import me.ztowne13.customcrates.crates.types.animations.dataholders.EnclosementDataHolder;
+import me.ztowne13.customcrates.crates.types.animations.enclosement.EnclosementDataHolder;
 import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
@@ -15,7 +15,6 @@ import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -25,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Created by ztowne13 on 7/5/16.
  */
-public class InvEnclosement extends InventoryCrate
+public class EnclosementAnimation extends InventoryCrate
 {
 
 	String invName, prefix;
@@ -33,7 +32,7 @@ public class InvEnclosement extends InventoryCrate
 	SoundData tickSound;
 	ItemStack fillerItem;
 
-	public InvEnclosement(Inventory inv, Crate crate)
+	public EnclosementAnimation(Inventory inv, Crate crate)
 	{
 		super(inv, crate);
 		this.prefix = CrateType.INV_ENCLOSE.getPrefix() + ".";

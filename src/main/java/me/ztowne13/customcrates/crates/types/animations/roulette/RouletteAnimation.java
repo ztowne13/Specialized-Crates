@@ -1,8 +1,7 @@
-package me.ztowne13.customcrates.crates.types.animations;
+package me.ztowne13.customcrates.crates.types.animations.roulette;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
-import me.ztowne13.customcrates.crates.types.animations.dataholders.RouletteDataHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -11,11 +10,11 @@ import org.bukkit.inventory.Inventory;
 /**
  * Created by ztowne13 on 6/30/16.
  */
-public class InvRouletteNew extends InvRoulette
+public class RouletteAnimation extends RouletteManager
 {
 	static double baseSpeed = 1;
 
-	public InvRouletteNew(Inventory inv, Crate crates)
+	public RouletteAnimation(Inventory inv, Crate crates)
 	{
 		super(inv, crates);
 	}

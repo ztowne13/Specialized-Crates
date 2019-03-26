@@ -1,7 +1,6 @@
-package me.ztowne13.customcrates.crates.types.animations.dataholders;
+package me.ztowne13.customcrates.crates.types.animations.csgo;
 
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.crates.types.animations.InvCSGO;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -29,7 +28,7 @@ public class CSGODataHolder
 
 	InventoryBuilder inv;
 
-	public CSGODataHolder(Player p, Location l, InvCSGO ic)
+	public CSGODataHolder(Player p, Location l, CSGOManager ic)
 	{
 		this.p = p;
 		this.l = l;

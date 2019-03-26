@@ -1,4 +1,4 @@
-package me.ztowne13.customcrates.crates.types.animations;
+package me.ztowne13.customcrates.crates.types.animations.discover;
 
 import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.crates.Crate;
@@ -6,7 +6,7 @@ import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.crates.types.InventoryCrate;
-import me.ztowne13.customcrates.crates.types.animations.dataholders.DiscoverDataHolder;
+import me.ztowne13.customcrates.crates.types.animations.discover.DiscoverDataHolder;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
@@ -14,7 +14,6 @@ import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -36,7 +35,7 @@ import java.util.Random;
  *	 random-display-duration: 50
  *	 uncover-block: CHEST;0
  */
-public class InvDiscover extends InventoryCrate
+public class DiscoverAnimation extends InventoryCrate
 {
 	String invName, prefix;
 	SoundData tickSound, clickSound, uncoverSound;
@@ -44,7 +43,7 @@ public class InvDiscover extends InventoryCrate
 	ItemStack uncoverBlock;
 	boolean count;
 
-	public InvDiscover(Inventory inv, Crate crate)
+	public DiscoverAnimation(Inventory inv, Crate crate)
 	{
 		super(inv, crate);
 		prefix = crate.getCs().getCt().getPrefix() + ".";

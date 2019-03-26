@@ -1,11 +1,11 @@
-package me.ztowne13.customcrates.crates.types.animations;
+package me.ztowne13.customcrates.crates.types.animations.menu;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.InventoryCrate;
-import me.ztowne13.customcrates.crates.types.animations.dataholders.MenuDataHolder;
+import me.ztowne13.customcrates.crates.types.animations.menu.MenuDataHolder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Location;
@@ -14,12 +14,12 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.Random;
 
-public class InvMenu extends InventoryCrate
+public class MenuAnimation extends InventoryCrate
 {
 	protected String invName = "";
 	protected int minRewards, maxRewards, inventoryRows = 0;
 	
-	public InvMenu(Inventory inv, Crate crates)
+	public MenuAnimation(Inventory inv, Crate crates)
 	{
 		super(inv, crates);
 	}

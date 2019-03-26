@@ -1,7 +1,6 @@
-package me.ztowne13.customcrates.crates.types.animations.dataholders;
+package me.ztowne13.customcrates.crates.types.animations.enclosement;
 
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.crates.types.animations.InvEnclosement;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -18,7 +17,7 @@ public class EnclosementDataHolder
 
 	Player p;
 	Location l;
-	InvEnclosement ie;
+	EnclosementAnimation ie;
 
 	int currentTicksIn, ticks;
 	boolean completed;
@@ -26,7 +25,7 @@ public class EnclosementDataHolder
 	InventoryBuilder ib;
 	ArrayList<Reward> lastDisplayRewards = new ArrayList<>();
 
-	public EnclosementDataHolder(Player p, Location l, InvEnclosement ie)
+	public EnclosementDataHolder(Player p, Location l, EnclosementAnimation ie)
 	{
 		this.p = p;
 		this.l = l;
@@ -64,12 +63,12 @@ public class EnclosementDataHolder
 		this.l = l;
 	}
 
-	public InvEnclosement getIe()
+	public EnclosementAnimation getIe()
 	{
 		return ie;
 	}
 
-	public void setIe(InvEnclosement ie)
+	public void setIe(EnclosementAnimation ie)
 	{
 		this.ie = ie;
 	}

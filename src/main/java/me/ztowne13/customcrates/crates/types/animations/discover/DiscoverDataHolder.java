@@ -1,7 +1,6 @@
-package me.ztowne13.customcrates.crates.types.animations.dataholders;
+package me.ztowne13.customcrates.crates.types.animations.discover;
 
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.crates.types.animations.InvDiscover;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -19,7 +18,7 @@ public class DiscoverDataHolder
 
 	Player p;
 	Location l;
-	InvDiscover id;
+	DiscoverAnimation id;
 
 	int remainingClicks, currentSequence = 1, sequence2Ticks;
 	boolean completed = false, canCloseInventory = false;
@@ -29,7 +28,7 @@ public class DiscoverDataHolder
 
 	InventoryBuilder ib;
 
-	public DiscoverDataHolder(Player p, Location l, InvDiscover id)
+	public DiscoverDataHolder(Player p, Location l, DiscoverAnimation id)
 	{
 		this.p = p;
 		this.l = l;
@@ -63,12 +62,12 @@ public class DiscoverDataHolder
 		this.l = l;
 	}
 
-	public InvDiscover getId()
+	public DiscoverAnimation getId()
 	{
 		return id;
 	}
 
-	public void setId(InvDiscover id)
+	public void setId(DiscoverAnimation id)
 	{
 		this.id = id;
 	}

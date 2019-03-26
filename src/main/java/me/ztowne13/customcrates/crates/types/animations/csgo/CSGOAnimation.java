@@ -1,8 +1,7 @@
-package me.ztowne13.customcrates.crates.types.animations;
+package me.ztowne13.customcrates.crates.types.animations.csgo;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
-import me.ztowne13.customcrates.crates.types.animations.dataholders.CSGODataHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -11,11 +10,11 @@ import org.bukkit.inventory.Inventory;
 /**
  * Created by ztowne13 on 6/30/16.
  */
-public class InvCSGONew extends InvCSGO
+public class CSGOAnimation extends CSGOManager
 {
 	static double baseSpeed = 1;
 
-	public InvCSGONew(Inventory inv, Crate crates)
+	public CSGOAnimation(Inventory inv, Crate crates)
 	{
 		super(inv, crates);
 	}

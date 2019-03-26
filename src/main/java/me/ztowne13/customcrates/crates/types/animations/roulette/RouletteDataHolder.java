@@ -1,7 +1,6 @@
-package me.ztowne13.customcrates.crates.types.animations.dataholders;
+package me.ztowne13.customcrates.crates.types.animations.roulette;
 
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.crates.types.animations.InvRoulette;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -28,7 +27,7 @@ public class RouletteDataHolder
 
 	InventoryBuilder inv;
 
-	public RouletteDataHolder(Player p, Location l, InvRoulette ir)
+	public RouletteDataHolder(Player p, Location l, RouletteManager ir)
 	{
 		this.p = p;
 		this.l = l;

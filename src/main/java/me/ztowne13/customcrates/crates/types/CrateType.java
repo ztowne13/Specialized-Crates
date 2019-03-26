@@ -2,6 +2,11 @@ package me.ztowne13.customcrates.crates.types;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.types.animations.*;
+import me.ztowne13.customcrates.crates.types.animations.csgo.CSGOAnimation;
+import me.ztowne13.customcrates.crates.types.animations.discover.DiscoverAnimation;
+import me.ztowne13.customcrates.crates.types.animations.enclosement.EnclosementAnimation;
+import me.ztowne13.customcrates.crates.types.animations.menu.MenuAnimation;
+import me.ztowne13.customcrates.crates.types.animations.roulette.RouletteAnimation;
 
 public enum CrateType
 {
@@ -34,20 +39,20 @@ public enum CrateType
 		switch(this)
 		{
 			case INV_ROULETTE:
-				ch = new InvRouletteNew(null, crates);
+				ch = new RouletteAnimation(null, crates);
 				break;
 			case INV_CSGO:
-				//ch = new InvCSGO(null, crates);
-				ch = new InvCSGONew(null, crates);
+				//ch = new CSGOManager(null, crates);
+				ch = new CSGOAnimation(null, crates);
 				break;
 			case INV_MENU:
-				ch = new InvMenu(null, crates);
+				ch = new MenuAnimation(null, crates);
 				break;
 			case INV_ENCLOSE:
-				ch = new InvEnclosement(null, crates);
+				ch = new EnclosementAnimation(null, crates);
 				break;
 			case INV_DISCOVER:
-				ch = new InvDiscover(null, crates);
+				ch = new DiscoverAnimation(null, crates);
 				break;
 			case GIVE_KEY:
 			default:

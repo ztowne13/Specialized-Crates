@@ -5,15 +5,12 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.CrateHead;
 import me.ztowne13.customcrates.crates.types.CrateType;
-import me.ztowne13.customcrates.crates.types.animations.InvDiscover;
-import me.ztowne13.customcrates.crates.types.animations.InvMenu;
-import me.ztowne13.customcrates.crates.types.animations.dataholders.DiscoverDataHolder;
+import me.ztowne13.customcrates.crates.types.animations.discover.DiscoverAnimation;
+import me.ztowne13.customcrates.crates.types.animations.menu.MenuAnimation;
+import me.ztowne13.customcrates.crates.types.animations.discover.DiscoverDataHolder;
 import me.ztowne13.customcrates.gui.ingame.crates.IGCMultiCrateMain;
-import me.ztowne13.customcrates.gui.ingame.rewards.IGCDragAndDrop;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
-import net.citizensnpcs.api.jnbt.NBTUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,7 +55,7 @@ public class InventoryActionListener implements Listener
                 if (pm.getOpenCrate().getCs().getCt().equals(CrateType.INV_DISCOVER) &&
                         DiscoverDataHolder.getHolders().containsKey(p))
                 {
-                    ((InvDiscover) pm.getOpenCrate().getCs().getCh())
+                    ((DiscoverAnimation) pm.getOpenCrate().getCs().getCh())
                             .handleClick(DiscoverDataHolder.getHolders().get(p), e.getSlot());
                 }
             }
@@ -166,7 +163,7 @@ public class InventoryActionListener implements Listener
         if (pm.isInCrate() || pm.isInRewardMenu())
         {
             CrateHead ch = pm.getOpenCrate().getCs().getCh();
-            if (ch instanceof InvMenu)
+            if (ch instanceof MenuAnimation)
             {
                 ch.completeCrateRun(p);
                 return;
