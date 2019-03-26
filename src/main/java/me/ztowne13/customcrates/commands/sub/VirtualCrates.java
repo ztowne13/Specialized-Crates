@@ -43,7 +43,7 @@ public class VirtualCrates extends SubCommand
 				Player p = (Player) cmds.getCmdSender();
 				PlayerManager pm = PlayerManager.get(cc, p);
 				Messages.OPENING_VIRTUALCRATES.msgSpecified(cc, p);
-				crate.getCs().getCmci().getInventory(p, cc.getSettings().getConfigValues().get("crates-command-name").toString()).open();
+				crate.getCs().getCmci().getInventory(p, cc.getSettings().getConfigValues().get("crates-command-name").toString(), true).open();
 				// FIX THIS BECAUSE I THINK THE CODE CHECKS IF THE LAST OPENED CRATE WAS A MULTICRATE BY CHECKING ITS LOCATION
 				pm.setLastOpenCrate(p.getLocation());
 				pm.openCrate(crate);

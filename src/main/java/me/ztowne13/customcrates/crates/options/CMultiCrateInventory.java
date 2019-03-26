@@ -156,7 +156,7 @@ public class CMultiCrateInventory extends CSetting
 		StatusLoggerEvent.MULTICRATEINVENTORY_NONEXISTENT.log(getCrates());
 	}
 
-	public InventoryBuilder getInventory(Player p, String invName)
+	public InventoryBuilder getInventory(Player p, String invName, boolean toEdit)
 	{
 		if(ib == null)
 		{
@@ -178,8 +178,19 @@ public class CMultiCrateInventory extends CSetting
 			cc.getDu().log("CMultiCrateInventory.getInventory.if(ib == null)");
 
 		}
-		else
+		else if(toEdit)
 		{
+			InventoryBuilder newIb = new InventoryBuilder(p, ib.getInv().getSize(), invName);
+			for(int i = 0; i < newIb.getInv().getSize(); i++)
+			{
+				Inventory oldInv = ib.getInv();
+				if(oldInv.getItem(i) != null && !oldInv.getItem(i).getType().equals((Material.AIR)))
+				{
+					newIb.getInv().setItem(i, oldInv.getItem(i));
+				}
+			}
+
+			ib = newIb;
 			cc.getDu().log("CMultiCrateInventory.getInventory.else");
 		}
 

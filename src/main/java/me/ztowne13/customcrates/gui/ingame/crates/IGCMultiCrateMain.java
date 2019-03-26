@@ -48,14 +48,14 @@ public class IGCMultiCrateMain extends IGCMenuCrate
 				up();
 				break;
 			case 2:
-				crates.getCs().getCmci().getInventory(getP(), "Close the INV to save").open();
+				crates.getCs().getCmci().getInventory(getP(), "&c&lClose to save", true).open();
 				ChatUtils.msgSuccess(getP(), "Close the inventory to save, if you don't want to save, type /scrates reload and all changes will be lost.");
 				break;
 			case 4:
-				new InputMenu(getCc(), getP(), "set rows", (crates.getCs().getCmci().getInventory(getP(), "").getInv().getSize() / 9) + "", "Please use a number between 1 and 6", Integer.class, this);
+				new InputMenu(getCc(), getP(), "set rows", (crates.getCs().getCmci().getInventory(getP(), "", false).getInv().getSize() / 9) + "", "Please use a number between 1 and 6", Integer.class, this);
 				break;
 			case 6:
-				crates.getCs().getCmci().getInventory(getP(), "").getInv().clear();
+				crates.getCs().getCmci().getInventory(getP(), "", false).getInv().clear();
 				ChatUtils.msgSuccess(getP(), "You have cleared the inventory.");
 				break;
 		}
@@ -68,7 +68,7 @@ public class IGCMultiCrateMain extends IGCMenuCrate
 		{
 			if(Utils.isInt(input))
 			{
-				InventoryBuilder oldIb = crates.getCs().getCmci().getInventory(getP(), "");
+				InventoryBuilder oldIb = crates.getCs().getCmci().getInventory(getP(), "", false);
 				InventoryBuilder newIb = new InventoryBuilder(getP(), Integer.parseInt(input)*9, oldIb.getInv().getName());
 
 				for(int i = 0; i < (oldIb.getInv().getSize() < newIb.getInv().getSize() ? oldIb.getInv().getSize() : newIb.getInv().getSize()); i++)
@@ -80,6 +80,7 @@ public class IGCMultiCrateMain extends IGCMenuCrate
 				}
 				crates.getCs().getCmci().setIb(newIb);
 				ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
+				return true;
 			}
 			else
 			{
