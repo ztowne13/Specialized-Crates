@@ -5,10 +5,12 @@ import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.particles.FireworkData;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -93,11 +95,17 @@ public class CFireworks extends CSetting
 		getFireworks().get(tier).remove(fd);
 	}
 
-	public FireworkData getByString(String tier, String s)
+	public FireworkData getByItemStack(String tier, ItemStack stack)
 	{
+		ItemBuilder ib = new ItemBuilder(stack);
+
+		String lastLine = "";
+		for(String line : ib.im().getLore())
+			lastLine = line;
+
 		for(FireworkData fd : getFireworks().get(tier))
 		{
-			if(fd.toString().equalsIgnoreCase(s))
+			if(fd.getId().equalsIgnoreCase(lastLine))
 			{
 				return fd;
 			}

@@ -19,7 +19,7 @@ public class GiveCrate extends SubCommand
 {
 	public GiveCrate()
 	{
-		super("givecrate", 2, "Usage: /SCrates GiveCrate (Crate) (Player/ALL) [Amount]");
+		super("givecrate", 2, "Usage: /SCrates GiveCrate (Crate) (Player/ALL) [Amount] [-v : for a virtual crate]");
 	}
 
 	@Override

@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class FireworkData 
 {
@@ -25,6 +26,7 @@ public class FireworkData
 	CrateSettings cs;
 
 	String unLoaded;
+	String id;
 
 	Builder effect;
 	int power = 1;
@@ -33,10 +35,11 @@ public class FireworkData
 	boolean trail = false, flicker = false;
 	FireworkEffect.Type feType = FireworkEffect.Type.BALL_LARGE;
 
-	public FireworkData(CustomCrates cc, CrateSettings cs) 
+	public FireworkData(CustomCrates cc, CrateSettings cs)
 	{
 		this.cc = cc;
 		this.cs = cs;
+		this.id = UUID.randomUUID().toString().substring(0, 8);
 	}
 
 	public void loadFromFirework(ItemStack stack)
@@ -309,4 +312,13 @@ public class FireworkData
 		this.fadeColors = fadeColors;
 	}
 
+	public String getId()
+	{
+		return id;
+	}
+
+	public void setId(String id)
+	{
+		this.id = id;
+	}
 }

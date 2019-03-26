@@ -19,93 +19,93 @@ import java.util.UUID;
  */
 public class GiveKey extends SubCommand
 {
-	public GiveKey()
-	{
-		super("givekey", 2, "Usage: /SCrates GiveKey (Crate) (Player/ALL) [Amount]");
-	}
+    public GiveKey()
+    {
+        super("givekey", 2, "Usage: /SCrates GiveKey (Crate) (Player/ALL) [Amount] [-v : for a virtual crate]");
+    }
 
-	@Override
-	public boolean run(CustomCrates cc, Commands cmds, String[] args)
-	{
-		if (Crate.exists(args[1]))
-		{
-			int amount = 1;
-			if (args.length >= 4)
-			{
-				if(Utils.isInt(args[3]))
-				{
-					amount = Integer.parseInt(args[3]);
-				}
-				else
-				{
-					cmds.msgError(args[3] + " is not a valid number.");
-					return true;
-				}
-			}
+    @Override
+    public boolean run(CustomCrates cc, Commands cmds, String[] args)
+    {
+        if (Crate.exists(args[1]))
+        {
+            int amount = 1;
+            if (args.length >= 4)
+            {
+                if (Utils.isInt(args[3]))
+                {
+                    amount = Integer.parseInt(args[3]);
+                }
+                else
+                {
+                    cmds.msgError(args[3] + " is not a valid number.");
+                    return true;
+                }
+            }
 
-			Crate crate = Crate.getCrate(cc, args[1]);
-			ItemStack toAdd = crate.getCs().getKey(amount);
+            Crate crate = Crate.getCrate(cc, args[1]);
+            ItemStack toAdd = crate.getCs().getKey(amount);
 
-			if(args.length < 3)
-			{
-				if(cmds.getCmdSender() instanceof Player)
-				{
-					Player p = (Player) cmds.getCmdSender();
-					cmds.msgSuccess("Given key for crate: " + args[1]);
-					p.getInventory().addItem(toAdd);
-				}
-				return true;
-			}
+            if (args.length < 3)
+            {
+                if (cmds.getCmdSender() instanceof Player)
+                {
+                    Player p = (Player) cmds.getCmdSender();
+                    cmds.msgSuccess("Given key for crate: " + args[1]);
+                    p.getInventory().addItem(toAdd);
+                }
+                return true;
+            }
 
-			if (args[2].equalsIgnoreCase("ALL"))
-			{
-				Utils.giveAllItem(toAdd);
-				return true;
-			}
+            if (args[2].equalsIgnoreCase("ALL"))
+            {
+                Utils.giveAllItem(toAdd);
+                return true;
+            }
 
-			Player op = Bukkit.getPlayer(args[2]);
-			Player op2 = null;
-			try
-			{
-				op2 = Bukkit.getPlayer(UUID.fromString(args[2]));
-			}
-			catch(Exception exc)
-			{
-				//exc.printStackTrace();
-			}
+            Player op = Bukkit.getPlayer(args[2]);
+            Player op2 = null;
+            try
+            {
+                op2 = Bukkit.getPlayer(UUID.fromString(args[2]));
+            }
+            catch (Exception exc)
+            {
+                //exc.printStackTrace();
+            }
 
-			boolean foundPlayer = true;
+            boolean foundPlayer = true;
 
-			if (op == null && op2 == null)
-			{
-				if (!args[2].equalsIgnoreCase("ALL"))
-				{
-					foundPlayer = false;
-				}
-			}
+            if (op == null && op2 == null)
+            {
+                if (!args[2].equalsIgnoreCase("ALL"))
+                {
+                    foundPlayer = false;
+                }
+            }
 
-			if(!foundPlayer)
-			{
-				cmds.msgError(args[2] + " is not an online player / online player's UUID.");
-				return false;
-			}
+            if (!foundPlayer)
+            {
+                cmds.msgError(args[2] + " is not an online player / online player's UUID.");
+                return false;
+            }
 
-			Player toGive = op == null ? op2 : op;
-			PlayerDataManager pdm = PlayerManager.get(cc, toGive).getPdm();
-			String end = args[args.length - 1];
-			if(end.toLowerCase().startsWith("-v"))
-			{
-				pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + amount);
-				cmds.msgSuccess("Given virtual key for crate: " + args[1]);
-			}
-			else
-			{
-				toGive.getInventory().addItem(toAdd);
-				cmds.msgSuccess("Given physical key for crate: " + args[1]);
-			}
-			return true;
-		}
-		cmds.msgError(args[1] + " crate does NOT exist.");
-		return false;
-	}
+            Player toGive = op == null ? op2 : op;
+            PlayerDataManager pdm = PlayerManager.get(cc, toGive).getPdm();
+            String end = args[args.length - 1];
+            if (end.toLowerCase().startsWith("-v"))
+            {
+                pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + amount);
+                cmds.msgSuccess("Given virtual key for crate: " + args[1]);
+            }
+            else
+            {
+                toGive.getInventory().addItem(toAdd);
+                cmds.msgSuccess("Given physical key for crate: " + args[1]);
+            }
+            return true;
+        }
+        cmds.msgError(args[1] + " crate does NOT exist.");
+        return false;
+    }
 }
