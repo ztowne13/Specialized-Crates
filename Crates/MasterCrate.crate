@@ -43,6 +43,8 @@ rewards:
 
 hologram:
   reward-hologram: '&a+ &c%reward% &a+'
+  reward-hologram-duration: 60
+  reward-hologram-yoffset: 0
   lines:
     - '&5&l> &dMaster Crate &5&l<'
     - '&c--'

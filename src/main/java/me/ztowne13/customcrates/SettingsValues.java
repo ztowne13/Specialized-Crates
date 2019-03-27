@@ -187,13 +187,6 @@ public enum SettingsValues
 					"Multicrates will show the",
 					"player's virtual crates",
 					"amount."
-	}),
-
-	REWARD_HOLOGRAM_LENGTH("reward-hologram-length", Integer.class,
-			new String[]{
-					"The duration reward holograms",
-					"will display for in",
-					"seconds."
 	});
 		
 	String path;

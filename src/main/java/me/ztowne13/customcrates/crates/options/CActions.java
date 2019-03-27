@@ -10,12 +10,15 @@ import me.ztowne13.customcrates.crates.options.actions.BukkitActionEffect;
 import me.ztowne13.customcrates.crates.options.actions.NMSActionEffect;
 import me.ztowne13.customcrates.crates.options.holograms.DynamicHologram;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.crates.types.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.openchest.OpenChestAnimation;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -218,11 +221,16 @@ public class CActions extends CSetting
 
 		if(!pre)
 		{
-			playRewardCrate(p, rewardsAsDisplayname);
+			if(!crates.getCs().getCt().equals(CrateType.BLOCK_CRATEOPEN) || !((OpenChestAnimation) crates.getCs().getCh()).isEarlyRewardHologram())
+				playRewardCrate(p, rewardsAsDisplayname);
 		}
 	}
-
 	public void playRewardCrate(Player p, ArrayList<String> rewards)
+	{
+		playRewardCrate(p, rewards, 0);
+	}
+
+	public void playRewardCrate(Player p, ArrayList<String> rewards, double additionalYOffset)
 	{
 		final PlayerManager pm = PlayerManager.get(cc, p);
 		if(!(pm.getLastOpenedPlacedCrate() == null))
@@ -238,7 +246,7 @@ public class CActions extends CSetting
 				dynamicHologram.delete();
 
 				Location rewardLoc = placedCrate.getL().clone();
-				rewardLoc.setY(rewardLoc.getY() - .3);
+				rewardLoc.setY(rewardLoc.getY() - .3 + getCrates().getCs().getCholoCopy().getRewardHoloYOffset() + additionalYOffset);
 				dynamicHologram.create(rewardLoc);
 				dynamicHologram.addLine(msg);
 
@@ -262,7 +270,7 @@ public class CActions extends CSetting
 							dynamicHologram.getHa().update(true);
 						}
 					}
-				}, (int) SettingsValues.REWARD_HOLOGRAM_LENGTH.getValue(cc)*20);
+				}, getCrates().getCs().getCholoCopy().getRewardHoloDuration());
 			}
 		}
 	}

@@ -16,6 +16,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.util.FileUtil;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -24,8 +25,10 @@ public class OpenChestAnimation extends InventoryCrate
 {
     public static ArrayList<Item> items = new ArrayList<>();
 
-    String invName, prefix;
+    String prefix;
     int openDuration;
+    boolean earlyRewardHologram;
+    long rewardHoloDelay;
 
     Location loc;
     Reward reward;
@@ -56,6 +59,8 @@ public class OpenChestAnimation extends InventoryCrate
     public void playAnimation(final Player p, final Location l)
     {
         reward = getCrates().getCs().getCr().getRandomReward(p);
+        final ArrayList<String> rewards = new ArrayList<String>();
+        rewards.add(reward.getDisplayName());
 
         Location upOne = l.clone();
         upOne.setY(upOne.getY() + 1);
@@ -67,9 +72,22 @@ public class OpenChestAnimation extends InventoryCrate
         item.setVelocity(new Vector(0, item.getVelocity().getY(), 0));
         items.add(item);
 
+        if(isEarlyRewardHologram())
+        {
+            Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    crates.getCs().getCa().playRewardCrate(p, rewards, .6);
+                }
+            }, rewardHoloDelay);
+        }
+
         new NMSChestState().playChestAction(l.getBlock(), true);
 
-        Bukkit.getScheduler().runTaskLater(cc, new Runnable(){
+        Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+        {
             @Override
             public void run()
             {
@@ -91,11 +109,17 @@ public class OpenChestAnimation extends InventoryCrate
     {
         FileConfiguration fc = getFu().get();
 
-        invName = fc.getString(prefix + "inv-name");
-
-        openDuration = FileUtils.loadInt(prefix + "chest-open-duration", 60, sl,
+        openDuration = FileUtils.loadInt(fc.getString(prefix + "chest-open-duration"), 60, sl,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_INVALID);
+
+        earlyRewardHologram = FileUtils.loadBoolean(fc.getString(prefix + "early-reward-hologram"), true, sl,
+                StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_EARLY_REWARD_SUCCESS,
+                StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_EARLY_REWARD_INVALID);
+
+        rewardHoloDelay = FileUtils.loadLong(fc.getString(prefix + "reward-hologram-delay"), 9, sl,
+                StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_REWARD_HOLO_DELAY_SUCCESS,
+                StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_REWARD_HOLO_DELAY_INVALID);
     }
 
     @Override
@@ -110,7 +134,17 @@ public class OpenChestAnimation extends InventoryCrate
 
     public static void removeAllItems()
     {
-        for(Item item : items)
+        for (Item item : items)
             item.remove();
+    }
+
+    public boolean isEarlyRewardHologram()
+    {
+        return earlyRewardHologram;
+    }
+
+    public void setEarlyRewardHologram(boolean earlyRewardHologram)
+    {
+        this.earlyRewardHologram = earlyRewardHologram;
     }
 }

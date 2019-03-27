@@ -254,6 +254,19 @@ public class Utils
 		}
 	}
 
+	public static boolean isLong(String s)
+	{
+		try
+		{
+			Long i = Long.valueOf(s);
+			return true;
+		}
+		catch(Exception exc)
+		{
+			return false;
+		}
+	}
+
 	public static boolean isBoolean(String s)
 	{
 		try

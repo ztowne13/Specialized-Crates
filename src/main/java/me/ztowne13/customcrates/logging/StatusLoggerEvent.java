@@ -45,10 +45,21 @@ public enum StatusLoggerEvent
 
     HOLOGRAM_ADDLINE_SUCCESS(true, "Hologram", "Added hologram line $?$", "NONE"),
 
+    @Deprecated
     HOLOGRAM_ADDLINE_FAIL_TOMANY(false, "Hologram", "Failed to add hologram line $?$",
             "Maximum lines for a hologram is: $?$"),
 
     HOLOGRAM_REWARD_HOLOGRAM(true, "Hologram", "Added the reward-hologram $?$", "NONE"),
+
+    HOLOGRAM_REWARD_HOLOGRAM_DURATION_SUCCESS(true, "Hologram", "Added the reward-hologram's duration.", "NONE"),
+
+    HOLOGRAM_REWARD_HOLOGRAM_DURATION_INVALID(true, "Hologram", "Failed to load the reward-hologram's duration",
+            "It is not a valid integer."),
+
+    HOLOGRAM_REWARD_HOLOGRAM_YOFFSET_SUCCESS(true, "Hologram", "Added the reward-hologram's Y-Offset.", "NONE"),
+
+    HOLOGRAM_REWARD_HOLOGRAM_YOFFSET_INVALID(true, "Hologram", "Failed to load the reward-hologram's Y-Offset",
+            "It is not a valid integer."),
 
     LUCKYCHEST_CHANCE_MISFORMATTED(false, "Lucky Chest", "Failed to load the 'chance' setting.",
             "Not properly formatted 'INTEGER/INTEGER'"),
@@ -496,17 +507,25 @@ public enum StatusLoggerEvent
     ANIMATION_ROULETTE_RANDOMBLOCK_NONEXISTENT(false, "Animation", "Failed to load the roulette random-blocks.",
             "The random-blocks value does not exist."),
 
-    ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_SUCCESS(true, "Animation",
+    ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_INVALID(false, "Animation",
             "Failed to load the openchest chest-open-duration value.", "It is either nonexistent or an invalid number."),
 
-    ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_INVALID(false, "Animation",
+    ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_SUCCESS(false, "Animation",
             "Successfully loaded the chestopen chest-open-duration value.", "NONE"),
 
-    ANIMATION_OPENCHEST_CHEST_OPEN_SOUND_SUCCESS(true, "Animation",
-            "Successfully loaded the chest open chest-animation-sound value.", "NONE"),
+    ANIMATION_OPENCHEST_CHEST_OPEN_EARLY_REWARD_SUCCESS(true, "Animation",
+            "Successfully loaded the open chest early-reward-hologram value.", "NONE"),
 
-    ANIMATION_OPENCHEST_CHEST_OPEN_SOUND_INVALID(false, "Animation", "Failed to load the openchest chest-open-sound value.",
-            "It is either nonexistent or not a valid true/false value.");
+    ANIMATION_OPENCHEST_CHEST_OPEN_EARLY_REWARD_INVALID(false, "Animation",
+            "Failed to load the open chest early-reward-hologram value.",
+            "It is either nonexistent or not a valid true/false value."),
+
+    ANIMATION_OPENCHEST_CHEST_OPEN_REWARD_HOLO_DELAY_SUCCESS(true, "Animation",
+            "Successfully loaded the open chest reward-holo-delay value.", "NONE"),
+
+    ANIMATION_OPENCHEST_CHEST_OPEN_REWARD_HOLO_DELAY_INVALID(false, "Animation",
+            "Failed to load the open chest reward-holo-delay value.",
+            "It is either nonexistent or not a valid decimal value value.");
 
     boolean success;
     String event, cause, section;

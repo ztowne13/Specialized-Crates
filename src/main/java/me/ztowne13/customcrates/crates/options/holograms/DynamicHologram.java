@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.crates.options.holograms;
 
 import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.animations.holo.HoloAnimType;
 import me.ztowne13.customcrates.animations.holo.HoloAnimation;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import org.bukkit.Location;
@@ -19,7 +20,7 @@ public abstract class DynamicHologram
 		this.cc = cc;
 		this.cm = cm;
 
-		if(cm.getCholo().getHat() != null)
+		if(cm.getCholo().getHat() != null && cm.getCholo().getHat() != HoloAnimType.NONE)
 		{
 			setHa(cm.getCholo().getHat().getAsHoloAnimation(cc, this));
 		}

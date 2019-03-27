@@ -106,7 +106,8 @@ public class FileHandler
 				}
 				else
 				{
-					throw new NullPointerException("Failed to load the file " + getName());
+					if(!newFile)
+						throw new NullPointerException("Failed to load the file " + getName());
 				}
 			}
 			else

@@ -24,95 +24,100 @@ import java.util.Collections;
  */
 public class IGCMenuCrates extends IGCMenu
 {
-	public IGCMenuCrates(CustomCrates cc, Player p, IGCMenu lastMenu)
-	{
-		super(cc, p, lastMenu, "&7&l> &6&lCrates");
-	}
+    public IGCMenuCrates(CustomCrates cc, Player p, IGCMenu lastMenu)
+    {
+        super(cc, p, lastMenu, "&7&l> &6&lCrates");
+    }
 
-	@Override
-	public void open()
-	{
-		getP().closeInventory();
-		putInMenu();
+    @Override
+    public void open()
+    {
+        getP().closeInventory();
+        putInMenu();
 
-		InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4, Crate.getLoadedCrates().keySet().size()));
-		ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
-		ib.setItem(8, new ItemBuilder(Material.PAPER, 1, 0).setName("&aCreate a new crate").setLore("&7Please set the crate and").addLore("&7key once you are done configuring").addLore("&7for it to save properly."));
+        InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4, Crate.getLoadedCrates().keySet().size()));
+        ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
+        ib.setItem(8,
+                new ItemBuilder(Material.PAPER, 1, 0).setName("&aCreate a new crate").setLore("&7Please set the crate and")
+                        .addLore("&7key once you are done configuring").addLore("&7for it to save properly."));
 
-		int i = 2;
-		ArrayList<String> names = new ArrayList<>(Crate.getLoadedCrates().keySet());
-		Collections.sort(names);
-		for(String crateName : names)
-		{
-			if(i%9 == 7)
-			{
-				i += 4;
-			}
+        int i = 2;
+        ArrayList<String> names = new ArrayList<>(Crate.getLoadedCrates().keySet());
+        Collections.sort(names);
+        for (String crateName : names)
+        {
+            if (i % 9 == 7)
+            {
+                i += 4;
+            }
 
-			Crate crate = Crate.getLoadedCrates().get(crateName);
-			ib.setItem(i, new ItemBuilder(Material.CHEST, 1, 0).setName((crate.isEnabled() ? "&a" : "&c") + crateName).setLore("&7Placed crates: &f" + crate.getPlacedCount()).addLore("&7Errors: " + (crate.getCs().getSl().getFailures() == 0 ? "&f" : "&c") + crate.getCs().getSl().getFailures()));
-			i++;
-		}
+            Crate crate = Crate.getLoadedCrates().get(crateName);
+            ib.setItem(i, new ItemBuilder(Material.CHEST, 1, 0).setName((crate.isEnabled() ? "&a" : "&c") + crateName)
+                    .setLore("&7Placed crates: &f" + crate.getPlacedCount()).addLore(
+                            "&7Errors: " + (crate.getCs().getSl().getFailures() == 0 ? "&f" : "&c") +
+                                    crate.getCs().getSl().getFailures()));
+            i++;
+        }
 
-		getIb().open();
-	}
+        getIb().open();
+    }
 
-	@Override
-	public void manageClick(int slot)
-	{
-		if(slot == 0)
-		{
-			up();
-		}
-		else if(slot == 8)
-		{
-			new InputMenu(getCc(), getP(), "crate name", "null", "Name the crate whatever you want.", String.class, this);
-		}
-		else if(getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType() == Material.CHEST)
-		{
-			String name = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
-			getP().closeInventory();
-			new IGCCratesMain(getCc(), getP(), this, Crate.getCrate(getCc(), name)).open();
-		}
-	}
+    @Override
+    public void manageClick(int slot)
+    {
+        if (slot == 0)
+        {
+            up();
+        }
+        else if (slot == 8)
+        {
+            new InputMenu(getCc(), getP(), "crate name", "null", "Name the crate whatever you want.", String.class, this);
+        }
+        else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType() == Material.CHEST)
+        {
+            String name = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
+            getP().closeInventory();
+            new IGCCratesMain(getCc(), getP(), this, Crate.getCrate(getCc(), name)).open();
+        }
+    }
 
-	@Override
-	public boolean handleInput(String value, String input)
-	{
-		if(value.equalsIgnoreCase("crate name"))
-		{
-			if(!Crate.crateAlreadyExist(input))
-			{
-				if(!input.contains(" "))
-				{
-					Crate newCrate = new Crate(getCc(), input, true);
-					CrateSettings cs = newCrate.getCs();
-					cs.setOt(ObtainType.STATIC);
-					cs.setDcp(new MaterialPlaceholder(getCc()));
-					cs.setCt(CrateType.INV_ROULETTE);
-					cs.setRequireKey(true);
-					newCrate.setEnabled(true);
-					newCrate.setCanBeEnabled(false);
+    @Override
+    public boolean handleInput(String value, String input)
+    {
+        if (value.equalsIgnoreCase("crate name"))
+        {
+            if (!Crate.crateAlreadyExist(input))
+            {
+                if (!input.contains(" "))
+                {
+                    Crate newCrate = new Crate(getCc(), input, true);
+                    CrateSettings cs = newCrate.getCs();
+                    cs.setOt(ObtainType.STATIC);
+                    cs.setDcp(new MaterialPlaceholder(getCc()));
+                    cs.setCt(CrateType.INV_ROULETTE);
+                    cs.setRequireKey(true);
+                    newCrate.setEnabled(true);
+                    newCrate.setCanBeEnabled(false);
 
-					if(!CRewards.getAllRewards().isEmpty())
-					{
-						cs.getCr().addReward(CRewards.getAllRewards().values().iterator().next().getRewardName());
-					}
+                    if (!CRewards.getAllRewards().isEmpty())
+                    {
+                        cs.getCr().addReward(CRewards.getAllRewards().values().iterator().next().getRewardName());
+                    }
 
-					new IGCCratesMain(getCc(), getP(), this, newCrate).open();
-					ChatUtils.msgSuccess(getP(), "Create a new crate with the name " + input);
-					//	new InputMenu(getCc(), getP(), "crate obtain method", "null", "Available obtain methods: " + Arrays.toString(ObtainType.values()), String.class, this);
-				}
-				else
-				{
-					ChatUtils.msgError(getP(), "Crate names cannot have spaces in their names.");
-				}
-			}
-			else
-			{
-				ChatUtils.msgError(getP(), "This crate name already exists!");
-			}
-		}
+                    new IGCCratesMain(getCc(), getP(), this, newCrate).open();
+                    ChatUtils.msgSuccess(getP(), "Create a new crate with the name " + input);
+                    //	new InputMenu(getCc(), getP(), "crate obtain method", "null", "Available obtain methods: " + Arrays.toString(ObtainType.values()), String.class, this);
+                }
+                else
+                {
+                    ChatUtils.msgError(getP(), "Crate names cannot have spaces in their names.");
+                }
+            }
+            else
+            {
+                ChatUtils.msgError(getP(), "This crate name already exists!");
+            }
+        }
 		/*else if(value.equalsIgnoreCase("crate obtain method"))
 		{
 			try
@@ -199,6 +204,6 @@ public class IGCMenuCrates extends IGCMenu
 				ChatUtils.msgError(getP(), input + " is not valid in the list of crate animations: " + Arrays.toString(CrateType.values()));
 			}
 		}*/
-		return false;
-	}
+        return false;
+    }
 }

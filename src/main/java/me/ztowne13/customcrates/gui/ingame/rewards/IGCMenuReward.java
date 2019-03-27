@@ -82,6 +82,7 @@ public class IGCMenuReward extends IGCMenu
         {
             commands.addLore(getName(null));
         }
+        commands.addLore("").addAutomaticLore("&f", 30, "Use {name} as a placeholder for the player's name.");
         ib.setItem(12, commands);
 
         //Lore

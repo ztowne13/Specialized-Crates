@@ -70,7 +70,7 @@ auto-close: true
 #           Crate Action Settings           #
 #-------------------------------------------#
 
-# Referring to the Action Bar, TitleV1_7_8_9_10, and/or Subtitle...
+# Referring to the Action Bar, Title, and/or Subtitle...
 
 # How long would you like the message to take, in seconds, to fade in?
 fade-in-time: 0
@@ -80,9 +80,6 @@ stay-time: 4
 
 # How long would you like the message to take, in seconds, to fade out?
 fade-out-time: 1
-
-# How long would you like the reward hologram to stay up for in seconds?
-reward-hologram-length: 3
 
 #-------------------------------------------#
 #           Lucky Crate Settings            #

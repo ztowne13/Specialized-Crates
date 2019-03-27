@@ -46,25 +46,9 @@ public class TextChangeAnimation extends HoloAnimation
 
         String s = getCh().getPrefixes().get(count);
 
-        for(int i = 0; i < getCh().getLines().length; i++)
+        if(!getLast().equals(s) || force)
         {
-            try
-            {
-                if(getCh().getLines()[i] == null)
-                {
-                    break;
-                }
-                String currentLine = getCh().getLines()[i];
-                currentLine = s + currentLine;
-                if(!getLast().equals(s) || force)
-                {
-                    getDh().setLine(i, ChatUtils.toChatColor(currentLine));
-                }
-            }
-            catch(Exception exc)
-            {
-                break;
-            }
+            getDh().setLine(0, ChatUtils.toChatColor(s));
         }
 
         setLast(s);

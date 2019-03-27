@@ -5,6 +5,7 @@ import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
@@ -143,6 +144,21 @@ public class FileUtils
         {
             success.log(sl);
             return Double.parseDouble(s);
+        }
+        else
+        {
+            invalid.log(sl);
+            return defValue;
+        }
+    }
+
+    public static long loadLong(String s, long defValue, StatusLogger sl, StatusLoggerEvent success,
+                                    StatusLoggerEvent invalid)
+    {
+        if (Utils.isLong(s))
+        {
+            success.log(sl);
+            return Long.parseLong(s);
         }
         else
         {

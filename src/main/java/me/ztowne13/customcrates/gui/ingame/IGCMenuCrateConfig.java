@@ -46,6 +46,7 @@ public class IGCMenuCrateConfig extends IGCMenu
 		ib.setItem(13, new ItemBuilder(Material.PAPER, 1, 0).setName("&aMenu Animation").setLore("&7Animation name: &fINV_MENU").addLore("").addLore("&7Used by crates: &f" + CrateType.INV_MENU.getUses()));
 		ib.setItem(14, new ItemBuilder(Material.PAPER, 1, 0).setName("&aEnclose Animation").setLore("&7Animation name: &fINV_ENCLOSE").addLore("").addLore("&7Used by crates: &f" + CrateType.INV_ENCLOSE.getUses()));
 		ib.setItem(15, new ItemBuilder(Material.PAPER, 1, 0).setName("&aDiscover Animation").setLore("&7Animation name: &fINV_DISCOVER").addLore("").addLore("&7Used by crates: &f" + CrateType.INV_DISCOVER.getUses()));
+		ib.setItem(16, new ItemBuilder(Material.PAPER, 1, 0).setName("&aOpen Chest Animation").setLore("&7Animation name: &fBLOCK_CRATEOPEN").addLore("").addLore("&7Used by crates: &f" + CrateType.BLOCK_CRATEOPEN.getUses()));
 
 		/*ib.setItem(27, IGCDefaultItems.EXIT_BUTTON.getIb());
 
@@ -124,6 +125,9 @@ public class IGCMenuCrateConfig extends IGCMenu
 				break;
 			case 15:
 				new IGCAnimDiscover(cc, p, this).open();
+				break;
+			case 16:
+				new IGCAnimOpenChest(cc, p, this).open();
 				break;
 		}
 		/*String val = "no current value";

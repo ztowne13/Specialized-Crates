@@ -85,7 +85,7 @@ public class MenuAnimation extends InventoryCrate
 		}
 		catch(Exception exc)
 		{
-			ChatUtils.log(new String[]{"Failed to load CSGO inv-name"});
+			ChatUtils.log(new String[]{"Failed to load Menu inv-name"});
 		}
 		
 		try
@@ -94,7 +94,7 @@ public class MenuAnimation extends InventoryCrate
 		}
 		catch(Exception exc)
 		{
-			ChatUtils.log(new String[]{"Failed to load CSGO tick-sound, it is invalid."});
+			ChatUtils.log(new String[]{"Failed to load Menu minimum-rewards, it is invalid."});
 		}
 		
 		try

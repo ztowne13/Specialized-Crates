@@ -19,13 +19,14 @@ import java.util.Arrays;
 public class CHolograms extends CSetting
 {
 	DynamicHologram dh = null;
-	String[] lines = new String[10];
-	//ArrayList<String> lines = new ArrayList<>();
+	ArrayList<String> lines = new ArrayList<>();
 	int lineCount = 0;
 
 	String rewardHologram = "";
+	int rewardHoloDuration = 60;
+	double rewardHoloYOffset = 0;
 	
-	HoloAnimType hat;
+	HoloAnimType hat = HoloAnimType.NONE;
 	int speed = 20;
 	ArrayList<String> prefixes = new ArrayList<String>();
 	double hologramOffset = -123.123;
@@ -43,6 +44,32 @@ public class CHolograms extends CSetting
 		{
 			rewardHologram = fc.getString("hologram.reward-hologram");
 			StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM.log(getCrates(), new String[]{rewardHologram});
+		}
+
+		if(csb.hasV("hologram.reward-hologram-duration"))
+		{
+			try
+			{
+				rewardHoloDuration = Integer.parseInt(fc.getString("hologram.reward-hologram-duration"));
+				StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_DURATION_SUCCESS.log(getCrates());
+			}
+			catch(Exception exc)
+			{
+				StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_DURATION_INVALID.log(getCrates());
+			}
+		}
+
+		if(csb.hasV("hologram.reward-hologram-yoffset"))
+		{
+			try
+			{
+				rewardHoloYOffset = Double.parseDouble(fc.getString("hologram.reward-hologram-yoffset"));
+				StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_YOFFSET_SUCCESS.log(getCrates());
+			}
+			catch(Exception exc)
+			{
+				StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_YOFFSET_INVALID.log(getCrates());
+			}
 		}
 
 		if(csb.hasV("hologram.lines"))
@@ -119,33 +146,37 @@ public class CHolograms extends CSetting
 
 	public void saveToFile()
 	{
-		boolean empty = true;
-		for(String s : lines)
+		for(int i = 0; i < lines.size(); i++)
 		{
-			if(s != null && !s.equalsIgnoreCase(""))
+			try
 			{
-				empty = false;
-				break;
+				lines.set(i, ChatUtils.fromChatColor(lines.get(i)));
+			}
+			catch (Exception exc)
+			{
+
 			}
 		}
+		getFu().get().set("hologram.lines", lines);
 
-		if(!empty)
+		for(int i = 0; i < prefixes.size(); i++)
 		{
-			for(int i = 0; i < lines.length; i++)
+			try
 			{
-				try
-				{
-					lines[i] = ChatUtils.fromChatColor(lines[i]);
-				}
-				catch (Exception exc)
-				{
-
-				}
+				prefixes.set(i, ChatUtils.fromChatColor(prefixes.get(i)));
 			}
-			getFu().get().set("hologram.lines", Arrays.asList(lines));
+			catch (Exception exc)
+			{
+
+			}
 		}
+		getFu().get().set("hologram.animation.prefixes", prefixes);
+		getFu().get().set("hologram.animation.type", getHat().name());
+		getFu().get().set("hologram.animation.speed", getSpeed());
 
 		getFu().get().set("hologram.reward-hologram", getRewardHologram());
+		getFu().get().set("hologram.reward-hologram-duration", getRewardHoloDuration());
+		getFu().get().set("hologram.reward-hologram-yoffset", getRewardHoloYOffset());
 	}
 
 	public double getHologramOffset()
@@ -178,39 +209,28 @@ public class CHolograms extends CSetting
 
 	public void addLine(String line)
 	{
-		for(int i = 0; i < getLines().length; i++)
+		try
 		{
-			if(getLines()[i] == null)
-			{
-				getLines()[i] = line;
-				StatusLoggerEvent.HOLOGRAM_ADDLINE_SUCCESS.log(getCrates(), new String[]{line});
-				return;
-			}
+			lines.add(line);
 		}
-		StatusLoggerEvent.HOLOGRAM_ADDLINE_FAIL_TOMANY.log(getCrates(), new String[]{line, (getLines().length + 1) + ""});
+		catch(Exception exc)
+		{
+			StatusLoggerEvent.HOLOGRAM_ADDLINE_FAIL_TOMANY
+					.log(getCrates(), new String[]{line, (getLines().size() + 1) + ""});
+		}
 	}
 
 	public void removeLine(int lineNum)
 	{
-		String[] newLines = new String[lines.length];
-		int count = 0;
-		for(int i = 0; i < lines.length; i++)
-		{
-			if(i != lineNum)
-			{
-				newLines[count] = lines[i];
-				count++;
-			}
-		}
-
-		lines = newLines;
+		lines.remove(lineNum - 1);
 	}
 
 	public DynamicHologram createHologram(PlacedCrate cm, Location l, DynamicHologram h)
 	{
-		if(!(getLines()[0] == null))
+		h.create(l);
+
+		if(!lines.isEmpty())
 		{
-			h.create(l);
 
 			for (String s : getLines())
 			{
@@ -237,7 +257,7 @@ public class CHolograms extends CSetting
 
 	public int getLinesAmount()
 	{
-		for(int i = lines.length-1; i >= 0; i--)
+		for(int i = lines.size()-1; i >= 0; i--)
 		{
 
 		}
@@ -278,14 +298,34 @@ public class CHolograms extends CSetting
 
 	}
 
-	public String[] getLines()
+	public ArrayList<String> getLines()
 	{
 		return lines;
 	}
 
-	public void setLines(String[] lines) 
+	public void setLines(ArrayList<String> lines)
 	{
 		this.lines = lines;
+	}
+
+	public int getRewardHoloDuration()
+	{
+		return rewardHoloDuration;
+	}
+
+	public void setRewardHoloDuration(int rewardHoloDuration)
+	{
+		this.rewardHoloDuration = rewardHoloDuration;
+	}
+
+	public double getRewardHoloYOffset()
+	{
+		return rewardHoloYOffset;
+	}
+
+	public void setRewardHoloYOffset(double rewardHoloYOffset)
+	{
+		this.rewardHoloYOffset = rewardHoloYOffset;
 	}
 
 	public HoloAnimType getHat()

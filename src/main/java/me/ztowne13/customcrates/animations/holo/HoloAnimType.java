@@ -5,6 +5,8 @@ import me.ztowne13.customcrates.crates.options.holograms.DynamicHologram;
 
 public enum HoloAnimType 
 {
+	NONE,
+
 	SINGLELINE_CHANGE,
 
 	TEXT_CHANGE;

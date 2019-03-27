@@ -49,6 +49,8 @@ rewards:
 
 hologram:
   reward-hologram: '&a[&e%reward%&a]'
+  reward-hologram-duration: 60
+  reward-hologram-yoffset: 0
   lines:
     - ''
   animation:

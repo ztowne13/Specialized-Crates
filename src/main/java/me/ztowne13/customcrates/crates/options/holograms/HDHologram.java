@@ -7,6 +7,7 @@ import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 
 import java.util.HashMap;
 

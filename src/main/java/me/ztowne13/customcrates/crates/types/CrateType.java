@@ -21,7 +21,7 @@ public enum CrateType
 
 	INV_DISCOVER("CrateType.Inventory.Discover"),
 
-	BLOCK_CRATEOPEN("CrateType.Block.CrateOpen"),
+	BLOCK_CRATEOPEN("CrateType.Block.OpenChest"),
 		
 	GIVE_KEY("");
 			

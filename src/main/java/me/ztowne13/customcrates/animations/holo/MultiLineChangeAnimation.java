@@ -46,15 +46,12 @@ public class MultiLineChangeAnimation extends HoloAnimation
 
 		String s = getCh().getPrefixes().get(count);
 
-		for(int i = 0; i < getCh().getLines().length; i++)
+
+		for(int i = 0; i < getCh().getLines().size(); i++)
 		{
 			try
 			{
-				if(getCh().getLines()[i] == null)
-				{
-					break;
-				}
-				String currentLine = getCh().getLines()[i];
+				String currentLine = getCh().getLines().get(i);
 				currentLine = s + currentLine;
 				if(!getLast().equals(s))
 				{
