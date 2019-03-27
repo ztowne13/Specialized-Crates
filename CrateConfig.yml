@@ -1,4 +1,9 @@
 CrateType:
+  Block:
+    OpenChest:
+      inv-name: '&8&l> &6&l%crate%'
+      chest-open-duration: 60
+      chest-open-sound: true
   Inventory:
     Roulette:
       inv-name: '&8&l> &6&l%crate%'

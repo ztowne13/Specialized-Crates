@@ -8,6 +8,7 @@ import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.CHolograms;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.crates.types.animations.openchest.OpenChestAnimation;
 import me.ztowne13.customcrates.listeners.*;
 import me.ztowne13.customcrates.logging.UpdateChecker;
 import me.ztowne13.customcrates.players.PlayerDataManager;
@@ -96,16 +97,8 @@ public class CustomCrates extends JavaPlugin
 		}
 
 		CHolograms.deleteAll();
-
-		/*for(PlacedCrate cm: PlacedCrate.getPlacedCrates().values())
-		{
-			if(cm.isCratesEnabled())
-			{
-				cm.getCrates().getCs().getDcp().remove(cm);
-			}
-		}*/
-
 		NPCUtils.checkUncheckMobs(true);
+		OpenChestAnimation.removeAllItems();
 
 	}
 	

@@ -31,11 +31,19 @@ public class IGCTierSelector extends IGCMenuCrate
 		super(cc, p, lastMenu, "&7&l> &6&lTier Selector", crates);
 		this.tiers = tiers;
 		this.igcTierMenu = igcTierMenu;
+
 	}
 
 	@Override
 	public void open()
 	{
+		if(tiers.size() == 1)
+		{
+			igcTierMenu.setTier(tiers.iterator().next());
+			igcTierMenu.open();
+			return;
+		}
+
 		getP().closeInventory();
 		putInMenu();
 

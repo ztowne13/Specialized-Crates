@@ -92,6 +92,36 @@ public class ItemBuilder
 		return this;
 	}
 
+	public ItemBuilder addAutomaticLore(String lineColor, int charLength, String lore)
+	{
+		String[] split = lore.split(" ");
+		int lineSize = 0;
+		String currentLine = "";
+
+		for(String word : split)
+		{
+			int wordLength = word.length();
+			if(lineSize + wordLength <= charLength)
+			{
+				lineSize += wordLength + 1;
+				currentLine += word + " ";
+			}
+			else
+			{
+				addLore(lineColor + currentLine.substring(0, currentLine.length() - 1));
+				currentLine = word + " ";
+				lineSize = wordLength;
+
+
+			}
+		}
+
+		if(lineSize != 0)
+			addLore(lineColor + currentLine.substring(0, currentLine.length() - 1));
+
+		return this;
+	}
+
 	public ItemBuilder clearLore()
 	{
 		ItemMeta im = im();

@@ -56,64 +56,82 @@ public class IGCMenuReward extends IGCMenu
         ib.setItem(4, new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1).setName("&a" + r.getRewardName()));
         ib.setItem(8,
                 new ItemBuilder(DynamicMaterial.RED_CARPET.parseMaterial(), 1, 14).setName("&cDelete this reward")
-                        .setLore("&7You will have confirmation").addLore("&7before deleting."));
+                        .addAutomaticLore("&7", 30, "You will have to confirm before deleting."));
 
+        // Display name
         ib.setItem(10,
-                new ItemBuilder(r.getDisplayName() == null ? DynamicMaterial.ROSE_RED : DynamicMaterial.PAPER, 1)
-                        .setLore("&7Current value: ").addLore("&f" + getName(r.getDisplayName()))
-                        .setName("&aSet the display name."));
+                new ItemBuilder(DynamicMaterial.PAPER, 1).setName("&aEdit the display name.")
+                        .setLore("&7Current value: ")
+                        .addLore("&7" + getName(r.getDisplayName())).addLore("")
+                        .addAutomaticLore("&f", 30, "This is the reward name everyone will see."));
 
+        //Commands
         ItemBuilder commands =
-                new ItemBuilder(r.getCommands() == null ? DynamicMaterial.ROSE_RED : DynamicMaterial.COMMAND_BLOCK, 1)
+                new ItemBuilder(r.getCommands() == null || r.getCommands().isEmpty() ? DynamicMaterial.ROSE_RED :
+                        DynamicMaterial.COMMAND_BLOCK, 1)
                         .setName("&aEdit the commands")
                         .setLore("&7Current value: ");
-        if (commands.getStack().getType() != DynamicMaterial.INK_SAC.parseMaterial())
+        if (r.getCommands() != null && !r.getCommands().isEmpty())
         {
             for (String cmds : r.getCommands())
             {
-                commands.addLore("&f" + cmds);
-            }
-        }
-        ib.setItem(12, commands);
-
-        ItemBuilder lore = new ItemBuilder(
-                r.getCustomLore() == null || r.getCustomLore().isEmpty() ? DynamicMaterial.ROSE_RED :
-                        DynamicMaterial.WRITABLE_BOOK, 1).setName("&aEdit the lore")
-                .setLore("&7Current value: ");
-        if (lore.getStack().getType() != DynamicMaterial.INK_SAC.parseMaterial())
-        {
-            for (String loreLine : r.getCustomLore())
-            {
-                lore.addLore(loreLine);
+                commands.addLore("&7" + cmds);
             }
         }
         else
         {
-            lore.addLore("&6&lNote: &eCurrently using default").addLore("&elore from config.yml");
+            commands.addLore(getName(null));
         }
+        ib.setItem(12, commands);
 
+        //Lore
+        ItemBuilder lore = new ItemBuilder(DynamicMaterial.WRITABLE_BOOK, 1).setName("&aEdit the lore")
+                .setLore("&7Current value: ");
+        if (r.getCustomLore() != null && !r.getCustomLore().isEmpty())
+            for (String loreLine : r.getCustomLore())
+            {
+                lore.addLore(loreLine);
+            }
+        else
+            lore.addAutomaticLore("&e", 30, "Currently using global lore from the config.yml");
+
+        lore.addLore("").addAutomaticLore("&f", 30,
+                "Set the reward's lore to display. Delete every line of the lore to use the global lore specificed in the config.yml.");
         ib.setItem(11, lore);
 
+        // Display item
         ib.setItem(13,
                 (r == null || r.getDisplayItem() == null ? new ItemBuilder(DynamicMaterial.ROSE_RED, 1) :
-                        new ItemBuilder(r.getDisplayItem())).setName("&aSet the display item.")
-                        .setLore("&7By clicking this object you will").addLore("&7set the display item to your")
-                        .addLore("&7item you are currently holding."));
+                        new ItemBuilder(r.getDisplayItem())).setName("&aEdit the display item.").clearLore()
+                        .addAutomaticLore("&f", 30,
+                                "By clicking this object you will set the display item to the item you are currently holding."));
+
+        // Chance
         ib.setItem(14,
-                new ItemBuilder(r.getChance() == null ? DynamicMaterial.ROSE_RED : DynamicMaterial.FISHING_ROD, 1)
-                        .setName("&aSet the chance").setLore("&7Current value: ")
-                        .addLore("&f" + getName(r.getChance() + "")));
+                new ItemBuilder(
+                        r.getChance() == null || r.getChance() == 0 ? DynamicMaterial.ROSE_RED : DynamicMaterial.FISHING_ROD,
+                        1)
+                        .setName("&aEdit the chance").setLore("&7Current value: ")
+                        .addLore("&7" + getName(r.getChance() == 0 ? null : (r.getChance() + ""))).addLore("")
+                        .addAutomaticLore("&f", 30, "This is the actual chance of the lore."));
+
+        // Rarity Level (Tier)
         ib.setItem(15,
-                new ItemBuilder(r.getRarity() == null ? DynamicMaterial.ROSE_RED : DynamicMaterial.DIAMOND_BLOCK, 1)
-                        .setName("&aSet the rarity level").setLore("&7Current value: ")
-                        .addLore("&f" + getName(r.getRarity())));
-        ib.setItem(16, new ItemBuilder(DynamicMaterial.DARK_OAK_FENCE, 1)
-                .setName("&cSet the receive-limit").setLore("&cThis value is currently non-usable."));
+                new ItemBuilder(DynamicMaterial.DIAMOND_BLOCK, 1)
+                        .setName("&aEdit the rarity level")
+                        .setLore("&7Current value: ")
+                        .addLore("&7" + getName(r.getRarity())).addLore("").addAutomaticLore("&f", 30,
+                        "This is the 'tier' of the reward. If you aren't using tiers, ignore this."));
+
+        // Glow
+        ib.setItem(16, new ItemBuilder(r.isGlow() ? DynamicMaterial.NETHER_STAR : DynamicMaterial.QUARTZ, 1)
+                .setName("&aEdit the glow").setLore("&7Current value:").addLore("&7" + r.isGlow()).addLore("")
+                .addAutomaticLore("&f", 30, "This is whether or not the display item should glow."));
 
 
         if (r.getDisplayItem() != null && DynamicMaterial.PLAYER_HEAD.isSameMaterial(r.getDisplayItem()))
         {
-            ib.setItem(22, new ItemBuilder(DynamicMaterial.NAME_TAG, 1).setName("&aSet the player-head name")
+            ib.setItem(22, new ItemBuilder(DynamicMaterial.NAME_TAG, 1).setName("&aEdit the player-head name")
                     .setLore("&7Current value:").addLore("&f" + getName(r.getHeadName())));
         }
 
@@ -188,15 +206,17 @@ public class IGCMenuReward extends IGCMenu
             else
             {
                 ItemBuilder ib = new ItemBuilder(getP().getItemInHand());
-                ib.setName("&aSet the display item.").setLore("&7By clicking this object you will")
-                        .addLore("&7set the display item to your").addLore("&7item you are currently holding.");
+
+                ib.clearLore().setName("&aEdit the display item.").clearLore().addAutomaticLore("&f", 30,
+                        "By clicking this object you will set the display item to the item you are currently holding.");
+
                 getIb().setItem(slot, ib);
                 r.setDisplayItem(ib.get());
             }
 
-            if (DynamicMaterial.PLAYER_HEAD.isSameMaterial(r.getDisplayItem()))
+            if (r.getDisplayItem() != null && DynamicMaterial.PLAYER_HEAD.isSameMaterial(r.getDisplayItem()))
             {
-                getIb().setItem(22, new ItemBuilder(DynamicMaterial.NAME_TAG, 1).setName("&aSet the player-head name")
+                getIb().setItem(22, new ItemBuilder(DynamicMaterial.NAME_TAG, 1).setName("&aEdit the player-head name")
                         .setLore("&7Current value:").addLore("&f" + getName(r.getHeadName())));
             }
         }
@@ -210,11 +230,13 @@ public class IGCMenuReward extends IGCMenu
         }
         else if (slot == 16)
         {
-            ChatUtils.msgError(getP(), "This value is currently unusable and non-settable.");
-            unsavedChanges = false;
+            r.setGlow(!r.isGlow());
+            getIb().setItem(16, new ItemBuilder(r.isGlow() ? DynamicMaterial.NETHER_STAR : DynamicMaterial.QUARTZ, 1)
+                    .setName("&aEdit the glow").setLore("&7Current value:").addLore("&7" + r.isGlow()).addLore("")
+                    .addAutomaticLore("&f", 30, "This is whether or not the display item should glow."));
             return;
         }
-        else if(slot == 22)
+        else if (slot == 22)
         {
             new InputMenu(getCc(), getP(), "head-player-name", r.getHeadName(), String.class, this);
         }
@@ -230,7 +252,7 @@ public class IGCMenuReward extends IGCMenu
             {
                 b.setLore("&creward item.");
             }
-            else if (r.getChance() == null)
+            else if (r.getChance() == null || r.getChance() == 0)
             {
                 b.setLore("&cchance.");
             }
@@ -337,7 +359,7 @@ public class IGCMenuReward extends IGCMenu
                 r.setRarity(input);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
             }
-            else if(value.equalsIgnoreCase("head-player-name"))
+            else if (value.equalsIgnoreCase("head-player-name"))
             {
                 r.setHeadName(input);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");

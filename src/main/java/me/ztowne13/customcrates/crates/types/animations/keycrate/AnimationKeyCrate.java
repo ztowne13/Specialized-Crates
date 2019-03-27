@@ -1,4 +1,4 @@
-package me.ztowne13.customcrates.crates.types.animations;
+package me.ztowne13.customcrates.crates.types.animations.keycrate;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class KeyCrate extends CrateHead {
+public class AnimationKeyCrate extends CrateHead {
 
-	public KeyCrate(Crate crate)
+	public AnimationKeyCrate(Crate crate)
 	{
 		super(crate);
 	}

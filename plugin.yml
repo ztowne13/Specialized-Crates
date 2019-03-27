@@ -1,6 +1,6 @@
 name: SpecializedCrates
 author: Ztowne13
-version: 2.8.3.5 SNAP 3
+version: 2.8.4.0
 main: me.ztowne13.customcrates.CustomCrates
 api-version: 1.13
 description: A 100% customizable crate plugin for your server.

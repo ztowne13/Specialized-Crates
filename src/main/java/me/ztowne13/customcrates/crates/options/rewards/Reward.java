@@ -27,7 +27,8 @@ public class Reward
 	FileConfiguration fc;
 
 	CRewards cr;
-	String rewardName, displayName, rarity;
+	String rewardName, displayName;
+	String rarity = "default";
 	ItemStack displayItem;
     List<String> customLore;
 
@@ -35,12 +36,14 @@ public class Reward
 	List<String> commands;
 	int totalUses;
 	Material m;
-	boolean needsMoreConfig, glow;
+	boolean needsMoreConfig;
+	boolean glow = false;
 
 	boolean toLog;
 
 	public Reward(CustomCrates cc, String rewardName)
 	{
+		setDisplayName(rewardName);
 	    init();
 	    needsMoreConfig = true;
 		this.cc = cc;
@@ -268,6 +271,11 @@ public class Reward
 				success =  false;
 			}
 		}
+
+		if(getDisplayName() == null)
+			displayName = rewardName;
+		if(getRarity() == null)
+			rarity = "default";
 
 		return success;
 	}

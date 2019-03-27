@@ -14,6 +14,8 @@ public abstract class InventoryCrate extends CrateHead
 	protected HashMap<UUID,BukkitTask> rotateTimers = new HashMap<UUID,BukkitTask>();
 	protected Inventory inv;
 	protected PlacedCrate placedCrate;
+
+	String prefix;
 	
 	public InventoryCrate(Inventory inv, Crate crates)
 	{

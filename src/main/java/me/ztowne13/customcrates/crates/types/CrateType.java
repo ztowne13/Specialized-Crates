@@ -1,26 +1,29 @@
 package me.ztowne13.customcrates.crates.types;
 
 import me.ztowne13.customcrates.crates.Crate;
-import me.ztowne13.customcrates.crates.types.animations.*;
 import me.ztowne13.customcrates.crates.types.animations.csgo.CSGOAnimation;
 import me.ztowne13.customcrates.crates.types.animations.discover.DiscoverAnimation;
 import me.ztowne13.customcrates.crates.types.animations.enclosement.EnclosementAnimation;
+import me.ztowne13.customcrates.crates.types.animations.keycrate.AnimationKeyCrate;
 import me.ztowne13.customcrates.crates.types.animations.menu.MenuAnimation;
+import me.ztowne13.customcrates.crates.types.animations.openchest.OpenChestAnimation;
 import me.ztowne13.customcrates.crates.types.animations.roulette.RouletteAnimation;
 
 public enum CrateType
 {
-		INV_ROULETTE("CrateType.Inventory.Roulette"),
+	INV_ROULETTE("CrateType.Inventory.Roulette"),
 		
-		INV_MENU("CrateType.Inventory.Menu"),
-		
-		INV_CSGO("CrateType.Inventory.CSGO"),
+	INV_MENU("CrateType.Inventory.Menu"),
 
-		INV_ENCLOSE("CrateType.Inventory.Enclose"),
+	INV_CSGO("CrateType.Inventory.CSGO"),
 
-		INV_DISCOVER("CrateType.Inventory.Discover"),
+	INV_ENCLOSE("CrateType.Inventory.Enclose"),
+
+	INV_DISCOVER("CrateType.Inventory.Discover"),
+
+	BLOCK_CRATEOPEN("CrateType.Block.CrateOpen"),
 		
-		GIVE_KEY("");
+	GIVE_KEY("");
 			
 		/*BLOCK_MINEPLEX,
 		
@@ -54,9 +57,12 @@ public enum CrateType
 			case INV_DISCOVER:
 				ch = new DiscoverAnimation(null, crates);
 				break;
+			case BLOCK_CRATEOPEN:
+				ch = new OpenChestAnimation(null, crates);
+				break;
 			case GIVE_KEY:
 			default:
-				ch = new KeyCrate(crates);
+				ch = new AnimationKeyCrate(crates);
 		}
 		crates.getCs().setCh(ch);
 	}
