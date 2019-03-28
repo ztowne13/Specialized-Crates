@@ -11,86 +11,86 @@ import me.ztowne13.customcrates.crates.types.animations.roulette.RouletteAnimati
 
 public enum CrateType
 {
-	INV_ROULETTE("CrateType.Inventory.Roulette"),
-		
-	INV_MENU("CrateType.Inventory.Menu"),
+    INV_ROULETTE("CrateType.Inventory.Roulette"),
 
-	INV_CSGO("CrateType.Inventory.CSGO"),
+    INV_MENU("CrateType.Inventory.Menu"),
 
-	INV_ENCLOSE("CrateType.Inventory.Enclose"),
+    INV_CSGO("CrateType.Inventory.CSGO"),
 
-	INV_DISCOVER("CrateType.Inventory.Discover"),
+    INV_ENCLOSE("CrateType.Inventory.Enclose"),
 
-	BLOCK_CRATEOPEN("CrateType.Block.OpenChest"),
-		
-	GIVE_KEY("");
+    INV_DISCOVER("CrateType.Inventory.Discover"),
+
+    BLOCK_CRATEOPEN("CrateType.Block.OpenChest"),
+
+    GIVE_KEY("");
 			
 		/*BLOCK_MINEPLEX,
 		
 		BLOCK_CSGO;*/
 
-	String prefix;
+    String prefix;
 
-	CrateType(String prefix)
-	{
-		this.prefix = prefix;
-	}
+    CrateType(String prefix)
+    {
+        this.prefix = prefix;
+    }
 
-	public void setupFor(Crate crates)
-	{
-		CrateHead ch;
-		switch(this)
-		{
-			case INV_ROULETTE:
-				ch = new RouletteAnimation(null, crates);
-				break;
-			case INV_CSGO:
-				//ch = new CSGOManager(null, crates);
-				ch = new CSGOAnimation(null, crates);
-				break;
-			case INV_MENU:
-				ch = new MenuAnimation(null, crates);
-				break;
-			case INV_ENCLOSE:
-				ch = new EnclosementAnimation(null, crates);
-				break;
-			case INV_DISCOVER:
-				ch = new DiscoverAnimation(null, crates);
-				break;
-			case BLOCK_CRATEOPEN:
-				ch = new OpenChestAnimation(null, crates);
-				break;
-			case GIVE_KEY:
-			default:
-				ch = new AnimationKeyCrate(crates);
-		}
-		crates.getCs().setCh(ch);
-	}
+    public void setupFor(Crate crates)
+    {
+        CrateHead ch;
+        switch (this)
+        {
+            case INV_ROULETTE:
+                ch = new RouletteAnimation(null, crates);
+                break;
+            case INV_CSGO:
+                //ch = new CSGOManager(null, crates);
+                ch = new CSGOAnimation(null, crates);
+                break;
+            case INV_MENU:
+                ch = new MenuAnimation(null, crates);
+                break;
+            case INV_ENCLOSE:
+                ch = new EnclosementAnimation(null, crates);
+                break;
+            case INV_DISCOVER:
+                ch = new DiscoverAnimation(null, crates);
+                break;
+            case BLOCK_CRATEOPEN:
+                ch = new OpenChestAnimation(null, crates);
+                break;
+            case GIVE_KEY:
+            default:
+                ch = new AnimationKeyCrate(crates);
+        }
+        crates.getCs().setCh(ch);
+    }
 
-	public int getUses()
-	{
-		int uses = 0;
-		for(Crate crate : Crate.getLoadedCrates().values())
-		{
-			if(!crate.isMultiCrate())
-			{
-				if(crate.getCs().getCt().equals(this))
-				{
-					uses++;
-				}
-			}
-		}
+    public int getUses()
+    {
+        int uses = 0;
+        for (Crate crate : Crate.getLoadedCrates().values())
+        {
+            if (!crate.isMultiCrate())
+            {
+                if (crate.getCs().getCt().equals(this))
+                {
+                    uses++;
+                }
+            }
+        }
 
-		return uses;
-	}
+        return uses;
+    }
 
-	public String getPrefix()
-	{
-		return prefix;
-	}
+    public String getPrefix()
+    {
+        return prefix;
+    }
 
-	public void setPrefix(String prefix)
-	{
-		this.prefix = prefix;
-	}
+    public void setPrefix(String prefix)
+    {
+        this.prefix = prefix;
+    }
 }

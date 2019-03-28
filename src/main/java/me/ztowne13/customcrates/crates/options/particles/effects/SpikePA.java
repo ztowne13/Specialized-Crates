@@ -10,32 +10,32 @@ import java.util.Random;
  */
 public class SpikePA extends ParticleAnimationEffect
 {
-	int updatesPerSec = 20;
+    int updatesPerSec = 20;
 
-	Random r;
+    Random r;
 
-	double currentLength = -1, currentXAngle, currentYAngle;
+    double currentLength = -1, currentXAngle, currentYAngle;
 
-	public SpikePA(CustomCrates cc, ParticleData particleData)
-	{
-		super(cc, particleData);
-		r = new Random();
-		this.updatesPerSec = (int) particleData.getSpeed();
-	}
+    public SpikePA(CustomCrates cc, ParticleData particleData)
+    {
+        super(cc, particleData);
+        r = new Random();
+        this.updatesPerSec = (int) particleData.getSpeed();
+    }
 
-	@Override
-	public void update()
-	{
-		totalTick += updatesPerSec;
-		tick += updatesPerSec;
+    @Override
+    public void update()
+    {
+        totalTick += updatesPerSec;
+        tick += updatesPerSec;
 
-		double radius = particleData.getOffX();
-		double yOffset = particleData.getOffY();
-		double height = particleData.getOffZ();
+        double radius = particleData.getOffX();
+        double yOffset = particleData.getOffY();
+        double height = particleData.getOffZ();
 
-		if(currentLength == -1)
-		{
-			currentLength = height + r.nextInt((int) Math.ceil(radius)) + 1 + r.nextDouble();
-		}
-	}
+        if (currentLength == -1)
+        {
+            currentLength = height + r.nextInt((int) Math.ceil(radius)) + 1 + r.nextDouble();
+        }
+    }
 }

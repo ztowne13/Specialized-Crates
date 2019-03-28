@@ -15,15 +15,10 @@ import me.ztowne13.customcrates.visuals.EntityTypes;
 import me.ztowne13.customcrates.visuals.MaterialPlaceholder;
 import me.ztowne13.customcrates.visuals.npcs.Citizens2NPCPlaceHolder;
 import me.ztowne13.customcrates.visuals.npcs.MobPlaceholder;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CrateSettingsBuilder
 {
@@ -296,7 +291,7 @@ public class CrateSettingsBuilder
                             enchantCause = "Enchantment " + enchantArgs[0] + " doesn't exist";
                             Enchantment ench = Enchantment.getByName(enchantArgs[0].toUpperCase());
 
-                            if(ench == null)
+                            if (ench == null)
                                 throw new Exception();
 
                             enchantCause = "The enchantment is improperly formatted. Use ENCHANTMENT;LEVEL";
@@ -372,19 +367,19 @@ public class CrateSettingsBuilder
 
                             boolean isSet = !getFc().getStringList(updatedPath).isEmpty();
                             ArrayList<String> oneEnchantment = null;
-                            if(!isSet)
+                            if (!isSet)
                             {
                                 oneEnchantment = new ArrayList<String>();
                                 oneEnchantment.add(getFc().getString(updatedPath));
                             }
 
-                            for(String enchantment : (isSet ? getFc().getStringList(updatedPath) : oneEnchantment))
+                            for (String enchantment : (isSet ? getFc().getStringList(updatedPath) : oneEnchantment))
                             {
                                 String[] enchantArgs = enchantment.split(";");
                                 enchantCause = "Enchantment " + enchantArgs[0] + " doesn't exist";
                                 Enchantment ench = Enchantment.getByName(enchantArgs[0].toUpperCase());
 
-                                if(ench == null)
+                                if (ench == null)
                                     throw new Exception();
 
                                 enchantCause = "The enchantment is improperly formatted. Use ENCHANTMENT;LEVEL";

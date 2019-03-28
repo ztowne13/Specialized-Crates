@@ -94,7 +94,8 @@ public class Crate
         ItemStack crate = getCs().getCrate(1);
         if (Utils.itemHasName(stack))
         {
-            return crate.getType().equals(stack.getType()) && crate.getItemMeta().getDisplayName().equals(stack.getItemMeta().getDisplayName());
+            return crate.getType().equals(stack.getType()) &&
+                    crate.getItemMeta().getDisplayName().equals(stack.getItemMeta().getDisplayName());
         }
         return false;
     }
@@ -104,7 +105,8 @@ public class Crate
         ItemStack crate = getCs().getKey(1);
         if (Utils.itemHasName(stack))
         {
-            return crate.getType().equals(stack.getType()) && crate.getItemMeta().getDisplayName().equals(stack.getItemMeta().getDisplayName());
+            return crate.getType().equals(stack.getType()) &&
+                    crate.getItemMeta().getDisplayName().equals(stack.getItemMeta().getDisplayName());
         }
         return false;
     }

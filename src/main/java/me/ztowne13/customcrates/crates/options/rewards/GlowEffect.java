@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Created by ztown on 2/17/2017.
  */
-public abstract  class GlowEffect
+public abstract class GlowEffect
 {
     ItemStack stack;
 

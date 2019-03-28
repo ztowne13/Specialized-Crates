@@ -10,21 +10,21 @@ import org.bukkit.entity.Player;
  */
 public abstract class IGCTierMenu extends IGCMenuCrate
 {
-	String tier;
+    String tier;
 
-	public IGCTierMenu(CustomCrates cc, Player p, IGCMenu lastMenu, String name, Crate crates, String tier)
-	{
-		super(cc, p, lastMenu, name, crates);
-		this.tier = tier;
-	}
+    public IGCTierMenu(CustomCrates cc, Player p, IGCMenu lastMenu, String name, Crate crates, String tier)
+    {
+        super(cc, p, lastMenu, name, crates);
+        this.tier = tier;
+    }
 
-	public String getTier()
-	{
-		return tier;
-	}
+    public String getTier()
+    {
+        return tier;
+    }
 
-	public void setTier(String tier)
-	{
-		this.tier = tier;
-	}
+    public void setTier(String tier)
+    {
+        this.tier = tier;
+    }
 }

@@ -6,7 +6,6 @@ import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.crates.types.InventoryCrate;
-import me.ztowne13.customcrates.crates.types.animations.enclosement.EnclosementDataHolder;
 import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
@@ -27,289 +26,292 @@ import org.bukkit.inventory.ItemStack;
 public class EnclosementAnimation extends InventoryCrate
 {
 
-	String invName, prefix;
-	int inventoryRows, updateSpeed, rewardAmount;
-	SoundData tickSound;
-	ItemStack fillerItem;
+    String invName, prefix;
+    int inventoryRows, updateSpeed, rewardAmount;
+    SoundData tickSound;
+    ItemStack fillerItem;
 
-	public EnclosementAnimation(Inventory inv, Crate crate)
-	{
-		super(inv, crate);
-		this.prefix = CrateType.INV_ENCLOSE.getPrefix() + ".";
-	}
+    public EnclosementAnimation(Inventory inv, Crate crate)
+    {
+        super(inv, crate);
+        this.prefix = CrateType.INV_ENCLOSE.getPrefix() + ".";
+    }
 
-	@Override
-	public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand)
-	{
-		if(canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
-		{
-			EnclosementDataHolder edh = new EnclosementDataHolder(p, l, this);
-			playSequence(edh, true);
-			playRequiredOpenActions(p, !requireKeyInHand);
-			return true;
-		}
+    @Override
+    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand)
+    {
+        if (canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
+        {
+            EnclosementDataHolder edh = new EnclosementDataHolder(p, l, this);
+            playSequence(edh, true);
+            playRequiredOpenActions(p, !requireKeyInHand);
+            return true;
+        }
 
-		playFailToOpen(p);
-		return false;
-	}
+        playFailToOpen(p);
+        return false;
+    }
 
-	public void playSequence(final EnclosementDataHolder edh, final boolean first)
-	{
-		if(first)
-		{
-			buildNewInventory(edh);
-		}
+    public void playSequence(final EnclosementDataHolder edh, final boolean first)
+    {
+        if (first)
+        {
+            buildNewInventory(edh);
+        }
 
-		if(!edh.isCompleted())
-		{
-			Bukkit.getScheduler().runTaskLater(getCc(), new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					edh.setCurrentTicksIn(edh.getCurrentTicksIn() - 1);
+        if (!edh.isCompleted())
+        {
+            Bukkit.getScheduler().runTaskLater(getCc(), new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    edh.setCurrentTicksIn(edh.getCurrentTicksIn() - 1);
 
-					if(getTickSound() != null)
-					{
-						edh.getP().playSound(edh.getL(), getTickSound().getSound(), getTickSound().getVolume(), getTickSound().getPitch());
-					}
+                    if (getTickSound() != null)
+                    {
+                        edh.getP().playSound(edh.getL(), getTickSound().getSound(), getTickSound().getVolume(),
+                                getTickSound().getPitch());
+                    }
 
-					buildNewInventory(edh);
+                    buildNewInventory(edh);
 
-					if (first || !edh.getP().getOpenInventory().getTopInventory().getName().equals(edh.getIb().getInv().getName()))
-					{
-						edh.getIb().open();
-					}
+                    if (first || !edh.getP().getOpenInventory().getTopInventory().getName()
+                            .equals(edh.getIb().getInv().getName()))
+                    {
+                        edh.getIb().open();
+                    }
 
-					if (edh.getCurrentTicksIn() <= 0)
-					{
-						finishUp(edh.getP(), 20);
-						return;
-					}
+                    if (edh.getCurrentTicksIn() <= 0)
+                    {
+                        finishUp(edh.getP(), 20);
+                        return;
+                    }
 
-					playSequence(edh, false);
-				}
-			}, updateSpeed);
-		}
-	}
+                    playSequence(edh, false);
+                }
+            }, updateSpeed);
+        }
+    }
 
-	public InventoryBuilder buildNewInventory(EnclosementDataHolder edh)
-	{
-		InventoryBuilder ib = edh.getIb();
+    public InventoryBuilder buildNewInventory(EnclosementDataHolder edh)
+    {
+        InventoryBuilder ib = edh.getIb();
 
-		edh.getLastDisplayRewards().clear();
-		for(int i = 0; i < ib.getInv().getSize(); i++)
-		{
-			ib.setItem(i, new ItemBuilder(fillerItem).setName(" "));
-		}
+        edh.getLastDisplayRewards().clear();
+        for (int i = 0; i < ib.getInv().getSize(); i++)
+        {
+            ib.setItem(i, new ItemBuilder(fillerItem).setName(" "));
+        }
 
-		int midPoint = (ib.getInv().getSize() / 2) + 1;
-		for(int i = 0; i < ib.getInv().getSize(); i++)
-		{
-			if(i >= midPoint - edh.getCurrentTicksIn() - 1 - rewardAmount && i < midPoint + edh.getCurrentTicksIn() + rewardAmount)
-			{
-				Reward r = getCrates().getCs().getCr().getRandomReward(edh.getP());
-				ib.setItem(i, r.getDisplayItem());
-				edh.getLastDisplayRewards().add(r);
-			}
-		}
+        int midPoint = (ib.getInv().getSize() / 2) + 1;
+        for (int i = 0; i < ib.getInv().getSize(); i++)
+        {
+            if (i >= midPoint - edh.getCurrentTicksIn() - 1 - rewardAmount &&
+                    i < midPoint + edh.getCurrentTicksIn() + rewardAmount)
+            {
+                Reward r = getCrates().getCs().getCr().getRandomReward(edh.getP());
+                ib.setItem(i, r.getDisplayItem());
+                edh.getLastDisplayRewards().add(r);
+            }
+        }
 
-		return ib;
-	}
+        return ib;
+    }
 
-	@Override
-	public void finishUp(Player p)
-	{
-		EnclosementDataHolder edh = EnclosementDataHolder.getHolders().get(p);
-		edh.setCompleted(true);
+    @Override
+    public void finishUp(Player p)
+    {
+        EnclosementDataHolder edh = EnclosementDataHolder.getHolders().get(p);
+        edh.setCompleted(true);
 
-		completeCrateRun(p, edh.getLastDisplayRewards(), false);
-		getCrates().tick(edh.getL(), CrateState.OPEN, p, edh.getLastDisplayRewards());
+        completeCrateRun(p, edh.getLastDisplayRewards(), false);
+        getCrates().tick(edh.getL(), CrateState.OPEN, p, edh.getLastDisplayRewards());
 
-		edh.getHolders().remove(p);
-	}
+        edh.getHolders().remove(p);
+    }
 
-	@Override
-	public void loadValueFromConfig(StatusLogger sl)
-	{
-		FileConfiguration fc = cc.getCrateconfigFile().get();
-		try
-		{
-			setInvName(fc.getString(prefix + "inv-name").replace("%crate%", crates.getName()));
-			StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVNAME_SUCCESS.log(getSl());
-		}
-		catch(Exception exc)
-		{
-			StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVNAME_INVALID.log(getSl());
-		}
+    @Override
+    public void loadValueFromConfig(StatusLogger sl)
+    {
+        FileConfiguration fc = cc.getCrateconfigFile().get();
+        try
+        {
+            setInvName(fc.getString(prefix + "inv-name").replace("%crate%", crates.getName()));
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVNAME_SUCCESS.log(getSl());
+        }
+        catch (Exception exc)
+        {
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVNAME_INVALID.log(getSl());
+        }
 
-		try
-		{
-			setInventoryRows(Integer.parseInt(fc.getString(prefix + "inventory-rows")));
-			StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVROWS_SUCCESS.log(getSl());
-		}
-		catch(Exception exc)
-		{
-			StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVROWS_INVALID.log(getSl());
-		}
+        try
+        {
+            setInventoryRows(Integer.parseInt(fc.getString(prefix + "inventory-rows")));
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVROWS_SUCCESS.log(getSl());
+        }
+        catch (Exception exc)
+        {
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVROWS_INVALID.log(getSl());
+        }
 
-		String cause = "The 'fill-block' value is non-existent.";
-		try
-		{
-			String s = fc.getString(prefix + "fill-block");
-			cause = s + " is not a valid material.";
+        String cause = "The 'fill-block' value is non-existent.";
+        try
+        {
+            String s = fc.getString(prefix + "fill-block");
+            cause = s + " is not a valid material.";
 
-			DynamicMaterial m = DynamicMaterial.fromString(s);
+            DynamicMaterial m = DynamicMaterial.fromString(s);
 
-			fillerItem = new ItemBuilder(m, 1).setName(" ").get();
-			StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_SUCCESS.log(getSl());
-		}
-		catch(Exception exc)
-		{
-			StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID.log(getSl(), new String[]{cause});
-		}
+            fillerItem = new ItemBuilder(m, 1).setName(" ").get();
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_SUCCESS.log(getSl());
+        }
+        catch (Exception exc)
+        {
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID.log(getSl(), new String[]{cause});
+        }
 
-		try
-		{
-			String[] args = fu.get().getString(prefix + "tick-sound").replace(" ", "").split(",");
+        try
+        {
+            String[] args = fu.get().getString(prefix + "tick-sound").replace(" ", "").split(",");
 
-			SoundData sd = new SoundData(Sound.valueOf(args[0].toUpperCase()));
+            SoundData sd = new SoundData(Sound.valueOf(args[0].toUpperCase()));
 
-			StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_SOUND_SUCCESS.log(getSl());
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_SOUND_SUCCESS.log(getSl());
 
-			if(args.length >= 2)
-			{
-				if(Utils.isInt(args[1]))
-				{
-					sd.setVolume(Integer.parseInt(args[1]));
-					StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUME_SUCCESS.log(getSl());
-				}
-				else
-				{
-					sd.setVolume(5);
-					StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUME_INVALID.log(getSl(), new String[]{args[1]});
-				}
+            if (args.length >= 2)
+            {
+                if (Utils.isInt(args[1]))
+                {
+                    sd.setVolume(Integer.parseInt(args[1]));
+                    StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUME_SUCCESS.log(getSl());
+                }
+                else
+                {
+                    sd.setVolume(5);
+                    StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUME_INVALID.log(getSl(), new String[]{args[1]});
+                }
 
-				if(args.length >= 3)
-				{
-					if(Utils.isInt(args[2]))
-					{
-						sd.setPitch(Integer.parseInt(args[2]));
-						StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_SUCCESS.log(getSl());
-					}
-					else
-					{
-						sd.setPitch(5);
-						StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_INVALID.log(getSl(), new String[]{args[2]});
-					}
-				}
-				else
-				{
-					sd.setPitch(5);
-				}
-			}
-			else
-			{
-				StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUMEPITCH_FAILURE.log(getSl());
-				sd.setVolume(5);
-				sd.setPitch(5);
-			}
+                if (args.length >= 3)
+                {
+                    if (Utils.isInt(args[2]))
+                    {
+                        sd.setPitch(Integer.parseInt(args[2]));
+                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_SUCCESS.log(getSl());
+                    }
+                    else
+                    {
+                        sd.setPitch(5);
+                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_INVALID.log(getSl(), new String[]{args[2]});
+                    }
+                }
+                else
+                {
+                    sd.setPitch(5);
+                }
+            }
+            else
+            {
+                StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUMEPITCH_FAILURE.log(getSl());
+                sd.setVolume(5);
+                sd.setPitch(5);
+            }
 
-			setTickSound(sd);
-		}
-		catch(Exception exc)
-		{
-			//setTickSound(new SoundData(Sound.FALL_BIG));
-			StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_SOUND_FAILURE.log(getSl());
-		}
+            setTickSound(sd);
+        }
+        catch (Exception exc)
+        {
+            //setTickSound(new SoundData(Sound.FALL_BIG));
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_SOUND_FAILURE.log(getSl());
+        }
 
-		try
-		{
-			updateSpeed = Integer.parseInt(fc.getString(prefix + "update-speed"));
-			StatusLoggerEvent.ANIMATION_ENCLOSEMENT_UPDATESPEED_SUCCESS.log(getSl());
-		}
-		catch(Exception exc)
-		{
-			StatusLoggerEvent.ANIMATION_ENCLOSEMENT_UPDATESPEED_INVALID.log(getSl());
-		}
+        try
+        {
+            updateSpeed = Integer.parseInt(fc.getString(prefix + "update-speed"));
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_UPDATESPEED_SUCCESS.log(getSl());
+        }
+        catch (Exception exc)
+        {
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_UPDATESPEED_INVALID.log(getSl());
+        }
 
-		try
-		{
-			rewardAmount = Integer.parseInt(fc.getString(prefix + "reward-amount"));
-			if(rewardAmount % 2 == 0)
-			{
-				rewardAmount++;
-			}
+        try
+        {
+            rewardAmount = Integer.parseInt(fc.getString(prefix + "reward-amount"));
+            if (rewardAmount % 2 == 0)
+            {
+                rewardAmount++;
+            }
 
-			rewardAmount--;
+            rewardAmount--;
 
-			rewardAmount = rewardAmount == 0 ? 0 : rewardAmount / 2;
+            rewardAmount = rewardAmount == 0 ? 0 : rewardAmount / 2;
 
-			StatusLoggerEvent.ANIMATION_ENCLOSEMENT_REWARDAMOUNT_SUCCESS.log(getSl());
-		}
-		catch(Exception exc)
-		{
-			StatusLoggerEvent.ANIMATION_ENCLOSEMENT_REWARDAMOUNT_INVALID.log(getSl());
-		}
-	}
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_REWARDAMOUNT_SUCCESS.log(getSl());
+        }
+        catch (Exception exc)
+        {
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_REWARDAMOUNT_INVALID.log(getSl());
+        }
+    }
 
-	public String getInvName()
-	{
-		return invName;
-	}
+    public String getInvName()
+    {
+        return invName;
+    }
 
-	public void setInvName(String invName)
-	{
-		this.invName = invName;
-	}
+    public void setInvName(String invName)
+    {
+        this.invName = invName;
+    }
 
-	public int getInventoryRows()
-	{
-		return inventoryRows;
-	}
+    public int getInventoryRows()
+    {
+        return inventoryRows;
+    }
 
-	public void setInventoryRows(int inventoryRows)
-	{
-		this.inventoryRows = inventoryRows;
-	}
+    public void setInventoryRows(int inventoryRows)
+    {
+        this.inventoryRows = inventoryRows;
+    }
 
-	public int getUpdateSpeed()
-	{
-		return updateSpeed;
-	}
+    public int getUpdateSpeed()
+    {
+        return updateSpeed;
+    }
 
-	public void setUpdateSpeed(int updateSpeed)
-	{
-		this.updateSpeed = updateSpeed;
-	}
+    public void setUpdateSpeed(int updateSpeed)
+    {
+        this.updateSpeed = updateSpeed;
+    }
 
-	public int getRewardAmount()
-	{
-		return rewardAmount;
-	}
+    public int getRewardAmount()
+    {
+        return rewardAmount;
+    }
 
-	public void setRewardAmount(int rewardAmount)
-	{
-		this.rewardAmount = rewardAmount;
-	}
+    public void setRewardAmount(int rewardAmount)
+    {
+        this.rewardAmount = rewardAmount;
+    }
 
-	public SoundData getTickSound()
-	{
-		return tickSound;
-	}
+    public SoundData getTickSound()
+    {
+        return tickSound;
+    }
 
-	public void setTickSound(SoundData tickSound)
-	{
-		this.tickSound = tickSound;
-	}
+    public void setTickSound(SoundData tickSound)
+    {
+        this.tickSound = tickSound;
+    }
 
-	public ItemStack getFillerItem()
-	{
-		return fillerItem;
-	}
+    public ItemStack getFillerItem()
+    {
+        return fillerItem;
+    }
 
-	public void setFillerItem(ItemStack fillerItem)
-	{
-		this.fillerItem = fillerItem;
-	}
+    public void setFillerItem(ItemStack fillerItem)
+    {
+        this.fillerItem = fillerItem;
+    }
 }

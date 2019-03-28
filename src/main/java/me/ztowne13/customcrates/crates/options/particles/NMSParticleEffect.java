@@ -13,56 +13,57 @@ import java.util.Iterator;
  */
 public class NMSParticleEffect extends ParticleData
 {
-	ParticleEffect particleEffect;
+    ParticleEffect particleEffect;
 
-	public NMSParticleEffect(ParticleEffect particleEffect, boolean hasAnimation)
-	{
-		super(hasAnimation);
-		this.particleEffect = particleEffect;
-	}
+    public NMSParticleEffect(ParticleEffect particleEffect, boolean hasAnimation)
+    {
+        super(hasAnimation);
+        this.particleEffect = particleEffect;
+    }
 
-	@Override
-	public void display(Location l)
-	{
-		try
-		{
-			Iterator iterator = Bukkit.getOnlinePlayers().iterator();
-			while (iterator.hasNext())
-			{
-				Player p = (Player) iterator.next();
-				if (isHasAnimation())
-				{
-					particleEffect.sendToPlayer(p, LocationUtils.getLocationCentered(l), 0, 0, 0, 0, 1);
-				}
-				else
-				{
-					particleEffect.sendToPlayer(p, LocationUtils.getLocationCentered(l), getOffX(), getOffY(), getOffZ(), getSpeed(), getAmount());
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			ChatUtils.log(new String[]{"Error loading particle: " + particleEffect.name()});
-		}
-	}
+    @Override
+    public void display(Location l)
+    {
+        try
+        {
+            Iterator iterator = Bukkit.getOnlinePlayers().iterator();
+            while (iterator.hasNext())
+            {
+                Player p = (Player) iterator.next();
+                if (isHasAnimation())
+                {
+                    particleEffect.sendToPlayer(p, LocationUtils.getLocationCentered(l), 0, 0, 0, 0, 1);
+                }
+                else
+                {
+                    particleEffect.sendToPlayer(p, LocationUtils.getLocationCentered(l), getOffX(), getOffY(), getOffZ(),
+                            getSpeed(), getAmount());
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            ChatUtils.log(new String[]{"Error loading particle: " + particleEffect.name()});
+        }
+    }
 
-	@Override
-	public boolean setParticle(String particleName)
-	{
-		try
-		{
-			particleEffect = ParticleEffect.valueOf(particleName);
-			return true;
-		}
-		catch(Exception exc)
-		{
-			return false;
-		}
-	}
+    @Override
+    public boolean setParticle(String particleName)
+    {
+        try
+        {
+            particleEffect = ParticleEffect.valueOf(particleName);
+            return true;
+        }
+        catch (Exception exc)
+        {
+            return false;
+        }
+    }
 
-	@Override
-	public String getParticleName()
-	{
-		return particleEffect.name();
-	}
+    @Override
+    public String getParticleName()
+    {
+        return particleEffect.name();
+    }
 }

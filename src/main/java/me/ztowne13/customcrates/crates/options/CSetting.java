@@ -7,48 +7,49 @@ import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.utils.FileHandler;
 
-public abstract class CSetting 
+public abstract class CSetting
 {
-	Crate crates;
-	CustomCrates cc;
-	
-	public CSetting(Crate crates, CustomCrates cc)
-	{
-		this.crates = crates;
-		this.cc = cc;
-	}
-	
-	public abstract void loadFor(CrateSettingsBuilder csb, CrateState cs);
+    Crate crates;
+    CustomCrates cc;
 
-	public abstract void saveToFile();
+    public CSetting(Crate crates, CustomCrates cc)
+    {
+        this.crates = crates;
+        this.cc = cc;
+    }
 
-	public FileHandler getFu()
-	{
-		return getCrates().getCs().getFu();
-	}
+    public abstract void loadFor(CrateSettingsBuilder csb, CrateState cs);
+
+    public abstract void saveToFile();
+
+    public FileHandler getFu()
+    {
+        return getCrates().getCs().getFu();
+    }
 
 
-	public CrateSettings up()
-	{
-		return getCrates().getCs();
-	}
+    public CrateSettings up()
+    {
+        return getCrates().getCs();
+    }
 
-	public Crate getCrates()
-	{
-		return crates;
-	}
+    public Crate getCrates()
+    {
+        return crates;
+    }
 
-	public void setCrates(Crate crates) {
-		this.crates = crates;
-	}
+    public void setCrates(Crate crates)
+    {
+        this.crates = crates;
+    }
 
-	public CustomCrates getCc()
-	{
-		return cc;
-	}
+    public CustomCrates getCc()
+    {
+        return cc;
+    }
 
-	public void setCc(CustomCrates cc)
-	{
-		this.cc = cc;
-	}
+    public void setCc(CustomCrates cc)
+    {
+        this.cc = cc;
+    }
 }

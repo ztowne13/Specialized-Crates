@@ -5,9 +5,9 @@ package me.ztowne13.customcrates.visuals;
  */
 public enum CrateDisplayType
 {
-	BLOCK,
+    BLOCK,
 
-	MOB,
+    MOB,
 
-	NPC;
+    NPC;
 }

@@ -5,7 +5,7 @@ import me.ztowne13.customcrates.crates.options.holograms.DynamicHologram;
 import me.ztowne13.customcrates.utils.ChatUtils;
 
 /**
- *  Animation that modifies the hologram text directly to what was configured in the config
+ * Animation that modifies the hologram text directly to what was configured in the config
  */
 public class TextChangeAnimation extends HoloAnimation
 {
@@ -21,10 +21,10 @@ public class TextChangeAnimation extends HoloAnimation
     public void tick()
     {
         setIntTicks(getIntTicks() + 1);
-        if(getIntTicks() == getCh().getSpeed())
+        if (getIntTicks() == getCh().getSpeed())
         {
             setIntTicks(0);
-            if(!getDh().getDisplayingRewardHologram())
+            if (!getDh().getDisplayingRewardHologram())
             {
                 update();
             }
@@ -39,14 +39,14 @@ public class TextChangeAnimation extends HoloAnimation
     @Override
     public void update(boolean force)
     {
-        if(count >= getCh().getPrefixes().size())
+        if (count >= getCh().getPrefixes().size())
         {
             count = 0;
         }
 
         String s = getCh().getPrefixes().get(count);
 
-        if(!getLast().equals(s) || force)
+        if (!getLast().equals(s) || force)
         {
             getDh().setLine(0, ChatUtils.toChatColor(s));
         }

@@ -10,8 +10,10 @@ public class IdentifierTrait extends Trait
         super("IdentifierTrait");
         isCrate = true;
     }
-    @Persist(value="isCrate")
-    boolean isCrate = false; // the default value of @Persist saves the value under the field name (in this case, 'myVariable').
+
+    @Persist(value = "isCrate")
+    boolean isCrate = false;
+            // the default value of @Persist saves the value under the field name (in this case, 'myVariable').
 
     public boolean isCrate()
     {

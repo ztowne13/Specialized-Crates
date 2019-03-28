@@ -20,19 +20,22 @@ public class ActionBarV1_9_10_11 extends ActionBar
             Class c4 = NMSUtils.getNmsClass("PacketPlayOutChat");
             Class c5 = NMSUtils.getNmsClass("Packet");
 
-            Object o = NMSUtils.getNmsClass("ChatComponentText").getConstructor(new Class[] { String.class }).newInstance(new Object[] { msg });
-            Object ppoc = c4.getConstructor(new Class[] { NMSUtils.getNmsClass("IChatBaseComponent"), Byte.TYPE }).newInstance(new Object[] { o, (byte)2 });
+            Object o = NMSUtils.getNmsClass("ChatComponentText").getConstructor(new Class[]{String.class})
+                    .newInstance(new Object[]{msg});
+            Object ppoc = c4.getConstructor(new Class[]{NMSUtils.getNmsClass("IChatBaseComponent"), Byte.TYPE})
+                    .newInstance(new Object[]{o, (byte) 2});
 
             Method m1 = c1.getDeclaredMethod("getHandle", new Class[0]);
             Object h = m1.invoke(p, new Object[0]);
             Field f1 = h.getClass().getDeclaredField("playerConnection");
             Object pc = f1.get(h);
-            Method m5 = pc.getClass().getDeclaredMethod("sendPacket", new Class[] { c5 });
-            m5.invoke(pc, new Object[] { ppoc });
+            Method m5 = pc.getClass().getDeclaredMethod("sendPacket", new Class[]{c5});
+            m5.invoke(pc, new Object[]{ppoc});
         }
         catch (Exception ex)
         {
-            ChatUtils.log("The ACTIONBAR method has failed to run, please make sure you are on the latest version on the plugin and latest version of spigot / bukkit.");
+            ChatUtils
+                    .log("The ACTIONBAR method has failed to run, please make sure you are on the latest version on the plugin and latest version of spigot / bukkit.");
             ex.printStackTrace();
         }
     }

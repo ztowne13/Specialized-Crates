@@ -13,123 +13,125 @@ import java.util.HashMap;
  */
 public class EnclosementDataHolder
 {
-	static HashMap<Player, EnclosementDataHolder> holders = new HashMap<>();
+    static HashMap<Player, EnclosementDataHolder> holders = new HashMap<>();
 
-	Player p;
-	Location l;
-	EnclosementAnimation ie;
+    Player p;
+    Location l;
+    EnclosementAnimation ie;
 
-	int currentTicksIn, ticks;
-	boolean completed;
+    int currentTicksIn, ticks;
+    boolean completed;
 
-	InventoryBuilder ib;
-	ArrayList<Reward> lastDisplayRewards = new ArrayList<>();
+    InventoryBuilder ib;
+    ArrayList<Reward> lastDisplayRewards = new ArrayList<>();
 
-	public EnclosementDataHolder(Player p, Location l, EnclosementAnimation ie)
-	{
-		this.p = p;
-		this.l = l;
-		this.ie = ie;
+    public EnclosementDataHolder(Player p, Location l, EnclosementAnimation ie)
+    {
+        this.p = p;
+        this.l = l;
+        this.ie = ie;
 
-		if(ie.getInventoryRows() > 2)
-		{
-			ie.setInventoryRows(2);
-		}
+        if (ie.getInventoryRows() > 2)
+        {
+            ie.setInventoryRows(2);
+        }
 
-		currentTicksIn = (((((ie.getInventoryRows() * 2) + 1) * 9) - 1) / 2) - ie.getRewardAmount();
+        currentTicksIn = (((((ie.getInventoryRows() * 2) + 1) * 9) - 1) / 2) - ie.getRewardAmount();
 
-		ib = new InventoryBuilder(p, ((ie.getInventoryRows()) * 9 * 2) + 9, ie.getCrates().getCs().getCrateInventoryName() == null ? ie.getInvName() : ie.getCrates().getCs().getCrateInventoryName());
-		ib.open();
-		holders.put(p, this);
-	}
+        ib = new InventoryBuilder(p, ((ie.getInventoryRows()) * 9 * 2) + 9,
+                ie.getCrates().getCs().getCrateInventoryName() == null ? ie.getInvName() :
+                        ie.getCrates().getCs().getCrateInventoryName());
+        ib.open();
+        holders.put(p, this);
+    }
 
-	public Player getP()
-	{
-		return p;
-	}
+    public Player getP()
+    {
+        return p;
+    }
 
-	public void setP(Player p)
-	{
-		this.p = p;
-	}
+    public void setP(Player p)
+    {
+        this.p = p;
+    }
 
-	public Location getL()
-	{
-		return l;
-	}
+    public Location getL()
+    {
+        return l;
+    }
 
-	public void setL(Location l)
-	{
-		this.l = l;
-	}
+    public void setL(Location l)
+    {
+        this.l = l;
+    }
 
-	public EnclosementAnimation getIe()
-	{
-		return ie;
-	}
+    public EnclosementAnimation getIe()
+    {
+        return ie;
+    }
 
-	public void setIe(EnclosementAnimation ie)
-	{
-		this.ie = ie;
-	}
+    public void setIe(EnclosementAnimation ie)
+    {
+        this.ie = ie;
+    }
 
-	public int getCurrentTicksIn()
-	{
-		return currentTicksIn;
-	}
+    public int getCurrentTicksIn()
+    {
+        return currentTicksIn;
+    }
 
-	public void setCurrentTicksIn(int currentTicksIn)
-	{
-		this.currentTicksIn = currentTicksIn;
-	}
+    public void setCurrentTicksIn(int currentTicksIn)
+    {
+        this.currentTicksIn = currentTicksIn;
+    }
 
-	public int getTicks()
-	{
-		return ticks;
-	}
+    public int getTicks()
+    {
+        return ticks;
+    }
 
-	public void setTicks(int ticks)
-	{
-		this.ticks = ticks;
-	}
+    public void setTicks(int ticks)
+    {
+        this.ticks = ticks;
+    }
 
-	public InventoryBuilder getIb()
-	{
-		return ib;
-	}
+    public InventoryBuilder getIb()
+    {
+        return ib;
+    }
 
-	public void setIb(InventoryBuilder ib)
-	{
-		this.ib = ib;
-	}
+    public void setIb(InventoryBuilder ib)
+    {
+        this.ib = ib;
+    }
 
-	public boolean isCompleted()
-	{
-		return completed;
-	}
+    public boolean isCompleted()
+    {
+        return completed;
+    }
 
-	public void setCompleted(boolean completed)
-	{
-		this.completed = completed;
-	}
+    public void setCompleted(boolean completed)
+    {
+        this.completed = completed;
+    }
 
-	public static HashMap<Player, EnclosementDataHolder> getHolders()
-	{
-		return holders;
-	}
+    public static HashMap<Player, EnclosementDataHolder> getHolders()
+    {
+        return holders;
+    }
 
-	public static void setHolders(HashMap<Player, EnclosementDataHolder> holders)
-	{
-		EnclosementDataHolder.holders = holders;
-	}
+    public static void setHolders(HashMap<Player, EnclosementDataHolder> holders)
+    {
+        EnclosementDataHolder.holders = holders;
+    }
 
-	public ArrayList<Reward> getLastDisplayRewards()
-	{
-		return lastDisplayRewards;
-	}
+    public ArrayList<Reward> getLastDisplayRewards()
+    {
+        return lastDisplayRewards;
+    }
 
-	public void setLastDisplayRewards(ArrayList<Reward> lastDisplayRewards)
-	{
-		this.lastDisplayRewards = lastDisplayRewards;
-	}
+    public void setLastDisplayRewards(ArrayList<Reward> lastDisplayRewards)
+    {
+        this.lastDisplayRewards = lastDisplayRewards;
+    }
 }

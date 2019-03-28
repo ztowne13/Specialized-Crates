@@ -9,13 +9,13 @@ import java.util.List;
  */
 public class NBTTagManager
 {
-	public static ItemStack applyTo(ItemStack item, String tag)
-	{
-		return NBTTagReflection.applyTo(item, tag);
-	}
+    public static ItemStack applyTo(ItemStack item, String tag)
+    {
+        return NBTTagReflection.applyTo(item, tag);
+    }
 
-	public static List<String> getFrom(ItemStack item)
-	{
-		return NBTTagReflection.getFrom(item);
-	}
+    public static List<String> getFrom(ItemStack item)
+    {
+        return NBTTagReflection.getFrom(item);
+    }
 }

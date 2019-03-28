@@ -31,8 +31,8 @@ public class SHHologram extends DynamicHologram
     public void create(Location l)
     {
         UUID uuid = UUID.randomUUID();
-		this.hologram = new Hologram(uuid.toString(), l);
-		hologram.addLine(new TextLine(hologram, "THIS LINE SHOULD BE GETTING REMOVED"));
+        this.hologram = new Hologram(uuid.toString(), l);
+        hologram.addLine(new TextLine(hologram, "THIS LINE SHOULD BE GETTING REMOVED"));
         hm.addActiveHologram(hologram);
         teleport(l);
     }
@@ -40,17 +40,17 @@ public class SHHologram extends DynamicHologram
     @Override
     public void addLine(String line)
     {
-		hologram.addLine(new TextLine(hologram, line));
-		if(hologram.getLine(0).getRaw().equalsIgnoreCase("THIS LINE SHOULD BE GETTING REMOVED"))
-		{
-			hologram.removeLine(hologram.getLine(0));
-		}
+        hologram.addLine(new TextLine(hologram, line));
+        if (hologram.getLine(0).getRaw().equalsIgnoreCase("THIS LINE SHOULD BE GETTING REMOVED"))
+        {
+            hologram.removeLine(hologram.getLine(0));
+        }
     }
 
     @Override
     public void delete()
     {
-        if(hologram != null && hm != null)
+        if (hologram != null && hm != null)
         {
             hm.removeActiveHologram(hologram);
             hm.deleteHologram(hologram);
@@ -61,14 +61,14 @@ public class SHHologram extends DynamicHologram
     public void teleport(Location l)
     {
         l.setY(l.getY() + getDefaultYOffSet() + getCm().getCholo().getHologramOffset());
-		hologram.teleport(LocationUtils.getLocationCentered(l));
+        hologram.teleport(LocationUtils.getLocationCentered(l));
     }
 
     @Override
     public void setLine(int lineNum, String line)
     {
-		hologram.removeLine(hologram.getLine(lineNum));
-		hologram.addLine(new TextLine(hologram, line), lineNum);
+        hologram.removeLine(hologram.getLine(lineNum));
+        hologram.addLine(new TextLine(hologram, line), lineNum);
     }
 
     public double getDefaultYOffSet()

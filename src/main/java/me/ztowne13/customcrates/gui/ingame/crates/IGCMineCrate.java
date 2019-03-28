@@ -59,7 +59,8 @@ public class IGCMineCrate extends IGCMenuCrate
         {
             wList.addLore("&7" + w);
         }
-        wList.addLore("").addAutomaticLore("&f", 30, "These are the worlds where mine crates can be found. Remove all the worlds for ALL worlds to be allowed.");
+        wList.addLore("").addAutomaticLore("&f", 30,
+                "These are the worlds where mine crates can be found. Remove all the worlds for ALL worlds to be allowed.");
         ib.setItem(14, wList);
 
         ib.open();

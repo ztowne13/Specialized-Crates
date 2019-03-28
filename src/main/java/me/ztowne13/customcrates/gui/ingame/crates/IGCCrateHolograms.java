@@ -13,7 +13,6 @@ import me.ztowne13.customcrates.gui.ingame.IGCListEditor;
 import me.ztowne13.customcrates.gui.ingame.IGCMenu;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;

@@ -1,12 +1,12 @@
 package me.ztowne13.customcrates.crates;
 
 import me.ztowne13.customcrates.CustomCrates;
-import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.crates.options.*;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.CrateHead;
 import me.ztowne13.customcrates.crates.types.CrateType;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -25,275 +25,277 @@ import java.util.ArrayList;
 
 public class CrateSettings
 {
-	CustomCrates cc;
-	Crate crates;
-	StatusLogger sl;
-	
-	String name, crateInventoryName = "", permission = "no permission";
-	FileConfiguration fc;
-	FileHandler fu;
-	CrateSettingsBuilder csb;
+    CustomCrates cc;
+    Crate crates;
+    StatusLogger sl;
 
-	ItemStack crate, key;
-	boolean requireKey, tiersOverrideDefaults = true, autoClose = true;
-	
-	ObtainType ot;
-	CrateType ct;
-	int cooldown = 0;
-	double hologramOffset = 0;
+    String name, crateInventoryName = "", permission = "no permission";
+    FileConfiguration fc;
+    FileHandler fu;
+    CrateSettingsBuilder csb;
 
-	CrateDisplayType cdt;
-	DynamicCratePlaceholder dcp;
+    ItemStack crate, key;
+    boolean requireKey, tiersOverrideDefaults = true, autoClose = true;
 
-	CrateHead ch;
-	CHolograms choloCopy;
-	CParticles cp;
-	CSounds cs;
-	CActions ca;
-	CFireworks cf;
-	CLuckyChest clc;
-	CRewards cr;
-	CMultiCrateInventory cmci;
-	
-	public CrateSettings(CustomCrates cc, Crate crates, boolean newFile)
-	{
-		this.cc = cc;
-		this.crates = crates;
-		this.name = crates.getName();
-		this.sl = new StatusLogger(cc);
+    ObtainType ot;
+    CrateType ct;
+    int cooldown = 0;
+    double hologramOffset = 0;
 
-		crate = new ItemBuilder(DynamicMaterial.RED_WOOL.parseMaterial(), 1, 14).setName("&4Please set me!").get();
-		key = new ItemBuilder(DynamicMaterial.REDSTONE_TORCH.parseMaterial(), 1, 0).setName("&4Please set me!").get();
+    CrateDisplayType cdt;
+    DynamicCratePlaceholder dcp;
 
-		this.fu = new FileHandler(cc, crates.getName() + (crates.isMultiCrate() ? ".multicrate" : ".crate"), "/Crates", true, true, newFile);
-		this.fc = fu.get();
+    CrateHead ch;
+    CHolograms choloCopy;
+    CParticles cp;
+    CSounds cs;
+    CActions ca;
+    CFireworks cf;
+    CLuckyChest clc;
+    CRewards cr;
+    CMultiCrateInventory cmci;
 
-		this.csb = new CrateSettingsBuilder(this);
-	}
+    public CrateSettings(CustomCrates cc, Crate crates, boolean newFile)
+    {
+        this.cc = cc;
+        this.crates = crates;
+        this.name = crates.getName();
+        this.sl = new StatusLogger(cc);
 
-	public void saveAll()
-	{
-		saveIndividualValues();
+        crate = new ItemBuilder(DynamicMaterial.RED_WOOL.parseMaterial(), 1, 14).setName("&4Please set me!").get();
+        key = new ItemBuilder(DynamicMaterial.REDSTONE_TORCH.parseMaterial(), 1, 0).setName("&4Please set me!").get();
 
-		if(getOt().equals(ObtainType.LUCKYCHEST))
-		{
-			getClc().saveToFile();
-		}
-		getCholoCopy().saveToFile();
-		getCp().saveToFile();
+        this.fu = new FileHandler(cc, crates.getName() + (crates.isMultiCrate() ? ".multicrate" : ".crate"), "/Crates", true,
+                true, newFile);
+        this.fc = fu.get();
 
-		if(!getCrates().isMultiCrate())
-		{
-			getCr().saveToFile();
-			getCs().saveToFile();
-			getCa().saveToFile();
-			getCf().saveToFile();
-		}
-		else
-		{
-			getCmci().saveToFile();
-		}
+        this.csb = new CrateSettingsBuilder(this);
+    }
 
+    public void saveAll()
+    {
+        saveIndividualValues();
 
-		getFu().save();
-	}
+        if (getOt().equals(ObtainType.LUCKYCHEST))
+        {
+            getClc().saveToFile();
+        }
+        getCholoCopy().saveToFile();
+        getCp().saveToFile();
+
+        if (!getCrates().isMultiCrate())
+        {
+            getCr().saveToFile();
+            getCs().saveToFile();
+            getCa().saveToFile();
+            getCf().saveToFile();
+        }
+        else
+        {
+            getCmci().saveToFile();
+        }
 
 
-	public void saveIndividualValues()
-	{
-		fc.set("enabled", crates.isEnabled());
-		fc.set("cooldown", getCooldown());
-		fc.set("obtain-method", getOt().name());
-		fc.set("display.type", getDcp().toString());
-		fc.set("hologram-offset", getHologramOffset());
-		fc.set("auto-close", isAutoClose());
-
-		fc.set("permission", getPermission().equalsIgnoreCase("no permission") ? null : getPermission());
-
-		if(!getDcp().toString().equalsIgnoreCase("block"))
-		{
-			fc.set("display." + (getDcp().toString().equalsIgnoreCase("mob") ? "creature" : "name"), getDcp().getType());
-		}
-
-		if(!(getCrateInventoryName() == null))
-		{
-			fc.set("inventory-name", ChatUtils.fromChatColor(getCrateInventoryName()));
-		}
-
-		saveCrate();
-
-		if(!getCrates().isMultiCrate())
-		{
-			saveKey();
-
-			fc.set("open.crate-animation", getCt().name());
-		}
-
-	}
-
-	public void saveCrate()
-	{
-		fc.set("crate.material", getCrate().getType() + ";" + getCrate().getDurability());
-		fc.set("crate.name", ChatUtils.fromChatColor(getCrate().getItemMeta().getDisplayName()));
-
-		if(getCrate().getEnchantments().keySet().iterator().hasNext())
-		{
-			Enchantment e = getCrate().getEnchantments().keySet().iterator().next();
-			fc.set("crate.enchantment", e.getName() + ";" + getCrate().getEnchantments().get(e));
-		}
-
-		if(getCrate().getItemMeta().hasLore())
-		{
-			fc.set("crate.lore", ChatUtils.removeColorFrom(getCrate().getItemMeta().getLore()));
-		}
-	}
-
-	public void saveKey()
-	{
-		fc.set("key.require", isRequireKey());
-		fc.set("key.material", getKey().getType() + ";" + getKey().getDurability());
-		fc.set("key.name", ChatUtils.fromChatColor(getKey().getItemMeta().getDisplayName()));
-
-		if(getKey().getEnchantments().keySet().iterator().hasNext())
-		{
-			ArrayList<String> enchants = new ArrayList<String>();
-			for(Enchantment enchant : getKey().getEnchantments().keySet())
-			{
-				int lvl = getKey().getEnchantments().get(enchant);
-				enchants.add(enchant.getName() + ";" + lvl);
-			}
-			String updatedPath = fc.contains("key.enchantment") ? "key.enchantment" : "key.enchantments";
-			fc.set(updatedPath, enchants);
-		}
-
-		if(getKey().getItemMeta().hasLore())
-		{
-			fc.set("key.lore", ChatUtils.removeColorFrom(getKey().getItemMeta().getLore()));
-		}
-	}
-	
-	public void loadAll()
-	{
-		// Crate Loging
-		String toLog = SettingsValues.LOG_SUCCESSES.getValue(getCrates().getCc()).toString();
-		loadNotice(toLog);
-
-		setCp(new CParticles(getCrates()));
-		setCholoCopy(new CHolograms(getCrates()));
-
-		if(!getCrates().isMultiCrate())
-		{
-			setCs(new CSounds(getCrates()));
-			setCr(new CRewards(getCrates()));
-			setCa(new CActions(getCrates()));
-			setCf(new CFireworks(getCrates()));
-			setClc(new CLuckyChest(getCrates()));
-		}
-		else
-		{
-			setCmci(new CMultiCrateInventory(getCrates()));
-		}
-
-		if(getFu().isProperLoad())
-		{
-			// Base Settings
-
-			getCsb().setupCrate();
-			getCsb().setupCooldowns();
-			getCsb().setupDisplay();
-			getCsb().setupObtainMethod();
-			getCsb().setupCrateInventoryName();
-			getCsb().setupPermission();
-			getCsb().setupAutoClose();
-			getCsb().setupHologramOffset();
-
-			// Base Settings for non-MultiCrates
-			if(!getCrates().isMultiCrate())
-			{
-				getCsb().setupKey();
-				getCsb().setupCrateAnimation();
-			}
-
-			// Particles
-			getCp().loadFor(getCsb(), CrateState.PLAY);
-			getCp().loadFor(getCsb(), CrateState.OPEN);
-
-			// Holograms
-			getCholoCopy().loadFor(getCsb(), CrateState.PLAY);
-
-			// Lucky Chest
-			if (getOt().equals(ObtainType.LUCKYCHEST))
-			{
-				getClc().loadFor(getCsb(), null);
-			}
-
-			if(!getCrates().isMultiCrate())
-			{
-				// Sounds
-				getCs().loadFor(getCsb(), CrateState.OPEN);
-
-				// Rewards
-				getCr().loadFor(getCsb(), CrateState.OPEN);
-
-				// Actions
-				getCa().loadFor(getCsb(), CrateState.OPEN);
-
-				// Fireworks
-				getCf().loadFor(getCsb(), CrateState.OPEN);
-
-				getCrates().getCs().getCt().setupFor(crates);
-				getCh().loadValueFromConfig(getSl());
-			}
-			else
-			{
-				getCmci().loadFor(getCsb(), CrateState.OPEN);
-			}
+        getFu().save();
+    }
 
 
-			if (!toLog.equalsIgnoreCase("NOTHING"))
-			{
-				getSl().logAll();
-				ChatUtils.log("");
-				ChatUtils.log("-------------------------");
-			}
-		}
-		else
-		{
-			crates.setEnabled(false);
-			crates.setCanBeEnabled(false);
-		}
-	}
+    public void saveIndividualValues()
+    {
+        fc.set("enabled", crates.isEnabled());
+        fc.set("cooldown", getCooldown());
+        fc.set("obtain-method", getOt().name());
+        fc.set("display.type", getDcp().toString());
+        fc.set("hologram-offset", getHologramOffset());
+        fc.set("auto-close", isAutoClose());
 
-	public void loadNotice(String toLog)
-	{
-		if(!toLog.equalsIgnoreCase("NOTHING")) {
-			ChatUtils.log("");
-			ChatUtils.log("Loading the '" + getCrates().getName() + "' crate");
-			ChatUtils.log("");
-			if(!CrateUtils.isCrateUsable(getCrates()))
-			{
-				ChatUtils.log("NOTICE: This crate is disabled");
-				ChatUtils.log("");
-			}
-		}
-	}
+        fc.set("permission", getPermission().equalsIgnoreCase("no permission") ? null : getPermission());
 
-	public String deleteCrate()
-	{
-		Path path = getFu().getDataFile().toPath();
-		crates.deleteAllPlaced();
-		try
-		{
-			org.apache.commons.io.FileUtils.forceDelete(getFu().getDataFile());
-		}
-		catch(Exception exc)
-		{
-			exc.printStackTrace();
-			return "File nonexistent, please try reloading or contacting the plugin author.";
-		}
-		cc.reload();
-		return path.toString();
-	}
+        if (!getDcp().toString().equalsIgnoreCase("block"))
+        {
+            fc.set("display." + (getDcp().toString().equalsIgnoreCase("mob") ? "creature" : "name"), getDcp().getType());
+        }
+
+        if (!(getCrateInventoryName() == null))
+        {
+            fc.set("inventory-name", ChatUtils.fromChatColor(getCrateInventoryName()));
+        }
+
+        saveCrate();
+
+        if (!getCrates().isMultiCrate())
+        {
+            saveKey();
+
+            fc.set("open.crate-animation", getCt().name());
+        }
+
+    }
+
+    public void saveCrate()
+    {
+        fc.set("crate.material", getCrate().getType() + ";" + getCrate().getDurability());
+        fc.set("crate.name", ChatUtils.fromChatColor(getCrate().getItemMeta().getDisplayName()));
+
+        if (getCrate().getEnchantments().keySet().iterator().hasNext())
+        {
+            Enchantment e = getCrate().getEnchantments().keySet().iterator().next();
+            fc.set("crate.enchantment", e.getName() + ";" + getCrate().getEnchantments().get(e));
+        }
+
+        if (getCrate().getItemMeta().hasLore())
+        {
+            fc.set("crate.lore", ChatUtils.removeColorFrom(getCrate().getItemMeta().getLore()));
+        }
+    }
+
+    public void saveKey()
+    {
+        fc.set("key.require", isRequireKey());
+        fc.set("key.material", getKey().getType() + ";" + getKey().getDurability());
+        fc.set("key.name", ChatUtils.fromChatColor(getKey().getItemMeta().getDisplayName()));
+
+        if (getKey().getEnchantments().keySet().iterator().hasNext())
+        {
+            ArrayList<String> enchants = new ArrayList<String>();
+            for (Enchantment enchant : getKey().getEnchantments().keySet())
+            {
+                int lvl = getKey().getEnchantments().get(enchant);
+                enchants.add(enchant.getName() + ";" + lvl);
+            }
+            String updatedPath = fc.contains("key.enchantment") ? "key.enchantment" : "key.enchantments";
+            fc.set(updatedPath, enchants);
+        }
+
+        if (getKey().getItemMeta().hasLore())
+        {
+            fc.set("key.lore", ChatUtils.removeColorFrom(getKey().getItemMeta().getLore()));
+        }
+    }
+
+    public void loadAll()
+    {
+        // Crate Loging
+        String toLog = SettingsValues.LOG_SUCCESSES.getValue(getCrates().getCc()).toString();
+        loadNotice(toLog);
+
+        setCp(new CParticles(getCrates()));
+        setCholoCopy(new CHolograms(getCrates()));
+
+        if (!getCrates().isMultiCrate())
+        {
+            setCs(new CSounds(getCrates()));
+            setCr(new CRewards(getCrates()));
+            setCa(new CActions(getCrates()));
+            setCf(new CFireworks(getCrates()));
+            setClc(new CLuckyChest(getCrates()));
+        }
+        else
+        {
+            setCmci(new CMultiCrateInventory(getCrates()));
+        }
+
+        if (getFu().isProperLoad())
+        {
+            // Base Settings
+
+            getCsb().setupCrate();
+            getCsb().setupCooldowns();
+            getCsb().setupDisplay();
+            getCsb().setupObtainMethod();
+            getCsb().setupCrateInventoryName();
+            getCsb().setupPermission();
+            getCsb().setupAutoClose();
+            getCsb().setupHologramOffset();
+
+            // Base Settings for non-MultiCrates
+            if (!getCrates().isMultiCrate())
+            {
+                getCsb().setupKey();
+                getCsb().setupCrateAnimation();
+            }
+
+            // Particles
+            getCp().loadFor(getCsb(), CrateState.PLAY);
+            getCp().loadFor(getCsb(), CrateState.OPEN);
+
+            // Holograms
+            getCholoCopy().loadFor(getCsb(), CrateState.PLAY);
+
+            // Lucky Chest
+            if (getOt().equals(ObtainType.LUCKYCHEST))
+            {
+                getClc().loadFor(getCsb(), null);
+            }
+
+            if (!getCrates().isMultiCrate())
+            {
+                // Sounds
+                getCs().loadFor(getCsb(), CrateState.OPEN);
+
+                // Rewards
+                getCr().loadFor(getCsb(), CrateState.OPEN);
+
+                // Actions
+                getCa().loadFor(getCsb(), CrateState.OPEN);
+
+                // Fireworks
+                getCf().loadFor(getCsb(), CrateState.OPEN);
+
+                getCrates().getCs().getCt().setupFor(crates);
+                getCh().loadValueFromConfig(getSl());
+            }
+            else
+            {
+                getCmci().loadFor(getCsb(), CrateState.OPEN);
+            }
+
+
+            if (!toLog.equalsIgnoreCase("NOTHING"))
+            {
+                getSl().logAll();
+                ChatUtils.log("");
+                ChatUtils.log("-------------------------");
+            }
+        }
+        else
+        {
+            crates.setEnabled(false);
+            crates.setCanBeEnabled(false);
+        }
+    }
+
+    public void loadNotice(String toLog)
+    {
+        if (!toLog.equalsIgnoreCase("NOTHING"))
+        {
+            ChatUtils.log("");
+            ChatUtils.log("Loading the '" + getCrates().getName() + "' crate");
+            ChatUtils.log("");
+            if (!CrateUtils.isCrateUsable(getCrates()))
+            {
+                ChatUtils.log("NOTICE: This crate is disabled");
+                ChatUtils.log("");
+            }
+        }
+    }
+
+    public String deleteCrate()
+    {
+        Path path = getFu().getDataFile().toPath();
+        crates.deleteAllPlaced();
+        try
+        {
+            org.apache.commons.io.FileUtils.forceDelete(getFu().getDataFile());
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace();
+            return "File nonexistent, please try reloading or contacting the plugin author.";
+        }
+        cc.reload();
+        return path.toString();
+    }
 
 	/*public void rename(final Player renamer, final String newName, String type)
 	{
@@ -324,336 +326,340 @@ public class CrateSettings
 			}
 		}, 20);
 	}*/
-	
-	@Deprecated
-	public void playAll(Location l, CrateState cs)
-	{
-		playAll(l, null, cs, null, null);
-	}
 
-	@Deprecated
-	public void playAll(Location l, CrateState cstate, Player p, ArrayList<Reward> rewards)
-	{
-		playAll(l, null, cstate, p, rewards);
-	}
-	
-	public void playAll(Location l, PlacedCrate placedCrate, CrateState cstate, Player p, ArrayList<Reward> rewards)
-	{
-		getCp().runAll(l, cstate, rewards);
-		if(cstate.equals(CrateState.OPEN) && CrateUtils.isCrateUsable(getCrates()))
-		{
-			cs.runAll(p, l, rewards);
-			cf.runAll(p, l, rewards);
-			if(rewards != null && !rewards.isEmpty())
-			{
-				ca.playAll(p, placedCrate, rewards, false);
-			}
-		}
-	}
+    @Deprecated
+    public void playAll(Location l, CrateState cs)
+    {
+        playAll(l, null, cs, null, null);
+    }
 
-	public ItemStack getKey(int amount)
-	{
-		ItemStack stack = key.clone();
-		stack.setAmount(amount);
-		return stack;
-	}
+    @Deprecated
+    public void playAll(Location l, CrateState cstate, Player p, ArrayList<Reward> rewards)
+    {
+        playAll(l, null, cstate, p, rewards);
+    }
 
-	public ItemStack getCrate(int amount)
-	{
-		ItemStack stack = crate.clone();
-		stack.setAmount(amount);
-		return stack;
-	}
+    public void playAll(Location l, PlacedCrate placedCrate, CrateState cstate, Player p, ArrayList<Reward> rewards)
+    {
+        getCp().runAll(l, cstate, rewards);
+        if (cstate.equals(CrateState.OPEN) && CrateUtils.isCrateUsable(getCrates()))
+        {
+            cs.runAll(p, l, rewards);
+            cf.runAll(p, l, rewards);
+            if (rewards != null && !rewards.isEmpty())
+            {
+                ca.playAll(p, placedCrate, rewards, false);
+            }
+        }
+    }
 
-	public boolean isRequireKey()
-	{
-		return requireKey;
-	}
+    public ItemStack getKey(int amount)
+    {
+        ItemStack stack = key.clone();
+        stack.setAmount(amount);
+        return stack;
+    }
 
-	public void setRequireKey(boolean requireKey)
-	{
-		this.requireKey = requireKey;
-	}
+    public ItemStack getCrate(int amount)
+    {
+        ItemStack stack = crate.clone();
+        stack.setAmount(amount);
+        return stack;
+    }
 
-	public Crate getCrates()
-	{
-		return crates;
-	}
+    public boolean isRequireKey()
+    {
+        return requireKey;
+    }
 
-	public void setCrates(Crate crates)
-	{
-		this.crates = crates;
-	}
+    public void setRequireKey(boolean requireKey)
+    {
+        this.requireKey = requireKey;
+    }
 
-	public String getName() 
-	{
-		return name;
-	}
+    public Crate getCrates()
+    {
+        return crates;
+    }
 
-	public void setName(String name)
-	{
-		this.name = name;
-	}
+    public void setCrates(Crate crates)
+    {
+        this.crates = crates;
+    }
 
-	public FileConfiguration getFc() 
-	{
-		return fc;
-	}
+    public String getName()
+    {
+        return name;
+    }
 
-	public void setFc(FileConfiguration fc) 
-	{
-		this.fc = fc;
-	}
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
-	public void setKey(ItemStack key)
-	{
-		this.key = key;
-	}
+    public FileConfiguration getFc()
+    {
+        return fc;
+    }
 
-	public CParticles getCp()
-	{
-		return cp;
-	}
+    public void setFc(FileConfiguration fc)
+    {
+        this.fc = fc;
+    }
 
-	public void setCp(CParticles cp) 
-	{
-		this.cp = cp;
-	}
+    public void setKey(ItemStack key)
+    {
+        this.key = key;
+    }
 
-	public CRewards getCr()
-	{
-		return cr;
-	}
+    public CParticles getCp()
+    {
+        return cp;
+    }
 
-	public void setCr(CRewards cr)
-	{
-		this.cr = cr;
-	}
+    public void setCp(CParticles cp)
+    {
+        this.cp = cp;
+    }
 
-	public CHolograms getCholoCopy()
-	{
-		return choloCopy;
-	}
+    public CRewards getCr()
+    {
+        return cr;
+    }
 
-	public void setCholoCopy(CHolograms choloCopy)
-	{
-		this.choloCopy = choloCopy;
-	}
+    public void setCr(CRewards cr)
+    {
+        this.cr = cr;
+    }
 
-	public void setCrate(ItemStack crate) 
-	{
-		this.crate = crate;
-	}
+    public CHolograms getCholoCopy()
+    {
+        return choloCopy;
+    }
 
-	public ObtainType getOt() 
-	{
-		return ot;
-	}
+    public void setCholoCopy(CHolograms choloCopy)
+    {
+        this.choloCopy = choloCopy;
+    }
 
-	public void setOt(ObtainType ot) 
-	{
-		this.ot = ot;
-	}
+    public void setCrate(ItemStack crate)
+    {
+        this.crate = crate;
+    }
 
-	public CrateType getCt() 
-	{
-		return ct;
-	}
+    public ObtainType getOt()
+    {
+        return ot;
+    }
 
-	public void setCt(CrateType ct)
-	{
-		this.ct = ct;
-	}
+    public void setOt(ObtainType ot)
+    {
+        this.ot = ot;
+    }
 
-	public StatusLogger getSl() 
-	{
-		return sl;
-	}
+    public CrateType getCt()
+    {
+        return ct;
+    }
 
-	public void setSl(StatusLogger sl)
-	{
-		this.sl = sl;
-	}
+    public void setCt(CrateType ct)
+    {
+        this.ct = ct;
+    }
 
-	public boolean isTiersOverrideDefaults()
-	{
-		return tiersOverrideDefaults;
-	}
+    public StatusLogger getSl()
+    {
+        return sl;
+    }
 
-	public void setTiersOverrideDefaults(boolean tiersOverrideDefaults)
-	{
-		this.tiersOverrideDefaults = tiersOverrideDefaults;
-	}
+    public void setSl(StatusLogger sl)
+    {
+        this.sl = sl;
+    }
 
-	public CrateSettingsBuilder getCsb() 
-	{
-		return csb;
-	}
+    public boolean isTiersOverrideDefaults()
+    {
+        return tiersOverrideDefaults;
+    }
 
-	public void setCsb(CrateSettingsBuilder csb) 
-	{
-		this.csb = csb;
-	}
+    public void setTiersOverrideDefaults(boolean tiersOverrideDefaults)
+    {
+        this.tiersOverrideDefaults = tiersOverrideDefaults;
+    }
 
-	public CLuckyChest getClc() {
-		return clc;
-	}
+    public CrateSettingsBuilder getCsb()
+    {
+        return csb;
+    }
 
-	public void setClc(CLuckyChest clc) {
-		this.clc = clc;
-	}
+    public void setCsb(CrateSettingsBuilder csb)
+    {
+        this.csb = csb;
+    }
 
-	public boolean clcExists()
-	{
-		return clc != null;
-	}
+    public CLuckyChest getClc()
+    {
+        return clc;
+    }
 
-	public int getCooldown() {
-		return cooldown;
-	}
+    public void setClc(CLuckyChest clc)
+    {
+        this.clc = clc;
+    }
 
-	public void setCooldown(int cooldown) {
-		this.cooldown = cooldown;
-	}
+    public boolean clcExists()
+    {
+        return clc != null;
+    }
 
-	public CustomCrates getCc()
-	{
-		return cc;
-	}
+    public int getCooldown()
+    {
+        return cooldown;
+    }
 
-	public void setCc(CustomCrates cc)
-	{
-		this.cc = cc;
-	}
+    public void setCooldown(int cooldown)
+    {
+        this.cooldown = cooldown;
+    }
 
-	public ItemStack getCrate()
-	{
-		return crate;
-	}
+    public CustomCrates getCc()
+    {
+        return cc;
+    }
 
-	public ItemStack getKey()
-	{
-		return key;
-	}
+    public void setCc(CustomCrates cc)
+    {
+        this.cc = cc;
+    }
 
-	public DynamicCratePlaceholder getDcp()
-	{
-		return dcp;
-	}
+    public ItemStack getCrate()
+    {
+        return crate;
+    }
 
-	public void setDcp(DynamicCratePlaceholder dcp)
-	{
-		this.dcp = dcp;
-	}
+    public ItemStack getKey()
+    {
+        return key;
+    }
 
-	public CSounds getCs()
-	{
-		return cs;
-	}
+    public DynamicCratePlaceholder getDcp()
+    {
+        return dcp;
+    }
 
-	public void setCs(CSounds cs)
-	{
-		this.cs = cs;
-	}
+    public void setDcp(DynamicCratePlaceholder dcp)
+    {
+        this.dcp = dcp;
+    }
 
-	public CActions getCa()
-	{
-		return ca;
-	}
+    public CSounds getCs()
+    {
+        return cs;
+    }
 
-	public void setCa(CActions ca)
-	{
-		this.ca = ca;
-	}
+    public void setCs(CSounds cs)
+    {
+        this.cs = cs;
+    }
 
-	public CFireworks getCf()
-	{
-		return cf;
-	}
+    public CActions getCa()
+    {
+        return ca;
+    }
 
-	public void setCf(CFireworks cf)
-	{
-		this.cf = cf;
-	}
+    public void setCa(CActions ca)
+    {
+        this.ca = ca;
+    }
 
-	public CrateDisplayType getCdt()
-	{
-		return cdt;
-	}
+    public CFireworks getCf()
+    {
+        return cf;
+    }
 
-	public void setCdt(CrateDisplayType cdt)
-	{
-		this.cdt = cdt;
-	}
+    public void setCf(CFireworks cf)
+    {
+        this.cf = cf;
+    }
 
-	public FileHandler getFu()
-	{
-		return fu;
-	}
+    public CrateDisplayType getCdt()
+    {
+        return cdt;
+    }
 
-	public void setFu(FileHandler fu)
-	{
-		this.fu = fu;
-	}
+    public void setCdt(CrateDisplayType cdt)
+    {
+        this.cdt = cdt;
+    }
 
-	public String getCrateInventoryName()
-	{
-		return crateInventoryName;
-	}
+    public FileHandler getFu()
+    {
+        return fu;
+    }
 
-	public void setCrateInventoryName(String crateInventoryName)
-	{
-		this.crateInventoryName = crateInventoryName;
-	}
+    public void setFu(FileHandler fu)
+    {
+        this.fu = fu;
+    }
 
-	public CrateHead getCh()
-	{
-		return ch;
-	}
+    public String getCrateInventoryName()
+    {
+        return crateInventoryName;
+    }
 
-	public void setCh(CrateHead ch)
-	{
-		this.ch = ch;
-	}
+    public void setCrateInventoryName(String crateInventoryName)
+    {
+        this.crateInventoryName = crateInventoryName;
+    }
 
-	public String getPermission()
-	{
-		return permission;
-	}
+    public CrateHead getCh()
+    {
+        return ch;
+    }
 
-	public void setPermission(String permission)
-	{
-		this.permission = permission;
-	}
+    public void setCh(CrateHead ch)
+    {
+        this.ch = ch;
+    }
 
-	public boolean isAutoClose()
-	{
-		return autoClose;
-	}
+    public String getPermission()
+    {
+        return permission;
+    }
 
-	public void setAutoClose(boolean autoClose)
-	{
-		this.autoClose = autoClose;
-	}
+    public void setPermission(String permission)
+    {
+        this.permission = permission;
+    }
 
-	public CMultiCrateInventory getCmci()
-	{
-		return cmci;
-	}
+    public boolean isAutoClose()
+    {
+        return autoClose;
+    }
 
-	public void setCmci(CMultiCrateInventory cmci)
-	{
-		this.cmci = cmci;
-	}
+    public void setAutoClose(boolean autoClose)
+    {
+        this.autoClose = autoClose;
+    }
 
-	public double getHologramOffset()
-	{
-		return hologramOffset;
-	}
+    public CMultiCrateInventory getCmci()
+    {
+        return cmci;
+    }
 
-	public void setHologramOffset(double hologramOffset)
-	{
-		this.hologramOffset = hologramOffset;
-	}
+    public void setCmci(CMultiCrateInventory cmci)
+    {
+        this.cmci = cmci;
+    }
+
+    public double getHologramOffset()
+    {
+        return hologramOffset;
+    }
+
+    public void setHologramOffset(double hologramOffset)
+    {
+        this.hologramOffset = hologramOffset;
+    }
 
 }

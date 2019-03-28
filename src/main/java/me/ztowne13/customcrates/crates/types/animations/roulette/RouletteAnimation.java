@@ -12,37 +12,37 @@ import org.bukkit.inventory.Inventory;
  */
 public class RouletteAnimation extends RouletteManager
 {
-	static double baseSpeed = 1;
+    static double baseSpeed = 1;
 
-	public RouletteAnimation(Inventory inv, Crate crates)
-	{
-		super(inv, crates);
-	}
+    public RouletteAnimation(Inventory inv, Crate crates)
+    {
+        super(inv, crates);
+    }
 
-	@Override
-	public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand)
-	{
-		if(canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
-		{
-			RouletteDataHolder rdh = new RouletteDataHolder(p, l, this);
-			playSequence(rdh, true);
-			playRequiredOpenActions(p, !requireKeyInHand);
-			return true;
-		}
+    @Override
+    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand)
+    {
+        if (canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
+        {
+            RouletteDataHolder rdh = new RouletteDataHolder(p, l, this);
+            playSequence(rdh, true);
+            playRequiredOpenActions(p, !requireKeyInHand);
+            return true;
+        }
 
-		playFailToOpen(p);
-		return false;
-	}
+        playFailToOpen(p);
+        return false;
+    }
 
-	public void playSequence(final RouletteDataHolder rdh, final boolean first)
-	{
-		if(!rdh.isCompleted())
-		{
-			Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
-			{
-				@Override
-				public void run()
-				{
+    public void playSequence(final RouletteDataHolder rdh, final boolean first)
+    {
+        if (!rdh.isCompleted())
+        {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
+            {
+                @Override
+                public void run()
+                {
 					/*rdh.getP().openInventory(buildNewInventory(rdh).getInv());
 
 					if(getTickSound() != null)
@@ -60,40 +60,42 @@ public class RouletteAnimation extends RouletteManager
 
 					playSequence(rdh);*/
 
-					rdh.setIndividualTicks(rdh.getIndividualTicks() + baseSpeed);
-					rdh.setTotalTicks(rdh.getTotalTicks() + baseSpeed);
+                    rdh.setIndividualTicks(rdh.getIndividualTicks() + baseSpeed);
+                    rdh.setTotalTicks(rdh.getTotalTicks() + baseSpeed);
 
-					boolean b = false;
-					if (rdh.getIndividualTicks() * baseSpeed >= rdh.getCurrentTicks() - 1.1)
-					{
-						rdh.setUpdates(rdh.getUpdates() + 1);
-						b = true;
-						rdh.setIndividualTicks(0);
-						if (getTickSound() != null)
-						{
-							rdh.getP().playSound(rdh.getL(), getTickSound().getSound(), getTickSound().getVolume(), getTickSound().getPitch());
-						}
+                    boolean b = false;
+                    if (rdh.getIndividualTicks() * baseSpeed >= rdh.getCurrentTicks() - 1.1)
+                    {
+                        rdh.setUpdates(rdh.getUpdates() + 1);
+                        b = true;
+                        rdh.setIndividualTicks(0);
+                        if (getTickSound() != null)
+                        {
+                            rdh.getP().playSound(rdh.getL(), getTickSound().getSound(), getTickSound().getVolume(),
+                                    getTickSound().getPitch());
+                        }
 
-						//if (cdh.getCurrentTicks() > cdh.getDisplayAmount())
-						if(rdh.getCurrentTicks() > getFinalTickLength())
-						{
-							finishUp(rdh.getP(), 50);
-							return;
-						}
+                        //if (cdh.getCurrentTicks() > cdh.getDisplayAmount())
+                        if (rdh.getCurrentTicks() > getFinalTickLength())
+                        {
+                            finishUp(rdh.getP(), 50);
+                            return;
+                        }
 
-						rdh.setCurrentTicks(.05 * Math.pow((getTickIncrease()/40) + 1, rdh.getUpdates()));
-					}
+                        rdh.setCurrentTicks(.05 * Math.pow((getTickIncrease() / 40) + 1, rdh.getUpdates()));
+                    }
 
-					buildNewInventory(rdh, rdh.getTotalTicks() % glassUpdateTicks == 0, b);
+                    buildNewInventory(rdh, rdh.getTotalTicks() % glassUpdateTicks == 0, b);
 
-					if (first || !rdh.getP().getOpenInventory().getTopInventory().getName().equals(rdh.getInv().getInv().getName()))
-					{
-						rdh.getP().openInventory(rdh.getInv().getInv());
-					}
+                    if (first || !rdh.getP().getOpenInventory().getTopInventory().getName()
+                            .equals(rdh.getInv().getInv().getName()))
+                    {
+                        rdh.getP().openInventory(rdh.getInv().getInv());
+                    }
 
-					playSequence(rdh, false);
-				}
-			}, (long) baseSpeed);
-		}
-	}
+                    playSequence(rdh, false);
+                }
+            }, (long) baseSpeed);
+        }
+    }
 }

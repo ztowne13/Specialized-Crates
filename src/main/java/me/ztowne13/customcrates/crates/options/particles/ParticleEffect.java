@@ -1,12 +1,8 @@
 package me.ztowne13.customcrates.crates.options.particles;
 
 import me.ztowne13.customcrates.utils.ReflectionUtilities;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 public enum ParticleEffect
 {

@@ -1,17 +1,18 @@
-/** The MIT License (MIT)
- *
+/**
+ * The MIT License (MIT)
+ * <p>
  * Copyright (c) 2018 Hex_27
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
  * the rights to use, copy, modify, merge, publish, distribute, sublicense,
  * and/or sell copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -23,13 +24,13 @@
 
 package me.ztowne13.customcrates.gui;
 
-import java.util.HashMap;
-
-import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public enum DynamicMaterial {
+import java.util.HashMap;
+
+public enum DynamicMaterial
+{
     ACACIA_BOAT(0, "BOAT_ACACIA"),
     ACACIA_BUTTON(0, "WOOD_BUTTON"),
     ACACIA_DOOR(0, "ACACIA_DOOR", "ACACIA_DOOR_ITEM"),
@@ -146,7 +147,7 @@ public enum DynamicMaterial {
     CACTUS(0, "CACTUS"),
     CACTUS_GREEN(2, "INK_SACK"),
     CAKE(0, "CAKE", "CAKE_BLOCK"),
-//    CARROT(0, "CARROT_ITEM"),
+    //    CARROT(0, "CARROT_ITEM"),
 //    CARROTS(0, "CARROT"),
     CARROT_ITEM(0, "CARROT", "CARROTS"),
     CARROT_ON_A_STICK(0, "CARROT_STICK"),
@@ -616,7 +617,7 @@ public enum DynamicMaterial {
     POPPED_CHORUS_FRUIT(0, "CHORUS_FRUIT_POPPED"),
     POPPY(0, "RED_ROSE"),
     PORKCHOP(0, "PORK"),
-//    POTATO(0, "POTATO_ITEM"),
+    //    POTATO(0, "POTATO_ITEM"),
 //    POTATOES(0, "POTATO"),
     POTATO_ITEM(0, "POTATO", "POTATOES"),
     POTION(0, "POTION"),
@@ -889,18 +890,20 @@ public enum DynamicMaterial {
     boolean preProgrammedNBTTag = false;
     String nbtTag = "";
 
-    DynamicMaterial(int data, String... m) {
+    DynamicMaterial(int data, String... m)
+    {
         this.m = m;
         this.data = data;
 
-        if(name().endsWith("_SPAWN_EGG"))
+        if (name().endsWith("_SPAWN_EGG"))
         {
             preProgrammedNBTTag = true;
             nbtTag = name().replaceAll("_SPAWN_EGG", "");
         }
     }
 
-    public ItemStack parseItem() {
+    public ItemStack parseItem()
+    {
         Material mat = parseMaterial();
 
         if (isNewVersion())
@@ -909,11 +912,13 @@ public enum DynamicMaterial {
         return new ItemStack(mat, 1, (byte) data);
     }
 
-    public static boolean isNewVersion() {
+    public static boolean isNewVersion()
+    {
         return Material.getMaterial("RED_WOOL") != null;
     }
 
-    public boolean isSameMaterial(ItemStack comp) {
+    public boolean isSameMaterial(ItemStack comp)
+    {
         if (isNewVersion())
             return comp.getType() == this.parseMaterial();
 
@@ -929,10 +934,14 @@ public enum DynamicMaterial {
         return false;
     }
 
-    public DynamicMaterial fromMaterial(Material mat) {
-        try {
+    public DynamicMaterial fromMaterial(Material mat)
+    {
+        try
+        {
             return DynamicMaterial.valueOf(mat.toString());
-        } catch (IllegalArgumentException e) {
+        }
+        catch (IllegalArgumentException e)
+        {
             for (DynamicMaterial xmat : DynamicMaterial.values())
                 for (String test : xmat.m)
                     if (test.equalsIgnoreCase(mat.toString()))
@@ -942,7 +951,8 @@ public enum DynamicMaterial {
         return null;
     }
 
-    public static DynamicMaterial fromString(String key) {
+    public static DynamicMaterial fromString(String key)
+    {
         key = key.toUpperCase();
         String[] split = key.split(";");
         String keyMat = split[0];
@@ -952,10 +962,13 @@ public enum DynamicMaterial {
 
         DynamicMaterial xmat = null;
 
-        try {
+        try
+        {
             xmat = DynamicMaterial.valueOf(keyMat);
             return xmat;
-        } catch (IllegalArgumentException e) {
+        }
+        catch (IllegalArgumentException e)
+        {
             if (split.length == 1)
                 xmat = requestXMaterial(keyMat, (byte) 0);
             else
@@ -969,14 +982,16 @@ public enum DynamicMaterial {
 
     }
 
-    public boolean isDamageable(DynamicMaterial type) {
+    public boolean isDamageable(DynamicMaterial type)
+    {
         if (type == null)
             return false;
 
         String[] split = type.toString().split("_");
         int length = split.length;
 
-        switch (split[length - 1]) {
+        switch (split[length - 1])
+        {
             case "HELMET":
                 return true;
             case "CHESTPLATE":
@@ -1013,7 +1028,7 @@ public enum DynamicMaterial {
     public Material parseMaterial()
     {
         Material mat = Material.matchMaterial(toString());
-        if(mat != null)
+        if (mat != null)
             return mat;
 
         return Material.matchMaterial(m[0]);
@@ -1058,18 +1073,19 @@ public enum DynamicMaterial {
     }*/
 
     private static HashMap<String, DynamicMaterial> cachedSearch = new HashMap<>();
+
     public static DynamicMaterial requestXMaterial(String name, byte data)
     {
-        if(cachedSearch.containsKey(name.toUpperCase()+","+data))
-            return cachedSearch.get(name.toUpperCase()+","+data);
+        if (cachedSearch.containsKey(name.toUpperCase() + "," + data))
+            return cachedSearch.get(name.toUpperCase() + "," + data);
 
-        for(DynamicMaterial mat : DynamicMaterial.values())
+        for (DynamicMaterial mat : DynamicMaterial.values())
         {
-            for(String test : mat.m)
+            for (String test : mat.m)
             {
-                if(name.toUpperCase().equals(test) && ((byte)mat.data) == data)
+                if (name.toUpperCase().equals(test) && ((byte) mat.data) == data)
                 {
-                    cachedSearch.put(test+","+data,mat);
+                    cachedSearch.put(test + "," + data, mat);
                     return mat;
                 }
             }

@@ -1,18 +1,20 @@
 package me.ztowne13.customcrates.players.data.events;
 
-import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.players.PlayerDataManager;
 
 /**
  * Created by ztowne13 on 8/5/15.
  */
-public class RewardLimitEvent extends DataEvent {
+public class RewardLimitEvent extends DataEvent
+{
     public Reward r;
     int addedUses;
     public int currentUses;
     int totalUses;
 
-    public RewardLimitEvent(Reward r, int currentUses, int addedUses) {
+    public RewardLimitEvent(Reward r, int currentUses, int addedUses)
+    {
         super(r.getCc());
         this.r = r;
         this.addedUses = addedUses;
@@ -22,7 +24,8 @@ public class RewardLimitEvent extends DataEvent {
     }
 
     @Override
-    public void addTo(PlayerDataManager pdm) {
+    public void addTo(PlayerDataManager pdm)
+    {
         /*
         if (getTotalUses() > 0) {
             if (!(pdm.getRewardLimitEventByMatch(this) == null)) {
@@ -34,19 +37,23 @@ public class RewardLimitEvent extends DataEvent {
     }
 
     @Override
-    public String getFormatted() {
+    public String getFormatted()
+    {
         return r.getRewardName() + ";" + getCurrentUses();
     }
 
-    public boolean getCanUse() {
+    public boolean getCanUse()
+    {
         return getCurrentUses() <= getTotalUses();
     }
 
-    public void updateCurrentUses() {
+    public void updateCurrentUses()
+    {
         setCurrentUses(getCurrentUses() + getAddedUses());
     }
 
-    public boolean matches(RewardLimitEvent rle) {
+    public boolean matches(RewardLimitEvent rle)
+    {
         return r.getRewardName().equalsIgnoreCase(rle.r.getRewardName());
     }
 

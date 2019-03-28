@@ -10,31 +10,31 @@ import org.bukkit.command.CommandSender;
  */
 public abstract class SubCommand
 {
-	int minimumArgs;
-	String commandTitle, usageMessage;
+    int minimumArgs;
+    String commandTitle, usageMessage;
 
-	public SubCommand(String commandTitle, int minimumArgs, String usageMessage)
-	{
-		this.minimumArgs = minimumArgs;
-		this.commandTitle = commandTitle;
-		this.usageMessage = usageMessage;
-	}
+    public SubCommand(String commandTitle, int minimumArgs, String usageMessage)
+    {
+        this.minimumArgs = minimumArgs;
+        this.commandTitle = commandTitle;
+        this.usageMessage = usageMessage;
+    }
 
-	public abstract boolean run(CustomCrates cc, Commands cmds, String[] args);
+    public abstract boolean run(CustomCrates cc, Commands cmds, String[] args);
 
-	public boolean checkProperUsage(CommandSender sender, String[] args)
-	{
-		boolean enoughArgs = args.length >= minimumArgs;
-		if(!enoughArgs)
-		{
-			sender.sendMessage(ChatUtils.toChatColor("&4&lERROR! &c" + ChatUtils.toChatColor(usageMessage)));
-		}
+    public boolean checkProperUsage(CommandSender sender, String[] args)
+    {
+        boolean enoughArgs = args.length >= minimumArgs;
+        if (!enoughArgs)
+        {
+            sender.sendMessage(ChatUtils.toChatColor("&4&lERROR! &c" + ChatUtils.toChatColor(usageMessage)));
+        }
 
-		return enoughArgs;
-	}
+        return enoughArgs;
+    }
 
-	public boolean isCommand(String s)
-	{
-		return commandTitle.equalsIgnoreCase(s);
-	}
+    public boolean isCommand(String s)
+    {
+        return commandTitle.equalsIgnoreCase(s);
+    }
 }

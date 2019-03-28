@@ -6,7 +6,6 @@ import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import me.ztowne13.customcrates.crates.options.particles.ParticleEffect;
 import me.ztowne13.customcrates.crates.options.particles.effects.OffsetTiltedRingsPA;
 import me.ztowne13.customcrates.crates.options.particles.effects.PEAnimationType;
-import me.ztowne13.customcrates.crates.options.particles.effects.ParticleAnimationEffect;
 import me.ztowne13.customcrates.crates.options.particles.effects.TiltedRingsPA;
 import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;

@@ -47,7 +47,7 @@ public class PlayerDataManager
         {
             setCrateCooldowns(getDh().get("crate-cooldowns").toString());
         }
-        if(getDh().hasDataValue("virtual-crates"))
+        if (getDh().hasDataValue("virtual-crates"))
         {
             setVirtualCrates(getDh().get("virtual-crates").toString());
         }
@@ -62,21 +62,21 @@ public class PlayerDataManager
     {
         for (String unParsed : getHistory().split(","))
         {
-            if(!unParsed.equalsIgnoreCase(""))
+            if (!unParsed.equalsIgnoreCase(""))
             {
                 String[] split = unParsed.split(";");
 
-                if(Crate.exists(split[1]))
+                if (Crate.exists(split[1]))
                 {
                     Crate crates = Crate.getCrate(getDh().getCc(), split[1]);
-                    if(CrateUtils.isCrateUsable(crates))
+                    if (CrateUtils.isCrateUsable(crates))
                     {
                         ArrayList<Reward> rewards = new ArrayList<Reward>();
-                        for(String s : split[2].replace("[", "").replace("]","").split("%newReward% "))
+                        for (String s : split[2].replace("[", "").replace("]", "").split("%newReward% "))
                         {
                             Reward r = crates.getCs().getCr().getByName(s);
 
-                            if(rewards != null)
+                            if (rewards != null)
                             {
                                 rewards.add(r);
                             }
@@ -92,11 +92,11 @@ public class PlayerDataManager
 
         for (String unParsed : getCrateCooldowns().split(","))
         {
-            if(!unParsed.equalsIgnoreCase(""))
+            if (!unParsed.equalsIgnoreCase(""))
             {
                 String[] split = unParsed.split(";");
 
-                if(Crate.exists(split[0]))
+                if (Crate.exists(split[0]))
                 {
                     Crate crates = Crate.getCrate(getPm().getCc(), split[0]);
                     long startTime = Long.valueOf(split[1]);
@@ -106,12 +106,12 @@ public class PlayerDataManager
             }
         }
 
-        for(String unParsed : getVirtualCrates().split(","))
+        for (String unParsed : getVirtualCrates().split(","))
         {
-            if(!unParsed.equalsIgnoreCase(""))
+            if (!unParsed.equalsIgnoreCase(""))
             {
                 String[] split = unParsed.split(";");
-                if(Crate.exists(split[0]))
+                if (Crate.exists(split[0]))
                 {
                     Crate crate = Crate.getCrate(getPm().getCc(), split[0]);
                     try
@@ -120,7 +120,7 @@ public class PlayerDataManager
                         int keys = Integer.parseInt(split[2]);
                         getVirtualCrateData().put(crate, new VirtualCrateData(crate, crates, keys));
                     }
-                    catch(Exception exc)
+                    catch (Exception exc)
                     {
                         exc.printStackTrace();
                     }
@@ -150,9 +150,9 @@ public class PlayerDataManager
     {
         String newList = "";
 
-        for(String parsed : list.replace(" ", "").split(","))
+        for (String parsed : list.replace(" ", "").split(","))
         {
-            if(!parsed.equals(toRemove))
+            if (!parsed.equals(toRemove))
             {
                 newList = newList.equals("") ? parsed : "," + parsed;
             }
@@ -191,7 +191,7 @@ public class PlayerDataManager
         }
     }
 
-   public void setVirtualCrateCrates(Crate crate, int crates)
+    public void setVirtualCrateCrates(Crate crate, int crates)
     {
         VirtualCrateData vCD = getVCCrateData(crate);
         String temp = removeStringFromList(vCD.toString(), getVirtualCrates());
@@ -217,7 +217,7 @@ public class PlayerDataManager
 
     public VirtualCrateData getVCCrateData(Crate crate)
     {
-        if(getVirtualCrateData().containsKey(crate))
+        if (getVirtualCrateData().containsKey(crate))
         {
             return getVirtualCrateData().get(crate);
         }
@@ -277,31 +277,38 @@ public class PlayerDataManager
         return history;
     }
 
-    public String getCrateCooldowns() {
+    public String getCrateCooldowns()
+    {
         return crateCooldowns;
     }
 
-    public DataHandler getDh() {
+    public DataHandler getDh()
+    {
         return dh;
     }
 
-    public void setDh(DataHandler dh) {
+    public void setDh(DataHandler dh)
+    {
         this.dh = dh;
     }
 
-    public ArrayList<HistoryEvent> getHistoryEvents() {
+    public ArrayList<HistoryEvent> getHistoryEvents()
+    {
         return historyEvents;
     }
 
-    public void setHistoryEvents(ArrayList<HistoryEvent> historyEvents) {
+    public void setHistoryEvents(ArrayList<HistoryEvent> historyEvents)
+    {
         this.historyEvents = historyEvents;
     }
 
-    public ArrayList<CrateCooldownEvent> getCrateCooldownEvents() {
+    public ArrayList<CrateCooldownEvent> getCrateCooldownEvents()
+    {
         return crateCooldownEvents;
     }
 
-    public void setCrateCooldownEvents(ArrayList<CrateCooldownEvent> crateCooldownEvents) {
+    public void setCrateCooldownEvents(ArrayList<CrateCooldownEvent> crateCooldownEvents)
+    {
         this.crateCooldownEvents = crateCooldownEvents;
     }
 

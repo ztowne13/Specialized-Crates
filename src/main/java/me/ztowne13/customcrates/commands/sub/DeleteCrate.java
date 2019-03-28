@@ -11,31 +11,31 @@ import org.bukkit.entity.Player;
  */
 public class DeleteCrate extends SubCommand
 {
-	public DeleteCrate()
-	{
-		super("deletecrate", 1, "");
-	}
+    public DeleteCrate()
+    {
+        super("deletecrate", 1, "");
+    }
 
-	@Override
-	public boolean run(CustomCrates cc, Commands cmds, String[] args)
-	{
-		if(cmds.canExecute(false, false, ""))
-		{
-			Player p = (Player)cmds.getCmdSender();
-			PlayerManager pm = PlayerManager.get(cc, p);
+    @Override
+    public boolean run(CustomCrates cc, Commands cmds, String[] args)
+    {
+        if (cmds.canExecute(false, false, ""))
+        {
+            Player p = (Player) cmds.getCmdSender();
+            PlayerManager pm = PlayerManager.get(cc, p);
 
-			if(pm.isDeleteCrate())
-			{
-				pm.setDeleteCrate(false);
-				ChatUtils.msgSuccess(p, "You will no longer delete a crate!");
-			}
-			else
-			{
-				pm.setDeleteCrate(true);
-				ChatUtils.msg(p, "&ePlease LEFT-CLICK the crate you'd like to delete.");
-				ChatUtils.msg(p, " &o&6Use /SCrates deletecrate to disable this mode.");
-			}
-		}
-		return true;
-	}
+            if (pm.isDeleteCrate())
+            {
+                pm.setDeleteCrate(false);
+                ChatUtils.msgSuccess(p, "You will no longer delete a crate!");
+            }
+            else
+            {
+                pm.setDeleteCrate(true);
+                ChatUtils.msg(p, "&ePlease LEFT-CLICK the crate you'd like to delete.");
+                ChatUtils.msg(p, " &o&6Use /SCrates deletecrate to disable this mode.");
+            }
+        }
+        return true;
+    }
 }

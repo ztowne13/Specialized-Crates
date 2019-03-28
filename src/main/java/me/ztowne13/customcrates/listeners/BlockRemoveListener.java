@@ -16,64 +16,65 @@ import java.util.List;
 
 public class BlockRemoveListener implements Listener
 {
-	CustomCrates cc;
-	
-	public BlockRemoveListener(CustomCrates cc)
-	{
-		this.cc = cc;
-	}
-	
-	@EventHandler
-	public void onBlockChange(BlockExplodeEvent e)
-	{
+    CustomCrates cc;
 
-		if((Boolean) SettingsValues.EXPLODE_DYNAMIC.getValue(cc))
-		{
-			for(Block b: new ArrayList<Block>(e.blockList()))
-			{
-				if(PlacedCrate.crateExistsAt(cc, b.getLocation()))
-				{
-					e.blockList().remove(b);
-				}
-			}
-		}
-	}
-	
-	@EventHandler
-	public void onPistonPush(BlockPistonExtendEvent e)
-	{
-		e.setCancelled(shouldCancel(e.getBlocks(), e.getDirection()));
-	}
-	
-	@EventHandler
-	public void onEntityExplode(EntityExplodeEvent e)
-	{
-		if((Boolean) SettingsValues.EXPLODE_DYNAMIC.getValue(cc))
-		{
-			for(Block b: new ArrayList<Block>(e.blockList()))
-			{
-				if(PlacedCrate.crateExistsAt(cc, b.getLocation()))
-				{
-					e.blockList().remove(b);
-				}
-			}
-		}
-	}
-	
-	public boolean shouldCancel(List<Block> blocks, BlockFace bf)
-	{
-		boolean shouldCancel = false;
-		if((Boolean) SettingsValues.EXPLODE_DYNAMIC.getValue(cc))
-		{
-			for(Block b: blocks)
-			{
-				if(PlacedCrate.crateExistsAt(cc, b.getLocation()) || PlacedCrate.crateExistsAt(cc, b.getRelative(bf).getLocation()))
-				{
-					shouldCancel = true;
-					break;
-				}
-			}
-		}
-		return shouldCancel;
-	}
+    public BlockRemoveListener(CustomCrates cc)
+    {
+        this.cc = cc;
+    }
+
+    @EventHandler
+    public void onBlockChange(BlockExplodeEvent e)
+    {
+
+        if ((Boolean) SettingsValues.EXPLODE_DYNAMIC.getValue(cc))
+        {
+            for (Block b : new ArrayList<Block>(e.blockList()))
+            {
+                if (PlacedCrate.crateExistsAt(cc, b.getLocation()))
+                {
+                    e.blockList().remove(b);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPistonPush(BlockPistonExtendEvent e)
+    {
+        e.setCancelled(shouldCancel(e.getBlocks(), e.getDirection()));
+    }
+
+    @EventHandler
+    public void onEntityExplode(EntityExplodeEvent e)
+    {
+        if ((Boolean) SettingsValues.EXPLODE_DYNAMIC.getValue(cc))
+        {
+            for (Block b : new ArrayList<Block>(e.blockList()))
+            {
+                if (PlacedCrate.crateExistsAt(cc, b.getLocation()))
+                {
+                    e.blockList().remove(b);
+                }
+            }
+        }
+    }
+
+    public boolean shouldCancel(List<Block> blocks, BlockFace bf)
+    {
+        boolean shouldCancel = false;
+        if ((Boolean) SettingsValues.EXPLODE_DYNAMIC.getValue(cc))
+        {
+            for (Block b : blocks)
+            {
+                if (PlacedCrate.crateExistsAt(cc, b.getLocation()) ||
+                        PlacedCrate.crateExistsAt(cc, b.getRelative(bf).getLocation()))
+                {
+                    shouldCancel = true;
+                    break;
+                }
+            }
+        }
+        return shouldCancel;
+    }
 }

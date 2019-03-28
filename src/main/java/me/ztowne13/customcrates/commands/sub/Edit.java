@@ -17,50 +17,50 @@ import java.util.TreeSet;
  */
 public class Edit extends SubCommand
 {
-	public Edit()
-	{
-		super("edit", 1, "");
-	}
+    public Edit()
+    {
+        super("edit", 1, "");
+    }
 
-	@Override
-	public boolean run(CustomCrates cc, Commands cmds, String[] args)
-	{
-		if(cmds.getCmdSender() instanceof Player)
-		{
-			Player p = (Player) cmds.getCmdSender();
+    @Override
+    public boolean run(CustomCrates cc, Commands cmds, String[] args)
+    {
+        if (cmds.getCmdSender() instanceof Player)
+        {
+            Player p = (Player) cmds.getCmdSender();
 
-			if(args.length == 1)
-			{
-				TreeSet<Material> set = new TreeSet<>();
-				set.add(Material.AIR);
-				if (!(p.getTargetBlock(set, 20) == null))
-				{
-					Block b = p.getTargetBlock(set, 20);
-					if (PlacedCrate.crateExistsAt(cc, b.getLocation()))
-					{
-						PlacedCrate pc = PlacedCrate.get(cc, b.getLocation());
-						new IGCCratesMain(cc, p, null, pc.getCrates()).open();
-						ChatUtils.msgSuccess(p, "Opening config menu for crate: " + pc.getCrates().getName());
-						return true;
-					}
-				}
-				ChatUtils.msgError(p, "You are not looking at a crate to open!");
-			}
-			else
-			{
-				if(Crate.crateAlreadyExist(args[1]))
-				{
-					Crate crate = Crate.getCrate(cc, args[1]);
-					new IGCCratesMain(cc, p, null, crate).open();
-					ChatUtils.msgSuccess(p, "Opening config menu for crate: " + crate.getName());
-				}
-				ChatUtils.msgError(p, args[1] + " is not a valid crate name.");
-			}
-		}
-		else
-		{
-			cmds.msg("This command can only be run from in-game.");
-		}
-		return false;
-	}
+            if (args.length == 1)
+            {
+                TreeSet<Material> set = new TreeSet<>();
+                set.add(Material.AIR);
+                if (!(p.getTargetBlock(set, 20) == null))
+                {
+                    Block b = p.getTargetBlock(set, 20);
+                    if (PlacedCrate.crateExistsAt(cc, b.getLocation()))
+                    {
+                        PlacedCrate pc = PlacedCrate.get(cc, b.getLocation());
+                        new IGCCratesMain(cc, p, null, pc.getCrates()).open();
+                        ChatUtils.msgSuccess(p, "Opening config menu for crate: " + pc.getCrates().getName());
+                        return true;
+                    }
+                }
+                ChatUtils.msgError(p, "You are not looking at a crate to open!");
+            }
+            else
+            {
+                if (Crate.crateAlreadyExist(args[1]))
+                {
+                    Crate crate = Crate.getCrate(cc, args[1]);
+                    new IGCCratesMain(cc, p, null, crate).open();
+                    ChatUtils.msgSuccess(p, "Opening config menu for crate: " + crate.getName());
+                }
+                ChatUtils.msgError(p, args[1] + " is not a valid crate name.");
+            }
+        }
+        else
+        {
+            cmds.msg("This command can only be run from in-game.");
+        }
+        return false;
+    }
 }

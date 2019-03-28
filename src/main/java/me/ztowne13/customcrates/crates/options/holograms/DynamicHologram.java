@@ -6,79 +6,81 @@ import me.ztowne13.customcrates.animations.holo.HoloAnimation;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import org.bukkit.Location;
 
-public abstract class DynamicHologram 
+public abstract class DynamicHologram
 {
-	CustomCrates cc;
-	PlacedCrate cm;
-	
-	HoloAnimation ha;
+    CustomCrates cc;
+    PlacedCrate cm;
 
-	boolean displayingRewardHologram = false;
+    HoloAnimation ha;
 
-	public DynamicHologram(CustomCrates cc, PlacedCrate cm)
-	{
-		this.cc = cc;
-		this.cm = cm;
+    boolean displayingRewardHologram = false;
 
-		if(cm.getCholo().getHat() != null && cm.getCholo().getHat() != HoloAnimType.NONE)
-		{
-			setHa(cm.getCholo().getHat().getAsHoloAnimation(cc, this));
-		}
-	}
+    public DynamicHologram(CustomCrates cc, PlacedCrate cm)
+    {
+        this.cc = cc;
+        this.cm = cm;
 
-	public abstract void create(Location l);
-	
-	public abstract void addLine(String line);
-	
-	public abstract void setLine(int lineNum, String line);
+        if (cm.getCholo().getHat() != null && cm.getCholo().getHat() != HoloAnimType.NONE)
+        {
+            setHa(cm.getCholo().getHat().getAsHoloAnimation(cc, this));
+        }
+    }
 
-	public abstract void delete();
-	
-	public abstract void teleport(Location l);
+    public abstract void create(Location l);
 
-	public void tick()
-	{
-		if(getHa() != null)
-		{
-			getHa().tick();
-		}
-	}
+    public abstract void addLine(String line);
 
-	public PlacedCrate getCm()
-	{
-		return cm;
-	}
+    public abstract void setLine(int lineNum, String line);
 
-	public void setCm(PlacedCrate cm)
-	{
-		this.cm = cm;
-	}
+    public abstract void delete();
 
-	public HoloAnimation getHa() {
-		return ha;
-	}
+    public abstract void teleport(Location l);
 
-	public void setHa(HoloAnimation ha) {
-		this.ha = ha;
-	}
+    public void tick()
+    {
+        if (getHa() != null)
+        {
+            getHa().tick();
+        }
+    }
 
-	public CustomCrates getCc()
-	{
-		return cc;
-	}
+    public PlacedCrate getCm()
+    {
+        return cm;
+    }
 
-	public void setCc(CustomCrates cc)
-	{
-		this.cc = cc;
-	}
+    public void setCm(PlacedCrate cm)
+    {
+        this.cm = cm;
+    }
 
-	public boolean getDisplayingRewardHologram()
-	{
-		return displayingRewardHologram;
-	}
+    public HoloAnimation getHa()
+    {
+        return ha;
+    }
 
-	public void setDisplayingRewardHologram(boolean displayingRewardHologram)
-	{
-		this.displayingRewardHologram = displayingRewardHologram;
-	}
+    public void setHa(HoloAnimation ha)
+    {
+        this.ha = ha;
+    }
+
+    public CustomCrates getCc()
+    {
+        return cc;
+    }
+
+    public void setCc(CustomCrates cc)
+    {
+        this.cc = cc;
+    }
+
+    public boolean getDisplayingRewardHologram()
+    {
+        return displayingRewardHologram;
+    }
+
+    public void setDisplayingRewardHologram(boolean displayingRewardHologram)
+    {
+        this.displayingRewardHologram = displayingRewardHologram;
+    }
 }

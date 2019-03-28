@@ -33,7 +33,7 @@ public class CLuckyChest extends CSetting
 
     public CLuckyChest(Crate crates)
     {
-       super(crates, crates.getCc());
+        super(crates, crates.getCc());
     }
 
     @Override
@@ -42,13 +42,14 @@ public class CLuckyChest extends CSetting
         FileConfiguration fc = up().getFc();
         StatusLogger sl = up().getSl();
 
-        if(csb.hasV("lucky-chest"))
+        if (csb.hasV("lucky-chest"))
         {
-            if(csb.hasV("lucky-chest.chance"))
+            if (csb.hasV("lucky-chest.chance"))
             {
                 String unParsedChance = fc.getString("lucky-chest.chance");
                 String[] args = unParsedChance.split("/");
-                try {
+                try
+                {
                     setChance(Integer.parseInt(args[0]));
                     setOutOfChance(Integer.parseInt(args[1]));
                 }
@@ -64,13 +65,13 @@ public class CLuckyChest extends CSetting
                 StatusLoggerEvent.LUCKYCHEST_CHANCE_NONEXISTENT.log(getCrates());
             }
 
-            if(csb.hasV("lucky-chest.is-block-list-whitelist"))
+            if (csb.hasV("lucky-chest.is-block-list-whitelist"))
             {
                 try
                 {
                     setBLWL(fc.getBoolean("lucky-chest.is-block-list-whitelist"));
                 }
-                catch(Exception exc)
+                catch (Exception exc)
                 {
                     StatusLoggerEvent.LUCKYCHEST_BLWL_INVALID.log(getCrates());
                 }
@@ -81,15 +82,15 @@ public class CLuckyChest extends CSetting
                 StatusLoggerEvent.LUCKYCHEST_BLWL_NONEXISTENT.log(getCrates());
             }
 
-            if(csb.hasV("lucky-chest.worlds"))
+            if (csb.hasV("lucky-chest.worlds"))
             {
                 worldsRaw = fc.getStringList("lucky-chest.worlds");
 
-                for(String s: fc.getStringList("lucky-chest.worlds"))
+                for (String s : fc.getStringList("lucky-chest.worlds"))
                 {
                     setAllWorlds(false);
                     World w = Bukkit.getWorld(s);
-                    if(w != null)
+                    if (w != null)
                     {
                         getWorlds().add(w);
                     }
@@ -100,7 +101,7 @@ public class CLuckyChest extends CSetting
                 }
             }
 
-            if(csb.hasV("lucky-chest.block-list"))
+            if (csb.hasV("lucky-chest.block-list"))
             {
                 whiteListRaw = fc.getStringList("lucky-chest.block-list");
                 try
@@ -112,13 +113,13 @@ public class CLuckyChest extends CSetting
                             Material m = DynamicMaterial.fromString(mat.toUpperCase()).parseMaterial();
                             getWhiteList().add(m);
                         }
-                        catch(Exception exc)
+                        catch (Exception exc)
                         {
                             StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALIDBLOCK.log(getCrates(), new String[]{mat});
                         }
                     }
                 }
-                catch(Exception exc)
+                catch (Exception exc)
                 {
                     StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALID.log(getCrates());
                 }
@@ -136,8 +137,8 @@ public class CLuckyChest extends CSetting
 
     public void saveToFile()
     {
-        getFu().get().set("lucky-chest.chance", ((int)chance) + "/" + ((int)outOfChance));
-        if(!whiteListRaw.isEmpty())
+        getFu().get().set("lucky-chest.chance", ((int) chance) + "/" + ((int) outOfChance));
+        if (!whiteListRaw.isEmpty())
         {
             getFu().get().set("lucky-chest.is-block-list-whitelist", isBLWL);
             getFu().get().set("lucky-chest.block-list", whiteListRaw);
@@ -147,7 +148,7 @@ public class CLuckyChest extends CSetting
             getFu().get().set("lucky-chest.is-block-list-whitelist", null);
             getFu().get().set("lucky-chest.block-list", null);
         }
-        if(!worldsRaw.isEmpty())
+        if (!worldsRaw.isEmpty())
         {
             getFu().get().set("lucky-chest.worlds", worldsRaw);
         }
@@ -159,7 +160,7 @@ public class CLuckyChest extends CSetting
 
     public boolean canRunForBlock(Block b)
     {
-        if(isAllWorlds() || getWorlds().contains(b.getWorld()))
+        if (isAllWorlds() || getWorlds().contains(b.getWorld()))
         {
             if (getWhiteList().isEmpty())
             {

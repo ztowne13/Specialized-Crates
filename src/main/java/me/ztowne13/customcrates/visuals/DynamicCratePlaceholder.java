@@ -8,27 +8,27 @@ import me.ztowne13.customcrates.crates.PlacedCrate;
  */
 public abstract class DynamicCratePlaceholder
 {
-	CustomCrates cc;
+    CustomCrates cc;
 
-	public DynamicCratePlaceholder(CustomCrates cc)
-	{
-		this.cc = cc;
-	}
+    public DynamicCratePlaceholder(CustomCrates cc)
+    {
+        this.cc = cc;
+    }
 
-	public CustomCrates getCc()
-	{
-		return cc;
-	}
+    public CustomCrates getCc()
+    {
+        return cc;
+    }
 
-	public abstract void place(PlacedCrate cm);
+    public abstract void place(PlacedCrate cm);
 
-	public abstract void remove(PlacedCrate cm);
+    public abstract void remove(PlacedCrate cm);
 
-	public abstract void setType(Object obj);
+    public abstract void setType(Object obj);
 
-	public abstract String getType();
+    public abstract String getType();
 
-	public abstract void fixHologram(PlacedCrate cm);
+    public abstract void fixHologram(PlacedCrate cm);
 
-	public abstract String toString();
+    public abstract String toString();
 }

@@ -21,7 +21,7 @@ public class CrateCooldownEvent extends DataEvent
 
         this.crates = crates;
         this.startTime = startTime;
-        this.cooldownTime = crates.getCs().getCooldown()*1000;
+        this.cooldownTime = crates.getCs().getCooldown() * 1000;
         this.start = start;
     }
 
@@ -34,13 +34,14 @@ public class CrateCooldownEvent extends DataEvent
     @Override
     public void addTo(PlayerDataManager pdm)
     {
-        if(getCooldownTime() > 0)
+        if (getCooldownTime() > 0)
         {
             if (isStart())
             {
                 int seconds = Math.round(getCooldownTime() / 1000);
                 String cdTimeFormatted = Utils.ConvertSecondToHHMMString(seconds);
-                Messages.COOLDOWN_START.msgSpecified(cc, pdm.getDh().getPm().getP(), new String[]{"%crate%", "%seconds%"}, new String[]{getCrates().getName(), cdTimeFormatted});
+                Messages.COOLDOWN_START.msgSpecified(cc, pdm.getDh().getPm().getP(), new String[]{"%crate%", "%seconds%"},
+                        new String[]{getCrates().getName(), cdTimeFormatted});
             }
 
             pdm.addCrateCooldowns(this, pdm.addStringToList(getFormatted(), pdm.getCrateCooldowns()));
@@ -49,7 +50,7 @@ public class CrateCooldownEvent extends DataEvent
 
     public void tickSecond(PlayerDataManager pdm)
     {
-        if(isCooldownOverAsBoolean())
+        if (isCooldownOverAsBoolean())
         {
             end(pdm);
         }
@@ -62,20 +63,23 @@ public class CrateCooldownEvent extends DataEvent
 
     public long isCooldownOver()
     {
-        return getStartTime() + getCooldownTime() < System.currentTimeMillis() ? -1 : (getStartTime() + getCooldownTime() - System.currentTimeMillis()) / 1000L;
+        return getStartTime() + getCooldownTime() < System.currentTimeMillis() ? -1 :
+                (getStartTime() + getCooldownTime() - System.currentTimeMillis()) / 1000L;
     }
 
     public void end(PlayerDataManager pdm)
     {
         int seconds = Math.round(getCooldownTime() / 1000);
         String cdTimeFormatted = Utils.ConvertSecondToHHMMString(seconds);
-        Messages.COOLDOWN_END.msgSpecified(getCc(), pdm.getDh().getPm().getP(), new String[]{"%crate%", "%seconds%"}, new String[]{getCrates().getName(), cdTimeFormatted});
+        Messages.COOLDOWN_END.msgSpecified(getCc(), pdm.getDh().getPm().getP(), new String[]{"%crate%", "%seconds%"},
+                new String[]{getCrates().getName(), cdTimeFormatted});
         pdm.removeCrateCooldowns(this, pdm.removeStringFromList(getFormatted(), pdm.getCrateCooldowns()));
     }
 
     public boolean matches(CrateCooldownEvent cce)
     {
-        return getCrates().getName().equalsIgnoreCase(cce.getCrates().getName()) && getStartTime() == cce.getStartTime() && getCooldownTime() == cce.getCooldownTime();
+        return getCrates().getName().equalsIgnoreCase(cce.getCrates().getName()) && getStartTime() == cce.getStartTime() &&
+                getCooldownTime() == cce.getCooldownTime();
     }
 
     public void playFailure(PlayerDataManager pdm)
@@ -83,7 +87,8 @@ public class CrateCooldownEvent extends DataEvent
         crates.getCs().getCh().playFailToOpen(pdm.getPm().getP(), false);
         int seconds = Math.round(isCooldownOver());
         String cdTimeFormatted = Utils.ConvertSecondToHHMMString(seconds);
-        pdm.getPm().getP().sendMessage(Messages.CRATE_ON_COOLDOWN.getFromConf(cc).replace("%crate%", crates.getName()).replace("%seconds%",  cdTimeFormatted));
+        pdm.getPm().getP().sendMessage(Messages.CRATE_ON_COOLDOWN.getFromConf(cc).replace("%crate%", crates.getName())
+                .replace("%seconds%", cdTimeFormatted));
 
     }
 

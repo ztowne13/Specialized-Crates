@@ -25,7 +25,7 @@ public class NMSActionEffect extends ActionEffect
 
     public ActionBar getActionBarExecutor()
     {
-        if(NMSUtils.Version.v1_8.isServerVersionOrEarlier())
+        if (NMSUtils.Version.v1_8.isServerVersionOrEarlier())
             return new ActionBarV1_7_8();
         else
             return new ActionBarV1_9_10_11();
@@ -33,7 +33,7 @@ public class NMSActionEffect extends ActionEffect
 
     public void newTitle()
     {
-        if(NMSUtils.Version.v1_10.isServerVersionOrEarlier())
+        if (NMSUtils.Version.v1_10.isServerVersionOrEarlier())
         {
             title = new TitleV1_7_8_9_10("", "",
                     (Integer.parseInt(SettingsValues.CA_FADE_IN.getValue(cc).toString())),
@@ -51,7 +51,7 @@ public class NMSActionEffect extends ActionEffect
 
     public void playTitle(Player p)
     {
-        if(title != null)
+        if (title != null)
         {
             title.send(p);
             title = null;

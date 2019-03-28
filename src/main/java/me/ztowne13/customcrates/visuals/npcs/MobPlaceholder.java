@@ -18,83 +18,83 @@ import java.util.HashMap;
  */
 public class MobPlaceholder extends DynamicCratePlaceholder
 {
-	static HashMap<PlacedCrate, NPC> mobs = new HashMap<PlacedCrate, NPC>();
+    static HashMap<PlacedCrate, NPC> mobs = new HashMap<PlacedCrate, NPC>();
 
-	EntityTypes ent;
+    EntityTypes ent;
 
-	public MobPlaceholder(CustomCrates cc)
-	{
-		super(cc);
-	}
+    public MobPlaceholder(CustomCrates cc)
+    {
+        super(cc);
+    }
 
-	public void place(PlacedCrate cm)
-	{
-		LocationUtils.removeDubBlocks(cm.getL());
+    public void place(PlacedCrate cm)
+    {
+        LocationUtils.removeDubBlocks(cm.getL());
 
-		NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
-		NPC npc = npcRegistry.createNPC(ent.getEt(), "Specialized Crate - Crate");
+        NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
+        NPC npc = npcRegistry.createNPC(ent.getEt(), "Specialized Crate - Crate");
 
-		npc.addTrait(new IdentifierTrait());
+        npc.addTrait(new IdentifierTrait());
 
-		NPCUtils.applyDefaultInfo(npc);
+        NPCUtils.applyDefaultInfo(npc);
 
-		npc.spawn(LocationUtils.getLocationCentered(cm.getL()));
+        npc.spawn(LocationUtils.getLocationCentered(cm.getL()));
 
-		getMobs().put(cm, npc);
+        getMobs().put(cm, npc);
 
-	}
+    }
 
-	public void remove(PlacedCrate cm)
-	{
-		getMobs().get(cm).destroy();
-	}
+    public void remove(PlacedCrate cm)
+    {
+        getMobs().get(cm).destroy();
+    }
 
-	public boolean existsAt(Location l)
-	{
-		return true;
-	}
+    public boolean existsAt(Location l)
+    {
+        return true;
+    }
 
-	public void setType(Object obj)
-	{
-		setEnt(EntityTypes.valueOf(obj.toString()));
-	}
+    public void setType(Object obj)
+    {
+        setEnt(EntityTypes.valueOf(obj.toString()));
+    }
 
-	public String getType()
-	{
-		return ent == null ? "null" : ent.name();
-	}
+    public String getType()
+    {
+        return ent == null ? "null" : ent.name();
+    }
 
-	public void fixHologram(PlacedCrate cm)
-	{
-		Location l = cm.getL().clone();
-		l.setY(l.getY() + getEnt().getHeight() - .5);
-		cm.getCholo().getDh().teleport(l);
+    public void fixHologram(PlacedCrate cm)
+    {
+        Location l = cm.getL().clone();
+        l.setY(l.getY() + getEnt().getHeight() - .5);
+        cm.getCholo().getDh().teleport(l);
 
-	}
+    }
 
 
-	public static HashMap<PlacedCrate, NPC> getMobs()
-	{
-		return mobs;
-	}
+    public static HashMap<PlacedCrate, NPC> getMobs()
+    {
+        return mobs;
+    }
 
-	public static void setMobs(HashMap<PlacedCrate, NPC> mobs)
-	{
-		MobPlaceholder.mobs = mobs;
-	}
+    public static void setMobs(HashMap<PlacedCrate, NPC> mobs)
+    {
+        MobPlaceholder.mobs = mobs;
+    }
 
-	public EntityTypes getEnt()
-	{
-		return ent;
-	}
+    public EntityTypes getEnt()
+    {
+        return ent;
+    }
 
-	public void setEnt(EntityTypes ent)
-	{
-		this.ent = ent;
-	}
+    public void setEnt(EntityTypes ent)
+    {
+        this.ent = ent;
+    }
 
-	public String toString()
-	{
-		return "Mob";
-	}
+    public String toString()
+    {
+        return "Mob";
+    }
 }

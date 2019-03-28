@@ -11,13 +11,13 @@ import org.bukkit.entity.Player;
  */
 public abstract class IGCMenuCrate extends IGCMenu
 {
-	Crate crates;
-	CrateSettings cs;
+    Crate crates;
+    CrateSettings cs;
 
-	public IGCMenuCrate(CustomCrates cc, Player p, IGCMenu lastMenu, String invName, Crate crates)
-	{
-		super(cc, p, lastMenu, invName);
-		this.crates = crates;
-		this.cs = crates.getCs();
-	}
+    public IGCMenuCrate(CustomCrates cc, Player p, IGCMenu lastMenu, String invName, Crate crates)
+    {
+        super(cc, p, lastMenu, invName);
+        this.crates = crates;
+        this.cs = crates.getCs();
+    }
 }

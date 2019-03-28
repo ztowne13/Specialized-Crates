@@ -17,78 +17,82 @@ import java.util.ArrayList;
  */
 public class IGCMenuMessages extends IGCMenu
 {
-	static int msgLoreLength = 40;
-	public IGCMenuMessages(CustomCrates cc, Player p, IGCMenu lastMenu)
-	{
-		super(cc, p, lastMenu, "&7&l> &6&lMessages.YML");
-	}
+    static int msgLoreLength = 40;
 
-	@Override
-	public void open()
-	{
-		p.closeInventory();
-		putInMenu();
+    public IGCMenuMessages(CustomCrates cc, Player p, IGCMenu lastMenu)
+    {
+        super(cc, p, lastMenu, "&7&l> &6&lMessages.YML");
+    }
 
-		InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(2, Messages.values().length-1));
-		ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
-		ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
-		ib.setItem(ib.getInv().getSize()-9, IGCDefaultItems.EXIT_BUTTON.getIb());
+    @Override
+    public void open()
+    {
+        p.closeInventory();
+        putInMenu();
 
-		ArrayList<Messages> msgs = new ArrayList<>();
+        InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(2, Messages.values().length - 1));
+        ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
+        ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
+        ib.setItem(ib.getInv().getSize() - 9, IGCDefaultItems.EXIT_BUTTON.getIb());
 
-		for(Messages msg: Messages.values())
-		{
-			if(msg.getMsg().equalsIgnoreCase(""))
-			{
-				msgs.add(msg);
-			}
-		}
+        ArrayList<Messages> msgs = new ArrayList<>();
 
-		int i = 2;
-		for(Messages msg : msgs)
-		{
-			if (i % 9 == 0)
-			{
-				i += 2;
-			}
+        for (Messages msg : Messages.values())
+        {
+            if (msg.getMsg().equalsIgnoreCase(""))
+            {
+                msgs.add(msg);
+            }
+        }
 
-			String properMsg = msg.getPropperMsg(cc);
-			ib.setItem(i, new ItemBuilder(Material.BOOK, 1, 0).setName("&a" + msg.toString().toLowerCase()).addLore(properMsg.substring(0, properMsg.length() > msgLoreLength ? msgLoreLength : properMsg.length()) + (properMsg.length() > msgLoreLength ? "..." : "")));
-			i++;
-		}
+        int i = 2;
+        for (Messages msg : msgs)
+        {
+            if (i % 9 == 0)
+            {
+                i += 2;
+            }
 
-		ib.open();
-	}
+            String properMsg = msg.getPropperMsg(cc);
+            ib.setItem(i, new ItemBuilder(Material.BOOK, 1, 0).setName("&a" + msg.toString().toLowerCase()).addLore(
+                    properMsg.substring(0, properMsg.length() > msgLoreLength ? msgLoreLength : properMsg.length()) +
+                            (properMsg.length() > msgLoreLength ? "..." : "")));
+            i++;
+        }
 
-	@Override
-	public void manageClick(int slot)
-	{
-		if(slot == 0)
-		{
-			cc.getMessageFile().save();
-			ChatUtils.msgSuccess(p, "Messages.YML saved!");
-		}
-		else if(slot == 9)
-		{
-			reload();
-		}
-		else if(slot == ib.getInv().getSize()-9)
-		{
-			up();
-		}
-		else if(!(ib.getInv().getItem(slot) == null))
-		{
-			Messages msg = Messages.valueOf(ChatUtils.removeColor(ib.getInv().getItem(slot).getItemMeta().getDisplayName()).toUpperCase());
-			new InputMenu(cc, p, msg.name(), msg.getPropperMsg(cc), String.class, this);
-		}
-	}
+        ib.open();
+    }
 
-	@Override
-	public boolean handleInput(String value, String input)
-	{
-		Messages msg = Messages.valueOf(value.toUpperCase());
-		msg.writeValue(cc, input);
-		ChatUtils.msgSuccess(p, "Set " + value + " to '" + input + "'");
-		return true;
-	}
+    @Override
+    public void manageClick(int slot)
+    {
+        if (slot == 0)
+        {
+            cc.getMessageFile().save();
+            ChatUtils.msgSuccess(p, "Messages.YML saved!");
+        }
+        else if (slot == 9)
+        {
+            reload();
+        }
+        else if (slot == ib.getInv().getSize() - 9)
+        {
+            up();
+        }
+        else if (!(ib.getInv().getItem(slot) == null))
+        {
+            Messages msg = Messages.valueOf(
+                    ChatUtils.removeColor(ib.getInv().getItem(slot).getItemMeta().getDisplayName()).toUpperCase());
+            new InputMenu(cc, p, msg.name(), msg.getPropperMsg(cc), String.class, this);
+        }
+    }
+
+    @Override
+    public boolean handleInput(String value, String input)
+    {
+        Messages msg = Messages.valueOf(value.toUpperCase());
+        msg.writeValue(cc, input);
+        ChatUtils.msgSuccess(p, "Set " + value + " to '" + input + "'");
+        return true;
+    }
 }

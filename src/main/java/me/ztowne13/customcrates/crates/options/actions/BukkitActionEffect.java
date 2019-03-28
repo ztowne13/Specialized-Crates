@@ -3,8 +3,6 @@ package me.ztowne13.customcrates.crates.options.actions;
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.crates.options.actions.actionbar.ActionBar;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.entity.Player;
 
 /**
@@ -34,7 +32,7 @@ public class BukkitActionEffect extends ActionEffect
 
     public void playTitle(Player p)
     {
-        p.sendTitle(title, subtitle, fadeIn*20, stay*20, fadeOut*20);
+        p.sendTitle(title, subtitle, fadeIn * 20, stay * 20, fadeOut * 20);
         resetData();
     }
 

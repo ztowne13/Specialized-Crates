@@ -1,9 +1,9 @@
 package me.ztowne13.customcrates.gui.ingame.rewards;
 
 import me.ztowne13.customcrates.CustomCrates;
-import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
@@ -11,7 +11,6 @@ import me.ztowne13.customcrates.gui.ingame.IGCDefaultItems;
 import me.ztowne13.customcrates.gui.ingame.IGCMenu;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.InventoryUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 

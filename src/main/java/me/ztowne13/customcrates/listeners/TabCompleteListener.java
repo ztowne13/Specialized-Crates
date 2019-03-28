@@ -28,7 +28,7 @@ public class TabCompleteListener implements TabCompleter
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args)
     {
         List<String> list = new ArrayList<String>();
-        if(sender instanceof Player)
+        if (sender instanceof Player)
         {
             String cN = cmd.getName();
             if (cN.equalsIgnoreCase("crates") ||
@@ -39,14 +39,28 @@ public class TabCompleteListener implements TabCompleter
             {
                 if (args.length == 1)
                 {
-                    list.add("config"); list.add("virtualcrates"); list.add("givecrate"); list.add("givekey"); list.add("edit"); list.add("errors"); list.add("deletecrate"); list.add("listcrates"); list.add("listhistory"); list.add("delallcratetype"); list.add("reload"); list.add("info"); list.add("!"); list.add("luckychest");
+                    list.add("config");
+                    list.add("virtualcrates");
+                    list.add("givecrate");
+                    list.add("givekey");
+                    list.add("edit");
+                    list.add("errors");
+                    list.add("deletecrate");
+                    list.add("listcrates");
+                    list.add("listhistory");
+                    list.add("delallcratetype");
+                    list.add("reload");
+                    list.add("info");
+                    list.add("!");
+                    list.add("luckychest");
                     list = Utils.onlyLeaveEntriesWithPref(list, args[0]);
                 }
                 else
                 {
-                    if(args[0].equalsIgnoreCase("givekey") || args[0].equalsIgnoreCase("givecrate") || args[0].equalsIgnoreCase("delallcratetype"))
+                    if (args[0].equalsIgnoreCase("givekey") || args[0].equalsIgnoreCase("givecrate") ||
+                            args[0].equalsIgnoreCase("delallcratetype"))
                     {
-                        if(args.length == 2)
+                        if (args.length == 2)
                         {
                             for (Crate crates : Crate.getLoadedCrates().values())
                             {
@@ -54,7 +68,7 @@ public class TabCompleteListener implements TabCompleter
                             }
                             list = Utils.onlyLeaveEntriesWithPref(list, args[1]);
                         }
-                        if(!args[0].equalsIgnoreCase("delallcratetype"))
+                        if (!args[0].equalsIgnoreCase("delallcratetype"))
                         {
                             if (args.length == 3)
                             {
@@ -72,7 +86,7 @@ public class TabCompleteListener implements TabCompleter
                             }
                         }
                     }
-                    else if(args[0].equalsIgnoreCase("edit"))
+                    else if (args[0].equalsIgnoreCase("edit"))
                     {
                         for (Crate crates : Crate.getLoadedCrates().values())
                         {
@@ -80,24 +94,24 @@ public class TabCompleteListener implements TabCompleter
                         }
                         list = Utils.onlyLeaveEntriesWithPref(list, args[1]);
                     }
-                    else if(args[0].equalsIgnoreCase(("listhistory")))
+                    else if (args[0].equalsIgnoreCase(("listhistory")))
                     {
-                        if(args.length == 2)
+                        if (args.length == 2)
                         {
-                            for(Player p: Bukkit.getOnlinePlayers())
+                            for (Player p : Bukkit.getOnlinePlayers())
                             {
                                 list.add(p.getName());
                             }
 
                             list = Utils.onlyLeaveEntriesWithPref(list, args[1]);
                         }
-                        else if(args.length == 3)
+                        else if (args.length == 3)
                         {
                             list.add("10");
                             list = Utils.onlyLeaveEntriesWithPref(list, "");
                         }
                     }
-                    else if(args[0].equalsIgnoreCase("errors"))
+                    else if (args[0].equalsIgnoreCase("errors"))
                     {
                         for (Crate crates : Crate.getLoadedCrates().values())
                         {

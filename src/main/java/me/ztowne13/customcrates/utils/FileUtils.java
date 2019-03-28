@@ -5,7 +5,6 @@ import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
@@ -153,7 +152,7 @@ public class FileUtils
     }
 
     public static long loadLong(String s, long defValue, StatusLogger sl, StatusLoggerEvent success,
-                                    StatusLoggerEvent invalid)
+                                StatusLoggerEvent invalid)
     {
         if (Utils.isLong(s))
         {

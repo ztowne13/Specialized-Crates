@@ -6,8 +6,8 @@ import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.CrateHead;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.crates.types.animations.discover.DiscoverAnimation;
-import me.ztowne13.customcrates.crates.types.animations.menu.MenuAnimation;
 import me.ztowne13.customcrates.crates.types.animations.discover.DiscoverDataHolder;
+import me.ztowne13.customcrates.crates.types.animations.menu.MenuAnimation;
 import me.ztowne13.customcrates.gui.ingame.crates.IGCMultiCrateMain;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -124,7 +124,8 @@ public class InventoryActionListener implements Listener
             {
                 ChatUtils.msgInfo(p, "There are unsaved changes, please remember to save.");
 
-                Bukkit.getScheduler().runTaskLater(cc, new Runnable() {
+                Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+                {
                     @Override
                     public void run()
                     {

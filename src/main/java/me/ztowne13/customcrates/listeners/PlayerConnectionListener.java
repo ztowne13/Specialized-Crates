@@ -12,36 +12,37 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerConnectionListener implements Listener
 {
-	CustomCrates cc;
-	
-	public PlayerConnectionListener(CustomCrates cc)
-	{
-		this.cc = cc;
-	}
-	
-	@EventHandler
-	public void onJoin(PlayerJoinEvent e)
-	{
-		final Player p = e.getPlayer();
-		PlayerManager.get(cc, p);
-		if(p.hasPermission("customcrates.admin") && cc.getUpdateChecker().needsUpdate())
-		{
-			Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					Messages.NEEDS_UPDATE.msgSpecified(cc, p, new String[]{"%version%"}, new String[]{cc.getUpdateChecker().getLatestVersion()});
-				}
-			}, 1);
-		}
-	}
+    CustomCrates cc;
 
-	@EventHandler
-	public void onQuit(PlayerQuitEvent e)
-	{
-		Player p = e.getPlayer();
-		PlayerManager.get(cc, p).remove();
-	}
+    public PlayerConnectionListener(CustomCrates cc)
+    {
+        this.cc = cc;
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e)
+    {
+        final Player p = e.getPlayer();
+        PlayerManager.get(cc, p);
+        if (p.hasPermission("customcrates.admin") && cc.getUpdateChecker().needsUpdate())
+        {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    Messages.NEEDS_UPDATE.msgSpecified(cc, p, new String[]{"%version%"},
+                            new String[]{cc.getUpdateChecker().getLatestVersion()});
+                }
+            }, 1);
+        }
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e)
+    {
+        Player p = e.getPlayer();
+        PlayerManager.get(cc, p).remove();
+    }
 
 }

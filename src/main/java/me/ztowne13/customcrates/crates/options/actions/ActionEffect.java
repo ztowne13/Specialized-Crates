@@ -2,12 +2,7 @@ package me.ztowne13.customcrates.crates.options.actions;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.options.actions.actionbar.ActionBar;
-import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.NMSUtils;
 import org.bukkit.entity.Player;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * Created by ztown on 2/14/2017.

@@ -6,66 +6,67 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class IndividualFileDataHandler extends DataHandler
 {
-	FileHandler fu;
-	FileConfiguration fc;
+    FileHandler fu;
+    FileConfiguration fc;
 
-	public IndividualFileDataHandler(PlayerManager pm) 
-	{
-		super(pm);
-		cc.getDu().log("Loading individual file data handler for " + pm.getP().getName());
-		this.fu = new FileHandler(pm.getCc(), pm.getP().getUniqueId().toString() + ".stats", "/PlayerStats/", false, false, false);
-		this.fc = getFu().get();
-		cc.getDu().log(fu.getDataFile().getAbsolutePath());
-	}
+    public IndividualFileDataHandler(PlayerManager pm)
+    {
+        super(pm);
+        cc.getDu().log("Loading individual file data handler for " + pm.getP().getName());
+        this.fu = new FileHandler(pm.getCc(), pm.getP().getUniqueId().toString() + ".stats", "/PlayerStats/", false, false,
+                false);
+        this.fc = getFu().get();
+        cc.getDu().log(fu.getDataFile().getAbsolutePath());
+    }
 
-	@Override
-	public boolean load() 
-	{
-		return false;
-	}
+    @Override
+    public boolean load()
+    {
+        return false;
+    }
 
-	@Override
-	public Object get(String value) 
-	{
-		return getFc().get(value);
-	}
+    @Override
+    public Object get(String value)
+    {
+        return getFc().get(value);
+    }
 
-	@Override
-	public void write(String value, String toWrite)
-	{
-		getFc().set(value, toWrite);
-		getFu().save();
-	}
+    @Override
+    public void write(String value, String toWrite)
+    {
+        getFc().set(value, toWrite);
+        getFu().save();
+    }
 
-	@Override
-	public boolean hasDataValue(String value)
-	{
-		return getFc().contains(value);
-	}
+    @Override
+    public boolean hasDataValue(String value)
+    {
+        return getFc().contains(value);
+    }
 
-	@Override
-	public boolean hasDataPath() 
-	{
-		return true;
-	}
+    @Override
+    public boolean hasDataPath()
+    {
+        return true;
+    }
 
-	public FileHandler getFu()
-	{
-		return fu;
-	}
+    public FileHandler getFu()
+    {
+        return fu;
+    }
 
-	public void setFu(FileHandler fu)
-	{
-		this.fu = fu;
-	}
+    public void setFu(FileHandler fu)
+    {
+        this.fu = fu;
+    }
 
-	public FileConfiguration getFc()
-	{
-		return fc;
-	}
+    public FileConfiguration getFc()
+    {
+        return fc;
+    }
 
-	public void setFc(FileConfiguration fc)
-	{
-		this.fc = fc;
-	}
+    public void setFc(FileConfiguration fc)
+    {
+        this.fc = fc;
+    }
 }

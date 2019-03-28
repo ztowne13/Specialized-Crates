@@ -9,18 +9,18 @@ import me.ztowne13.customcrates.crates.Crate;
  */
 public class ListCrates extends SubCommand
 {
-	public ListCrates()
-	{
-		super("listcrates", 1, "");
-	}
+    public ListCrates()
+    {
+        super("listcrates", 1, "");
+    }
 
-	@Override
-	public boolean run(CustomCrates cc, Commands cmds, String[] args)
-	{
-		for (Crate crates : Crate.getLoadedCrates().values())
-		{
-			cmds.msg("&6- &f" + crates.getName());
-		}
-		return true;
-	}
+    @Override
+    public boolean run(CustomCrates cc, Commands cmds, String[] args)
+    {
+        for (Crate crates : Crate.getLoadedCrates().values())
+        {
+            cmds.msg("&6- &f" + crates.getName());
+        }
+        return true;
+    }
 }

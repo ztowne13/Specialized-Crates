@@ -16,278 +16,287 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class PlayerManager 
+public class PlayerManager
 {
-	static HashMap<UUID,PlayerManager> pManagers = new HashMap<UUID,PlayerManager>();
-	
-	CustomCrates cc;
-	
-	Player p;
-	
-	DataHandler dh;
-	PlayerDataManager pdm;
+    static HashMap<UUID, PlayerManager> pManagers = new HashMap<UUID, PlayerManager>();
 
-	//CrateHead openCrate = null;
-	PlacedCrate lastOpenedPlacedCrate = null;
-	Crate openCrate = null;
-	Location lastOpenCrate = null;
-	private IGCMenu openMenu = null, lastOpenMenu = null;
-	boolean inRewardMenu = false, canClose = true, deleteCrate = false, useVirtualCrate = false;
+    CustomCrates cc;
 
-	ArrayList<Reward> waitingForClose = null;
+    Player p;
 
-	long cmdCooldown = 0;
-	String lastCooldown = "NONE";
-	
-	public PlayerManager(CustomCrates cc, Player p)
-	{
-		this.cc = cc;
-		this.p = p;
-		this.dh = getSpecifiedDataHandler();
-		this.pdm = new PlayerDataManager(this);
+    DataHandler dh;
+    PlayerDataManager pdm;
 
-		getPdm().setDh(getDh());
-		getPdm().loadAllInformation();
-		getpManagers().put(p.getUniqueId(), this);
-	}
+    //CrateHead openCrate = null;
+    PlacedCrate lastOpenedPlacedCrate = null;
+    Crate openCrate = null;
+    Location lastOpenCrate = null;
+    private IGCMenu openMenu = null, lastOpenMenu = null;
+    boolean inRewardMenu = false, canClose = true, deleteCrate = false, useVirtualCrate = false;
 
-	public void remove()
-	{
-		getpManagers().remove(getP().getUniqueId());
-	}
-	
-	public DataHandler getSpecifiedDataHandler()
-	{
-		try
-		{
-			StorageType st = StorageType.valueOf(ChatUtils.stripFromWhitespace(SettingsValues.STORE_DATA.getValue(getCc()).toString().toUpperCase()));
-			switch(st)
-			{
-				case MYSQL:
-					Utils.addToInfoLog(cc, "Storage Type", "MYSQL");
-					return new SQLDataHandler(this);
-				case FLATFILE:
-					Utils.addToInfoLog(cc, "Storage Type", "FLATFILE");
-					return new FlatFileDataHandler(this);
-				case PLAYERFILES:
-					Utils.addToInfoLog(cc, "Storage Type", "PLAYERFILES");
-					return new IndividualFileDataHandler(this);
-				default:
-					ChatUtils.log(new String[]{"store-data value in the config.YML is not a valid storage type.", "  It must be: MYSQL, FLATFILE, PLAYERFILES"});
-					Utils.addToInfoLog(cc, "StorageType", "FLATFILE");
-					return new FlatFileDataHandler(this);
-			}
-		}
-		catch(Exception exc)
-		{
-			exc.printStackTrace();
-			ChatUtils.log(new String[]{"store-data value in the config.YML is not a valid storage type.", "  It must be: MYSQL, FLATFILE, PLAYERFILES"});
-		}
-		return null;
-	}
+    ArrayList<Reward> waitingForClose = null;
 
-	public static PlayerManager get(CustomCrates cc, Player p)
-	{
-		return getpManagers().containsKey(p.getUniqueId()) ? getpManagers().get(p.getUniqueId()) : new PlayerManager(cc, p);
-	}
+    long cmdCooldown = 0;
+    String lastCooldown = "NONE";
 
-	public static void clearLoaded()
-	{
-		getpManagers().clear();
-		setpManagers(new HashMap<UUID,PlayerManager>());
-	}
+    public PlayerManager(CustomCrates cc, Player p)
+    {
+        this.cc = cc;
+        this.p = p;
+        this.dh = getSpecifiedDataHandler();
+        this.pdm = new PlayerDataManager(this);
 
-	public boolean isInCrate()
-	{
-		return openCrate != null;
-	}
-	
-	public boolean isDeleteCrate()
-	{
-		return deleteCrate;
-	}
-	
-	public void setDeleteCrate(boolean b)
-	{
-		this.deleteCrate = b;
-	}
-	
-	public void openCrate(Crate ch)
-	{
-		openCrate = ch;
-	}
-	
-	public void closeCrate()
-	{
-		openCrate = null;
-		useVirtualCrate = false;
-	}
-	
-	public Crate getOpenCrate()
-	{
-		return openCrate;
-	}
-	
-	public boolean isInRewardMenu() 
-	{
-		return inRewardMenu;
-	}
+        getPdm().setDh(getDh());
+        getPdm().loadAllInformation();
+        getpManagers().put(p.getUniqueId(), this);
+    }
 
-	public void setInRewardMenu(boolean inRewardMenu) 
-	{
-		this.inRewardMenu = inRewardMenu;
-	}
+    public void remove()
+    {
+        getpManagers().remove(getP().getUniqueId());
+    }
 
-	public boolean isCanClose() 
-	{
-		return canClose;
-	}
+    public DataHandler getSpecifiedDataHandler()
+    {
+        try
+        {
+            StorageType st = StorageType.valueOf(
+                    ChatUtils.stripFromWhitespace(SettingsValues.STORE_DATA.getValue(getCc()).toString().toUpperCase()));
+            switch (st)
+            {
+                case MYSQL:
+                    Utils.addToInfoLog(cc, "Storage Type", "MYSQL");
+                    return new SQLDataHandler(this);
+                case FLATFILE:
+                    Utils.addToInfoLog(cc, "Storage Type", "FLATFILE");
+                    return new FlatFileDataHandler(this);
+                case PLAYERFILES:
+                    Utils.addToInfoLog(cc, "Storage Type", "PLAYERFILES");
+                    return new IndividualFileDataHandler(this);
+                default:
+                    ChatUtils.log(new String[]{"store-data value in the config.YML is not a valid storage type.",
+                            "  It must be: MYSQL, FLATFILE, PLAYERFILES"});
+                    Utils.addToInfoLog(cc, "StorageType", "FLATFILE");
+                    return new FlatFileDataHandler(this);
+            }
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace();
+            ChatUtils.log(new String[]{"store-data value in the config.YML is not a valid storage type.",
+                    "  It must be: MYSQL, FLATFILE, PLAYERFILES"});
+        }
+        return null;
+    }
 
-	public void setCanClose(boolean canClose)
-	{
-		this.canClose = canClose;
-	}
+    public static PlayerManager get(CustomCrates cc, Player p)
+    {
+        return getpManagers().containsKey(p.getUniqueId()) ? getpManagers().get(p.getUniqueId()) : new PlayerManager(cc, p);
+    }
 
-	public Player getP() 
-	{
-		return p;
-	}
+    public static void clearLoaded()
+    {
+        getpManagers().clear();
+        setpManagers(new HashMap<UUID, PlayerManager>());
+    }
 
-	public void setP(Player p) 
-	{
-		this.p = p;
-	}
+    public boolean isInCrate()
+    {
+        return openCrate != null;
+    }
 
-	public CustomCrates getCc()
-	{
-		return cc;
-	}
+    public boolean isDeleteCrate()
+    {
+        return deleteCrate;
+    }
 
-	public void setCc(CustomCrates cc) 
-	{
-		this.cc = cc;
-	}
+    public void setDeleteCrate(boolean b)
+    {
+        this.deleteCrate = b;
+    }
 
-	public DataHandler getDh()
-	{
-		return dh;
-	}
+    public void openCrate(Crate ch)
+    {
+        openCrate = ch;
+    }
 
-	public void setDh(DataHandler dh)
-	{
-		this.dh = dh;
-	}
+    public void closeCrate()
+    {
+        openCrate = null;
+        useVirtualCrate = false;
+    }
 
-	public boolean isWaitingForClose()
-	{
-		return waitingForClose != null;
-	}
+    public Crate getOpenCrate()
+    {
+        return openCrate;
+    }
 
-	public void setWaitingForClose(ArrayList<Reward> waitingForClose)
-	{
-		this.waitingForClose = waitingForClose;
-	}
-	
-	public ArrayList<Reward> getWaitingForClose()
-	{
-		return waitingForClose;
-	}
+    public boolean isInRewardMenu()
+    {
+        return inRewardMenu;
+    }
 
-	public PlayerDataManager getPdm() {
-		return pdm;
-	}
+    public void setInRewardMenu(boolean inRewardMenu)
+    {
+        this.inRewardMenu = inRewardMenu;
+    }
 
-	public void setPdm(PlayerDataManager pdm) {
-		this.pdm = pdm;
-	}
+    public boolean isCanClose()
+    {
+        return canClose;
+    }
 
-	public long getCmdCooldown() {
-		return cmdCooldown;
-	}
+    public void setCanClose(boolean canClose)
+    {
+        this.canClose = canClose;
+    }
 
-	public void setCmdCooldown(long cmdCooldown) {
-		this.cmdCooldown = cmdCooldown;
-	}
+    public Player getP()
+    {
+        return p;
+    }
 
-	public String getLastCooldown() {
-		return lastCooldown;
-	}
+    public void setP(Player p)
+    {
+        this.p = p;
+    }
 
-	public void setLastCooldown(String lastCooldown) {
-		this.lastCooldown = lastCooldown;
-	}
+    public CustomCrates getCc()
+    {
+        return cc;
+    }
 
-	public static HashMap<UUID, PlayerManager> getpManagers()
-	{
-		return pManagers;
-	}
+    public void setCc(CustomCrates cc)
+    {
+        this.cc = cc;
+    }
 
-	public static void setpManagers(HashMap<UUID, PlayerManager> pManagers)
-	{
-		PlayerManager.pManagers = pManagers;
-	}
+    public DataHandler getDh()
+    {
+        return dh;
+    }
 
-	public IGCMenu getOpenMenu()
-	{
-		return openMenu;
-	}
+    public void setDh(DataHandler dh)
+    {
+        this.dh = dh;
+    }
 
-	public void setOpenMenu(IGCMenu openMenu)
-	{
-		this.openMenu = openMenu;
-		if(!(openMenu == null))
-		{
-			this.lastOpenMenu = openMenu;
-		}
-	}
+    public boolean isWaitingForClose()
+    {
+        return waitingForClose != null;
+    }
 
-	public boolean isInOpenMenu()
-	{
-		return !(this.openMenu == null);
-	}
+    public void setWaitingForClose(ArrayList<Reward> waitingForClose)
+    {
+        this.waitingForClose = waitingForClose;
+    }
 
-	public IGCMenu getLastOpenMenu()
-	{
-		return lastOpenMenu;
-	}
+    public ArrayList<Reward> getWaitingForClose()
+    {
+        return waitingForClose;
+    }
 
-	public void setLastOpenMenu(IGCMenu lastOpenMenu)
-	{
-		this.lastOpenMenu = lastOpenMenu;
-	}
+    public PlayerDataManager getPdm()
+    {
+        return pdm;
+    }
 
-	public Location getLastOpenCrate()
-	{
-		return lastOpenCrate;
-	}
+    public void setPdm(PlayerDataManager pdm)
+    {
+        this.pdm = pdm;
+    }
 
-	public void setLastOpenCrate(Location lastOpenCrate)
-	{
-		this.lastOpenCrate = lastOpenCrate;
-	}
+    public long getCmdCooldown()
+    {
+        return cmdCooldown;
+    }
 
-	public void setOpenCrate(Crate openCrate)
-	{
-		this.openCrate = openCrate;
-	}
+    public void setCmdCooldown(long cmdCooldown)
+    {
+        this.cmdCooldown = cmdCooldown;
+    }
 
-	public boolean isUseVirtualCrate()
-	{
-		return useVirtualCrate;
-	}
+    public String getLastCooldown()
+    {
+        return lastCooldown;
+    }
 
-	public void setUseVirtualCrate(boolean useVirtualCrate)
-	{
-		this.useVirtualCrate = useVirtualCrate;
-	}
+    public void setLastCooldown(String lastCooldown)
+    {
+        this.lastCooldown = lastCooldown;
+    }
 
-	public void setLastOpenedPlacedCrate(PlacedCrate lastOpenedPlacedCrate)
-	{
-		this.lastOpenedPlacedCrate = lastOpenedPlacedCrate;
-	}
+    public static HashMap<UUID, PlayerManager> getpManagers()
+    {
+        return pManagers;
+    }
 
-	public PlacedCrate getLastOpenedPlacedCrate()
-	{
-		return lastOpenedPlacedCrate;
-	}
+    public static void setpManagers(HashMap<UUID, PlayerManager> pManagers)
+    {
+        PlayerManager.pManagers = pManagers;
+    }
+
+    public IGCMenu getOpenMenu()
+    {
+        return openMenu;
+    }
+
+    public void setOpenMenu(IGCMenu openMenu)
+    {
+        this.openMenu = openMenu;
+        if (!(openMenu == null))
+        {
+            this.lastOpenMenu = openMenu;
+        }
+    }
+
+    public boolean isInOpenMenu()
+    {
+        return !(this.openMenu == null);
+    }
+
+    public IGCMenu getLastOpenMenu()
+    {
+        return lastOpenMenu;
+    }
+
+    public void setLastOpenMenu(IGCMenu lastOpenMenu)
+    {
+        this.lastOpenMenu = lastOpenMenu;
+    }
+
+    public Location getLastOpenCrate()
+    {
+        return lastOpenCrate;
+    }
+
+    public void setLastOpenCrate(Location lastOpenCrate)
+    {
+        this.lastOpenCrate = lastOpenCrate;
+    }
+
+    public void setOpenCrate(Crate openCrate)
+    {
+        this.openCrate = openCrate;
+    }
+
+    public boolean isUseVirtualCrate()
+    {
+        return useVirtualCrate;
+    }
+
+    public void setUseVirtualCrate(boolean useVirtualCrate)
+    {
+        this.useVirtualCrate = useVirtualCrate;
+    }
+
+    public void setLastOpenedPlacedCrate(PlacedCrate lastOpenedPlacedCrate)
+    {
+        this.lastOpenedPlacedCrate = lastOpenedPlacedCrate;
+    }
+
+    public PlacedCrate getLastOpenedPlacedCrate()
+    {
+        return lastOpenedPlacedCrate;
+    }
 }

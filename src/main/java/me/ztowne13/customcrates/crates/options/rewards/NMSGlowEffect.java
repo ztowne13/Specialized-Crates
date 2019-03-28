@@ -20,7 +20,8 @@ public class NMSGlowEffect extends GlowEffect
     {
         net.minecraft.server.v1_7_R4.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
         NBTTagCompound tag = null;
-        if (!nmsStack.hasTag()) {
+        if (!nmsStack.hasTag())
+        {
             tag = new NBTTagCompound();
             nmsStack.setTag(tag);
         }

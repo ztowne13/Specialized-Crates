@@ -7,48 +7,48 @@ import me.ztowne13.customcrates.crates.Crate;
  */
 public class VirtualCrateData
 {
-	Crate crate;
-	int crates, keys;
+    Crate crate;
+    int crates, keys;
 
-	public VirtualCrateData(Crate crate, int crates, int keys)
-	{
-		this.crate = crate;
-		this.crates = crates;
-		this.keys = keys;
-	}
+    public VirtualCrateData(Crate crate, int crates, int keys)
+    {
+        this.crate = crate;
+        this.crates = crates;
+        this.keys = keys;
+    }
 
-	public String toString()
-	{
-		return crate.getName() + ";" + crates + ";" + keys;
-	}
+    public String toString()
+    {
+        return crate.getName() + ";" + crates + ";" + keys;
+    }
 
-	public Crate getCrate()
-	{
-		return crate;
-	}
+    public Crate getCrate()
+    {
+        return crate;
+    }
 
-	public void setCrate(Crate crate)
-	{
-		this.crate = crate;
-	}
+    public void setCrate(Crate crate)
+    {
+        this.crate = crate;
+    }
 
-	public int getCrates()
-	{
-		return crates;
-	}
+    public int getCrates()
+    {
+        return crates;
+    }
 
-	public void setCrates(int crates)
-	{
-		this.crates = crates;
-	}
+    public void setCrates(int crates)
+    {
+        this.crates = crates;
+    }
 
-	public int getKeys()
-	{
-		return keys;
-	}
+    public int getKeys()
+    {
+        return keys;
+    }
 
-	public void setKeys(int keys)
-	{
-		this.keys = keys;
-	}
+    public void setKeys(int keys)
+    {
+        this.keys = keys;
+    }
 }

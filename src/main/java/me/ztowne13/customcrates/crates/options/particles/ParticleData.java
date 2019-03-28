@@ -5,135 +5,135 @@ import org.bukkit.Location;
 
 public abstract class ParticleData
 {
-	float offX, offY, offZ, speed;
-	boolean hasAnimation, hasColor;
-	int amount, red, green, blue;
+    float offX, offY, offZ, speed;
+    boolean hasAnimation, hasColor;
+    int amount, red, green, blue;
 
-	ParticleAnimationEffect particleAnimationEffect;
-	
-	public ParticleData(boolean hasAnimation)
-	{
-		this.hasAnimation = hasAnimation;
-	}
-	
-	public abstract void display(Location l);
+    ParticleAnimationEffect particleAnimationEffect;
 
-	public abstract String getParticleName();
+    public ParticleData(boolean hasAnimation)
+    {
+        this.hasAnimation = hasAnimation;
+    }
 
-	public abstract boolean setParticle(String particleName);
+    public abstract void display(Location l);
 
-	public float getOffX() 
-	{
-		return offX;
-	}
+    public abstract String getParticleName();
 
-	public ParticleData setOffX(float offX) 
-	{
-		this.offX = offX;
-		return this;
-	}
+    public abstract boolean setParticle(String particleName);
 
-	public float getOffY()
-	{
-		return offY;
-	}
+    public float getOffX()
+    {
+        return offX;
+    }
 
-	public ParticleData setOffY(float offY)
-	{
-		this.offY = offY;
-		return this;
-	}
+    public ParticleData setOffX(float offX)
+    {
+        this.offX = offX;
+        return this;
+    }
 
-	public float getOffZ() 
-	{
-		return offZ;
-	}
+    public float getOffY()
+    {
+        return offY;
+    }
 
-	public ParticleData setOffZ(float offZ)
-	{
-		this.offZ = offZ;
-		return this;
-	}
+    public ParticleData setOffY(float offY)
+    {
+        this.offY = offY;
+        return this;
+    }
 
-	public float getSpeed()
-	{
-		return speed;
-	}
+    public float getOffZ()
+    {
+        return offZ;
+    }
 
-	public ParticleData setSpeed(float speed) 
-	{
-		this.speed = speed;
-		return this;
-	}
+    public ParticleData setOffZ(float offZ)
+    {
+        this.offZ = offZ;
+        return this;
+    }
 
-	public int getAmount() 
-	{
-		return amount;
-	}
+    public float getSpeed()
+    {
+        return speed;
+    }
 
-	public ParticleData setAmount(int amount)
-	{
-		this.amount = amount;
-		return this;
-	}
+    public ParticleData setSpeed(float speed)
+    {
+        this.speed = speed;
+        return this;
+    }
 
-	public boolean isHasAnimation()
-	{
-		return hasAnimation;
-	}
+    public int getAmount()
+    {
+        return amount;
+    }
 
-	public void setHasAnimation(boolean hasAnimation)
-	{
-		this.hasAnimation = hasAnimation;
-	}
+    public ParticleData setAmount(int amount)
+    {
+        this.amount = amount;
+        return this;
+    }
 
-	public ParticleAnimationEffect getParticleAnimationEffect()
-	{
-		return particleAnimationEffect;
-	}
+    public boolean isHasAnimation()
+    {
+        return hasAnimation;
+    }
 
-	public void setParticleAnimationEffect(ParticleAnimationEffect particleAnimationEffect)
-	{
-		this.particleAnimationEffect = particleAnimationEffect;
-	}
+    public void setHasAnimation(boolean hasAnimation)
+    {
+        this.hasAnimation = hasAnimation;
+    }
 
-	public int getRed()
-	{
-		return red;
-	}
+    public ParticleAnimationEffect getParticleAnimationEffect()
+    {
+        return particleAnimationEffect;
+    }
 
-	public void setRed(int red)
-	{
-		this.red = red;
-	}
+    public void setParticleAnimationEffect(ParticleAnimationEffect particleAnimationEffect)
+    {
+        this.particleAnimationEffect = particleAnimationEffect;
+    }
 
-	public int getGreen()
-	{
-		return green;
-	}
+    public int getRed()
+    {
+        return red;
+    }
 
-	public void setGreen(int green)
-	{
-		this.green = green;
-	}
+    public void setRed(int red)
+    {
+        this.red = red;
+    }
 
-	public int getBlue()
-	{
-		return blue;
-	}
+    public int getGreen()
+    {
+        return green;
+    }
 
-	public void setBlue(int blue)
-	{
-		this.blue = blue;
-	}
+    public void setGreen(int green)
+    {
+        this.green = green;
+    }
 
-	public boolean isHasColor()
-	{
-		return hasColor;
-	}
+    public int getBlue()
+    {
+        return blue;
+    }
 
-	public void setHasColor(boolean hasColor)
-	{
-		this.hasColor = hasColor;
-	}
+    public void setBlue(int blue)
+    {
+        this.blue = blue;
+    }
+
+    public boolean isHasColor()
+    {
+        return hasColor;
+    }
+
+    public void setHasColor(boolean hasColor)
+    {
+        this.hasColor = hasColor;
+    }
 }

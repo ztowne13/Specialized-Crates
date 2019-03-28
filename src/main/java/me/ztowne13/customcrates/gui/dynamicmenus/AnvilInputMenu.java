@@ -9,46 +9,46 @@ import org.bukkit.entity.Player;
  */
 public class AnvilInputMenu extends InputMenuGUI
 {
-	public AnvilInputMenu(InputMenu im)
-	{
-		super(im);
-	}
+    public AnvilInputMenu(InputMenu im)
+    {
+        super(im);
+    }
 
-	public void openMenu()
-	{
+    public void openMenu()
+    {
 
-	}
+    }
 
-	public void closeMenu(boolean saved)
-	{
+    public void closeMenu(boolean saved)
+    {
 
-	}
+    }
 
-	@Override
-	public void initMsg()
-	{
-		Player p = im.getP();
-		p.closeInventory();
-		for(int i = 0; i < 20; i++)
-		{
-			ChatUtils.msg(p, "");
-		}
-		ChatUtils.msg(p, "&7----------------------------------------");
-		ChatUtils.msg(p, "&aYou are currently editing the &f" + im.value + " &avalue.");
-		ChatUtils.msg(p, "&BCurrent Value: &f" + im.currentValue);
-		if(!im.formatExp.equalsIgnoreCase(""))
-		{
-			ChatUtils.msg(p, "&a" + im.formatExp);
-		}
-		ChatUtils.msg(p, "&7----------------------------------------");
-		ChatUtils.msg(p, "&6Please write the value you'd like to set it IN THE ANVIL.");
-		ChatUtils.msg(p, "&e&oClose the inventory to exit the current configuration session.");
-		ChatUtils.msg(p, "&c&oClick the paper to save your work.");
-	}
+    @Override
+    public void initMsg()
+    {
+        Player p = im.getP();
+        p.closeInventory();
+        for (int i = 0; i < 20; i++)
+        {
+            ChatUtils.msg(p, "");
+        }
+        ChatUtils.msg(p, "&7----------------------------------------");
+        ChatUtils.msg(p, "&aYou are currently editing the &f" + im.value + " &avalue.");
+        ChatUtils.msg(p, "&BCurrent Value: &f" + im.currentValue);
+        if (!im.formatExp.equalsIgnoreCase(""))
+        {
+            ChatUtils.msg(p, "&a" + im.formatExp);
+        }
+        ChatUtils.msg(p, "&7----------------------------------------");
+        ChatUtils.msg(p, "&6Please write the value you'd like to set it IN THE ANVIL.");
+        ChatUtils.msg(p, "&e&oClose the inventory to exit the current configuration session.");
+        ChatUtils.msg(p, "&c&oClick the paper to save your work.");
+    }
 
-	@Override
-	public void runFor(IGCMenu igcm, String s)
-	{
+    @Override
+    public void runFor(IGCMenu igcm, String s)
+    {
 
-	}
+    }
 }

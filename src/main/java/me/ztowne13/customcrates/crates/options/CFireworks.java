@@ -18,138 +18,141 @@ import java.util.List;
 
 public class CFireworks extends CSetting
 {
-	HashMap<String,ArrayList<FireworkData>> fireworks = new HashMap<String,ArrayList<FireworkData>>();
-	
-	public CFireworks(Crate crates)
-	{
-		super(crates, crates.getCc());
-	}
+    HashMap<String, ArrayList<FireworkData>> fireworks = new HashMap<String, ArrayList<FireworkData>>();
 
-	@Override
-	public void loadFor(CrateSettingsBuilder csb, CrateState cs) 
-	{
-		if(csb.hasV("open.fireworks"))
-		{
-			addFireworks("OPEN", csb.getSettings().getFc().getStringList("open.fireworks"));
-		}
-		if(csb.hasV("open.crate-tiers"))
-		{
-			for(String id: up().getFc().getConfigurationSection("open.crate-tiers").getKeys(false))
-			{
-				if(csb.hasV("open.crate-tiers." + id + ".fireworks"))
-				{
-					addFireworks(id, up().getFc().getStringList("open.crate-tiers." + id + ".fireworks"));
-				}
-			}
-		}
-	}
+    public CFireworks(Crate crates)
+    {
+        super(crates, crates.getCc());
+    }
 
-	public void saveToFile()
-	{
-		if(!fireworks.isEmpty())
-		{
-			for(String tier : fireworks.keySet())
-			{
-				ArrayList<String> toSetList = new ArrayList<>();
-				for(FireworkData fd : fireworks.get(tier))
-				{
-					String serializedFw = "";
-					for(String color : fd.getColors())
-					{
-						serializedFw += color + ";";
-					}
+    @Override
+    public void loadFor(CrateSettingsBuilder csb, CrateState cs)
+    {
+        if (csb.hasV("open.fireworks"))
+        {
+            addFireworks("OPEN", csb.getSettings().getFc().getStringList("open.fireworks"));
+        }
+        if (csb.hasV("open.crate-tiers"))
+        {
+            for (String id : up().getFc().getConfigurationSection("open.crate-tiers").getKeys(false))
+            {
+                if (csb.hasV("open.crate-tiers." + id + ".fireworks"))
+                {
+                    addFireworks(id, up().getFc().getStringList("open.crate-tiers." + id + ".fireworks"));
+                }
+            }
+        }
+    }
 
-					serializedFw = serializedFw.substring(0, serializedFw.length()-1) + ", ";
+    public void saveToFile()
+    {
+        if (!fireworks.isEmpty())
+        {
+            for (String tier : fireworks.keySet())
+            {
+                ArrayList<String> toSetList = new ArrayList<>();
+                for (FireworkData fd : fireworks.get(tier))
+                {
+                    String serializedFw = "";
+                    for (String color : fd.getColors())
+                    {
+                        serializedFw += color + ";";
+                    }
 
-					for(String color : fd.getFadeColors())
-					{
-						serializedFw += color + ";";
-					}
+                    serializedFw = serializedFw.substring(0, serializedFw.length() - 1) + ", ";
 
-					serializedFw = serializedFw.substring(0, serializedFw.length()-1);
-					serializedFw += ", " + fd.isTrail();
-					serializedFw += ", " + fd.isFlicker();
-					serializedFw += ", " + fd.getFeType().name();
-					serializedFw += ", " + fd.getPower();
-					toSetList.add(serializedFw);
-				}
+                    for (String color : fd.getFadeColors())
+                    {
+                        serializedFw += color + ";";
+                    }
 
-				String path = "open." + (tier.equalsIgnoreCase("OPEN") ? "" : "crate-tiers." + tier + ".") + ".fireworks";
-				getFu().get().set(path, toSetList);
-			}
-		}
-	}
-	
-	public void addFireworks(String id, List<String> list)
-	{
-		for(String firework: list)
-		{
-			FireworkData fd = new FireworkData(cc, up());
-			fd.load(firework);
-			addFirework(id, fd);
-		}
-	}
+                    serializedFw = serializedFw.substring(0, serializedFw.length() - 1);
+                    serializedFw += ", " + fd.isTrail();
+                    serializedFw += ", " + fd.isFlicker();
+                    serializedFw += ", " + fd.getFeType().name();
+                    serializedFw += ", " + fd.getPower();
+                    toSetList.add(serializedFw);
+                }
 
-	public void removeFireworks(String tier, FireworkData fd)
-	{
-		getFireworks().get(tier).remove(fd);
-	}
+                String path = "open." + (tier.equalsIgnoreCase("OPEN") ? "" : "crate-tiers." + tier + ".") + ".fireworks";
+                getFu().get().set(path, toSetList);
+            }
+        }
+    }
 
-	public FireworkData getByItemStack(String tier, ItemStack stack)
-	{
-		ItemBuilder ib = new ItemBuilder(stack);
+    public void addFireworks(String id, List<String> list)
+    {
+        for (String firework : list)
+        {
+            FireworkData fd = new FireworkData(cc, up());
+            fd.load(firework);
+            addFirework(id, fd);
+        }
+    }
 
-		String lastLine = "";
-		for(String line : ib.im().getLore())
-			lastLine = line;
+    public void removeFireworks(String tier, FireworkData fd)
+    {
+        getFireworks().get(tier).remove(fd);
+    }
 
-		for(FireworkData fd : getFireworks().get(tier))
-		{
-			if(fd.getId().equalsIgnoreCase(lastLine))
-			{
-				return fd;
-			}
-		}
-		return null;
-	}
-	
-	public void addFirework(String id, FireworkData s)
-	{
-		if(getFireworks().containsKey(id))
-		{
-			ArrayList<FireworkData> list = getFireworks().get(id);
-			list.add(s);
-			getFireworks().put(id, list);
-			return;
-		}
-		
-		ArrayList<FireworkData> list = new ArrayList<FireworkData>();
-		list.add(s);
+    public FireworkData getByItemStack(String tier, ItemStack stack)
+    {
+        ItemBuilder ib = new ItemBuilder(stack);
 
-		StatusLoggerEvent.FIREWORK_ADD.log(getCrates(), new String[]{s.getFeType().name(), id});
-		getFireworks().put(id, list);
-	}
-	public void runAll(Player p, Location l, ArrayList<Reward> rewards)
-	{
-		for(String tier: getFireworks().keySet())
-		{
-			if((tier.equalsIgnoreCase("OPEN") && (!up().isTiersOverrideDefaults() || !getFireworks().containsKey(rewards.get(0).getRarity().toUpperCase()))) || rewards.get(0).getRarity().equalsIgnoreCase(tier))
-			{
-				for(FireworkData fd: getFireworks().get(tier))
-				{
-					fd.play(LocationUtils.getLocationCentered(l));
-				}
-			}
-		}
-	}
+        String lastLine = "";
+        for (String line : ib.im().getLore())
+            lastLine = line;
 
-	public HashMap<String, ArrayList<FireworkData>> getFireworks()
-	{
-		return fireworks;
-	}
+        for (FireworkData fd : getFireworks().get(tier))
+        {
+            if (fd.getId().equalsIgnoreCase(lastLine))
+            {
+                return fd;
+            }
+        }
+        return null;
+    }
 
-	public void setFireworks(HashMap<String, ArrayList<FireworkData>> fireworks)
-	{
-		this.fireworks = fireworks;
-	}
+    public void addFirework(String id, FireworkData s)
+    {
+        if (getFireworks().containsKey(id))
+        {
+            ArrayList<FireworkData> list = getFireworks().get(id);
+            list.add(s);
+            getFireworks().put(id, list);
+            return;
+        }
+
+        ArrayList<FireworkData> list = new ArrayList<FireworkData>();
+        list.add(s);
+
+        StatusLoggerEvent.FIREWORK_ADD.log(getCrates(), new String[]{s.getFeType().name(), id});
+        getFireworks().put(id, list);
+    }
+
+    public void runAll(Player p, Location l, ArrayList<Reward> rewards)
+    {
+        for (String tier : getFireworks().keySet())
+        {
+            if ((tier.equalsIgnoreCase("OPEN") && (!up().isTiersOverrideDefaults() ||
+                    !getFireworks().containsKey(rewards.get(0).getRarity().toUpperCase()))) ||
+                    rewards.get(0).getRarity().equalsIgnoreCase(tier))
+            {
+                for (FireworkData fd : getFireworks().get(tier))
+                {
+                    fd.play(LocationUtils.getLocationCentered(l));
+                }
+            }
+        }
+    }
+
+    public HashMap<String, ArrayList<FireworkData>> getFireworks()
+    {
+        return fireworks;
+    }
+
+    public void setFireworks(HashMap<String, ArrayList<FireworkData>> fireworks)
+    {
+        this.fireworks = fireworks;
+    }
 }

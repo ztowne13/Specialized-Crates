@@ -17,7 +17,6 @@ import me.ztowne13.customcrates.visuals.EntityTypes;
 import me.ztowne13.customcrates.visuals.MaterialPlaceholder;
 import me.ztowne13.customcrates.visuals.npcs.Citizens2NPCPlaceHolder;
 import me.ztowne13.customcrates.visuals.npcs.MobPlaceholder;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 

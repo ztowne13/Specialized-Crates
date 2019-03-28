@@ -9,67 +9,67 @@ import org.bukkit.Location;
  */
 public class OffsetTiltedRingsPA extends ParticleAnimationEffect
 {
-	int updatesPerSec = 20;
+    int updatesPerSec = 20;
 
-	public OffsetTiltedRingsPA(CustomCrates cc, ParticleData particleData)
-	{
-		super(cc, particleData);
-		this.updatesPerSec = (int) particleData.getSpeed();
-	}
+    public OffsetTiltedRingsPA(CustomCrates cc, ParticleData particleData)
+    {
+        super(cc, particleData);
+        this.updatesPerSec = (int) particleData.getSpeed();
+    }
 
-	@Override
-	public void update()
-	{
-		toDisplay.clear();
+    @Override
+    public void update()
+    {
+        toDisplay.clear();
 
-		totalTick += updatesPerSec;
-		tick += updatesPerSec;
+        totalTick += updatesPerSec;
+        tick += updatesPerSec;
 
-		double radius = particleData.getOffX();
-		double yOffset = particleData.getOffY();
-		double rotation = particleData.getOffZ();
+        double radius = particleData.getOffX();
+        double yOffset = particleData.getOffY();
+        double rotation = particleData.getOffZ();
 
-		double rotateInRadians = Math.toRadians(rotation);
+        double rotateInRadians = Math.toRadians(rotation);
 
-		for (int i = tick; i < tick + updatesPerSec; i++)
-		{
-			int iTemp = i;
-			if(i % (2 + particleData.getAmount()) == 0)
-			{
-				i = iTemp;
-				double x = Math.sin(Math.toRadians(i)) * radius;
-				double y = Math.cos(Math.toRadians(i)) * radius;
+        for (int i = tick; i < tick + updatesPerSec; i++)
+        {
+            int iTemp = i;
+            if (i % (2 + particleData.getAmount()) == 0)
+            {
+                i = iTemp;
+                double x = Math.sin(Math.toRadians(i)) * radius;
+                double y = Math.cos(Math.toRadians(i)) * radius;
 
-				double toX = (x * Math.cos(rotateInRadians)) - (y * Math.sin(rotateInRadians));
-				double toY = (x * Math.sin(rotateInRadians)) + (y * Math.cos(rotateInRadians));
+                double toX = (x * Math.cos(rotateInRadians)) - (y * Math.sin(rotateInRadians));
+                double toY = (x * Math.sin(rotateInRadians)) + (y * Math.cos(rotateInRadians));
 
-				double tilt = Math.cos(Math.toRadians(i)) * radius;
+                double tilt = Math.cos(Math.toRadians(i)) * radius;
 
-				Location newL = new Location(null, toX, yOffset + tilt, - toY);
-				toDisplay.add(newL);
+                Location newL = new Location(null, toX, yOffset + tilt, -toY);
+                toDisplay.add(newL);
 
-				i = - iTemp;
+                i = -iTemp;
 
-				x = Math.sin(Math.toRadians(i)) * radius;
-				y = Math.cos(Math.toRadians(i)) * radius;
+                x = Math.sin(Math.toRadians(i)) * radius;
+                y = Math.cos(Math.toRadians(i)) * radius;
 
-				toX = (x * Math.cos(rotateInRadians)) - (y * Math.sin(rotateInRadians));
-				toY = (x * Math.sin(rotateInRadians)) + (y * Math.cos(rotateInRadians));
+                toX = (x * Math.cos(rotateInRadians)) - (y * Math.sin(rotateInRadians));
+                toY = (x * Math.sin(rotateInRadians)) + (y * Math.cos(rotateInRadians));
 
-				tilt = Math.cos(Math.toRadians(i)) * radius;
+                tilt = Math.cos(Math.toRadians(i)) * radius;
 
-				newL = new Location(null, toX, yOffset - tilt, - toY);
-				toDisplay.add(newL);
+                newL = new Location(null, toX, yOffset - tilt, -toY);
+                toDisplay.add(newL);
 
-				if (i > 360)
-				{
-					i = 1;
-					tick = 0;
-				}
+                if (i > 360)
+                {
+                    i = 1;
+                    tick = 0;
+                }
 
-			}
+            }
 
-			i = iTemp;
-		}
-	}
+            i = iTemp;
+        }
+    }
 }

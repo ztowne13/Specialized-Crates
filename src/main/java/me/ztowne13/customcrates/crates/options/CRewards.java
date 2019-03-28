@@ -15,151 +15,152 @@ import java.util.Random;
 
 public class CRewards extends CSetting
 {
-	public static HashMap<String,Reward> allRewards = new HashMap<String,Reward>();
+    public static HashMap<String, Reward> allRewards = new HashMap<String, Reward>();
 
-	Reward[] crateRewards;
-	
-	public CRewards(Crate crates)
-	{
-		super(crates, crates.getCc());
-	}
+    Reward[] crateRewards;
 
-	public Reward getByName(String s)
-	{
-		for(Reward r: getCrateRewards())
-		{
-			if(r.getDisplayName().equals(s) || r.getRewardName().equals(s))
-				return r;
-		}
-		return null;
-	}
+    public CRewards(Crate crates)
+    {
+        super(crates, crates.getCc());
+    }
 
-	public void saveToFile()
-	{
-		String[] displayNameRewards = new String[crateRewards.length];
-		for(int i = 0; i < displayNameRewards.length; i++)
-		{
-			displayNameRewards[i] = crateRewards[i].getRewardName();
-		}
-		getFu().get().set("rewards", Arrays.asList(displayNameRewards));
-	}
+    public Reward getByName(String s)
+    {
+        for (Reward r : getCrateRewards())
+        {
+            if (r.getDisplayName().equals(s) || r.getRewardName().equals(s))
+                return r;
+        }
+        return null;
+    }
 
-	public void removeReward(String name)
-	{
-		Reward toRemove = getByName(name);
-		Reward[] newRewards = new Reward[crateRewards.length-1];
+    public void saveToFile()
+    {
+        String[] displayNameRewards = new String[crateRewards.length];
+        for (int i = 0; i < displayNameRewards.length; i++)
+        {
+            displayNameRewards[i] = crateRewards[i].getRewardName();
+        }
+        getFu().get().set("rewards", Arrays.asList(displayNameRewards));
+    }
 
-		int i = 0;
-		for(Reward r: crateRewards)
-		{
-			if(!r.equals(toRemove))
-			{
-				newRewards[i] = r;
-				i++;
-			}
-		}
+    public void removeReward(String name)
+    {
+        Reward toRemove = getByName(name);
+        Reward[] newRewards = new Reward[crateRewards.length - 1];
 
-		crateRewards = newRewards;
-	}
+        int i = 0;
+        for (Reward r : crateRewards)
+        {
+            if (!r.equals(toRemove))
+            {
+                newRewards[i] = r;
+                i++;
+            }
+        }
 
-	public boolean addReward(String rName)
-	{
-		if(allRewards.containsKey(rName))
-		{
-			Reward toAdd = allRewards.get(rName);
-			if(!toAdd.isNeedsMoreConfig())
-			{
-				Reward[] newRewards = new Reward[(crateRewards == null || crateRewards.length == 0 ? 0 : crateRewards.length) + 1];
+        crateRewards = newRewards;
+    }
 
-				for (int i = 0; i < newRewards.length - 1; i++)
-				{
-					newRewards[i] = crateRewards[i];
-				}
+    public boolean addReward(String rName)
+    {
+        if (allRewards.containsKey(rName))
+        {
+            Reward toAdd = allRewards.get(rName);
+            if (!toAdd.isNeedsMoreConfig())
+            {
+                Reward[] newRewards =
+                        new Reward[(crateRewards == null || crateRewards.length == 0 ? 0 : crateRewards.length) + 1];
 
-				newRewards[newRewards.length - 1] = toAdd;
+                for (int i = 0; i < newRewards.length - 1; i++)
+                {
+                    newRewards[i] = crateRewards[i];
+                }
 
-				crateRewards = newRewards;
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public void loadFor(CrateSettingsBuilder csb, CrateState cs)
-	{
-		if(csb.hasV("rewards"))
-		{
-			int slot = 0;
+                newRewards[newRewards.length - 1] = toAdd;
 
-			setCrateRewards(new Reward[getCrates().getCs().getFc().getStringList("rewards").size()]);
+                crateRewards = newRewards;
+                return true;
+            }
+        }
+        return false;
+    }
 
-			List<String> unparsedRewards = getCrates().getCs().getFc().getStringList("rewards");
+    public void loadFor(CrateSettingsBuilder csb, CrateState cs)
+    {
+        if (csb.hasV("rewards"))
+        {
+            int slot = 0;
 
-			for(int i = 0 ; i < unparsedRewards.size(); i++)
-			{
-				String s = unparsedRewards.get(i);
-				Reward reward = new Reward(getCrates().getCc(), this, s);
+            setCrateRewards(new Reward[getCrates().getCs().getFc().getStringList("rewards").size()]);
 
-				setReward(slot, reward);
+            List<String> unparsedRewards = getCrates().getCs().getFc().getStringList("rewards");
 
-				getAllRewards().put(s, reward);
-				StatusLoggerEvent.REWARD_ADD_SUCCESS.log(getCrates(), new String[]{s});
+            for (int i = 0; i < unparsedRewards.size(); i++)
+            {
+                String s = unparsedRewards.get(i);
+                Reward reward = new Reward(getCrates().getCc(), this, s);
 
-				slot++;
-			}
+                setReward(slot, reward);
 
-			Reward[] updatedRewards = new Reward[getCrateRewards().length];
-			int count = 0;
-			for(Reward r: getCrateRewards().clone())
-			{
-				if(r.loadFromConfig())
-				{
-					updatedRewards[count] = r;
-					count++;
-				}
-			}
+                getAllRewards().put(s, reward);
+                StatusLoggerEvent.REWARD_ADD_SUCCESS.log(getCrates(), new String[]{s});
 
-			Reward[] finalUpdate = new Reward[count];
-			count = 0;
-			for(Reward r : updatedRewards)
-			{
-				if(r != null)
-				{
-					finalUpdate[count] = r;
-					count++;
-				}
-			}
+                slot++;
+            }
 
-			setCrateRewards(finalUpdate);
-			return;
-		}
-		StatusLoggerEvent.REWARD_NONEXISTENT.log(getCrates());
-	}
-	
-	public void setReward(Integer i, Reward reward)
-	{
-		getCrateRewards()[i] = reward;
-	}
-	
-	public Reward getRandomReward(Player p)
-	{
-		int totalOdds = getTotalOdds();
+            Reward[] updatedRewards = new Reward[getCrateRewards().length];
+            int count = 0;
+            for (Reward r : getCrateRewards().clone())
+            {
+                if (r.loadFromConfig())
+                {
+                    updatedRewards[count] = r;
+                    count++;
+                }
+            }
 
-		int randNum = getRandomNumber(totalOdds);
+            Reward[] finalUpdate = new Reward[count];
+            count = 0;
+            for (Reward r : updatedRewards)
+            {
+                if (r != null)
+                {
+                    finalUpdate[count] = r;
+                    count++;
+                }
+            }
 
-		int currentStackedOdds = 0;
+            setCrateRewards(finalUpdate);
+            return;
+        }
+        StatusLoggerEvent.REWARD_NONEXISTENT.log(getCrates());
+    }
 
-		Reward[] crateRewardsClone = getCrateRewards();
+    public void setReward(Integer i, Reward reward)
+    {
+        getCrateRewards()[i] = reward;
+    }
 
-		for(Reward r: crateRewardsClone)
-		{
-			double odds = r.getChance();
-			currentStackedOdds += odds;
-			if(randNum <= currentStackedOdds)
-			{
-				return r;
-			}
-		}
+    public Reward getRandomReward(Player p)
+    {
+        int totalOdds = getTotalOdds();
+
+        int randNum = getRandomNumber(totalOdds);
+
+        int currentStackedOdds = 0;
+
+        Reward[] crateRewardsClone = getCrateRewards();
+
+        for (Reward r : crateRewardsClone)
+        {
+            double odds = r.getChance();
+            currentStackedOdds += odds;
+            if (randNum <= currentStackedOdds)
+            {
+                return r;
+            }
+        }
 
 		/*PlayerManager pm = PlayerManager.get(cc, p);
 
@@ -173,55 +174,57 @@ public class CRewards extends CSetting
 				}
 			}
 		}*/
-		
-		return null;
-	}
-	
-	public Integer getRandomNumber(int outOfOdds)
-	{
-		Random r = new Random();
-		int num = r.nextInt(outOfOdds) + 1;
-		return num;
-	}
-	
-	public Integer getTotalOdds()
-	{
-		int totalOdds = 0;
-		for (Reward r : getCrateRewards())
-		{
-			double odds = r.getChance();
-			totalOdds += odds;
-		}
-		return totalOdds;
-	}
 
-	public static boolean rewardNameExists(CustomCrates cc, String name)
-	{
-		for(String s : cc.getRewardsFile().get().getKeys(false))
-		{
-			if(s.equalsIgnoreCase(name))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+        return null;
+    }
 
-	public Reward[] getCrateRewards() {
-		return crateRewards;
-	}
+    public Integer getRandomNumber(int outOfOdds)
+    {
+        Random r = new Random();
+        int num = r.nextInt(outOfOdds) + 1;
+        return num;
+    }
 
-	public void setCrateRewards(Reward[] crateRewards) {
-		this.crateRewards = crateRewards;
-	}
+    public Integer getTotalOdds()
+    {
+        int totalOdds = 0;
+        for (Reward r : getCrateRewards())
+        {
+            double odds = r.getChance();
+            totalOdds += odds;
+        }
+        return totalOdds;
+    }
 
-	public static HashMap<String, Reward> getAllRewards()
-	{
-		return allRewards;
-	}
+    public static boolean rewardNameExists(CustomCrates cc, String name)
+    {
+        for (String s : cc.getRewardsFile().get().getKeys(false))
+        {
+            if (s.equalsIgnoreCase(name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public static void setAllRewards(HashMap<String, Reward> allRewards)
-	{
-		CRewards.allRewards = allRewards;
-	}
+    public Reward[] getCrateRewards()
+    {
+        return crateRewards;
+    }
+
+    public void setCrateRewards(Reward[] crateRewards)
+    {
+        this.crateRewards = crateRewards;
+    }
+
+    public static HashMap<String, Reward> getAllRewards()
+    {
+        return allRewards;
+    }
+
+    public static void setAllRewards(HashMap<String, Reward> allRewards)
+    {
+        CRewards.allRewards = allRewards;
+    }
 }

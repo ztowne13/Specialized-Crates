@@ -12,32 +12,32 @@ import java.util.ArrayList;
  */
 public abstract class ParticleAnimationEffect
 {
-	CustomCrates cc;
-	ParticleData particleData;
+    CustomCrates cc;
+    ParticleData particleData;
 
-	ArrayList<Location> toDisplay = new ArrayList<Location>();
+    ArrayList<Location> toDisplay = new ArrayList<Location>();
 
-	int totalTick = 0;
-	int tick = 0;
+    int totalTick = 0;
+    int tick = 0;
 
-	public ParticleAnimationEffect(CustomCrates cc, ParticleData particleData)
-	{
-		this.cc = cc;
-		this.particleData = particleData;
-	}
+    public ParticleAnimationEffect(CustomCrates cc, ParticleData particleData)
+    {
+        this.cc = cc;
+        this.particleData = particleData;
+    }
 
-	public abstract void update();
+    public abstract void update();
 
-	public void display(Location l)
-	{
-		for(Location toDisplayLocation : toDisplay)
-		{
-			toDisplayLocation.setWorld(l.getWorld());
+    public void display(Location l)
+    {
+        for (Location toDisplayLocation : toDisplay)
+        {
+            toDisplayLocation.setWorld(l.getWorld());
 
-			Location modifiedL = l.clone().add(toDisplayLocation);
-			modifiedL.setY(modifiedL.getY() - 1);
+            Location modifiedL = l.clone().add(toDisplayLocation);
+            modifiedL.setY(modifiedL.getY() - 1);
 
-			particleData.display(modifiedL);
-		}
-	}
+            particleData.display(modifiedL);
+        }
+    }
 }

@@ -11,25 +11,25 @@ import org.bukkit.entity.Player;
  */
 public class Config extends SubCommand
 {
-	public Config()
-	{
-		super("config", 1, "");
-	}
+    public Config()
+    {
+        super("config", 1, "");
+    }
 
-	@Override
-	public boolean run(CustomCrates cc, Commands cmds, String[] args)
-	{
-		CommandSender sender = cmds.getCmdSender();
-		if(cmds.canExecute(false, false, ""))
-		{
-			new IGCMenuMain(cc, (Player)sender, null).open();
-			cmds.msgSuccess("Opened in game configuration.");
-			return true;
-		}
-		else
-		{
-			cmds.msgError("This is an in-game command only.");
-			return false;
-		}
-	}
+    @Override
+    public boolean run(CustomCrates cc, Commands cmds, String[] args)
+    {
+        CommandSender sender = cmds.getCmdSender();
+        if (cmds.canExecute(false, false, ""))
+        {
+            new IGCMenuMain(cc, (Player) sender, null).open();
+            cmds.msgSuccess("Opened in game configuration.");
+            return true;
+        }
+        else
+        {
+            cmds.msgError("This is an in-game command only.");
+            return false;
+        }
+    }
 }

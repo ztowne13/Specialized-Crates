@@ -9,55 +9,55 @@ import org.bukkit.Location;
  */
 public class SpiralPA extends ParticleAnimationEffect
 {
-	int updatesPerSec = 20;
+    int updatesPerSec = 20;
 
-	double toChangeHeight = 0, currentYOffset = 0;
+    double toChangeHeight = 0, currentYOffset = 0;
 
-	public SpiralPA(CustomCrates cc, ParticleData particleData)
-	{
-		super(cc, particleData);
-		this.updatesPerSec = (int) particleData.getSpeed();
-	}
+    public SpiralPA(CustomCrates cc, ParticleData particleData)
+    {
+        super(cc, particleData);
+        this.updatesPerSec = (int) particleData.getSpeed();
+    }
 
-	@Override
-	public void update()
-	{
-		toDisplay.clear();
+    @Override
+    public void update()
+    {
+        toDisplay.clear();
 
-		totalTick += updatesPerSec;
-		tick += updatesPerSec;
+        totalTick += updatesPerSec;
+        tick += updatesPerSec;
 
-		double radius = particleData.getOffX();
-		double yOffset = particleData.getOffY();
-		double height = particleData.getOffZ();
+        double radius = particleData.getOffX();
+        double yOffset = particleData.getOffY();
+        double height = particleData.getOffZ();
 
-		if(toChangeHeight == 0 && height != 0)
-		{
-			toChangeHeight = height / 360;
-		}
+        if (toChangeHeight == 0 && height != 0)
+        {
+            toChangeHeight = height / 360;
+        }
 
-		for (int i = tick; i < tick + updatesPerSec; i++)
-		{
-			if(i % (2 + particleData.getAmount()) == 0)
-			{
-				currentYOffset += toChangeHeight;
-				double toX = Math.sin(Math.toRadians(i)) * radius;
-				double toY = Math.cos(Math.toRadians(i)) * radius;
+        for (int i = tick; i < tick + updatesPerSec; i++)
+        {
+            if (i % (2 + particleData.getAmount()) == 0)
+            {
+                currentYOffset += toChangeHeight;
+                double toX = Math.sin(Math.toRadians(i)) * radius;
+                double toY = Math.cos(Math.toRadians(i)) * radius;
 
-				Location newL = new Location(null, toX, currentYOffset + yOffset, toY);
-				toDisplay.add(newL);
+                Location newL = new Location(null, toX, currentYOffset + yOffset, toY);
+                toDisplay.add(newL);
 
-				if (i > 360)
-				{
-					i = 1;
-					tick = 0;
-				}
+                if (i > 360)
+                {
+                    i = 1;
+                    tick = 0;
+                }
 
-				if ((currentYOffset > height && toChangeHeight > 0) || (currentYOffset < 0 && toChangeHeight < 0))
-				{
-					toChangeHeight = -toChangeHeight;
-				}
-			}
-		}
-	}
+                if ((currentYOffset > height && toChangeHeight > 0) || (currentYOffset < 0 && toChangeHeight < 0))
+                {
+                    toChangeHeight = -toChangeHeight;
+                }
+            }
+        }
+    }
 }

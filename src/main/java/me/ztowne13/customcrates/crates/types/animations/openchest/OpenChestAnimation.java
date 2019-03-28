@@ -69,7 +69,7 @@ public class OpenChestAnimation extends InventoryCrate
         item.setVelocity(new Vector(0, item.getVelocity().getY(), 0));
         items.add(item);
 
-        if(isEarlyRewardHologram())
+        if (isEarlyRewardHologram())
         {
             Bukkit.getScheduler().runTaskLater(cc, new Runnable()
             {

@@ -74,7 +74,8 @@ public enum StatusLoggerEvent
 
     LUCKYCHEST_WORLD_INVALID(false, "Lucky Chest", "$?$ is not a valid world for the lucky chests to spawn in.", "NONE"),
 
-    LUCKYCHEST_BLOCKLIST_INVALIDBLOCK(false, "Lucky Chest", "Failed to load the material '$?$' for the 'block-list' setting.",
+    LUCKYCHEST_BLOCKLIST_INVALIDBLOCK(false, "Lucky Chest",
+            "Failed to load the material '$?$' for the 'block-list' setting.",
             "Not a valid material such as DIRT."),
 
     LUCKYCHEST_BLOCKLIST_INVALID(false, "Lucky Chest", "Failed to load the 'block-list' setting.",

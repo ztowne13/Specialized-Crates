@@ -9,13 +9,9 @@ import me.ztowne13.customcrates.visuals.EntityTypes;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
-import net.citizensnpcs.npc.skin.Skin;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
-import net.citizensnpcs.util.NMS;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 import java.util.HashMap;
@@ -25,19 +21,20 @@ import java.util.HashMap;
  */
 public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
 {
-	static HashMap<PlacedCrate, NPC> npcs = new HashMap<PlacedCrate, NPC>();
+    static HashMap<PlacedCrate, NPC> npcs = new HashMap<PlacedCrate, NPC>();
 
-	String name;
+    String name;
 
-	public Citizens2NPCPlaceHolder(CustomCrates cc)
-	{
-		super(cc);
-	}
+    public Citizens2NPCPlaceHolder(CustomCrates cc)
+    {
+        super(cc);
+    }
 
-	public void place(final PlacedCrate cm)
-	{
-	    Bukkit.getScheduler().runTaskLater(getCc(), new Runnable(){
-	        @Override
+    public void place(final PlacedCrate cm)
+    {
+        Bukkit.getScheduler().runTaskLater(getCc(), new Runnable()
+        {
+            @Override
             public void run()
             {
                 LocationUtils.removeDubBlocks(cm.getL());
@@ -59,63 +56,65 @@ public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
             }
         }, 60);
 
-	}
+    }
 
-	public void remove(PlacedCrate cm)
-	{
-		getNpcs().get(cm).destroy();
-	}
+    public void remove(PlacedCrate cm)
+    {
+        getNpcs().get(cm).destroy();
+    }
 
-	public void setType(Object obj)
-	{
-		setName(obj.toString());
-	}
+    public void setType(Object obj)
+    {
+        setName(obj.toString());
+    }
 
-	public String getType()
-	{
-		return getName();
-	}
+    public String getType()
+    {
+        return getName();
+    }
 
-	public void fixHologram(PlacedCrate cm)
-	{
-		Location l = cm.getL().clone();
-		l.setY(l.getY() + EntityTypes.PLAYER.getHeight() - .8);
-		cm.getCholo().getDh().teleport(l);
-	}
+    public void fixHologram(PlacedCrate cm)
+    {
+        Location l = cm.getL().clone();
+        l.setY(l.getY() + EntityTypes.PLAYER.getHeight() - .8);
+        cm.getCholo().getDh().teleport(l);
+    }
 
-	public void applySkin(NPC npc, String name)
-	{
-		if (npc.isSpawned()) {
+    public void applySkin(NPC npc, String name)
+    {
+        if (npc.isSpawned())
+        {
 
-			SkinnableEntity skinnable = (SkinnableEntity) npc.getEntity();
-			if (skinnable != null) {
-				skinnable.setSkinName(name);
-			}
-		}
-	}
+            SkinnableEntity skinnable = (SkinnableEntity) npc.getEntity();
+            if (skinnable != null)
+            {
+                skinnable.setSkinName(name);
+            }
+        }
+    }
 
     public static HashMap<PlacedCrate, NPC> getNpcs()
-	{
-		return npcs;
-	}
+    {
+        return npcs;
+    }
 
-	public static void setNpcs(HashMap<PlacedCrate, NPC> npcs)
-	{
-		Citizens2NPCPlaceHolder.npcs = npcs;
-	}
+    public static void setNpcs(HashMap<PlacedCrate, NPC> npcs)
+    {
+        Citizens2NPCPlaceHolder.npcs = npcs;
+    }
 
-	public String getName()
-	{
-		return name;
-	}
+    public String getName()
+    {
+        return name;
+    }
 
-	public void setName(String name)
-	{
-		this.name = name;
-	}
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
-	public String toString()
-	{
-		return "NPC";
-	}
+    public String toString()
+    {
+        return "NPC";
+    }
 }

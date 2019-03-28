@@ -1,27 +1,27 @@
 package me.ztowne13.customcrates.players.data;
 
-public enum StorageType 
+public enum StorageType
 {
-	MYSQL(false),
-	
-	FLATFILE(true),
-	
-	PLAYERFILES(true);
+    MYSQL(false),
 
-	boolean enabled;
+    FLATFILE(true),
 
-	StorageType(boolean enabled)
-	{
-		this.enabled = enabled;
-	}
+    PLAYERFILES(true);
 
-	public boolean isEnabled()
-	{
-		return enabled;
-	}
+    boolean enabled;
 
-	public void setEnabled(boolean enabled)
-	{
-		this.enabled = enabled;
-	}
+    StorageType(boolean enabled)
+    {
+        this.enabled = enabled;
+    }
+
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled)
+    {
+        this.enabled = enabled;
+    }
 }

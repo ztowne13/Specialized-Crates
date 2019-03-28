@@ -94,7 +94,7 @@ public class IGCAnimOpenChest extends IGCAnimation
                 ChatUtils.msgError(getP(), "This is not a valid number, please try again.");
             }
         }
-        else if(type == Boolean.class)
+        else if (type == Boolean.class)
         {
             if (Utils.isBoolean(input))
             {

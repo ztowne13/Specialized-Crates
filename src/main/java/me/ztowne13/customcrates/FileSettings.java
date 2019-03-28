@@ -5,6 +5,6 @@ package me.ztowne13.customcrates;
  */
 public class FileSettings
 {
-	public static String splitter1 = ",";
-	public static String splitter2 = ";";
+    public static String splitter1 = ",";
+    public static String splitter2 = ";";
 }
