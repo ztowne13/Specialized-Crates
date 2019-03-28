@@ -10,13 +10,10 @@ import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.util.FileUtil;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;

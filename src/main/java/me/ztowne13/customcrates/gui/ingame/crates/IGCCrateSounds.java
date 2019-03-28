@@ -26,7 +26,7 @@ public class IGCCrateSounds extends IGCTierMenu
 
 	public IGCCrateSounds(CustomCrates cc, Player p, IGCMenu lastMenu, Crate crates, String tier)
 	{
-		super(cc, p, lastMenu, "&7&l> &6&lParticles", crates, tier);
+		super(cc, p, lastMenu, "&7&l> &6&lSounds", crates, tier);
 	}
 
 	@Override
