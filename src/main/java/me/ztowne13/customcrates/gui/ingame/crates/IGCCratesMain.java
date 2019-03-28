@@ -6,11 +6,9 @@ import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.gui.DynamicMaterial;
 import me.ztowne13.customcrates.gui.InventoryBuilder;
 import me.ztowne13.customcrates.gui.ItemBuilder;
-import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
 import me.ztowne13.customcrates.gui.ingame.IGCDefaultItems;
 import me.ztowne13.customcrates.gui.ingame.IGCMenu;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -223,7 +221,7 @@ public class IGCCratesMain extends IGCMenuCrate
             case 44:
                 if (cs.getOt().equals(ObtainType.LUCKYCHEST))
                 {
-                    new IGCCrateLuckyChest(getCc(), getP(), this, crates).open();
+                    new IGCMineCrate(getCc(), getP(), this, crates).open();
                 }
                 break;
         }

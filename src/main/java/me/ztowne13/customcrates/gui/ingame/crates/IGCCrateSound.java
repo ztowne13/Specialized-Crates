@@ -20,99 +20,110 @@ import org.bukkit.entity.Player;
  */
 public class IGCCrateSound extends IGCTierMenu
 {
-	SoundData sd;
+    SoundData sd;
 
-	public IGCCrateSound(CustomCrates cc, Player p, IGCMenu lastMenu, Crate crates, SoundData sd, String tier)
-	{
-		super(cc, p, lastMenu, "&7&l> &6&lSounds", crates, tier);
-		this.sd = sd;
-	}
+    public IGCCrateSound(CustomCrates cc, Player p, IGCMenu lastMenu, Crate crates, SoundData sd, String tier)
+    {
+        super(cc, p, lastMenu, "&7&l> &6&lSound", crates, tier);
+        this.sd = sd;
+    }
 
-	@Override
-	public void open()
-	{
+    @Override
+    public void open()
+    {
 
-		getP().closeInventory();
-		putInMenu();
+        getP().closeInventory();
+        putInMenu();
 
-		InventoryBuilder ib = createDefault(27);
+        InventoryBuilder ib = createDefault(27);
 
-		ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
-		ib.setItem(8, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&cDelete this particle").setLore("&7NOTE: This action cannot").addLore("&7be undone!"));
+        ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
+        ib.setItem(8, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&cDelete this sound")
+                .addAutomaticLore("&7", 30, "NOTE: This action cannot be undone!"));
 
-		ib.setItem(11, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&aSound type").setLore("&7Current value: ").addLore("&7" + sd.getSound().name()));
-		ib.setItem(13, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aSound pitch").setLore("&7Current value: ").addLore("&7" + sd.getPitch()));
-		ib.setItem(15, new ItemBuilder(Material.LEVER, 1, 0).setName("&aSound volume").setLore("&7Current value: ").addLore("&7" + sd.getVolume()));
+        ib.setItem(11, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&aSound type").setLore("&7Current value: ")
+                .addLore("&7" + sd.getSound().name()).addLore("").addAutomaticLore("&f", 30,
+                        "Set the 'type' of the sound. The values for this can be found online. An example would be AMBIENT_CAVE"));
+        ib.setItem(13, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aSound pitch").setLore("&7Current value: ")
+                .addLore("&7" + sd.getPitch()).addLore("").addAutomaticLore("&f", 30,
+                        "This is the pitch that the sound will play at. 5 is a good normal-sounding pitch."));
+        ib.setItem(15, new ItemBuilder(Material.LEVER, 1, 0).setName("&aSound volume").setLore("&7Current value: ")
+                .addLore("&7" + sd.getVolume()).addLore("")
+                .addAutomaticLore("&f", 30, "This is the volume that the sound will play at. 5 is a good 'normal' volume."));
 
 
-		ib.open();
-	}
+        ib.open();
+    }
 
-	@Override
-	public void manageClick(int slot)
-	{
-		switch(slot)
-		{
-			case 8:
-				cs.getCs().getSounds().get("DEFAULT").remove(sd);
-			case 9:
-				up();
-				break;
-			case 11:
-				new InputMenu(getCc(), getP(), "sound type", sd.getSound().name(), "Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/", String.class, this);
-				break;
-			case 13:
-				new InputMenu(getCc(), getP(), "sound pitch", sd.getSound().name(), "Change the pitch of the sound.", Integer.class, this);
-				break;
-			case 15:
-				new InputMenu(getCc(), getP(), "sound volume", sd.getSound().name(), "Change the volume of the sound.", Integer.class, this);
-				break;
-		}
-	}
+    @Override
+    public void manageClick(int slot)
+    {
+        switch (slot)
+        {
+            case 8:
+                cs.getCs().getSounds().get("DEFAULT").remove(sd);
+            case 9:
+                up();
+                break;
+            case 11:
+                new InputMenu(getCc(), getP(), "sound type", sd.getSound().name(),
+                        "Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/", String.class, this);
+                break;
+            case 13:
+                new InputMenu(getCc(), getP(), "sound pitch", sd.getSound().name(), "Change the pitch of the sound.",
+                        Integer.class, this);
+                break;
+            case 15:
+                new InputMenu(getCc(), getP(), "sound volume", sd.getSound().name(), "Change the volume of the sound.",
+                        Integer.class, this);
+                break;
+        }
+    }
 
-	@Override
-	public boolean handleInput(String value, String input)
-	{
-		if(value.equalsIgnoreCase("sound type"))
-		{
-			try
-			{
-				Sound s = Sound.valueOf(input.toUpperCase());
-				sd.setSound(s);
-				ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
-				return true;
-			}
-			catch(Exception exc)
-			{
-				ChatUtils.msgError(getP(), input + " is not a valid sound. Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/");
-			}
-		}
-		else if(value.equalsIgnoreCase("sound pitch"))
-		{
-			if(Utils.isInt(input))
-			{
-				sd.setPitch(Integer.parseInt(input));
-				ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
-				return true;
-			}
-			else
-			{
-				ChatUtils.msgError(getP(), input + " is not a valid integer (number). Make sure it has no decimals.");
-			}
-		}
-		else if(value.equalsIgnoreCase("sound volume"))
-		{
-			if(Utils.isInt(input))
-			{
-				sd.setVolume(Integer.parseInt(input));
-				ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
-				return true;
-			}
-			else
-			{
-				ChatUtils.msgError(getP(), input + " is not a valid integer (number). Make sure it has no decimals.");
-			}
-		}
-		return false;
-	}
+    @Override
+    public boolean handleInput(String value, String input)
+    {
+        if (value.equalsIgnoreCase("sound type"))
+        {
+            try
+            {
+                Sound s = Sound.valueOf(input.toUpperCase());
+                sd.setSound(s);
+                ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
+                return true;
+            }
+            catch (Exception exc)
+            {
+                ChatUtils.msgError(getP(), input +
+                        " is not a valid sound. Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/");
+            }
+        }
+        else if (value.equalsIgnoreCase("sound pitch"))
+        {
+            if (Utils.isInt(input))
+            {
+                sd.setPitch(Integer.parseInt(input));
+                ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
+                return true;
+            }
+            else
+            {
+                ChatUtils.msgError(getP(), input + " is not a valid integer (number). Make sure it has no decimals.");
+            }
+        }
+        else if (value.equalsIgnoreCase("sound volume"))
+        {
+            if (Utils.isInt(input))
+            {
+                sd.setVolume(Integer.parseInt(input));
+                ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
+                return true;
+            }
+            else
+            {
+                ChatUtils.msgError(getP(), input + " is not a valid integer (number). Make sure it has no decimals.");
+            }
+        }
+        return false;
+    }
 }

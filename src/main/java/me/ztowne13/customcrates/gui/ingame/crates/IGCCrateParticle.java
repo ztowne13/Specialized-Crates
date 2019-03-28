@@ -47,34 +47,38 @@ public class IGCCrateParticle extends IGCTierMenu
                 .setLore("&7NOTE: This action cannot").addLore("&7be undone!"));
 
         ib.setItem(10, new ItemBuilder(Material.BEACON, 1, 0).setName("&aParticle Animation")
-                .addAutomaticLore("&f", 30, "&fSet this value to 'none' to have no animation.").addLore("")
                 .addLore("&7Current value: ")
                 .addLore("&7" + (pd.getParticleAnimationEffect() == null ? "none" :
-                        PEAnimationType.getFromParticleAnimationEffect(pd.getParticleAnimationEffect()).name())));
+                        PEAnimationType.getFromParticleAnimationEffect(pd.getParticleAnimationEffect()).name())).addLore("")
+                .addAutomaticLore("&f", 30,
+                        "&fThe animation type of the particle. Set this value to 'none' to have no animation."));
         ib.setItem(11, new ItemBuilder(Material.NETHER_STAR, 1, 0).setName("&aParticle Type").setLore("&7Current value: ")
-                .addLore("&7" + pd.getParticleName()));
+                .addLore("&7" + pd.getParticleName()).addLore("")
+                .addAutomaticLore("&f", 30, "The particle type that this particle will display."));
 
         if (pd.getParticleAnimationEffect() == null)
         {
             ib.setItem(12,
                     new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aX Offset")
-                            .addAutomaticLore("&f", 30, "Range particles will spawn in the X direction.").addLore("")
                             .addLore("&7Current value: ")
-                            .addLore("&7" + pd.getOffX()));
+                            .addLore("&7" + pd.getOffX()).addLore("")
+                            .addAutomaticLore("&f", 30, "Range particles will spawn in the X direction."));
             ib.setItem(13,
                     new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aY Offset")
-                            .addAutomaticLore("&f", 30, "Range particles will spawn in the Y direction.").addLore("")
                             .addLore("&7Current value: ")
-                            .addLore("&7" + pd.getOffY()));
+                            .addLore("&7" + pd.getOffY()).addLore("")
+                            .addAutomaticLore("&f", 30, "Range particles will spawn in the Y direction."));
             ib.setItem(14,
                     new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aZ Offset")
-                            .addAutomaticLore("&f", 30, "Range particles will spawn in the Z direction.").addLore("")
                             .addLore("&7Current value: ")
-                            .addLore("&7" + pd.getOffZ()));
+                            .addLore("&7" + pd.getOffZ()).addLore("")
+                            .addAutomaticLore("&f", 30, "Range particles will spawn in the Z direction."));
             ib.setItem(15, new ItemBuilder(Material.SUGAR, 1, 0).setName("&aParticle speed").setLore("&7Current value: ")
-                    .addLore("&7" + pd.getSpeed()));
+                    .addLore("&7" + pd.getSpeed()).addLore("").addAutomaticLore("&f", 30,
+                            "The speed the particles will move around at. For some particles, this changes their color."));
             ib.setItem(16, new ItemBuilder(Material.BUCKET, 1, 0).setName("&aParticle amount").setLore("&7Current value: ")
-                    .addLore("&7" + pd.getAmount()));
+                    .addLore("&7" + pd.getAmount()).addLore("")
+                    .addAutomaticLore("&f", 30, "The amount of particles that will be displayed every tick."));
         }
         else
         {
@@ -117,7 +121,9 @@ public class IGCCrateParticle extends IGCTierMenu
                     .addAutomaticLore("&f", 30, "The speed of the animation. A value of 20 is a fairly reasonable speed.")
                     .addLore("").addLore("&7Current value: ").addLore("&7" + pd.getSpeed()));
             ib.setItem(16, new ItemBuilder(Material.BUCKET, 1, 0).setName("&aParticle amount")
-                    .addAutomaticLore("&f", 30, "The amount of particles per animation tick. A value of 3 will create a full/filled looking animation.").addLore("").addLore("&7Current value: ")
+                    .addAutomaticLore("&f", 30,
+                            "The amount of particles per animation tick. A value of 3 will create a full/filled looking animation.")
+                    .addLore("").addLore("&7Current value: ")
                     .addLore("&7" + pd.getAmount()));
         }
 

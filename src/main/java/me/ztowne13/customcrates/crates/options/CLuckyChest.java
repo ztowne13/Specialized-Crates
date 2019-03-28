@@ -26,6 +26,9 @@ public class CLuckyChest extends CSetting
     boolean isBLWL;
     ArrayList<Material> whiteList = new ArrayList<Material>();
     ArrayList<World> worlds = new ArrayList<World>();
+
+    List<String> whiteListRaw = new ArrayList<>();
+    List<String> worldsRaw = new ArrayList<>();
     boolean allWorlds = true;
 
     public CLuckyChest(Crate crates)
@@ -80,6 +83,8 @@ public class CLuckyChest extends CSetting
 
             if(csb.hasV("lucky-chest.worlds"))
             {
+                worldsRaw = fc.getStringList("lucky-chest.worlds");
+
                 for(String s: fc.getStringList("lucky-chest.worlds"))
                 {
                     setAllWorlds(false);
@@ -97,6 +102,7 @@ public class CLuckyChest extends CSetting
 
             if(csb.hasV("lucky-chest.block-list"))
             {
+                whiteListRaw = fc.getStringList("lucky-chest.block-list");
                 try
                 {
                     for (String mat : fc.getStringList("lucky-chest.block-list"))
@@ -131,29 +137,19 @@ public class CLuckyChest extends CSetting
     public void saveToFile()
     {
         getFu().get().set("lucky-chest.chance", ((int)chance) + "/" + ((int)outOfChance));
-        if(!whiteList.isEmpty())
+        if(!whiteListRaw.isEmpty())
         {
             getFu().get().set("lucky-chest.is-block-list-whitelist", isBLWL);
-            List<String> materialsParsed = new ArrayList<>();
-            for(Material m : whiteList)
-            {
-                materialsParsed.add(m.name());
-            }
-            getFu().get().set("lucky-chest.block-list", materialsParsed);
+            getFu().get().set("lucky-chest.block-list", whiteListRaw);
         }
         else
         {
             getFu().get().set("lucky-chest.is-block-list-whitelist", null);
             getFu().get().set("lucky-chest.block-list", null);
         }
-        if(!worlds.isEmpty())
+        if(!worldsRaw.isEmpty())
         {
-            List<String> worldsParsed = new ArrayList<>();
-            for(World w : worlds)
-            {
-                worldsParsed.add(w.getName());
-            }
-            getFu().get().set("lucky-chest.worlds", worldsParsed);
+            getFu().get().set("lucky-chest.worlds", worldsRaw);
         }
         else
         {
@@ -244,6 +240,26 @@ public class CLuckyChest extends CSetting
     public void setAllWorlds(boolean allWorlds)
     {
         this.allWorlds = allWorlds;
+    }
+
+    public List<String> getWhiteListRaw()
+    {
+        return whiteListRaw;
+    }
+
+    public void setWhiteListRaw(List<String> whiteListRaw)
+    {
+        this.whiteListRaw = whiteListRaw;
+    }
+
+    public List<String> getWorldsRaw()
+    {
+        return worldsRaw;
+    }
+
+    public void setWorldsRaw(List<String> worldsRaw)
+    {
+        this.worldsRaw = worldsRaw;
     }
 }
 

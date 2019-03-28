@@ -45,39 +45,39 @@ public class IGCCratesBase extends IGCMenuCrate
                 .setName(crates.isEnabled() ? "&aEnabled" : "&cDisabled").addLore("&7Click me to toggle the crate.")
                 .addLore("").addAutomaticLore("&f", 30, "Completely enable or disable the crate."));
         ib.setItem(2, new ItemBuilder(Material.BOOK, 1, 0).setName("&aSet the crate permission").setLore("&7Current value: ")
-                .addLore("&f" + cs.getPermission()).addLore("")
+                .addLore("&7" + cs.getPermission()).addLore("")
                 .addAutomaticLore("&f", 30,
                         "The permissions that is required to open this crate. Great for monthly crates, donor crates."));
         ib.setItem(3, new ItemBuilder(Material.BUCKET, 1, 0).setName("&aSet the obtain-method").setLore("&7Current value: ")
-                .addLore("&f" + cs.getOt().name()).addLore("")
+                .addLore("&7" + cs.getOt().name()).addLore("")
                 .addAutomaticLore("&f", 30,
                         "STATIC: Crate stays in place forever. DYNAMIC: Crate disappears when used. LUCKYCHEST (Mine Crate): Find this crate while mining."));
         ib.setItem(4, new ItemBuilder(Material.PAPER, 1, 0).setName("&aSet the inventory-name").setLore("&7Current value: ")
-                .addLore("&f" + cs.getCrateInventoryName()).addLore("").addAutomaticLore("&f", 30,
+                .addLore("&7" + cs.getCrateInventoryName()).addLore("").addAutomaticLore("&f", 30,
                         "The name of the inventory for the animation, or name of the MultiCrate. If this value is set to 'none' the inventory name in the CrateConfig.YML for that animation will be used."));
         ib.setItem(8, new ItemBuilder(DynamicMaterial.BIRCH_BUTTON, 1).setName("&aSet the display.type")
-                .setLore("&7Current value: ").addLore("&f" + cs.getDcp()).addLore("")
+                .setLore("&7Current value: ").addLore("&7" + cs.getDcp()).addLore("")
                 .addAutomaticLore("&f", 30, "How the crate will appear to players (block, npc, mob, etc.)"));
 
         if (crates.getCs().getDcp().toString().equalsIgnoreCase("mob") ||
                 crates.getCs().getDcp().toString().equalsIgnoreCase("npc"))
         {
             ib.setItem(17, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aSet the " + cs.getDcp() + " type")
-                    .setLore("&7Current value: ").addLore("&f" + cs.getDcp().getType()).addLore("")
+                    .setLore("&7Current value: ").addLore("&7" + cs.getDcp().getType()).addLore("")
                     .addAutomaticLore("&f", 30, "Set the type of mob it will be or playername for the NPC."));
         }
 
         ib.setItem(12,
                 new ItemBuilder(DynamicMaterial.BIRCH_FENCE_GATE, 1).setName("&aSet auto-close").setLore("&7Current value: ")
-                        .addLore("&f" + cs.isAutoClose()).addLore("").addAutomaticLore("&f", 30,
+                        .addLore("&7" + cs.isAutoClose()).addLore("").addAutomaticLore("&f", 30,
                         "If the crate is in an inventory, should it automatically close when it is done?"));
         ib.setItem(13,
                 new ItemBuilder(Material.ARMOR_STAND, 1, 0).setName("&aSet hologram-offset").setLore("&7Current value: ")
-                        .addLore("&f" + cs.getHologramOffset()).addLore("").addAutomaticLore("&f", 30,
+                        .addLore("&7" + cs.getHologramOffset()).addLore("").addAutomaticLore("&f", 30,
                         "Change if the hologram is displayed higher or lower than the default height."));
         ib.setItem(11,
                 new ItemBuilder(DynamicMaterial.SNOWBALL, 1).setName("&aSet the cooldown").setLore("&7Current value: ")
-                        .addLore("&f" + cs.getCooldown()).addLore("").addAutomaticLore("&f", 30,
+                        .addLore("&7" + cs.getCooldown()).addLore("").addAutomaticLore("&f", 30,
                         "The duration of time, in seconds, between when a player can open the crate."));
         ib.setItem(14,
                 new ItemBuilder(cs.getCrate()).setName("&a&lSet the crate item.").addLore("")
@@ -89,11 +89,11 @@ public class IGCCratesBase extends IGCMenuCrate
                     new ItemBuilder(cs.getKey()).setName("&a&lSet the crate key.").addLore("").addAutomaticLore("&f", 30,
                             "This will set the item you are currently holding to the key item. NOTE: The item requires a display name. Display name and lore will be saved automatically."));
             ib.setItem(5, new ItemBuilder(Material.ITEM_FRAME, 1, 0).setName("&aSet the crate animation")
-                    .setLore("&7Current Value: ").addLore("&f" + cs.getCt().name()).addLore("")
+                    .setLore("&7Current Value: ").addLore("&7" + cs.getCt().name()).addLore("")
                     .addAutomaticLore("&f", 30, "This is the animation that will play when the crate is opened."));
             ib.setItem(16,
                     new ItemBuilder(Material.SLIME_BALL, 1, 0).setName("&aSet require key").setLore("&7Current value: ")
-                            .addLore("&f" + cs.isRequireKey()).addLore("").addAutomaticLore("&f", 30,
+                            .addLore("&7" + cs.isRequireKey()).addLore("").addAutomaticLore("&f", 30,
                             "Does the crate require a key? Best for key-less weekly/monthly crates or DYNAMIC crates that can be placed to open without a key. Or if minecrates can be opened without needing a key."));
         }
 
