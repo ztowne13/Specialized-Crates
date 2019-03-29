@@ -77,7 +77,7 @@ public class IGCCratesBase extends IGCMenuCrate
         ib.setItem(11,
                 new ItemBuilder(DynamicMaterial.SNOWBALL, 1).setName("&aSet the cooldown").setLore("&7Current value: ")
                         .addLore("&7" + cs.getCooldown()).addLore("").addAutomaticLore("&f", 30,
-                        "The duration of time, in seconds, between when a player can open the crate."));
+                        "The duration of time, in seconds, between when a player can open the crate. Set to -1 to have no cooldown."));
         ib.setItem(14,
                 new ItemBuilder(cs.getCrate()).setName("&a&lSet the crate item.").addLore("")
                         .addAutomaticLore("&f", 30,

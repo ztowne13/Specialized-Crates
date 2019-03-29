@@ -192,7 +192,8 @@ public class DiscoverAnimation extends InventoryCrate
                 {
                     ddh.getAlreadyChosenSlots().add(slot);
                     ddh.setRemainingClicks(ddh.getRemainingClicks() - 1);
-                    clickSound.playTo(ddh.getP(), ddh.getL());
+                    if(clickSound != null)
+                        clickSound.playTo(ddh.getP(), ddh.getL());
                     buildInventory(ddh);
 
                     if (ddh.getRemainingClicks() <= 0)
@@ -217,7 +218,8 @@ public class DiscoverAnimation extends InventoryCrate
                     if (!ddh.getAlreadyDisplayedRewards().keySet().contains(slot))
                     {
                         Reward newR = getCrates().getCs().getCr().getRandomReward(ddh.getP());
-                        uncoverSound.playTo(ddh.getP(), ddh.getL());
+                        if(uncoverSound != null)
+                            uncoverSound.playTo(ddh.getP(), ddh.getL());
                         ddh.getAlreadyDisplayedRewards().put(slot, newR);
                         buildInventory(ddh);
                         if (ddh.getAlreadyDisplayedRewards().keySet().size() == ddh.getAlreadyChosenSlots().size())

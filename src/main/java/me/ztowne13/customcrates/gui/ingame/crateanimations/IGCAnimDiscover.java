@@ -29,20 +29,29 @@ public class IGCAnimDiscover extends IGCAnimation
         getP().closeInventory();
         putInMenu();
 
-        InventoryBuilder ib = createDefault(36);
+        InventoryBuilder ib = createDefault(18);
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
-        ib.setItem(11,
-                new ItemBuilder(Material.BOOK, 1, 0).setName("&ainv-name").setLore(getcVal() + getString("inv-name")));
-        ib.setItem(13, new ItemBuilder(Material.PAPER, 1, 0).setName("&ainventory-rows")
-                .setLore(getcVal() + getString("inventory-rows")));
-        ib.setItem(14, new ItemBuilder(Material.PAPER, 1, 0).setName("&aminimum-rewards")
-                .setLore(getcVal() + getString("minimum-rewards")));
-        ib.setItem(15, new ItemBuilder(Material.PAPER, 1, 0).setName("&amaximum-rewards")
-                .setLore(getcVal() + getString("maximum-rewards")));
-        ib.setItem(16, new ItemBuilder(Material.PAPER, 1, 0).setName("&arandom-display-duration")
-                .setLore(getcVal() + getString("random-display-duration")));
+        ib.setItem(2,
+                new ItemBuilder(Material.BOOK, 1, 0).setName("&ainv-name").setLore(getcVal() + getString("inv-name"))
+                        .addLore("").addAutomaticLore("&f", 30,
+                        "The name of the inventory when the animation runs. This is overwritten by the crate's 'inv-name' value, if it exists."));
+        ib.setItem(4, new ItemBuilder(Material.PAPER, 1, 0).setName("&ainventory-rows")
+                .setLore(getcVal()).addLore("&7" + getString("inventory-rows")).addLore("")
+                .addAutomaticLore("&f", 30,
+                        "The amount of rows in the inventory."));
+        ib.setItem(5, new ItemBuilder(Material.PAPER, 1, 0).setName("&aminimum-rewards")
+                .setLore(getcVal()).addLore("&7" + getString("minimum-rewards")).addLore("")
+                .addAutomaticLore("&f", 30,
+                        "The minimum amount of rewards that could appear in the menu. Set to the same amount as the maximum-rewards for it to be the same amount every time."));
+        ib.setItem(6, new ItemBuilder(Material.PAPER, 1, 0).setName("&amaximum-rewards")
+                .setLore(getcVal()).addLore("&7" + getString("maximum-rewards")).addLore("")
+                .addAutomaticLore("&f", 30,
+                        "The maximum amount of rewards that could appear in the menu. Set to the same amount as the minimum-rewards for it to be the same amount every time."));
+        ib.setItem(7, new ItemBuilder(Material.PAPER, 1, 0).setName("&arandom-display-duration")
+                .setLore(getcVal()).addLore("&7" + getString("random-display-duration")).addLore("")
+                .addAutomaticLore("&f", 30, "The duration in which the 'shuffling' animation will play for."));
 
         boolean b = true;
         try
@@ -53,17 +62,24 @@ public class IGCAnimDiscover extends IGCAnimation
         {
 
         }
-        ib.setItem(20, new ItemBuilder(b ? DynamicMaterial.LIME_WOOL : DynamicMaterial.RED_WOOL, 1).setName("&acount")
-                .setLore(getcVal() + b).addLore("").addLore("&7Do the 'cover-block's display numbers?"));
-        ib.setItem(21, new ItemBuilder(Material.ENDER_CHEST, 1, 0).setName("&acover-block")
-                .setLore(getcVal() + getString("cover-block")));
+        ib.setItem(11, new ItemBuilder(b ? DynamicMaterial.LIME_WOOL : DynamicMaterial.RED_WOOL, 1).setName("&acount")
+                .setLore(getcVal()).addLore("&7" + b).addLore("")
+                .addAutomaticLore("&f", 30,
+                        "Whether or not the cover-block's should display numbers. (i.e. whether they should be stacked items)."));
+        ib.setItem(12, new ItemBuilder(Material.ENDER_CHEST, 1, 0).setName("&acover-block")
+                .setLore(getcVal()).addLore("&7" + getString("cover-block")).addLore("")
+                .addAutomaticLore("&f", 30,
+                        "The block that the player will have to click to chose the random reward."));
 
-        ib.setItem(23, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&atick-sound")
-                .setLore(getcVal() + getString("tick-sound")));
-        ib.setItem(24, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&aclick-sound")
-                .setLore(getcVal() + getString("click-sound")));
-        ib.setItem(25, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&auncover-sound")
-                .setLore(getcVal() + getString("uncover-sound")));
+        ib.setItem(14, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&atick-sound")
+                .setLore(getcVal()).addLore("&7" + getString("tick-sound")).addLore("").addAutomaticLore("&f", 30,
+                        "The sound that is played every time the inventory updates. Set to 'none' to have no sound."));
+        ib.setItem(15, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&aclick-sound")
+                .setLore(getcVal()).addLore("&7" + getString("click-sound")).addLore("").addAutomaticLore("&f", 30,
+                        "The sound that is played every time the player click's a cover block. Set to 'none' to have no sound."));
+        ib.setItem(16, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&auncover-sound")
+                .setLore(getcVal()).addLore("&7" + getString("uncover-sound")).addLore("").addAutomaticLore("&f", 30,
+                        "The sound that is played every time the player uncovers a reward. Set to 'none' to have no sound."));
 
         ib.open();
     }
@@ -76,44 +92,46 @@ public class IGCAnimDiscover extends IGCAnimation
             case 0:
                 up();
                 break;
-            case 11:
+            case 2:
                 new InputMenu(getCc(), getP(), "inv-name", getString("inv-name"), String.class, this);
                 break;
-            case 13:
+            case 4:
                 new InputMenu(getCc(), getP(), "inventory-rows", getString("inventory-rows"), Integer.class, this);
                 break;
-            case 14:
+            case 5:
                 new InputMenu(getCc(), getP(), "minimum-rewards", getString("minimum-rewards"), Integer.class, this);
                 break;
-            case 15:
+            case 6:
                 new InputMenu(getCc(), getP(), "maximum-rewards", getString("maximum-rewards"), Integer.class, this);
                 break;
-            case 16:
+            case 7:
                 new InputMenu(getCc(), getP(), "random-display-duration", getString("random-display-duration"),
                         "How many ticks the random display of green grass plane will run for.", Integer.class, this);
                 break;
-            case 20:
+            case 11:
                 boolean b = !Boolean.valueOf(getString("count"));
                 fc.set(getPath("count"), b);
                 getIb().setItem(20,
                         new ItemBuilder(b ? DynamicMaterial.LIME_WOOL : DynamicMaterial.RED_WOOL, 1).setName("&acount")
                                 .setLore(getcVal() + b).addLore("").addLore("&7Do the 'cover-block's display numbers?"));
                 break;
-            case 21:
+            case 12:
                 new InputMenu(getCc(), getP(), "cover-block", getString("cover-block"), "Formatted: MATERIAL;DURABILITY",
                         String.class, this);
                 break;
-            case 23:
-                new InputMenu(getCc(), getP(), "tick-sound", getString("ticks-sound"), "Formatted: SOUND, VOLUME, PITCH",
+            case 14:
+                new InputMenu(getCc(), getP(), "tick-sound", getString("ticks-sound"),
+                        "Set to 'none' to have no sound. Formatted: SOUND, VOLUME, PITCH",
                         String.class, this);
                 break;
-            case 24:
-                new InputMenu(getCc(), getP(), "click-sound", getString("click-sound"), "Formatted: SOUND, VOLUME, PITCH",
+            case 15:
+                new InputMenu(getCc(), getP(), "click-sound", getString("click-sound"),
+                        "Set to 'none' to have no sound. Formatted: SOUND, VOLUME, PITCH",
                         String.class, this);
                 break;
-            case 25:
+            case 16:
                 new InputMenu(getCc(), getP(), "uncover-sound", getString("uncover-sound"),
-                        "Formatted: SOUND, VOLUME, PITCH", String.class, this);
+                        "Set to 'none' to have no sound. Formatted: SOUND, VOLUME, PITCH", String.class, this);
                 break;
         }
     }
@@ -150,6 +168,14 @@ public class IGCAnimDiscover extends IGCAnimation
         }
         else
         {
+
+            if ((value.equalsIgnoreCase("tick-sound") || value.equalsIgnoreCase("click-sound") ||
+                    value.equalsIgnoreCase("uncover-sound")) &&
+                    (input.equalsIgnoreCase("null") || input.equalsIgnoreCase("none")))
+            {
+                fc.set(getPath(value), null);
+            }
+
             fc.set(getPath(value), input);
             ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
             return true;

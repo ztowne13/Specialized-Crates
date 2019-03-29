@@ -12,15 +12,9 @@ CrateType:
       tick-speed-per-run: 3
       final-crate-tick-length: 11
       random-blocks:
-        - STAINED_GLASS_PANE;1
-        - STAINED_GLASS_PANE;2
-        - STAINED_GLASS_PANE;3
-        - STAINED_GLASS_PANE;4
-        - STAINED_GLASS_PANE;5
-        - STAINED_GLASS_PANE;6
-        - STAINED_GLASS_PANE;7
-        - STAINED_GLASS_PANE;8
-        - STAINED_GLASS_PANE;9
+        - BLACK_STAINED_GLASS_PANE
+        - WHITE_STAINED_GLASS_PANE
+        - GRAY_STAINED_GLASS_PANE
     CSGO:
       inv-name: '&8&l> &6&l%crate%'
       tick-sound: BLOCK_CHEST_LOCKED, 5, 5
@@ -30,15 +24,9 @@ CrateType:
       tile-update-ticks: 2
       close-speed: 3
       filler-blocks:
-        - STAINED_GLASS_PANE;1
-        - STAINED_GLASS_PANE;2
-        - STAINED_GLASS_PANE;3
-        - STAINED_GLASS_PANE;4
-        - STAINED_GLASS_PANE;5
-        - STAINED_GLASS_PANE;6
-        - STAINED_GLASS_PANE;7
-        - STAINED_GLASS_PANE;8
-        - STAINED_GLASS_PANE;9
+        - BLACK_STAINED_GLASS_PANE
+        - WHITE_STAINED_GLASS_PANE
+        - GRAY_STAINED_GLASS_PANE
     Menu:
       inv-name: '&8&l> &6&l%crate%'
       inventory-rows: 3

@@ -35,22 +35,32 @@ public class IGCAnimEnclose extends IGCAnimation
         getP().closeInventory();
         putInMenu();
 
-        InventoryBuilder ib = createDefault(36);
+        InventoryBuilder ib = createDefault(18);
 
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
-        ib.setItem(11,
-                new ItemBuilder(Material.BOOK, 1, 0).setName("&ainv-name").addLore(getcVal() + getString("inv-name")));
-        ib.setItem(13, new ItemBuilder(Material.PAPER, 1, 0).setName("&ainventory-rows")
-                .addLore(getcVal() + getString("inventory-rows")));
-        ib.setItem(14, new ItemBuilder(Material.PAPER, 1, 0).setName("&aupdate-speed")
-                .addLore(getcVal() + getString("update-speed")));
-        ib.setItem(15, new ItemBuilder(Material.PAPER, 1, 0).setName("&areward-amount")
-                .addLore(getcVal() + getString("reward-amount")));
-        ib.setItem(20, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&atick-sound")
-                .addLore(getcVal() + getString("tick-sound")));
-        ib.setItem(23, new ItemBuilder(Material.ENDER_CHEST, 1, 0).setName("&afill-block")
-                .addLore(getcVal() + getString("fill-block")));
+        ib.setItem(2,
+                new ItemBuilder(Material.BOOK, 1, 0).setName("&ainv-name").addLore(getcVal() + getString("inv-name"))
+                        .addLore("").addAutomaticLore("&f", 30,
+                        "The name of the inventory when the animation runs. This is overwritten by the crate's 'inv-name' value, if it exists."));
+        ib.setItem(4, new ItemBuilder(Material.PAPER, 1, 0).setName("&ainventory-rows")
+                .addLore(getcVal()).addLore("&7" + getString("inventory-rows")).addLore("")
+                .addAutomaticLore("&f", 30,
+                        "The amount of rows in addition to the center row, both top and bottom. Meaning, to have 3 rows TOTAL, this value would be 1: 1 row up + 1 row down + center row."));
+        ib.setItem(5, new ItemBuilder(Material.PAPER, 1, 0).setName("&aupdate-speed")
+                .addLore(getcVal()).addLore("&7" + getString("update-speed")).addLore("")
+                .addAutomaticLore("&f", 30,
+                        "The delay between each frame (the speed at which the animation will update and play)."));
+        ib.setItem(6, new ItemBuilder(Material.PAPER, 1, 0).setName("&areward-amount")
+                .addLore(getcVal()).addLore("&7" + getString("reward-amount")).addLore("")
+                .addAutomaticLore("&f", 30,
+                        "The amount of rewards that the player will receive from the crate. Must be an odd number of rewards, otherwise it will be rounded up."));
+        ib.setItem(11, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&atick-sound")
+                .addLore(getcVal()).addLore("&7" + getString("tick-sound")).addLore("").addAutomaticLore("&f", 30,
+                        "The sound that is played every time the inventory updates. Set to 'none' to have no sound."));
+        ib.setItem(14, new ItemBuilder(Material.ENDER_CHEST, 1, 0).setName("&afill-block")
+                .addLore(getcVal()).addLore("&7" + getString("fill-block")).addLore("")
+                .addAutomaticLore("&f", 30, "The block that will fill the empty space in the animation."));
 
         getIb().open();
     }
@@ -63,28 +73,30 @@ public class IGCAnimEnclose extends IGCAnimation
             case 0:
                 up();
                 break;
-            case 11:
+            case 2:
                 new InputMenu(getCc(), getP(), "inv-name", getString("inv-name"), "The name of the inventory", String.class,
                         this);
                 break;
-            case 13:
+            case 4:
                 new InputMenu(getCc(), getP(), "inventory-rows", getString("inventory-rows"),
-                        "How many rows the menu crate has (1 is 1 row up AND down).", Integer.class, this);
+                        "The amount of rows in addition to the center row, both top and bottom. Meaning, to have 3 rows TOTAL, this value would be 1: 1 row up + 1 row down + center row.",
+                        Integer.class, this);
                 break;
-            case 14:
+            case 5:
                 new InputMenu(getCc(), getP(), "update-speed", getString("minimum-rewards"),
                         "How fast each reward disappears (in ticks).", Integer.class, this);
                 break;
-            case 15:
+            case 6:
                 new InputMenu(getCc(), getP(), "reward-amount", getString("maximum-rewards"),
                         "The amount of rewards that are left displayed and given to the player (must be an odd number).",
                         Integer.class, this);
                 break;
-            case 20:
+            case 11:
                 new InputMenu(getCc(), getP(), "tick-sound", getString("tick-sound"),
-                        "Formatted: SOUND, PITCH, VOLUME. The sound played on every update.", String.class, this);
+                        "Set to 'none' to have no sound. Formatted: SOUND, PITCH, VOLUME. The sound played on every update.",
+                        String.class, this);
                 break;
-            case 23:
+            case 14:
                 new InputMenu(getCc(), getP(), "fill-block", getString("fill-block"),
                         "Formatted: MATERIAL;DURABILITY. The block that fills the empty spots", String.class, this);
                 break;
@@ -110,6 +122,11 @@ public class IGCAnimEnclose extends IGCAnimation
         }
         else
         {
+            if (value.equalsIgnoreCase("tick-sound") &&
+                    (input.equalsIgnoreCase("null") || input.equalsIgnoreCase("none")))
+            {
+                fc.set(getPath(value), null);
+            }
             fc.set(getPath(value), input);
             ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
             return true;
