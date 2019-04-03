@@ -112,7 +112,7 @@ public class OpenChestAnimation extends InventoryCrate
     {
         FileConfiguration fc = getFu().get();
 
-        openDuration = FileUtils.loadInt(fc.getString(prefix + "chest-open-duration"), 60, sl,
+        openDuration = FileUtils.loadInt(fc.getString(prefix + "chest-open-duration"), 80, sl,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_INVALID);
 
@@ -120,7 +120,7 @@ public class OpenChestAnimation extends InventoryCrate
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_EARLY_REWARD_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_EARLY_REWARD_INVALID);
 
-        rewardHoloDelay = FileUtils.loadLong(fc.getString(prefix + "reward-hologram-delay"), 9, sl,
+        rewardHoloDelay = FileUtils.loadLong(fc.getString(prefix + "reward-hologram-delay"), 0, sl,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_REWARD_HOLO_DELAY_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_REWARD_HOLO_DELAY_INVALID);
 

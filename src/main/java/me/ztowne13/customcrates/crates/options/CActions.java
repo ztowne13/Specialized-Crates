@@ -318,7 +318,7 @@ public class CActions extends CSetting
             }
         }
 
-        item.addPassenger(real);
+        item.setPassenger(real);
 
     }
     public HashMap<String, HashMap<String, ArrayList<String>>> getActions()

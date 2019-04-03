@@ -9,46 +9,47 @@ import org.bukkit.Location;
  */
 public class CirclePA extends ParticleAnimationEffect
 {
-    int updatesPerSec;
+	int updatesPerSec;
 
-    public CirclePA(CustomCrates cc, ParticleData particleData)
-    {
-        super(cc, particleData);
-        this.updatesPerSec = (int) particleData.getSpeed();
-    }
+	public CirclePA(CustomCrates cc, ParticleData particleData)
+	{
+		super(cc, particleData);
+		this.updatesPerSec = (int) particleData.getSpeed();
+	}
 
-    @Override
-    public void update()
-    {
-        toDisplay.clear();
+	@Override
+	public void update()
+	{
+		toDisplay.clear();
 
-        totalTick += updatesPerSec;
-        tick += updatesPerSec;
+		totalTick += updatesPerSec;
+		tick += updatesPerSec;
 
-        double radius = particleData.getOffX();
-        double yOffset = particleData.getOffY();
-        double height = particleData.getOffZ();
+		double radius = particleData.getOffX();
+		double yOffset = particleData.getOffY();
+		double height = particleData.getOffZ();
 
-        for (int i = tick; i < tick + updatesPerSec; i++)
-        {
-            if (i % (2 + particleData.getAmount()) == 0)
-            {
-                double toX = Math.sin(Math.toRadians(i)) * radius;
-                double toY = Math.cos(Math.toRadians(i)) * radius;
+		for (int i = tick; i < tick + updatesPerSec; i++)
+		{
+			if(i % (2 + particleData.getAmount()) == 0)
+			{
+				double toX = Math.sin(Math.toRadians(i)) * radius;
+				double toY = Math.cos(Math.toRadians(i)) * radius;
 
-                for (double add = -.1; add < height; add += .1)
-                {
-                    Location newL = new Location(null, toX, add + yOffset, toY);
-                    toDisplay.add(newL);
-                }
+				double formattedHeight = height / 10;
+				for (double add = 0; add < formattedHeight; add += .1)
+				{
+					Location newL = new Location(null, toX, add + yOffset, toY);
+					toDisplay.add(newL);
+				}
 
-                if (i > 360)
-                {
-                    i = 1;
-                    tick = 0;
-                }
-            }
-        }
+				if (i > 360)
+				{
+					i = 1;
+					tick = 0;
+				}
+			}
+		}
 
-    }
+	}
 }

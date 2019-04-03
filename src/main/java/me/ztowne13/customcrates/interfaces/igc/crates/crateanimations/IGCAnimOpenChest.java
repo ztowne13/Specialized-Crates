@@ -6,6 +6,7 @@ import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.inputmenus.InputMenu;
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
@@ -41,14 +42,25 @@ public class IGCAnimOpenChest extends IGCAnimation
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
         ib.setItem(3, new ItemBuilder(Material.PAPER, 1, 0).setName("&achest-open-duration")
-                .addLore(getcVal()).addLore("&7" + getString("chest-open-duration")).addLore("")
+                .addLore(getcVal()).addLore("&7Current value:").addLore("&7" + getString("chest-open-duration")).addLore("")
                 .addAutomaticLore("&f", 30, "How long the chest will appear to be open for"));
         ib.setItem(4, new ItemBuilder(Material.PAPER, 1, 0).setName("&aearly-reward-hologram")
-                .addLore(getcVal()).addLore("&7" + getString("early-reward-hologram")).addLore("")
-                .addAutomaticLore("&f", 30, "Should the reward-hologram play early with the animation for added effect?"));
+                .addLore(getcVal()).addLore("&7Current value:").addLore("&7" + getString("early-reward-hologram"))
+                .addLore("")
+                .addAutomaticLore("&f", 30, "Should the reward-hologram play early with the animation for added effect?")
+                .addLore("").addAutomaticLore("&e", 30, "Has no effect if reward-holo-attach-to-item is set to TRUE."));
         ib.setItem(5, new ItemBuilder(Material.PAPER, 1, 0).setName("&areward-hologram-delay")
-                .addLore(getcVal()).addLore("&7" + getString("reward-hologram-delay")).addLore("").addAutomaticLore("&f", 30,
-                        "If displaying the early-reward-hologram, how long to wait for it to appear? Setting this to a value of 9 plays about when the item falls down."));
+                .addLore(getcVal()).addLore("&7Current value:").addLore("&7" + getString("reward-hologram-delay"))
+                .addLore("").addAutomaticLore("&f", 30,
+                        "If displaying the early-reward-hologram, how long to wait for it to appear? Setting this to a value of 9 plays about when the item falls down.")
+                .addLore("").addAutomaticLore("&e", 30, "Has no effect if reward-holo-attach-to-item is set to TRUE."));
+
+        ItemBuilder attachTo = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        attachTo.setDisplayName("&areward-holo-attach-to-item");
+        attachTo.addLore("&7Current value").addLore("&7" + getString("reward-holo-attach-to-item"));
+        attachTo.addAutomaticLore("&f", 30,
+                "Instead of just playing the reward hologram early or normally, have it attach to the actual item to have a nice bounce effect.");
+        ib.setItem(6, attachTo);
 
         getIb().open();
     }
@@ -73,6 +85,11 @@ public class IGCAnimOpenChest extends IGCAnimation
                 new InputMenu(getCc(), getP(), "reward-hologram-delay", getString("reward-hologram-delay"),
                         "How long to delay (or not to delay) the early-reward-hologram from appearing.",
                         Integer.class, this);
+                break;
+            case 6:
+                new InputMenu(getCc(), getP(), "reward-holo-attach-to-item", getString("reward-holo-attach-to-item"),
+                        "Attach the reward hologram to the item that appears.",
+                        Boolean.class, this);
                 break;
         }
     }
