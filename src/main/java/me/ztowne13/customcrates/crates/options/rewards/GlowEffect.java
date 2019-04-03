@@ -15,4 +15,6 @@ public abstract class GlowEffect
     }
 
     public abstract ItemStack apply();
+
+    public abstract ItemStack remove();
 }

@@ -4,7 +4,7 @@ import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.commands.Commands;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
-import me.ztowne13.customcrates.gui.ingame.crates.IGCCratesMain;
+import me.ztowne13.customcrates.interfaces.igc.crates.IGCCratesMain;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

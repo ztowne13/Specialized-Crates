@@ -30,4 +30,19 @@ public class BukkitGlowEffect extends GlowEffect
         }
         return stack;
     }
+
+    @Override
+    public ItemStack remove()
+    {
+        if (NMSUtils.Version.v1_8.isServerVersionOrLater())
+        {
+            ItemMeta im = stack.getItemMeta();
+            im.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+            im.removeEnchant(Enchantment.DURABILITY);
+            stack.setItemMeta(im);
+
+            return stack;
+        }
+        return stack;
+    }
 }

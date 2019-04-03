@@ -191,6 +191,8 @@ public class CRewards extends CSetting
         for (Reward r : getCrateRewards())
         {
             double odds = r.getChance();
+            if(odds < 0)
+                odds = 0;
             totalOdds += odds;
         }
         return totalOdds;

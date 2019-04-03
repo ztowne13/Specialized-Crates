@@ -7,9 +7,9 @@ import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.rewards.RewardDisplayer;
-import me.ztowne13.customcrates.gui.DynamicMaterial;
-import me.ztowne13.customcrates.gui.InventoryBuilder;
-import me.ztowne13.customcrates.gui.ItemBuilder;
+import me.ztowne13.customcrates.interfaces.InventoryBuilder;
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
+import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.VirtualCrateData;
@@ -202,7 +202,7 @@ public class CMultiCrateInventory extends CSetting
                 cc.getDu().log(crate.getName());
                 VirtualCrateData vcd = PlayerManager.get(cc, p).getPdm().getVCCrateData(crate);
                 cc.getDu().log(vcd.toString());
-                ItemBuilder crateIb = new ItemBuilder(crate.getCs().getCrate());
+                ItemBuilder crateIb = new ItemBuilder(crate.getCs().getCrate(1));
                 crateIb.addLore("");
 
                 if (cc.getSettings().getConfigValAsBoolean("virtual-crate-cratecount"))

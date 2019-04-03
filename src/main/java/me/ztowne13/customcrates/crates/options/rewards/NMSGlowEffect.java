@@ -8,6 +8,8 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Created by ztown on 2/17/2017.
  */
+
+@Deprecated
 public class NMSGlowEffect extends GlowEffect
 {
     public NMSGlowEffect(ItemStack stack)
@@ -30,5 +32,11 @@ public class NMSGlowEffect extends GlowEffect
         tag.set("ench", ench);
         nmsStack.setTag(tag);
         return CraftItemStack.asCraftMirror(nmsStack);
+    }
+
+    @Override
+    public ItemStack remove()
+    {
+        return null;
     }
 }

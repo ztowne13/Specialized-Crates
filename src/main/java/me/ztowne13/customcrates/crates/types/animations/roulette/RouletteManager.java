@@ -5,9 +5,9 @@ import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.crates.types.InventoryCrate;
-import me.ztowne13.customcrates.gui.DynamicMaterial;
-import me.ztowne13.customcrates.gui.InventoryBuilder;
-import me.ztowne13.customcrates.gui.ItemBuilder;
+import me.ztowne13.customcrates.interfaces.InventoryBuilder;
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
+import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.Utils;
@@ -92,11 +92,11 @@ public class RouletteManager extends InventoryCrate
                 {
                     Reward r = getCrates().getCs().getCr().getRandomReward(rdh.getP());
                     rdh.setLastShownReward(r);
-                    inv.setItem(i, r.getDisplayItem());
+                    inv.setItem(i, r.getItemBuilder());
                 }
                 else
                 {
-                    inv.setItem(i, rdh.getLastShownReward().getDisplayItem());
+                    inv.setItem(i, rdh.getLastShownReward().getItemBuilder());
                 }
             }
             else

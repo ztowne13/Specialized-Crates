@@ -5,9 +5,9 @@ import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.crates.types.InventoryCrate;
-import me.ztowne13.customcrates.gui.DynamicMaterial;
-import me.ztowne13.customcrates.gui.InventoryBuilder;
-import me.ztowne13.customcrates.gui.ItemBuilder;
+import me.ztowne13.customcrates.interfaces.InventoryBuilder;
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
+import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -115,13 +115,13 @@ public class CSGOManager extends InventoryCrate
                 {
                     cdh.getDisplayedRewards()[numToSet] = cdh.getDisplayedRewards()[i];
 
-                    inv.setItem(numToSet + 10, cdh.getDisplayedRewards()[numToSet].getDisplayItem());
+                    inv.setItem(numToSet + 10, cdh.getDisplayedRewards()[numToSet].getItemBuilder());
                 }
             }
 
             Reward r = getCrates().getCs().getCr().getRandomReward(cdh.getP());
             cdh.getDisplayedRewards()[cdh.getDisplayedRewards().length - 1] = r;
-            inv.setItem(cdh.getDisplayedRewards().length + 9, r.getDisplayItem());
+            inv.setItem(cdh.getDisplayedRewards().length + 9, r.getItemBuilder());
         }
         else
         {
@@ -130,7 +130,7 @@ public class CSGOManager extends InventoryCrate
                 Reward r = cdh.getDisplayedRewards()[i];
                 if (r != null)
                 {
-                    inv.setItem(i + 10, r.getDisplayItem());
+                    inv.setItem(i + 10, r.getItemBuilder());
                 }
             }
         }

@@ -6,8 +6,8 @@ import me.ztowne13.customcrates.crates.options.*;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.CrateHead;
 import me.ztowne13.customcrates.crates.types.CrateType;
-import me.ztowne13.customcrates.gui.DynamicMaterial;
-import me.ztowne13.customcrates.gui.ItemBuilder;
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
+import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
@@ -16,7 +16,6 @@ import me.ztowne13.customcrates.visuals.CrateDisplayType;
 import me.ztowne13.customcrates.visuals.DynamicCratePlaceholder;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -34,7 +33,7 @@ public class CrateSettings
     FileHandler fu;
     CrateSettingsBuilder csb;
 
-    ItemStack crate, key;
+    SaveableItemBuilder crate, key;
     boolean requireKey, tiersOverrideDefaults = true, autoClose = true;
 
     ObtainType ot;
@@ -62,8 +61,10 @@ public class CrateSettings
         this.name = crates.getName();
         this.sl = new StatusLogger(cc);
 
-        crate = new ItemBuilder(DynamicMaterial.RED_WOOL.parseMaterial(), 1, 14).setName("&4Please set me!").get();
-        key = new ItemBuilder(DynamicMaterial.REDSTONE_TORCH.parseMaterial(), 1, 0).setName("&4Please set me!").get();
+        crate = new SaveableItemBuilder(DynamicMaterial.RED_WOOL, 1);
+        crate.setDisplayName("&4Please set me!");
+        key = new SaveableItemBuilder(DynamicMaterial.REDSTONE_TORCH, 1);
+        key.setDisplayName("&4Please set me!");
 
         this.fu = new FileHandler(cc, crates.getName() + (crates.isMultiCrate() ? ".multicrate" : ".crate"), "/Crates", true,
                 true, newFile);
@@ -108,6 +109,7 @@ public class CrateSettings
         fc.set("display.type", getDcp().toString());
         fc.set("hologram-offset", getHologramOffset());
         fc.set("auto-close", isAutoClose());
+        fc.set("key.require", isRequireKey());
 
         fc.set("permission", getPermission().equalsIgnoreCase("no permission") ? null : getPermission());
 
@@ -121,57 +123,57 @@ public class CrateSettings
             fc.set("inventory-name", ChatUtils.fromChatColor(getCrateInventoryName()));
         }
 
-        saveCrate();
+        getCrate().saveItem(getFu(), "crate");
 
         if (!getCrates().isMultiCrate())
         {
-            saveKey();
+            getKey().saveItem(getFu(), "key");
 
             fc.set("open.crate-animation", getCt().name());
         }
 
     }
 
-    public void saveCrate()
-    {
-        fc.set("crate.material", getCrate().getType() + ";" + getCrate().getDurability());
-        fc.set("crate.name", ChatUtils.fromChatColor(getCrate().getItemMeta().getDisplayName()));
-
-        if (getCrate().getEnchantments().keySet().iterator().hasNext())
-        {
-            Enchantment e = getCrate().getEnchantments().keySet().iterator().next();
-            fc.set("crate.enchantment", e.getName() + ";" + getCrate().getEnchantments().get(e));
-        }
-
-        if (getCrate().getItemMeta().hasLore())
-        {
-            fc.set("crate.lore", ChatUtils.removeColorFrom(getCrate().getItemMeta().getLore()));
-        }
-    }
-
-    public void saveKey()
-    {
-        fc.set("key.require", isRequireKey());
-        fc.set("key.material", getKey().getType() + ";" + getKey().getDurability());
-        fc.set("key.name", ChatUtils.fromChatColor(getKey().getItemMeta().getDisplayName()));
-
-        if (getKey().getEnchantments().keySet().iterator().hasNext())
-        {
-            ArrayList<String> enchants = new ArrayList<String>();
-            for (Enchantment enchant : getKey().getEnchantments().keySet())
-            {
-                int lvl = getKey().getEnchantments().get(enchant);
-                enchants.add(enchant.getName() + ";" + lvl);
-            }
-            String updatedPath = fc.contains("key.enchantment") ? "key.enchantment" : "key.enchantments";
-            fc.set(updatedPath, enchants);
-        }
-
-        if (getKey().getItemMeta().hasLore())
-        {
-            fc.set("key.lore", ChatUtils.removeColorFrom(getKey().getItemMeta().getLore()));
-        }
-    }
+//    public void saveCrate()
+//    {
+//        fc.set("crate.material", getCrate().getType() + ";" + getCrate().getDurability());
+//        fc.set("crate.name", ChatUtils.fromChatColor(getCrate().getItemMeta().getDisplayName()));
+//
+//        if (getCrate().getEnchantments().keySet().iterator().hasNext())
+//        {
+//            Enchantment e = getCrate().getEnchantments().keySet().iterator().next();
+//            fc.set("crate.enchantment", e.getName() + ";" + getCrate().getEnchantments().get(e));
+//        }
+//
+//        if (getCrate().getItemMeta().hasLore())
+//        {
+//            fc.set("crate.lore", ChatUtils.removeColorFrom(getCrate().getItemMeta().getLore()));
+//        }
+//
+//    }
+//
+//    public void saveKey()
+//    {
+//        fc.set("key.material", getKey().getType() + ";" + getKey().getDurability());
+//        fc.set("key.name", ChatUtils.fromChatColor(getKey().getItemMeta().getDisplayName()));
+//
+//        if (getKey().getEnchantments().keySet().iterator().hasNext())
+//        {
+//            ArrayList<String> enchants = new ArrayList<String>();
+//            for (Enchantment enchant : getKey().getEnchantments().keySet())
+//            {
+//                int lvl = getKey().getEnchantments().get(enchant);
+//                enchants.add(enchant.getName() + ";" + lvl);
+//            }
+//            String updatedPath = fc.contains("key.enchantment") ? "key.enchantment" : "key.enchantments";
+//            fc.set(updatedPath, enchants);
+//        }
+//
+//        if (getKey().getItemMeta().hasLore())
+//        {
+//            fc.set("key.lore", ChatUtils.removeColorFrom(getKey().getItemMeta().getLore()));
+//        }
+//    }
 
     public void loadAll()
     {
@@ -355,14 +357,14 @@ public class CrateSettings
 
     public ItemStack getKey(int amount)
     {
-        ItemStack stack = key.clone();
+        ItemStack stack = key.get().clone();
         stack.setAmount(amount);
         return stack;
     }
 
     public ItemStack getCrate(int amount)
     {
-        ItemStack stack = crate.clone();
+        ItemStack stack = crate.get().clone();
         stack.setAmount(amount);
         return stack;
     }
@@ -407,7 +409,7 @@ public class CrateSettings
         this.fc = fc;
     }
 
-    public void setKey(ItemStack key)
+    public void setKey(SaveableItemBuilder key)
     {
         this.key = key;
     }
@@ -442,7 +444,7 @@ public class CrateSettings
         this.choloCopy = choloCopy;
     }
 
-    public void setCrate(ItemStack crate)
+    public void setCrate(SaveableItemBuilder crate)
     {
         this.crate = crate;
     }
@@ -532,12 +534,12 @@ public class CrateSettings
         this.cc = cc;
     }
 
-    public ItemStack getCrate()
+    public SaveableItemBuilder getCrate()
     {
         return crate;
     }
 
-    public ItemStack getKey()
+    public SaveableItemBuilder getKey()
     {
         return key;
     }

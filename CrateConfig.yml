@@ -4,6 +4,7 @@ CrateType:
       chest-open-duration: 60
       early-reward-hologram: true
       reward-hologram-delay: 9
+      reward-holo-attach-to-item: true
   Inventory:
     Roulette:
       inv-name: '&8&l> &6&l%crate%'

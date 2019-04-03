@@ -25,6 +25,7 @@ public class OpenChestAnimation extends InventoryCrate
     String prefix;
     int openDuration;
     boolean earlyRewardHologram;
+    boolean attachTo = true;
     long rewardHoloDelay;
 
     Location loc;
@@ -64,12 +65,16 @@ public class OpenChestAnimation extends InventoryCrate
         upOne.setX(upOne.getX() + .5);
         upOne.setZ(upOne.getZ() + .5);
 
-        final Item item = l.getWorld().dropItem(upOne, reward.getDisplayItem());
+        final Item item = l.getWorld().dropItem(upOne, reward.getItemBuilder().getStack());
         item.setPickupDelay(100000);
         item.setVelocity(new Vector(0, item.getVelocity().getY(), 0));
         items.add(item);
 
-        if (isEarlyRewardHologram())
+        if(attachTo)
+        {
+            crates.getCs().getCa().playRewardCrate(p, rewards, .6, true, item);
+        }
+        else if (isEarlyRewardHologram())
         {
             Bukkit.getScheduler().runTaskLater(cc, new Runnable()
             {
@@ -91,6 +96,7 @@ public class OpenChestAnimation extends InventoryCrate
                 new NMSChestState().playChestAction(l.getBlock(), false);
                 item.remove();
                 finishUp(p);
+                items.remove(item);
             }
         }, openDuration);
     }
@@ -117,6 +123,10 @@ public class OpenChestAnimation extends InventoryCrate
         rewardHoloDelay = FileUtils.loadLong(fc.getString(prefix + "reward-hologram-delay"), 9, sl,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_REWARD_HOLO_DELAY_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_REWARD_HOLO_DELAY_INVALID);
+
+        attachTo = FileUtils.loadBoolean(fc.getString(prefix + "reward-holo-attach-to-item"), true, sl,
+                StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_ATTACH_TO_SUCCESS,
+                StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_ATTACH_TO_INVALID);
     }
 
     @Override

@@ -3,11 +3,8 @@ package me.ztowne13.customcrates.crates;
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.crates.types.CrateType;
-import me.ztowne13.customcrates.gui.DynamicMaterial;
-import me.ztowne13.customcrates.gui.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
-import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NPCUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import me.ztowne13.customcrates.visuals.CrateDisplayType;
@@ -16,9 +13,6 @@ import me.ztowne13.customcrates.visuals.MaterialPlaceholder;
 import me.ztowne13.customcrates.visuals.npcs.Citizens2NPCPlaceHolder;
 import me.ztowne13.customcrates.visuals.npcs.MobPlaceholder;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
-
-import java.util.ArrayList;
 
 public class CrateSettingsBuilder
 {
@@ -59,6 +53,18 @@ public class CrateSettingsBuilder
                 return;
             }
             StatusLoggerEvent.SETTINGS_HOLOGRAMOFFSET_FAILURE.log(getSl());
+        }
+    }
+
+    public void setupRequireKey()
+    {
+        if (hasV("key.require"))
+        {
+            getSettings().setRequireKey(getFc().getBoolean(("key.require")));
+        }
+        else
+        {
+            StatusLoggerEvent.SETTINGS_KEY_REQUIRE_NONEXISTENT.log(getSl());
         }
     }
 
@@ -252,176 +258,208 @@ public class CrateSettingsBuilder
 
     public void setupCrate()
     {
-        String cause = "The 'crate.material' value does not exist.";
-        if (hasV("crate.material"))
+        boolean result = getSettings().getCrate()
+                .loadItem(getSettings().getFu(), "crate", getSl(), StatusLoggerEvent.SETTINGS_CRATE_FAILURE,
+                        StatusLoggerEvent.SETTINGS_CRATE_ENCHANTMENT_ADD_FAILURE,
+                        StatusLoggerEvent.SETTINGS_CRATE_POTION_ADD_FAILURE, StatusLoggerEvent.SETTINGS_CRATE_GLOW_FAILURE,
+                        StatusLoggerEvent.SETTINGS_CRATE_AMOUNT_FAILURE);
+        if (!result)
         {
-            cause = "The 'crate.name' value does not exist.";
-            if (hasV("crate.name"))
-            {
-                cause = "NONE";
-                try
-                {
-                    String unsplitMaterial = getFc().getString("crate.material");
-                    String[] args = unsplitMaterial.split(";");
-                    cause = "The material '" + args[0] + "' does not exist.";
-
-                    DynamicMaterial m = DynamicMaterial.fromString(unsplitMaterial);
-
-                    cause = "The crate.name value does not exist.";
-                    String name = ChatUtils.toChatColor(getFc().getString(("crate.name")));
-                    ItemBuilder ib = new ItemBuilder(m, 1).setName(name);
-                    cause = "NONE";
-
-                    if (hasV("crate.lore"))
-                    {
-                        for (String value : getFc().getStringList(("crate.lore")))
-                        {
-                            ib.addLore(value);
-                            StatusLoggerEvent.SETTINGS_CRATE_LORE_ADDLINE_SUCCESS.log(getSl(), new String[]{value});
-                        }
-                    }
-
-
-                    if (hasV("crate.enchantment"))
-                    {
-                        String enchantCause = "crate.enchantment value is improperly set up.";
-                        try
-                        {
-                            String[] enchantArgs = getFc().getString("crate.enchantment").split(";");
-                            enchantCause = "Enchantment " + enchantArgs[0] + " doesn't exist";
-                            Enchantment ench = Enchantment.getByName(enchantArgs[0].toUpperCase());
-
-                            if (ench == null)
-                                throw new Exception();
-
-                            enchantCause = "The enchantment is improperly formatted. Use ENCHANTMENT;LEVEL";
-                            enchantCause = enchantArgs[1] + " is not a valid enchantment level number.";
-                            int level = Integer.parseInt(enchantArgs[1]);
-
-                            ib.addEnchantment(ench, level);
-
-                            StatusLoggerEvent.SETTINGS_CRATE_ENCHANTMENT_ADD_SUCCESS
-                                    .log(getSl(), new String[]{enchantArgs[0]});
-                        }
-                        catch (Exception exc)
-                        {
-                            StatusLoggerEvent.SETTINGS_CRATE_ENCHANTMENT_ADD_FAILURE
-                                    .log(getSl(), new String[]{enchantCause});
-                        }
-                    }
-
-                    StatusLoggerEvent.SETTINGS_CRATE_SUCCESS.log(getSl());
-                    getSettings().setCrate(ib.get());
-                    return;
-                }
-                catch (Exception exc)
-                {
-                    getSettings().getCrates().setEnabled(false);
-                    getSettings().getCrates().setCanBeEnabled(false);
-
-                    StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(getSl(), new String[]{cause});
-                }
-            }
+            StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(getSl());
         }
-
-        StatusLoggerEvent.SETTINGS_CRATE_FAILURE.log(getSl(), new String[]{cause});
     }
-
 
     public void setupKey()
     {
-        String cause = "The 'key.material' value does not exist.";
-        if (hasV("key.material"))
+        //itemfail, improperenchamnt, improperpotion, improperglow
+        setupRequireKey();
+        boolean result = getSettings().getKey()
+                .loadItem(getSettings().getFu(), "key", getSl(), StatusLoggerEvent.SETTINGS_KEY_FAILURE,
+                        StatusLoggerEvent.SETTINGS_KEY_ENCHANTMENT_ADD_FAILURE,
+                        StatusLoggerEvent.SETTINGS_KEY_POTION_ADD_FAILURE, StatusLoggerEvent.SETTINGS_KEY_GLOW_FAILURE,
+                        StatusLoggerEvent.SETTINGS_KEY_AMOUNT_FAILURE);
+
+        if (!result)
         {
-            cause = "The 'key.name' value does not exist.";
-            if (hasV("key.name"))
-            {
-                cause = "NONE";
-                try
-                {
-                    String unsplitMaterial = getFc().getString("key.material");
-                    String[] args = unsplitMaterial.split(";");
-                    cause = "The material '" + args[0] + "' does not exist.";
-
-                    DynamicMaterial m = DynamicMaterial.fromString(unsplitMaterial);
-
-                    cause = "NONE";
-                    String name = ChatUtils.toChatColor(getFc().getString(("key.name")));
-                    ItemBuilder ib = new ItemBuilder(m, 1).setName(name);
-
-                    if (hasV("key.lore"))
-                    {
-                        for (String value : getFc().getStringList(("key.lore")))
-                        {
-                            ib.addLore(value);
-                            StatusLoggerEvent.SETTINGS_KEY_LORE_ADDLINE.log(getSl(), new String[]{value});
-                        }
-                    }
-
-                    if (hasV("key.enchantment") || hasV("key.enchantments"))
-                    {
-                        String enchantCause = "key.enchantment value is improperly set up.";
-                        try
-                        {
-                            String updatedPath = hasV("key.enchantment") ? "key.enchantment" : "key.enchantments";
-
-                            boolean isSet = !getFc().getStringList(updatedPath).isEmpty();
-                            ArrayList<String> oneEnchantment = null;
-                            if (!isSet)
-                            {
-                                oneEnchantment = new ArrayList<String>();
-                                oneEnchantment.add(getFc().getString(updatedPath));
-                            }
-
-                            for (String enchantment : (isSet ? getFc().getStringList(updatedPath) : oneEnchantment))
-                            {
-                                String[] enchantArgs = enchantment.split(";");
-                                enchantCause = "Enchantment " + enchantArgs[0] + " doesn't exist";
-                                Enchantment ench = Enchantment.getByName(enchantArgs[0].toUpperCase());
-
-                                if (ench == null)
-                                    throw new Exception();
-
-                                enchantCause = "The enchantment is improperly formatted. Use ENCHANTMENT;LEVEL";
-                                enchantCause = enchantArgs[1] + " is not a valid enchantment level number.";
-                                int level = Integer.parseInt(enchantArgs[1]);
-
-                                ib.addEnchantment(ench, level);
-                                StatusLoggerEvent.SETTINGS_KEY_ENCHANTMENT_ADD_SUCCESS
-                                        .log(getSl(), new String[]{enchantArgs[0]});
-                            }
-                        }
-                        catch (Exception exc)
-                        {
-                            StatusLoggerEvent.SETTINGS_KEY_ENCHANTMENT_ADD_FAILURE.log(getSl(), new String[]{enchantCause});
-                        }
-                    }
-
-                    StatusLoggerEvent.SETTINGS_KEY_SUCCESS.log(getSl());
-                    getSettings().setKey(ib.get());
-
-                    if (hasV("key.require"))
-                    {
-                        cause = "The 'key.require' value is not true or false";
-                        getSettings().setRequireKey(getFc().getBoolean(("key.require")));
-                    }
-                    else
-                    {
-                        StatusLoggerEvent.SETTINGS_KEY_REQUIRE_NONEXISTENT.log(getSl());
-                    }
-
-                    return;
-                }
-                catch (Exception exc)
-                {
-                    getSettings().getCrates().setEnabled(false);
-                    getSettings().getCrates().setCanBeEnabled(false);
-                    StatusLoggerEvent.SETTINGS_KEY_FAILURE_DISABLE.log(getSl(), new String[]{cause});
-                }
-            }
+            StatusLoggerEvent.SETTINGS_KEY_FAILURE_DISABLE.log(getSl());
         }
-        StatusLoggerEvent.SETTINGS_KEY_FAILURE.log(getSl(), new String[]{cause});
     }
+
+//    public void setupCrate()
+//    {
+//
+//
+//
+//        String cause = "The 'crate.material' value does not exist.";
+//        if (hasV("crate.material"))
+//        {
+//            cause = "The 'crate.name' value does not exist.";
+//            if (hasV("crate.name"))
+//            {
+//                cause = "NONE";
+//                try
+//                {
+//                    String unsplitMaterial = getFc().getString("crate.material");
+//                    String[] args = unsplitMaterial.split(";");
+//                    cause = "The material '" + args[0] + "' does not exist.";
+//
+//                    DynamicMaterial m = DynamicMaterial.fromString(unsplitMaterial);
+//
+//                    cause = "The crate.name value does not exist.";
+//                    String name = ChatUtils.toChatColor(getFc().getString(("crate.name")));
+//                    ItemBuilder ib = new ItemBuilder(m, 1).setName(name);
+//                    cause = "NONE";
+//
+//                    if (hasV("crate.lore"))
+//                    {
+//                        for (String value : getFc().getStringList(("crate.lore")))
+//                        {
+//                            ib.addLore(value);
+//                            StatusLoggerEvent.SETTINGS_CRATE_LORE_ADDLINE_SUCCESS.log(getSl(), new String[]{value});
+//                        }
+//                    }
+//
+//
+//                    if (hasV("crate.enchantment"))
+//                    {
+//                        String enchantCause = "crate.enchantment value is improperly set up.";
+//                        try
+//                        {
+//                            String[] enchantArgs = getFc().getString("crate.enchantment").split(";");
+//                            enchantCause = "Enchantment " + enchantArgs[0] + " doesn't exist";
+//                            Enchantment ench = Enchantment.getByName(enchantArgs[0].toUpperCase());
+//
+//                            if (ench == null)
+//                                throw new Exception();
+//
+//                            enchantCause = "The enchantment is improperly formatted. Use ENCHANTMENT;LEVEL";
+//                            enchantCause = enchantArgs[1] + " is not a valid enchantment level number.";
+//                            int level = Integer.parseInt(enchantArgs[1]);
+//
+//                            ib.addEnchantment(ench, level);
+//
+//                            StatusLoggerEvent.SETTINGS_CRATE_ENCHANTMENT_ADD_SUCCESS
+//                                    .log(getSl(), new String[]{enchantArgs[0]});
+//                        }
+//                        catch (Exception exc)
+//                        {
+//                            StatusLoggerEvent.SETTINGS_CRATE_ENCHANTMENT_ADD_FAILURE
+//                                    .log(getSl(), new String[]{enchantCause});
+//                        }
+//                    }
+//
+//                    StatusLoggerEvent.SETTINGS_CRATE_SUCCESS.log(getSl());
+//                    getSettings().setCrate(ib.get());
+//                    return;
+//                }
+//                catch (Exception exc)
+//                {
+//                    getSettings().getCrates().setEnabled(false);
+//                    getSettings().getCrates().setCanBeEnabled(false);
+//
+//                    StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(getSl(), new String[]{cause});
+//                }
+//            }
+//        }
+//
+//        StatusLoggerEvent.SETTINGS_CRATE_FAILURE.log(getSl(), new String[]{cause});
+//    }
+//
+//
+//    public void setupKey()
+//    {
+//        String cause = "The 'key.material' value does not exist.";
+//        if (hasV("key.material"))
+//        {
+//            cause = "The 'key.name' value does not exist.";
+//            if (hasV("key.name"))
+//            {
+//                cause = "NONE";
+//                try
+//                {
+//                    String unsplitMaterial = getFc().getString("key.material");
+//                    String[] args = unsplitMaterial.split(";");
+//                    cause = "The material '" + args[0] + "' does not exist.";
+//
+//                    DynamicMaterial m = DynamicMaterial.fromString(unsplitMaterial);
+//
+//                    cause = "NONE";
+//                    String name = ChatUtils.toChatColor(getFc().getString(("key.name")));
+//                    ItemBuilder ib = new ItemBuilder(m, 1).setName(name);
+//
+//                    if (hasV("key.lore"))
+//                    {
+//                        for (String value : getFc().getStringList(("key.lore")))
+//                        {
+//                            ib.addLore(value);
+//                            StatusLoggerEvent.SETTINGS_KEY_LORE_ADDLINE.log(getSl(), new String[]{value});
+//                        }
+//                    }
+//
+//                    if (hasV("key.enchantment") || hasV("key.enchantments"))
+//                    {
+//                        String enchantCause = "key.enchantment value is improperly set up.";
+//                        try
+//                        {
+//                            String updatedPath = hasV("key.enchantment") ? "key.enchantment" : "key.enchantments";
+//
+//                            boolean isSet = !getFc().getStringList(updatedPath).isEmpty();
+//                            ArrayList<String> oneEnchantment = null;
+//                            if (!isSet)
+//                            {
+//                                oneEnchantment = new ArrayList<String>();
+//                                oneEnchantment.add(getFc().getString(updatedPath));
+//                            }
+//
+//                            for (String enchantment : (isSet ? getFc().getStringList(updatedPath) : oneEnchantment))
+//                            {
+//                                String[] enchantArgs = enchantment.split(";");
+//                                enchantCause = "Enchantment " + enchantArgs[0] + " doesn't exist";
+//                                Enchantment ench = Enchantment.getByName(enchantArgs[0].toUpperCase());
+//
+//                                if (ench == null)
+//                                    throw new Exception();
+//
+//                                enchantCause = "The enchantment is improperly formatted. Use ENCHANTMENT;LEVEL";
+//                                enchantCause = enchantArgs[1] + " is not a valid enchantment level number.";
+//                                int level = Integer.parseInt(enchantArgs[1]);
+//
+//                                ib.addEnchantment(ench, level);
+//                                StatusLoggerEvent.SETTINGS_KEY_ENCHANTMENT_ADD_SUCCESS
+//                                        .log(getSl(), new String[]{enchantArgs[0]});
+//                            }
+//                        }
+//                        catch (Exception exc)
+//                        {
+//                            StatusLoggerEvent.SETTINGS_KEY_ENCHANTMENT_ADD_FAILURE.log(getSl(), new String[]{enchantCause});
+//                        }
+//                    }
+//
+//                    StatusLoggerEvent.SETTINGS_KEY_SUCCESS.log(getSl());
+//                    getSettings().setKey(ib.get());
+//
+//                    if (hasV("key.require"))
+//                    {
+//                        cause = "The 'key.require' value is not true or false";
+//                        getSettings().setRequireKey(getFc().getBoolean(("key.require")));
+//                    }
+//                    else
+//                    {
+//                        StatusLoggerEvent.SETTINGS_KEY_REQUIRE_NONEXISTENT.log(getSl());
+//                    }
+//
+//                    return;
+//                }
+//                catch (Exception exc)
+//                {
+//                    getSettings().getCrates().setEnabled(false);
+//                    getSettings().getCrates().setCanBeEnabled(false);
+//                    StatusLoggerEvent.SETTINGS_KEY_FAILURE_DISABLE.log(getSl(), new String[]{cause});
+//                }
+//            }
+//        }
+//        StatusLoggerEvent.SETTINGS_KEY_FAILURE.log(getSl(), new String[]{cause});
+//    }
 
     public StatusLogger getSl()
     {

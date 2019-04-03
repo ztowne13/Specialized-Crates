@@ -1,8 +1,8 @@
 package me.ztowne13.customcrates.utils;
 
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
-import me.ztowne13.customcrates.gui.DynamicMaterial;
-import me.ztowne13.customcrates.gui.ItemBuilder;
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
+import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import org.bukkit.Material;

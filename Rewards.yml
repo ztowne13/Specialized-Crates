@@ -6,7 +6,6 @@ Diamond:
   glow: true
   chance: 10
   rarity: rare
-  receive-limit: -1
 Dirt:
   name: 'Dirt'
   commands:
@@ -19,7 +18,6 @@ Dirt:
   glow: true
   chance: 20
   rarity: common
-  receive-limit: -1
 DiamondSword:
   name: 'Diamond Sword'
   enchantments:
@@ -31,7 +29,6 @@ DiamondSword:
   item: DIAMOND_SWORD;0
   chance: 3
   rarity: legendary
-  receive-limit: -1
 MonsterEggsInAllVersions:
   name: 'Monster-specific spawn eggs for all versions'
   commands:
@@ -39,18 +36,16 @@ MonsterEggsInAllVersions:
   item: CREEPER_SPAWN_EGG
   chance: 5
   rarity: legendary
-  receive-limit: 1
 Speed:
   name: 'Speed'
   commands:
     - effect {name} 1 60 1
     - give {name} minecraft:milk 1
   item: POTION
-  nbt-tags:
-    - 'swiftness'
+  potion-effects:
+    - SPEED;0;0
   chance: 5
   rarity: legendary
-  receive-limit: 1
 SuperGoldenApple:
   name: 'Super Golden Apple'
   commands:
@@ -58,7 +53,6 @@ SuperGoldenApple:
   item: GOLDEN_APPLE;1
   chance: 7
   rarity: legendary
-  receive-limit: 5
 GoldenApple:
   name: 'Golden Apple'
   commands:
@@ -66,7 +60,6 @@ GoldenApple:
   item: GOLDEN_APPLE;0
   chance: 10
   rarity: legendary
-  receive-limit: -1
 Grass:
   name: 'Grass'
   commands:
@@ -75,7 +68,6 @@ Grass:
   glow: true
   chance: 20
   rarity: common
-  receive-limit: -1
 SpecialDirt:
   name: 'Special Dirt'
   commands:
@@ -89,18 +81,16 @@ SpecialDirt:
     - '&eChance: &6%writtenchance%%'
   chance: 15
   rarity: uncommon
-  receive-limit: 1
 Jump:
   name: 'Jump Potion'
   commands:
     - effect {name} 8 60 1
     - give {name} minecraft:milk_bucket 1
   item: POTION
-  nbt-tags:
-    - 'leaping'
+  potion-effects:
+    - JUMP;0;0
   chance: 7
   rarity: rare
-  receive-limit: 1
 SpecialDirt2:
   name: 'More Special Dirt'
   commands:
@@ -113,7 +103,6 @@ SpecialDirt2:
     - '&7Get Special Dirt if you win this!'
   chance: 10
   rarity: rare
-  receive-limit: -1
 MyHead:
   name: 'Ztowne13s Head'
   item: PLAYER_HEAD
@@ -124,6 +113,5 @@ MyHead:
   amount: 1
   chance: 1.0
   rarity: '1'
-  receive-limit: 0
   nbt-tags: []
   

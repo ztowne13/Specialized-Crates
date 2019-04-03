@@ -6,9 +6,9 @@ import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.crates.types.InventoryCrate;
-import me.ztowne13.customcrates.gui.DynamicMaterial;
-import me.ztowne13.customcrates.gui.InventoryBuilder;
-import me.ztowne13.customcrates.gui.ItemBuilder;
+import me.ztowne13.customcrates.interfaces.InventoryBuilder;
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
+import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.Utils;
@@ -111,7 +111,7 @@ public class EnclosementAnimation extends InventoryCrate
                     i < midPoint + edh.getCurrentTicksIn() + rewardAmount)
             {
                 Reward r = getCrates().getCs().getCr().getRandomReward(edh.getP());
-                ib.setItem(i, r.getDisplayItem());
+                ib.setItem(i, r.getItemBuilder());
                 edh.getLastDisplayRewards().add(r);
             }
         }

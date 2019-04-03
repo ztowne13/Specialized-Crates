@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.utils.nbt_utils;
 
-import me.ztowne13.customcrates.gui.DynamicMaterial;
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
 import org.bukkit.entity.EntityType;
@@ -140,15 +140,16 @@ public class NBTTagReflection
         }
         else
         {
-            try
-            {
-                list.add(tagCompound.getClass().getMethod("getString", String.class).invoke(tagCompound, "Potion").toString()
-                        .split(":")[1]);
-            }
-            catch (Exception exc)
-            {
-                ChatUtils.log("Failed to load NBT Tag Compound from stack. Please check plugin is up to date.");
-            }
+//            try
+//            {
+//                list.add(tagCompound.getClass().getMethod("getString", String.class).invoke(tagCompound, "Potion").toString()
+//                        .split(":")[1]);
+//            }
+//            catch (Exception exc)
+//            {
+//                exc.printStackTrace();
+//                ChatUtils.log("Failed to load NBT Tag Compound from stack. Please check plugin is up to date.");
+//            }
         }
         return list;
     }

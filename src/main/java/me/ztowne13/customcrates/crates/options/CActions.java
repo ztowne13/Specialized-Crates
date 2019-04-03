@@ -17,6 +17,8 @@ import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -235,12 +237,17 @@ public class CActions extends CSetting
         }
     }
 
-    public void playRewardCrate(Player p, ArrayList<String> rewards)
+    public void playRewardCrate(Player p, ArrayList<String> rewards, double additionalYOffset)
     {
-        playRewardCrate(p, rewards, 0);
+         playRewardCrate(p, rewards, additionalYOffset, false, null);
     }
 
-    public void playRewardCrate(Player p, ArrayList<String> rewards, double additionalYOffset)
+    public void playRewardCrate(Player p, ArrayList<String> rewards)
+    {
+        playRewardCrate(p, rewards, 0, false, null);
+    }
+
+    public void playRewardCrate(Player p, ArrayList<String> rewards, double additionalYOffset, boolean attach, Item item)
     {
         final PlayerManager pm = PlayerManager.get(cc, p);
         if (!(pm.getLastOpenedPlacedCrate() == null))
@@ -261,6 +268,13 @@ public class CActions extends CSetting
                 dynamicHologram.create(rewardLoc);
                 dynamicHologram.addLine(msg);
 
+
+                if(attach)
+                {
+                    attachTo(item, msg);
+                }
+
+
                 Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
                 {
                     @Override
@@ -280,12 +294,33 @@ public class CActions extends CSetting
                         {
                             dynamicHologram.getHa().update(true);
                         }
+
                     }
                 }, getCrates().getCs().getCholoCopy().getRewardHoloDuration());
+
             }
         }
     }
 
+    public void attachTo(Item item, String rewardName)
+    {
+        Entity real = null;
+
+        for(Entity entity : item.getLocation().getChunk().getEntities())
+        {
+            if(item.getLocation().distance(entity.getLocation()) < 2)
+            {
+                if(ChatUtils.removeColor(rewardName).equalsIgnoreCase(ChatUtils.removeColor(entity.getName())))
+                {
+                    real = entity;
+                    break;
+                }
+            }
+        }
+
+        item.addPassenger(real);
+
+    }
     public HashMap<String, HashMap<String, ArrayList<String>>> getActions()
     {
         return actions;

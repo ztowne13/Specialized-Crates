@@ -119,6 +119,11 @@ public enum StatusLoggerEvent
 
     REWARD_ENCHANT_INVALID(false, "Rewards", "Failed to load specified enchantments for reward $?$", "$?$"),
 
+    REWARD_POTION_INVALID(false, "Rewards", "Failed to load specified potion for reward $?$",
+            "'$?$' is not formatted potiontype;duration;amplifier, potiontype is not a valid potion type, or duration/amplifier are not valid numbers."),
+
+    REWARD_AMOUNT_INVALID(false, "Rewards", "Failed to load amount for reward $?$", "It is not a valid number."),
+
     SOUND_NONEXISTENT(false, "Sounds", "The sound value: $?$ is improperly setup.", "Sound '$?$' is invalid."),
 
     SOUND_PITCH_INVALID(false, "Sounds", "Failed to load pitch for sound $?$", "$?$ is not a valid number."),
@@ -151,6 +156,12 @@ public enum StatusLoggerEvent
 
     SETTINGS_CRATE_ENCHANTMENT_ADD_FAILURE(false, "Settings", "Failed to load the 'crate.enchantment' value.", "$?$"),
 
+    SETTINGS_CRATE_POTION_ADD_FAILURE(false, "Settings", "Failed to load the 'crate.potion-effects' value.", "$?$"),
+
+    SETTINGS_CRATE_GLOW_FAILURE(false, "Settings", "Failed to load the 'crate.glow' value.", "$?$"),
+
+    SETTINGS_CRATE_AMOUNT_FAILURE(false, "Settings", "Failed to load the 'crate.amount' value.", "$?$"),
+
     SETTINGS_CRATE_SUCCESS(true, "Settings", "Set up crate item.", "NONE"),
 
     SETTINGS_CRATE_FAILURE_DISABLE(false, "Settings", "Failed to load the crate settings for the crate... disabling", "$?$"),
@@ -162,6 +173,12 @@ public enum StatusLoggerEvent
     SETTINGS_KEY_ENCHANTMENT_ADD_SUCCESS(true, "Settings", "Added enchantment $?$ to the key", "NONE"),
 
     SETTINGS_KEY_ENCHANTMENT_ADD_FAILURE(false, "Settings", "Failed to load the 'key.enchantment' value.", "$?$"),
+
+    SETTINGS_KEY_POTION_ADD_FAILURE(false, "Settings", "Failed to load the 'key.potion-effects' value.", "$?$"),
+
+    SETTINGS_KEY_GLOW_FAILURE(false, "Settings", "Failed to load the 'key.glow' value.", "$?$"),
+
+    SETTINGS_KEY_AMOUNT_FAILURE(false, "Settings", "Failed to load the 'key.amount' value.", "$?$"),
 
     SETTINGS_KEY_SUCCESS(true, "Settings", "Set up key item.", "NONE"),
 
@@ -511,7 +528,7 @@ public enum StatusLoggerEvent
     ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_INVALID(false, "Animation",
             "Failed to load the openchest chest-open-duration value.", "It is either nonexistent or an invalid number."),
 
-    ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_SUCCESS(false, "Animation",
+    ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_SUCCESS(true, "Animation",
             "Successfully loaded the chestopen chest-open-duration value.", "NONE"),
 
     ANIMATION_OPENCHEST_CHEST_OPEN_EARLY_REWARD_SUCCESS(true, "Animation",
@@ -526,7 +543,14 @@ public enum StatusLoggerEvent
 
     ANIMATION_OPENCHEST_CHEST_OPEN_REWARD_HOLO_DELAY_INVALID(false, "Animation",
             "Failed to load the open chest reward-holo-delay value.",
-            "It is either nonexistent or not a valid decimal value value.");
+            "It is either nonexistent or not a valid decimal value."),
+
+    ANIMATION_OPENCHEST_CHEST_OPEN_ATTACH_TO_SUCCESS(true, "Animation",
+            "Successfully loaded the open chest reward-holo-attach-to-item value.", "NONE"),
+
+    ANIMATION_OPENCHEST_CHEST_OPEN_ATTACH_TO_INVALID(false, "Animation",
+            "Failed to load the open chest reward-holo-attach-to-item value.",
+            "It is either nonexistent or not a valid true/false value.");
 
     boolean success;
     String event, cause, section;

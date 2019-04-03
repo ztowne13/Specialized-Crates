@@ -3,7 +3,7 @@ package me.ztowne13.customcrates.crates.options;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
-import me.ztowne13.customcrates.gui.DynamicMaterial;
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import org.bukkit.Bukkit;
@@ -24,10 +24,9 @@ public class CLuckyChest extends CSetting
 
     double chance, outOfChance;
     boolean isBLWL;
-    ArrayList<Material> whiteList = new ArrayList<Material>();
+    ArrayList<Material> whiteList = new ArrayList<>();
     ArrayList<World> worlds = new ArrayList<World>();
 
-    List<String> whiteListRaw = new ArrayList<>();
     List<String> worldsRaw = new ArrayList<>();
     boolean allWorlds = true;
 
@@ -103,15 +102,14 @@ public class CLuckyChest extends CSetting
 
             if (csb.hasV("lucky-chest.block-list"))
             {
-                whiteListRaw = fc.getStringList("lucky-chest.block-list");
                 try
                 {
                     for (String mat : fc.getStringList("lucky-chest.block-list"))
                     {
                         try
                         {
-                            Material m = DynamicMaterial.fromString(mat.toUpperCase()).parseMaterial();
-                            getWhiteList().add(m);
+                            DynamicMaterial m = DynamicMaterial.fromString(mat.toUpperCase());
+                            getWhiteList().add(m.parseMaterial());
                         }
                         catch (Exception exc)
                         {
@@ -138,9 +136,14 @@ public class CLuckyChest extends CSetting
     public void saveToFile()
     {
         getFu().get().set("lucky-chest.chance", ((int) chance) + "/" + ((int) outOfChance));
-        if (!whiteListRaw.isEmpty())
+        if (!whiteList.isEmpty())
         {
             getFu().get().set("lucky-chest.is-block-list-whitelist", isBLWL);
+
+            ArrayList<String> whiteListRaw = new ArrayList<>();
+            for(Material mat : getWhiteList())
+                whiteListRaw.add(mat.name());
+
             getFu().get().set("lucky-chest.block-list", whiteListRaw);
         }
         else
@@ -241,16 +244,6 @@ public class CLuckyChest extends CSetting
     public void setAllWorlds(boolean allWorlds)
     {
         this.allWorlds = allWorlds;
-    }
-
-    public List<String> getWhiteListRaw()
-    {
-        return whiteListRaw;
-    }
-
-    public void setWhiteListRaw(List<String> whiteListRaw)
-    {
-        this.whiteListRaw = whiteListRaw;
     }
 
     public List<String> getWorldsRaw()

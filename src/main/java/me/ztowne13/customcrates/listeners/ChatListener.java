@@ -1,8 +1,8 @@
 package me.ztowne13.customcrates.listeners;
 
 import me.ztowne13.customcrates.CustomCrates;
-import me.ztowne13.customcrates.gui.dynamicmenus.InputMenu;
-import me.ztowne13.customcrates.gui.ingame.IGCMenu;
+import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
+import me.ztowne13.customcrates.interfaces.inputmenus.InputMenu;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.entity.Player;

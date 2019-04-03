@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.crates.types.animations.menu;
 
 
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.gui.InventoryBuilder;
+import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

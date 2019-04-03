@@ -8,7 +8,8 @@ import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.crates.types.animations.discover.DiscoverAnimation;
 import me.ztowne13.customcrates.crates.types.animations.discover.DiscoverDataHolder;
 import me.ztowne13.customcrates.crates.types.animations.menu.MenuAnimation;
-import me.ztowne13.customcrates.gui.ingame.crates.IGCMultiCrateMain;
+import me.ztowne13.customcrates.interfaces.igc.crates.IGCMultiCrateMain;
+import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCDragAndDrop;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Bukkit;
@@ -80,7 +81,9 @@ public class InventoryActionListener implements Listener
                 if (e.getClickedInventory().equals(e.getView().getTopInventory()) &&
                         !e.getInventory().getName().equalsIgnoreCase(ChatUtils.toChatColor("&c&lClose to save")))
                 {
-                    e.setCancelled(true);
+                    if(!(pm.getOpenMenu() instanceof IGCDragAndDrop) || e.getSlot() == 52 || e.getSlot() == 53)
+                        e.setCancelled(true);
+
                     try
                     {
                         pm.getOpenMenu().manageClick(e.getSlot());

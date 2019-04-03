@@ -3,19 +3,18 @@ package me.ztowne13.customcrates.crates.options.rewards;
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.CRewards;
-import me.ztowne13.customcrates.gui.DynamicMaterial;
-import me.ztowne13.customcrates.gui.ItemBuilder;
+import me.ztowne13.customcrates.interfaces.items.CompressedEnchantment;
+import me.ztowne13.customcrates.interfaces.items.CompressedPotionEffect;
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
+import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.FileHandler;
 import me.ztowne13.customcrates.utils.NMSUtils;
-import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -27,27 +26,26 @@ public class Reward
     FileConfiguration fc;
 
     CRewards cr;
-    String rewardName, displayName;
+    String rewardName, tempDisplayName;
     String rarity = "default";
-    ItemStack displayItem;
-    List<String> customLore;
+
+    ItemBuilder itemBuilder;
 
     double chance;
     List<String> commands;
     int totalUses;
-    Material m;
     boolean needsMoreConfig;
-    boolean glow = false;
 
     boolean toLog;
 
     public Reward(CustomCrates cc, String rewardName)
     {
-        setDisplayName(rewardName);
         init();
         needsMoreConfig = true;
         this.cc = cc;
         setRewardName(rewardName);
+        itemBuilder = new ItemBuilder(DynamicMaterial.STONE, 1);
+        itemBuilder.setDisplayName(rewardName);
     }
 
     public Reward(CustomCrates cc, CRewards cr, String rewardName)
@@ -63,9 +61,7 @@ public class Reward
     public void init()
     {
         commands = new ArrayList<String>();
-        customLore = new ArrayList<String>();
         needsMoreConfig = false;
-        glow = false;
         toLog = false;
         chance = -1;
     }
@@ -83,40 +79,53 @@ public class Reward
     {
         FileHandler fu = getCc().getRewardsFile();
         FileConfiguration fc = fu.get();
-        fc.set(getPath("name"), getDisplayName());
+        fc.set(getPath("name"), itemBuilder.getDisplayNameStripped());
         fc.set(getPath("commands"), getCommands());
-        fc.set(getPath("item"), asDynamicMaterial().toString());
-        fc.set(getPath("glow"), glow);
-        fc.set(getPath("amount"), getDisplayItem().getAmount());
-        fc.set(getPath("head-player-name"), getHeadName());
-
-        ArrayList<String> parsedEnchs = new ArrayList<>();
-
-        if (!getDisplayItem().getEnchantments().isEmpty())
-        {
-            for (Enchantment ench : getDisplayItem().getEnchantments().keySet())
-            {
-                parsedEnchs.add(ench.getName() + ";" + getDisplayItem().getEnchantments().get(ench));
-            }
-            fc.set(getPath("enchantments"), parsedEnchs);
-        }
-
-        if (!customLore.isEmpty())
-        {
-            fc.set(getPath("lore"), customLore);
-        }
-        else
-        {
-            fc.set(getPath("lore"), null);
-        }
-
+        fc.set(getPath("item"), DynamicMaterial.fromItemStack(itemBuilder.get()).name());
+        fc.set(getPath("glow"), itemBuilder.isGlowing());
+        fc.set(getPath("amount"), itemBuilder.get().getAmount());
+        fc.set(getPath("head-player-name"), itemBuilder.getPlayerHeadName());
         fc.set(getPath("chance"), getChance());
         fc.set(getPath("rarity"), getRarity());
-        fc.set(getPath("receive-limit"), getTotalUses());
+        fc.set(getPath("receive-limit"), /*getTotalUses()*/null);
 
+        // Enchantments
+        if (!itemBuilder.getEnchantments().isEmpty())
+        {
+            ArrayList<String> parsedEnchs = new ArrayList<>();
+            for (CompressedEnchantment ench : itemBuilder.getEnchantments())
+                parsedEnchs.add(ench.toString());
+
+            fc.set(getPath("enchantments"), parsedEnchs);
+        }
+        else
+            fc.set(getPath("enchantments"), null);
+
+        // Potion Effects
+        if(!itemBuilder.getPotionEffects().isEmpty())
+        {
+            ArrayList<String> parsedPots = new ArrayList<>();
+            for(CompressedPotionEffect compressedPotionEffect : itemBuilder.getPotionEffects())
+                parsedPots.add(compressedPotionEffect.toString());
+
+            fc.set(getPath("potion-effects"), parsedPots);
+        }
+        else
+            fc.set(getPath("potion-effects"), null);
+
+        // Lore
+        if(!itemBuilder.getLore().isEmpty())
+            fc.set(getPath("lore"), itemBuilder.getLore());
+        else
+            fc.set(getPath("lore"), null);
+
+        // NBT Tags
         if (NMSUtils.Version.v1_12.isServerVersionOrEarlier() && NMSUtils.Version.v1_8.isServerVersionOrLater())
         {
-            fc.set(getPath("nbt-tags"), NBTTagManager.getFrom(getDisplayItem()));
+            if(!itemBuilder.getNBTTags().isEmpty())
+                fc.set(getPath("nbt-tags"), itemBuilder.getNBTTags());
+            else
+                fc.set(getPath("nbt-tags"), null);
         }
 
         fu.save();
@@ -156,7 +165,7 @@ public class Reward
     public String applyVariablesTo(String s)
     {
         return ChatUtils.toChatColor(s.replace("%rewardname%", getRewardName()).
-                replace("%displayname%", getDisplayName()).
+                replace("%displayname%", itemBuilder.getDisplayName()).
                 replace("%writtenchance%", getChance() + "").
                 replace("%rarity%", rarity)).
                 replace("%chance%", getFormattedChance());
@@ -200,11 +209,23 @@ public class Reward
 
         try
         {
-            setDisplayName(getFc().getString(getPath("name")));
+            String unsplitMat = getFc().getString(getPath("item"));
+            DynamicMaterial m = DynamicMaterial.fromString(unsplitMat);
+            itemBuilder = new ItemBuilder(m, 1);
+        }
+        catch(Exception exc)
+        {
+            return false;
+        }
+
+        try
+        {
+            itemBuilder.setDisplayName(getFc().getString(getPath("name")));
 
         }
         catch (Exception exc)
         {
+            itemBuilder.setDisplayName(itemBuilder.getStack().getType().name().toLowerCase());
             needsMoreConfig = true;
             if (toLog)
             {
@@ -229,11 +250,11 @@ public class Reward
 
         try
         {
-            setGlow(getFc().getBoolean(getPath("glow")));
+            itemBuilder.setGlowing(getFc().getBoolean(getPath("glow")));
         }
         catch (Exception exc)
         {
-
+            itemBuilder.setGlowing(false);
         }
 
         try
@@ -272,8 +293,9 @@ public class Reward
             }
         }
 
-        if (getDisplayName() == null)
-            displayName = rewardName;
+        if (itemBuilder.getDisplayName() == null)
+            itemBuilder.setDisplayName(rewardName);
+
         if (getRarity() == null)
             rarity = "default";
 
@@ -282,45 +304,40 @@ public class Reward
 
     public void buildDisplayItemFromConfig()
     {
-        String unsplitMat = getFc().getString(getPath("item"));
-
-        DynamicMaterial m = DynamicMaterial.fromString(unsplitMat);
-
-        ItemBuilder ib = new ItemBuilder(m, 1);
-
-        ib.setName(applyVariablesTo(cc.getSettings().getConfigValues().get("inv-reward-item-name").toString()));
+        itemBuilder.setDisplayName(applyVariablesTo(cc.getSettings().getConfigValues().get("inv-reward-item-name").toString()));
 
         // If an item has a custom lore, apply that. Otherwise apply the general lore.
         if (getFc().contains(getPath("lore")))
         {
+
             for (String s : getFc().getStringList(getPath("lore")))
             {
-                ib.addLore(applyVariablesTo(s));
-                customLore.add(applyVariablesTo(s));
+                itemBuilder.addLore(applyVariablesTo(s));
             }
         }
         else
         {
             for (Object s : (ArrayList<String>) cc.getSettings().getConfigValues().get("inv-reward-item-lore"))
             {
-                ib.addLore(applyVariablesTo(s.toString()));
+                itemBuilder.addLore(applyVariablesTo(s.toString()));
             }
         }
 
         if (getFc().contains(getPath("head-player-name")))
         {
-            ib.applyPlayerHeadName(getFc().getString(getPath("head-player-name")));
+            itemBuilder.setPlayerHeadName(getFc().getString(getPath("head-player-name")));
         }
 
         if (getFc().contains(getPath("amount")))
         {
             try
             {
-                int amnt = getFc().getInt(getPath("amount"));
-                ib.getStack().setAmount(amnt);
+                int amnt = Integer.parseInt(getFc().getString(getPath("amount")));
+                itemBuilder.getStack().setAmount(amnt);
             }
             catch (Exception exc)
             {
+                StatusLoggerEvent.REWARD_AMOUNT_INVALID.log(getCr().getCrates(), new String[]{itemBuilder.getDisplayName()});
             }
         }
 
@@ -330,7 +347,28 @@ public class Reward
             {
                 for (String s : fc.getStringList(getPath("nbt-tags")))
                 {
-                    ib.applyNBTTag(s);
+                    itemBuilder.addNBTTag(s);
+                }
+            }
+        }
+
+        if(getFc().contains(getPath("potion-effects")))
+        {
+            for(String unparsedPot : getFc().getStringList(getPath("potion-effects")))
+            {
+                try
+                {
+                    CompressedPotionEffect compressedPotionEffect = CompressedPotionEffect.fromString(unparsedPot);
+
+                    if(compressedPotionEffect == null)
+                        throw new Exception();
+                    else
+                        itemBuilder.addPotionEffect(compressedPotionEffect);
+                }
+                catch (Exception exc)
+                {
+                    StatusLoggerEvent.REWARD_POTION_INVALID
+                            .log(getCr().getCrates(), new String[]{itemBuilder.getDisplayName(), unparsedPot});
                 }
             }
         }
@@ -357,50 +395,27 @@ public class Reward
                     cause = args[1] + " is not a valid Integer.";
                     int level = Integer.parseInt(args[1]);
 
-                    ib.addEnchantment(ench, level);
+                    itemBuilder.addEnchantment(ench, level);
                     continue;
                 }
             }
             catch (Exception exc)
             {
-                StatusLoggerEvent.REWARD_ENCHANT_INVALID.log(getCr().getCrates(), new String[]{getDisplayName(), cause});
+                StatusLoggerEvent.REWARD_ENCHANT_INVALID.log(getCr().getCrates(), new String[]{itemBuilder.getDisplayName(), cause});
             }
         }
+    }
 
-        if (glow)
-        {
-            ib.setStack(NMSUtils.Version.v1_7.isServerVersionOrLater() ? new BukkitGlowEffect(ib.get()).apply() :
-                    new NMSGlowEffect(ib.get()).apply());
-        }
-
-        setDisplayItem(ib.get());
+    public String getDisplayName()
+    {
+        if(itemBuilder == null || itemBuilder.getDisplayName() == null)
+            return rewardName;
+        return itemBuilder.getDisplayName();
     }
 
     public void checkIsNeedMoreConfig()
     {
-        needsMoreConfig = !(chance != -1 && getDisplayName() != null && rarity != null && displayItem != null);
-    }
-
-    public DynamicMaterial asDynamicMaterial()
-    {
-        return DynamicMaterial.fromString(getDisplayItem().getType().toString() + ";" + getDisplayItem().getDurability());
-    }
-
-    public String getHeadName()
-    {
-        return new ItemBuilder(getDisplayItem()).getPlayerHeadName();
-    }
-
-    public void setHeadName(String headName)
-    {
-        ItemBuilder ib = new ItemBuilder(getDisplayItem());
-        ib.applyPlayerHeadName(headName);
-        setDisplayItem(ib.get());
-    }
-
-    public void setDisplayItem(ItemStack displayItem)
-    {
-        this.displayItem = displayItem;
+        needsMoreConfig = !(chance != -1 && itemBuilder.getDisplayName() != null && rarity != null && itemBuilder != null);
     }
 
     public boolean equals(Reward r)
@@ -418,11 +433,6 @@ public class Reward
         return getRewardName() + "." + s;
     }
 
-    public ItemStack getDisplayItem()
-    {
-        return displayItem;
-    }
-
     public List<String> getCommands()
     {
         return commands;
@@ -431,16 +441,6 @@ public class Reward
     public void setCommands(List<String> list)
     {
         this.commands = list;
-    }
-
-    public String getDisplayName()
-    {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName)
-    {
-        this.displayName = displayName;
     }
 
     public String getRewardName()
@@ -471,16 +471,6 @@ public class Reward
     public void setChance(Integer chance)
     {
         this.chance = chance;
-    }
-
-    public Material getM()
-    {
-        return m;
-    }
-
-    public void setM(Material m)
-    {
-        this.m = m;
     }
 
     public CustomCrates getCc()
@@ -538,23 +528,23 @@ public class Reward
         this.needsMoreConfig = needsMoreConfig;
     }
 
-    public boolean isGlow()
+    public String getTempDisplayName()
     {
-        return glow;
+        return tempDisplayName;
     }
 
-    public void setGlow(boolean glow)
+    public void setTempDisplayName(String tempDisplayName)
     {
-        this.glow = glow;
+        this.tempDisplayName = tempDisplayName;
     }
 
-    public List<String> getCustomLore()
+    public ItemBuilder getItemBuilder()
     {
-        return customLore;
+        return itemBuilder;
     }
 
-    public void setCustomLore(List<String> customLore)
+    public void setItemBuilder(ItemBuilder itemBuilder)
     {
-        this.customLore = customLore;
+        this.itemBuilder = itemBuilder;
     }
 }

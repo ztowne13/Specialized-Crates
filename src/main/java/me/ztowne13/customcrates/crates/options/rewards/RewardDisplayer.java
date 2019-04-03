@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.crates.options.rewards;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.CRewards;
-import me.ztowne13.customcrates.gui.InventoryBuilder;
+import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.entity.Player;
@@ -32,7 +32,7 @@ public class RewardDisplayer
         int i = 0;
         for (Reward r : crewards)
         {
-            ib.setItem(i, r.getDisplayItem());
+            ib.setItem(i, r.getItemBuilder());
             i++;
         }
         return ib;

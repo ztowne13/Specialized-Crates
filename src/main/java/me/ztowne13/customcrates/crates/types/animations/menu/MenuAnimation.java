@@ -52,7 +52,7 @@ public class MenuAnimation extends InventoryCrate
             Reward reward = getCrates().getCs().getCr().getRandomReward(mdh.getP());
             mdh.getDisplayedRewards().add(reward);
 
-            mdh.getInv().setItem(slot, reward.getDisplayItem());
+            mdh.getInv().setItem(slot, reward.getItemBuilder());
         }
 
         mdh.getInv().open();
