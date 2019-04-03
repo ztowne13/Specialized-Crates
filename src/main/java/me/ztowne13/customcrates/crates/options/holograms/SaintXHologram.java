@@ -15,13 +15,13 @@ import java.util.UUID;
 /**
  * Created by ztowne13 on 2/14/16.
  */
-public class SHHologram extends DynamicHologram
+public class SaintXHologram extends DynamicHologram
 {
     HologramManager hm;
     Hologram hologram;
     double defaultYOffSet = -.2;
 
-    public SHHologram(CustomCrates cc, PlacedCrate cm)
+    public SaintXHologram(CustomCrates cc, PlacedCrate cm)
     {
         super(cc, cm);
         this.hm = JavaPlugin.getPlugin(HologramPlugin.class).getHologramManager();

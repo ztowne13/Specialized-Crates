@@ -10,12 +10,12 @@ import org.bukkit.Location;
 
 import java.util.HashMap;
 
-public class HDHologram extends DynamicHologram
+public class HolographicDisplaysHologram extends DynamicHologram
 {
     Hologram h;
     HashMap<Integer, TextLine> lines = new HashMap<Integer, TextLine>();
 
-    public HDHologram(CustomCrates cc, PlacedCrate cm)
+    public HolographicDisplaysHologram(CustomCrates cc, PlacedCrate cm)
     {
         super(cc, cm);
     }

@@ -269,17 +269,17 @@ public class CHolograms extends CSetting
         if (Utils.isPLInstalled("HolographicDisplays"))
         {
             Utils.addToInfoLog(getCc(), "Hologram Plugin", "HolographicDisplays");
-            return new HDHologram(getCc(), cm);
+            return new HolographicDisplaysHologram(getCc(), cm);
         }
         if (Utils.isPLInstalled("IndividualHolograms"))
         {
             Utils.addToInfoLog(getCc(), "Hologram Plugin", "Individual Holograms");
-            return new IHHologram(getCc(), cm);
+            return new IndividualHologramsHologram(getCc(), cm);
         }
         if (Utils.isPLInstalled("Holograms"))
         {
             Utils.addToInfoLog(getCc(), "Hologram Plugin", "Holograms");
-            return new SHHologram(getCc(), cm);
+            return new SaintXHologram(getCc(), cm);
         }
 
         Utils.addToInfoLog(getCc(), "Hologram Plugin", "None");

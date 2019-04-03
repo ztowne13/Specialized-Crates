@@ -8,12 +8,13 @@ import org.bukkit.Location;
 
 import java.util.UUID;
 
-public class IHHologram extends DynamicHologram
+@Deprecated
+public class IndividualHologramsHologram extends DynamicHologram
 {
     UUID uuid;
     double defaultYOffSet = -1.4D;
 
-    public IHHologram(CustomCrates cc, PlacedCrate cm)
+    public IndividualHologramsHologram(CustomCrates cc, PlacedCrate cm)
     {
         super(cc, cm);
     }
