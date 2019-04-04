@@ -30,7 +30,7 @@ public class IGCMenuMain extends IGCMenu
         putInMenu();
 
         InventoryBuilder ib = createDefault(27);
-        ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
+        ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb().setName("&aSave every file/crate"));
         ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
         ib.setItem(18, IGCDefaultItems.EXIT_BUTTON.getIb());
 
