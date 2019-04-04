@@ -30,7 +30,9 @@ public class IGCMenuMain extends IGCMenu
         putInMenu();
 
         InventoryBuilder ib = createDefault(27);
-        ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
+        ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
+        ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
+        ib.setItem(18, IGCDefaultItems.EXIT_BUTTON.getIb());
 
         ItemBuilder paper = new ItemBuilder(Material.PAPER, 1, 0);
 
@@ -62,7 +64,13 @@ public class IGCMenuMain extends IGCMenu
     {
         switch (slot)
         {
+            case 0:
+                getCc().saveEverything();
+                break;
             case 9:
+                getCc().reload();
+                break;
+            case 18:
                 getP().closeInventory();
                 break;
             case 11:

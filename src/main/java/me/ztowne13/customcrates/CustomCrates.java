@@ -102,6 +102,25 @@ public class CustomCrates extends JavaPlugin
 
     }
 
+    public void saveEverything()
+    {
+        messageFile.save();
+        rewardsFile.save();
+        crateconfigFile.save();
+        settings.writeSettingsValues();
+        for(Crate crate : Crate.getLoadedCrates().values())
+        {
+            try
+            {
+                crate.getCs().saveAll();
+            }
+            catch(Exception exc)
+            {
+                exc.printStackTrace();
+            }
+        }
+    }
+
     public void reload()
     {
         ChatUtils.log("Disabling...");
