@@ -44,23 +44,30 @@ public class IGCAnimOpenChest extends IGCAnimation
         ib.setItem(3, new ItemBuilder(Material.PAPER, 1, 0).setName("&achest-open-duration")
                 .addLore(getcVal()).addLore("&7Current value:").addLore("&7" + getString("chest-open-duration")).addLore("")
                 .addAutomaticLore("&f", 30, "How long the chest will appear to be open for"));
-        ib.setItem(4, new ItemBuilder(Material.PAPER, 1, 0).setName("&aearly-reward-hologram")
+        ib.setItem(4, new ItemBuilder(DynamicMaterial.REDSTONE, 1).setName("&aearly-reward-hologram")
                 .addLore(getcVal()).addLore("&7Current value:").addLore("&7" + getString("early-reward-hologram"))
                 .addLore("")
                 .addAutomaticLore("&f", 30, "Should the reward-hologram play early with the animation for added effect?")
                 .addLore("").addAutomaticLore("&e", 30, "Has no effect if reward-holo-attach-to-item is set to TRUE."));
-        ib.setItem(5, new ItemBuilder(Material.PAPER, 1, 0).setName("&areward-hologram-delay")
+        ib.setItem(5, new ItemBuilder(DynamicMaterial.REPEATER, 1).setName("&areward-hologram-delay")
                 .addLore(getcVal()).addLore("&7Current value:").addLore("&7" + getString("reward-hologram-delay"))
                 .addLore("").addAutomaticLore("&f", 30,
                         "If displaying the early-reward-hologram, how long to wait for it to appear? Setting this to a value of 9 plays about when the item falls down.")
                 .addLore("").addAutomaticLore("&e", 30, "Has no effect if reward-holo-attach-to-item is set to TRUE."));
 
-        ItemBuilder attachTo = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        ItemBuilder attachTo = new ItemBuilder(DynamicMaterial.DIAMOND, 1);
         attachTo.setDisplayName("&areward-holo-attach-to-item");
-        attachTo.addLore("&7Current value").addLore("&7" + getString("reward-holo-attach-to-item"));
-        attachTo.addAutomaticLore("&f", 30,
+        attachTo.addLore("&7Current value:").addLore("&7" + getString("reward-holo-attach-to-item"));
+        attachTo.addLore("").addAutomaticLore("&f", 30,
                 "Instead of just playing the reward hologram early or normally, have it attach to the actual item to have a nice bounce effect.");
         ib.setItem(6, attachTo);
+
+        ItemBuilder earlyActions = new ItemBuilder(DynamicMaterial.FIREWORK_ROCKET, 1);
+        earlyActions.setDisplayName("&aearly-open-actions");
+        earlyActions.addLore("&7Current value:").addLore("&7" + getString("early-open-actions"));
+        earlyActions.addLore("").addAutomaticLore("&f", 30,
+                "Play the fireworks, sounds, actions, and particles when the crate is OPENED as opposed to after it closes.");
+        ib.setItem(7, earlyActions);
 
         getIb().open();
     }
@@ -88,7 +95,12 @@ public class IGCAnimOpenChest extends IGCAnimation
                 break;
             case 6:
                 new InputMenu(getCc(), getP(), "reward-holo-attach-to-item", getString("reward-holo-attach-to-item"),
-                        "Attach the reward hologram to the item that appears.",
+                        "Attach the reward hologram to the item that appears?",
+                        Boolean.class, this);
+                break;
+            case 7:
+                new InputMenu(getCc(), getP(), "early-open-actions", getString("early-open-actions"),
+                        "Play the fireworks, sound, actions, and particles right when the crate is opened, not after it closes.",
                         Boolean.class, this);
                 break;
         }

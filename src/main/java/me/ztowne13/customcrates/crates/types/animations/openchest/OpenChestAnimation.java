@@ -26,6 +26,7 @@ public class OpenChestAnimation extends InventoryCrate
     int openDuration;
     boolean earlyRewardHologram;
     boolean attachTo = true;
+    boolean earlyEffects = false;
     long rewardHoloDelay;
 
     Location loc;
@@ -69,6 +70,11 @@ public class OpenChestAnimation extends InventoryCrate
         item.setPickupDelay(100000);
         item.setVelocity(new Vector(0, item.getVelocity().getY(), 0));
         items.add(item);
+
+        ArrayList<Reward> rewardsStr = new ArrayList<Reward>();
+        rewardsStr.add(reward);
+        if(earlyEffects)
+            getCrates().tick(loc, CrateState.OPEN, p, rewardsStr);
 
         if(attachTo)
         {
@@ -117,16 +123,20 @@ public class OpenChestAnimation extends InventoryCrate
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_INVALID);
 
         earlyRewardHologram = FileUtils.loadBoolean(fc.getString(prefix + "early-reward-hologram"), true, sl,
-                StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_EARLY_REWARD_SUCCESS,
-                StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_EARLY_REWARD_INVALID);
+                StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_REWARD_SUCCESS,
+                StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_REWARD_INVALID);
 
         rewardHoloDelay = FileUtils.loadLong(fc.getString(prefix + "reward-hologram-delay"), 0, sl,
-                StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_REWARD_HOLO_DELAY_SUCCESS,
-                StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_REWARD_HOLO_DELAY_INVALID);
+                StatusLoggerEvent.ANIMATION_OPENCHEST_REWARD_HOLO_DELAY_SUCCESS,
+                StatusLoggerEvent.ANIMATION_OPENCHEST_REWARD_HOLO_DELAY_INVALID);
 
         attachTo = FileUtils.loadBoolean(fc.getString(prefix + "reward-holo-attach-to-item"), true, sl,
-                StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_ATTACH_TO_SUCCESS,
-                StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_ATTACH_TO_INVALID);
+                StatusLoggerEvent.ANIMATION_OPENCHEST_ATTACH_TO_SUCCESS,
+                StatusLoggerEvent.ANIMATION_OPENCHEST_ATTACH_TO_INVALID);
+
+        earlyEffects = FileUtils.loadBoolean(fc.getString(prefix + "early-open-actions"), false, sl,
+                StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_OPEN_ACTIONS_SUCCESS,
+                StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_OPEN_ACTIONS_INVALID);
     }
 
     @Override
@@ -136,7 +146,8 @@ public class OpenChestAnimation extends InventoryCrate
         rewards.add(reward);
 
         completeCrateRun(p, rewards, false);
-        getCrates().tick(loc, CrateState.OPEN, p, rewards);
+        if(!earlyEffects)
+            getCrates().tick(loc, CrateState.OPEN, p, rewards);
     }
 
     public static void removeAllItems()

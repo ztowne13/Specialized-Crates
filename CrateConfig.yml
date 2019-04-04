@@ -5,6 +5,7 @@ CrateType:
       early-reward-hologram: true
       reward-hologram-delay: 0
       reward-holo-attach-to-item: true
+      early-open-actions: false
   Inventory:
     Roulette:
       inv-name: '&8&l> &6&l%crate%'

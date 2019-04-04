@@ -531,25 +531,32 @@ public enum StatusLoggerEvent
     ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_SUCCESS(true, "Animation",
             "Successfully loaded the chestopen chest-open-duration value.", "NONE"),
 
-    ANIMATION_OPENCHEST_CHEST_OPEN_EARLY_REWARD_SUCCESS(true, "Animation",
+    ANIMATION_OPENCHEST_EARLY_REWARD_SUCCESS(true, "Animation",
             "Successfully loaded the open chest early-reward-hologram value.", "NONE"),
 
-    ANIMATION_OPENCHEST_CHEST_OPEN_EARLY_REWARD_INVALID(false, "Animation",
+    ANIMATION_OPENCHEST_EARLY_REWARD_INVALID(false, "Animation",
             "Failed to load the open chest early-reward-hologram value.",
             "It is either nonexistent or not a valid true/false value."),
 
-    ANIMATION_OPENCHEST_CHEST_OPEN_REWARD_HOLO_DELAY_SUCCESS(true, "Animation",
+    ANIMATION_OPENCHEST_REWARD_HOLO_DELAY_SUCCESS(true, "Animation",
             "Successfully loaded the open chest reward-holo-delay value.", "NONE"),
 
-    ANIMATION_OPENCHEST_CHEST_OPEN_REWARD_HOLO_DELAY_INVALID(false, "Animation",
+    ANIMATION_OPENCHEST_REWARD_HOLO_DELAY_INVALID(false, "Animation",
             "Failed to load the open chest reward-holo-delay value.",
             "It is either nonexistent or not a valid decimal value."),
 
-    ANIMATION_OPENCHEST_CHEST_OPEN_ATTACH_TO_SUCCESS(true, "Animation",
+    ANIMATION_OPENCHEST_ATTACH_TO_SUCCESS(true, "Animation",
             "Successfully loaded the open chest reward-holo-attach-to-item value.", "NONE"),
 
-    ANIMATION_OPENCHEST_CHEST_OPEN_ATTACH_TO_INVALID(false, "Animation",
+    ANIMATION_OPENCHEST_ATTACH_TO_INVALID(false, "Animation",
             "Failed to load the open chest reward-holo-attach-to-item value.",
+            "It is either nonexistent or not a valid true/false value."),
+
+    ANIMATION_OPENCHEST_EARLY_OPEN_ACTIONS_SUCCESS(true, "Animation",
+            "Successfully loaded the open chest early-open-actions value.", "NONE"),
+
+    ANIMATION_OPENCHEST_EARLY_OPEN_ACTIONS_INVALID(false, "Animation",
+            "Faield to load the open chest early-open-actions value.",
             "It is either nonexistent or not a valid true/false value.");
 
     boolean success;
