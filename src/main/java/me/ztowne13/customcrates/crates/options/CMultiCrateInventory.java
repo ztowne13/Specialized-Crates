@@ -231,7 +231,11 @@ public class CMultiCrateInventory extends CSetting
     @Override
     public void saveToFile()
     {
+        if(ib == null || ib.getInv() == null)
+            return;
+
         Inventory inv = ib.getInv();
+
         for (int i = 0; i < inv.getSize(); i++)
         {
             ItemStack stack;
