@@ -50,12 +50,17 @@ public class CRewards extends CSetting
         Reward[] newRewards = new Reward[crateRewards.length - 1];
 
         int i = 0;
+        boolean foundOne = false;
         for (Reward r : crateRewards)
         {
-            if (!r.equals(toRemove))
+            if (!r.equals(toRemove) || foundOne)
             {
                 newRewards[i] = r;
                 i++;
+            }
+            else
+            {
+                foundOne = true;
             }
         }
 
