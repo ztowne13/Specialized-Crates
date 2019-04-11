@@ -9,6 +9,8 @@ import me.ztowne13.customcrates.crates.options.CHolograms;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.animations.openchest.OpenChestAnimation;
+import me.ztowne13.customcrates.interfaces.holograms.HologramInteractListener;
+import me.ztowne13.customcrates.interfaces.holograms.HologramManager;
 import me.ztowne13.customcrates.listeners.*;
 import me.ztowne13.customcrates.logging.UpdateChecker;
 import me.ztowne13.customcrates.players.PlayerDataManager;
@@ -31,6 +33,7 @@ public class CustomCrates extends JavaPlugin
     FileHandler messageFile, rewardsFile, activecratesFile, crateconfigFile;
     Settings settings;
     UpdateChecker updateChecker;
+    HologramManager hologramManager;
 
     BukkitTask br;
 
@@ -38,6 +41,7 @@ public class CustomCrates extends JavaPlugin
 
     int tick = 0;
     boolean allowTick = true;
+    boolean onlyUseBuildInHolograms = true;
 
     ArrayList<ParticleData> alreadyUpdated = new ArrayList<>();
 
@@ -49,10 +53,11 @@ public class CustomCrates extends JavaPlugin
 
     public void onEnable(boolean register)
     {
-
         reloadConfig();
         saveDefaultConfig();
         loadFiles();
+
+        this.hologramManager = new HologramManager(this);
 
         setSettings(new Settings(this));
         getSettings().load();
@@ -180,6 +185,7 @@ public class CustomCrates extends JavaPlugin
         rl(new PlayerConnectionListener(this));
         rl(new CommandPreprocessListener(this));
         rl(new ChatListener(this));
+        rl(new HologramInteractListener(this));
 
         if (NPCUtils.isCitizensInstalled())
         {
@@ -237,7 +243,7 @@ public class CustomCrates extends JavaPlugin
                 }
             }
 
-            alreadyUpdated.clear();
+            getAlreadyUpdated().clear();
 
             setTick(getTick() + 1);
 
@@ -312,16 +318,6 @@ public class CustomCrates extends JavaPlugin
         return du;
     }
 
-    public void setDu(DebugUtils du)
-    {
-        this.du = du;
-    }
-
-    public BukkitTask getBr()
-    {
-        return br;
-    }
-
     public void setBr(BukkitTask br)
     {
         this.br = br;
@@ -377,24 +373,10 @@ public class CustomCrates extends JavaPlugin
         this.crateconfigFile = crateconfigFile;
     }
 
-    public boolean isAllowTick()
-    {
-        return allowTick;
-    }
-
-    public void setAllowTick(boolean allowTick)
-    {
-        this.allowTick = allowTick;
-    }
 
     public ArrayList<ParticleData> getAlreadyUpdated()
     {
         return alreadyUpdated;
-    }
-
-    public void setAlreadyUpdated(ArrayList<ParticleData> alreadyUpdated)
-    {
-        this.alreadyUpdated = alreadyUpdated;
     }
 
     public UpdateChecker getUpdateChecker()
@@ -402,8 +384,13 @@ public class CustomCrates extends JavaPlugin
         return updateChecker;
     }
 
-    public void setUpdateChecker(UpdateChecker updateChecker)
+    public HologramManager getHologramManager()
     {
-        this.updateChecker = updateChecker;
+        return hologramManager;
+    }
+
+    public boolean isOnlyUseBuildInHolograms()
+    {
+        return onlyUseBuildInHolograms;
     }
 }
