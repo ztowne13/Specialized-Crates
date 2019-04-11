@@ -266,6 +266,11 @@ public class CHolograms extends CSetting
 
     public DynamicHologram getLoadedInstance(PlacedCrate cm)
     {
+        if(getCc().isOnlyUseBuildInHolograms())
+        {
+            Utils.addToInfoLog(getCc(), "Hologram Plugin", "Built in hologram support");
+            return new NativeHologram(getCc(),cm);
+        }
         if (Utils.isPLInstalled("HolographicDisplays"))
         {
             Utils.addToInfoLog(getCc(), "Hologram Plugin", "HolographicDisplays");
