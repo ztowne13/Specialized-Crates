@@ -318,7 +318,17 @@ public class CActions extends CSetting
             }
         }
 
-        item.setPassenger(real);
+        try
+        {
+            if (real != null)
+            {
+                item.setPassenger(real);
+            }
+        }
+        catch(Exception exc)
+        {
+
+        }
 
     }
     public HashMap<String, HashMap<String, ArrayList<String>>> getActions()
