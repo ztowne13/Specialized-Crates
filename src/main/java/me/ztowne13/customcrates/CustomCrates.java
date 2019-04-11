@@ -11,6 +11,7 @@ import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.animations.openchest.OpenChestAnimation;
 import me.ztowne13.customcrates.interfaces.holograms.HologramInteractListener;
 import me.ztowne13.customcrates.interfaces.holograms.HologramManager;
+import me.ztowne13.customcrates.interfaces.holograms.HologramManagerAS;
 import me.ztowne13.customcrates.listeners.*;
 import me.ztowne13.customcrates.logging.UpdateChecker;
 import me.ztowne13.customcrates.players.PlayerDataManager;
@@ -57,7 +58,7 @@ public class CustomCrates extends JavaPlugin
         saveDefaultConfig();
         loadFiles();
 
-        this.hologramManager = new HologramManager(this);
+        this.hologramManager = new HologramManagerAS(this);
 
         setSettings(new Settings(this));
         getSettings().load();

@@ -7,11 +7,11 @@ import org.bukkit.entity.ArmorStand;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HologramManager
+public abstract class HologramManager
 {
     CustomCrates cc;
 
-    List<HologramAS> holograms;
+    List<Hologram> holograms;
 
     public HologramManager(CustomCrates cc)
     {
@@ -19,37 +19,15 @@ public class HologramManager
         holograms = new ArrayList<>();
     }
 
-    public boolean isHologramEntity(ArmorStand stand)
-    {
-        for(HologramAS hologram : getHolograms())
-        {
-            if(hologram.getStands().contains(stand))
-                return true;
-        }
+    public abstract boolean isHologramEntity(ArmorStand stand);
 
-        return false;
-    }
+    public abstract Hologram createHologram(String name, Location location);
 
-    public HologramAS createHologram(String name, Location location)
-    {
-        HologramAS newHolo = new HologramAS(getCc(), name, location);
-        getHolograms().add(newHolo);
+    public abstract void deleteHologram(Hologram hologram);
 
-        return newHolo;
-    }
+    abstract CustomCrates getCc();
 
-    public void deleteHologram(HologramAS hologram)
-    {
-        hologram.deleteStands();
-        getHolograms().remove(hologram);
-    }
-
-    public CustomCrates getCc()
-    {
-        return cc;
-    }
-
-    public List<HologramAS> getHolograms()
+    public List<Hologram> getHolograms()
     {
         return holograms;
     }

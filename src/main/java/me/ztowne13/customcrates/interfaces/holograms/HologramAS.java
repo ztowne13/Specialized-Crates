@@ -9,21 +9,18 @@ import org.bukkit.entity.EntityType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HologramAS
+@Deprecated
+public class HologramAS extends Hologram
 {
     double SEPARATION = 0.25;
-
-    CustomCrates cc;
-
-    String name;
-    Location location;
 
     List<String> lines;
     List<ArmorStand> stands;
 
     protected HologramAS(CustomCrates cc, String name, Location location)
     {
-        this.cc = cc;
+        super(cc, name, location);
+
         this.name = name;
         this.location = location;
 
@@ -37,22 +34,19 @@ public class HologramAS
             stand.remove();
     }
 
+    @Override
     public void addLine(String line)
     {
-//        int index = getLines().size();
-//        double offset = -index*SEPARATION;
-//
-//        Location toSetLoc = getLocation().add(0, offset, 0);
-
         ArmorStand armorStand = spawnNewArmourStand(getLocation());
         armorStand.setCustomName(ChatUtils.toChatColor(line));
 
         getStands().add(armorStand);
         getLines().add(line);
 
-        updateLines();
+        update();
     }
 
+    @Override
     public void setLine(int i, String line)
     {
         if(i >= getLines().size())
@@ -68,12 +62,8 @@ public class HologramAS
         }
     }
 
-    public void setLocation(Location location)
-    {
-        this.location = location;
-    }
-
-    public void updateLines()
+    @Override
+    public void update()
     {
         for(int i = 0; i < getLines().size(); i++)
         {
@@ -88,6 +78,7 @@ public class HologramAS
         }
     }
 
+
     private ArmorStand spawnNewArmourStand(Location spawnLoc)
     {
         ArmorStand as = (ArmorStand) spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
@@ -98,11 +89,6 @@ public class HologramAS
         as.setVisible(false);
 
         return as;
-    }
-
-    public CustomCrates getCc()
-    {
-        return cc;
     }
 
     public String getName()
