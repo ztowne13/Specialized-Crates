@@ -72,7 +72,7 @@ public class OpenChestAnimation extends InventoryCrate
 
         if(attachTo)
         {
-            crates.getCs().getCa().playRewardCrate(p, rewards, .6, true, item);
+            crates.getCs().getCa().playRewardCrate(p, rewards, .6, true, item, openDuration);
         }
         else if (isEarlyRewardHologram())
         {
