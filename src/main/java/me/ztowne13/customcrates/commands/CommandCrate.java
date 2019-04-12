@@ -87,15 +87,15 @@ public class CommandCrate extends Commands implements CommandExecutor
             }
             else if (args.length == 0)
             {
-                msg("&7&l>> &3&m--------------------");
+                msg("&7&l>> &3&m                    ");
                 msg("&c" + cc.getDescription().getName() + " &fV" + cc.getDescription().getVersion());
                 msg("&6By &e" + cc.getDescription().getAuthors().get(0));
-                msg("&7&l>> &3&m--------------------");
+                msg("&7&l>> &3&m                    ");
                 return true;
             }
 
             msg(Messages.NO_PERMISSIONS.getFromConf(cc)
-                    .replaceAll("%permission%", "customcrates.crates / customcrates.admin"));
+                    .replaceAll("%permission%", "customcrates.admin"));
         }
         else
         {

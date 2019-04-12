@@ -239,15 +239,15 @@ public class CActions extends CSetting
 
     public void playRewardCrate(Player p, ArrayList<String> rewards, double additionalYOffset)
     {
-         playRewardCrate(p, rewards, additionalYOffset, false, null);
+        playRewardCrate(p, rewards, additionalYOffset, false, null, -1);
     }
 
     public void playRewardCrate(Player p, ArrayList<String> rewards)
     {
-        playRewardCrate(p, rewards, 0, false, null);
+        playRewardCrate(p, rewards, 0, false, null, -1);
     }
 
-    public void playRewardCrate(Player p, ArrayList<String> rewards, double additionalYOffset, boolean attach, Item item)
+    public void playRewardCrate(Player p, ArrayList<String> rewards, double additionalYOffset, boolean attach, Item item, int openDuration)
     {
         final PlayerManager pm = PlayerManager.get(cc, p);
         if (!(pm.getLastOpenedPlacedCrate() == null))
@@ -269,7 +269,7 @@ public class CActions extends CSetting
                 dynamicHologram.addLine(msg);
 
 
-                if(attach)
+                if (attach)
                 {
                     attachTo(item, msg);
                 }
@@ -296,7 +296,7 @@ public class CActions extends CSetting
                         }
 
                     }
-                }, getCrates().getCs().getCholoCopy().getRewardHoloDuration());
+                }, attach ? openDuration : getCrates().getCs().getCholoCopy().getRewardHoloDuration());
 
             }
         }
@@ -306,15 +306,14 @@ public class CActions extends CSetting
     {
         Entity real = null;
 
-        for(Entity entity : item.getLocation().getChunk().getEntities())
+        for (Entity entity : item.getLocation().getChunk().getEntities())
         {
-            if(item.getLocation().distance(entity.getLocation()) < 2)
+            if (item.getLocation().distance(entity.getLocation()) < 2 &&
+                    ChatUtils.removeColor(rewardName).equalsIgnoreCase(ChatUtils.removeColor(entity.getName())) &&
+                    !entity.equals(item))
             {
-                if(ChatUtils.removeColor(rewardName).equalsIgnoreCase(ChatUtils.removeColor(entity.getName())))
-                {
-                    real = entity;
-                    break;
-                }
+                real = entity;
+                break;
             }
         }
 
@@ -325,12 +324,13 @@ public class CActions extends CSetting
                 item.setPassenger(real);
             }
         }
-        catch(Exception exc)
+        catch (Exception exc)
         {
-
+            exc.printStackTrace();
         }
 
     }
+
     public HashMap<String, HashMap<String, ArrayList<String>>> getActions()
     {
         return actions;
