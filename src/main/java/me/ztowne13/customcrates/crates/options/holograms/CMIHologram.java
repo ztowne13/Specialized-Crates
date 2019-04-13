@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 public class CMIHologram extends DynamicHologram
 {
@@ -26,17 +27,23 @@ public class CMIHologram extends DynamicHologram
     @Override
     public void create(Location l)
     {
-        l.setY(l.getY() + getCm().getCholo().getHologramOffset() - 1);
-        l = LocationUtils.getLocationCentered(l);
-        this.l = l;
-        cmiHologram =
-                new com.Zrips.CMI.Modules.Holograms.CMIHologram(
-                        ".SpecializedCrate::" + l.getWorld().getName() + "," + l.getBlockX() + "," + l.getBlockY() + "," +
-                                l.getBlockZ(), l);
+        if(!getCm().isDeleted())
+        {
+            l.setY(l.getY() + getCm().getCholo().getHologramOffset() - 1);
+            l = LocationUtils.getLocationCentered(l);
 
-        cmiHologram.setUpdateIntervalSec(.1);
-        hologramManager.addHologram(cmiHologram);
-        update(true);
+            this.l = l;
+
+            cmiHologram =
+                    new com.Zrips.CMI.Modules.Holograms.CMIHologram(
+                            ".SpecializedCrate::" + l.getWorld().getName() + "," + l.getBlockX() + "," + l.getBlockY() +
+                                    "," +
+                                    l.getBlockZ(), l);
+
+            cmiHologram.setUpdateIntervalSec(.1);
+            hologramManager.addHologram(cmiHologram);
+            //update(true);
+        }
     }
 
     @Override
@@ -52,7 +59,10 @@ public class CMIHologram extends DynamicHologram
         cmiHologram.setLines(newList);
 
         hologramManager.addHologram(cmiHologram);
-        update(true);
+
+
+        //hologramManager.handleHoloRangeUpdates(Bukkit.getOnlinePlayers().iterator().next(), l);
+        //update(true);
         //cmiHologram.setUpdateIntervalSec(.001);
         //hologramManager.save();
     }
@@ -74,15 +84,16 @@ public class CMIHologram extends DynamicHologram
             cmiHologram.setLines(newList);
 
             hologramManager.addHologram(cmiHologram);
-            update(true);
+            //update(true);
             //hologramManager.save();
         }
     }
 
     public void remove()
     {
+        System.out.println("Removing...");
         hologramManager.removeHolo(cmiHologram);
-        update(false);
+        hologramManager.handleHoloUpdates(Bukkit.getOnlinePlayers().iterator().next(), l);
     }
 
     @Override
@@ -107,24 +118,40 @@ public class CMIHologram extends DynamicHologram
 
     public void update(boolean add)
     {
-
-        for (Player p : Bukkit.getOnlinePlayers())
+        System.out.println("Updating [" + add + "]");
+        if(add)
         {
-            Location holoL = cmiHologram.getLoc();
-            if(holoL.distance(p.getLocation()) <= 30)
+            for (Player p : Bukkit.getOnlinePlayers())
             {
-                if (add)
+                Location holoL = cmiHologram.getLoc();
+                if (holoL.distance(p.getLocation()) <= 30)
                 {
-                    cmiHologram.addLastHoloInRange(p.getUniqueId());
-                    cmiHologram.addLastHoloInRangeExtra(p.getUniqueId());
-                    cmiHologram.update(p);
-                }
-                else
-                {
-                    cmiHologram.removeLastHoloInRange(p.getUniqueId());
-                    cmiHologram.removeLastHoloInRangeExtra(p.getUniqueId());
+                    if (add)
+                    {
+                        cmiHologram.addLastHoloInRange(p.getUniqueId());
+                        cmiHologram.addLastHoloInRangeExtra(p.getUniqueId());
+                        cmiHologram.update(p);
+                    }
+
                 }
             }
         }
+        else
+        {
+            for(UUID uuid : cmiHologram.getLastHoloInRange())
+            {
+                cmiHologram.removeLastHoloInRange(uuid);
+                cmiHologram.hide(uuid);
+
+            }
+            for(UUID uuid : cmiHologram.getLastHoloInRangeExtra())
+            {
+                cmiHologram.removeLastHoloInRangeExtra(uuid);
+                cmiHologram.hide(uuid);
+
+            }
+        }
+
+        cmiHologram.update();
     }
 }

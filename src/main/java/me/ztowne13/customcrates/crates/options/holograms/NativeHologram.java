@@ -9,6 +9,7 @@ import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+@Deprecated
 public class NativeHologram extends DynamicHologram
 {
     HologramManager hologramManager;

@@ -73,8 +73,11 @@ public class OpenChestAnimation extends InventoryCrate
 
         ArrayList<Reward> rewardsStr = new ArrayList<Reward>();
         rewardsStr.add(reward);
+
         if(earlyEffects)
+        {
             getCrates().tick(loc, CrateState.OPEN, p, rewardsStr);
+        }
 
         if(attachTo)
         {
@@ -137,6 +140,9 @@ public class OpenChestAnimation extends InventoryCrate
         earlyEffects = FileUtils.loadBoolean(fc.getString(prefix + "early-open-actions"), false, sl,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_OPEN_ACTIONS_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_OPEN_ACTIONS_INVALID);
+
+        if(attachTo == true)
+            earlyRewardHologram = true;
     }
 
     @Override

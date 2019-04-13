@@ -4,9 +4,9 @@ import me.ztowne13.customcrates.CustomCrates;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 
-public class HologramMananerNMS extends HologramManager
+public class HologramManagerNMS extends HologramManager
 {
-    public HologramMananerNMS(CustomCrates cc)
+    public HologramManagerNMS(CustomCrates cc)
     {
         super(cc);
     }
