@@ -274,7 +274,6 @@ public class CActions extends CSetting
                     attachTo(item, msg);
                 }
 
-
                 Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
                 {
                     @Override
@@ -321,7 +320,10 @@ public class CActions extends CSetting
         {
             if (real != null)
             {
-                item.setPassenger(real);
+                if(NMSUtils.Version.v1_13.isServerVersionOrLater())
+                    item.addPassenger(real);
+                else
+                    item.setPassenger(real);
             }
         }
         catch (Exception exc)
