@@ -127,6 +127,9 @@ public class OpenChestAnimation extends InventoryCrate
         attachTo = FileUtils.loadBoolean(fc.getString(prefix + "reward-holo-attach-to-item"), true, sl,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_ATTACH_TO_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_ATTACH_TO_INVALID);
+
+        if(attachTo == true)
+            earlyRewardHologram = true;
     }
 
     @Override

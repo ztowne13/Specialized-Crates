@@ -21,6 +21,7 @@ public class PlacedCrate
     Crate crates;
 
     boolean isCratesEnabled;
+    boolean deleted = false;
 
     CHolograms cholo;
 
@@ -44,6 +45,7 @@ public class PlacedCrate
         getCholo().getDh().delete();
         getCrates().getCs().getDcp().remove(this);
         getPlacedCrates().remove(getL());
+        deleted = true;
     }
 
     public void writeToFile()
@@ -207,5 +209,10 @@ public class PlacedCrate
     public void setCrates(Crate crates)
     {
         this.crates = crates;
+    }
+
+    public boolean isDeleted()
+    {
+        return deleted;
     }
 }
