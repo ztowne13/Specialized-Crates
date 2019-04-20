@@ -70,7 +70,7 @@ public class CParticles extends CSetting
 
                     if (!(pd.getParticleAnimationEffect() == null))
                         getFu().get().set(path + "." + pd.getName() + ".animation",
-                                PEAnimationType.getFromParticleAnimationEffect(pd.getParticleAnimationEffect()));
+                                PEAnimationType.getFromParticleAnimationEffect(pd.getParticleAnimationEffect()).name());
                     else
                         getFu().get().set(path + "." + pd.getName() + ".animation", "NONE");
                 }
