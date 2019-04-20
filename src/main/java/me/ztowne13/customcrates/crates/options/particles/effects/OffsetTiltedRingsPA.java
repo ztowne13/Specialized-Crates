@@ -25,9 +25,9 @@ public class OffsetTiltedRingsPA extends ParticleAnimationEffect
         totalTick += updatesPerSec;
         tick += updatesPerSec;
 
-        double radius = particleData.getOffX();
-        double yOffset = particleData.getOffY();
-        double rotation = particleData.getOffZ();
+        double radius = particleData.getRangeX();
+        double yOffset = particleData.getRangeY();
+        double rotation = particleData.getRangeZ();
 
         double rotateInRadians = Math.toRadians(rotation);
 

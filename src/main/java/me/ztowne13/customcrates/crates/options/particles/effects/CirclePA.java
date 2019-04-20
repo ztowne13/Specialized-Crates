@@ -25,9 +25,9 @@ public class CirclePA extends ParticleAnimationEffect
 		totalTick += updatesPerSec;
 		tick += updatesPerSec;
 
-		double radius = particleData.getOffX();
-		double yOffset = particleData.getOffY();
-		double height = particleData.getOffZ();
+		double radius = particleData.getRangeX();
+		double yOffset = particleData.getRangeY();
+		double height = particleData.getRangeZ();
 
 		for (int i = tick; i < tick + updatesPerSec; i++)
 		{

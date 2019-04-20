@@ -27,7 +27,7 @@ public class BukkitParticleEffect extends ParticleData
     {
         if (false /*isHasColor()*/)
         {
-            //l.getWorld().spawnParticle(particle, l, 1, isHasAnimation() ? 0 : getOffX(), isHasAnimation() ? 0 : getOffY(), isHasAnimation() ? 0 : getOffZ(), getSpeed(), red, green, blue);
+            //l.getWorld().spawnParticle(particle, l, 1, isHasAnimation() ? 0 : getRangeX(), isHasAnimation() ? 0 : getRangeY(), isHasAnimation() ? 0 : getRangeZ(), getSpeed(), red, green, blue);
         }
         else
         {
@@ -37,9 +37,9 @@ public class BukkitParticleEffect extends ParticleData
             }
             else
             {
-                l.getWorld().spawnParticle(particle, LocationUtils.getLocationCentered(l), getAmount(),
-                        isHasAnimation() ? 0 : getOffX(), isHasAnimation() ? 0 : getOffY(), isHasAnimation() ? 0 : getOffZ(),
-                        getSpeed());
+                l.getWorld().spawnParticle(particle,
+                        LocationUtils.getLocationCentered(l).add(getCenterX(), getCenterY(), getCenterZ()), getAmount(),
+                        getRangeX(), getRangeY(), getRangeZ(), getSpeed());
             }
         }
     }

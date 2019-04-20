@@ -36,7 +36,7 @@ public class NMSParticleEffect extends ParticleData
                 }
                 else
                 {
-                    particleEffect.sendToPlayer(p, LocationUtils.getLocationCentered(l), getOffX(), getOffY(), getOffZ(),
+                    particleEffect.sendToPlayer(p, LocationUtils.getLocationCentered(l), getRangeX(), getRangeY(), getRangeZ(),
                             getSpeed(), getAmount());
                 }
             }

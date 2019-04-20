@@ -6,7 +6,7 @@ import org.bukkit.Location;
 public abstract class ParticleData
 {
     String name;
-    float offX, offY, offZ, speed;
+    float rangeX, rangeY, rangeZ, centerX, centerY, centerZ, speed;
     boolean hasAnimation, hasColor;
     int amount, red, green, blue;
 
@@ -16,6 +16,11 @@ public abstract class ParticleData
     {
         this.name = name;
         this.hasAnimation = hasAnimation;
+
+        this.rangeX = this.rangeY = this.rangeZ = 1;
+        this.centerX = this.centerY = this.centerZ = 0;
+        this.amount = 1;
+        this.speed = isHasAnimation() ? 20 : 0;
     }
 
     public abstract void display(Location l);
@@ -24,36 +29,36 @@ public abstract class ParticleData
 
     public abstract boolean setParticle(String particleName);
 
-    public float getOffX()
+    public float getRangeX()
     {
-        return offX;
+        return rangeX;
     }
 
-    public ParticleData setOffX(float offX)
+    public ParticleData setRangeX(float rangeX)
     {
-        this.offX = offX;
+        this.rangeX = rangeX;
         return this;
     }
 
-    public float getOffY()
+    public float getRangeY()
     {
-        return offY;
+        return rangeY;
     }
 
-    public ParticleData setOffY(float offY)
+    public ParticleData setRangeY(float rangeY)
     {
-        this.offY = offY;
+        this.rangeY = rangeY;
         return this;
     }
 
-    public float getOffZ()
+    public float getRangeZ()
     {
-        return offZ;
+        return rangeZ;
     }
 
-    public ParticleData setOffZ(float offZ)
+    public ParticleData setRangeZ(float rangeZ)
     {
-        this.offZ = offZ;
+        this.rangeZ = rangeZ;
         return this;
     }
 
@@ -142,5 +147,40 @@ public abstract class ParticleData
     public String getName()
     {
         return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public float getCenterX()
+    {
+        return centerX;
+    }
+
+    public void setCenterX(float centerX)
+    {
+        this.centerX = centerX;
+    }
+
+    public float getCenterY()
+    {
+        return centerY;
+    }
+
+    public void setCenterY(float centerY)
+    {
+        this.centerY = centerY;
+    }
+
+    public float getCenterZ()
+    {
+        return centerZ;
+    }
+
+    public void setCenterZ(float centerZ)
+    {
+        this.centerZ = centerZ;
     }
 }

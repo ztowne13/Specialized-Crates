@@ -39,7 +39,7 @@ public class IGCCrateParticle extends IGCTierMenu
         getP().closeInventory();
         putInMenu();
 
-        InventoryBuilder ib = createDefault(27);
+        InventoryBuilder ib = createDefault(pd.getParticleAnimationEffect() == null ? 36 : 27);
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
         ib.setItem(8, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&cDelete this particle")
@@ -58,19 +58,19 @@ public class IGCCrateParticle extends IGCTierMenu
         if (pd.getParticleAnimationEffect() == null)
         {
             ib.setItem(12,
-                    new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aX Offset")
+                    new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aX Range")
                             .addLore("&7Current value: ")
-                            .addLore("&7" + pd.getOffX()).addLore("")
+                            .addLore("&7" + pd.getRangeX()).addLore("")
                             .addAutomaticLore("&f", 30, "Range particles will spawn in the X direction."));
             ib.setItem(13,
-                    new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aY Offset")
+                    new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aY Range")
                             .addLore("&7Current value: ")
-                            .addLore("&7" + pd.getOffY()).addLore("")
+                            .addLore("&7" + pd.getRangeY()).addLore("")
                             .addAutomaticLore("&f", 30, "Range particles will spawn in the Y direction."));
             ib.setItem(14,
-                    new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aZ Offset")
+                    new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aZ Range")
                             .addLore("&7Current value: ")
-                            .addLore("&7" + pd.getOffZ()).addLore("")
+                            .addLore("&7" + pd.getRangeZ()).addLore("")
                             .addAutomaticLore("&f", 30, "Range particles will spawn in the Z direction."));
             ib.setItem(15, new ItemBuilder(Material.SUGAR, 1, 0).setName("&aParticle speed").setLore("&7Current value: ")
                     .addLore("&7" + pd.getSpeed()).addLore("").addAutomaticLore("&f", 30,
@@ -78,6 +78,36 @@ public class IGCCrateParticle extends IGCTierMenu
             ib.setItem(16, new ItemBuilder(Material.BUCKET, 1, 0).setName("&aParticle amount").setLore("&7Current value: ")
                     .addLore("&7" + pd.getAmount()).addLore("")
                     .addAutomaticLore("&f", 30, "The amount of particles that will be displayed every tick."));
+
+            ItemBuilder xCenter = new ItemBuilder(DynamicMaterial.BLAZE_POWDER, 1);
+            xCenter.setDisplayName("&aCenter Offset X");
+            xCenter.addLore("&7Current Value:");
+            xCenter.addLore("&7" + pd.getCenterX());
+            xCenter.addLore("");
+            xCenter.addAutomaticLore("&f", 30,
+                    "The x offset for the middle of where all the particles will spawn. This is useful if the particles spawn in a compact area and that area is off-centered.");
+
+            ItemBuilder yCenter = new ItemBuilder(DynamicMaterial.BLAZE_POWDER, 1);
+            yCenter.setDisplayName("&aCenter Offset Y");
+            yCenter.addLore("&7Current Value:");
+            yCenter.addLore("&7" + pd.getCenterY());
+            yCenter.addLore("");
+            yCenter.addAutomaticLore("&f", 30,
+                    "The y offset for the middle of where all the particles will spawn. This is useful if the particles spawn in a compact area and that area is off-centered.");
+
+            ItemBuilder zCenter = new ItemBuilder(DynamicMaterial.BLAZE_POWDER, 1);
+            zCenter.setDisplayName("&aCenter Offset Z");
+            zCenter.addLore("&7Current Value:");
+            zCenter.addLore("&7" + pd.getCenterZ());
+            zCenter.addLore("");
+            zCenter.addAutomaticLore("&f", 30,
+                    "The z offset for the middle of where all the particles will spawn. This is useful if the particles spawn in a compact area and that area is off-centered.");
+
+
+            getIb().setItem(21, xCenter);
+            getIb().setItem(22, yCenter);
+            getIb().setItem(23, zCenter);
+
         }
         else
         {
@@ -87,14 +117,14 @@ public class IGCCrateParticle extends IGCTierMenu
                                     "What radius (how 'large') the effect will have. Ideally should be around 1-2.")
                             .addLore("")
                             .addLore("&7Current value: ")
-                            .addLore("&7" + pd.getOffX()));
+                            .addLore("&7" + pd.getRangeX()));
             ib.setItem(13,
                     new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aY Offset")
                             .addAutomaticLore("&f", 30,
                                     "The Y-Offset to center the animation on. Negative numbers make it go down, positive numbers make it go up. Decimals are OK.")
                             .addLore("")
                             .addLore("&7Current value: ")
-                            .addLore("&7" + pd.getOffY()));
+                            .addLore("&7" + pd.getRangeY()));
 
             if (pd.getParticleAnimationEffect() instanceof TiltedRingsPA ||
                     pd.getParticleAnimationEffect() instanceof OffsetTiltedRingsPA)
@@ -104,7 +134,7 @@ public class IGCCrateParticle extends IGCTierMenu
                                 .addAutomaticLore("&f", 30,
                                         "The rotation (in degrees) of the animation. This helps if the animation is playing sideways. Setting it to 90 will rotate it a quarter turn.")
                                 .addLore("").addLore("&7Current value: ")
-                                .addLore("&7" + pd.getOffZ()));
+                                .addLore("&7" + pd.getRangeZ()));
             }
             else
             {
@@ -113,7 +143,7 @@ public class IGCCrateParticle extends IGCTierMenu
                                 .addAutomaticLore("&f", 30,
                                         "How high up and down the animation will go. A value of 1 to 3 will keep it around the crate.")
                                 .addLore("").addLore("&7Current value: ")
-                                .addLore("&7" + pd.getOffZ()));
+                                .addLore("&7" + pd.getRangeZ()));
             }
 
             ib.setItem(15, new ItemBuilder(Material.SUGAR, 1, 0).setName("&aAnimation Speed")
@@ -135,7 +165,7 @@ public class IGCCrateParticle extends IGCTierMenu
         switch (slot)
         {
             case 8:
-                cs.getCp().getParticles().get(tier).remove(pd);
+                cs.getCp().deleteParticle(tier, pd);
                 up();
                 break;
             case 0:
@@ -151,15 +181,15 @@ public class IGCCrateParticle extends IGCTierMenu
                         "Avaialable particles: " + Arrays.toString(ParticleEffect.values()), String.class, this);
                 break;
             case 12:
-                new InputMenu(getCc(), getP(), "x offset", pd.getOffX() + "",
+                new InputMenu(getCc(), getP(), "x range", pd.getRangeX() + "",
                         "Distance particles will spawn in the x direction relative to the crate.", Double.class, this);
                 break;
             case 13:
-                new InputMenu(getCc(), getP(), "y offset", pd.getOffY() + "",
+                new InputMenu(getCc(), getP(), "y range", pd.getRangeY() + "",
                         "Distance particles will spawn in the y direction relative to the crate.", Double.class, this);
                 break;
             case 14:
-                new InputMenu(getCc(), getP(), "z offset", pd.getOffZ() + "",
+                new InputMenu(getCc(), getP(), "z range", pd.getRangeZ() + "",
                         "Distance particles will spawn in the z direction relative to the crate.", Double.class, this);
                 break;
             case 15:
@@ -170,6 +200,18 @@ public class IGCCrateParticle extends IGCTierMenu
             case 16:
                 new InputMenu(getCc(), getP(), "amount", pd.getAmount() + "",
                         "How many particles spawn every tick (1/20th of a second).", Integer.class, this);
+                break;
+            case 21:
+                new InputMenu(getCc(), getP(), "x center offset", pd.getCenterX() + "",
+                        "Adjust the center of where the particles will spawn in the x direction.", Double.class, this);
+                break;
+            case 22:
+                new InputMenu(getCc(), getP(), "y center offset", pd.getCenterY() + "",
+                        "Adjust the center of where the particles will spawn in the y direction.", Double.class, this);
+                break;
+            case 23:
+                new InputMenu(getCc(), getP(), "z center offset", pd.getCenterZ() + "",
+                        "Adjust the center of where the particles will spawn in the z direction.", Double.class, this);
                 break;
         }
     }
@@ -184,15 +226,27 @@ public class IGCCrateParticle extends IGCTierMenu
                 Float parsedIn = Float.valueOf(input);
                 if (value.equalsIgnoreCase("x offset"))
                 {
-                    pd.setOffX(parsedIn);
+                    pd.setRangeX(parsedIn);
                 }
                 else if (value.equalsIgnoreCase("y offset"))
                 {
-                    pd.setOffY(parsedIn);
+                    pd.setRangeY(parsedIn);
                 }
                 else if (value.equalsIgnoreCase("z offset"))
                 {
-                    pd.setOffZ(parsedIn);
+                    pd.setRangeZ(parsedIn);
+                }
+                else if (value.equalsIgnoreCase("x center offset"))
+                {
+                    pd.setCenterX(parsedIn);
+                }
+                else if (value.equalsIgnoreCase("y center offset"))
+                {
+                    pd.setCenterY(parsedIn);
+                }
+                else if (value.equalsIgnoreCase("z center offset"))
+                {
+                    pd.setCenterZ(parsedIn);
                 }
                 else if (value.equalsIgnoreCase("speed"))
                 {

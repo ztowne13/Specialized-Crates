@@ -61,7 +61,7 @@ public class IGCCrateParticles extends IGCTierMenu
 
                 slots.put(i, pd);
                 ib.setItem(i, new ItemBuilder(Material.NETHER_STAR, 1, 0).setName("&a" + pd.getParticleName()).
-                        setLore("&7X: &f" + pd.getOffX()).addLore("&7Y:&f " + pd.getOffY()).addLore("&7Z:&f " + pd.getOffZ())
+                        setLore("&7X: &f" + pd.getRangeX()).addLore("&7Y:&f " + pd.getRangeY()).addLore("&7Z:&f " + pd.getRangeZ())
                         .
                                 addLore("&7Speed: &f" + pd.getSpeed()).addLore("&7Amount:&f " + pd.getAmount()).
                                 addLore("&7Animation: &f" + (pd.getParticleAnimationEffect() == null ? "none" :
@@ -150,7 +150,7 @@ public class IGCCrateParticles extends IGCTierMenu
         {
             if (Utils.isDouble(input))
             {
-                pd.setOffX(Float.valueOf(input));
+                pd.setRangeX(Float.valueOf(input));
                 new InputMenu(getCc(), getP(), "Y offset", "null",
                         "How far the particles can spawn, in the Y direction, from the crate.", Double.class, this);
             }
@@ -163,7 +163,7 @@ public class IGCCrateParticles extends IGCTierMenu
         {
             if (Utils.isDouble(input))
             {
-                pd.setOffY(Float.valueOf(input));
+                pd.setRangeY(Float.valueOf(input));
                 new InputMenu(getCc(), getP(), "Z offset", "null",
                         "How far the particles can spawn, in the Z direction, from the crate.", Double.class, this);
             }
@@ -176,7 +176,7 @@ public class IGCCrateParticles extends IGCTierMenu
         {
             if (Utils.isDouble(input))
             {
-                pd.setOffZ(Float.valueOf(input));
+                pd.setRangeZ(Float.valueOf(input));
                 new InputMenu(getCc(), getP(), "speed", "null",
                         "Changes the speed of most of the particles. For some, like music notes, it changes the color.",
                         Double.class, this);

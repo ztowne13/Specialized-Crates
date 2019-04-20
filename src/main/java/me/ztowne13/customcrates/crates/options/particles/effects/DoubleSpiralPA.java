@@ -30,9 +30,9 @@ public class DoubleSpiralPA extends ParticleAnimationEffect
         totalTick += updatesPerSec;
         tick += updatesPerSec;
 
-        double radius = particleData.getOffX();
-        double yOffset = particleData.getOffY();
-        double height = particleData.getOffZ();
+        double radius = particleData.getRangeX();
+        double yOffset = particleData.getRangeY();
+        double height = particleData.getRangeZ();
 
         if (toChangeHeight == 0 && height != 0)
         {
