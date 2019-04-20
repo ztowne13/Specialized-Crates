@@ -397,4 +397,9 @@ public class CustomCrates extends JavaPlugin
     {
         return onlyUseBuildInHolograms;
     }
+
+    public boolean isAllowTick()
+    {
+        return allowTick;
+    }
 }
