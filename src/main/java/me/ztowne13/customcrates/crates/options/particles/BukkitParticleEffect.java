@@ -11,14 +11,14 @@ public class BukkitParticleEffect extends ParticleData
 {
     Particle particle;
 
-    public BukkitParticleEffect(String particleName, boolean hasAnimation)
+    public BukkitParticleEffect(String particleName, String name, boolean hasAnimation)
     {
-        this(Particle.valueOf(particleName.toUpperCase()), hasAnimation);
+        this(Particle.valueOf(particleName.toUpperCase()), name, hasAnimation);
     }
 
-    public BukkitParticleEffect(Particle particle, boolean hasAnimation)
+    public BukkitParticleEffect(Particle particle, String name, boolean hasAnimation)
     {
-        super(hasAnimation);
+        super(name, hasAnimation);
         this.particle = particle;
     }
 

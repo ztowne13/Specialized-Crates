@@ -15,9 +15,9 @@ public class NMSParticleEffect extends ParticleData
 {
     ParticleEffect particleEffect;
 
-    public NMSParticleEffect(ParticleEffect particleEffect, boolean hasAnimation)
+    public NMSParticleEffect(ParticleEffect particleEffect, String name, boolean hasAnimation)
     {
-        super(hasAnimation);
+        super(name, hasAnimation);
         this.particleEffect = particleEffect;
     }
 

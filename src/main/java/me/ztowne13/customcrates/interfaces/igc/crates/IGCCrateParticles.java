@@ -104,14 +104,34 @@ public class IGCCrateParticles extends IGCTierMenu
         {
             try
             {
+                String newName = null;
+                for(int i = 0; i < 1000; i++)
+                {
+                    boolean found = false;
+                    for(ParticleData particleData : crates.getCs().getCp().getParticles().get(getTier()))
+                    {
+                        if(particleData.getName().equalsIgnoreCase(i + ""))
+                        {
+                            found = true;
+                            break;
+                        }
+
+                        if(!found)
+                        {
+                            newName = i + "";
+                            break;
+                        }
+                    }
+                }
+
                 if (NMSUtils.Version.v1_7.isServerVersionOrLater() && NMSUtils.Version.v1_8.isServerVersionOrEarlier())
                 {
                     ParticleEffect pe = ParticleEffect.valueOf(input.toUpperCase());
-                    pd = new NMSParticleEffect(pe, false);
+                    pd = new NMSParticleEffect(pe, newName, false);
                 }
                 else
                 {
-                    pd = new BukkitParticleEffect(input.toUpperCase(), false);
+                    pd = new BukkitParticleEffect(input.toUpperCase(), newName, false);
                 }
 
 

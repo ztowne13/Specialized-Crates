@@ -18,7 +18,9 @@ public enum PEAnimationType
 
     TILTED_RINGS(TiltedRingsPA.class),
 
-    OFFSET_TILTED_RINGS(OffsetTiltedRingsPA.class);
+    OFFSET_TILTED_RINGS(OffsetTiltedRingsPA.class),
+
+    NONE(null);
 
 
     Class<? extends ParticleAnimationEffect> particleAnimationEffect;

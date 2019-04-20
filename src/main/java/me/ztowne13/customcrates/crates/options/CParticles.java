@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.crates.options;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
+import me.ztowne13.customcrates.crates.SettingsConverter;
 import me.ztowne13.customcrates.crates.options.particles.BukkitParticleEffect;
 import me.ztowne13.customcrates.crates.options.particles.NMSParticleEffect;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
@@ -15,7 +16,6 @@ import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class CParticles extends CSetting
 {
@@ -32,7 +32,7 @@ public class CParticles extends CSetting
         if (csb.hasV(cstate.name().toLowerCase() + ".particles"))
         {
             parseAndAddParticles(cstate.name().toUpperCase(),
-                    getCrates().getCs().getFc().getStringList(cstate.name().toLowerCase() + ".particles"));
+                    cstate.name().toLowerCase() + ".particles");
         }
 
         if (cstate.equals(CrateState.OPEN))
@@ -43,8 +43,7 @@ public class CParticles extends CSetting
                 {
                     if (csb.hasV("open.crate-tiers." + id + ".particles"))
                     {
-                        parseAndAddParticles(id,
-                                getCrates().getCs().getFc().getStringList("open.crate-tiers." + id + ".particles"));
+                        parseAndAddParticles(id, "open.crate-tiers." + id + ".particles");
                     }
                 }
             }
@@ -57,24 +56,24 @@ public class CParticles extends CSetting
         {
             for (String tier : particles.keySet())
             {
-                ArrayList<String> listToSet = new ArrayList<>();
-                for (ParticleData pd : particles.get(tier))
-                {
-                    String parsedParticle =
-                            pd.getParticleName() + ", " + pd.getOffX() + ", " + pd.getOffY() + ", " + pd.getOffZ() + ", " +
-                                    pd.getSpeed() + ", " + pd.getAmount();
-                    if (!(pd.getParticleAnimationEffect() == null))
-                    {
-                        parsedParticle = parsedParticle + ", " +
-                                PEAnimationType.getFromParticleAnimationEffect(pd.getParticleAnimationEffect());
-                    }
-                    listToSet.add(parsedParticle);
-                }
-
                 String path = (tier.equalsIgnoreCase("PLAY") ? "play." : "open.") +
                         (tier.equalsIgnoreCase("open") || tier.equalsIgnoreCase("play") ? "" : "crate-tiers." + tier + ".") +
                         "particles";
-                getFu().get().set(path, listToSet);
+                for (ParticleData pd : particles.get(tier))
+                {
+                    getFu().get().set(path + "." + pd.getName() + ".type", pd.getParticleName());
+                    getFu().get().set(path + "." + pd.getName() + ".range-x", pd.getOffX());
+                    getFu().get().set(path + "." + pd.getName() + ".range-y", pd.getOffY());
+                    getFu().get().set(path + "." + pd.getName() + ".range-z", pd.getOffZ());
+                    getFu().get().set(path + "." + pd.getName() + ".speed", pd.getSpeed());
+                    getFu().get().set(path + "." + pd.getName() + ".amount", pd.getAmount());
+
+                    if (!(pd.getParticleAnimationEffect() == null))
+                        getFu().get().set(path + "." + pd.getName() + ".animation",
+                                PEAnimationType.getFromParticleAnimationEffect(pd.getParticleAnimationEffect()));
+                    else
+                        getFu().get().set(path + "." + pd.getName() + ".animation", "NONE");
+                }
             }
         }
     }
@@ -88,89 +87,86 @@ public class CParticles extends CSetting
         getParticles().put(s, plist);
     }
 
-    public void parseAndAddParticles(String id, List<String> list)
+    public void parseAndAddParticles(String id, String path)
     {
-        for (String s : list)
+        SettingsConverter.convertParticles(getFu(), path);
+
+        try
         {
-            try
+            for (String parent : getFu().get().getConfigurationSection(path).getValues(false).keySet())
             {
-                String[] split = s.toString().replace(" ", "").split(",");
+                String particleTypeAS = getFu().get().getString(path + "." + parent + ".type");
+                String rangeXAS = getFu().get().getString(path + "." + parent + ".range-x");
+                String rangeYAS = getFu().get().getString(path + "." + parent + ".range-y");
+                String rangeZAS = getFu().get().getString(path + "." + parent + ".range-z");
+                String speedAS = getFu().get().getString(path + "." + parent + ".speed");
+                String amountAS = getFu().get().getString(path + "." + parent + ".amount");
+                String animationAS = getFu().get().getString(path + "." + parent + ".animation");
 
-                ParticleData pd;
 
-                if (!NMSUtils.Version.v1_10.isServerVersionOrLater())
+                try
                 {
-                    ParticleEffect pe = null;
+                    ParticleData pd;
+
+                    if (!NMSUtils.Version.v1_10.isServerVersionOrLater())
+                    {
+                        ParticleEffect pe = null;
+                        try
+                        {
+                            pe = ParticleEffect.valueOf(particleTypeAS);
+                        }
+                        catch (Exception exc)
+                        {
+                            StatusLoggerEvent.PARTICLE_INVALID.log(getCrates(), new String[]{parent, particleTypeAS});
+                            continue;
+                        }
+                        pd = new NMSParticleEffect(pe, parent, false);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            pd = new BukkitParticleEffect(particleTypeAS, parent, false);
+                        }
+                        catch (Exception exc)
+                        {
+                            StatusLoggerEvent.PARTICLE_INVALID.log(getCrates(), new String[]{parent, particleTypeAS});
+                            continue;
+                        }
+                    }
+
+                    pd.setOffX(Float.valueOf(rangeXAS));
+                    pd.setOffY(Float.valueOf(rangeYAS));
+                    pd.setOffZ(Float.valueOf(rangeZAS));
+                    pd.setSpeed(Float.valueOf(speedAS));
+                    pd.setAmount(Integer.valueOf(amountAS));
+
                     try
                     {
-                        pe = ParticleEffect.valueOf(split[0].toUpperCase());
+                        PEAnimationType peAnimationType = PEAnimationType.valueOf(animationAS);
+                        if(!peAnimationType.equals(peAnimationType.NONE))
+                        {
+                            pd.setParticleAnimationEffect(peAnimationType.getAnimationEffectInstance(cc, pd));
+                            pd.setHasAnimation(true);
+                        }
                     }
                     catch (Exception exc)
                     {
-                        StatusLoggerEvent.PARTICLE_INVALID.log(getCrates(), new String[]{s, split[0].toUpperCase()});
-                        continue;
+                        StatusLoggerEvent.PARTICLE_ANIMATION_INVALID.log(getCrates(), new String[]{animationAS});
                     }
-                    pd = new NMSParticleEffect(pe, false);
+
+                    addParticle(pd, id);
                 }
-                else
+                catch (Exception exc)
                 {
-                    try
-                    {
-                        pd = new BukkitParticleEffect(split[0].toUpperCase(), false);
-                    }
-                    catch (Exception exc)
-                    {
-                        StatusLoggerEvent.PARTICLE_INVALID.log(getCrates(), new String[]{s, split[0].toUpperCase()});
-                        continue;
-                    }
+                    exc.printStackTrace();
+                    StatusLoggerEvent.PARTICLE_STRING_INVALID.log(getCrates(), new String[]{parent});
                 }
-
-                pd.setOffX(Float.valueOf(split[1]));
-                pd.setOffY(Float.valueOf(split[2]));
-                pd.setOffZ(Float.valueOf(split[3]));
-                pd.setSpeed(Float.valueOf(split[4]));
-                pd.setAmount(Integer.valueOf(split[5]));
-
-                if (split.length >= 7)
-                {
-                    try
-                    {
-                        PEAnimationType peAnimationType = PEAnimationType.valueOf(split[6].toUpperCase());
-                        pd.setParticleAnimationEffect(peAnimationType.getAnimationEffectInstance(cc, pd));
-                        pd.setHasAnimation(true);
-                    }
-                    catch (Exception exc)
-                    {
-                        StatusLoggerEvent.PARTICLE_ANIMATION_INVALID.log(getCrates(), new String[]{split[6]});
-                    }
-                }
-                else if (split.length >= 10)
-                {
-                    try
-                    {
-                        int red = Integer.parseInt(split[7]);
-                        int green = Integer.parseInt(split[8]);
-                        int blue = Integer.parseInt(split[9]);
-
-                        pd.setRed(red);
-                        pd.setGreen(green);
-                        pd.setBlue(blue);
-                        pd.setHasColor(true);
-                    }
-                    catch (Exception exc)
-                    {
-                        StatusLoggerEvent.PARTICLE_ANIMATION_COLOR_INVALID
-                                .log(getCrates(), new String[]{pd.getParticleName()});
-                    }
-                }
-
-                addParticle(pd, id);
             }
-            catch (Exception exc)
-            {
-                exc.printStackTrace();
-                StatusLoggerEvent.PARTICLE_STRING_INVALID.log(getCrates(), new String[]{s});
-            }
+        }
+        catch(Exception exc)
+        {
+            exc.printStackTrace();
         }
     }
 

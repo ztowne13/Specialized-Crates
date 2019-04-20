@@ -5,14 +5,16 @@ import org.bukkit.Location;
 
 public abstract class ParticleData
 {
+    String name;
     float offX, offY, offZ, speed;
     boolean hasAnimation, hasColor;
     int amount, red, green, blue;
 
     ParticleAnimationEffect particleAnimationEffect;
 
-    public ParticleData(boolean hasAnimation)
+    public ParticleData(String name, boolean hasAnimation)
     {
+        this.name = name;
         this.hasAnimation = hasAnimation;
     }
 
@@ -135,5 +137,10 @@ public abstract class ParticleData
     public void setHasColor(boolean hasColor)
     {
         this.hasColor = hasColor;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 }
