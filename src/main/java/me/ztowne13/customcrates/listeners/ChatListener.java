@@ -23,7 +23,7 @@ public class ChatListener implements Listener
         this.cc = cc;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(AsyncPlayerChatEvent e)
     {
         Player p = e.getPlayer();
@@ -38,6 +38,8 @@ public class ChatListener implements Listener
                     InputMenu im = menu.getInputMenu();
                     im.runFor(menu, e.getMessage());
                     p.sendMessage(ChatUtils.toChatColor(" &7&l> &f" + e.getMessage()));
+
+                    e.getRecipients().clear();
                     e.setCancelled(true);
                 }
             }
