@@ -26,38 +26,28 @@ public class BlockRemoveListener implements Listener
     @EventHandler
     public void onBlockChange(BlockExplodeEvent e)
     {
-
-        if ((Boolean) SettingsValues.EXPLODE_DYNAMIC.getValue(cc))
-        {
-            for (Block b : new ArrayList<Block>(e.blockList()))
-            {
-                if (PlacedCrate.crateExistsAt(cc, b.getLocation()))
-                {
-                    e.blockList().remove(b);
-                }
-            }
-        }
+        if(cc.isAllowTick())
+            if ((Boolean) SettingsValues.EXPLODE_DYNAMIC.getValue(cc))
+                for (Block b : new ArrayList<Block>(e.blockList()))
+                    if (PlacedCrate.crateExistsAt(cc, b.getLocation()))
+                        e.blockList().remove(b);
     }
 
     @EventHandler
     public void onPistonPush(BlockPistonExtendEvent e)
     {
-        e.setCancelled(shouldCancel(e.getBlocks(), e.getDirection()));
+        if(cc.isAllowTick() && shouldCancel(e.getBlocks(), e.getDirection()))
+            e.setCancelled(true);
     }
 
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent e)
     {
-        if ((Boolean) SettingsValues.EXPLODE_DYNAMIC.getValue(cc))
-        {
+        if(cc.isAllowTick())
+            if ((Boolean) SettingsValues.EXPLODE_DYNAMIC.getValue(cc))
             for (Block b : new ArrayList<Block>(e.blockList()))
-            {
                 if (PlacedCrate.crateExistsAt(cc, b.getLocation()))
-                {
                     e.blockList().remove(b);
-                }
-            }
-        }
     }
 
     public boolean shouldCancel(List<Block> blocks, BlockFace bf)
