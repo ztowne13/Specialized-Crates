@@ -6,6 +6,7 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.CHolograms;
+import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.animations.openchest.OpenChestAnimation;
@@ -152,6 +153,8 @@ public class CustomCrates extends JavaPlugin
         stopRun();
 
         setBr(null);
+
+        CRewards.getAllRewards().clear();
 
         ChatUtils.log("Enabling, wait 1 second...");
 
