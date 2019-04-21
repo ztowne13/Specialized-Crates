@@ -23,6 +23,8 @@ public enum CrateType
 
     BLOCK_CRATEOPEN("CrateType.Block.OpenChest"),
 
+    //BLOCK_CRATEOPEN_ROLLING("CrateType.Block.OpenChestRolling"),
+
     GIVE_KEY("");
 			
 		/*BLOCK_MINEPLEX,
@@ -60,6 +62,9 @@ public enum CrateType
             case BLOCK_CRATEOPEN:
                 ch = new OpenChestAnimation(null, crates);
                 break;
+//            case BLOCK_CRATEOPEN_ROLLING:
+//                ch = new OpenChestRollingAnimation(null, crates);
+//                break;
             case GIVE_KEY:
             default:
                 ch = new AnimationKeyCrate(crates);
