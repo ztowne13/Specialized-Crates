@@ -1,12 +1,16 @@
 package me.ztowne13.customcrates.crates.options.particles;
 
+import me.ztowne13.customcrates.crates.options.particles.effects.PEAnimationType;
 import me.ztowne13.customcrates.crates.options.particles.effects.ParticleAnimationEffect;
+import me.ztowne13.customcrates.utils.FileHandler;
 import org.bukkit.Location;
 
 public abstract class ParticleData
 {
     String name;
-    float rangeX, rangeY, rangeZ, centerX, centerY, centerZ, speed;
+    float rangeX, rangeY, rangeZ;
+    float centerX, centerY, centerZ;
+    float speed;
     boolean hasAnimation, hasColor;
     int amount, red, green, blue;
 
@@ -32,6 +36,25 @@ public abstract class ParticleData
     public float getRangeX()
     {
         return rangeX;
+    }
+
+    public void save(FileHandler fileHandler, String path)
+    {
+        fileHandler.get().set(path + "." + getName() + ".type", getParticleName());
+        fileHandler.get().set(path + "." + getName() + ".range-x", getRangeX());
+        fileHandler.get().set(path + "." + getName() + ".range-y", getRangeY());
+        fileHandler.get().set(path + "." + getName() + ".range-z", getRangeZ());
+        fileHandler.get().set(path + "." + getName() + ".center-x", getCenterX());
+        fileHandler.get().set(path + "." + getName() + ".center-y", getCenterY());
+        fileHandler.get().set(path + "." + getName() + ".center-z", getCenterZ());
+        fileHandler.get().set(path + "." + getName() + ".speed", getSpeed());
+        fileHandler.get().set(path + "." + getName() + ".amount", getAmount());
+
+        if (!(getParticleAnimationEffect() == null))
+            fileHandler.get().set(path + "." + getName() + ".animation",
+                    PEAnimationType.getFromParticleAnimationEffect(getParticleAnimationEffect()).name());
+        else
+            fileHandler.get().set(path + "." + getName() + ".animation", "NONE");
     }
 
     public ParticleData setRangeX(float rangeX)

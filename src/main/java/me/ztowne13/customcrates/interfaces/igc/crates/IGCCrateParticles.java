@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * Created by ztowne13 on 4/2/16.
@@ -61,12 +62,14 @@ public class IGCCrateParticles extends IGCTierMenu
 
                 slots.put(i, pd);
                 ib.setItem(i, new ItemBuilder(Material.NETHER_STAR, 1, 0).setName("&a" + pd.getParticleName()).
-                        setLore("&7X: &f" + pd.getRangeX()).addLore("&7Y:&f " + pd.getRangeY()).addLore("&7Z:&f " + pd.getRangeZ())
+                        setLore("&7X Range: &f" + pd.getRangeX()).addLore("&7Y Range:&f " + pd.getRangeY())
+                        .addLore("&7Z Range:&f " + pd.getRangeZ())
                         .
                                 addLore("&7Speed: &f" + pd.getSpeed()).addLore("&7Amount:&f " + pd.getAmount()).
                                 addLore("&7Animation: &f" + (pd.getParticleAnimationEffect() == null ? "none" :
                                         PEAnimationType.getFromParticleAnimationEffect(pd.getParticleAnimationEffect())
-                                                .name())));
+                                                .name())).addLore("&7X Center:&f " + pd.getCenterX())
+                        .addLore("&7Y Center:&f " + pd.getCenterY()).addLore("&7Z Center:&f " + pd.getCenterZ()));
                 i++;
             }
         }
@@ -104,25 +107,7 @@ public class IGCCrateParticles extends IGCTierMenu
         {
             try
             {
-                String newName = null;
-                for(int i = 0; i < 1000; i++)
-                {
-                    boolean found = false;
-                    for(ParticleData particleData : crates.getCs().getCp().getParticles().get(getTier()))
-                    {
-                        if(particleData.getName().equalsIgnoreCase(i + ""))
-                        {
-                            found = true;
-                            break;
-                        }
-
-                        if(!found)
-                        {
-                            newName = i + "";
-                            break;
-                        }
-                    }
-                }
+                String newName = UUID.randomUUID().getLeastSignificantBits() + "";
 
                 if (NMSUtils.Version.v1_7.isServerVersionOrLater() && NMSUtils.Version.v1_8.isServerVersionOrEarlier())
                 {
@@ -204,6 +189,7 @@ public class IGCCrateParticles extends IGCTierMenu
             if (Utils.isInt(input))
             {
                 pd.setAmount(Integer.valueOf(input));
+                pd.save(cs.getFu(), cs.getCp().getPath(tier));
 
                 cs.getCp().addParticle(pd, tier);
 

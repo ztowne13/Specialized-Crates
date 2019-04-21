@@ -53,30 +53,9 @@ public class CParticles extends CSetting
     public void saveToFile()
     {
         if (!particles.isEmpty())
-        {
             for (String tier : particles.keySet())
-            {
-                String path = getPath(tier);
                 for (ParticleData pd : particles.get(tier))
-                {
-                    getFu().get().set(path + "." + pd.getName() + ".type", pd.getParticleName());
-                    getFu().get().set(path + "." + pd.getName() + ".range-x", pd.getRangeX());
-                    getFu().get().set(path + "." + pd.getName() + ".range-y", pd.getRangeY());
-                    getFu().get().set(path + "." + pd.getName() + ".range-z", pd.getRangeZ());
-                    getFu().get().set(path + "." + pd.getName() + ".center-x", pd.getCenterX());
-                    getFu().get().set(path + "." + pd.getName() + ".center-y", pd.getCenterY());
-                    getFu().get().set(path + "." + pd.getName() + ".center-z", pd.getCenterZ());
-                    getFu().get().set(path + "." + pd.getName() + ".speed", pd.getSpeed());
-                    getFu().get().set(path + "." + pd.getName() + ".amount", pd.getAmount());
-
-                    if (!(pd.getParticleAnimationEffect() == null))
-                        getFu().get().set(path + "." + pd.getName() + ".animation",
-                                PEAnimationType.getFromParticleAnimationEffect(pd.getParticleAnimationEffect()).name());
-                    else
-                        getFu().get().set(path + "." + pd.getName() + ".animation", "NONE");
-                }
-            }
-        }
+                   pd.save(getFu(), getPath(tier));
     }
 
     public void deleteParticle(String tier, ParticleData pd)

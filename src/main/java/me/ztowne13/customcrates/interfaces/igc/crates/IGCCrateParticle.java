@@ -202,15 +202,18 @@ public class IGCCrateParticle extends IGCTierMenu
                         "How many particles spawn every tick (1/20th of a second).", Integer.class, this);
                 break;
             case 21:
-                new InputMenu(getCc(), getP(), "x center offset", pd.getCenterX() + "",
+                if(pd.getParticleAnimationEffect() == null)
+                    new InputMenu(getCc(), getP(), "x center offset", pd.getCenterX() + "",
                         "Adjust the center of where the particles will spawn in the x direction.", Double.class, this);
                 break;
             case 22:
-                new InputMenu(getCc(), getP(), "y center offset", pd.getCenterY() + "",
+                if(pd.getParticleAnimationEffect() == null)
+                    new InputMenu(getCc(), getP(), "y center offset", pd.getCenterY() + "",
                         "Adjust the center of where the particles will spawn in the y direction.", Double.class, this);
                 break;
             case 23:
-                new InputMenu(getCc(), getP(), "z center offset", pd.getCenterZ() + "",
+                if(pd.getParticleAnimationEffect() == null)
+                    new InputMenu(getCc(), getP(), "z center offset", pd.getCenterZ() + "",
                         "Adjust the center of where the particles will spawn in the z direction.", Double.class, this);
                 break;
         }
@@ -224,15 +227,15 @@ public class IGCCrateParticle extends IGCTierMenu
             if (Utils.isDouble(input))
             {
                 Float parsedIn = Float.valueOf(input);
-                if (value.equalsIgnoreCase("x offset"))
+                if (value.equalsIgnoreCase("x range"))
                 {
                     pd.setRangeX(parsedIn);
                 }
-                else if (value.equalsIgnoreCase("y offset"))
+                else if (value.equalsIgnoreCase("y range"))
                 {
                     pd.setRangeY(parsedIn);
                 }
-                else if (value.equalsIgnoreCase("z offset"))
+                else if (value.equalsIgnoreCase("z range"))
                 {
                     pd.setRangeZ(parsedIn);
                 }
