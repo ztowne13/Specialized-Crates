@@ -25,9 +25,12 @@ public class LocationUtils
 
     public static void removeDubBlocks(Location l)
     {
-        l.getBlock().setType(Material.AIR);
+        if(l.getBlock() != null)
+            l.getBlock().setType(Material.AIR);
         Location l2 = l.clone();
         l2.setY(l2.getY() + 1);
-        l2.getBlock().setType(Material.AIR);
+
+        if(l2.getBlock() != null)
+            l2.getBlock().setType(Material.AIR);
     }
 }
