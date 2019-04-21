@@ -76,13 +76,15 @@ public class IGCMenuReward extends IGCMenu
         {
             commands.addLore(getName(null));
         }
-        commands.addLore("").addAutomaticLore("&f", 30, "Use {name} as a placeholder for the player's name.");
+        commands.addLore("").addAutomaticLore("&f", 30,
+                "Use %player% as a placeholder for the player's name. Use %amountX-Y% for a random number between X and Y. Ex: %amount1000-10000%");
         ib.setItem(13, commands);
 
         // Display item
         ib.setItem(11,
                 (r == null || r.getItemBuilder() == null ? new ItemBuilder(DynamicMaterial.ROSE_RED, 1) :
-                        new ItemBuilder(r.getItemBuilder().getStack())).clearLore().setName("&aEdit the display item.").clearLore()
+                        new ItemBuilder(r.getItemBuilder().getStack())).clearLore().setName("&aEdit the display item.")
+                        .clearLore()
                         .addAutomaticLore("&f", 40,
                                 "Edit the display item, including the 'displayname' which is the name &edisplayed &eto &eplayers&f. " +
                                         "That value is different from the name used to create the reward - that value cannot be edited " +
