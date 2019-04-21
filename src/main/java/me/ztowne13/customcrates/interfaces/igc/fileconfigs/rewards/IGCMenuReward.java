@@ -162,7 +162,6 @@ public class IGCMenuReward extends IGCMenu
 //        }
         else if (slot == 13)
         {
-            getP().closeInventory();
             new IGCListEditor(getCc(), getP(), this, "Commands Editor", "Command", r.getCommands(),
                     DynamicMaterial.COMMAND_BLOCK, 1).open();
         }

@@ -178,7 +178,6 @@ public class IGCMenuRewards extends IGCMenu
         else if (getIb().getInv().getItem(slot) != null)
         {
             String rName = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
-            getP().closeInventory();
             new IGCMenuReward(getCc(), getP(), this, rName).open();
         }
     }
