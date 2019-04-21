@@ -1,5 +1,6 @@
 enabled: true
 obtain-method: DYNAMIC
+inventory-name: 'Super basic crate'
 
 display:
   type: block
