@@ -24,11 +24,13 @@ public class Settings
     public void load()
     {
         loadSettings();
-        ChatUtils.log("-------------------------");
+        ChatUtils.log("");
         loadCrates(false);
         loadCrates(true);
         loadPlacedCrates();
         loadInfo();
+        ChatUtils.log("");
+        ChatUtils.log("");
     }
 
     public void loadCrates(boolean multiCrate)

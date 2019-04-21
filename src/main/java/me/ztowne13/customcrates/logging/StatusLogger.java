@@ -58,6 +58,12 @@ public class StatusLogger
                 hasLogged.add(s.toUpperCase());
             }
         }
+
+        if (getFailedEvents().isEmpty() &&
+                SettingsValues.LOG_SUCCESSES.getValue(getCc()).toString().equalsIgnoreCase("FAILURES"))
+        {
+            ChatUtils.log("  &a+&f Success: there were no issues.");
+        }
     }
 
     public void logSection(CommandSender sender, String section, boolean forceOnlyFailures)
@@ -70,7 +76,7 @@ public class StatusLogger
             if (!toLog.equalsIgnoreCase("FAILURES") && !forceOnlyFailures)
             {
                 hasLoggedHeader = true;
-                logValue(sender, section);
+                logValue(sender, "  " + section);
                 for (String checkSec : getCompletedEvents().keySet())
                 {
                     if (checkSec.equalsIgnoreCase(section))
@@ -79,7 +85,7 @@ public class StatusLogger
                         {
                             String[] split = s.split("%CAUSE%");
                             String event = split[0];
-                            logValue(sender, " + " + event);
+                            logValue(sender, "    &a+&f " + event);
                         }
                     }
                 }
@@ -91,7 +97,7 @@ public class StatusLogger
                 {
                     if (!hasLoggedHeader)
                     {
-                        logValue(sender, section);
+                        logValue(sender, "  " + section);
                         hasLoggedHeader = true;
                     }
 
@@ -101,14 +107,14 @@ public class StatusLogger
                         String event = parsedEvent[0];
                         String cause = parsedEvent[1];
 
-                        logValue(sender, " - " + event);
+                        logValue(sender, "    &c-&f " + event);
 
                         if (cause.equalsIgnoreCase("NONE"))
                         {
                             continue;
                         }
 
-                        logValue(sender, "     CAUSE: " + cause);
+                        logValue(sender, "        &7CAUSE: " + cause);
                     }
                 }
             }

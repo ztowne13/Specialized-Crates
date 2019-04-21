@@ -256,8 +256,8 @@ public class CrateSettings
             if (!toLog.equalsIgnoreCase("NOTHING"))
             {
                 getSl().logAll();
-                ChatUtils.log("");
-                ChatUtils.log("-------------------------");
+//                ChatUtils.log("");
+//                ChatUtils.log("-------------------------");
             }
         }
         else
@@ -272,12 +272,13 @@ public class CrateSettings
         if (!toLog.equalsIgnoreCase("NOTHING"))
         {
             ChatUtils.log("");
-            ChatUtils.log("Loading the '" + getCrates().getName() + "' crate");
-            ChatUtils.log("");
             if (!CrateUtils.isCrateUsable(getCrates()))
             {
-                ChatUtils.log("NOTICE: This crate is disabled");
-                ChatUtils.log("");
+                ChatUtils.log("&b" + getCrates().getName() + " &c(Disabled)");
+            }
+            else
+            {
+                ChatUtils.log("&b" + getCrates().getName());
             }
         }
     }

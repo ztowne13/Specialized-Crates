@@ -46,10 +46,11 @@ public class SettingsConverter
                     fc.set(path + "." + section + ".speed", speed);
                     fc.set(path + "." + section + ".amount", amnt);
                     fc.set(path + "." + section + ".animation", animation);
+                    fc.set(path + "." + section + ".center-x", 0);
+                    fc.set(path + "." + section + ".center-y", 0);
+                    fc.set(path + "." + section + ".center-z", 0);
                     fileHandler.save();
-
-                    ChatUtils.log("Success.");
-
+                    ChatUtils.log("Success. Converted " + s);
                 }
                 catch (Exception exc)
                 {

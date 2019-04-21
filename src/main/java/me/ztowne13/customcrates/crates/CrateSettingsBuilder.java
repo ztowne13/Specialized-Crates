@@ -121,6 +121,7 @@ public class CrateSettingsBuilder
             }
             catch (Exception exc)
             {
+                getSettings().setCt(CrateType.BLOCK_CRATEOPEN);
                 StatusLoggerEvent.SETTINGS_ANIMATION_INVALID
                         .log(getSl(), new String[]{getFc().getString("open.crate-animation")});
             }

@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 public enum SettingsValues
 {
@@ -213,9 +214,19 @@ public enum SettingsValues
         return null;
     }
 
+    static HashMap<SettingsValues, Object> valuesCache = new HashMap<>();
+
     public Object getValue(CustomCrates cc)
     {
-        return cc.getSettings().getConfigValues().get(path);
+        if(valuesCache.containsKey(this))
+        {
+            return valuesCache.get(this);
+        }
+        else
+        {
+            valuesCache.put(this, cc.getSettings().getConfigValues().get(path));
+            return getValue(cc);
+        }
     }
 
     public void write(CustomCrates cc, Object obj)

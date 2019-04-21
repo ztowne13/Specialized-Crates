@@ -10,6 +10,7 @@ import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.animations.openchest.OpenChestAnimation;
+import me.ztowne13.customcrates.crates.types.animations.openchestrolling.OpenChestRollingAnimation;
 import me.ztowne13.customcrates.interfaces.holograms.HologramInteractListener;
 import me.ztowne13.customcrates.interfaces.holograms.HologramManager;
 import me.ztowne13.customcrates.interfaces.holograms.HologramManagerNMS;
@@ -106,6 +107,7 @@ public class CustomCrates extends JavaPlugin
         CHolograms.deleteAll();
         NPCUtils.checkUncheckMobs(true);
         OpenChestAnimation.removeAllItems();
+        OpenChestRollingAnimation.removeAllItems();
 
     }
 
@@ -155,6 +157,7 @@ public class CustomCrates extends JavaPlugin
         setBr(null);
 
         CRewards.getAllRewards().clear();
+        SettingsValues.valuesCache.clear();
 
         ChatUtils.log("Enabling, wait 1 second...");
 

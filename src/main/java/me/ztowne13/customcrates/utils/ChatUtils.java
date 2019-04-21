@@ -13,19 +13,20 @@ import java.util.List;
  */
 public class ChatUtils
 {
+    @Deprecated
     public static void log(String[] args)
     {
         Bukkit.getLogger().info("-----------------------------------");
         for (int i = 0; i < args.length; i++)
         {
-            Bukkit.getLogger().info(args[i]);
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatUtils.toChatColor(args[i]));
         }
         Bukkit.getLogger().info("-----------------------------------");
     }
 
     public static void log(String s)
     {
-        Bukkit.getLogger().info(s);
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatUtils.toChatColor("&7" + s));
     }
 
     public static void logFailLoad(String crate, String failLoad, String failLoadValue)
