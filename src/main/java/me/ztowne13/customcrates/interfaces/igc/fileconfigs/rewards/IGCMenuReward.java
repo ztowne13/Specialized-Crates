@@ -169,31 +169,6 @@ public class IGCMenuReward extends IGCMenu
         {
             new IGCItemEditor(getCc(), getP(), this, r.getItemBuilder()).open();
         }
-//        else if (slot == 13)
-//        {
-//            ItemStack stack = getP().getItemInHand();
-//            if (stack == null || stack.getType() == DynamicMaterial.AIR.parseMaterial())
-//            {
-//                getIb().setItem(slot, new ItemBuilder(getIb().getInv().getItem(slot)).setName("&cNo item in hand"));
-//                ChatUtils.msgError(getP(), "You do not have an item in your hand!");
-//            }
-//            else
-//            {
-//                ItemBuilder ib = new ItemBuilder(getP().getItemInHand());
-//
-//                ib.clearLore().setName("&aEdit the display item.").clearLore().addAutomaticLore("&f", 30,
-//                        "By clicking this object you will set the display item to the item you are currently holding.");
-//
-//                getIb().setItem(slot, ib);
-//                r.setDisplayItem(ib.get());
-//            }
-//
-//            if (r.getDisplayItem() != null && DynamicMaterial.PLAYER_HEAD.isSameMaterial(r.getDisplayItem()))
-//            {
-//                getIb().setItem(22, new ItemBuilder(DynamicMaterial.NAME_TAG, 1).setName("&aEdit the player-head name")
-//                        .setLore("&7Current value:").addLore("&f" + getName(r.getHeadName())));
-//            }
-//        }
         else if (slot == 14)
         {
             new InputMenu(getCc(), getP(), "chance", r.getChance().toString(), Integer.class, this);
@@ -202,18 +177,6 @@ public class IGCMenuReward extends IGCMenu
         {
             new InputMenu(getCc(), getP(), "rarity", r.getRarity(), String.class, this);
         }
-//        else if (slot == 16)
-//        {
-//            r.setGlow(!r.isGlow());
-//            getIb().setItem(16, new ItemBuilder(r.isGlow() ? DynamicMaterial.NETHER_STAR : DynamicMaterial.QUARTZ, 1)
-//                    .setName("&aEdit the glow").setLore("&7Current value:").addLore("&7" + r.isGlow()).addLore("")
-//                    .addAutomaticLore("&f", 30, "This is whether or not the display item should glow."));
-//            return;
-//        }
-//        else if (slot == 22)
-//        {
-//            new InputMenu(getCc(), getP(), "head-player-name", r.getHeadName(), String.class, this);
-//        }
         else if (slot == 0)
         {
             ItemBuilder b = new ItemBuilder(getIb().getInv().getItem(slot));

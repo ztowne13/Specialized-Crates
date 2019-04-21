@@ -11,6 +11,7 @@ import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.FileHandler;
 import me.ztowne13.customcrates.utils.NMSUtils;
+import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -19,11 +20,13 @@ import org.bukkit.entity.Player;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Reward
 {
     CustomCrates cc;
     FileConfiguration fc;
+    Random r;
 
     CRewards cr;
     String rewardName, tempDisplayName;
@@ -46,6 +49,7 @@ public class Reward
         setRewardName(rewardName);
         itemBuilder = new ItemBuilder(DynamicMaterial.STONE, 1);
         itemBuilder.setDisplayName(rewardName);
+        this.r = new Random();
     }
 
     public Reward(CustomCrates cc, CRewards cr, String rewardName)
@@ -70,9 +74,75 @@ public class Reward
     {
         for (String command : getCommands())
         {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.toString().replace("{name}", p.getName()));
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), applyCommandPlaceHolders(p, command));
         }
         //new RewardLimitEvent(this, PlayerManager.get(cc, p).getPdm().getCurrentRewardLimitUses(this), 1).addTo(PlayerManager.get(cc, p).getPdm());
+    }
+
+    public String applyCommandPlaceHolders(Player p, String cmd)
+    {
+        cmd = cmd.replaceAll("%player%", p.getName());
+        cmd = cmd.replaceAll("%name%", p.getName());
+        cmd = cmd.replaceAll("%playername%", p.getName());
+        cmd = cmd.replace("{name}", p.getName());
+
+        if (cmd.contains("%amount"))
+        {
+            String[] args = cmd.split("%amount");
+
+            for (int i = 1; i < args.length; i++)
+            {
+                boolean firstVal = true;
+                String firstNum = "";
+                String secondNum = "";
+
+                for (String letter : args[i].split(""))
+                {
+                    if (letter.equalsIgnoreCase("-"))
+                    {
+                        firstVal = false;
+                    }
+                    else if (letter.equalsIgnoreCase("%"))
+                    {
+                        break;
+                    }
+                    else if (Utils.isInt(letter))
+                    {
+                        if (firstVal)
+                            firstNum = firstNum + letter;
+                        else
+                            secondNum = secondNum + letter;
+                    }
+                }
+
+                int first = Integer.parseInt(firstNum);
+                int second = Integer.parseInt(secondNum);
+
+                try
+                {
+                    if(second - first == 0)
+                    {
+                        second = second + 1;
+                    }
+                    else if(second - first < 0)
+                    {
+                        int temp = second;
+                        second = first;
+                        first = temp;
+                    }
+                    int random = r.nextInt(second - first) + first;
+                    String toReplace = "%amount" + firstNum + "-" + secondNum + "%";
+                    cmd = cmd.replaceAll(toReplace, random + "");
+                }
+                catch (Exception exc)
+                {
+                    ChatUtils
+                            .log("The %amountX-X% placeholder is improperly formatted. Please use %amountX-Y where X is the starting value and Y is the ending (X is LESS THAN Y)");
+                }
+            }
+        }
+
+        return cmd;
     }
 
     public void writeToFile()
@@ -102,10 +172,10 @@ public class Reward
             fc.set(getPath("enchantments"), null);
 
         // Potion Effects
-        if(!itemBuilder.getPotionEffects().isEmpty())
+        if (!itemBuilder.getPotionEffects().isEmpty())
         {
             ArrayList<String> parsedPots = new ArrayList<>();
-            for(CompressedPotionEffect compressedPotionEffect : itemBuilder.getPotionEffects())
+            for (CompressedPotionEffect compressedPotionEffect : itemBuilder.getPotionEffects())
                 parsedPots.add(compressedPotionEffect.toString());
 
             fc.set(getPath("potion-effects"), parsedPots);
@@ -114,7 +184,7 @@ public class Reward
             fc.set(getPath("potion-effects"), null);
 
         // Lore
-        if(!itemBuilder.getLore().isEmpty())
+        if (!itemBuilder.getLore().isEmpty())
             fc.set(getPath("lore"), itemBuilder.getLore());
         else
             fc.set(getPath("lore"), null);
@@ -122,7 +192,7 @@ public class Reward
         // NBT Tags
         if (NMSUtils.Version.v1_12.isServerVersionOrEarlier() && NMSUtils.Version.v1_8.isServerVersionOrLater())
         {
-            if(!itemBuilder.getNBTTags().isEmpty())
+            if (!itemBuilder.getNBTTags().isEmpty())
                 fc.set(getPath("nbt-tags"), itemBuilder.getNBTTags());
             else
                 fc.set(getPath("nbt-tags"), null);
@@ -213,7 +283,7 @@ public class Reward
             DynamicMaterial m = DynamicMaterial.fromString(unsplitMat);
             itemBuilder = new ItemBuilder(m, 1);
         }
-        catch(Exception exc)
+        catch (Exception exc)
         {
             return false;
         }
@@ -304,7 +374,8 @@ public class Reward
 
     public void buildDisplayItemFromConfig()
     {
-        itemBuilder.setDisplayName(applyVariablesTo(cc.getSettings().getConfigValues().get("inv-reward-item-name").toString()));
+        itemBuilder
+                .setDisplayName(applyVariablesTo(cc.getSettings().getConfigValues().get("inv-reward-item-name").toString()));
 
         // If an item has a custom lore, apply that. Otherwise apply the general lore.
         if (getFc().contains(getPath("lore")))
@@ -352,15 +423,15 @@ public class Reward
             }
         }
 
-        if(getFc().contains(getPath("potion-effects")))
+        if (getFc().contains(getPath("potion-effects")))
         {
-            for(String unparsedPot : getFc().getStringList(getPath("potion-effects")))
+            for (String unparsedPot : getFc().getStringList(getPath("potion-effects")))
             {
                 try
                 {
                     CompressedPotionEffect compressedPotionEffect = CompressedPotionEffect.fromString(unparsedPot);
 
-                    if(compressedPotionEffect == null)
+                    if (compressedPotionEffect == null)
                         throw new Exception();
                     else
                         itemBuilder.addPotionEffect(compressedPotionEffect);
@@ -401,14 +472,15 @@ public class Reward
             }
             catch (Exception exc)
             {
-                StatusLoggerEvent.REWARD_ENCHANT_INVALID.log(getCr().getCrates(), new String[]{itemBuilder.getDisplayName(), cause});
+                StatusLoggerEvent.REWARD_ENCHANT_INVALID
+                        .log(getCr().getCrates(), new String[]{itemBuilder.getDisplayName(), cause});
             }
         }
     }
 
     public String getDisplayName()
     {
-        if(itemBuilder == null || itemBuilder.getDisplayName() == null)
+        if (itemBuilder == null || itemBuilder.getDisplayName() == null)
             return rewardName;
         return itemBuilder.getDisplayName();
     }
