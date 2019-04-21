@@ -27,8 +27,6 @@ public class IGCMenuMain extends IGCMenu
     @Override
     public void open()
     {
-        putInMenu();
-
         InventoryBuilder ib = createDefault(27);
         ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb().setName("&aSave every file/crate"));
         ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
@@ -57,6 +55,7 @@ public class IGCMenuMain extends IGCMenu
                 .addLore("&7Amount: &f" + Crate.getLoadedCrates().keySet().size())
                 .addLore("&7Amount Placed: &f" + PlacedCrate.getPlacedCrates().keySet().size()));
         ib.open();
+        putInMenu();
     }
 
     @Override

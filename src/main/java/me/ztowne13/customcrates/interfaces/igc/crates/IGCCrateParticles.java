@@ -38,8 +38,6 @@ public class IGCCrateParticles extends IGCTierMenu
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4,
                 (crates.getCs().getCp().getParticles().containsKey(tier) ?
@@ -75,6 +73,7 @@ public class IGCCrateParticles extends IGCTierMenu
         }
 
         ib.open();
+        putInMenu();
     }
 
     @Override
@@ -93,7 +92,6 @@ public class IGCCrateParticles extends IGCTierMenu
                 getIb().getInv().getItem(slot).getType().equals(Material.NETHER_STAR))
         {
             ParticleData pd = slots.get(slot);
-            getP().closeInventory();
             new IGCCrateParticle(getCc(), getP(), this, crates, pd, tier).open();
         }
     }

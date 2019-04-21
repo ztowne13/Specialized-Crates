@@ -27,8 +27,6 @@ public class IGCDragAndDrop extends IGCMenu
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(54);
 
@@ -37,6 +35,7 @@ public class IGCDragAndDrop extends IGCMenu
 
         setIb(ib);
         getIb().open();
+        putInMenu();
     }
 
     @Override // For this menu it has been repurposed to be used as the "save" function

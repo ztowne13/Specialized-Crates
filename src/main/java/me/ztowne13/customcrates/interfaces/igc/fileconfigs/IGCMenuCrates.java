@@ -34,8 +34,6 @@ public class IGCMenuCrates extends IGCMenu
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4, Crate.getLoadedCrates().keySet().size()));
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
@@ -62,6 +60,7 @@ public class IGCMenuCrates extends IGCMenu
         }
 
         getIb().open();
+        putInMenu();
     }
 
     @Override
@@ -78,7 +77,6 @@ public class IGCMenuCrates extends IGCMenu
         else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType() == Material.CHEST)
         {
             String name = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
-            getP().closeInventory();
             new IGCCratesMain(getCc(), getP(), this, Crate.getCrate(getCc(), name)).open();
         }
     }

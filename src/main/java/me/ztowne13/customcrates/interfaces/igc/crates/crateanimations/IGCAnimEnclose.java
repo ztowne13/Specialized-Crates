@@ -32,8 +32,6 @@ public class IGCAnimEnclose extends IGCAnimation
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(18);
 
@@ -63,6 +61,7 @@ public class IGCAnimEnclose extends IGCAnimation
                 .addAutomaticLore("&f", 30, "The block that will fill the empty space in the animation."));
 
         getIb().open();
+        putInMenu();
     }
 
     @Override

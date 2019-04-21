@@ -45,8 +45,6 @@ public class IGCAnimRoulette extends IGCAnimation
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(18);
 
@@ -87,6 +85,7 @@ public class IGCAnimRoulette extends IGCAnimation
         ib.setItem(15, fillerBlocks.setName("&aRemove existing random-blocks"));
 
         getIb().open();
+        putInMenu();
     }
 
     @Override

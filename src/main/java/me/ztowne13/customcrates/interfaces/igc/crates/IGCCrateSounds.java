@@ -32,9 +32,6 @@ public class IGCCrateSounds extends IGCTierMenu
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
-
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4,
                 (crates.getCs().getCs().getSounds().containsKey(tier) ? crates.getCs().getCs().getSounds().get(tier).size() :
                         0) + 9));
@@ -61,6 +58,7 @@ public class IGCCrateSounds extends IGCTierMenu
         }
 
         ib.open();
+        putInMenu();
     }
 
     @Override
@@ -80,7 +78,6 @@ public class IGCCrateSounds extends IGCTierMenu
         {
             //SoundData sd = crates.getCs().getCs().getSoundFromName(tier, Sound.valueOf(ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName()).toUpperCase()));
             SoundData sd = slots.get(slot);
-            getP().closeInventory();
             new IGCCrateSound(getCc(), getP(), this, crates, sd, tier).open();
         }
     }

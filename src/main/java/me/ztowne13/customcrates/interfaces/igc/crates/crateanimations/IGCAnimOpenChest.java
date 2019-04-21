@@ -33,8 +33,6 @@ public class IGCAnimOpenChest extends IGCAnimation
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(9);
 
@@ -70,6 +68,7 @@ public class IGCAnimOpenChest extends IGCAnimation
         ib.setItem(7, earlyActions);
 
         getIb().open();
+        putInMenu();
     }
 
     @Override

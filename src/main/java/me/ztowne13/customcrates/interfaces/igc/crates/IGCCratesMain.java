@@ -28,8 +28,6 @@ public class IGCCratesMain extends IGCMenuCrate
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(crates.isMultiCrate() ? 27 : 45);
 
@@ -88,6 +86,7 @@ public class IGCCratesMain extends IGCMenuCrate
         }
 
         ib.open();
+        putInMenu();
     }
 
     @Override
@@ -164,11 +163,9 @@ public class IGCCratesMain extends IGCMenuCrate
                 getP().chat("/ccrates delallcratetype " + crates.getName());
                 break;
             case 10:
-                getP().closeInventory();
                 new IGCCratesBase(getCc(), getP(), this, crates).open();
                 break;
             case 16:
-                getP().closeInventory();
                 Set<String> blankParticles = new HashSet<String>();
                 blankParticles.add("PLAY");
                 if (!crates.isMultiCrate())
@@ -179,18 +176,15 @@ public class IGCCratesMain extends IGCMenuCrate
                         new IGCCrateParticles(getCc(), getP(), this, crates, "")).open();
                 break;
             case 21:
-                getP().closeInventory();
                 new IGCCrateHolograms(getCc(), getP(), this, crates).open();
                 break;
             case 23:
                 if (crates.isMultiCrate())
                 {
-                    getP().closeInventory();
                     new IGCMultiCrateMain(getCc(), getP(), this, crates).open();
                 }
                 else
                 {
-                    getP().closeInventory();
                     Set<String> blankSounds = new HashSet<String>();
                     blankSounds.add("OPEN");
                     new IGCTierSelector(getCc(), getP(), this, crates, blankSounds,
@@ -198,7 +192,6 @@ public class IGCCratesMain extends IGCMenuCrate
                 }
                 break;
             case 28:
-                getP().closeInventory();
                 Set<String> blankFireworks = new HashSet<String>();
                 blankFireworks.add("OPEN");
                 new IGCTierSelector(getCc(), getP(), this, crates, blankFireworks,

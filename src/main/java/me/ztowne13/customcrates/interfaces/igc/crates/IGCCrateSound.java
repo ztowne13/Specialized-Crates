@@ -32,9 +32,6 @@ public class IGCCrateSound extends IGCTierMenu
     public void open()
     {
 
-        getP().closeInventory();
-        putInMenu();
-
         InventoryBuilder ib = createDefault(27);
 
         ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
@@ -53,6 +50,7 @@ public class IGCCrateSound extends IGCTierMenu
 
 
         ib.open();
+        putInMenu();
     }
 
     @Override

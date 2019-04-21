@@ -29,8 +29,6 @@ public class IGCCrateFireworks extends IGCTierMenu
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4,
                 (crates.getCs().getCf().getFireworks().containsKey(tier) ? cs.getCf().getFireworks().get(tier).size() : 0)) +
@@ -64,6 +62,7 @@ public class IGCCrateFireworks extends IGCTierMenu
         }
 
         ib.open();
+        putInMenu();
     }
 
     @Override

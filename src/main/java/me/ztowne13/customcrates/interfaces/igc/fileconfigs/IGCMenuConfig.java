@@ -44,8 +44,6 @@ public class IGCMenuConfig extends IGCMenu
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         HashMap<String, Object> map = getCc().getSettings().getConfigValues();
         InventoryBuilder ib =
@@ -128,6 +126,7 @@ public class IGCMenuConfig extends IGCMenu
 
 
         ib.open();
+        putInMenu();
     }
 
     @Override

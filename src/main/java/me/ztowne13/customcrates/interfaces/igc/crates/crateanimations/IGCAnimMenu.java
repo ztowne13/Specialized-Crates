@@ -30,8 +30,6 @@ public class IGCAnimMenu extends IGCAnimation
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(9);
 
@@ -55,6 +53,7 @@ public class IGCAnimMenu extends IGCAnimation
                         "The maximum amount of rewards that could appear in the menu. Set to the same amount as the minimum-rewards for it to be the same amount every time."));
 
         getIb().open();
+        putInMenu();
     }
 
     @Override

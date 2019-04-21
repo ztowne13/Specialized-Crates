@@ -29,9 +29,6 @@ public class IGCMenuMessages extends IGCMenu
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
-
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(2, Messages.values().length - 1));
         ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
         ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
@@ -63,6 +60,7 @@ public class IGCMenuMessages extends IGCMenu
         }
 
         ib.open();
+        putInMenu();
     }
 
     @Override

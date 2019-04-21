@@ -46,8 +46,6 @@ public class IGCCrateActions extends IGCTierMenu
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         int count = 0;
         if (cs.getCa().getActions().containsKey(tier))
@@ -95,6 +93,7 @@ public class IGCCrateActions extends IGCTierMenu
         }
 
         ib.open();
+        putInMenu();
     }
 
     @Override

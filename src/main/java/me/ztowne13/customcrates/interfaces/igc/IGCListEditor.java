@@ -48,8 +48,6 @@ public class IGCListEditor extends IGCMenu
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         int slots;
 
@@ -113,6 +111,7 @@ public class IGCListEditor extends IGCMenu
         }
 
         ib.open();
+        putInMenu();
     }
 
     @Override

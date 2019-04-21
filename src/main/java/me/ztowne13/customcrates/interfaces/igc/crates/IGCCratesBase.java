@@ -33,8 +33,6 @@ public class IGCCratesBase extends IGCMenuCrate
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(18);
 
@@ -96,6 +94,7 @@ public class IGCCratesBase extends IGCMenuCrate
         }
 
         getIb().open();
+        putInMenu();
     }
 
     @Override

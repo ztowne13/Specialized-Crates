@@ -44,9 +44,6 @@ public class IGCTierSelector extends IGCMenuCrate
             return;
         }
 
-        getP().closeInventory();
-        putInMenu();
-
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4, tiers.size()) + 9);
 
         ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
@@ -68,6 +65,7 @@ public class IGCTierSelector extends IGCMenuCrate
         }
 
         ib.open();
+        putInMenu();
     }
 
     @Override

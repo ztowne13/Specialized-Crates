@@ -55,7 +55,7 @@ public abstract class IGCMenu
 
     public void up()
     {
-        p.closeInventory();
+        //p.closeInventory();
         lastMenu.open();
     }
 

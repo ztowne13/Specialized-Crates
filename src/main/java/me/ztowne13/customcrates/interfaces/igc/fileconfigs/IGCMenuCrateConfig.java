@@ -31,8 +31,6 @@ public class IGCMenuCrateConfig extends IGCMenu
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         FileHandler fu = getCc().getCrateconfigFile();
         FileConfiguration fc = fu.get();
@@ -62,52 +60,8 @@ public class IGCMenuCrateConfig extends IGCMenu
                 .setLore("&7Animation name: &fBLOCK_CRATEOPEN").addLore("")
                 .addLore("&7Used by crates: &f" + CrateType.BLOCK_CRATEOPEN.getUses()));
 
-		/*ib.setItem(27, IGCDefaultItems.EXIT_BUTTON.getIb());
-
-		ItemBuilder nameDisplay = new ItemBuilder(Material.PAPER, 1, 0).setLore("").addLore("&7---->");
-		ItemBuilder nameEditor = new ItemBuilder(Material.BOOK, 1, 0).setName("&aChange the inv-name");
-
-		// Roulette
-		ib.setItem(1, nameDisplay.setName("&aRoulette Animation"));
-		ib.setItem(2, nameEditor.setLore("&7Current value:").addLore("&f" + getValue("Roulette", "inv-name")));
-		ib.setItem(3, new ItemBuilder(Material.RECORD_3, 1, 0).setName("&aChange the tick-sound").setLore("&7Current value:").addLore("&f" + getValue("Roulette", "tick-sound")));
-		ib.setItem(4, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aChange the tick-speed-per-run").setLore("&7Current value:").addLore("&f" + getValue("Roulette", "tick-speed-per-run")));
-		ib.setItem(5, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aChange the final-crate-tick-length").setLore("&7Current value:").addLore("&f" + getValue("Roulette", "final-crate-tick-length")));
-
-		ItemBuilder randomBlocks = new ItemBuilder(Material.STONE, 1, 0).setName("&aAdd to random-blocks").setLore("&7Current values: ");
-		for(String s: fc.getStringList("CrateType.Inventory.Roulette.random-blocks"))
-		{
-			randomBlocks.addLore("&f" + s);
-		}
-
-		ib.setItem(6, randomBlocks);
-		ib.setItem(7, randomBlocks.setName("&aRemove from random-blocks"));
-
-		// CS:GO
-		ib.setItem(19, nameDisplay.setName("&aCSGO Animation"));
-		ib.setItem(20, nameEditor.setLore("&7Current value:").addLore("&f" + getValue("CSGO", "inv-name")));
-		ib.setItem(21, new ItemBuilder(Material.RECORD_3, 1, 0).setName("&aChange the tick-sound").setLore("&7Current value:").addLore("&f" + getValue("CSGO", "tick-sound")));
-		ib.setItem(22, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aChange the tick-speed-per-run").setLore("&7Current value:").addLore("&f" + getValue("CSGO", "tick-speed-per-run")));
-		ib.setItem(23, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aChange the final-crate-tick-length").setLore("&7Current value:").addLore("&f" + getValue("CSGO", "final-crate-tick-length")));
-
-		randomBlocks = new ItemBuilder(Material.STONE, 1, 0).setName("&aAdd to filler-blocks").setLore("&7Current values: ");
-		for(String s: fc.getStringList("CrateType.Inventory.CSGO.filler-blocks"))
-		{
-			randomBlocks.addLore("&f" + s);
-		}
-
-		// Menu
-		ib.setItem(24, randomBlocks);
-		ib.setItem(25, randomBlocks.setName("&aRemove from filler-blocks"));
-		ib.setItem(26, new ItemBuilder(Material.REDSTONE_TORCH_ON, 1, 0).setName("&aChange the identifier-block").setLore("&7Current value:").addLore("&f" + getValue("CSGO", "identifier-block")));
-
-		ib.setItem(37, nameDisplay.setName("&aMenu Animation"));
-		ib.setItem(38, nameEditor.setLore("&7Current value:").addLore("&f" + getValue("Menu", "inv-name")));
-		ib.setItem(39, new ItemBuilder(Material.FENCE, 1, 0).setName("&aChange the inventory-rows").setLore("&7Current value:").addLore("&f" + getValue("Menu", "inventory-rows")));
-		ib.setItem(40, new ItemBuilder(Material.WOOD_BUTTON, 1, 0).setName("&aChange the minimum-rewards").setLore("&7Current value:").addLore("&f" + getValue("Menu", "minimum-rewards")));
-		ib.setItem(41, new ItemBuilder(Material.WOOD_BUTTON, 1, 0).setName("&aChange the maximum-rewards").setLore("&7Current value:").addLore("&f" + getValue("Menu", "maximum-rewards")));*/
-
         ib.open();
+        putInMenu();
     }
 
     @Override

@@ -32,8 +32,6 @@ public class IGCCrateRewards extends IGCMenuCrate
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         setInventoryName("&7&l> &6&lReward PG" + page);
 
@@ -119,6 +117,7 @@ public class IGCCrateRewards extends IGCMenuCrate
         }
 
         ib.open();
+        putInMenu();
     }
 
     @Override

@@ -36,9 +36,6 @@ public class IGCCrateParticle extends IGCTierMenu
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
-
         InventoryBuilder ib = createDefault(pd.getParticleAnimationEffect() == null ? 36 : 27);
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
@@ -157,6 +154,7 @@ public class IGCCrateParticle extends IGCTierMenu
         }
 
         ib.open();
+        putInMenu();
     }
 
     @Override

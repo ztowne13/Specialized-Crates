@@ -26,8 +26,6 @@ public class IGCMultiCrateMain extends IGCMenuCrate
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(9);
 
@@ -44,6 +42,7 @@ public class IGCMultiCrateMain extends IGCMenuCrate
                 .setLore("&4&lWARNING: &cThis clears the entire").addLore("&cinventory."));
 
         getIb().open();
+        putInMenu();
     }
 
     @Override

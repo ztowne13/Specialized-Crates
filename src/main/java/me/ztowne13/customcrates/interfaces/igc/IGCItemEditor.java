@@ -31,8 +31,6 @@ public class IGCItemEditor extends IGCMenu
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         editableItem.reapplyLore();
         editableItem.reapplyEnchantments();
@@ -153,6 +151,7 @@ public class IGCItemEditor extends IGCMenu
         ib.setItem(25, playerHead);
 
         ib.open();
+        putInMenu();
     }
 
     @Override

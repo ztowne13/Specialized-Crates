@@ -43,8 +43,6 @@ public class IGCMenuReward extends IGCMenu
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(27);
 
@@ -60,14 +58,6 @@ public class IGCMenuReward extends IGCMenu
         ib.setItem(8,
                 new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&cDelete this reward")
                         .addAutomaticLore("&7", 30, "You will have to confirm before deleting."));
-
-        // Display name
-//        ib.setItem(11,
-//                new ItemBuilder(DynamicMaterial.PAPER, 1).setName("&aEdit the display name.")
-//                        .setLore("&7Current value: ")
-//                        .addLore("&7" + getName(r.getDisplayName())).addLore("")
-//                        .addAutomaticLore("&f", 30,
-//                                "This is the reward name everyone will see on the item and in all messages / actions."));
 
         //Commands
         ItemBuilder commands =
@@ -88,21 +78,6 @@ public class IGCMenuReward extends IGCMenu
         }
         commands.addLore("").addAutomaticLore("&f", 30, "Use {name} as a placeholder for the player's name.");
         ib.setItem(13, commands);
-
-        //Lore
-//        ItemBuilder lore = new ItemBuilder(DynamicMaterial.WRITABLE_BOOK, 1).setName("&aEdit the lore")
-//                .setLore("&7Current value: ");
-//        if (r.getCustomLore() != null && !r.getCustomLore().isEmpty())
-//            for (String loreLine : r.getCustomLore())
-//            {
-//                lore.addLore(loreLine);
-//            }
-//        else
-//            lore.addAutomaticLore("&e", 30, "Currently using global lore from the config.yml");
-//
-//        lore.addLore("").addAutomaticLore("&f", 30,
-//                "Set the reward's lore to display. Delete every line of the lore to use the global lore specificed in the config.yml.");
-//        ib.setItem(11, lore);
 
         // Display item
         ib.setItem(11,
@@ -130,19 +105,8 @@ public class IGCMenuReward extends IGCMenu
                         .addLore("&7" + getName(r.getRarity())).addLore("").addAutomaticLore("&f", 30,
                         "This is the 'tier' of the reward. If you aren't using tiers, ignore this."));
 
-        // Glow
-//        ib.setItem(16, new ItemBuilder(r.isGlow() ? DynamicMaterial.NETHER_STAR : DynamicMaterial.QUARTZ, 1)
-//                .setName("&aEdit the glow").setLore("&7Current value:").addLore("&7" + r.isGlow()).addLore("")
-//                .addAutomaticLore("&f", 30, "This is whether or not the display item should glow."));
-
-
-//        if (r.getDisplayItem() != null && DynamicMaterial.PLAYER_HEAD.isSameMaterial(r.getDisplayItem()))
-//        {
-//            ib.setItem(22, new ItemBuilder(DynamicMaterial.NAME_TAG, 1).setName("&aEdit the player-head name")
-//                    .setLore("&7Current value:").addLore("&f" + getName(r.getHeadName())));
-//        }
-
         getIb().open();
+        putInMenu();
     }
 
     @Override

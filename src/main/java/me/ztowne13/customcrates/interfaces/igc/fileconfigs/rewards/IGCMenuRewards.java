@@ -30,8 +30,6 @@ public class IGCMenuRewards extends IGCMenu
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         int slots = 0;
 
@@ -136,6 +134,7 @@ public class IGCMenuRewards extends IGCMenu
         }
 
         ib.open();
+        putInMenu();
     }
 
     @Override

@@ -26,8 +26,6 @@ public class IGCAnimDiscover extends IGCAnimation
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(18);
 
@@ -82,6 +80,7 @@ public class IGCAnimDiscover extends IGCAnimation
                         "The sound that is played every time the player uncovers a reward. Set to 'none' to have no sound."));
 
         ib.open();
+        putInMenu();
     }
 
     @Override

@@ -29,8 +29,6 @@ public class IGCMineCrate extends IGCMenuCrate
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(27);
 
@@ -64,6 +62,7 @@ public class IGCMineCrate extends IGCMenuCrate
         ib.setItem(14, wList);
 
         ib.open();
+        putInMenu();
     }
 
     @Override

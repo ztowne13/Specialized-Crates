@@ -32,8 +32,6 @@ public class IGCCrateHolograms extends IGCMenuCrate
     @Override
     public void open()
     {
-        getP().closeInventory();
-        putInMenu();
 
         InventoryBuilder ib = createDefault(27);
         CHolograms cholo = crates.getCs().getCholoCopy();
@@ -116,6 +114,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
         ib.setItem(24, animatedHoloSpeed);
 
         ib.open();
+        putInMenu();
     }
 
     @Override
