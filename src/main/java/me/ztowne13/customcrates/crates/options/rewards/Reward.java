@@ -276,6 +276,7 @@ public class Reward
     {
         setFc(getCc().getRewardsFile().get());
         boolean success = true;
+        needsMoreConfig = false;
 
         try
         {
@@ -310,7 +311,7 @@ public class Reward
         }
         catch (Exception exc)
         {
-            needsMoreConfig = true;
+            //needsMoreConfig = true;
             if (toLog)
             {
                 StatusLoggerEvent.REWARD_RARITY_NONEXISTENT.log(getCr().getCrates(), new String[]{this.toString()});
