@@ -75,7 +75,7 @@ public class DiscoverAnimation extends InventoryCrate
             {
                 if (!ddh.isCanCloseInventory())
                 {
-                    if (!ddh.getP().getOpenInventory().getTopInventory().getName().equals(ddh.getIb().getInv().getName()))
+                    if (!ddh.getP().getOpenInventory().getTitle().equals(ddh.getIb().getName()))
                     {
                         ddh.getIb().open();
                     }

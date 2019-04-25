@@ -11,23 +11,32 @@ import static java.lang.Math.max;
 
 public class InventoryBuilder
 {
+    String invName = "";
     Inventory inv;
     Player p;
     int minimumSlots = 0;
 
     public InventoryBuilder(Player p, int slots, String invName)
     {
-        super();
-        this.p = p;
-        setInv(Bukkit.createInventory(p, slots, ChatColor.translateAlternateColorCodes('&', invName)));
+        this(p, slots, invName, 0);
     }
 
     public InventoryBuilder(Player p, int slots, String invName, int minimumSlots)
     {
-        super();
+        this.invName = invName;
         this.minimumSlots = minimumSlots;
         this.p = p;
+
+//        if(slots < 27)
+//            minimumSlots = 27;
+//        else if (slots > 27)
+//            minimumSlots = 27 * 2;
         setInv(Bukkit.createInventory(p, max(minimumSlots, slots), ChatColor.translateAlternateColorCodes('&', invName)));
+    }
+
+    public String getName()
+    {
+        return invName;
     }
 
     public void setItem(int slot, ItemStack stack)

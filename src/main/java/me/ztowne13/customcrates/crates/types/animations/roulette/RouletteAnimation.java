@@ -87,8 +87,8 @@ public class RouletteAnimation extends RouletteManager
 
                     buildNewInventory(rdh, rdh.getTotalTicks() % glassUpdateTicks == 0, b);
 
-                    if (first || !rdh.getP().getOpenInventory().getTopInventory().getName()
-                            .equals(rdh.getInv().getInv().getName()))
+                    if (first || !rdh.getP().getOpenInventory().getTitle()
+                            .equals(rdh.getInv().getName()))
                     {
                         rdh.getP().openInventory(rdh.getInv().getInv());
                     }
