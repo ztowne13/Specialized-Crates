@@ -53,7 +53,7 @@ public class RouletteManager extends InventoryCrate
     {
         if (!rdh.isCompleted())
         {
-            Bukkit.getScheduler().runTaskLater(getCc(), new Runnable()
+            Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
             {
                 @Override
                 public void run()

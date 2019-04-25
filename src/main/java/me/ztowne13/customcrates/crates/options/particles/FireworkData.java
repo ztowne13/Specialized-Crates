@@ -15,7 +15,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -184,7 +183,7 @@ public class FireworkData
 
         if (getPower() == 0)
         {
-            Bukkit.getScheduler().runTaskLater(getCc(), new BukkitRunnable()
+            Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
             {
                 public void run()
                 {

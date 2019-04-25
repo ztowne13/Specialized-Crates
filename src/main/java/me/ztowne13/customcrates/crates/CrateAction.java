@@ -151,7 +151,7 @@ public class CrateAction
                                             CrateCooldownEvent cce = pdm.getCrateCooldownEventByCrates(crates);
                                             if (cce == null || cce.isCooldownOverAsBoolean())
                                             {
-                                                Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+                                                Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
                                                 {
                                                     @Override
                                                     public void run()

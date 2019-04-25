@@ -32,7 +32,7 @@ public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
 
     public void place(final PlacedCrate cm)
     {
-        Bukkit.getScheduler().runTaskLater(getCc(), new Runnable()
+        Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
         {
             @Override
             public void run()

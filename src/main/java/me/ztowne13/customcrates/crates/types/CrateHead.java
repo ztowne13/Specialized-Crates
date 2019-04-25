@@ -44,7 +44,7 @@ public abstract class CrateHead
 
     public void finishUp(final Player p, long ticks)
     {
-        Bukkit.getScheduler().runTaskLater(getCc(), new Runnable()
+        Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
         {
             @Override
             public void run()
