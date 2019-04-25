@@ -74,7 +74,16 @@ public class Reward
     {
         for (String command : getCommands())
         {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), applyCommandPlaceHolders(p, command));
+            try
+            {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), applyCommandPlaceHolders(p, command));
+            }
+            catch (Exception exc)
+            {
+//                ChatUtils
+//                        .log("Specialized Crates has attempted to run a command that has produced an error. Please contact the author of the plugin who's command is run to fix the issue.");
+//                exc.printStackTrace();
+            }
         }
         //new RewardLimitEvent(this, PlayerManager.get(cc, p).getPdm().getCurrentRewardLimitUses(this), 1).addTo(PlayerManager.get(cc, p).getPdm());
     }
@@ -120,11 +129,11 @@ public class Reward
 
                 try
                 {
-                    if(second - first == 0)
+                    if (second - first == 0)
                     {
                         second = second + 1;
                     }
-                    else if(second - first < 0)
+                    else if (second - first < 0)
                     {
                         int temp = second;
                         second = first;
