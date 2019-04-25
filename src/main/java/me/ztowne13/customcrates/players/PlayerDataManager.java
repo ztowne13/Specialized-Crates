@@ -154,7 +154,7 @@ public class PlayerDataManager
         {
             if (!parsed.equals(toRemove))
             {
-                newList = newList.equals("") ? parsed : "," + parsed;
+                newList = newList.equals("") ? parsed : newList + "," + parsed;
             }
         }
 
