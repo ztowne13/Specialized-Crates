@@ -34,7 +34,7 @@ public class IGCCratesMain extends IGCMenuCrate
         ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
         ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
         ib.setItem(crates.isMultiCrate() ? 18 : 36, IGCDefaultItems.EXIT_BUTTON.getIb());
-        ib.setItem(3, new ItemBuilder(DynamicMaterial.ROSE_RED, 1).setName("&4&lDelete this crate")
+        ib.setItem(3, new ItemBuilder(DynamicMaterial.RED_DYE, 1).setName("&4&lDelete this crate")
                 .setLore("&cThis action CANNOT be undone.").addLore("&e&oNote: This does not delete rewards").addLore("")
                 .addLore("&7This will delete the entire").addLore("&7file for this crate and will")
                 .addLore("&7erase all data for it."));
@@ -125,7 +125,7 @@ public class IGCCratesMain extends IGCMenuCrate
                 if (ChatUtils.removeColor(getIb().getInv().getItem(3).getItemMeta().getDisplayName())
                         .equalsIgnoreCase("Delete this crate"))
                 {
-                    getIb().setItem(3, new ItemBuilder(DynamicMaterial.ROSE_RED, 1).setName("&6CONFIRM DELETE")
+                    getIb().setItem(3, new ItemBuilder(DynamicMaterial.RED_DYE, 1).setName("&6CONFIRM DELETE")
                             .setLore("&4&lTHIS CANNOT BE UNDONE!"));
                 }
                 else

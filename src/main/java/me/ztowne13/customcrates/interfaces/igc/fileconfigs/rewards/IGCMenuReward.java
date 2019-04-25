@@ -61,7 +61,7 @@ public class IGCMenuReward extends IGCMenu
 
         //Commands
         ItemBuilder commands =
-                new ItemBuilder(r.getCommands() == null || r.getCommands().isEmpty() ? DynamicMaterial.ROSE_RED :
+                new ItemBuilder(r.getCommands() == null || r.getCommands().isEmpty() ? DynamicMaterial.RED_DYE :
                         DynamicMaterial.COMMAND_BLOCK, 1)
                         .setName("&aEdit the commands")
                         .setLore("&7Current value: ");
@@ -82,7 +82,7 @@ public class IGCMenuReward extends IGCMenu
 
         // Display item
         ib.setItem(11,
-                (r == null || r.getItemBuilder() == null ? new ItemBuilder(DynamicMaterial.ROSE_RED, 1) :
+                (r == null || r.getItemBuilder() == null ? new ItemBuilder(DynamicMaterial.RED_DYE, 1) :
                         new ItemBuilder(r.getItemBuilder().getStack())).clearLore().setName("&aEdit the display item.")
                         .clearLore()
                         .addAutomaticLore("&f", 40,
@@ -93,7 +93,7 @@ public class IGCMenuReward extends IGCMenu
         // Chance
         ib.setItem(14,
                 new ItemBuilder(
-                        r.getChance() == null || r.getChance() == 0 ? DynamicMaterial.ROSE_RED : DynamicMaterial.FISHING_ROD,
+                        r.getChance() == null || r.getChance() == 0 ? DynamicMaterial.RED_DYE : DynamicMaterial.FISHING_ROD,
                         1)
                         .setName("&aEdit the chance").setLore("&7Current value: ")
                         .addLore("&7" + getName(r.getChance() == 0 ? null : (r.getChance() + ""))).addLore("")

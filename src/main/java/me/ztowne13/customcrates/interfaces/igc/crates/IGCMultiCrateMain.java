@@ -78,7 +78,7 @@ public class IGCMultiCrateMain extends IGCMenuCrate
             if (Utils.isInt(input))
             {
                 InventoryBuilder oldIb = crates.getCs().getCmci().getInventory(getP(), "", false);
-                InventoryBuilder newIb = new InventoryBuilder(getP(), Integer.parseInt(input) * 9, oldIb.getInv().getName());
+                InventoryBuilder newIb = new InventoryBuilder(getP(), Integer.parseInt(input) * 9, oldIb.getName());
 
                 for (int i = 0; i < (oldIb.getInv().getSize() < newIb.getInv().getSize() ? oldIb.getInv().getSize() :
                         newIb.getInv().getSize()); i++)
