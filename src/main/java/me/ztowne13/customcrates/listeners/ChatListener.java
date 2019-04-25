@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatEvent;
 
 /**
  * Created by ztowne13 on 3/15/16.
@@ -24,7 +24,7 @@ public class ChatListener implements Listener
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onChat(AsyncPlayerChatEvent e)
+    public void onChat(PlayerChatEvent e)
     {
         Player p = e.getPlayer();
         if(p.hasPermission("customcrates.admin"))
