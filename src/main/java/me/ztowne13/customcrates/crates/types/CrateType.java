@@ -7,7 +7,6 @@ import me.ztowne13.customcrates.crates.types.animations.enclosement.EnclosementA
 import me.ztowne13.customcrates.crates.types.animations.keycrate.AnimationKeyCrate;
 import me.ztowne13.customcrates.crates.types.animations.menu.MenuAnimation;
 import me.ztowne13.customcrates.crates.types.animations.openchest.OpenChestAnimation;
-import me.ztowne13.customcrates.crates.types.animations.openchestrolling.OpenChestRollingAnimation;
 import me.ztowne13.customcrates.crates.types.animations.roulette.RouletteAnimation;
 
 public enum CrateType
@@ -24,7 +23,7 @@ public enum CrateType
 
     BLOCK_CRATEOPEN("CrateType.Block.OpenChest"),
 
-    BLOCK_CRATEOPEN_ROLLING("CrateType.Block.OpenChestRolling"),
+    //BLOCK_CRATEOPEN_ROLLING("CrateType.Block.OpenChestRolling"),
 
     GIVE_KEY("");
 			
@@ -63,9 +62,9 @@ public enum CrateType
             case BLOCK_CRATEOPEN:
                 ch = new OpenChestAnimation(null, crates);
                 break;
-            case BLOCK_CRATEOPEN_ROLLING:
-                ch = new OpenChestRollingAnimation(null, crates);
-                break;
+//            case BLOCK_CRATEOPEN_ROLLING:
+//                ch = new OpenChestRollingAnimation(null, crates);
+//                break;
             case GIVE_KEY:
             default:
                 ch = new AnimationKeyCrate(crates);
