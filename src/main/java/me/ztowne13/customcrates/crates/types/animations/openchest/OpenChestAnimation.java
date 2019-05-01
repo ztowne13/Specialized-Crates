@@ -85,7 +85,7 @@ public class OpenChestAnimation extends InventoryCrate
         }
         else if (isEarlyRewardHologram())
         {
-            Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+            Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
             {
                 @Override
                 public void run()
@@ -97,7 +97,7 @@ public class OpenChestAnimation extends InventoryCrate
 
         new NMSChestState().playChestAction(l.getBlock(), true);
 
-        Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+        Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
         {
             @Override
             public void run()

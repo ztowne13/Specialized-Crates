@@ -86,6 +86,8 @@ public class CustomCrates extends JavaPlugin
         NPCUtils.load(register);
         NPCUtils.checkUncheckMobs(this, false, 20);
 
+        loadRewards();
+
         run();
 
         allowTick = true;
@@ -197,6 +199,26 @@ public class CustomCrates extends JavaPlugin
         if (NPCUtils.isCitizensInstalled())
         {
             rl(new NPCEventListener(this));
+        }
+    }
+
+    public void loadRewards()
+    {
+        boolean newValues = false;
+
+        for(String rName : getRewardsFile().get().getKeys(false))
+        {
+            if (!CRewards.getAllRewards().keySet().contains(rName))
+            {
+                if(!newValues)
+                {
+                    newValues = true;
+                }
+                Reward r = new Reward(this, rName);
+                r.loadFromConfig();
+                r.loadChance();
+                CRewards.allRewards.put(rName, r);
+            }
         }
     }
 

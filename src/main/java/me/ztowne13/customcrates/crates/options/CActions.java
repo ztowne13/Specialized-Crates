@@ -196,7 +196,12 @@ public class CActions extends CSetting
                         }
                         else if (s.equalsIgnoreCase("BROADCAST"))
                         {
-                            Bukkit.broadcastMessage(msg);
+                            for(Player onlinePlayer : Bukkit.getOnlinePlayers())
+                            {
+                                onlinePlayer.sendMessage(msg);
+                            }
+
+                            //Bukkit.broadcastMessage(msg);
                         }
                         else if (s.equalsIgnoreCase("ACTIONBAR"))
                         {

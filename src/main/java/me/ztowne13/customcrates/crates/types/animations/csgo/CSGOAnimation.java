@@ -80,8 +80,8 @@ public class CSGOAnimation extends CSGOManager
 
                     buildNewInventory(cdh, cdh.getTotalTicks() % glassUpdateTicks == 0, b, 0);
 
-                    if (first || !cdh.getP().getOpenInventory().getTopInventory().getName()
-                            .equals(cdh.getInv().getInv().getName()))
+                    if (first || !cdh.getP().getOpenInventory().getTitle()
+                            .equals(cdh.getInv().getName()))
                     {
                         cdh.getP().openInventory(cdh.getInv().getInv());
                     }

@@ -79,7 +79,7 @@ public class InventoryActionListener implements Listener
             if (!(e.getClickedInventory() == null || e.getView().getTopInventory() == null))
             {
                 if (e.getClickedInventory().equals(e.getView().getTopInventory()) &&
-                        !e.getInventory().getName().equalsIgnoreCase(ChatUtils.toChatColor("&c&lClose to save")))
+                        !e.getView().getTitle().equalsIgnoreCase(ChatUtils.toChatColor("&c&lClose to save")))
                 {
                     if(!(pm.getOpenMenu() instanceof IGCDragAndDrop) || e.getSlot() == 52 || e.getSlot() == 53)
                         e.setCancelled(true);
@@ -108,13 +108,13 @@ public class InventoryActionListener implements Listener
         if (pm.isInOpenMenu() && !pm.getOpenMenu().isInInputMenu())
         {
 
-            if (e.getInventory().getName().equalsIgnoreCase(ChatUtils.toChatColor("&7&l> &6&lClose to save")))
+            if (e.getView().getTitle().equalsIgnoreCase(ChatUtils.toChatColor("&7&l> &6&lClose to save")))
             {
 
                 pm.getOpenMenu().manageClick(-1);
                 ChatUtils.msgSuccess(p,
                         "Successfully saved all rewards. Please go through and update all of their commands as well as their chance values.");
-                Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+                Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
                 {
                     @Override
                     public void run()
@@ -123,11 +123,11 @@ public class InventoryActionListener implements Listener
                     }
                 }, 1);
             }
-            else if (e.getInventory().getName().equalsIgnoreCase(ChatUtils.toChatColor("&c&lClose to save")))
+            else if (e.getView().getTitle().equalsIgnoreCase(ChatUtils.toChatColor("&c&lClose to save")))
             {
                 ChatUtils.msgInfo(p, "There are unsaved changes, please remember to save.");
 
-                Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+                Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
                 {
                     @Override
                     public void run()
@@ -139,7 +139,7 @@ public class InventoryActionListener implements Listener
             else if (!(pm.getOpenMenu() instanceof IGCMultiCrateMain))
             {
                 pm.setOpenMenu(null);
-                Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+                Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
                 {
                     @Override
                     public void run()

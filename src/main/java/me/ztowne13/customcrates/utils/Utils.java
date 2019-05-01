@@ -304,7 +304,7 @@ public class Utils
         return exclude.contains(generated) ? getRandomNumberExcluding(limit, exclude) : generated;
     }
 
-    public static String ConvertSecondToHHMMString(int secondtTime)
+    public static String[] ConvertSecondToHHMMString(int secondtTime)
     {
         TimeZone tz = TimeZone.getTimeZone("UTC");
         SimpleDateFormat df = new SimpleDateFormat("dd:HH:mm:ss");
@@ -312,18 +312,18 @@ public class Utils
         String time = df.format(new Date(secondtTime * 1000L));
 
         String[] args = time.split(":");
-        int seconds = Integer.parseInt(args[3]);
-        int minutes = Integer.parseInt(args[2]);
-        int hours = Integer.parseInt(args[1]);
-        int days = Integer.parseInt(args[0]) - 1;
-        String timeFormatted =
-                (days == 0 ? "" : days + " days, ") +
-                        (hours == 0 ? "" : hours + " hours, ") +
-                        (minutes == 0 ? "" : minutes + " minutes, ") +
-                        (seconds + " seconds");
+        String seconds = args[3];
+        String minutes = args[2];
+        String hours = args[1];
+        String days = (Integer.parseInt(args[0]) - 1) + "";
+//        String timeFormatted =
+//                (days == 0 ? "" : days + " days, ") +
+//                        (hours == 0 ? "" : hours + " hours, ") +
+//                        (minutes == 0 ? "" : minutes + " minutes, ") +
+//                        (seconds + " seconds");
+//        return timeFormatted;
 
-        return timeFormatted;
-
+        return new String[]{days, hours, minutes, seconds};
     }
 
 	/*public static List<String> toUpperCase(Set l)

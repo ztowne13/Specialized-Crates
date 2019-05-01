@@ -61,7 +61,7 @@ public class EnclosementAnimation extends InventoryCrate
 
         if (!edh.isCompleted())
         {
-            Bukkit.getScheduler().runTaskLater(getCc(), new Runnable()
+            Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
             {
                 @Override
                 public void run()
@@ -76,8 +76,8 @@ public class EnclosementAnimation extends InventoryCrate
 
                     buildNewInventory(edh);
 
-                    if (first || !edh.getP().getOpenInventory().getTopInventory().getName()
-                            .equals(edh.getIb().getInv().getName()))
+                    if (first || !edh.getP().getOpenInventory().getTitle()
+                            .equals(edh.getIb().getName()))
                     {
                         edh.getIb().open();
                     }
