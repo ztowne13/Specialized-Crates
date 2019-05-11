@@ -1151,13 +1151,30 @@ public enum DynamicMaterial
         }
     }
 
-    public Material parseMaterial()
+    public Material parseMaterialRecur(int idx)
     {
-        Material mat = Material.matchMaterial(toString());
+        Material mat = null;
+        if(idx == -1)
+        {
+            mat = Material.matchMaterial(toString());
+        }
+        else
+        {
+            if(m.length == idx)
+                return null;
+
+            mat = Material.matchMaterial(m[idx]);
+        }
+
         if (mat != null)
             return mat;
 
-        return Material.matchMaterial(m[0]);
+        return parseMaterialRecur(idx + 1);
+    }
+
+    public Material parseMaterial()
+    {
+        return parseMaterialRecur(-1);
     }
 
     private static HashMap<String, DynamicMaterial> cachedSearch = new HashMap<>();
