@@ -100,7 +100,9 @@ public class DiscoverAnimation extends InventoryCrate
                     @Override
                     public void run()
                     {
-                        tickSound.playTo(ddh.getP(), ddh.getL());
+                        if (getTickSound() != null)
+                            tickSound.playTo(ddh.getP(), ddh.getL());
+
                         if (!(ddh.getSequence2Ticks() > getRandomDisplayDuration()))
                         {
                             playSequence(ddh);
