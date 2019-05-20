@@ -104,17 +104,6 @@ public class Settings
         }
     }
 
-	/*public void loadCrateSettingsAfter()
-	{
-		for(Crate crate : Crate.getLoadedCrates().values())
-		{
-			if(crate.isMultiCrate())
-			{
-				crate.getCs().getCmci().loadFor(crate.getCs().getCsb(), CrateState.OPEN);
-			}
-		}
-	}*/
-
     public void loadSettings()
     {
         for (SettingsValues sv : SettingsValues.values())

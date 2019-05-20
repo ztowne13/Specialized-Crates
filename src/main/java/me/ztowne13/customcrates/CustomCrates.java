@@ -33,10 +33,11 @@ import java.util.ArrayList;
 
 public class CustomCrates extends JavaPlugin
 {
-    FileHandler messageFile, rewardsFile, activecratesFile, crateconfigFile;
+    FileHandler messageFile, rewardsFile, activecratesFile, crateconfigFile, dataFile;
     Settings settings;
     UpdateChecker updateChecker;
     HologramManager hologramManager;
+    DataHandler dataHandler;
 
     BukkitTask br;
 
@@ -61,6 +62,7 @@ public class CustomCrates extends JavaPlugin
         loadFiles();
 
         this.hologramManager = new HologramManagerNMS(this);
+        this.dataHandler = new DataHandler(this, dataFile);
 
         setSettings(new Settings(this));
         getSettings().load();
@@ -106,6 +108,7 @@ public class CustomCrates extends JavaPlugin
 
         }
 
+        dataHandler.saveToFile();
         CHolograms.deleteAll();
         NPCUtils.checkUncheckMobs(true);
         OpenChestAnimation.removeAllItems();
@@ -143,6 +146,7 @@ public class CustomCrates extends JavaPlugin
         setActivecratesFile(null);
         setCrateconfigFile(null);
         setSettings(null);
+        setDataFile(null);
 
         getCommand("scrates").setExecutor(null);
         getCommand("scrates").setTabCompleter(null);
@@ -234,11 +238,13 @@ public class CustomCrates extends JavaPlugin
         setActivecratesFile(new FileHandler(this, "ActiveCrates.db", false, false));
         setCrateconfigFile(new FileHandler(this, "CrateConfig.yml", true, false));
         setMessageFile(new FileHandler(this, "Messages.yml", true, false));
+        setDataFile(new FileHandler(this, "PluginData.db", false, false));
 
         getMessageFile().saveDefaults();
         getRewardsFile().saveDefaults();
         getActivecratesFile().saveDefaults();
         getCrateconfigFile().saveDefaults();
+        getDataFile().saveDefaults();
     }
 
     public void firstLoadFiles()
@@ -426,5 +432,25 @@ public class CustomCrates extends JavaPlugin
     public boolean isAllowTick()
     {
         return allowTick;
+    }
+
+    public FileHandler getDataFile()
+    {
+        return dataFile;
+    }
+
+    public void setDataFile(FileHandler dataFile)
+    {
+        this.dataFile = dataFile;
+    }
+
+    public DataHandler getDataHandler()
+    {
+        return dataHandler;
+    }
+
+    public void setDataHandler(DataHandler dataHandler)
+    {
+        this.dataHandler = dataHandler;
     }
 }

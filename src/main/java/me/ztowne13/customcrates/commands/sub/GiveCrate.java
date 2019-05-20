@@ -1,12 +1,14 @@
 package me.ztowne13.customcrates.commands.sub;
 
 import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.DataHandler;
 import me.ztowne13.customcrates.commands.Commands;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -82,16 +84,28 @@ public class GiveCrate extends SubCommand
                 }
             }
 
+            String end = args[args.length - 1];
+            boolean isVirtual = end.toLowerCase().startsWith("-v");
+
+
             if (!foundPlayer)
             {
-                cmds.msgError(args[2] + " is not an online player / online player's UUID.");
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[2]);
+
+                cmds.msgError(args[2] +
+                        " is not an online player / online player's UUID. Adding the commands to the queue for when they rejoin.");
+                DataHandler dataHandler = cc.getDataHandler();
+                DataHandler.QueuedGiveCommand queuedGiveCommand = dataHandler.new QueuedGiveCommand(
+                        offlinePlayer == null ? UUID.fromString(args[2]) : offlinePlayer.getUniqueId(), false, isVirtual,
+                        amount, crate);
+
+                dataHandler.
                 return false;
             }
 
             Player toGive = op == null ? op2 : op;
             PlayerDataManager pdm = PlayerManager.get(cc, toGive).getPdm();
-            String end = args[args.length - 1];
-            if (end.toLowerCase().startsWith("-v"))
+            if (isVirtual)
             {
                 pdm.setVirtualCrateCrates(crate, pdm.getVCCrateData(crate).getCrates() + amount);
                 cmds.msgSuccess("Given virtual crate for crate: " + args[1]);
