@@ -1,5 +1,6 @@
 no-permissions: '&4&lERROR! &cYou do not have the correct permission: %permission%'
 fail-open: '&4&lERROR! &cYou do not have the proper key!'
+already-opening-crate: '&4&lERROR! &cYou are already opening a crate, you must wait until it is done!'
 inventory-too-full: '&4&lERROR! &cYour inventory is too full.'
 placed-crate: '&2&lSUCCESS! &aYou have placed the %crate% crate!'
 broken-crate: '2&lSUCCESS! &aYou have broken a %crate%.'

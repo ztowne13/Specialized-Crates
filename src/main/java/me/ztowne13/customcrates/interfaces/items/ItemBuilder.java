@@ -158,6 +158,38 @@ public class ItemBuilder implements EditableItem
         return this;
     }
 
+    public ItemBuilder addAutomaticLore(int charLength, String lore)
+    {
+        String[] split = lore.split(" ");
+        int lineSize = 0;
+        String currentLine = "";
+        String lastLine = "";
+
+        for (String word : split)
+        {
+            int wordLength = word.length();
+            if (lineSize + wordLength <= charLength)
+            {
+                lineSize += wordLength + 1;
+                currentLine += word + " ";
+            }
+            else
+            {
+                String line = ChatUtils.lastChatColor(lastLine) + currentLine.substring(0, currentLine.length() - 1);
+                addLore(line);
+                currentLine = word + " ";
+                lineSize = wordLength;
+                lastLine = line;
+
+            }
+        }
+
+        if (lineSize != 0)
+            addLore(ChatUtils.lastChatColor(lastLine) + currentLine.substring(0, currentLine.length() - 1));
+
+        return this;
+    }
+
     public ItemBuilder clearLore()
     {
         getLore().clear();

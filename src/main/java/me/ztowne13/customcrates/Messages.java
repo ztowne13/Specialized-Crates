@@ -9,6 +9,8 @@ public enum Messages
 
     FAIL_OPEN,
 
+    ALREADY_OPENING_CRATE,
+
     DENY_CREATIVE_MODE,
 
     DENY_PLACE_KEY,
@@ -74,7 +76,20 @@ public enum Messages
 
     public String getFromConf(CustomCrates cc)
     {
-        return ChatUtils.toChatColor(cc.getMessageFile().get().getString(name().toLowerCase().replace("_", "-")));
+        try
+        {
+            String val = cc.getMessageFile().get().getString(name().toLowerCase().replace("_", "-"));
+
+            if (val == null)
+                throw new Exception();
+
+            return ChatUtils.toChatColor(val);
+        }
+        catch (Exception exc)
+        {
+            return ChatUtils.toChatColor(
+                    "&eThis value isn't set, please tell the server operator to configure the " + name() + " value.");
+        }
     }
 
     public void msgSpecified(CustomCrates cc, Player p)
