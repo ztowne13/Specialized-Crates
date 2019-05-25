@@ -101,4 +101,22 @@ public class ChatUtils
         }
         return newList;
     }
+
+    public static String lastChatColor(String s)
+    {
+        String col;
+
+        String[] split = fromChatColor(s).split("&");
+        if(split.length == 1)
+        {
+            col = "&f";
+        }
+        else
+        {
+            int last = split.length - 1;
+            col = ChatColor.translateAlternateColorCodes('&', "&" + split[last].split("")[0]);
+        }
+
+        return col;
+    }
 }

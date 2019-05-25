@@ -7,9 +7,9 @@ import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.inputmenus.InputMenu;
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -53,9 +53,12 @@ public class IGCMenuMessages extends IGCMenu
             }
 
             String properMsg = msg.getPropperMsg(getCc());
-            ib.setItem(i, new ItemBuilder(Material.BOOK, 1, 0).setName("&a" + msg.toString().toLowerCase()).addLore(
-                    properMsg.substring(0, properMsg.length() > msgLoreLength ? msgLoreLength : properMsg.length()) +
-                            (properMsg.length() > msgLoreLength ? "..." : "")));
+//            ib.setItem(i, new ItemBuilder(DynamicMaterial.BOOK, 1).setName("&a" + msg.toString().toLowerCase()).addLore(
+//                    properMsg.substring(0, properMsg.length() > msgLoreLength ? msgLoreLength : properMsg.length()) +
+//                            (properMsg.length() > msgLoreLength ? "..." : "")));
+
+            ib.setItem(i, new ItemBuilder(DynamicMaterial.BOOK, 1).setName("&a" + msg.toString().toLowerCase())
+                    .addAutomaticLore(30, properMsg));
             i++;
         }
 
