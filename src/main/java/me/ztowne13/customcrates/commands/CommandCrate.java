@@ -142,4 +142,9 @@ public class CommandCrate extends Commands implements CommandExecutor
             msgPage(1);
         }
     }
+
+    public ArrayList<SubCommand> getSubCommands()
+    {
+        return subCommands;
+    }
 }

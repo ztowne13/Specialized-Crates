@@ -1,7 +1,10 @@
 package me.ztowne13.customcrates;
 
 import me.ztowne13.customcrates.crates.Crate;
+import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.FileHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
@@ -10,10 +13,14 @@ import java.util.UUID;
 
 public class DataHandler
 {
+    String playerCmdsPath = "queued-player-commands";
+
+    int LOGIN_WAIT = 20;
+
     CustomCrates cc;
     FileHandler dataFile;
 
-    HashMap<UUID,ArrayList<QueuedGiveCommand>> quedGiveCommands = new HashMap<>();
+    HashMap<UUID, ArrayList<QueuedGiveCommand>> quedGiveCommands = new HashMap<>();
 
     public DataHandler(CustomCrates cc, FileHandler dataFile)
     {
@@ -23,45 +30,76 @@ public class DataHandler
 
     public void loadFromFile()
     {
-        FileConfiguration fileConfiguration = dataFile.getData();
+        FileConfiguration fileConfig = dataFile.get();
 
         // Queued give commands
-        for(Object queuedCmd : fileConfiguration.getList("givecommands"))
+        ConfigurationSection configSection = fileConfig.getConfigurationSection(playerCmdsPath);
+
+        for (Object queuedCmd : configSection.getKeys(false))
         {
-            QueuedGiveCommand queuedGiveCommand = new QueuedGiveCommand(queuedCmd.toString());
-            quedGiveCommands.put(queuedGiveCommand.getUuid(), queuedGiveCommand);
+            String uuidStr = queuedCmd.toString();
+            UUID uuid = UUID.fromString(uuidStr);
+
+            ArrayList<QueuedGiveCommand> cmds = new ArrayList<>();
+
+            for (String cmd : configSection.getStringList(uuidStr))
+            {
+                QueuedGiveCommand queuedGiveCommand = new QueuedGiveCommand(cmd);
+                cmds.add(queuedGiveCommand);
+            }
+
+            quedGiveCommands.put(uuid, cmds);
         }
     }
 
     public void saveToFile()
     {
-        FileConfiguration fileConfiguration = dataFile.getData();
+        FileConfiguration fileConfig = dataFile.get();
 
         // Queued give commands
-        ArrayList<String> parsedGiveCommands = new ArrayList<>();
-        for(QueuedGiveCommand queuedGiveCommand : quedGiveCommands.values())
+        for (UUID uuid : quedGiveCommands.keySet())
         {
-            for(queuedG)
-            parsedGiveCommands.add(queuedGiveCommand.toString());
+            ArrayList<String> giveCmdsStr = new ArrayList<>();
+            ArrayList<QueuedGiveCommand> giveCmds = quedGiveCommands.get(uuid);
+            for (QueuedGiveCommand cmd : giveCmds)
+            {
+                giveCmdsStr.add(cmd.toString());
+            }
+
+            fileConfig.set(playerCmdsPath + "." + uuid.toString(), giveCmdsStr.toArray());
         }
-        fileConfiguration.set("givecommands", parsedGiveCommands);
 
         dataFile.save();
     }
 
-    public ArrayList<QueuedGiveCommand> getQueuedGiveCommand()
-    {
-        return quedGiveCommands.get(quedGiveCommands);
-    }
-
     public void addQueuedGiveCommand(QueuedGiveCommand queuedGiveCommand)
     {
-        quedGiveCommands.put(queuedGiveCommand.getUuid(), queuedGiveCommand);
+        UUID uuid = queuedGiveCommand.getUuid();
+
+        ArrayList<QueuedGiveCommand> thisCmds;
+        thisCmds = quedGiveCommands.containsKey(uuid) ? quedGiveCommands.get(uuid) : new ArrayList<QueuedGiveCommand>();
+        thisCmds.add(queuedGiveCommand);
+
+        quedGiveCommands.put(uuid, thisCmds);
     }
 
-    public void removeQueuedGiveCommand(QueuedGiveCommand queuedGiveCommand)
+    public void playAllQueuedGiveCommands(final UUID uuid)
     {
-        quedGiveCommands.get(queuedGiveCommand.getUuid()).re
+        Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (quedGiveCommands.containsKey(uuid))
+                {
+                    for (QueuedGiveCommand cmd : quedGiveCommands.get(uuid))
+                        cmd.run();
+
+                    quedGiveCommands.remove(uuid);
+                    dataFile.get().set(playerCmdsPath + "." + uuid.toString(), null);
+                }
+            }
+        }, LOGIN_WAIT);
     }
 
     public class QueuedGiveCommand
@@ -94,6 +132,48 @@ public class DataHandler
         public UUID getUuid()
         {
             return uuid;
+        }
+
+        public void run()
+        {
+            try
+            {
+                String give = key ? "givekey" : "givecrate";
+                String crateName = crate.getName();
+                String uuidToStr = uuid.toString();
+                String amntStr = amount + "";
+                // virtual
+
+                String[] args = new String[virtual ? 5 : 4];
+
+                args[0] = give;
+                args[1] = crateName;
+                args[2] = uuidToStr;
+                args[3] = amntStr;
+                if (virtual)
+                    args[4] = "-v";
+
+                // Crate = 3, Key = 4
+
+
+                if (key)
+                {
+                    ChatUtils.log("[SpecializedCrate] Executing givecrate command for player that was offline.");
+                    cc.getCommandCrate().getSubCommands().get(4).run(cc, cc.getCommandCrate(), args);
+                }
+                else
+                {
+                    ChatUtils.log("[SpecializedCrate] Executing givekey command for player that was offline.");
+                    cc.getCommandCrate().getSubCommands().get(3).run(cc, cc.getCommandCrate(), args);
+                }
+            }
+            catch (Exception exc)
+            {
+                ChatUtils
+                        .log("&7Failed to run a qued givekey or givecrate command. The crate to give the player probably" +
+                                " no longer exists. The qued command will be removed.");
+                exc.printStackTrace();
+            }
         }
 
         @Override

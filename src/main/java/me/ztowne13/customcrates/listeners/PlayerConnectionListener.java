@@ -1,9 +1,7 @@
 package me.ztowne13.customcrates.listeners;
 
 import me.ztowne13.customcrates.CustomCrates;
-import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.players.PlayerManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,23 +17,30 @@ public class PlayerConnectionListener implements Listener
         this.cc = cc;
     }
 
+//    @EventHandler
+//    public void adminJoin(PlayerJoinEvent e)
+//    {
+//        final Player p = e.getPlayer();
+//        PlayerManager.get(cc, p);
+//        if (p.hasPermission("customcrates.admin") && cc.getUpdateChecker().needsUpdate())
+//        {
+//            Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
+//            {
+//                @Override
+//                public void run()
+//                {
+//                    Messages.NEEDS_UPDATE.msgSpecified(cc, p, new String[]{"%version%"},
+//                            new String[]{cc.getUpdateChecker().getLatestVersion()});
+//                }
+//            }, 1);
+//        }
+//    }
+
     @EventHandler
-    public void onJoin(PlayerJoinEvent e)
+    public void queuedCommandCheck(PlayerJoinEvent e)
     {
-        final Player p = e.getPlayer();
-        PlayerManager.get(cc, p);
-        if (p.hasPermission("customcrates.admin") && cc.getUpdateChecker().needsUpdate())
-        {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    Messages.NEEDS_UPDATE.msgSpecified(cc, p, new String[]{"%version%"},
-                            new String[]{cc.getUpdateChecker().getLatestVersion()});
-                }
-            }, 1);
-        }
+        Player p = e.getPlayer();
+        cc.getDataHandler().playAllQueuedGiveCommands(p.getUniqueId());
     }
 
     @EventHandler

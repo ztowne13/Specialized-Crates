@@ -95,11 +95,19 @@ public class GiveCrate extends SubCommand
                 cmds.msgError(args[2] +
                         " is not an online player / online player's UUID. Adding the commands to the queue for when they rejoin.");
                 DataHandler dataHandler = cc.getDataHandler();
-                DataHandler.QueuedGiveCommand queuedGiveCommand = dataHandler.new QueuedGiveCommand(
-                        offlinePlayer == null ? UUID.fromString(args[2]) : offlinePlayer.getUniqueId(), false, isVirtual,
-                        amount, crate);
+                try
+                {
+                    DataHandler.QueuedGiveCommand queuedGiveCommand = dataHandler.new QueuedGiveCommand(
+                            offlinePlayer == null ? UUID.fromString(args[2]) : offlinePlayer.getUniqueId(), false, isVirtual,
+                            amount, crate);
 
-                dataHandler.
+                    dataHandler.addQueuedGiveCommand(queuedGiveCommand);
+                }
+                catch(Exception exc)
+                {
+                    exc.printStackTrace();
+                    cmds.msgError("FAILED to add the give command! The player and/or UUID do not exist.");
+                }
                 return false;
             }
 
