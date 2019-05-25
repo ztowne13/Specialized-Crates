@@ -6,6 +6,7 @@ import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.InventoryCrate;
 import me.ztowne13.customcrates.crates.types.animations.openchest.NMSChestState;
 import me.ztowne13.customcrates.logging.StatusLogger;
+import me.ztowne13.customcrates.players.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -57,7 +58,7 @@ public class OpenChestRollingAnimation extends InventoryCrate
             return true;
         }
 
-        playFailToOpen(p);
+        playFailToOpen(p, true, !PlayerManager.get(cc, p).isInCrate());
         return false;
     }
 

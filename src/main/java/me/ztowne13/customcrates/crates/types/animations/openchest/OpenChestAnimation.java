@@ -7,6 +7,7 @@ import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.crates.types.InventoryCrate;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -51,7 +52,7 @@ public class OpenChestAnimation extends InventoryCrate
             return true;
         }
 
-        playFailToOpen(p);
+        playFailToOpen(p, true, !PlayerManager.get(cc, p).isInCrate());
         return false;
     }
 

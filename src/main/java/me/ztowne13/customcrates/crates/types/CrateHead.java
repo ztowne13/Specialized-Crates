@@ -173,6 +173,11 @@ public abstract class CrateHead
 
     public void playFailToOpen(Player p, boolean playMessage)
     {
+        playFailToOpen(p, true, true);
+    }
+
+    public void playFailToOpen(Player p, boolean playMessage, boolean failOpen)
+    {
         if (!(p == null))
         {
             if ((Boolean) SettingsValues.PUSHBACK.getValue(getCc()) && !getCrates().isMultiCrate())
@@ -181,7 +186,10 @@ public abstract class CrateHead
             }
             if (playMessage)
             {
-                Messages.FAIL_OPEN.msgSpecified(cc, p);
+                if(failOpen)
+                    Messages.FAIL_OPEN.msgSpecified(cc, p);
+                else
+                    Messages.ALREADY_OPENING_CRATE.msgSpecified(cc, p);
             }
         }
     }
