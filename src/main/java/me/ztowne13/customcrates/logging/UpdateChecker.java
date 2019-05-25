@@ -1,10 +1,8 @@
 package me.ztowne13.customcrates.logging;
 
 import me.ztowne13.customcrates.CustomCrates;
-import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -55,6 +53,7 @@ public class UpdateChecker
                 }
                 catch (Exception ex)
                 {
+                    ex.printStackTrace();
                     ChatUtils.log("Failed to check for a update on spigot.");
                 }
             }
@@ -81,7 +80,7 @@ public class UpdateChecker
                 ChatUtils.log(new String[]{
                         "There is an update for Specialized Crates! You are currently on version " + thisVersion +
                                 " but an update for version " + latestVersion + " is available."});
-                notifyPlayers();
+                //notifyPlayers();
                 needsUpdate = true;
                 return;
             }
@@ -89,24 +88,24 @@ public class UpdateChecker
         }
     }
 
-    public void notifyPlayers()
-    {
-        for (final Player p : Bukkit.getOnlinePlayers())
-        {
-            if (p.hasPermission(Bukkit.getPluginCommand("scrates").getPermission()))
-            {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        Messages.NEEDS_UPDATE.msgSpecified(cc, p, new String[]{"%version%"},
-                                new String[]{cc.getUpdateChecker().getLatestVersion()});
-                    }
-                }, 1);
-            }
-        }
-    }
+//    public void notifyPlayers()
+//    {
+//        for (final Player p : Bukkit.getOnlinePlayers())
+//        {
+//            if (p.hasPermission(Bukkit.getPluginCommand("scrates").getPermission()))
+//            {
+//                Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
+//                {
+//                    @Override
+//                    public void run()
+//                    {
+//                        Messages.NEEDS_UPDATE.msgSpecified(cc, p, new String[]{"%version%"},
+//                                new String[]{cc.getUpdateChecker().getLatestVersion()});
+//                    }
+//                }, 1);
+//            }
+//        }
+//    }
 
     public String getLatestVersion()
     {

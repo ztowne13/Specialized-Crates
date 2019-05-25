@@ -15,7 +15,6 @@ import me.ztowne13.customcrates.interfaces.holograms.HologramInteractListener;
 import me.ztowne13.customcrates.interfaces.holograms.HologramManager;
 import me.ztowne13.customcrates.interfaces.holograms.HologramManagerNMS;
 import me.ztowne13.customcrates.listeners.*;
-import me.ztowne13.customcrates.logging.UpdateChecker;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
@@ -35,9 +34,10 @@ public class CustomCrates extends JavaPlugin
 {
     FileHandler messageFile, rewardsFile, activecratesFile, crateconfigFile, dataFile;
     Settings settings;
-    UpdateChecker updateChecker;
+    //UpdateChecker updateChecker;
     HologramManager hologramManager;
     DataHandler dataHandler;
+    CommandCrate commandCrate;
 
     BukkitTask br;
 
@@ -67,7 +67,7 @@ public class CustomCrates extends JavaPlugin
         setSettings(new Settings(this));
         getSettings().load();
 
-        updateChecker = new UpdateChecker(this);
+        //updateChecker = new UpdateChecker(this);
 
         if (du == null)
         {
@@ -92,6 +92,7 @@ public class CustomCrates extends JavaPlugin
 
         run();
 
+        dataHandler.loadFromFile();
         allowTick = true;
     }
 
@@ -109,6 +110,7 @@ public class CustomCrates extends JavaPlugin
         }
 
         dataHandler.saveToFile();
+
         CHolograms.deleteAll();
         NPCUtils.checkUncheckMobs(true);
         OpenChestAnimation.removeAllItems();
@@ -181,7 +183,8 @@ public class CustomCrates extends JavaPlugin
 
     public void registerCommands()
     {
-        getCommand("scrates").setExecutor(new CommandCrate(this));
+        commandCrate = new CommandCrate(this);
+        getCommand("scrates").setExecutor(commandCrate);
         getCommand("scrates").setTabCompleter(new TabCompleteListener(this));
 
         getCommand("keys").setExecutor(new CommandKey(this));
@@ -414,10 +417,10 @@ public class CustomCrates extends JavaPlugin
         return alreadyUpdated;
     }
 
-    public UpdateChecker getUpdateChecker()
-    {
-        return updateChecker;
-    }
+//    public UpdateChecker getUpdateChecker()
+//    {
+//        return updateChecker;
+//    }
 
     public HologramManager getHologramManager()
     {
@@ -452,5 +455,10 @@ public class CustomCrates extends JavaPlugin
     public void setDataHandler(DataHandler dataHandler)
     {
         this.dataHandler = dataHandler;
+    }
+
+    public CommandCrate getCommandCrate()
+    {
+        return commandCrate;
     }
 }
