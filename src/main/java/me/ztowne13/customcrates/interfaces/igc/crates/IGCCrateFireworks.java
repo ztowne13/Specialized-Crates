@@ -80,7 +80,7 @@ public class IGCCrateFireworks extends IGCTierMenu
         else if (slot == 17)
         {
             new InputMenu(getCc(), getP(), "add firework", "null",
-                    "Please hold whatever fireworks in your hand you want to add and type 'add'. Type 'done' to finish and return to the menu.",
+                    "Please hold whatever fireworks in your hand you want to add and type 'add'.",
                     String.class, this);
         }
         else if (getIb().getInv().getItem(slot) != null &&
@@ -109,15 +109,12 @@ public class IGCCrateFireworks extends IGCTierMenu
                     cs.getCf().addFirework(tier, fd);
                     ChatUtils.msgSuccess(getP(),
                             "Added the firework you are holding to the crate. Please type 'add' to add another firework you are holding or 'done' to return to the menu.");
+                    return true;
                 }
                 else
                 {
                     ChatUtils.msgError(getP(), "You are not holding a firework!");
                 }
-            }
-            else if (input.equalsIgnoreCase("done"))
-            {
-                return true;
             }
             else
             {

@@ -311,15 +311,16 @@ public class ItemBuilder implements EditableItem
         boolean first = true;
 
         if (stack.getItemMeta() instanceof PotionMeta)
-        {
-            PotionMeta pm = (PotionMeta) im();
+        { PotionMeta pm = (PotionMeta) im();
             pm.clearCustomEffects();
 
             if (!getPotionEffects().isEmpty())
             {
+
                 CompressedPotionEffect firstVal = getPotionEffects().get(0);
                 if (NMSUtils.Version.v1_9.isServerVersionOrLater())
                 {
+                    PotionType.valueOf(firstVal.getType().getName());
                     pm.setBasePotionData(new PotionData(PotionType.getByEffect(firstVal.getType())));
                 }
                 else
