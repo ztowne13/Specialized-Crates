@@ -38,9 +38,9 @@ public class IGCMineCrate extends IGCMenuCrate
                 .addLore("&7" + cs.getClc().getChance() + "/" + cs.getClc().getOutOfChance()).addLore("")
                 .addAutomaticLore("&f", 30,
                         "These are the odds that a crate will appear while mining. Formatted 'number/number'."));
-        ib.setItem(12, new ItemBuilder(DynamicMaterial.LIGHT_GRAY_DYE, 1).setName("&aBlacklist")
+        ib.setItem(12, new ItemBuilder(DynamicMaterial.LIGHT_GRAY_DYE, 1).setName("&aWhitelist")
                 .addLore("&7Current value: ").addLore("&7" + cs.getClc().isBLWL() + "").addLore("")
-                .addAutomaticLore("&f", 30, "Set whether the block-list is a blacklist or not."));
+                .addAutomaticLore("&f", 30, "Set whether the block-list is a whitelist or not."));
         ItemBuilder bList =
                 new ItemBuilder(Material.STONE, 1, 0).setName("&aEdit the block-list").setLore("&7Current values: ");
 
@@ -78,7 +78,7 @@ public class IGCMineCrate extends IGCMenuCrate
                         "Format it 'chance/out of what chance'.", String.class, this);
                 break;
             case 12:
-                new InputMenu(getCc(), getP(), "blacklist", cs.getClc().isBLWL() + "", Boolean.class, this);
+                new InputMenu(getCc(), getP(), "whitelist", cs.getClc().isBLWL() + "", Boolean.class, this);
                 break;
             case 13:
                 new IGCListEditor(getCc(), getP(), this, "Block List", "Block", cs.getClc().getWhiteList(),
@@ -127,7 +127,7 @@ public class IGCMineCrate extends IGCMenuCrate
                 ChatUtils.msgError(getP(), input + " is not formatted 'number/number' or 'chance/out of chance'");
             }
         }
-        else if (value.equalsIgnoreCase("blacklist"))
+        else if (value.equalsIgnoreCase("whitelist"))
         {
             try
             {

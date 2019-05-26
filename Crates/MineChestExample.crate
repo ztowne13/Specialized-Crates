@@ -12,6 +12,7 @@ lucky-chest:
   - DIAMOND_ORE
   - COAL_ORE
   - EMERALD_ORE
+  - STONE
   worlds:
   - world
   - world_nether
