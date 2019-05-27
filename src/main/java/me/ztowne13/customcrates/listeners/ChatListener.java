@@ -23,7 +23,7 @@ public class ChatListener implements Listener
         this.cc = cc;
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(PlayerChatEvent e)
     {
         Player p = e.getPlayer();
