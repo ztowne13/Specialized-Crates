@@ -5,12 +5,13 @@ import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.crates.types.CrateType;
-import me.ztowne13.customcrates.crates.types.InventoryCrate;
+import me.ztowne13.customcrates.crates.types.InventoryCrateAnimation;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -75,7 +76,7 @@ public class DiscoverAnimation extends InventoryCrate
             {
                 if (!ddh.isCanCloseInventory())
                 {
-                    if (!ddh.getP().getOpenInventory().getTitle().equals(ddh.getIb().getName()))
+                    if (!ddh.getP().getOpenInventory().getTitle().equals(ChatUtils.toChatColor(ddh.getIb().getName())))
                     {
                         ddh.getIb().open();
                     }
@@ -194,7 +195,7 @@ public class DiscoverAnimation extends InventoryCrate
                 {
                     ddh.getAlreadyChosenSlots().add(slot);
                     ddh.setRemainingClicks(ddh.getRemainingClicks() - 1);
-                    if(clickSound != null)
+                    if (clickSound != null)
                         clickSound.playTo(ddh.getP(), ddh.getL());
                     buildInventory(ddh);
 
@@ -220,7 +221,7 @@ public class DiscoverAnimation extends InventoryCrate
                     if (!ddh.getAlreadyDisplayedRewards().keySet().contains(slot))
                     {
                         Reward newR = getCrates().getCs().getCr().getRandomReward(ddh.getP());
-                        if(uncoverSound != null)
+                        if (uncoverSound != null)
                             uncoverSound.playTo(ddh.getP(), ddh.getL());
                         ddh.getAlreadyDisplayedRewards().put(slot, newR);
                         buildInventory(ddh);
