@@ -3,18 +3,13 @@ package me.ztowne13.customcrates.crates.crateaction;
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.crates.Crate;
-import me.ztowne13.customcrates.crates.CrateSettings;
-import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.ObtainType;
-import me.ztowne13.customcrates.crates.types.CrateAnimation;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
-import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -71,59 +66,60 @@ public class AttemptCrateUseAction extends CrateAction
                             if (!player.getGameMode().equals(GameMode.CREATIVE) || (Boolean) cc.getSettings().getConfigValues()
                                     .get("place-creative"))
                             {
-                                // Does require key AND IS STATIC
-                                if (ot.isStatic() || crates.getCs().isRequireKey() || crates.isMultiCrate())
-                                {
-                                    createCrateAt(crates, location);
-                                }
-                                // Doesn't require key AND ISN'T STATIC
-                                else
-                                {
-                                    CrateSettings cs = crates.getCs();
-                                    if (player.hasPermission(cs.getPermission()) ||
-                                            cs.getPermission().equalsIgnoreCase("no permission"))
-                                    {
-                                        //Inventory has at least 1 space open
-                                        if (isInventoryTooEmpty(cc, player))
-                                        {
-                                            CrateCooldownEvent cce = pdm.getCrateCooldownEventByCrates(crates);
-                                            if (cce == null || cce.isCooldownOverAsBoolean())
-                                            {
-                                                Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
-                                                {
-                                                    @Override
-                                                    public void run()
-                                                    {
-                                                        PlacedCrate cm = PlacedCrate.get(cc, location);
-                                                        Crate crates = cm.getCrates();
-                                                        CrateAnimation ch = crates.getCs().getCh();
-
-                                                        cm.setup(crates, false);
-                                                        ch.tick(player, location, CrateState.OPEN, !cm.getCrates().isMultiCrate());
-                                                        ch.takeKeyFromPlayer(player, false);
-                                                        cm.delete();
-
-                                                        location.getBlock().setType(Material.AIR);
-                                                        new CrateCooldownEvent(crates, System.currentTimeMillis(), true)
-                                                                .addTo(pdm);
-                                                    }
-                                                }, 1);
-                                                return true;
-                                            }
-                                            cce.playFailure(pdm);
-                                            return true;
-                                        }
-                                        Messages.INVENTORY_TOO_FULL.msgSpecified(cc, player);
-                                        crates.getCs().getCh().playFailToOpen(player, false);
-                                        return true;
-                                    }
-                                    else
-                                    {
-                                        crates.getCs().getCh().playFailToOpen(player, false);
-                                        Messages.NO_PERMISSION_CRATE.msgSpecified(cc, player);
-                                    }
-                                    return true;
-                                }
+                                createCrateAt(crates, location);
+//                                // Does require key AND IS STATIC
+//                                if (ot.isStatic() || crates.getCs().isRequireKey() || crates.isMultiCrate())
+//                                {
+//                                    createCrateAt(crates, location);
+//                                }
+//                                // Doesn't require key AND ISN'T STATIC
+//                                else
+//                                {
+//                                    CrateSettings cs = crates.getCs();
+//                                    if (player.hasPermission(cs.getPermission()) ||
+//                                            cs.getPermission().equalsIgnoreCase("no permission"))
+//                                    {
+//                                        //Inventory has at least 1 space open
+//                                        if (isInventoryTooEmpty(cc, player))
+//                                        {
+//                                            CrateCooldownEvent cce = pdm.getCrateCooldownEventByCrates(crates);
+//                                            if (cce == null || cce.isCooldownOverAsBoolean())
+//                                            {
+//                                                Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
+//                                                {
+//                                                    @Override
+//                                                    public void run()
+//                                                    {
+//                                                        PlacedCrate cm = PlacedCrate.get(cc, location);
+//                                                        cm.setup(crates, false);
+//
+//                                                        CrateAnimation ch = cm.getCrates().getCs().getCh();
+//
+//                                                        ch.tick(player, location, CrateState.OPEN, !cm.getCrates().isMultiCrate());
+//                                                        ch.takeKeyFromPlayer(player, false);
+//                                                        cm.delete();
+//
+//                                                        location.getBlock().setType(Material.AIR);
+//                                                        new CrateCooldownEvent(crates, System.currentTimeMillis(), true)
+//                                                                .addTo(pdm);
+//                                                    }
+//                                                }, 1);
+//                                                return true;
+//                                            }
+//                                            cce.playFailure(pdm);
+//                                            return true;
+//                                        }
+//                                        Messages.INVENTORY_TOO_FULL.msgSpecified(cc, player);
+//                                        crates.getCs().getCh().playFailToOpen(player, false);
+//                                        return true;
+//                                    }
+//                                    else
+//                                    {
+//                                        crates.getCs().getCh().playFailToOpen(player, false);
+//                                        Messages.NO_PERMISSION_CRATE.msgSpecified(cc, player);
+//                                    }
+//                                    return true;
+//                                }
                             }
                             else
                             {

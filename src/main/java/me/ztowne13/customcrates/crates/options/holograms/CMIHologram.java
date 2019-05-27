@@ -22,14 +22,9 @@ public class CMIHologram extends DynamicHologram
     @Override
     public void create(Location l)
     {
-//        com.Zrips.CMI.Modules.Holograms.CMIHologram holo = new com.Zrips.CMI.Modules.Holograms.CMIHologram("TestHologram", l);
-//        holo.setLines(Arrays.asList("Line 1","Line 2"));
-//        CMI.getInstance().getHologramManager().addHologram(holo);
-//        holo.update();
 
         if (!getCm().isDeleted())
         {
-
             l.setY(l.getY() + getCm().getCholo().getHologramOffset() - 1);
             l = LocationUtils.getLocationCentered(l);
 

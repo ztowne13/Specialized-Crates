@@ -196,7 +196,7 @@ public class CActions extends CSetting
                         }
                         else if (s.equalsIgnoreCase("BROADCAST"))
                         {
-                            for(Player onlinePlayer : Bukkit.getOnlinePlayers())
+                            for (Player onlinePlayer : Bukkit.getOnlinePlayers())
                             {
                                 onlinePlayer.sendMessage(msg);
                             }
@@ -238,7 +238,10 @@ public class CActions extends CSetting
         {
             if (!crates.getCs().getCt().equals(CrateType.BLOCK_CRATEOPEN) ||
                     !((OpenChestAnimation) crates.getCs().getCh()).isEarlyRewardHologram())
-                playRewardCrate(p, rewardsAsDisplayname);
+            {
+                if(crates.getCs().getOt().isStatic() || crates.getCs().getCt().isSpecialDynamicHandling())
+                    playRewardCrate(p, rewardsAsDisplayname);
+            }
         }
     }
 
@@ -252,7 +255,8 @@ public class CActions extends CSetting
         playRewardCrate(p, rewards, 0, false, null, -1);
     }
 
-    public void playRewardCrate(Player p, ArrayList<String> rewards, double additionalYOffset, boolean attach, Item item, int openDuration)
+    public void playRewardCrate(Player p, ArrayList<String> rewards, double additionalYOffset, boolean attach, Item item,
+                                int openDuration)
     {
         final PlayerManager pm = PlayerManager.get(cc, p);
         if (!(pm.getLastOpenedPlacedCrate() == null))
@@ -289,7 +293,8 @@ public class CActions extends CSetting
                         final Location cloneY = placedCrate.getL().clone();
                         cloneY.setY(cloneY.getY() + .5);
 
-                        placedCrate.getCrates().getCs().getCholoCopy().createHologram(placedCrate, cloneY, dynamicHologram);
+                        placedCrate.getCrates().getCs().getCholoCopy()
+                                .createHologram(placedCrate, cloneY, dynamicHologram);
 
                         pm.setLastOpenedPlacedCrate(null);
                         dynamicHologram.setDisplayingRewardHologram(false);
@@ -325,7 +330,7 @@ public class CActions extends CSetting
         {
             if (real != null)
             {
-                if(NMSUtils.Version.v1_13.isServerVersionOrLater())
+                if (NMSUtils.Version.v1_13.isServerVersionOrLater())
                     item.addPassenger(real);
                 else
                     item.setPassenger(real);

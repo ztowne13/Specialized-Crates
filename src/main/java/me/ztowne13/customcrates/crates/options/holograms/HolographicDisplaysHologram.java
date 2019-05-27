@@ -23,8 +23,11 @@ public class HolographicDisplaysHologram extends DynamicHologram
     @Override
     public void create(Location l)
     {
-        setH(HologramsAPI.createHologram(getCc(), l));
-        teleport(l);
+        if (!getCm().isDeleted())
+        {
+            setH(HologramsAPI.createHologram(getCc(), l));
+            teleport(l);
+        }
     }
 
     @Override

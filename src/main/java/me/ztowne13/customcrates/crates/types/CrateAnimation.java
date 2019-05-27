@@ -346,7 +346,7 @@ public abstract class CrateAnimation
                         placedCrate.delete();
                         placedCrate.getL().getBlock().setType(Material.AIR);
                     }
-                }, 9);
+                }, 20);
             }
             else
             {

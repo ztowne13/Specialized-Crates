@@ -46,6 +46,11 @@ public class OpenChestAnimation extends CrateAnimation
 
         if (canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
         {
+            if(getCrates().getCs().getCt().isSpecialDynamicHandling() && !getCrates().getCs().getOt().isStatic())
+            {
+                placedCrate = PlayerManager.get(cc, p).getLastOpenedPlacedCrate();
+                placedCrate.setCratesEnabled(false);
+            }
             playAnimation(p, l);
             playRequiredOpenActions(p, !requireKeyInHand);
             return true;
@@ -151,7 +156,7 @@ public class OpenChestAnimation extends CrateAnimation
         ArrayList<Reward> rewards = new ArrayList<Reward>();
         rewards.add(reward);
 
-        completeCrateRun(p, rewards, false);
+        completeCrateRun(p, rewards, false, placedCrate);
         if(!earlyEffects)
             getCrates().tick(loc, CrateState.OPEN, p, rewards);
     }
