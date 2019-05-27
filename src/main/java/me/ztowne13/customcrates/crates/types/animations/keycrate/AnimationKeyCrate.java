@@ -3,19 +3,19 @@ package me.ztowne13.customcrates.crates.types.animations.keycrate;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.crates.types.CrateHead;
+import me.ztowne13.customcrates.crates.types.CrateAnimation;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class AnimationKeyCrate extends CrateHead
+public class AnimationKeyCrate extends CrateAnimation
 {
 
     public AnimationKeyCrate(Crate crate)
     {
-        super(crate);
+        super("", crate);
     }
 
     @Override

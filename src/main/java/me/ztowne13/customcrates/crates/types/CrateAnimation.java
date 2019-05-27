@@ -17,20 +17,23 @@ import me.ztowne13.customcrates.utils.FileHandler;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public abstract class CrateHead
+public abstract class CrateAnimation
 {
     protected CustomCrates cc;
     protected Crate crates;
     protected FileHandler fu;
+    protected String prefix;
 
-    public CrateHead(Crate crates)
+    public CrateAnimation(String prefix, Crate crates)
     {
+        this.prefix = prefix;
         this.crates = crates;
         this.cc = crates.getCc();
         this.fu = cc.getCrateconfigFile();
@@ -198,8 +201,7 @@ public abstract class CrateHead
     {
         PlayerManager pm = PlayerManager.get(cc, p);
 
-        if (!(pm.getOpenCrate() == null) && pm.getOpenCrate().isMultiCrate() &&
-                !getCrates().getCs().getOt().equals(ObtainType.STATIC))
+        if (!(pm.getOpenCrate() == null) && pm.getOpenCrate().isMultiCrate() && !getCrates().getCs().getOt().equals(ObtainType.STATIC))
         {
             PlacedCrate pc = PlacedCrate.get(cc, pm.getLastOpenCrate());
             pc.delete();
@@ -292,6 +294,7 @@ public abstract class CrateHead
         return false;
     }
 
+    @Deprecated
     public void completeCrateRun(Player p)
     {
         PlayerManager pm = PlayerManager.get(getCc(), p);
@@ -301,7 +304,13 @@ public abstract class CrateHead
         new HistoryEvent(Utils.currentTimeParsed(), getCrates(), null, true).addTo(PlayerManager.get(cc, p).getPdm());
     }
 
+    @Deprecated
     public void completeCrateRun(Player p, ArrayList<Reward> rewards, boolean overrideAutoClose)
+    {
+        completeCrateRun(p, rewards, overrideAutoClose, null);
+    }
+
+    public void completeCrateRun(Player p, ArrayList<Reward> rewards, boolean overrideAutoClose, final PlacedCrate placedCrate)
     {
         PlayerManager pm = PlayerManager.get(getCc(), p);
         pm.setInRewardMenu(false);
@@ -323,6 +332,28 @@ public abstract class CrateHead
 
         pm.closeCrate();
         p.closeInventory();
+
+        // Handle the DYNAMIC crates
+        if(getCrates().getCs().getCt().isSpecialDynamicHandling() && !getCrates().getCs().getOt().isStatic())
+        {
+            if(getCrates().getCs().getCt().getCategory().equals(CrateType.Category.CHEST))
+            {
+                Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        placedCrate.delete();
+                        placedCrate.getL().getBlock().setType(Material.AIR);
+                    }
+                }, 9);
+            }
+            else
+            {
+                placedCrate.delete();
+                placedCrate.getL().getBlock().setType(Material.AIR);
+            }
+        }
     }
 
     public double getRandomTickTime(double basedOff)

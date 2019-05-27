@@ -2,9 +2,10 @@ package me.ztowne13.customcrates.crates.types.animations.openchest;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
+import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.crates.types.CrateAnimation;
 import me.ztowne13.customcrates.crates.types.CrateType;
-import me.ztowne13.customcrates.crates.types.InventoryCrate;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
@@ -19,11 +20,10 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
-public class OpenChestAnimation extends InventoryCrate
+public class OpenChestAnimation extends CrateAnimation
 {
     public static ArrayList<Item> items = new ArrayList<>();
 
-    String prefix;
     int openDuration;
     boolean earlyRewardHologram;
     boolean attachTo = true;
@@ -32,12 +32,11 @@ public class OpenChestAnimation extends InventoryCrate
 
     Location loc;
     Reward reward;
-
+    PlacedCrate placedCrate;
 
     public OpenChestAnimation(Inventory inventory, Crate crate)
     {
-        super(inventory, crate);
-        prefix = CrateType.BLOCK_CRATEOPEN.getPrefix() + ".";
+        super(CrateType.BLOCK_CRATEOPEN.getPrefixDotted(), crate);
     }
 
     @Override

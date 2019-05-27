@@ -36,9 +36,9 @@ import java.util.Random;
  * random-display-duration: 50
  * uncover-block: CHEST;0
  */
-public class DiscoverAnimation extends InventoryCrate
+public class DiscoverAnimation extends InventoryCrateAnimation
 {
-    String invName, prefix;
+    String invName;
     SoundData tickSound, clickSound, uncoverSound;
     int minRewards, maxRewards, randomDisplayDuration, invRows;
     ItemStack uncoverBlock;
@@ -46,8 +46,7 @@ public class DiscoverAnimation extends InventoryCrate
 
     public DiscoverAnimation(Inventory inv, Crate crate)
     {
-        super(inv, crate);
-        prefix = CrateType.INV_DISCOVER.getPrefix() + ".";
+        super(CrateType.INV_DISCOVER.getPrefixDotted(), crate, inv);
     }
 
 

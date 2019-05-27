@@ -2,7 +2,9 @@ package me.ztowne13.customcrates.listeners;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.crates.Crate;
-import me.ztowne13.customcrates.crates.CrateAction;
+import me.ztowne13.customcrates.crates.crateaction.AttemptKeyUseAction;
+import me.ztowne13.customcrates.crates.crateaction.CrateAction;
+import me.ztowne13.customcrates.crates.crateaction.LeftClickAction;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -38,8 +40,13 @@ public class InteractListener implements Listener
 
             if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_BLOCK))
             {
-                if (new CrateAction(cc, e.getAction().equals(Action.RIGHT_CLICK_BLOCK) ? CrateAction.Types.USE_KEY :
-                        CrateAction.Types.LEFT_CLICK).completeAction(p, e.getClickedBlock().getLocation()))
+                CrateAction action;
+                if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+                    action = new AttemptKeyUseAction(cc, p, e.getClickedBlock().getLocation());
+                else
+                    action = new LeftClickAction(cc, p, e.getClickedBlock().getLocation());
+
+                if (action.run())
                 {
                     e.setCancelled(true);
                 }

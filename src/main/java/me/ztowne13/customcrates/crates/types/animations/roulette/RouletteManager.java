@@ -4,7 +4,8 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
-import me.ztowne13.customcrates.crates.types.InventoryCrate;
+import me.ztowne13.customcrates.crates.types.CrateType;
+import me.ztowne13.customcrates.crates.types.InventoryCrateAnimation;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
@@ -21,7 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class RouletteManager extends InventoryCrate
+public class RouletteManager extends InventoryCrateAnimation
 {
     protected SoundData tickSound = null;
     protected String invName = "";
@@ -29,9 +30,9 @@ public class RouletteManager extends InventoryCrate
     protected int glassUpdateTicks = 2;
     protected ArrayList<ItemStack> items;
 
-    public RouletteManager(Inventory inv, Crate crates)
+    public RouletteManager(Inventory inv, Crate crate)
     {
-        super(inv, crates);
+        super(CrateType.INV_ROULETTE.getPrefixDotted(), crate, inv);
     }
 
     @Override

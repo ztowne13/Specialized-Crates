@@ -3,7 +3,7 @@ package me.ztowne13.customcrates.crates.types.animations.openchestrolling;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.crates.types.InventoryCrate;
+import me.ztowne13.customcrates.crates.types.InventoryCrateAnimation;
 import me.ztowne13.customcrates.crates.types.animations.openchest.NMSChestState;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.players.PlayerManager;
@@ -17,11 +17,10 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
-public class OpenChestRollingAnimation extends InventoryCrate
+public class OpenChestRollingAnimation extends InventoryCrateAnimation
 {
     public static ArrayList<Item> items = new ArrayList<>();
 
-    String prefix;
     boolean completed = false;
 
     // values
@@ -42,7 +41,7 @@ public class OpenChestRollingAnimation extends InventoryCrate
 
     public OpenChestRollingAnimation(Inventory inventory, Crate crate)
     {
-        super(inventory, crate);
+        super("TO SET", crate, inventory);
         //prefix = CrateType.BLOCK_CRATEOPEN_ROLLING.getPrefix() + ".";
     }
 

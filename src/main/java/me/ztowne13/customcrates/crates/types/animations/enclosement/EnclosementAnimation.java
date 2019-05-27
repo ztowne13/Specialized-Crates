@@ -5,7 +5,7 @@ import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.crates.types.CrateType;
-import me.ztowne13.customcrates.crates.types.InventoryCrate;
+import me.ztowne13.customcrates.crates.types.InventoryCrateAnimation;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
@@ -23,18 +23,17 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Created by ztowne13 on 7/5/16.
  */
-public class EnclosementAnimation extends InventoryCrate
+public class EnclosementAnimation extends InventoryCrateAnimation
 {
 
-    String invName, prefix;
+    String invName;
     int inventoryRows, updateSpeed, rewardAmount;
     SoundData tickSound;
     ItemStack fillerItem;
 
     public EnclosementAnimation(Inventory inv, Crate crate)
     {
-        super(inv, crate);
-        this.prefix = CrateType.INV_ENCLOSE.getPrefix() + ".";
+        super(CrateType.INV_ENCLOSE.getPrefixDotted(), crate, inv);
     }
 
     @Override
@@ -275,24 +274,9 @@ public class EnclosementAnimation extends InventoryCrate
         this.inventoryRows = inventoryRows;
     }
 
-    public int getUpdateSpeed()
-    {
-        return updateSpeed;
-    }
-
-    public void setUpdateSpeed(int updateSpeed)
-    {
-        this.updateSpeed = updateSpeed;
-    }
-
     public int getRewardAmount()
     {
         return rewardAmount;
-    }
-
-    public void setRewardAmount(int rewardAmount)
-    {
-        this.rewardAmount = rewardAmount;
     }
 
     public SoundData getTickSound()
@@ -303,15 +287,5 @@ public class EnclosementAnimation extends InventoryCrate
     public void setTickSound(SoundData tickSound)
     {
         this.tickSound = tickSound;
-    }
-
-    public ItemStack getFillerItem()
-    {
-        return fillerItem;
-    }
-
-    public void setFillerItem(ItemStack fillerItem)
-    {
-        this.fillerItem = fillerItem;
     }
 }

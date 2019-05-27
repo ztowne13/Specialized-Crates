@@ -1,7 +1,8 @@
 package me.ztowne13.customcrates.listeners;
 
 import me.ztowne13.customcrates.CustomCrates;
-import me.ztowne13.customcrates.crates.CrateAction;
+import me.ztowne13.customcrates.crates.crateaction.AttemptKeyUseAction;
+import me.ztowne13.customcrates.crates.crateaction.LeftClickAction;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import org.bukkit.entity.Player;
@@ -23,7 +24,7 @@ public class NPCEventListener implements Listener
     @EventHandler
     public void onNPCClickRight(NPCRightClickEvent e)
     {
-        if (new CrateAction(cc, CrateAction.Types.USE_KEY).completeAction(e.getClicker(), e.getNPC().getStoredLocation()))
+        if (new AttemptKeyUseAction(cc, e.getClicker(), e.getNPC().getStoredLocation()).run())
         {
             e.setCancelled(true);
         }
@@ -33,7 +34,7 @@ public class NPCEventListener implements Listener
     public void onNPCClickLeft(NPCLeftClickEvent e)
     {
         Player p = e.getClicker();
-        new CrateAction(cc, CrateAction.Types.LEFT_CLICK).completeAction(p, e.getNPC().getStoredLocation());
+        new LeftClickAction(cc, p, e.getNPC().getStoredLocation());
 
     }
 

@@ -4,7 +4,7 @@ import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.crates.options.*;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.crates.types.CrateHead;
+import me.ztowne13.customcrates.crates.types.CrateAnimation;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
@@ -44,7 +44,7 @@ public class CrateSettings
     CrateDisplayType cdt;
     DynamicCratePlaceholder dcp;
 
-    CrateHead ch;
+    CrateAnimation ch;
     CHolograms choloCopy;
     CParticles cp;
     CSounds cs;
@@ -615,12 +615,12 @@ public class CrateSettings
         this.crateInventoryName = crateInventoryName;
     }
 
-    public CrateHead getCh()
+    public CrateAnimation getCh()
     {
         return ch;
     }
 
-    public void setCh(CrateHead ch)
+    public void setCh(CrateAnimation ch)
     {
         this.ch = ch;
     }

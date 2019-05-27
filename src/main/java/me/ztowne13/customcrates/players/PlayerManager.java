@@ -27,7 +27,7 @@ public class PlayerManager
     DataHandler dh;
     PlayerDataManager pdm;
 
-    //CrateHead openCrate = null;
+    //CrateAnimation openCrate = null;
     PlacedCrate lastOpenedPlacedCrate = null;
     Crate openCrate = null;
     Location lastOpenCrate = null;

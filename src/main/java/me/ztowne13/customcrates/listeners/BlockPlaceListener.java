@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.listeners;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Messages;
-import me.ztowne13.customcrates.crates.CrateAction;
+import me.ztowne13.customcrates.crates.crateaction.AttemptCrateUseAction;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -34,7 +34,7 @@ public class BlockPlaceListener implements Listener
             }
             else
             {
-                new CrateAction(cc, CrateAction.Types.USE_CRATE).completeAction(p, l);
+                new AttemptCrateUseAction(cc, p, l).run();
             }
         }
     }

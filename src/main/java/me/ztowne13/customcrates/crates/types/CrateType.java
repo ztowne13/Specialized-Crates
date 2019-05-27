@@ -11,36 +11,68 @@ import me.ztowne13.customcrates.crates.types.animations.roulette.RouletteAnimati
 
 public enum CrateType
 {
-    INV_ROULETTE("CrateType.Inventory.Roulette"),
 
-    INV_MENU("CrateType.Inventory.Menu"),
+    INV_ROULETTE( "CrateType.Inventory.Roulette", Category.INVENTORY),
 
-    INV_CSGO("CrateType.Inventory.CSGO"),
+    INV_MENU("CrateType.Inventory.Menu", Category.INVENTORY),
 
-    INV_ENCLOSE("CrateType.Inventory.Enclose"),
+    INV_CSGO("CrateType.Inventory.CSGO", Category.INVENTORY),
 
-    INV_DISCOVER("CrateType.Inventory.Discover"),
+    INV_ENCLOSE("CrateType.Inventory.Enclose", Category.INVENTORY),
 
-    BLOCK_CRATEOPEN("CrateType.Block.OpenChest"),
+    INV_DISCOVER("CrateType.Inventory.Discover", Category.INVENTORY),
+
+    BLOCK_CRATEOPEN("CrateType.Block.OpenChest", Category.CHEST),
 
     //BLOCK_CRATEOPEN_ROLLING("CrateType.Block.OpenChestRolling"),
 
-    GIVE_KEY("");
-			
-		/*BLOCK_MINEPLEX,
-		
-		BLOCK_CSGO;*/
+    GIVE_KEY("", Category.NONE);
 
     String prefix;
+    Category category;
 
-    CrateType(String prefix)
+    CrateType(String prefix, Category category)
     {
         this.prefix = prefix;
+        this.category = category;
+    }
+
+    public enum Category
+    {
+        INVENTORY(false),
+
+        BLOCK(true),
+
+        CHEST(true),
+
+        NONE(false);
+
+        boolean specialDynamicHandling;
+
+        Category(boolean specialDynamicHandling)
+        {
+            this.specialDynamicHandling = specialDynamicHandling;
+        }
+
+        public boolean isSpecialDynamicHandling()
+        {
+            return specialDynamicHandling;
+        }
+    }
+
+    public Category getCategory()
+    {
+        return category;
+    }
+
+    public boolean isSpecialDynamicHandling()
+    {
+        return category.isSpecialDynamicHandling();
     }
 
     public void setupFor(Crate crates)
     {
-        CrateHead ch;
+        CrateAnimation ch;
         switch (this)
         {
             case INV_ROULETTE:
@@ -92,6 +124,11 @@ public enum CrateType
     public String getPrefix()
     {
         return prefix;
+    }
+
+    public String getPrefixDotted()
+    {
+        return prefix + ".";
     }
 
     public void setPrefix(String prefix)
