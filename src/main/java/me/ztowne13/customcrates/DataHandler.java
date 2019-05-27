@@ -34,21 +34,24 @@ public class DataHandler
 
         // Queued give commands
         ConfigurationSection configSection = fileConfig.getConfigurationSection(playerCmdsPath);
-
-        for (Object queuedCmd : configSection.getKeys(false))
+        if(configSection != null)
         {
-            String uuidStr = queuedCmd.toString();
-            UUID uuid = UUID.fromString(uuidStr);
 
-            ArrayList<QueuedGiveCommand> cmds = new ArrayList<>();
-
-            for (String cmd : configSection.getStringList(uuidStr))
+            for (Object queuedCmd : configSection.getKeys(false))
             {
-                QueuedGiveCommand queuedGiveCommand = new QueuedGiveCommand(cmd);
-                cmds.add(queuedGiveCommand);
-            }
+                String uuidStr = queuedCmd.toString();
+                UUID uuid = UUID.fromString(uuidStr);
 
-            quedGiveCommands.put(uuid, cmds);
+                ArrayList<QueuedGiveCommand> cmds = new ArrayList<>();
+
+                for (String cmd : configSection.getStringList(uuidStr))
+                {
+                    QueuedGiveCommand queuedGiveCommand = new QueuedGiveCommand(cmd);
+                    cmds.add(queuedGiveCommand);
+                }
+
+                quedGiveCommands.put(uuid, cmds);
+            }
         }
     }
 
