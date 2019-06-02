@@ -147,7 +147,7 @@ public class IGCCrateActions extends IGCTierMenu
             {
                 actionType = input.toUpperCase();
                 new InputMenu(getCc(), getP(), "new action - message", "null", "What message would you like displayed?",
-                        String.class, this, true);
+                        String.class, this, false);
             }
             else
             {
