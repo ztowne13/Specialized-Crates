@@ -115,15 +115,15 @@ public class IGCAnimRoulette extends IGCAnimation
             case 11:
                 new InputMenu(getCc(), getP(), "tick-sound", getString("tick-sound"),
                         "Set to 'none' to have no sound. Formatted 'SOUND, PITCH, VOLUME' (without the quotes). Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/",
-                        String.class, this);
+                        String.class, this, true);
                 break;
             case 14:
-                new InputMenu(getCc(), getP(), "add random-blocks", "Formated: MATERIAL;ID", String.class, this);
+                new InputMenu(getCc(), getP(), "add random-blocks", "Formated: MATERIAL;ID", String.class, this, true);
                 break;
             case 15:
                 new InputMenu(getCc(), getP(), "remove random-blocks", "Existing filler-blocks: " +
                         (fc.contains(crateType.getPrefix() + ".filler-blocks") ?
-                                fc.getStringList(crateType.getPrefix() + ".filler-blocks") : "none"), String.class, this);
+                                fc.getStringList(crateType.getPrefix() + ".filler-blocks") : "none"), String.class, this, true);
                 break;
         }
     }

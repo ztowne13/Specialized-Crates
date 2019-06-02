@@ -71,7 +71,7 @@ public class IGCCrateSounds extends IGCTierMenu
         else if (slot == 8)
         {
             new InputMenu(getCc(), getP(), "sound type", "null",
-                    "Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/", String.class, this);
+                    "Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/", String.class, this, true);
         }
         else if (getIb().getInv().getItem(slot) != null &&
                 getIb().getInv().getItem(slot).getType().equals(Material.NOTE_BLOCK))

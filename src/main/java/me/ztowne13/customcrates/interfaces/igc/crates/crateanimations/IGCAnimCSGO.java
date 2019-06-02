@@ -130,19 +130,19 @@ public class IGCAnimCSGO extends IGCAnimation
             case 11:
                 new InputMenu(getCc(), getP(), "tick-sound", getString("tick-sound"),
                         "Set to 'none' to have no sound. Formatted SOUND, PITCH, VOLUME. Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/",
-                        String.class, this);
+                        String.class, this, true);
                 break;
             case 12:
                 new InputMenu(getCc(), getP(), "identifier-block", getString("identifier-block"),
-                        "The block, formatted MATERIAL;ID, that identifies the middle block.", String.class, this);
+                        "The block, formatted MATERIAL;ID, that identifies the middle block.", String.class, this, true);
                 break;
             case 14:
-                new InputMenu(getCc(), getP(), "add filler-blocks", "Formated: MATERIAL;ID", String.class, this);
+                new InputMenu(getCc(), getP(), "add filler-blocks", "Formated: MATERIAL;ID", String.class, this, true);
                 break;
             case 15:
                 new InputMenu(getCc(), getP(), "remove filler-blocks", "Existing filler-blocks: " +
                         (fc.contains(crateType.getPrefix() + ".filler-blocks") ?
-                                fc.getStringList(crateType.getPrefix() + ".filler-blocks") : "none"), String.class, this);
+                                fc.getStringList(crateType.getPrefix() + ".filler-blocks") : "none"), String.class, this, true);
                 break;
         }
     }

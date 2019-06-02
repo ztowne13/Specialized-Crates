@@ -75,7 +75,7 @@ public class IGCMineCrate extends IGCMenuCrate
                 break;
             case 11:
                 new InputMenu(getCc(), getP(), "chance", cs.getClc().getChance() + "/" + cs.getClc().getOutOfChance(),
-                        "Format it 'chance/out of what chance'.", String.class, this);
+                        "Format it 'chance/out of what chance'.", String.class, this, true);
                 break;
             case 12:
                 new InputMenu(getCc(), getP(), "whitelist", cs.getClc().isBLWL() + "", Boolean.class, this);
@@ -90,7 +90,7 @@ public class IGCMineCrate extends IGCMenuCrate
                 break;
             case 16:
                 new InputMenu(getCc(), getP(), "remove worlds", cs.getClc().getWorlds().toString(),
-                        "Current valid worlds: " + Bukkit.getWorlds(), String.class, this);
+                        "Current valid worlds: " + Bukkit.getWorlds(), String.class, this, true);
                 break;
         }
     }

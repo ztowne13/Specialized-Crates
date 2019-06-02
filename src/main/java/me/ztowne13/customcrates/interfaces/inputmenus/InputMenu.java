@@ -16,6 +16,7 @@ public class InputMenu
     String value;
     String formatExp;
     String currentValue;
+    boolean withoutColor;
     Object type;
     //SettingsValues sv;
 
@@ -28,11 +29,23 @@ public class InputMenu
 
     public InputMenu(CustomCrates cc, Player p, String value, String currentValue, Object type, IGCMenu inputMenu)
     {
-        this(cc, p, value, currentValue, "", type, inputMenu);
+        this(cc, p, value, currentValue, "", type, inputMenu, false);
+    }
+
+    public InputMenu(CustomCrates cc, Player p, String value, String currentValue, Object type, IGCMenu inputMenu,
+                     boolean withoutColor)
+    {
+        this(cc, p, value, currentValue, "", type, inputMenu, withoutColor);
     }
 
     public InputMenu(CustomCrates cc, Player p, String value, String currentValue, String formatExp, Object type,
                      IGCMenu inputMenu)
+    {
+        this(cc, p, value, currentValue, formatExp, type, inputMenu, false);
+    }
+
+    public InputMenu(CustomCrates cc, Player p, String value, String currentValue, String formatExp, Object type,
+                     IGCMenu inputMenu, boolean withoutColor)
     {
         this.p = p;
         this.cc = cc;
@@ -41,6 +54,7 @@ public class InputMenu
         this.inputMenu = inputMenu;
         this.formatExp = formatExp;
         this.type = type;
+        this.withoutColor = withoutColor;
 
         inputMenu.setInputMenu(this);
 
@@ -68,6 +82,11 @@ public class InputMenu
 
     public void runFor(IGCMenu igcm, String s)
     {
+        if (type != String.class || withoutColor)
+        {
+            s = ChatUtils.removeColor(s);
+        }
+
         if (s.equalsIgnoreCase("exit"))
         {
             igcm.open();
@@ -76,7 +95,6 @@ public class InputMenu
         }
         else
         {
-
             if (inputMenu.handleInput(value, s))
             {
                 igcm.open();

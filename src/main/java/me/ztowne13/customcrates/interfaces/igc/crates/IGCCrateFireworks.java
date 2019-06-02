@@ -81,7 +81,7 @@ public class IGCCrateFireworks extends IGCTierMenu
         {
             new InputMenu(getCc(), getP(), "add firework", "null",
                     "Please hold whatever fireworks in your hand you want to add and type 'add'.",
-                    String.class, this);
+                    String.class, this, true);
         }
         else if (getIb().getInv().getItem(slot) != null &&
                 DynamicMaterial.FIREWORK_ROCKET.isSameMaterial(getIb().getInv().getItem(slot)))

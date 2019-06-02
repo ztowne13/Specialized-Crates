@@ -116,21 +116,21 @@ public class IGCAnimDiscover extends IGCAnimation
                 break;
             case 12:
                 new InputMenu(getCc(), getP(), "cover-block", getString("cover-block"), "Formatted: MATERIAL;DURABILITY",
-                        String.class, this);
+                        String.class, this, true);
                 break;
             case 14:
                 new InputMenu(getCc(), getP(), "tick-sound", getString("ticks-sound"),
                         "Set to 'none' to have no sound. Formatted: SOUND, VOLUME, PITCH",
-                        String.class, this);
+                        String.class, this, true);
                 break;
             case 15:
                 new InputMenu(getCc(), getP(), "click-sound", getString("click-sound"),
                         "Set to 'none' to have no sound. Formatted: SOUND, VOLUME, PITCH",
-                        String.class, this);
+                        String.class, this, true);
                 break;
             case 16:
                 new InputMenu(getCc(), getP(), "uncover-sound", getString("uncover-sound"),
-                        "Set to 'none' to have no sound. Formatted: SOUND, VOLUME, PITCH", String.class, this);
+                        "Set to 'none' to have no sound. Formatted: SOUND, VOLUME, PITCH", String.class, this, true);
                 break;
         }
     }

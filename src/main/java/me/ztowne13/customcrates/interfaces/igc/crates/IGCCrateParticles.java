@@ -86,7 +86,7 @@ public class IGCCrateParticles extends IGCTierMenu
         else if (slot == 8)
         {
             new InputMenu(getCc(), getP(), "particle type", "null",
-                    "Available particles: " + Arrays.toString(ParticleEffect.values()), String.class, this);
+                    "Available particles: " + Arrays.toString(ParticleEffect.values()), String.class, this, true);
         }
         else if (getIb().getInv().getItem(slot) != null &&
                 getIb().getInv().getItem(slot).getType().equals(Material.NETHER_STAR))

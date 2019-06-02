@@ -93,11 +93,11 @@ public class IGCAnimEnclose extends IGCAnimation
             case 11:
                 new InputMenu(getCc(), getP(), "tick-sound", getString("tick-sound"),
                         "Set to 'none' to have no sound. Formatted: SOUND, PITCH, VOLUME. The sound played on every update.",
-                        String.class, this);
+                        String.class, this, true);
                 break;
             case 14:
                 new InputMenu(getCc(), getP(), "fill-block", getString("fill-block"),
-                        "Formatted: MATERIAL;DURABILITY. The block that fills the empty spots", String.class, this);
+                        "Formatted: MATERIAL;DURABILITY. The block that fills the empty spots", String.class, this, true);
                 break;
         }
     }
