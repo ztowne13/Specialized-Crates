@@ -172,11 +172,11 @@ public class IGCCrateParticle extends IGCTierMenu
             case 10:
                 new InputMenu(getCc(), getP(), "particle animation", pd.getParticleName(),
                         "Type 'NONE' to remove animations\nAvaialable animations: " +
-                                Arrays.toString(PEAnimationType.values()), String.class, this);
+                                Arrays.toString(PEAnimationType.values()), String.class, this, true);
                 break;
             case 11:
                 new InputMenu(getCc(), getP(), "particle type", pd.getParticleName(),
-                        "Avaialable particles: " + Arrays.toString(ParticleEffect.values()), String.class, this);
+                        "Avaialable particles: " + Arrays.toString(ParticleEffect.values()), String.class, this, true);
                 break;
             case 12:
                 new InputMenu(getCc(), getP(), "x range", pd.getRangeX() + "",

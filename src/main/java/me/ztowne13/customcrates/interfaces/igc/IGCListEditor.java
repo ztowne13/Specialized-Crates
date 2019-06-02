@@ -133,7 +133,7 @@ public class IGCListEditor extends IGCMenu
         }
         else if (slot == 8)
         {
-            new InputMenu(getCc(), getP(), "new " + ChatUtils.removeColor(identifier), "null", String.class, this);
+            new InputMenu(getCc(), getP(), "new " + ChatUtils.removeColor(identifier), "null", clazz != null ? clazz : String.class, this);
         }
         else if (slot == 17)
         {

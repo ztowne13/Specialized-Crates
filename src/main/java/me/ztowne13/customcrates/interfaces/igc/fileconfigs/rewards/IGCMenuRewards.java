@@ -173,7 +173,7 @@ public class IGCMenuRewards extends IGCMenu
         {
             new InputMenu(getCc(), getP(), "rewardName", "null",
                     "No spaces allowed. No duplicate names. &7&oNote: These 'reward names' will never be seen by your player: they are just an 'identifier'.",
-                    String.class, this);
+                    String.class, this, true);
         }
         else if (getIb().getInv().getItem(slot) != null)
         {

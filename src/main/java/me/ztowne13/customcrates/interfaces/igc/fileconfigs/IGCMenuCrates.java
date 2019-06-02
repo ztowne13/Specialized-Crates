@@ -72,7 +72,7 @@ public class IGCMenuCrates extends IGCMenu
         }
         else if (slot == 8)
         {
-            new InputMenu(getCc(), getP(), "crate name", "null", "Name the crate whatever you want.", String.class, this);
+            new InputMenu(getCc(), getP(), "crate name", "null", "Name the crate whatever you want.", String.class, this, true);
         }
         else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType() == Material.CHEST)
         {

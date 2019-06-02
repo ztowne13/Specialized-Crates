@@ -265,7 +265,7 @@ public class IGCItemEditor extends IGCMenu
             case 25:
                 if (DynamicMaterial.fromItemStack(editableItem.getStack()).equals(DynamicMaterial.PLAYER_HEAD))
                     new InputMenu(getCc(), getP(), "player-head-name", editableItem.getPlayerHeadName(), String.class,
-                            this);
+                            this, true);
                 else
                     ChatUtils.msgError(getP(), "The current item is not a player head or skull.");
                 break;

@@ -158,7 +158,7 @@ public class IGCCrateRewards extends IGCMenuCrate
         else if (slot == 17)
         {
             new InputMenu(getCc(), getP(), "add reward", "null",
-                    "Addable rewards: " + getCc().getRewardsFile().get().getKeys(false).toString(), String.class, this);
+                    "Addable rewards: " + getCc().getRewardsFile().get().getKeys(false).toString(), String.class, this, true);
         }
         else if (slot == 26)
         {

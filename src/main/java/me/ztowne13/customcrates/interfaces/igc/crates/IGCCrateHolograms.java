@@ -155,7 +155,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
         else if (slot == 15)
         {
             new InputMenu(getCc(), getP(), "hologram.animation.type", crates.getCs().getCholoCopy().getHat().toString(),
-                    "Animation types: " + Arrays.toString(HoloAnimType.values()), String.class, this);
+                    "Animation types: " + Arrays.toString(HoloAnimType.values()), String.class, this, true);
         }
         else if (slot == 24)
         {

@@ -65,7 +65,7 @@ public class IGCCrateSound extends IGCTierMenu
                 break;
             case 11:
                 new InputMenu(getCc(), getP(), "sound type", sd.getSound().name(),
-                        "Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/", String.class, this);
+                        "Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/", String.class, this, true);
                 break;
             case 13:
                 new InputMenu(getCc(), getP(), "sound pitch", sd.getSound().name(), "Change the pitch of the sound.",

@@ -129,20 +129,20 @@ public class IGCCratesBase extends IGCMenuCrate
                 break;
             case 2:
                 new InputMenu(getCc(), getP(), "permission", cs.getPermission(), "Type 'none' to remove the permission.",
-                        String.class, this);
+                        String.class, this, true);
                 break;
             case 3:
                 new InputMenu(getCc(), getP(), "obtain-method", cs.getOt().name(),
-                        "Available obtain methods: " + Arrays.toString(ObtainType.values()), String.class, this);
+                        "Available obtain methods: " + Arrays.toString(ObtainType.values()), String.class, this, true);
                 break;
             case 4:
                 new InputMenu(getCc(), getP(), "inventory-name", cs.getCrateInventoryName(),
-                        "Set to 'none' to use the inv-name from the CrateConfig.YML", String.class, this);
+                        "Set to 'none' to use the inv-name from the CrateConfig.YML", String.class, this, true);
                 break;
             case 6:
                 new InputMenu(getCc(), getP(), "display.type", cs.getDcp().toString(),
                         "Available display types: block, mob, npc",
-                        String.class, this);
+                        String.class, this, true);
                 break;
             case 15:
                 if (cs.getDcp().toString().equalsIgnoreCase("mob") || cs.getDcp().toString().equalsIgnoreCase("npc"))
@@ -151,7 +151,7 @@ public class IGCCratesBase extends IGCMenuCrate
                             "display." + (cs.getDcp().toString().equalsIgnoreCase("mob") ? "creature" : "name"),
                             cs.getDcp().getType(), cs.getDcp().toString().equalsIgnoreCase("mob") ?
                             "Available mob types: " + Arrays.toString(EntityTypes.values()) : "Use a player's name",
-                            String.class, this);
+                            String.class, this, true);
                 }
                 break;
             case 11:
@@ -174,7 +174,7 @@ public class IGCCratesBase extends IGCMenuCrate
                 break;
             case 5:
                 new InputMenu(getCc(), getP(), "animation", cs.getCt().name(),
-                        "Available animations: " + Arrays.toString(CrateType.values()), String.class, this);
+                        "Available animations: " + Arrays.toString(CrateType.values()), String.class, this, true);
                 break;
             case 14:
                 new InputMenu(getCc(), getP(), "require key", cs.isRequireKey() + "",

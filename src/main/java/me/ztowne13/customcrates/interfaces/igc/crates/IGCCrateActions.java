@@ -123,7 +123,7 @@ public class IGCCrateActions extends IGCTierMenu
         else if (slot == 17)
         {
             new InputMenu(getCc(), getP(), "new action - type", "null", "Valid action types: " + actionTypes.toString(),
-                    String.class, this);
+                    String.class, this, true);
         }
         else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType().equals(Material.BOOK))
         {
@@ -147,7 +147,7 @@ public class IGCCrateActions extends IGCTierMenu
             {
                 actionType = input.toUpperCase();
                 new InputMenu(getCc(), getP(), "new action - message", "null", "What message would you like displayed?",
-                        String.class, this);
+                        String.class, this, true);
             }
             else
             {

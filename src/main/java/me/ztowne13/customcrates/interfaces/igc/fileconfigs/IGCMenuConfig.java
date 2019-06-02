@@ -161,7 +161,7 @@ public class IGCMenuConfig extends IGCMenu
             ItemStack item = inv.getItem(slot);
             SettingsValues sv = SettingsValues.getByPath(new ItemBuilder(item).getName(true));
 
-            new InputMenu(getCc(), getP(), sv.getPath(), sv.getValue(getCc()).toString(), sv.getObj(), this);
+            new InputMenu(getCc(), getP(), sv.getPath(), sv.getValue(getCc()).toString(), sv.getObj(), this, true);
         }
         else if (DynamicMaterial.LIGHT_GRAY_WOOL.isSameMaterial(inv.getItem(slot)))
         {
