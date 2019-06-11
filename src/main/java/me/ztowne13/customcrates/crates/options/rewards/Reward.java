@@ -78,12 +78,17 @@ public class Reward
         if(isGiveDisplayItem())
         {
             ItemBuilder stack = new ItemBuilder(getItemBuilder().get());
-            if(!isGiveDisplayItemLore())
+            try
             {
-                ItemMeta im = stack.im();
-                im.setLore(null);
-                stack.setIm(im);
+                if (!isGiveDisplayItemLore())
+                {
+                    ItemMeta im = stack.im();
+                    im.setLore(null);
+                    stack.setIm(im);
+                }
             }
+            catch(Exception exc) { }
+
             p.getInventory().addItem(stack.get());
         }
 
@@ -174,7 +179,7 @@ public class Reward
     {
         FileHandler fu = getCc().getRewardsFile();
         FileConfiguration fc = fu.get();
-        fc.set(getPath("name"), itemBuilder.getDisplayNameStripped());
+        fc.set(getPath("name"), itemBuilder.getDisplayName() == null ? itemBuilder.get().getType().toString() : itemBuilder.getDisplayNameStripped());
         fc.set(getPath("commands"), getCommands());
         fc.set(getPath("item"), DynamicMaterial.fromItemStack(itemBuilder.get()).name());
         fc.set(getPath("glow"), itemBuilder.isGlowing());
@@ -348,7 +353,7 @@ public class Reward
 
         try
         {
-            setGiveDisplayItem(getFc().getBoolean("give-display-item.value"));
+            setGiveDisplayItem(getFc().getBoolean(getPath("give-display-item.value")));
         }
         catch(Exception exc)
         {
@@ -357,7 +362,7 @@ public class Reward
 
         try
         {
-            setGiveDisplayItemLore(getFc().getBoolean("give-display-item.with-lore"));
+            setGiveDisplayItemLore(getFc().getBoolean(getPath("give-display-item.with-lore")));
         }
         catch(Exception exc)
         {

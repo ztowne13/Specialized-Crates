@@ -57,7 +57,6 @@ public class IGCDragAndDrop extends IGCMenu
         else if(slot == 52)
         {
             ArrayList<String> cmds = new ArrayList<>();
-            cmds.add("say I am a reward that has no commands set!");
 
             for (int i = 0; i < getIb().getInv().getSize() - 2; i++)
             {
@@ -71,6 +70,8 @@ public class IGCDragAndDrop extends IGCMenu
                     r.setRarity("default");
                     r.setCommands((ArrayList<String>) cmds.clone());
                     r.setItemBuilder(new ItemBuilder(stack));
+                    r.setGiveDisplayItem(true);
+                    r.setGiveDisplayItemLore(false);
                     r.setNeedsMoreConfig(false);
 
                     r.writeToFile();

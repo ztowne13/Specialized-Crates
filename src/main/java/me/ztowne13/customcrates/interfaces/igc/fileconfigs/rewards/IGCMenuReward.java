@@ -44,11 +44,11 @@ public class IGCMenuReward extends IGCMenu
     public void open()
     {
 
-        InventoryBuilder ib = createDefault(27);
+        InventoryBuilder ib = createDefault(36);
 
         getIb().setItem(0, IGCDefaultItems.SAVE_BUTTON.getIb().setName("&aSave the reward to file")
                 .setLore("&7Save your current changes"));
-        getIb().setItem(18, IGCDefaultItems.EXIT_BUTTON.getIb());
+        getIb().setItem(27, IGCDefaultItems.EXIT_BUTTON.getIb());
 
         ib.setItem(4, new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1).setName("&a" + r.getRewardName()).addLore("")
                 .addAutomaticLore("&e", 40,
@@ -106,6 +106,27 @@ public class IGCMenuReward extends IGCMenu
                         .setLore("&7Current value: ")
                         .addLore("&7" + getName(r.getRarity())).addLore("").addAutomaticLore("&f", 30,
                         "This is the 'tier' of the reward. If you aren't using tiers, ignore this."));
+
+        // Give display item
+        ItemBuilder giveDisplayItem = new ItemBuilder(DynamicMaterial.ITEM_FRAME, 1);
+        giveDisplayItem.setDisplayName("&aGive the Display Item");
+        giveDisplayItem.addLore("&7Current value: ");
+        giveDisplayItem.addLore("&7" + r.isGiveDisplayItem());
+        giveDisplayItem.addLore("");
+        giveDisplayItem.addAutomaticLore("&f", 30,
+                "In addition to running the commands, should the player be given the display item when this reward is won?");
+        ib.setItem(22, giveDisplayItem);
+
+        // Give display item lore
+        ItemBuilder giveDisplayItemLore = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        giveDisplayItemLore.setDisplayName("&aGive the Display Item with Lore");
+        giveDisplayItemLore.addLore("&7Current value: ");
+        giveDisplayItemLore.addLore("&7" + r.isGiveDisplayItemLore());
+        giveDisplayItemLore.addLore("");
+        giveDisplayItemLore.addAutomaticLore("&f", 30,
+                "IF the display item is being given to the player, should it include it's display-item lore?");
+        ib.setItem(23, giveDisplayItemLore);
+
 
         getIb().open();
         putInMenu();
@@ -179,6 +200,16 @@ public class IGCMenuReward extends IGCMenu
         {
             new InputMenu(getCc(), getP(), "rarity", r.getRarity(), String.class, this);
         }
+        else if (slot == 22)
+        {
+            r.setGiveDisplayItem(!r.isGiveDisplayItem());
+            open();
+        }
+        else if (slot == 23)
+        {
+            r.setGiveDisplayItemLore(!r.isGiveDisplayItemLore());
+            open();
+        }
         else if (slot == 0)
         {
             ItemBuilder b = new ItemBuilder(getIb().getInv().getItem(slot));
@@ -199,10 +230,6 @@ public class IGCMenuReward extends IGCMenu
             {
                 b.setLore("&crarity.");
             }
-            else if (r.getCommands() == null || r.getCommands().isEmpty())
-            {
-                b.setLore("&ccommands.");
-            }
             else
             {
                 b.setName("&2SUCCESS");
@@ -213,7 +240,7 @@ public class IGCMenuReward extends IGCMenu
             unsavedChanges = false;
             return;
         }
-        else if (slot == 18)
+        else if (slot == 27)
         {
             if (!unsavedChanges || ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName())
                     .equalsIgnoreCase("Are you sure?"))
@@ -222,7 +249,7 @@ public class IGCMenuReward extends IGCMenu
             }
             else
             {
-                getIb().setItem(18, new ItemBuilder(getIb().getInv().getItem(slot)).setName("&4Are you sure?")
+                getIb().setItem(27, new ItemBuilder(getIb().getInv().getItem(slot)).setName("&4Are you sure?")
                         .setLore("&cYou have unsaved changes.").addLore("&7The changes will only be")
                         .addLore("&7temporary if not saved later").addLore("&7and will delete upon reload."));
             }

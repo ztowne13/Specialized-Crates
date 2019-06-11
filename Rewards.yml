@@ -6,10 +6,10 @@ Diamond:
   glow: true
   chance: 10
   rarity: rare
+  give-display-item:
+    value: false
 Dirt:
   name: 'Dirt'
-  commands:
-    - give {name} minecraft:dirt 1
   item: DIRT;0
   lore:
     - '&5This is a &a&lcustom lore!'
@@ -18,17 +18,21 @@ Dirt:
   glow: true
   chance: 20
   rarity: common
+  give-display-item:
+    value: true
+    with-lore: false
 DiamondSword:
   name: 'Diamond Sword'
   enchantments:
     - DURABILITY;10
     - DAMAGE_ALL;5
     - FIRE_ASPECT;2
-  commands:
-    - give {name} minecraft:diamond_sword 1
   item: DIAMOND_SWORD;0
   chance: 3
   rarity: legendary
+  give-display-item:
+    value: true
+    with-lore: false
 MonsterEggsInAllVersions:
   name: 'Monster-specific spawn eggs for all versions'
   commands:
@@ -36,8 +40,10 @@ MonsterEggsInAllVersions:
   item: CREEPER_SPAWN_EGG
   chance: 5
   rarity: legendary
+  give-display-item:
+    value: false
 Speed:
-  name: 'Speed'
+  name: 'Speed Effect and Potion'
   commands:
     - effect {name} 1 60 1
     - give {name} minecraft:milk 1
@@ -46,20 +52,25 @@ Speed:
     - SPEED;0;0
   chance: 5
   rarity: legendary
+  give-display-item:
+    value: true
+    with-lore: false
 SuperGoldenApple:
   name: 'Super Golden Apple'
-  commands:
-    - give {name} minecraft:GOLDEN_APPLE 1
   item: GOLDEN_APPLE;1
   chance: 7
   rarity: legendary
+  give-display-item:
+    value: true
+    with-lore: false
 GoldenApple:
   name: 'Golden Apple'
-  commands:
-    - give {name} minecraft:golden_apple 0
   item: GOLDEN_APPLE;0
   chance: 10
   rarity: legendary
+  give-display-item:
+    value: true
+    with-lore: false
 Grass:
   name: 'Grass'
   commands:
@@ -68,6 +79,9 @@ Grass:
   glow: true
   chance: 20
   rarity: common
+  give-display-item:
+    value: true
+    lore: false
 SpecialDirt:
   name: 'Special Dirt'
   commands:
@@ -81,8 +95,11 @@ SpecialDirt:
     - '&eChance: &6%writtenchance%%'
   chance: 15
   rarity: uncommon
+  give-display-item:
+    value: true
+    with-lore: false
 Jump:
-  name: 'Jump Potion'
+  name: 'Jump Potion Effect'
   commands:
     - effect {name} 8 60 1
     - give {name} minecraft:milk_bucket 1
@@ -91,10 +108,10 @@ Jump:
     - JUMP;0;0
   chance: 7
   rarity: rare
+  give-display-item:
+    value: false
 SpecialDirt2:
   name: 'More Special Dirt'
-  commands:
-    - give {name} minecraft:dirt 2
   item: DIRT;2
   lore:
     - ''
@@ -103,15 +120,18 @@ SpecialDirt2:
     - '&7Get Special Dirt if you win this!'
   chance: 10
   rarity: rare
+  give-display-item:
+    value: true
+    with-lore: false
 MyHead:
   name: 'Ztowne13s Head'
   item: PLAYER_HEAD
   head-player-name: Ztowne13
-  commands:
-    - 'say hi'
   glow: false
   amount: 1
   chance: 1.0
   rarity: '1'
-  nbt-tags: []
+  give-display-item:
+    value: true
+    with-lore: false
   
