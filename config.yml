@@ -47,10 +47,10 @@ explosions-destroy-dynamic-crates: true
 push-back: true
 
 # Should people be allowed to place crates in creative mode?
-place-creative: false
+place-creative: true
 
 # Should people be allowed to open crates in creative mode?
-open-creative: false
+open-creative: true
 
 # How many blocks should the hologram be offset from its original place?
 #    Note: This value applies to ALL crates, each individual crate can have its
