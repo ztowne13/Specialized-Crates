@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class Reward
     CRewards cr;
     String rewardName, tempDisplayName;
     String rarity = "default";
+    boolean giveDisplayItem = false, giveDisplayItemLore = false;
 
     ItemBuilder itemBuilder;
 
@@ -49,6 +51,7 @@ public class Reward
         setRewardName(rewardName);
         itemBuilder = new ItemBuilder(DynamicMaterial.STONE, 1);
         itemBuilder.setDisplayName(rewardName);
+        giveDisplayItem = true;
         this.r = new Random();
     }
 
@@ -72,6 +75,18 @@ public class Reward
 
     public void runCommands(Player p)
     {
+        if(isGiveDisplayItem())
+        {
+            ItemBuilder stack = new ItemBuilder(getItemBuilder().get());
+            if(!isGiveDisplayItemLore())
+            {
+                ItemMeta im = stack.im();
+                im.setLore(null);
+                stack.setIm(im);
+            }
+            p.getInventory().addItem(stack.get());
+        }
+
         for (String command : getCommands())
         {
             try
@@ -80,9 +95,10 @@ public class Reward
             }
             catch (Exception exc)
             {
-//                ChatUtils
-//                        .log("Specialized Crates has attempted to run a command that has produced an error. Please contact the author of the plugin who's command is run to fix the issue.");
-//                exc.printStackTrace();
+                ChatUtils
+                        .log("PLEASE READ THIS: Specialized Crates has attempted to run a command for a reward that has produced an error. " +
+                                "Please contact the author of the plugin who's command is run to fix the issue because THIS IS NOT A SPECIALIZED" +
+                                "CRATES ISSUE, it is the issue of the plugin who's command was run. Command: " + command);
             }
         }
         //new RewardLimitEvent(this, PlayerManager.get(cc, p).getPdm().getCurrentRewardLimitUses(this), 1).addTo(PlayerManager.get(cc, p).getPdm());
@@ -167,6 +183,8 @@ public class Reward
         fc.set(getPath("chance"), getChance());
         fc.set(getPath("rarity"), getRarity());
         fc.set(getPath("receive-limit"), /*getTotalUses()*/null);
+        fc.set(getPath("give-display-item.value"), giveDisplayItem);
+        fc.set(getPath("give-display-item.with-lore"), giveDisplayItemLore);
 
         // Enchantments
         if (!itemBuilder.getEnchantments().isEmpty())
@@ -326,6 +344,24 @@ public class Reward
                 StatusLoggerEvent.REWARD_RARITY_NONEXISTENT.log(getCr().getCrates(), new String[]{this.toString()});
                 success = false;
             }
+        }
+
+        try
+        {
+            setGiveDisplayItem(getFc().getBoolean("give-display-item.value"));
+        }
+        catch(Exception exc)
+        {
+            setGiveDisplayItem(false);
+        }
+
+        try
+        {
+            setGiveDisplayItemLore(getFc().getBoolean("give-display-item.with-lore"));
+        }
+        catch(Exception exc)
+        {
+            setGiveDisplayItemLore(false);
         }
 
         try
@@ -628,5 +664,25 @@ public class Reward
     public void setItemBuilder(ItemBuilder itemBuilder)
     {
         this.itemBuilder = itemBuilder;
+    }
+
+    public boolean isGiveDisplayItem()
+    {
+        return giveDisplayItem;
+    }
+
+    public void setGiveDisplayItem(boolean giveDisplayItem)
+    {
+        this.giveDisplayItem = giveDisplayItem;
+    }
+
+    public boolean isGiveDisplayItemLore()
+    {
+        return giveDisplayItemLore;
+    }
+
+    public void setGiveDisplayItemLore(boolean giveDisplayItemLore)
+    {
+        this.giveDisplayItemLore = giveDisplayItemLore;
     }
 }
