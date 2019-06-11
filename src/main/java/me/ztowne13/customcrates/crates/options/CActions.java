@@ -188,8 +188,7 @@ public class CActions extends CSetting
 
                         msg = ChatUtils.toChatColor(
                                 msg.replace("%player%", p.getName()).replace("%crate%", getCrates().getName())
-                                        .replace("%reward%",
-                                                rewardsAsDisplayname.toString().replace("[", "").replace("]", "")));
+                                        .replace("%reward%", rewardsAsDisplayname.toString()));
                         if (s.equalsIgnoreCase("MESSAGE"))
                         {
                             p.sendMessage(msg);
@@ -239,7 +238,7 @@ public class CActions extends CSetting
             if (!crates.getCs().getCt().equals(CrateType.BLOCK_CRATEOPEN) ||
                     !((OpenChestAnimation) crates.getCs().getCh()).isEarlyRewardHologram())
             {
-                if(crates.getCs().getOt().isStatic() || crates.getCs().getCt().isSpecialDynamicHandling())
+                if (crates.getCs().getOt().isStatic() || crates.getCs().getCt().isSpecialDynamicHandling())
                     playRewardCrate(p, rewardsAsDisplayname);
             }
         }
@@ -265,7 +264,7 @@ public class CActions extends CSetting
             String msg = placedCrate.getCrates().getCs().getCholoCopy().getRewardHologram();
             if (!msg.equalsIgnoreCase(""))
             {
-                msg = ChatUtils.toChatColor(msg.replace("%reward%", rewards.toString().replace("[", "").replace("]", "")));
+                msg = ChatUtils.toChatColor(msg.replace("%reward%", rewards.toString().replace("%player%", p.getName())));
 
                 final DynamicHologram dynamicHologram = placedCrate.getCholo().getDh();
                 dynamicHologram.setDisplayingRewardHologram(true);

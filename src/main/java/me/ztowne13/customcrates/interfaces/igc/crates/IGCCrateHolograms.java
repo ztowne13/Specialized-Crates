@@ -44,7 +44,8 @@ public class IGCCrateHolograms extends IGCMenuCrate
         rewardHologram.setName("&aEdit the reward-hologram");
         rewardHologram.addLore("&7Current value:").addLore(rewardHolo == "" ? "&7&oNot in use" : rewardHolo).addLore("");
         rewardHologram.addAutomaticLore("&f", 30,
-                "This is the hologram that appears after someone wins a reward. Type 'none' to remove it.");
+                "This is the hologram that appears after someone wins a reward. Type 'none' to remove it. " +
+                        "Use %reward% as a placeholder for the reward name and %player% as a placeholder for the player name.");
         ib.setItem(2, rewardHologram);
 
         //Reward Hologram duration
@@ -127,7 +128,9 @@ public class IGCCrateHolograms extends IGCMenuCrate
         else if (slot == 2)
         {
             new InputMenu(getCc(), getP(), "reward-hologram", crates.getCs().getCholoCopy().getRewardHologram(),
-                    "Type 'none' to remove the reward hologram. Use %reward% as a placeholder for the reward.", String.class,
+                    "Type 'none' to remove the reward hologram. Use %reward% as a placeholder for the reward and " +
+                            "%player% as a placeholder for the player name.",
+                    String.class,
                     this);
         }
         else if (slot == 11)
