@@ -13,6 +13,7 @@ import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -40,9 +41,10 @@ public class IGCCrateHolograms extends IGCMenuCrate
 
         // Reward Hologram
         String rewardHolo = cholo.getRewardHologram();
+        Bukkit.broadcastMessage(rewardHolo);
         ItemBuilder rewardHologram = new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1);
         rewardHologram.setName("&aEdit the reward-hologram");
-        rewardHologram.addLore("&7Current value:").addLore(rewardHolo == "" ? "&7&oNot in use" : rewardHolo).addLore("");
+        rewardHologram.addLore("&7Current value:").addLore(ChatUtils.toChatColor(rewardHolo) == "" ? "&7&oNot in use" : rewardHolo).addLore("");
         rewardHologram.addAutomaticLore("&f", 30,
                 "This is the hologram that appears after someone wins a reward. Type 'none' to remove it. " +
                         "Use %reward% as a placeholder for the reward name and %player% as a placeholder for the player name.");
@@ -177,7 +179,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
                 cs.getCholoCopy().setRewardHologram("");
                 return true;
             }
-            cs.getCholoCopy().setRewardHologram(input);
+            cs.getCholoCopy().setRewardHologram(ChatUtils.fromChatColor(input));
             ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
             return true;
         }
