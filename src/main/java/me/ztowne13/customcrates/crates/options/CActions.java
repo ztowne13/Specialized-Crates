@@ -264,7 +264,10 @@ public class CActions extends CSetting
             String msg = placedCrate.getCrates().getCs().getCholoCopy().getRewardHologram();
             if (!msg.equalsIgnoreCase(""))
             {
-                msg = ChatUtils.toChatColor(msg.replace("%reward%", rewards.toString()).replace("%player%", p.getName()));
+//                msg = ChatUtils.toChatColor(msg.replace("%reward%", rewards.toString().replace("[", "").replace("]", ""))).replace("%player%", p.getName()));
+
+                msg = ChatUtils.toChatColor(msg.replace("%reward%", rewards.toString().substring(1, rewards.toString().length() - 1)).replace("%player%", p.getName()));
+
 
                 final DynamicHologram dynamicHologram = placedCrate.getCholo().getDh();
                 dynamicHologram.setDisplayingRewardHologram(true);
