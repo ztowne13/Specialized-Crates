@@ -188,7 +188,9 @@ public class CActions extends CSetting
 
                         msg = ChatUtils.toChatColor(
                                 msg.replace("%player%", p.getName()).replace("%crate%", getCrates().getName())
-                                        .replace("%reward%", rewardsAsDisplayname.toString()));
+                                        .replace("%reward%",
+                                                rewardsAsDisplayname.toString().substring(1, rewardsAsDisplayname.toString().length() - 1)));
+
                         if (s.equalsIgnoreCase("MESSAGE"))
                         {
                             p.sendMessage(msg);
