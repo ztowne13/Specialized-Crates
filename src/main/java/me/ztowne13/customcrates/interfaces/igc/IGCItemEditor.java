@@ -81,6 +81,7 @@ public class IGCItemEditor extends IGCMenu
         glow.addLore("&7Current value:").addLore("&7" + editableItem.isGlowing());
         glow.addLore("").addAutomaticLore("&f", 30,
                 "This will toggle whether or not the display item will have a glowing effect. For enchanted items, if this value is true, the enchantments will be hidden.");
+        glow.addLore("").addAutomaticLore( "&e&l", 30, "Same as HIDE ENCHANTS");
 
         DynamicMaterial editableItemDM = DynamicMaterial.fromItemStack(editableItem.getStack());
 
