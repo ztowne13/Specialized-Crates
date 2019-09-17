@@ -57,9 +57,23 @@ public class GiveKey extends SubCommand
                 return true;
             }
 
+            String end = args[args.length - 1];
+            boolean isVirtual = end.toLowerCase().startsWith("-v");
+
             if (args[2].equalsIgnoreCase("ALL"))
             {
+                if(isVirtual)
+                {
+                    for(Player p : Bukkit.getOnlinePlayers())
+                    {
+                        PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
+                        pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + amount);
+                    }
+                    cmds.msgSuccess("Given a virtual key for " + args[1] + " to every online player.");
+                    return true;
+                }
                 Utils.giveAllItem(toAdd);
+                cmds.msgSuccess("Given a physical key for " + args[1] + " to every online player.");
                 return true;
             }
 
@@ -83,9 +97,6 @@ public class GiveKey extends SubCommand
                     foundPlayer = false;
                 }
             }
-
-            String end = args[args.length - 1];
-            boolean isVirtual = end.toLowerCase().startsWith("-v");
 
             if (!foundPlayer)
             {

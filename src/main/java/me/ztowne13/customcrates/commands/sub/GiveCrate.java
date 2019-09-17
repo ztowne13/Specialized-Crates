@@ -57,8 +57,22 @@ public class GiveCrate extends SubCommand
                 return true;
             }
 
+            String end = args[args.length - 1];
+            boolean isVirtual = end.toLowerCase().startsWith("-v");
+
             if (args[2].equalsIgnoreCase("ALL"))
             {
+                if(isVirtual)
+                {
+                    for(Player p : Bukkit.getOnlinePlayers())
+                    {
+                        PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
+                        pdm.setVirtualCrateCrates(crate, pdm.getVCCrateData(crate).getCrates() + amount);
+                    }
+                    cmds.msgSuccess("Given a virtual crate for " + args[1] + " to every online player.");
+                    return true;
+                }
+                cmds.msgSuccess("Given a physical crate for " + args[1] + " to every online player.");
                 Utils.giveAllItem(toAdd);
                 return true;
             }
@@ -83,10 +97,6 @@ public class GiveCrate extends SubCommand
                     foundPlayer = false;
                 }
             }
-
-            String end = args[args.length - 1];
-            boolean isVirtual = end.toLowerCase().startsWith("-v");
-
 
             if (!foundPlayer)
             {
