@@ -186,9 +186,12 @@ public class CActions extends CSetting
                             }
                         }
 
+                        String rewardsAsString = rewardsAsDisplayname.toString();
+                        rewardsAsString = rewardsAsString.substring(1, rewardsAsString.length() - 1);
+
                         msg = ChatUtils.toChatColor(
                                 msg.replace("%player%", p.getName()).replace("%crate%", getCrates().getName())
-                                        .replace("%reward%", rewardsAsDisplayname.toString()));
+                                        .replace("%reward%", rewardsAsString));
                         if (s.equalsIgnoreCase("MESSAGE"))
                         {
                             p.sendMessage(msg);
