@@ -149,11 +149,11 @@ public class CRewards extends CSetting
 
     public Reward getRandomReward(Player p)
     {
-        int totalOdds = getTotalOdds();
+        double totalOdds = getTotalOdds();
 
-        int randNum = getRandomNumber(totalOdds);
+        double randNum = getRandomNumber(totalOdds);
 
-        int currentStackedOdds = 0;
+        double currentStackedOdds = 0;
 
         Reward[] crateRewardsClone = getCrateRewards();
 
@@ -167,32 +167,19 @@ public class CRewards extends CSetting
             }
         }
 
-		/*PlayerManager pm = PlayerManager.get(cc, p);
-
-		for(RewardLimitEvent rle: pm.getPdm().getRewardLimitEvents())
-		{
-			if(!rle.getCanUse())
-			{
-				if(crateRewardsClone.values().contains(rle.r))
-				{
-					crateRewardsClone.remove(rle.r);
-				}
-			}
-		}*/
-
         return null;
     }
 
-    public Integer getRandomNumber(int outOfOdds)
+    public Double getRandomNumber(double outOfOdds)
     {
         Random r = new Random();
-        int num = r.nextInt(outOfOdds) + 1;
-        return num;
+
+        return outOfOdds * r.nextDouble();
     }
 
-    public Integer getTotalOdds()
+    public Double getTotalOdds()
     {
-        int totalOdds = 0;
+        double totalOdds = 0;
         for (Reward r : getCrateRewards())
         {
             double odds = r.getChance();

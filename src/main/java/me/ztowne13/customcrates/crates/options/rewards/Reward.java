@@ -291,7 +291,7 @@ public class Reward
     {
         try
         {
-            setChance(getCc().getRewardsFile().get().getInt(getPath("chance")));
+            setChance(getCc().getRewardsFile().get().getDouble(getPath("chance")));
         }
         catch (Exception exc)
         {

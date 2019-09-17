@@ -194,7 +194,7 @@ public class IGCMenuReward extends IGCMenu
         }
         else if (slot == 14)
         {
-            new InputMenu(getCc(), getP(), "chance", r.getChance().toString(), Integer.class, this);
+            new InputMenu(getCc(), getP(), "chance", r.getChance().toString(), Double.class, this);
         }
         else if (slot == 15)
         {
@@ -274,6 +274,22 @@ public class IGCMenuReward extends IGCMenu
                 if (value.equalsIgnoreCase("chance"))
                 {
                     r.setChance(Integer.parseInt(input));
+                    ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
+                }
+            }
+            else
+            {
+                ChatUtils.msgError(getP(), "This is not a valid number.");
+                return false;
+            }
+        }
+        if (type == Double.class)
+        {
+            if (Utils.isDouble(input))
+            {
+                if (value.equalsIgnoreCase("chance"))
+                {
+                    r.setChance(Double.parseDouble(input));
                     ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 }
             }
