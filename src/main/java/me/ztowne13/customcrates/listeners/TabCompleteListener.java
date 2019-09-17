@@ -84,6 +84,10 @@ public class TabCompleteListener implements TabCompleter
                                 list.add("1");
                                 list = Utils.onlyLeaveEntriesWithPref(list, "");
                             }
+                            else if (args.length == 5)
+                            {
+                                list.add("-v");
+                            }
                         }
                     }
                     else if (args[0].equalsIgnoreCase("edit"))
