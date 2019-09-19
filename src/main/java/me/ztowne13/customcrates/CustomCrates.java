@@ -40,6 +40,7 @@ public class CustomCrates extends JavaPlugin
     CommandCrate commandCrate;
 
     BukkitTask br;
+    MetricsLite metricsLite = null;
 
     DebugUtils du;
 
@@ -57,6 +58,9 @@ public class CustomCrates extends JavaPlugin
 
     public void onEnable(boolean register)
     {
+        if(metricsLite == null)
+            metricsLite = new MetricsLite(this);
+
         reloadConfig();
         saveDefaultConfig();
         loadFiles();
