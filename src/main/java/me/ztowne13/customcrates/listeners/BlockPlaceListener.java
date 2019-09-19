@@ -5,10 +5,12 @@ import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.crates.crateaction.AttemptCrateUseAction;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class BlockPlaceListener implements Listener
 {
@@ -20,7 +22,7 @@ public class BlockPlaceListener implements Listener
     }
 
     @EventHandler
-    public void onPlace(BlockPlaceEvent e)
+    public void onPlaceCrateKey(BlockPlaceEvent e)
     {
         Player p = e.getPlayer();
         Location l = e.getBlock().getLocation();
@@ -37,5 +39,12 @@ public class BlockPlaceListener implements Listener
                 new AttemptCrateUseAction(cc, p, l).run();
             }
         }
+    }
+
+    @EventHandler
+    public void onPlace(BlockPlaceEvent e)
+    {
+        Block b = e.getBlock();
+        b.setMetadata("PLACED", new FixedMetadataValue(cc, "something"));
     }
 }

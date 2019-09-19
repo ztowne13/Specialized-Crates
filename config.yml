@@ -95,6 +95,11 @@ luckychest-creative: false
 # 1 month = 43800 minutes
 luckychest-despawn-after: -1
 
+# Should lucky chests spawn if the block was placed (and not naturally generated)?
+#  NOTE: 'placed block' data is ERASED after restart (NOT RELOAD) so it is not server-resource intensive to store every
+#  placed block. This is simply meant to be a deterrent from people placing and then re-breaking the blocks.
+luckychest-allow-placed-blocks: false
+
 #-----------------------------------------------#
 #             Virtual Crate Settings            #
 #-----------------------------------------------#

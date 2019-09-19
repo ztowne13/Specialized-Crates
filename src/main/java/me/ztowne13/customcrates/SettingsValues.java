@@ -55,6 +55,20 @@ public enum SettingsValues
                     "in creative mode."
             }),
 
+    LUCKYCHEST_ALLOW_PLACED_BLOCKS("luckychest-allow-placed-blocks", Boolean.class,
+            new String[]{
+                    "Lucky chests (mine crates) WILL",
+                    "spawn even when the block broken",
+                    "was placed by a player.",
+                    "",
+                    "NOTE: Placed block data IS NOT SAVED",
+                    "on reload/restart as to not take too",
+                    "many server resources. It is simply",
+                    "meant to be a deterrent for placing",
+                    "and breaking blocks over and over to",
+                    "find lucky chests (mine crates)."
+            }),
+
     REQUIRE_KEY_LORE("require-key-lore", Boolean.class,
             new String[]{
                     "A key's lore is required to",
