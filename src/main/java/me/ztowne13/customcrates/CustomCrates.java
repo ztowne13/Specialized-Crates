@@ -41,6 +41,7 @@ public class CustomCrates extends JavaPlugin
 
     BukkitTask br;
     MetricsLite metricsLite = null;
+    PlaceHolderAPIHandler placeHolderAPIHandler = null;
 
     DebugUtils du;
 
@@ -60,6 +61,11 @@ public class CustomCrates extends JavaPlugin
     {
         if(metricsLite == null)
             metricsLite = new MetricsLite(this);
+
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && placeHolderAPIHandler == null){
+            placeHolderAPIHandler = new PlaceHolderAPIHandler(this);
+            placeHolderAPIHandler.register();
+        }
 
         reloadConfig();
         saveDefaultConfig();
