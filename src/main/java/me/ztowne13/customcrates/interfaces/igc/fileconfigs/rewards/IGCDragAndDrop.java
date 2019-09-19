@@ -8,6 +8,7 @@ import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -48,7 +49,7 @@ public class IGCDragAndDrop extends IGCMenu
                 ItemStack stack = getIb().getInv().getItem(i);
                 if (stack != null && !stack.getType().equals(Material.AIR))
                 {
-                    getP().getInventory().addItem(stack);
+                    Utils.addItemAndDropRest(getP(), stack);
                 }
             }
             ChatUtils.msgInfo(getP(), "Added all items back to your inventory.");

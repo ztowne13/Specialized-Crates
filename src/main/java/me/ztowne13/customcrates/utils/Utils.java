@@ -304,6 +304,17 @@ public class Utils
         return exclude.contains(generated) ? getRandomNumberExcluding(limit, exclude) : generated;
     }
 
+    public static void addItemAndDropRest(final Player player, ItemStack stack)
+    {
+        Bukkit.broadcastMessage("1");
+        HashMap<Integer, ItemStack> list = player.getInventory().addItem(stack);
+        for(ItemStack toDrop : list.values())
+        {
+            Bukkit.broadcastMessage(toDrop.getType().name() + " - " + toDrop.getAmount());
+            player.getWorld().dropItemNaturally(player.getLocation(), toDrop);
+        }
+    }
+
     public static String[] ConvertSecondToHHMMString(int secondtTime)
     {
         TimeZone tz = TimeZone.getTimeZone("UTC");

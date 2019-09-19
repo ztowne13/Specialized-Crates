@@ -52,7 +52,7 @@ public class GiveKey extends SubCommand
                 {
                     Player p = (Player) cmds.getCmdSender();
                     cmds.msgSuccess("Given key for crate: " + args[1]);
-                    p.getInventory().addItem(toAdd);
+                    Utils.addItemAndDropRest(p, toAdd);
                 }
                 return true;
             }
@@ -130,7 +130,7 @@ public class GiveKey extends SubCommand
             }
             else
             {
-                toGive.getInventory().addItem(toAdd);
+                Utils.addItemAndDropRest(toGive, toAdd);
                 cmds.msgSuccess("Given physical key for crate: " + args[1]);
             }
             return true;

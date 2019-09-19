@@ -89,7 +89,7 @@ public class Reward
             }
             catch(Exception exc) { }
 
-            p.getInventory().addItem(stack.get());
+            Utils.addItemAndDropRest(p, stack.get());
         }
 
         for (String command : getCommands())
