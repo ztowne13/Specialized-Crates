@@ -49,16 +49,7 @@ public class BlockBreakListener implements Listener
             cm.delete();
             Messages.BROKEN_CRATE.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crates.getName()});
         }
-    }
-
-    @EventHandler
-    public void onBreakForLuckyChest(BlockBreakEvent e)
-    {
-        Player p = e.getPlayer();
-        Location l = e.getBlock().getLocation();
-
-        // Crate doesn't exist at location
-        if(!PlacedCrate.crateExistsAt(cc, l))
+        else
         {
             // Event isn't already cancelled
             if (!e.isCancelled())
