@@ -5,6 +5,9 @@ import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.CrateAnimation;
 import me.ztowne13.customcrates.logging.StatusLogger;
+import me.ztowne13.customcrates.players.PlayerManager;
+import me.ztowne13.customcrates.players.data.events.HistoryEvent;
+import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -31,6 +34,8 @@ public class AnimationKeyCrate extends CrateAnimation
 
             getCrates().tick(l, cs, p, rewards);
             takeKeyFromPlayer(p, !requireKeyInHand);
+            new HistoryEvent(Utils.currentTimeParsed(), getCrates(), rewards, true)
+                    .addTo(PlayerManager.get(getCc(), p).getPdm());
             return true;
         }
 

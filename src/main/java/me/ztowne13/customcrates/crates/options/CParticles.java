@@ -55,7 +55,7 @@ public class CParticles extends CSetting
         if (!particles.isEmpty())
             for (String tier : particles.keySet())
                 for (ParticleData pd : particles.get(tier))
-                   pd.save(getFu(), getPath(tier));
+                    pd.save(getFu(), getPath(tier));
     }
 
     public void deleteParticle(String tier, ParticleData pd)
@@ -139,7 +139,7 @@ public class CParticles extends CSetting
                     {
                         pd.setCenterX(Float.valueOf(centerXAS));
                     }
-                    catch(Exception exc)
+                    catch (Exception exc)
                     {
 
                     }
@@ -149,7 +149,7 @@ public class CParticles extends CSetting
                     {
                         pd.setCenterY(Float.valueOf(centerYAS));
                     }
-                    catch(Exception exc)
+                    catch (Exception exc)
                     {
 
                     }
@@ -159,7 +159,7 @@ public class CParticles extends CSetting
                     {
                         pd.setCenterZ(Float.valueOf(centerZAS));
                     }
-                    catch(Exception exc)
+                    catch (Exception exc)
                     {
 
                     }
@@ -167,7 +167,7 @@ public class CParticles extends CSetting
                     try
                     {
                         PEAnimationType peAnimationType = PEAnimationType.valueOf(animationAS);
-                        if(!peAnimationType.equals(peAnimationType.NONE))
+                        if (!peAnimationType.equals(peAnimationType.NONE))
                         {
                             pd.setParticleAnimationEffect(peAnimationType.getAnimationEffectInstance(cc, pd));
                             pd.setHasAnimation(true);
@@ -187,7 +187,7 @@ public class CParticles extends CSetting
                 }
             }
         }
-        catch(Exception exc)
+        catch (Exception exc)
         {
             exc.printStackTrace();
         }
@@ -225,9 +225,9 @@ public class CParticles extends CSetting
                 continue;
             }
 
-            if ((id.equalsIgnoreCase(cs.name().toUpperCase()) && (!up().isTiersOverrideDefaults() ||
+            if ((id.equalsIgnoreCase(cs.name().toUpperCase()) && (!up().isTiersOverrideDefaults() || rewards.isEmpty() ||
                     !getParticles().keySet().contains(rewards.get(0).getRarity().toUpperCase()))) ||
-                    rewards.get(0).getRarity().equalsIgnoreCase(id))
+                    (!rewards.isEmpty() && rewards.get(0).getRarity().equalsIgnoreCase(id)))
             {
                 for (ParticleData pd : getParticles().get(id))
                 {
@@ -253,8 +253,8 @@ public class CParticles extends CSetting
     public String getPath(String tier)
     {
         return (tier.equalsIgnoreCase("PLAY") ? "play." : "open.") +
-            (tier.equalsIgnoreCase("open") || tier.equalsIgnoreCase("play") ? "" : "crate-tiers." + tier + ".") +
-            "particles";
+                (tier.equalsIgnoreCase("open") || tier.equalsIgnoreCase("play") ? "" : "crate-tiers." + tier + ".") +
+                "particles";
     }
 
     public HashMap<String, ArrayList<ParticleData>> getParticles()

@@ -151,9 +151,9 @@ public class CSounds extends CSetting
     {
         for (String tier : getSounds().keySet())
         {
-            if ((tier.equalsIgnoreCase("OPEN") && (!up().isTiersOverrideDefaults() ||
+            if ((tier.equalsIgnoreCase("OPEN") && (!up().isTiersOverrideDefaults() || rewards.isEmpty() ||
                     !getSounds().containsKey(rewards.get(0).getRarity().toUpperCase()))) ||
-                    rewards.get(0).getRarity().equalsIgnoreCase(tier))
+                    (!rewards.isEmpty() && rewards.get(0).getRarity().equalsIgnoreCase(tier)))
             {
                 for (SoundData sd : getSounds().get(tier))
                 {

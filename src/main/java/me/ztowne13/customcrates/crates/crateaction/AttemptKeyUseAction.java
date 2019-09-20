@@ -42,7 +42,7 @@ public class AttemptKeyUseAction extends CrateAction
             {
                 if (CrateUtils.isCrateUsable(cm))
                 {
-                    useCrate(pm, cm);
+                    useCrate(pm, cm, player.isSneaking());
                     return true;
                 }
                 else

@@ -145,6 +145,9 @@ public class CActions extends CSetting
 
     public void playAll(Player p, PlacedCrate placedCrate, ArrayList<Reward> rewards, boolean pre)
     {
+        if(rewards.isEmpty())
+            return;
+
         ActionEffect actionEffect =
                 NMSUtils.Version.v1_12.isServerVersionOrLater() ? new BukkitActionEffect(cc) : new NMSActionEffect(cc);
         actionEffect.newTitle();
@@ -260,6 +263,9 @@ public class CActions extends CSetting
     public void playRewardCrate(Player p, ArrayList<String> rewards, double additionalYOffset, boolean attach, Item item,
                                 int openDuration)
     {
+        if(rewards.isEmpty())
+            return;
+
         final PlayerManager pm = PlayerManager.get(cc, p);
         if (!(pm.getLastOpenedPlacedCrate() == null))
         {

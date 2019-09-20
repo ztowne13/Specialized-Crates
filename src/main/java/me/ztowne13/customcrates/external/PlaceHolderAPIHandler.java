@@ -51,7 +51,6 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
     @Override
     public String onPlaceholderRequest(Player player, String identifier)
     {
-
         // %specializedcrates_virtual_keys_[cratename]%
         // %specializedcrates_virtual_crates_[cratename]%
         // %specializedcrates_cooldown_[cratename]%
@@ -61,10 +60,11 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
         // %specializedcrates_last_player_[cratename]%
         // %specializedcrates_last_reward_[cratename]%
 
-        if (player == null)
-        {
+        if (!cc.isAllowTick())
             return "";
-        }
+
+        if (player == null)
+            return "";
 
         String[] args = identifier.split("_");
 

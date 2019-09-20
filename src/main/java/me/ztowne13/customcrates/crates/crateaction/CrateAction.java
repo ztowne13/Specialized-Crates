@@ -8,13 +8,17 @@ import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.ObtainType;
+import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
+import me.ztowne13.customcrates.players.data.events.HistoryEvent;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
 
 public abstract class CrateAction
 {
@@ -32,44 +36,91 @@ public abstract class CrateAction
 
     public abstract boolean run();
 
-    public void useCrate(PlayerManager pm, PlacedCrate cm)
+    public boolean useCrate(PlayerManager pm, PlacedCrate cm)
+    {
+        return useCrate(pm, cm, false);
+    }
+
+    public boolean useCrate(PlayerManager pm, PlacedCrate cm, boolean skipAnimation)
+    {
+        return useCrate(pm, cm, skipAnimation, false);
+    }
+
+    public boolean useCrate(PlayerManager pm, PlacedCrate cm, boolean skipAnimation, boolean hasSkipped)
     {
         Player player = pm.getP();
         PlayerDataManager pdm = pm.getPdm();
         Crate crates = cm.getCrates();
         CrateSettings cs = crates.getCs();
         Location location = cm.getL();
+        // Player has correct permissions
         if (player.hasPermission(cs.getPermission()) || cs.getPermission().equalsIgnoreCase("no permission"))
         {
+            // Player has enough inventory spaces (as defined by value in Config.YML)
             if (isInventoryTooEmpty(cc, player))
             {
+                // There is no cooldown or the previous cooldown is over
                 CrateCooldownEvent cce = pdm.getCrateCooldownEventByCrates(crates);
                 if (cce == null || cce.isCooldownOverAsBoolean())
                 {
                     pm.setLastOpenedPlacedCrate(cm);
-                    if (cs.getCh().tick(player, location, CrateState.OPEN, !crates.isMultiCrate()))
+
+
+                    // If the animation needs to be skipped (shift click). Also required to be a static crate
+                    if (skipAnimation && cs.getOt().equals(ObtainType.STATIC))
                     {
-                        // Crate isn't static but it ALSO isn't special handling (i.e. the BLOCK_ CrateTypes)
-                        if (!cs.getOt().equals(ObtainType.STATIC) && !cs.getCt().isSpecialDynamicHandling())
+                        if (cs.getCh().canExecuteFor(CrateState.OPEN, CrateState.OPEN, player, !crates.isMultiCrate()))
                         {
-                            cm.delete();
-                            location.getBlock().setType(Material.AIR);
+                            if(!hasSkipped)
+                                crates.tick(location, cm, CrateState.OPEN, player, new ArrayList<Reward>());
+
+                            Reward reward = cs.getCr().getRandomReward(player);
+                            ArrayList<Reward> rewards = new ArrayList<>();
+                            rewards.add(reward);
+                            reward.runCommands(player);
+
+                            cs.getCh().takeKeyFromPlayer(player, false);
+                            new HistoryEvent(Utils.currentTimeParsed(), crates, rewards, true)
+                                    .addTo(PlayerManager.get(cc, player).getPdm());
+
+                            useCrate(pm, cm, true, true);
+
+                            return true;
                         }
-                        new CrateCooldownEvent(crates, System.currentTimeMillis(), true).addTo(pdm);
-                        return;
+
+                        if(!hasSkipped)
+                            crates.getCs().getCh().playFailToOpen(player);
+
+                        return false;
                     }
-                    pm.setLastOpenedPlacedCrate(null);
-                    return;
+                    else
+                    {
+                        if (cs.getCh().tick(player, location, CrateState.OPEN, !crates.isMultiCrate()))
+                        {
+                            // Crate isn't static but it ALSO isn't special handling (i.e. the BLOCK_ CrateTypes)
+                            if (!cs.getOt().equals(ObtainType.STATIC) && !cs.getCt().isSpecialDynamicHandling())
+                            {
+                                cm.delete();
+                                location.getBlock().setType(Material.AIR);
+                            }
+                            new CrateCooldownEvent(crates, System.currentTimeMillis(), true).addTo(pdm);
+                            return !skipAnimation;
+                        }
+                        pm.setLastOpenedPlacedCrate(null);
+                        return false;
+                    }
                 }
                 cce.playFailure(pdm);
-                return;
+                return false;
             }
             Messages.INVENTORY_TOO_FULL.msgSpecified(cc, player);
+            return false;
         }
         else
         {
             Messages.NO_PERMISSION_CRATE.msgSpecified(cc, player);
         }
+        return false;
     }
 
     public boolean updateCooldown(PlayerManager pm)

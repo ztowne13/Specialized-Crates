@@ -202,6 +202,38 @@ public enum SettingsValues
                     "Multicrates will show the",
                     "player's virtual crates",
                     "amount."
+            }),
+
+    SHIFT_CLICK_OPEN_ALL_PHYSICAL("shift-click-open-all-physical", Boolean.class,
+            new String[]{
+                    "Shift clicking on a crate will",
+                    "use EVERY key a player is holding",
+                    "in their hand.",
+                    "",
+                    "NOTE: Opening every key only gives",
+                    "one reward per key - regardless of",
+                    "animation type."
+            }),
+
+    SHIFT_CLICK_OPEN_ALL_VIRTUAL("shift-click-open-all-virtual", Boolean.class,
+            new String[]{
+                    "Shift clicking on a crate will",
+                    "use EVERY virtual key a player has.",
+                    "",
+                    "NOTE: Opening every key only gives",
+                    "one reward per key - regardless of",
+                    "animation type."
+            }),
+    SHIFT_CLICK_CONFIRM("shift-click-confirm", Boolean.class,
+            new String[]{
+                    "The user has to shift-click again",
+                    "to confirm opening with every",
+                    "physical & virtual key."
+            }),
+    CONFIRM_OPEN("confirm-open", Boolean.class,
+            new String[]{
+                    "The user will have to click the",
+                    "crate again to confirm opening."
             });
 
     String path;

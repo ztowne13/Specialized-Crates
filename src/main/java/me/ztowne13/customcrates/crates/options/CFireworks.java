@@ -134,9 +134,9 @@ public class CFireworks extends CSetting
     {
         for (String tier : getFireworks().keySet())
         {
-            if ((tier.equalsIgnoreCase("OPEN") && (!up().isTiersOverrideDefaults() ||
+            if ((tier.equalsIgnoreCase("OPEN") && (!up().isTiersOverrideDefaults() || rewards.isEmpty() ||
                     !getFireworks().containsKey(rewards.get(0).getRarity().toUpperCase()))) ||
-                    rewards.get(0).getRarity().equalsIgnoreCase(tier))
+                    (!rewards.isEmpty() && rewards.get(0).getRarity().equalsIgnoreCase(tier)))
             {
                 for (FireworkData fd : getFireworks().get(tier))
                 {
