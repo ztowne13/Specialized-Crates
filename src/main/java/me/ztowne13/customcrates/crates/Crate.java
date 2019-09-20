@@ -18,6 +18,8 @@ public class Crate
     String name;
 
     int placedCount = 0;
+    String lastOpenedName = "Nobody";
+    String lastOpenedReward = "Nothing";
 
     boolean enabled = true, canBeEnabled = true, isMultiCrate, isUsedForCratesCommand = false;
 
@@ -227,5 +229,25 @@ public class Crate
     public void setUsedForCratesCommand(boolean usedForCratesCommand)
     {
         isUsedForCratesCommand = usedForCratesCommand;
+    }
+
+    public String getLastOpenedName()
+    {
+        return lastOpenedName;
+    }
+
+    public void setLastOpenedName(String lastOpenedName)
+    {
+        this.lastOpenedName = lastOpenedName;
+    }
+
+    public String getLastOpenedReward()
+    {
+        return lastOpenedReward;
+    }
+
+    public void setLastOpenedReward(String lastOpenedReward)
+    {
+        this.lastOpenedReward = lastOpenedReward;
     }
 }

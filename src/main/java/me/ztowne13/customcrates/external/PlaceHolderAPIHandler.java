@@ -129,14 +129,26 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
                     return "" + playerDataManager.getVirtualCrateData().get(crate).getCrates();
                 }
             }
-            else if (args[0].equalsIgnoreCase("last") && args[1].equalsIgnoreCase("crate") &&
-                    args[2].equalsIgnoreCase("opened"))
+            else if (args[0].equalsIgnoreCase("last"))
             {
-                if (playerDataManager.getHistoryEvents().size() != 0)
-                    return playerDataManager.getHistoryEvents().get(playerDataManager.getHistoryEvents().size() - 1)
-                            .getCrates().getName();
-                else
-                    return "None";
+                if (args[1].equalsIgnoreCase("crate") && args[2].equalsIgnoreCase("opened"))
+                {
+                    if (playerDataManager.getHistoryEvents().size() != 0)
+                        return playerDataManager.getHistoryEvents().get(playerDataManager.getHistoryEvents().size() - 1)
+                                .getCrates().getName();
+                    else
+                        return "None";
+                }
+
+                if (!Crate.exists(args[2]))
+                    return "[" + args[2] + " is an invalid crate]";
+
+                Crate crate = Crate.getCrate(cc, args[2]);
+
+                if(args[1].equalsIgnoreCase("player"))
+                    return crate.getLastOpenedName();
+                else if(args[1].equalsIgnoreCase("reward"))
+                    return crate.getLastOpenedReward();
             }
         }
         else if (args.length == 4)
