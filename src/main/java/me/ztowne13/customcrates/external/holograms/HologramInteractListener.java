@@ -1,4 +1,4 @@
-package me.ztowne13.customcrates.interfaces.holograms;
+package me.ztowne13.customcrates.external.holograms;
 
 import me.ztowne13.customcrates.CustomCrates;
 import org.bukkit.event.EventHandler;

@@ -306,7 +306,6 @@ public class Utils
 
     public static void addItemAndDropRest(final Player player, ItemStack stack)
     {
-        Bukkit.broadcastMessage("1");
         HashMap<Integer, ItemStack> list = player.getInventory().addItem(stack);
         for(ItemStack toDrop : list.values())
         {
