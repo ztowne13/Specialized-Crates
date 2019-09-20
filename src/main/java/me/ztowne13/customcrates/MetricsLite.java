@@ -110,6 +110,7 @@ public class MetricsLite {
                 config.save(configFile);
             } catch (IOException ignored) { }
         }
+        Bukkit.broadcastMessage("1");
 
         // Load the data
         serverUUID = config.getString("serverUuid");
@@ -117,7 +118,11 @@ public class MetricsLite {
         enabled = config.getBoolean("enabled", true);
         logSentData = config.getBoolean("logSentData", false);
         logResponseStatusText = config.getBoolean("logResponseStatusText", false);
+
+        Bukkit.broadcastMessage("2");
+
         if (enabled) {
+            Bukkit.broadcastMessage("3");
             boolean found = false;
             // Search for all other bStats Metrics classes to see if we are the first one
             for (Class<?> service : Bukkit.getServicesManager().getKnownServices()) {
@@ -127,6 +132,7 @@ public class MetricsLite {
                     break;
                 } catch (NoSuchFieldException ignored) { }
             }
+            Bukkit.broadcastMessage("4");
             // Register our service
             Bukkit.getServicesManager().register(MetricsLite.class, this, plugin, ServicePriority.Normal);
             if (!found) {
