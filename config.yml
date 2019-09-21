@@ -37,9 +37,6 @@ debug: false
 #           Crate Settings           #
 #------------------------------------#
 
-# Should the player have to confirm to open the crate or not?
-confirm-open: false
-
 # How many open inventory slots are required to open a crate?
 required-slots: 1
 
@@ -64,7 +61,7 @@ hologram-offset: 0
 place-effect: true
 
 # Should the lore for a key be required to match the crate's key to work?
-require-key-lore: false
+require-key-lore: true
 
 # Should the crates automatically close when their animations is done playing?
 auto-close: true
@@ -73,17 +70,18 @@ auto-close: true
 #   player is holding?
 #  NOTE: Skipping the animation by using every key at once only gives 1 rewards per
 #    key, regardless of the animation type.
-shift-click-open-all-physical: true
-
-# Should shift clicking allow the user to open a crate with every virtual key
-#   the player is holding.
-#  NOTE: Skipping the animation by using every key at once only gives 1 rewards per
-#    key, regardless of the animation type.
-shift-click-open-all-virtual: false
+shift-click-open-all: true
 
 # Should the player have to shift click the crate again to confirm opening
 #   it with every key / virtual key?
 shift-click-confirm: true
+
+# Should the player have to confirm to open the crate or not?
+confirm-open: false
+
+# How long should the crate-opening confirmation take to cancel, in seconds?
+#   NOTE: Also works for the shift-click confirmation.
+confirm-timeout: 3
 
 #-------------------------------------------#
 #           Crate Action Settings           #

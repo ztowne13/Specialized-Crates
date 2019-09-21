@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.crates.crateaction;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Messages;
+import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.players.PlayerManager;
@@ -42,7 +43,7 @@ public class AttemptKeyUseAction extends CrateAction
             {
                 if (CrateUtils.isCrateUsable(cm))
                 {
-                    useCrate(pm, cm, player.isSneaking());
+                    useCrate(pm, cm, player.isSneaking() && (Boolean) SettingsValues.SHIFT_CLICK_OPEN_ALL.getValue(cc));
                     return true;
                 }
                 else

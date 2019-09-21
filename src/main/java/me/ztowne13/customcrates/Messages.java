@@ -49,6 +49,10 @@ public enum Messages
 
     INSUFFICIENT_VIRTUAL_CRATES,
 
+    CONFIRM_OPEN,
+
+    CONFIRM_OPEN_ALL,
+
     BYPASS_BREAK_RESTRICTIONS("&9&lNOTICE! &bThis crate typically isn't placeable, you have bypassed this restriction."),
 
     SUCCESS_DELETE("&2&lSUCCESS! &aDeleted the %crate% crate from this location."),

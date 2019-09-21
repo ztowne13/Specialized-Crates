@@ -9,8 +9,10 @@ import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.players.data.*;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +34,12 @@ public class PlayerManager
     Crate openCrate = null;
     Location lastOpenCrate = null;
     private IGCMenu openMenu = null, lastOpenMenu = null;
-    boolean inRewardMenu = false, canClose = true, deleteCrate = false, useVirtualCrate = false;
+    boolean inRewardMenu = false;
+    boolean canClose = true;
+    boolean deleteCrate = false;
+    boolean useVirtualCrate = false;
+    boolean confirming = false;
+    BukkitTask confirmingTask = null;
 
     ArrayList<Reward> waitingForClose = null;
 
@@ -89,6 +96,8 @@ public class PlayerManager
         return null;
     }
 
+
+
     public static PlayerManager get(CustomCrates cc, Player p)
     {
         return getpManagers().containsKey(p.getUniqueId()) ? getpManagers().get(p.getUniqueId()) : new PlayerManager(cc, p);
@@ -98,6 +107,35 @@ public class PlayerManager
     {
         getpManagers().clear();
         setpManagers(new HashMap<UUID, PlayerManager>());
+    }
+
+    public boolean isConfirming()
+    {
+        return confirming;
+    }
+
+    public void setConfirming(final boolean confirming)
+    {
+        this.confirming = confirming;
+        if(confirming)
+        {
+            confirmingTask = Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    setConfirming(false);
+                }
+            }, 20 * (Integer) SettingsValues.CONFIRM_TIMEOUT.getValue(cc));
+        }
+        else
+        {
+            if(confirmingTask != null)
+            {
+                confirmingTask.cancel();
+                confirmingTask = null;
+            }
+        }
     }
 
     public boolean isInCrate()

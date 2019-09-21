@@ -5,13 +5,13 @@ import java.util.HashMap;
 
 public enum SettingsValues
 {
-    STORE_DATA("store-data", String.class,
+    STORE_DATA("store-data", String.class, "FLATFILE",
             new String[]{
                     "Set how would you like to store",
                     " player data."
             }),
 
-    LOG_SUCCESSES("log-successes", String.class,
+    LOG_SUCCESSES("log-successes", String.class, "FAILURES",
             new String[]{
                     "Set how much would you like to",
                     "be logged to console.",
@@ -19,43 +19,43 @@ public enum SettingsValues
                     "NOTHING."
             }),
 
-    PUSHBACK("push-back", Boolean.class,
+    PUSHBACK("push-back", Boolean.class, true,
             new String[]{
                     "Players will be pushed back if",
                     "they fail to open a crate"
             }),
 
-    AUTO_CLOSE("auto-close", Boolean.class,
+    AUTO_CLOSE("auto-close", Boolean.class, true,
             new String[]{
                     "Crate animations should automatically",
                     "close when done."
             }),
 
-    REQUIRED_SLOTS("required-slots", Integer.class,
+    REQUIRED_SLOTS("required-slots", Integer.class, 1,
             new String[]{
                     "Set amount of slots required",
                     "to open a crate?"
             }),
 
-    OPEN_CREATIVE("open-creative", Boolean.class,
+    OPEN_CREATIVE("open-creative", Boolean.class, true,
             new String[]{
                     "Players can open crates in",
                     "creative mode."
             }),
 
-    PLACE_CREATIVE("place-creative", Boolean.class,
+    PLACE_CREATIVE("place-creative", Boolean.class, true,
             new String[]{
                     "Players can place crates in",
                     "creative mode."
             }),
 
-    LUCKYCHEST_CREATIVE("luckychest-creative", Boolean.class,
+    LUCKYCHEST_CREATIVE("luckychest-creative", Boolean.class, false,
             new String[]{
                     "Players can find lucky chests",
                     "in creative mode."
             }),
 
-    LUCKYCHEST_ALLOW_PLACED_BLOCKS("luckychest-allow-placed-blocks", Boolean.class,
+    LUCKYCHEST_ALLOW_PLACED_BLOCKS("luckychest-allow-placed-blocks", Boolean.class, false,
             new String[]{
                     "Lucky chests (mine crates) WILL",
                     "spawn even when the block broken",
@@ -69,142 +69,142 @@ public enum SettingsValues
                     "find lucky chests (mine crates)."
             }),
 
-    REQUIRE_KEY_LORE("require-key-lore", Boolean.class,
+    REQUIRE_KEY_LORE("require-key-lore", Boolean.class, true,
             new String[]{
                     "A key's lore is required to",
                     "match the key."
             }),
 
-    CA_FADE_IN("fade-in-time", Integer.class,
+    CA_FADE_IN("fade-in-time", Integer.class, 0,
             new String[]{
                     "Set how long would you like titles",
                     "or subtitles to take to fade in.",
                     "(In seconds)"
             }),
 
-    CA_STAY("stay-time", Integer.class,
+    CA_STAY("stay-time", Integer.class, 4,
             new String[]{
                     "Set how long would you like titles",
                     "or subtitles to stay on the screen.",
                     "(In seconds)"
             }),
 
-    CA_FADE_OUT("fade-out-time", Integer.class,
+    CA_FADE_OUT("fade-out-time", Integer.class, 1,
             new String[]{
                     "Set how long would you like titles",
                     "or subtitles to take to fade out.",
                     "In seconds"
             }),
 
-    LUCKYCHEST_DESPAWN("luckychest-despawn-after", Integer.class,
+    LUCKYCHEST_DESPAWN("luckychest-despawn-after", Integer.class, -1,
             new String[]{
                     "Set how many MINUTES luckycrates will",
                     " take to despawn.",
                     "Set to -1 to never despawn."
             }),
 
-    REWARD_DISPLAY_ENABLED("enabled", Boolean.class,
+    REWARD_DISPLAY_ENABLED("enabled", Boolean.class, true,
             new String[]{
                     "Crate will display their rewards",
                     "when left clicked."
             }),
 
-    REWARD_DISPLAY_NAME("inv-reward-display-name", String.class,
+    REWARD_DISPLAY_NAME("inv-reward-display-name", String.class, "&4%crate% &cRewards",
             new String[]{
                     "Set the reward display inventory's."
             }),
 
-    REWARD_ITEM_NAME("inv-reward-item-name", String.class,
+    REWARD_ITEM_NAME("inv-reward-item-name", String.class, "&c%displayname%",
             new String[]{
                     "Set the reward display item's name."
             }),
 
-    REWARD_ITEM_LORE("inv-reward-item-lore", Collection.class,
+    REWARD_ITEM_LORE("inv-reward-item-lore", Collection.class, new String[]{"&7-", "&eChance: &6%writtenchance%%"},
             new String[]{
                     "Edit the reward display item's lore."
             }),
 
-    EXPLODE_DYNAMIC("explosions-destroy-dynamic-crates", Boolean.class,
+    EXPLODE_DYNAMIC("explosions-destroy-dynamic-crates", Boolean.class, true,
             new String[]{
                     "Explosions will destroy dynamic crates."
             }),
 
-    HOLOGRAM_OFFSET("hologram-offset", Double.class,
+    HOLOGRAM_OFFSET("hologram-offset", Double.class, 0,
             new String[]{
                     "Set the global hologram location offset."
             }),
 
-    PLACE_EFFECT("place-effect", Boolean.class,
+    PLACE_EFFECT("place-effect", Boolean.class, true,
             new String[]{
                     "A cool effect will be displayed when",
                     "a crate is placed."
             }),
 
-    PRIORITIZE_PHYSICAL_KEY("prioritize-physical-key", Boolean.class,
+    PRIORITIZE_PHYSICAL_KEY("prioritize-physical-key", Boolean.class, true,
             new String[]{
                     "Uses a physical key first if the",
                     "player has a physical & virtaul key."
             }),
 
-    VIRTUAL_CRATE_LORE("virtual-crate-lore", String.class,
+    VIRTUAL_CRATE_LORE("virtual-crate-lore", String.class, "&cCrates: &f(&7%crates%&f)",
             new String[]{
                     "Change the lore to display the",
                     "virtual crates."
             }),
 
-    VIRTUAL_KEY_LORE("virtual-key-lore", String.class,
+    VIRTUAL_KEY_LORE("virtual-key-lore", String.class, "&cKeys: &f(&7%keys%&f)",
             new String[]{
                     "Change the lore to display the",
                     "virtual keys."
             }),
 
-    CRATES_COMMAND_MULTICRATE("crates-command-multicrate", String.class,
+    CRATES_COMMAND_MULTICRATE("crates-command-multicrate", String.class, "AllCrates",
             new String[]{
                     "The name of the crate that",
                     "is run when /crates is run."
             }),
 
-    CRATES_COMMAND_NAME("crates-command-name", String.class,
+    CRATES_COMMAND_NAME("crates-command-name", String.class, "&b&lVirtual &7&lCrates",
             new String[]{
                     "The name of the /crates virtual",
                     "crates menu."
             }),
 
-    MC_REWARD_DISPLAY_LEFTCLICK("mc-reward-display-leftclick", Boolean.class,
+    MC_REWARD_DISPLAY_LEFTCLICK("mc-reward-display-leftclick", Boolean.class, true,
             new String[]{
                     "MultiCrates will display rewards",
                     "on left click instead of",
                     "right click."
             }),
 
-    NOTIFY_UPDATES("notify-updates", Boolean.class,
+    NOTIFY_UPDATES("notify-updates", Boolean.class, true,
             new String[]{
                     "The plugin will notify administrators",
                     "when there is an update",
                     "for the plugin."
             }),
 
-    DEBUG("debug", Boolean.class,
+    DEBUG("debug", Boolean.class, false,
             new String[]{
                     "The plugin will log developer",
                     "information to console."
             }),
 
-    VIRTUAL_CRATE_KEYCOUNT("virtual-crate-keycount", Boolean.class,
+    VIRTUAL_CRATE_KEYCOUNT("virtual-crate-keycount", Boolean.class, true,
             new String[]{
                     "Multicrates will show the",
                     "player's virtual keys",
                     "amount."
             }),
 
-    VIRTUAL_CRATE_CRATECOUNT("virtual-crate-cratecount", Boolean.class,
+    VIRTUAL_CRATE_CRATECOUNT("virtual-crate-cratecount", Boolean.class, true,
             new String[]{
                     "Multicrates will show the",
                     "player's virtual crates",
                     "amount."
             }),
 
-    SHIFT_CLICK_OPEN_ALL_PHYSICAL("shift-click-open-all-physical", Boolean.class,
+    SHIFT_CLICK_OPEN_ALL("shift-click-open-all", Boolean.class, true,
             new String[]{
                     "Shift clicking on a crate will",
                     "use EVERY key a player is holding",
@@ -215,36 +215,37 @@ public enum SettingsValues
                     "animation type."
             }),
 
-    SHIFT_CLICK_OPEN_ALL_VIRTUAL("shift-click-open-all-virtual", Boolean.class,
-            new String[]{
-                    "Shift clicking on a crate will",
-                    "use EVERY virtual key a player has.",
-                    "",
-                    "NOTE: Opening every key only gives",
-                    "one reward per key - regardless of",
-                    "animation type."
-            }),
-    SHIFT_CLICK_CONFIRM("shift-click-confirm", Boolean.class,
+    SHIFT_CLICK_CONFIRM("shift-click-confirm", Boolean.class, true,
             new String[]{
                     "The user has to shift-click again",
                     "to confirm opening with every",
                     "physical & virtual key."
             }),
-    CONFIRM_OPEN("confirm-open", Boolean.class,
+    CONFIRM_OPEN("confirm-open", Boolean.class, false,
             new String[]{
                     "The user will have to click the",
                     "crate again to confirm opening."
+            }),
+
+    CONFIRM_TIMEOUT("confirm-timeout", Integer.class, 3,
+            new String[]{
+                    "The time, in seconds, the player",
+                    "has to confirm opening a crate if",
+                    "shift-click-confirm or",
+                    "confirm-open is enabled."
             });
 
     String path;
     String[] descriptor;
     Object obj;
+    Object defaultVal;
 
-    SettingsValues(String path, Object obj, String[] descriptor)
+    SettingsValues(String path, Object obj, Object defaultVal, String[] descriptor)
     {
         this.path = path;
         this.descriptor = descriptor;
         this.obj = obj;
+        this.defaultVal = defaultVal;
     }
 
     public static SettingsValues getByPath(String s)
@@ -270,7 +271,11 @@ public enum SettingsValues
         }
         else
         {
-            valuesCache.put(this, cc.getSettings().getConfigValues().get(path));
+            Object val = cc.getSettings().getConfigValues().get(path);
+            if(val == null)
+                val = defaultVal;
+
+            valuesCache.put(this, val);
             return getValue(cc);
         }
     }
