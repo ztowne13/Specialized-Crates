@@ -12,4 +12,3 @@ commands:
   keys:
     description: See how many virtual keys you have for your crates.
     aliases: [skeys,cratekey,cratekeys]
-~
