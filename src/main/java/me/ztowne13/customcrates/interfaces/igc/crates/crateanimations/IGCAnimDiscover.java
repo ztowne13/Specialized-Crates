@@ -27,7 +27,7 @@ public class IGCAnimDiscover extends IGCAnimation
     public void open()
     {
 
-        InventoryBuilder ib = createDefault(18);
+        InventoryBuilder ib = createDefault(27);
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
@@ -79,7 +79,47 @@ public class IGCAnimDiscover extends IGCAnimation
                 .setLore(getcVal()).addLore("&7" + getString("uncover-sound")).addLore("").addAutomaticLore("&f", 30,
                         "The sound that is played every time the player uncovers a reward. Set to 'none' to have no sound."));
 
+        // cover-block-name
+        ItemBuilder coverBlockName = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        coverBlockName.setDisplayName("&acover-block-name");
+        coverBlockName.addLore(getcVal()).addLore("&7" + getString("cover-block-name")).addLore("");
+        coverBlockName.addAutomaticLore("&f", 30, "The name of all the blocks before the user clicks anything. Use %number% for the number reward it is.");
+
+        ItemBuilder coverBlockLore = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        coverBlockLore.setDisplayName("&acover-block-lore");
+        coverBlockLore.addLore(getcVal()).addLore("&7" + getString("cover-block-lore")).addLore("");
+        coverBlockLore.addAutomaticLore("&f", 30, "The lore of all the blocks before the user clicks them. Use %remaining-clicks% for the number of rewards remaining for the player to choose.");
+
+        ItemBuilder rewardBlock = new ItemBuilder(DynamicMaterial.LIME_STAINED_GLASS, 1);
+        rewardBlock.setDisplayName("&areward-block");
+        rewardBlock.addLore(getcVal()).addLore("&7" + getString("reward-block")).addLore("");
+        rewardBlock.addAutomaticLore("&f", 30, "The block that will be shown when a cover block is clicked.");
+
+        ItemBuilder rewardBlockName = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        rewardBlockName.setDisplayName("&areward-block-name");
+        rewardBlockName.addLore(getcVal()).addLore("&7" + getString("reward-block-name")).addLore("");
+        rewardBlockName.addAutomaticLore("&f", 30, "The name of the reward block when it's shuffling.");
+
+        ItemBuilder rewardBlockWaitingName = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        rewardBlockWaitingName.setDisplayName("&areward-block-waiting-name");
+        rewardBlockWaitingName.addLore(getcVal()).addLore("&7" + getString("reward-block-waiting-name")).addLore("");
+        rewardBlockWaitingName.addAutomaticLore("&f", 30, "The name of the reward block while it's waiting for the player to select all their rewards.");
+
+        ItemBuilder rewardBlockUnlockName = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        rewardBlockUnlockName.setDisplayName("&areward-block-unlock-name");
+        rewardBlockUnlockName.addLore(getcVal()).addLore("&7" + getString("reward-block-unlock-name")).addLore("");
+        rewardBlockUnlockName.addAutomaticLore("&f", 30, "The name of the reward block when the user is supposed to get their final reward.");
+
+        ib.setItem(19, coverBlockName);
+        ib.setItem(20, coverBlockLore);
+
+        ib.setItem(22, rewardBlock);
+        ib.setItem(23, rewardBlockWaitingName);
+        ib.setItem(24, rewardBlockName);
+        ib.setItem(25, rewardBlockUnlockName);
+
         ib.open();
+
         putInMenu();
     }
 
@@ -132,8 +172,41 @@ public class IGCAnimDiscover extends IGCAnimation
                 new InputMenu(getCc(), getP(), "uncover-sound", getString("uncover-sound"),
                         "Set to 'none' to have no sound. Formatted: SOUND, VOLUME, PITCH", String.class, this, true);
                 break;
+            case 19:
+                new InputMenu(getCc(), getP(), "cover-block-name", getString("cover-block-name"),
+                         String.class, this);
+                break;
+            case 20:
+                new InputMenu(getCc(), getP(), "cover-block-lore", getString("cover-block-lore"),
+                        "User %remaining-clicks% for the amount of rewards left.", String.class, this);
+                break;
+            case 22:
+                new InputMenu(getCc(), getP(), "reward-block", getString("reward-block"),
+                        "The name of the material of the reward block!", String.class, this, true);
+                break;
+            case 23:
+                new InputMenu(getCc(), getP(), "reward-block-waiting-name", getString("reward-block-waiting-name"),
+                        String.class, this);
+                break;
+            case 24:
+                new InputMenu(getCc(), getP(), "reward-block-name", getString("reward-block-name"),
+                        String.class, this);
+                break;
+            case 25:
+                new InputMenu(getCc(), getP(), "reward-block-unlock-name", getString("reward-block-unlock-name"),
+                        String.class, this);
+                break;
         }
     }
+
+    //
+    //        ib.setItem(19, coverBlockName);
+    //        ib.setItem(20, coverBlockLore);
+    //
+    //        ib.setItem(22, rewardBlock);
+    //        ib.setItem(23, rewardBlockWaitingName);
+    //        ib.setItem(24, rewardBlockName);
+    //        ib.setItem(25, rewardBlockUnlockName);
 
     @Override
     public boolean handleInput(String value, String input)

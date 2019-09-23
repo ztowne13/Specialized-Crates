@@ -41,7 +41,13 @@ public class DiscoverAnimation extends InventoryCrateAnimation
     String invName;
     SoundData tickSound, clickSound, uncoverSound;
     int minRewards, maxRewards, randomDisplayDuration, invRows;
+    String coverBlockName = "&aReward #%number%";
+    String coverBlockLore = "&7You have &f%remaining-clicks% rewards to chose from.";
+    String rewardBlockName = "&aReward";
+    String rewardBlockUnlockName = "&aClick me to unlock your reward.";
+    String rewardBlockWaitingName = "&aUncover all rewards to unlock";
     ItemStack uncoverBlock;
+    ItemStack rewardBlock = new ItemBuilder(DynamicMaterial.LIME_STAINED_GLASS_PANE, 1).get();
     boolean count;
 
     public DiscoverAnimation(Inventory inv, Crate crate)
@@ -129,9 +135,9 @@ public class DiscoverAnimation extends InventoryCrateAnimation
         {
             case 1:
                 ItemBuilder uncoverBlockIb = new ItemBuilder(uncoverBlock).setLore("")
-                        .addLore("&7You have &f" + ddh.getRemainingClicks() + " rewards to chose from.");
-                ItemBuilder alreadyUncoveredIb = new ItemBuilder(DynamicMaterial.LIME_STAINED_GLASS_PANE, 1)
-                        .setName("&aUncover all rewards to unlock");
+                        .addLore(coverBlockLore.replaceAll("%remaining-clicks%", ddh.getRemainingClicks() + ""));
+                ItemBuilder alreadyUncoveredIb = new ItemBuilder(rewardBlock);
+                alreadyUncoveredIb.setDisplayName(rewardBlockWaitingName);
                 for (int i = 0; i < ib.getInv().getSize(); i++)
                 {
                     if (ddh.getAlreadyChosenSlots().contains(i))
@@ -140,7 +146,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation
                     }
                     else
                     {
-                        uncoverBlockIb.setName("&aReward #" + (i + 1));
+                        uncoverBlockIb.setDisplayName(coverBlockName.replaceAll("%number%", (i + 1) + ""));
                         if (count)
                         {
                             uncoverBlockIb.get().setAmount(i + 1);
@@ -153,7 +159,8 @@ public class DiscoverAnimation extends InventoryCrateAnimation
                 correctDisplay = true;
             case 2:
                 ib.getInv().clear();
-                ItemBuilder reward = new ItemBuilder(DynamicMaterial.LIME_STAINED_GLASS_PANE, 1).setName("&Reward");
+                ItemBuilder reward = new ItemBuilder(rewardBlock);
+                reward.setDisplayName(rewardBlockName);
                 Random r = new Random();
                 if (!correctDisplay)
                 {
@@ -167,7 +174,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation
                 }
                 else
                 {
-                    reward.setName("&aClick me to unlock your reward");
+                    reward.setDisplayName(rewardBlockUnlockName);
                     for (int i : ddh.getAlreadyChosenSlots())
                     {
                         if (ddh.getAlreadyDisplayedRewards().keySet().contains(i))
@@ -293,6 +300,42 @@ public class DiscoverAnimation extends InventoryCrateAnimation
                 StatusLoggerEvent.ANIMATION_DISCOVER_UNCOVERSOUND_PITCHVOL_INVALID,
                 StatusLoggerEvent.ANIMATION_DISCOVER_UNCOVERSOUND_PITCH_SUCCESS,
                 StatusLoggerEvent.ANIMATION_DISCOVER_UNCOVERSOUND_PITCH_INVALID);
+
+        if(fc.contains(prefix + "reward-block"))
+            rewardBlock = FileUtils.loadItem(fc.getString(prefix + "reward-block"), sl,
+                    StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_MATERIAL_INVALID,
+                    StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_DURABILITY_INVALID,
+                    StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_INVALID,
+                    StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_SUCCESS);
+        else
+            fc.set(prefix + "reward-block", DynamicMaterial.fromItemStack(rewardBlock).name());
+
+        if(fc.contains(prefix + "cover-block-name"))
+            coverBlockName = fc.getString(prefix + "cover-block-name");
+        else
+            fc.set(prefix + "cover-block-name", coverBlockName);
+
+        if(fc.contains(prefix + "cover-block-lore"))
+            coverBlockLore = fc.getString(prefix + "cover-block-lore");
+        else
+            fc.set(prefix + "cover-block-lore", coverBlockLore);
+
+        if(fc.contains(prefix + "reward-block-name"))
+            rewardBlockName = fc.getString(prefix + "reward-block-name");
+        else
+            fc.set(prefix + "reward-block-name", rewardBlockName);
+
+        if(fc.contains(prefix + "reward-block-unlock-name"))
+            rewardBlockUnlockName = fc.getString(prefix + "reward-block-unlock-name");
+        else
+            fc.set(prefix + "reward-block-unlock-name", rewardBlockUnlockName);
+
+        if(fc.contains(prefix + "reward-block-waiting-name"))
+            rewardBlockWaitingName = fc.getString(prefix + "reward-block-waiting-name");
+        else
+            fc.set(prefix + "reward-block-waiting-name", rewardBlockWaitingName);
+
+        fu.save();
     }
 
     @Override

@@ -349,6 +349,18 @@ public enum StatusLoggerEvent
     ANIMATION_DISCOVER_COVERBLOCK_SUCCESS(true, "Animation", "Successfully loaded the discover animation cover-block value.",
             ""),
 
+    ANIMATION_DISCOVER_REWARDBLOCK_MATERIAL_INVALID(false, "Animation", "Failed to load the discover animation reward-block.",
+            "$?$ is an invalid material."),
+
+    ANIMATION_DISCOVER_REWARDBLOCK_DURABILITY_INVALID(false, "Animation",
+            "Failed to load the durability for the discover animation reward-block", "$?$ is an invalid number."),
+
+    ANIMATION_DISCOVER_REWARDBLOCK_INVALID(false, "Animation", "Failed to load the discover animation reward-block value.",
+            "It is nonexistent or not formatted MATERIAL;DURABILITY"),
+
+    ANIMATION_DISCOVER_REWARDBLOCK_SUCCESS(true, "Animation", "Successfully loaded the discover animation reward-block value.",
+            ""),
+
     ANIMATION_DISCOVER_TICKSOUND_SOUND_SUCCESS(true, "Animation",
             "Successfully loaded the discover animation tick-sound SOUND", ""),
 

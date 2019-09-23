@@ -58,5 +58,11 @@ CrateType:
       count: true
       random-display-duration: 50
       cover-block: CHEST;0
+      cover-block-name: '&aReward #%number%'
+      cover-block-lore: '&7You have &f%remaining-clicks% rewards to chose from.'
+      reward-block: LIME_STAINED_GLASS
+      reward-block-name: "&aReward"
+      reward-block-waiting-name: '&aUncover all rewards to unlock'
+      reward-block-unlock-name: '&aClick me to unlock your reward.'
 
       
