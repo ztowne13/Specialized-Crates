@@ -114,6 +114,8 @@ public enum StatusLoggerEvent
     REWARD_ITEM_NONEXISTENT(false, "Rewards", "Failed to load ITEM for reward: $?$",
             "The 'item' value does not exist or is misconfigured."),
 
+    REWARD_ITEM_AIR(false, "Rewards", "Failed to load the reward $?$", "The item cannot be AIR."),
+
     REWARD_COMMAND_INVALID(false, "Rewards", "Failed to load COMMANDS for reward: $?$",
             "The 'commands' value does not exist or is not a valid list."),
 
@@ -349,7 +351,8 @@ public enum StatusLoggerEvent
     ANIMATION_DISCOVER_COVERBLOCK_SUCCESS(true, "Animation", "Successfully loaded the discover animation cover-block value.",
             ""),
 
-    ANIMATION_DISCOVER_REWARDBLOCK_MATERIAL_INVALID(false, "Animation", "Failed to load the discover animation reward-block.",
+    ANIMATION_DISCOVER_REWARDBLOCK_MATERIAL_INVALID(false, "Animation",
+            "Failed to load the discover animation reward-block.",
             "$?$ is an invalid material."),
 
     ANIMATION_DISCOVER_REWARDBLOCK_DURABILITY_INVALID(false, "Animation",
@@ -358,7 +361,8 @@ public enum StatusLoggerEvent
     ANIMATION_DISCOVER_REWARDBLOCK_INVALID(false, "Animation", "Failed to load the discover animation reward-block value.",
             "It is nonexistent or not formatted MATERIAL;DURABILITY"),
 
-    ANIMATION_DISCOVER_REWARDBLOCK_SUCCESS(true, "Animation", "Successfully loaded the discover animation reward-block value.",
+    ANIMATION_DISCOVER_REWARDBLOCK_SUCCESS(true, "Animation",
+            "Successfully loaded the discover animation reward-block value.",
             ""),
 
     ANIMATION_DISCOVER_TICKSOUND_SOUND_SUCCESS(true, "Animation",

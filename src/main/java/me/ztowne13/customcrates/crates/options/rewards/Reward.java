@@ -306,6 +306,8 @@ public class Reward
 
     public boolean loadFromConfig()
     {
+
+        cc.getDu().log("Reward: " + rewardName);
         setFc(getCc().getRewardsFile().get());
         boolean success = true;
         needsMoreConfig = false;
@@ -314,6 +316,13 @@ public class Reward
         {
             String unsplitMat = getFc().getString(getPath("item"));
             DynamicMaterial m = DynamicMaterial.fromString(unsplitMat);
+
+            if(m.equals(DynamicMaterial.AIR))
+            {
+                StatusLoggerEvent.REWARD_ITEM_AIR.log(getCr().getCrates(), new String[]{this.toString()});
+                return false;
+            }
+
             itemBuilder = new ItemBuilder(m, 1);
         }
         catch (Exception exc)
@@ -324,7 +333,6 @@ public class Reward
         try
         {
             itemBuilder.setDisplayName(getFc().getString(getPath("name")));
-
         }
         catch (Exception exc)
         {
