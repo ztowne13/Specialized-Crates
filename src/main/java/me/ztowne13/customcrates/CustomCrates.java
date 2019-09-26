@@ -45,7 +45,7 @@ public class CustomCrates extends JavaPlugin
     MetricsLite metricsLite = null;
     PlaceHolderAPIHandler placeHolderAPIHandler = null;
 
-    DebugUtils du;
+    DebugUtils du = null;
 
     int tick = 0;
     boolean allowTick = true;

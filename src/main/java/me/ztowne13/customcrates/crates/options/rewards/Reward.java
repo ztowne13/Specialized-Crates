@@ -306,8 +306,6 @@ public class Reward
 
     public boolean loadFromConfig()
     {
-
-        cc.getDu().log("Reward: " + rewardName);
         setFc(getCc().getRewardsFile().get());
         boolean success = true;
         needsMoreConfig = false;
