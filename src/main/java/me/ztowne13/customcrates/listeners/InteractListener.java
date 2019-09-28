@@ -25,10 +25,15 @@ public class InteractListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInteract(PlayerInteractEvent e)
     {
+        cc.getDu().log("onInteract - CALL", this.getClass());
+
         try
         {
-            if (!e.getHand().equals(EquipmentSlot.HAND))
+            if (!e.getHand().equals(EquipmentSlot.HAND) && !(e.getPlayer().isSneaking() && e.getHand().equals(EquipmentSlot.OFF_HAND)))
+            {
+                cc.getDu().log("onInteract - Equipment slot isn't hand. It's " + e.getHand().name(), this.getClass());
                 return;
+            }
         }
         catch (Throwable exc)
         {
@@ -36,10 +41,14 @@ public class InteractListener implements Listener
 
         if (!e.isCancelled())
         {
+            cc.getDu().log("onInteract - Isn't cancelled", this.getClass());
+
             Player p = e.getPlayer();
 
             if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_BLOCK))
             {
+                cc.getDu().log("onInteract - Click block", this.getClass());
+
                 CrateAction action;
                 if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
                     action = new AttemptKeyUseAction(cc, p, e.getClickedBlock().getLocation());
