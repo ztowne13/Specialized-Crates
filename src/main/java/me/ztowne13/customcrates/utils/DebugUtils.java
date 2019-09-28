@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 public class DebugUtils
 {
     CustomCrates cc;
-    boolean forceDebug = false;
+    boolean forceDebug = true;
 
     public DebugUtils(CustomCrates cc)
     {
@@ -24,4 +24,12 @@ public class DebugUtils
         }
     }
 
+    public void log(String s, Class<?> clas)
+    {
+        boolean debug = forceDebug || Boolean.valueOf(cc.getSettings().getConfigValues().get("debug").toString());
+        if (debug)
+        {
+            Bukkit.getLogger().info("[DEBUG] " + clas.getName() + "." + s);
+        }
+    }
 }
