@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 
 public class InventoryActionListener implements Listener
 {
@@ -28,21 +29,41 @@ public class InventoryActionListener implements Listener
         this.cc = cc;
     }
 
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent e)
+    {
+        cc.getDu().log("onInventoryDrag - CALL", getClass());
+
+        Player player = (Player) e.getWhoClicked();
+        PlayerManager playerManager = PlayerManager.get(cc, player);
+
+        if (playerManager.isInCrate() || playerManager.isInRewardMenu())
+        {
+            cc.getDu().log("onInventoryDrag - CANCELLED");
+            e.setCancelled(true);
+        }
+    }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e)
     {
-
+        cc.getDu().log("onInventoryClick - CALL", getClass());
         Player p = (Player) e.getWhoClicked();
         PlayerManager pm = PlayerManager.get(cc, p);
 
         if (pm.isInCrate() || pm.isInRewardMenu())
         {
+            cc.getDu().log("onInventoryClick - In crate or reward menu (" + pm.isInCrate() + " : " + pm.isInRewardMenu() +
+                    ")", getClass());
             if (!(e.getClickedInventory() == null || e.getWhoClicked().getInventory() == null))
+            {
+                cc.getDu().log("onInventoryClick - Clicked inventory and clicker aren't null.");
                 if (!e.getClickedInventory().equals(e.getWhoClicked().getInventory()))
                 {
+                    cc.getDu().log("onInventoryClick - CANCELLED");
                     e.setCancelled(true);
                 }
+            }
 
             if (pm.isInCrate() && pm.getOpenCrate().isMultiCrate())
             {
@@ -81,7 +102,7 @@ public class InventoryActionListener implements Listener
                 if (e.getClickedInventory().equals(e.getView().getTopInventory()) &&
                         !e.getView().getTitle().equalsIgnoreCase(ChatUtils.toChatColor("&c&lClose to save")))
                 {
-                    if(!(pm.getOpenMenu() instanceof IGCDragAndDrop) || e.getSlot() == 52 || e.getSlot() == 53)
+                    if (!(pm.getOpenMenu() instanceof IGCDragAndDrop) || e.getSlot() == 52 || e.getSlot() == 53)
                         e.setCancelled(true);
 
                     try
