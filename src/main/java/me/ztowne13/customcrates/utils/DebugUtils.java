@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 public class DebugUtils
 {
     CustomCrates cc;
-    boolean forceDebug = true;
+    boolean forceDebug = false;
 
     public DebugUtils(CustomCrates cc)
     {
