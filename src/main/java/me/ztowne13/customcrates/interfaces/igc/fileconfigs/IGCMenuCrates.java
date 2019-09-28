@@ -35,7 +35,7 @@ public class IGCMenuCrates extends IGCMenu
     public void open()
     {
 
-        InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4, Crate.getLoadedCrates().keySet().size()));
+        InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4, Crate.getLoadedCrates().keySet().size()), 9);
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
         ib.setItem(8,
                 new ItemBuilder(Material.PAPER, 1, 0).setName("&aCreate a new crate").setLore("&7Please set the crate and")
