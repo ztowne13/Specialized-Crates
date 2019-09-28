@@ -40,7 +40,8 @@ public abstract class DynamicHologram
     {
         if (getHa() != null)
         {
-            getHa().tick();
+            if(!cm.getCholo().getPrefixes().isEmpty())
+                getHa().tick();
         }
     }
 
