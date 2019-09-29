@@ -183,6 +183,8 @@ public class FileHandler
     public void save()
     {
         cc.getDu().log("save() - CALL", getClass(), true);
+        long curTime = System.currentTimeMillis();
+
         if (getData() == null || getDataFile() == null)
         {
             return;
@@ -211,6 +213,7 @@ public class FileHandler
             ex.printStackTrace();
             getCc().getLogger().log(Level.SEVERE, "Could not save config to " + getDataFile(), ex);
         }
+        cc.getDu().log("save() - Time to complete: " + (System.currentTimeMillis() - curTime), getClass());
     }
 
     private void saveByByte()
@@ -291,7 +294,7 @@ public class FileHandler
 
     public FileConfiguration get()
     {
-        cc.getDu().log("get() - CALL", getClass(), true);
+        cc.getDu().log("get() - CALL", getClass(), false);
         if (getData() == null)
         {
             reload();
@@ -377,7 +380,7 @@ public class FileHandler
 
     public FileConfiguration getData()
     {
-        cc.getDu().log("getData() - CALL", getClass(), true);
+        cc.getDu().log("getData() - CALL", getClass(), false);
 
         return data;
     }
