@@ -37,7 +37,10 @@ public class InteractListener implements Listener
         }
         catch (Throwable exc)
         {
+            cc.getDu().log("onInteract - Failed to handle equipment slot check", getClass());
         }
+
+        cc.getDu().log("onInteract - (cancelled: " + e.isCancelled() + ")");
 
         if (!e.isCancelled())
         {
