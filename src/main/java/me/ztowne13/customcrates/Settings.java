@@ -10,12 +10,12 @@ import java.util.HashMap;
 
 public class Settings
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
     HashMap<String, String> infoToLog = new HashMap<String, String>();
     HashMap<String, Object> configValues = new HashMap<String, Object>();
 
-    public Settings(CustomCrates cc)
+    public Settings(SpecializedCrates cc)
     {
         this.cc = cc;
     }
@@ -161,12 +161,12 @@ public class Settings
         this.configValues = configValues;
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

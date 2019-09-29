@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates.options.holograms;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.animations.holo.HoloAnimType;
 import me.ztowne13.customcrates.animations.holo.HoloAnimation;
 import me.ztowne13.customcrates.crates.PlacedCrate;
@@ -8,14 +8,14 @@ import org.bukkit.Location;
 
 public abstract class DynamicHologram
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
     PlacedCrate cm;
 
     HoloAnimation ha;
 
     boolean displayingRewardHologram = false;
 
-    public DynamicHologram(CustomCrates cc, PlacedCrate cm)
+    public DynamicHologram(SpecializedCrates cc, PlacedCrate cm)
     {
         this.cc = cc;
         this.cm = cm;
@@ -65,12 +65,12 @@ public abstract class DynamicHologram
         this.ha = ha;
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

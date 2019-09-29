@@ -1,8 +1,8 @@
 package me.ztowne13.customcrates.crates.types;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.crates.CrateState;
@@ -26,7 +26,7 @@ import java.util.Random;
 
 public abstract class CrateAnimation
 {
-    protected CustomCrates cc;
+    protected SpecializedCrates cc;
     protected Crate crates;
     protected FileHandler fu;
     protected String prefix;
@@ -377,12 +377,12 @@ public abstract class CrateAnimation
         this.crates = crates;
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

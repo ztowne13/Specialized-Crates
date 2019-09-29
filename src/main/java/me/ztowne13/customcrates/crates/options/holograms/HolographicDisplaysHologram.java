@@ -3,7 +3,7 @@ package me.ztowne13.customcrates.crates.options.holograms;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Location;
@@ -15,7 +15,7 @@ public class HolographicDisplaysHologram extends DynamicHologram
     Hologram h;
     HashMap<Integer, TextLine> lines = new HashMap<Integer, TextLine>();
 
-    public HolographicDisplaysHologram(CustomCrates cc, PlacedCrate cm)
+    public HolographicDisplaysHologram(SpecializedCrates cc, PlacedCrate cm)
     {
         super(cc, cm);
     }

@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.listeners;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Messages;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.players.PlayerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,9 +13,9 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
  */
 public class CommandPreprocessListener implements Listener
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public CommandPreprocessListener(CustomCrates cc)
+    public CommandPreprocessListener(SpecializedCrates cc)
     {
         this.cc = cc;
     }

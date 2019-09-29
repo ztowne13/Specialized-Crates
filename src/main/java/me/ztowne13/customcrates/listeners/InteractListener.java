@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.listeners;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.crateaction.AttemptKeyUseAction;
 import me.ztowne13.customcrates.crates.crateaction.CrateAction;
@@ -15,9 +15,9 @@ import org.bukkit.inventory.EquipmentSlot;
 
 public class InteractListener implements Listener
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public InteractListener(CustomCrates cc)
+    public InteractListener(SpecializedCrates cc)
     {
         this.cc = cc;
     }

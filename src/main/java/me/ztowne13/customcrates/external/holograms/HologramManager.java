@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.external.holograms;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 
@@ -9,11 +9,11 @@ import java.util.List;
 
 public abstract class HologramManager
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
     List<Hologram> holograms;
 
-    public HologramManager(CustomCrates cc)
+    public HologramManager(SpecializedCrates cc)
     {
         this.cc = cc;
         holograms = new ArrayList<>();
@@ -25,7 +25,7 @@ public abstract class HologramManager
 
     public abstract void deleteHologram(Hologram hologram);
 
-    abstract CustomCrates getCc();
+    abstract SpecializedCrates getCc();
 
     public List<Hologram> getHolograms()
     {

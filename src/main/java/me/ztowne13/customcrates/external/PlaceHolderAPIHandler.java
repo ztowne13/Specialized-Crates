@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.external;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.players.PlayerDataManager;
@@ -11,9 +11,9 @@ import org.bukkit.entity.Player;
 
 public class PlaceHolderAPIHandler extends PlaceholderExpansion
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public PlaceHolderAPIHandler(CustomCrates cc)
+    public PlaceHolderAPIHandler(SpecializedCrates cc)
     {
         this.cc = cc;
     }

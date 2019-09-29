@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.*;
@@ -21,7 +21,7 @@ public class IGCItemEditor extends IGCMenu
 
     EditableItem editableItem;
 
-    public IGCItemEditor(CustomCrates cc, Player p, IGCMenu lastMenu, EditableItem editableItem)
+    public IGCItemEditor(SpecializedCrates cc, Player p, IGCMenu lastMenu, EditableItem editableItem)
     {
         super(cc, p, lastMenu, "&7&l> &6&lItem Editor");
 

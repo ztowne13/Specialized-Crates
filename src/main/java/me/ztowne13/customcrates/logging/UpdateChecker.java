@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.logging;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Bukkit;
 
@@ -14,11 +14,11 @@ import java.net.URL;
  */
 public class UpdateChecker
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
     String latestVersion;
     boolean needsUpdate = false;
 
-    public UpdateChecker(CustomCrates cc)
+    public UpdateChecker(SpecializedCrates cc)
     {
         this.cc = cc;
 

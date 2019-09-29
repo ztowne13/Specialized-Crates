@@ -1,14 +1,14 @@
 package me.ztowne13.customcrates.utils;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Bukkit;
 
 public class DebugUtils
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
     boolean forceDebug = true;
 
-    public DebugUtils(CustomCrates cc)
+    public DebugUtils(SpecializedCrates cc)
     {
         this.cc = cc;
     }

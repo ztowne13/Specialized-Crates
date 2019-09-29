@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates.options.holograms;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import org.bukkit.Location;
 
@@ -9,7 +9,7 @@ import org.bukkit.Location;
  */
 public class NoHologram extends DynamicHologram
 {
-    public NoHologram(CustomCrates cc, PlacedCrate cm)
+    public NoHologram(SpecializedCrates cc, PlacedCrate cm)
     {
         super(cc, cm);
     }

@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.commands.sub;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -17,7 +17,7 @@ public class DeleteCrate extends SubCommand
     }
 
     @Override
-    public boolean run(CustomCrates cc, Commands cmds, String[] args)
+    public boolean run(SpecializedCrates cc, Commands cmds, String[] args)
     {
         if (cmds.canExecute(false, false, ""))
         {

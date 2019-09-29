@@ -32,7 +32,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 
-public class CustomCrates extends JavaPlugin
+public class SpecializedCrates extends JavaPlugin
 {
     FileHandler messageFile, rewardsFile, activecratesFile, crateconfigFile, dataFile;
     Settings settings;

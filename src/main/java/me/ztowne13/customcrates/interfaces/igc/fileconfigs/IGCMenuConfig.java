@@ -1,8 +1,8 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Settings;
 import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
@@ -33,7 +33,7 @@ public class IGCMenuConfig extends IGCMenu
     ItemBuilder red;
     ItemBuilder green;
 
-    public IGCMenuConfig(CustomCrates cc, Player p, IGCMenu lastMenu)
+    public IGCMenuConfig(SpecializedCrates cc, Player p, IGCMenu lastMenu)
     {
         super(cc, p, lastMenu, "&7&l> &6&lConfig.YML");
 

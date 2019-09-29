@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.visuals.npcs;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import me.ztowne13.customcrates.utils.NPCUtils;
@@ -25,7 +25,7 @@ public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
 
     String name;
 
-    public Citizens2NPCPlaceHolder(CustomCrates cc)
+    public Citizens2NPCPlaceHolder(SpecializedCrates cc)
     {
         super(cc);
     }

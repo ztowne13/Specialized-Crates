@@ -1,12 +1,12 @@
 package me.ztowne13.customcrates.external.holograms;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 
 public class HologramManagerNMS extends HologramManager
 {
-    public HologramManagerNMS(CustomCrates cc)
+    public HologramManagerNMS(SpecializedCrates cc)
     {
         super(cc);
     }
@@ -35,7 +35,7 @@ public class HologramManagerNMS extends HologramManager
     }
 
     @Override
-    CustomCrates getCc()
+    SpecializedCrates getCc()
     {
         return null;
     }

@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.listeners;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.inputmenus.InputMenu;
 import me.ztowne13.customcrates.players.PlayerManager;
@@ -16,9 +16,9 @@ import org.bukkit.event.player.PlayerChatEvent;
  */
 public class ChatListener implements Listener
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public ChatListener(CustomCrates cc)
+    public ChatListener(SpecializedCrates cc)
     {
         this.cc = cc;
     }

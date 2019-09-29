@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.utils;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -21,7 +21,7 @@ public class FileHandler
     String name;
     String directory = "";
     String loaded;
-    CustomCrates cc;
+    SpecializedCrates cc;
 
     boolean canBeEdited;
     boolean saveWithCustomSave;
@@ -32,7 +32,7 @@ public class FileHandler
     private FileConfiguration data = null;
     private File dataFile = null;
 
-    public FileHandler(CustomCrates cc, String name, String directory, boolean canBeEdited, boolean saveWithCustomSave,
+    public FileHandler(SpecializedCrates cc, String name, String directory, boolean canBeEdited, boolean saveWithCustomSave,
                        boolean newFile)
     {
         this.name = name;
@@ -45,7 +45,7 @@ public class FileHandler
         map.put(name, this);
     }
 
-    public FileHandler(CustomCrates cc, String name, boolean canBeEdited, boolean saveWithCustomSave)
+    public FileHandler(SpecializedCrates cc, String name, boolean canBeEdited, boolean saveWithCustomSave)
     {
         this.name = name;
         this.canBeEdited = canBeEdited;
@@ -368,12 +368,12 @@ public class FileHandler
         this.loaded = loaded;
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

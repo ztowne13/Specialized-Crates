@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.listeners;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -16,9 +16,9 @@ import java.util.List;
 
 public class BlockRemoveListener implements Listener
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public BlockRemoveListener(CustomCrates cc)
+    public BlockRemoveListener(SpecializedCrates cc)
     {
         this.cc = cc;
     }

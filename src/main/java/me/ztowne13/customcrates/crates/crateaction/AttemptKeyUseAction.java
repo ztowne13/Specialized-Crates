@@ -1,9 +1,9 @@
 package me.ztowne13.customcrates.crates.crateaction;
 
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.players.PlayerManager;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 public class AttemptKeyUseAction extends CrateAction
 {
-    public AttemptKeyUseAction(CustomCrates cc, Player player, Location location)
+    public AttemptKeyUseAction(SpecializedCrates cc, Player player, Location location)
     {
         super(cc, player, location);
     }

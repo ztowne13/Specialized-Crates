@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.commands.sub;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
 
 /**
@@ -14,7 +14,7 @@ public class Info extends SubCommand
     }
 
     @Override
-    public boolean run(CustomCrates cc, Commands cmds, String[] args)
+    public boolean run(SpecializedCrates cc, Commands cmds, String[] args)
     {
         cc.getSettings().loadInfo();
         cmds.msg("&6&lCurrent &e&lS&7&lC &6&lInformation >");

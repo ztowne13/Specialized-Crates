@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
@@ -21,7 +21,7 @@ import org.bukkit.entity.Player;
  */
 public class IGCMineCrate extends IGCMenuCrate
 {
-    public IGCMineCrate(CustomCrates cc, Player p, IGCMenu lastMenu, Crate crates)
+    public IGCMineCrate(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates)
     {
         super(cc, p, lastMenu, "&7&l> &6&lMine Crate", crates);
     }

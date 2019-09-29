@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
@@ -14,7 +14,7 @@ public abstract class IGCMenuCrate extends IGCMenu
     Crate crates;
     CrateSettings cs;
 
-    public IGCMenuCrate(CustomCrates cc, Player p, IGCMenu lastMenu, String invName, Crate crates)
+    public IGCMenuCrate(SpecializedCrates cc, Player p, IGCMenu lastMenu, String invName, Crate crates)
     {
         super(cc, p, lastMenu, invName);
         this.crates = crates;

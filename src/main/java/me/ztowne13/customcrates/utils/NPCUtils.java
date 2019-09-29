@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.utils;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.visuals.npcs.Citizens2NPCPlaceHolder;
 import me.ztowne13.customcrates.visuals.npcs.IdentifierTrait;
 import me.ztowne13.customcrates.visuals.npcs.MobPlaceholder;
@@ -64,7 +64,7 @@ public class NPCUtils
         }
     }
 
-    public static void checkUncheckMobs(CustomCrates cc, final boolean bVal, long l)
+    public static void checkUncheckMobs(SpecializedCrates cc, final boolean bVal, long l)
     {
         Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
         {

@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.inputmenus.InputMenu;
@@ -25,7 +25,7 @@ public class IGCListEditor extends IGCMenu
     Class<?> clazz = null;
     String methodName, errorMsg;
 
-    public IGCListEditor(CustomCrates cc, Player p, IGCMenu lastMenu, String header, String identifier,
+    public IGCListEditor(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header, String identifier,
                          List values, DynamicMaterial displayItem, int page)
     {
         super(cc, p, lastMenu, "&7&l> &6&l" + header + " PG" + page);
@@ -36,7 +36,7 @@ public class IGCListEditor extends IGCMenu
         this.displayItem = displayItem;
     }
 
-    public IGCListEditor(CustomCrates cc, Player p, IGCMenu lastMenu, String header, String identifier,
+    public IGCListEditor(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header, String identifier,
                          List values, DynamicMaterial displayItem, int page, Class<?> clazz, String methodName, String errorMsg)
     {
         this(cc, p, lastMenu, header, identifier, values, displayItem, page);

@@ -82,7 +82,7 @@ public enum Messages
 
     static HashMap<Messages, String> cachedMessages = new HashMap<Messages, String>();
 
-    public String getFromConf(CustomCrates cc)
+    public String getFromConf(SpecializedCrates cc)
     {
         if(cachedMessages.containsKey(this))
             return cachedMessages.get(this);
@@ -106,12 +106,12 @@ public enum Messages
         }
     }
 
-    public void msgSpecified(CustomCrates cc, Player p)
+    public void msgSpecified(SpecializedCrates cc, Player p)
     {
         msgSpecified(cc, p, new String[]{}, new String[]{});
     }
 
-    public void msgSpecified(CustomCrates cc, Player p, String[] replaceValue, String[] setValue)
+    public void msgSpecified(SpecializedCrates cc, Player p, String[] replaceValue, String[] setValue)
     {
         String correctMSG = getPropperMsg(cc);
 
@@ -123,12 +123,12 @@ public enum Messages
         p.sendMessage(correctMSG);
     }
 
-    public void writeValue(CustomCrates cc, String value)
+    public void writeValue(SpecializedCrates cc, String value)
     {
         cc.getMessageFile().get().set(name().toLowerCase().replace("_", "-").toLowerCase(), value);
     }
 
-    public String getPropperMsg(CustomCrates cc)
+    public String getPropperMsg(SpecializedCrates cc)
     {
         return ChatUtils.toChatColor(getMsg().equalsIgnoreCase("") ? getFromConf(cc) : getMsg());
     }

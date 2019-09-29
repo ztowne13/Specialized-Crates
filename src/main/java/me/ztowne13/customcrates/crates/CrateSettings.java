@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.*;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.CrateAnimation;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class CrateSettings
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
     Crate crates;
     StatusLogger sl;
 
@@ -54,7 +54,7 @@ public class CrateSettings
     CRewards cr;
     CMultiCrateInventory cmci;
 
-    public CrateSettings(CustomCrates cc, Crate crates, boolean newFile)
+    public CrateSettings(SpecializedCrates cc, Crate crates, boolean newFile)
     {
         this.cc = cc;
         this.crates = crates;
@@ -525,12 +525,12 @@ public class CrateSettings
         this.cooldown = cooldown;
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

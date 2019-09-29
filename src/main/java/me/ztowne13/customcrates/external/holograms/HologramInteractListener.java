@@ -1,15 +1,15 @@
 package me.ztowne13.customcrates.external.holograms;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 
 public class HologramInteractListener implements Listener
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public HologramInteractListener(CustomCrates cc)
+    public HologramInteractListener(SpecializedCrates cc)
     {
         this.cc = cc;
     }

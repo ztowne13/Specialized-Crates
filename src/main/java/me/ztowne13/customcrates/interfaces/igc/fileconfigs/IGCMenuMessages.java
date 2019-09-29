@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Messages;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
@@ -21,7 +21,7 @@ public class IGCMenuMessages extends IGCMenu
 {
     static int msgLoreLength = 40;
 
-    public IGCMenuMessages(CustomCrates cc, Player p, IGCMenu lastMenu)
+    public IGCMenuMessages(SpecializedCrates cc, Player p, IGCMenu lastMenu)
     {
         super(cc, p, lastMenu, "&7&l> &6&lMessages.YML");
     }

@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.commands;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Messages;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.sub.*;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
@@ -18,11 +18,11 @@ import java.util.Arrays;
  */
 public class CommandCrate extends Commands implements CommandExecutor
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
     VirtualCrates vcSubCommand;
     ArrayList<SubCommand> subCommands;
 
-    public CommandCrate(CustomCrates cc)
+    public CommandCrate(SpecializedCrates cc)
     {
         super("scrates");
         this.cc = cc;

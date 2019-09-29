@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.logging.StatusLogger;
@@ -18,7 +18,7 @@ public class CrateSettingsBuilder
 {
     CrateSettings settings;
     FileConfiguration fc;
-    CustomCrates cc;
+    SpecializedCrates cc;
 
     public CrateSettingsBuilder(CrateSettings settings)
     {
@@ -487,12 +487,12 @@ public class CrateSettingsBuilder
         this.fc = fc;
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

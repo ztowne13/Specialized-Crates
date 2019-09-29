@@ -1,15 +1,15 @@
 package me.ztowne13.customcrates.animations;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 
 /**
  * Class that is the superclass to all non-crate open animations eg. holograms / particles
  */
 public abstract class Animation
 {
-    protected CustomCrates cc;
+    protected SpecializedCrates cc;
 
-    public Animation(CustomCrates cc)
+    public Animation(SpecializedCrates cc)
     {
         this.cc = cc;
     }

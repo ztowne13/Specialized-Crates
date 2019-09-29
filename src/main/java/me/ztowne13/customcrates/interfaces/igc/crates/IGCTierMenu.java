@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ public abstract class IGCTierMenu extends IGCMenuCrate
 {
     String tier;
 
-    public IGCTierMenu(CustomCrates cc, Player p, IGCMenu lastMenu, String name, Crate crates, String tier)
+    public IGCTierMenu(SpecializedCrates cc, Player p, IGCMenu lastMenu, String name, Crate crates, String tier)
     {
         super(cc, p, lastMenu, name, crates);
         this.tier = tier;

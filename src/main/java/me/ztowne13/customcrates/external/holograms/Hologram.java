@@ -1,16 +1,16 @@
 package me.ztowne13.customcrates.external.holograms;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Location;
 
 public abstract class Hologram
 {
-    CustomCrates customCrates;
+    SpecializedCrates customCrates;
 
     String name;
     Location location;
 
-    public Hologram(CustomCrates cc, String name, Location location)
+    public Hologram(SpecializedCrates cc, String name, Location location)
     {
         this.customCrates = cc;
         this.name = name;
@@ -28,7 +28,7 @@ public abstract class Hologram
         this.location = location;
     }
 
-    public CustomCrates getCustomCrates()
+    public SpecializedCrates getCustomCrates()
     {
         return customCrates;
     }

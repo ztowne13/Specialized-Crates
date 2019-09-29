@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.utils.FileHandler;
@@ -16,7 +16,7 @@ public abstract class IGCAnimation extends IGCMenu
     FileConfiguration fc;
     CrateType crateType;
 
-    public IGCAnimation(CustomCrates cc, Player p, IGCMenu lastMenu, String inventoryName, CrateType crateType)
+    public IGCAnimation(SpecializedCrates cc, Player p, IGCMenu lastMenu, String inventoryName, CrateType crateType)
     {
         super(cc, p, lastMenu, inventoryName);
         this.crateType = crateType;

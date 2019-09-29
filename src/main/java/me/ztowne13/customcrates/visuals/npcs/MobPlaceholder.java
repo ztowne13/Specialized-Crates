@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.visuals.npcs;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import me.ztowne13.customcrates.utils.NPCUtils;
@@ -22,7 +22,7 @@ public class MobPlaceholder extends DynamicCratePlaceholder
 
     EntityTypes ent;
 
-    public MobPlaceholder(CustomCrates cc)
+    public MobPlaceholder(SpecializedCrates cc)
     {
         super(cc);
     }

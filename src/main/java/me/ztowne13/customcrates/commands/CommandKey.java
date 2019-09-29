@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.commands;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Messages;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
@@ -17,9 +17,9 @@ import org.bukkit.entity.Player;
  */
 public class CommandKey extends Commands implements CommandExecutor
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public CommandKey(CustomCrates cc)
+    public CommandKey(SpecializedCrates cc)
     {
         super("keys");
         this.cc = cc;

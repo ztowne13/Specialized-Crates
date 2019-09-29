@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates.options.particles.effects;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import org.bukkit.Location;
 
@@ -11,7 +11,7 @@ public class CirclePA extends ParticleAnimationEffect
 {
 	int updatesPerSec;
 
-	public CirclePA(CustomCrates cc, ParticleData particleData)
+	public CirclePA(SpecializedCrates cc, ParticleData particleData)
 	{
 		super(cc, particleData);
 		this.updatesPerSec = (int) particleData.getSpeed();

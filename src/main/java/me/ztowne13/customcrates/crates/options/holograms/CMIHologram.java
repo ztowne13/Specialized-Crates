@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.crates.options.holograms;
 
 import com.Zrips.CMI.CMI;
 import com.Zrips.CMI.Modules.Holograms.HologramManager;
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Location;
@@ -13,7 +13,7 @@ public class CMIHologram extends DynamicHologram
     Location l;
     private com.Zrips.CMI.Modules.Holograms.CMIHologram cmiHologram;
 
-    public CMIHologram(CustomCrates customCrates, PlacedCrate placedCrate)
+    public CMIHologram(SpecializedCrates customCrates, PlacedCrate placedCrate)
     {
         super(customCrates, placedCrate);
         hologramManager = CMI.getInstance().getHologramManager();

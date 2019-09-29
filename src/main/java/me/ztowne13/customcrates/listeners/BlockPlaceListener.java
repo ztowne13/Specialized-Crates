@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.listeners;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Messages;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.crateaction.AttemptCrateUseAction;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import org.bukkit.Location;
@@ -14,9 +14,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class BlockPlaceListener implements Listener
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public BlockPlaceListener(CustomCrates cc)
+    public BlockPlaceListener(SpecializedCrates cc)
     {
         this.cc = cc;
     }

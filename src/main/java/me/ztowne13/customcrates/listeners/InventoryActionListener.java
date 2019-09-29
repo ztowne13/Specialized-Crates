@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.listeners;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.CrateAnimation;
@@ -22,9 +22,9 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 
 public class InventoryActionListener implements Listener
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public InventoryActionListener(CustomCrates cc)
+    public InventoryActionListener(SpecializedCrates cc)
     {
         this.cc = cc;
     }

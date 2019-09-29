@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
@@ -23,7 +23,7 @@ public class IGCMenuReward extends IGCMenu
     Reward r;
     boolean unsavedChanges = false;
 
-    public IGCMenuReward(CustomCrates cc, Player p, IGCMenu lastMenu, String rName)
+    public IGCMenuReward(SpecializedCrates cc, Player p, IGCMenu lastMenu, String rName)
     {
         super(cc, p, lastMenu, "&7&l> &6&l" + rName);
 

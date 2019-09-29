@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.players.data.events;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.players.PlayerDataManager;
@@ -61,7 +61,7 @@ public class HistoryEvent extends DataEvent
         return matches;
     }
 
-    public static void listFor(CustomCrates cc, CommandSender sender, Player toDisplay, int amount)
+    public static void listFor(SpecializedCrates cc, CommandSender sender, Player toDisplay, int amount)
     {
         ChatUtils.msg(sender, "&6TIME &7- &9CRATE &7- &cREWARD\n\n" +
                 "&aOldest Entries\n" +

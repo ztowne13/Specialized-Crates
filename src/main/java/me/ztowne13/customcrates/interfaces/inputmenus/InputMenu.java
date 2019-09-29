@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.inputmenus;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.entity.Player;
@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
  */
 public class InputMenu
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
     Player p;
     IGCMenu inputMenu;
     String value;
@@ -20,31 +20,31 @@ public class InputMenu
     Object type;
     //SettingsValues sv;
 
-	/*public InputMenu(CustomCrates cc, Player p, SettingsValues sv)
+	/*public InputMenu(SpecializedCrates cc, Player p, SettingsValues sv)
 	{
 		this.p = p;
 		this.sv = sv;
 		this.cc = cc;
 	}*/
 
-    public InputMenu(CustomCrates cc, Player p, String value, String currentValue, Object type, IGCMenu inputMenu)
+    public InputMenu(SpecializedCrates cc, Player p, String value, String currentValue, Object type, IGCMenu inputMenu)
     {
         this(cc, p, value, currentValue, "", type, inputMenu, false);
     }
 
-    public InputMenu(CustomCrates cc, Player p, String value, String currentValue, Object type, IGCMenu inputMenu,
+    public InputMenu(SpecializedCrates cc, Player p, String value, String currentValue, Object type, IGCMenu inputMenu,
                      boolean withoutColor)
     {
         this(cc, p, value, currentValue, "", type, inputMenu, withoutColor);
     }
 
-    public InputMenu(CustomCrates cc, Player p, String value, String currentValue, String formatExp, Object type,
+    public InputMenu(SpecializedCrates cc, Player p, String value, String currentValue, String formatExp, Object type,
                      IGCMenu inputMenu)
     {
         this(cc, p, value, currentValue, formatExp, type, inputMenu, false);
     }
 
-    public InputMenu(CustomCrates cc, Player p, String value, String currentValue, String formatExp, Object type,
+    public InputMenu(SpecializedCrates cc, Player p, String value, String currentValue, String formatExp, Object type,
                      IGCMenu inputMenu, boolean withoutColor)
     {
         this.p = p;
@@ -103,12 +103,12 @@ public class InputMenu
         }
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

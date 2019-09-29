@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.players.data.events;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 
 /**
@@ -8,9 +8,9 @@ import me.ztowne13.customcrates.players.PlayerDataManager;
  */
 public abstract class DataEvent
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public DataEvent(CustomCrates cc)
+    public DataEvent(SpecializedCrates cc)
     {
         this.cc = cc;
     }
@@ -19,12 +19,12 @@ public abstract class DataEvent
 
     public abstract String getFormatted();
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

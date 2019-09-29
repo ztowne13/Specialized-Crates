@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates.options.rewards;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.interfaces.items.CompressedEnchantment;
@@ -25,7 +25,7 @@ import java.util.Random;
 
 public class Reward
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
     FileConfiguration fc;
     Random r;
 
@@ -43,7 +43,7 @@ public class Reward
 
     boolean toLog;
 
-    public Reward(CustomCrates cc, String rewardName)
+    public Reward(SpecializedCrates cc, String rewardName)
     {
         init();
         needsMoreConfig = true;
@@ -55,7 +55,7 @@ public class Reward
         this.r = new Random();
     }
 
-    public Reward(CustomCrates cc, CRewards cr, String rewardName)
+    public Reward(SpecializedCrates cc, CRewards cr, String rewardName)
     {
         this(cc, rewardName);
         init();
@@ -602,12 +602,12 @@ public class Reward
         this.chance = chance;
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

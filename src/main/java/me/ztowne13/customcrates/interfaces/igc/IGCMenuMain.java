@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.interfaces.igc;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Messages;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.CRewards;
@@ -21,7 +21,7 @@ import org.bukkit.entity.Player;
  */
 public class IGCMenuMain extends IGCMenu
 {
-    public IGCMenuMain(CustomCrates cc, Player p, IGCMenu lastMenu)
+    public IGCMenuMain(SpecializedCrates cc, Player p, IGCMenu lastMenu)
     {
         super(cc, p, lastMenu, "&7&l> &6&lHome");
     }

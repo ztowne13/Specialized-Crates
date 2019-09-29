@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
  */
 public class IGCAnimMenu extends IGCAnimation
 {
-    public IGCAnimMenu(CustomCrates cc, Player p, IGCMenu lastMenu)
+    public IGCAnimMenu(SpecializedCrates cc, Player p, IGCMenu lastMenu)
     {
         super(cc, p, lastMenu, "&7&l> &6&lMenu Animation", CrateType.INV_MENU);
     }

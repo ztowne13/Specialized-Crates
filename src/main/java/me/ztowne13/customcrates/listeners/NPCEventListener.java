@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.listeners;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.crateaction.AttemptKeyUseAction;
 import me.ztowne13.customcrates.crates.crateaction.LeftClickAction;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
@@ -14,9 +14,9 @@ import org.bukkit.event.Listener;
  */
 public class NPCEventListener implements Listener
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public NPCEventListener(CustomCrates cc)
+    public NPCEventListener(SpecializedCrates cc)
     {
         this.cc = cc;
     }

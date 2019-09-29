@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.visuals;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import org.bukkit.Material;
@@ -10,7 +10,7 @@ import org.bukkit.Material;
  */
 public class MaterialPlaceholder extends DynamicCratePlaceholder
 {
-    public MaterialPlaceholder(CustomCrates cc)
+    public MaterialPlaceholder(SpecializedCrates cc)
     {
         super(cc);
     }

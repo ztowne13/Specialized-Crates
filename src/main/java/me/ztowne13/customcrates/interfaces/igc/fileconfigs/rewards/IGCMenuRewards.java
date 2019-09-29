@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
@@ -21,7 +21,7 @@ public class IGCMenuRewards extends IGCMenu
 {
     int page;
 
-    public IGCMenuRewards(CustomCrates cc, Player p, IGCMenu lastMenu, int page)
+    public IGCMenuRewards(SpecializedCrates cc, Player p, IGCMenu lastMenu, int page)
     {
         super(cc, p, lastMenu, "&7&l> &6&lRewards.YML PG" + page);
         this.page = page;

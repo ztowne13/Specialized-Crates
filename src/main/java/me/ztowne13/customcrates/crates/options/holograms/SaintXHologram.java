@@ -4,7 +4,7 @@ import com.sainttx.holograms.HologramPlugin;
 import com.sainttx.holograms.api.Hologram;
 import com.sainttx.holograms.api.HologramManager;
 import com.sainttx.holograms.api.line.TextLine;
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Location;
@@ -21,7 +21,7 @@ public class SaintXHologram extends DynamicHologram
     Hologram hologram;
     double defaultYOffSet = -.2;
 
-    public SaintXHologram(CustomCrates cc, PlacedCrate cm)
+    public SaintXHologram(SpecializedCrates cc, PlacedCrate cm)
     {
         super(cc, cm);
         this.hm = JavaPlugin.getPlugin(HologramPlugin.class).getHologramManager();

@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.utils;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -287,7 +287,7 @@ public class Utils
         }
     }
 
-    public static void addToInfoLog(CustomCrates cc, String s, String s2)
+    public static void addToInfoLog(SpecializedCrates cc, String s, String s2)
     {
         if (cc.getSettings().getInfoToLog().containsKey(s))
         {

@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates.options;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
@@ -10,9 +10,9 @@ import me.ztowne13.customcrates.utils.FileHandler;
 public abstract class CSetting
 {
     Crate crates;
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public CSetting(Crate crates, CustomCrates cc)
+    public CSetting(Crate crates, SpecializedCrates cc)
     {
         this.crates = crates;
         this.cc = cc;
@@ -43,12 +43,12 @@ public abstract class CSetting
         this.crates = crates;
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.listeners;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.players.PlayerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,9 +10,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerConnectionListener implements Listener
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public PlayerConnectionListener(CustomCrates cc)
+    public PlayerConnectionListener(SpecializedCrates cc)
     {
         this.cc = cc;
     }

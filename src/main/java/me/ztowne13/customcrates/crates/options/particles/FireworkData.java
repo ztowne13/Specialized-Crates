@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates.options.particles;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.FileSettings;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class FireworkData
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
     CrateSettings cs;
 
     String unLoaded;
@@ -34,7 +34,7 @@ public class FireworkData
     boolean trail = false, flicker = false;
     FireworkEffect.Type feType = FireworkEffect.Type.BALL_LARGE;
 
-    public FireworkData(CustomCrates cc, CrateSettings cs)
+    public FireworkData(SpecializedCrates cc, CrateSettings cs)
     {
         this.cc = cc;
         this.cs = cs;
@@ -224,12 +224,12 @@ public class FireworkData
         return unLoaded;
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

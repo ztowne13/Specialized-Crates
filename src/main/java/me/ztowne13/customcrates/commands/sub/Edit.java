@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.commands.sub;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
@@ -23,7 +23,7 @@ public class Edit extends SubCommand
     }
 
     @Override
-    public boolean run(CustomCrates cc, Commands cmds, String[] args)
+    public boolean run(SpecializedCrates cc, Commands cmds, String[] args)
     {
         if (cmds.getCmdSender() instanceof Player)
         {

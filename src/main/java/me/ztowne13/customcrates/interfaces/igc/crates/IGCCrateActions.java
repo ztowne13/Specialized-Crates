@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
@@ -26,7 +26,7 @@ public class IGCCrateActions extends IGCTierMenu
     List<String> actionTypes = new ArrayList<>();
     boolean deleteMode = false;
 
-    public IGCCrateActions(CustomCrates cc, Player p, IGCMenu lastMenu, Crate crates, String tier)
+    public IGCCrateActions(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, String tier)
     {
         super(cc, p, lastMenu, "&7&l> &6&lActions", crates, tier);
         actionTypes = Arrays.asList(

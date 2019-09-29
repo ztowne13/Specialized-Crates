@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.players;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
@@ -22,7 +22,7 @@ public class PlayerManager
 {
     static HashMap<UUID, PlayerManager> pManagers = new HashMap<UUID, PlayerManager>();
 
-    CustomCrates cc;
+    SpecializedCrates cc;
 
     Player p;
 
@@ -46,7 +46,7 @@ public class PlayerManager
     long cmdCooldown = 0;
     String lastCooldown = "NONE";
 
-    public PlayerManager(CustomCrates cc, Player p)
+    public PlayerManager(SpecializedCrates cc, Player p)
     {
         this.cc = cc;
         this.p = p;
@@ -98,7 +98,7 @@ public class PlayerManager
 
 
 
-    public static PlayerManager get(CustomCrates cc, Player p)
+    public static PlayerManager get(SpecializedCrates cc, Player p)
     {
         return getpManagers().containsKey(p.getUniqueId()) ? getpManagers().get(p.getUniqueId()) : new PlayerManager(cc, p);
     }
@@ -199,12 +199,12 @@ public class PlayerManager
         this.p = p;
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

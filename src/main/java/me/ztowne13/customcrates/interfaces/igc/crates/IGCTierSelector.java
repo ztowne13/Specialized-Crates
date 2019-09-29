@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
@@ -25,7 +25,7 @@ public class IGCTierSelector extends IGCMenuCrate
     Set<String> tiers;
     IGCTierMenu igcTierMenu;
 
-    public IGCTierSelector(CustomCrates cc, Player p, IGCMenu lastMenu, Crate crates, Set<String> tiers,
+    public IGCTierSelector(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, Set<String> tiers,
                            IGCTierMenu igcTierMenu)
     {
         super(cc, p, lastMenu, "&7&l> &6&lTier Selector", crates);

@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.external.holograms;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -17,7 +17,7 @@ public class HologramAS extends Hologram
     List<String> lines;
     List<ArmorStand> stands;
 
-    protected HologramAS(CustomCrates cc, String name, Location location)
+    protected HologramAS(SpecializedCrates cc, String name, Location location)
     {
         super(cc, name, location);
 

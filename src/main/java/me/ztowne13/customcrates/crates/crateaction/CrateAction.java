@@ -1,8 +1,8 @@
 package me.ztowne13.customcrates.crates.crateaction;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.crates.CrateState;
@@ -23,11 +23,11 @@ import java.util.ArrayList;
 public abstract class CrateAction
 {
 
-    CustomCrates cc;
+    SpecializedCrates cc;
     Player player;
     Location location;
 
-    public CrateAction(CustomCrates cc, Player player, Location location)
+    public CrateAction(SpecializedCrates cc, Player player, Location location)
     {
         this.cc = cc;
         this.player = player;
@@ -171,7 +171,7 @@ public abstract class CrateAction
         cm.setup(crates, true);
     }
 
-    public static boolean isInventoryTooEmpty(CustomCrates cc, Player p)
+    public static boolean isInventoryTooEmpty(SpecializedCrates cc, Player p)
     {
         return Utils.getOpenInventorySlots(p) >= ((Integer) SettingsValues.REQUIRED_SLOTS.getValue(cc));
     }

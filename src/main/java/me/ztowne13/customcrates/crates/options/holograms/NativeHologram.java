@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates.options.holograms;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.external.holograms.Hologram;
 import me.ztowne13.customcrates.external.holograms.HologramManager;
@@ -15,7 +15,7 @@ public class NativeHologram extends DynamicHologram
     HologramManager hologramManager;
     Hologram hologram;
 
-    public NativeHologram(CustomCrates cc, PlacedCrate placedCrate)
+    public NativeHologram(SpecializedCrates cc, PlacedCrate placedCrate)
     {
         super(cc, placedCrate);
         this.hologramManager = getCc().getHologramManager();

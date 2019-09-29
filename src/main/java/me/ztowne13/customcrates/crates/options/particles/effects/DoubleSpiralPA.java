@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates.options.particles.effects;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import org.bukkit.Location;
 
@@ -15,7 +15,7 @@ public class DoubleSpiralPA extends ParticleAnimationEffect
     int extraTick = 0;
     double toChangeHeight = 0, currentYOffset = 0;
 
-    public DoubleSpiralPA(CustomCrates cc, ParticleData particleData)
+    public DoubleSpiralPA(SpecializedCrates cc, ParticleData particleData)
     {
         super(cc, particleData);
         this.updatesPerSec = (int) particleData.getSpeed();

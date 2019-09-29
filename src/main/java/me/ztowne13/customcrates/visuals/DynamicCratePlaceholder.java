@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.visuals;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 
 /**
@@ -8,14 +8,14 @@ import me.ztowne13.customcrates.crates.PlacedCrate;
  */
 public abstract class DynamicCratePlaceholder
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public DynamicCratePlaceholder(CustomCrates cc)
+    public DynamicCratePlaceholder(SpecializedCrates cc)
     {
         this.cc = cc;
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }

@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.logging;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -12,14 +12,14 @@ import java.util.HashMap;
 
 public class StatusLogger
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
     int failures;
 
     HashMap<String, ArrayList<String>> completedEvents = new HashMap<String, ArrayList<String>>();
     HashMap<String, ArrayList<String>> failedEvents = new HashMap<String, ArrayList<String>>();
 
-    public StatusLogger(CustomCrates cc)
+    public StatusLogger(SpecializedCrates cc)
     {
         this.cc = cc;
     }
@@ -151,12 +151,12 @@ public class StatusLogger
         this.failedEvents = failedEvents;
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

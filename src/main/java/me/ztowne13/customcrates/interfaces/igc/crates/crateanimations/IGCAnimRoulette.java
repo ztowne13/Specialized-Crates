@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
@@ -37,7 +37,7 @@ import java.util.List;
  */
 public class IGCAnimRoulette extends IGCAnimation
 {
-    public IGCAnimRoulette(CustomCrates cc, Player p, IGCMenu lastMenu)
+    public IGCAnimRoulette(SpecializedCrates cc, Player p, IGCMenu lastMenu)
     {
         super(cc, p, lastMenu, "&7&l> &6&lRoulette Animation", CrateType.INV_ROULETTE);
     }

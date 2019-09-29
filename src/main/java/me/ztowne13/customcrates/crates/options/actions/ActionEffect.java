@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates.options.actions;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.actions.actionbar.ActionBar;
 import org.bukkit.entity.Player;
 
@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
  */
 public abstract class ActionEffect
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public ActionEffect(CustomCrates cc)
+    public ActionEffect(SpecializedCrates cc)
     {
         this.cc = cc;
     }

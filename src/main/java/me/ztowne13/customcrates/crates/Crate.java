@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Location;
@@ -14,7 +14,7 @@ public class Crate
 {
     static HashMap<String, Crate> loadedCrates = new HashMap<String, Crate>();
 
-    CustomCrates cc;
+    SpecializedCrates cc;
     String name;
 
     int placedCount = 0;
@@ -25,12 +25,12 @@ public class Crate
 
     CrateSettings cs;
 
-    public Crate(CustomCrates cc, String name, boolean newFile)
+    public Crate(SpecializedCrates cc, String name, boolean newFile)
     {
         this(cc, name, newFile, false);
     }
 
-    public Crate(CustomCrates cc, String name, boolean newFile, boolean isMultiCrate)
+    public Crate(SpecializedCrates cc, String name, boolean newFile, boolean isMultiCrate)
     {
         this.cc = cc;
         this.name = name;
@@ -81,12 +81,12 @@ public class Crate
         return deleted;
     }
 
-    public static Crate getCrate(CustomCrates cc, String name)
+    public static Crate getCrate(SpecializedCrates cc, String name)
     {
         return getCrate(cc, name, false);
     }
 
-    public static Crate getCrate(CustomCrates cc, String name, boolean isMultiCrate)
+    public static Crate getCrate(SpecializedCrates cc, String name, boolean isMultiCrate)
     {
         return getLoadedCrates().containsKey(name) ? getLoadedCrates().get(name) : new Crate(cc, name, false, isMultiCrate);
     }
@@ -136,12 +136,12 @@ public class Crate
         setLoadedCrates(new HashMap<String, Crate>());
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

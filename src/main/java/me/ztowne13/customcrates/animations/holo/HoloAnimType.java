@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.animations.holo;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.holograms.DynamicHologram;
 
 public enum HoloAnimType
@@ -13,7 +13,7 @@ public enum HoloAnimType
 
     //MULTILINE_CHANGE;
 
-    public HoloAnimation getAsHoloAnimation(CustomCrates cc, DynamicHologram dh)
+    public HoloAnimation getAsHoloAnimation(SpecializedCrates cc, DynamicHologram dh)
     {
         switch (this)
         {

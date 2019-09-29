@@ -1,11 +1,11 @@
 package me.ztowne13.customcrates.players.data;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.players.PlayerManager;
 
 public abstract class DataHandler
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
     PlayerManager pm;
     String uuid;
@@ -27,12 +27,12 @@ public abstract class DataHandler
 
     public abstract boolean hasDataValue(String value);
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
@@ -24,7 +24,7 @@ public class IGCCrateSounds extends IGCTierMenu
 {
     HashMap<Integer, SoundData> slots = new HashMap<>();
 
-    public IGCCrateSounds(CustomCrates cc, Player p, IGCMenu lastMenu, Crate crates, String tier)
+    public IGCCrateSounds(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, String tier)
     {
         super(cc, p, lastMenu, "&7&l> &6&lSounds", crates, tier);
     }

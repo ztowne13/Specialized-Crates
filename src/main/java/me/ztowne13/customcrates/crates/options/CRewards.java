@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates.options;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
@@ -190,7 +190,7 @@ public class CRewards extends CSetting
         return totalOdds;
     }
 
-    public static boolean rewardNameExists(CustomCrates cc, String name)
+    public static boolean rewardNameExists(SpecializedCrates cc, String name)
     {
         for (String s : cc.getRewardsFile().get().getKeys(false))
         {

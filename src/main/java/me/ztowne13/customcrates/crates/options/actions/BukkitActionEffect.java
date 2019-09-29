@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates.options.actions;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.actions.actionbar.ActionBar;
 import org.bukkit.entity.Player;
 
@@ -13,7 +13,7 @@ public class BukkitActionEffect extends ActionEffect
     String title, subtitle;
     int fadeIn, stay, fadeOut;
 
-    public BukkitActionEffect(CustomCrates cc)
+    public BukkitActionEffect(SpecializedCrates cc)
     {
         super(cc);
     }

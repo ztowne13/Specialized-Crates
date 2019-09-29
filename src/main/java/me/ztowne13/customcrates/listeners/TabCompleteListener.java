@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.listeners;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class TabCompleteListener implements TabCompleter
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public TabCompleteListener(CustomCrates cc)
+    public TabCompleteListener(SpecializedCrates cc)
     {
         this.cc = cc;
     }

@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.commands.sub;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.command.CommandSender;
@@ -20,7 +20,7 @@ public abstract class SubCommand
         this.usageMessage = usageMessage;
     }
 
-    public abstract boolean run(CustomCrates cc, Commands cmds, String[] args);
+    public abstract boolean run(SpecializedCrates cc, Commands cmds, String[] args);
 
     public boolean checkProperUsage(CommandSender sender, String[] args)
     {

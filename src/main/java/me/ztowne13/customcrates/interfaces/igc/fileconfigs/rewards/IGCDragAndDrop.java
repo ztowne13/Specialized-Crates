@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
  */
 public class IGCDragAndDrop extends IGCMenu
 {
-    public IGCDragAndDrop(CustomCrates cc, Player p, IGCMenu lastMenu)
+    public IGCDragAndDrop(SpecializedCrates cc, Player p, IGCMenu lastMenu)
     {
         super(cc, p, lastMenu, "&4&lDrag and Drop");
     }

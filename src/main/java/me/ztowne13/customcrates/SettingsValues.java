@@ -263,7 +263,7 @@ public enum SettingsValues
 
     static HashMap<SettingsValues, Object> valuesCache = new HashMap<>();
 
-    public Object getValue(CustomCrates cc)
+    public Object getValue(SpecializedCrates cc)
     {
         if(valuesCache.containsKey(this))
         {
@@ -280,7 +280,7 @@ public enum SettingsValues
         }
     }
 
-    public void write(CustomCrates cc, Object obj)
+    public void write(SpecializedCrates cc, Object obj)
     {
 
     }
@@ -313,5 +313,18 @@ public enum SettingsValues
     public void setObj(Object obj)
     {
         this.obj = obj;
+    }
+
+    enum Category
+    {
+        CRATE_SETTINGS,
+
+        CRATE_ACTION_SETTINGS,
+
+        LUCKY_CRATE_SETTINGS,
+
+        VIRTUAL_CRATE_SETTINGS,
+
+        REWARDS_DISPLAY_INVENTORY
     }
 }

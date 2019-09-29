@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.inputmenus.InputMenu;
 import me.ztowne13.customcrates.players.PlayerManager;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  */
 public abstract class IGCMenu
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
     Player p;
 
     String inventoryName, cVal = "&7Current Value: &f";
@@ -21,7 +21,7 @@ public abstract class IGCMenu
     IGCMenu lastMenu;
     InputMenu inputMenu;
 
-    public IGCMenu(CustomCrates cc, Player p, IGCMenu lastMenu, String inventoryName)
+    public IGCMenu(SpecializedCrates cc, Player p, IGCMenu lastMenu, String inventoryName)
     {
         this.cc = cc;
         this.p = p;
@@ -70,12 +70,12 @@ public abstract class IGCMenu
 
     // Getters and Setters
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

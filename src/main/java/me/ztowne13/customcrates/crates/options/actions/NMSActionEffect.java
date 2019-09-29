@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates.options.actions;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.actions.actionbar.ActionBar;
 import me.ztowne13.customcrates.crates.options.actions.actionbar.ActionBarV1_7_8;
 import me.ztowne13.customcrates.crates.options.actions.actionbar.ActionBarV1_9_10_11;
@@ -18,7 +18,7 @@ public class NMSActionEffect extends ActionEffect
 {
     Title title;
 
-    public NMSActionEffect(CustomCrates cc)
+    public NMSActionEffect(SpecializedCrates cc)
     {
         super(cc);
     }

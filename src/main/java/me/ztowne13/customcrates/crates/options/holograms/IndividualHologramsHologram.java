@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates.options.holograms;
 
 import com.micrlink.holo.HologramManager;
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Location;
@@ -14,7 +14,7 @@ public class IndividualHologramsHologram extends DynamicHologram
     UUID uuid;
     double defaultYOffSet = -1.4D;
 
-    public IndividualHologramsHologram(CustomCrates cc, PlacedCrate cm)
+    public IndividualHologramsHologram(SpecializedCrates cc, PlacedCrate cm)
     {
         super(cc, cm);
     }

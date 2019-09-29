@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.external.holograms;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -58,7 +58,7 @@ public class HologramNMS extends Hologram{
     private List<Object> entities = new ArrayList<Object>();
     private double offset = 0.23D;
 
-    public HologramNMS(CustomCrates cc, String name, Location location) {
+    public HologramNMS(SpecializedCrates cc, String name, Location location) {
         super(cc, name, location);
     }
 

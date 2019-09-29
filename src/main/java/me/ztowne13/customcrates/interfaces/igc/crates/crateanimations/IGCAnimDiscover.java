@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
  */
 public class IGCAnimDiscover extends IGCAnimation
 {
-    public IGCAnimDiscover(CustomCrates cc, Player p, IGCMenu lastMenu)
+    public IGCAnimDiscover(SpecializedCrates cc, Player p, IGCMenu lastMenu)
     {
         super(cc, p, lastMenu, "&7&l> &6&lDiscover Animation", CrateType.INV_DISCOVER);
     }

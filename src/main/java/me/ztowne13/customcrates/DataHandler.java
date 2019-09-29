@@ -17,12 +17,12 @@ public class DataHandler
 
     int LOGIN_WAIT = 20;
 
-    CustomCrates cc;
+    SpecializedCrates cc;
     FileHandler dataFile;
 
     HashMap<UUID, ArrayList<QueuedGiveCommand>> quedGiveCommands = new HashMap<>();
 
-    public DataHandler(CustomCrates cc, FileHandler dataFile)
+    public DataHandler(SpecializedCrates cc, FileHandler dataFile)
     {
         this.cc = cc;
         this.dataFile = dataFile;

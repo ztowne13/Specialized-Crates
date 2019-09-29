@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates.options.particles.effects;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 
 /**
@@ -30,7 +30,7 @@ public enum PEAnimationType
         this.particleAnimationEffect = particleAnimationEffect;
     }
 
-    public ParticleAnimationEffect getAnimationEffectInstance(CustomCrates cc, ParticleData particleData)
+    public ParticleAnimationEffect getAnimationEffectInstance(SpecializedCrates cc, ParticleData particleData)
     {
         switch (this)
         {

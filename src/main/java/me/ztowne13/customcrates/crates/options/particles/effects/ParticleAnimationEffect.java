@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates.options.particles.effects;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import org.bukkit.Location;
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public abstract class ParticleAnimationEffect
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
     ParticleData particleData;
 
     ArrayList<Location> toDisplay = new ArrayList<Location>();
@@ -20,7 +20,7 @@ public abstract class ParticleAnimationEffect
     int totalTick = 0;
     int tick = 0;
 
-    public ParticleAnimationEffect(CustomCrates cc, ParticleData particleData)
+    public ParticleAnimationEffect(SpecializedCrates cc, ParticleData particleData)
     {
         this.cc = cc;
         this.particleData = particleData;

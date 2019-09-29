@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.animations.holo;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.animations.Animation;
 import me.ztowne13.customcrates.crates.options.CHolograms;
 import me.ztowne13.customcrates.crates.options.holograms.DynamicHologram;
@@ -14,7 +14,7 @@ public abstract class HoloAnimation extends Animation
     protected CHolograms ch;
     int intTicks = 0;
 
-    public HoloAnimation(CustomCrates cc, DynamicHologram dh)
+    public HoloAnimation(SpecializedCrates cc, DynamicHologram dh)
     {
         super(cc);
         this.dh = dh;

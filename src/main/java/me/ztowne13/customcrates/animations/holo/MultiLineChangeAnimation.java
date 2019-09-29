@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.animations.holo;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.holograms.DynamicHologram;
 import me.ztowne13.customcrates.utils.ChatUtils;
 
@@ -12,7 +12,7 @@ public class MultiLineChangeAnimation extends HoloAnimation
     String last = "";
     int count = 0;
 
-    public MultiLineChangeAnimation(CustomCrates cc, DynamicHologram dh)
+    public MultiLineChangeAnimation(SpecializedCrates cc, DynamicHologram dh)
     {
         super(cc, dh);
     }

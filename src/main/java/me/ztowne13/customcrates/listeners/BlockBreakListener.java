@@ -1,8 +1,8 @@
 package me.ztowne13.customcrates.listeners;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.ObtainType;
@@ -17,9 +17,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 public class BlockBreakListener implements Listener
 {
-    CustomCrates cc;
+    SpecializedCrates cc;
 
-    public BlockBreakListener(CustomCrates cc)
+    public BlockBreakListener(SpecializedCrates cc)
     {
         this.cc = cc;
     }

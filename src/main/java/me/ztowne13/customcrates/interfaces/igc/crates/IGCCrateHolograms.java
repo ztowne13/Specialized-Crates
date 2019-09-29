@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.animations.holo.HoloAnimType;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.CHolograms;
@@ -24,7 +24,7 @@ import java.util.Arrays;
  */
 public class IGCCrateHolograms extends IGCMenuCrate
 {
-    public IGCCrateHolograms(CustomCrates cc, Player p, IGCMenu lastMenu, Crate crates)
+    public IGCCrateHolograms(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates)
     {
         super(cc, p, lastMenu, "&7&l> &6&lHolograms", crates);
     }

@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.particles.BukkitParticleEffect;
 import me.ztowne13.customcrates.crates.options.particles.NMSParticleEffect;
@@ -30,7 +30,7 @@ public class IGCCrateParticles extends IGCTierMenu
 {
     HashMap<Integer, ParticleData> slots = new HashMap<Integer, ParticleData>();
 
-    public IGCCrateParticles(CustomCrates cc, Player p, IGCMenu lastMenu, Crate crates, String tier)
+    public IGCCrateParticles(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, String tier)
     {
         super(cc, p, lastMenu, "&7&l> &6&lParticles", crates, tier);
     }

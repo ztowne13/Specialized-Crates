@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates;
 
-import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.CHolograms;
 import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.utils.CrateUtils;
@@ -17,7 +17,7 @@ public class PlacedCrate
 {
     static HashMap<Location, PlacedCrate> placedCrates = new HashMap<Location, PlacedCrate>();
 
-    CustomCrates cc;
+    SpecializedCrates cc;
     Crate crates;
 
     boolean isCratesEnabled;
@@ -29,7 +29,7 @@ public class PlacedCrate
     Long placedTime;
     boolean used = false;
 
-    public PlacedCrate(CustomCrates cc, Location l)
+    public PlacedCrate(SpecializedCrates cc, Location l)
     {
         this.cc = cc;
         this.l = l;
@@ -109,12 +109,12 @@ public class PlacedCrate
         }
     }
 
-    public static boolean crateExistsAt(CustomCrates cc, Location l)
+    public static boolean crateExistsAt(SpecializedCrates cc, Location l)
     {
         return getPlacedCrates().containsKey(l.getBlock().getLocation());
     }
 
-    public static PlacedCrate get(CustomCrates cc, Location l)
+    public static PlacedCrate get(SpecializedCrates cc, Location l)
     {
         Location bl = l.getBlock().getLocation();
         return getPlacedCrates().containsKey(bl) ? getPlacedCrates().get(bl) : new PlacedCrate(cc, l);
@@ -136,12 +136,12 @@ public class PlacedCrate
         this.cholo = cholo;
     }
 
-    public CustomCrates getCc()
+    public SpecializedCrates getCc()
     {
         return cc;
     }
 
-    public void setCc(CustomCrates cc)
+    public void setCc(SpecializedCrates cc)
     {
         this.cc = cc;
     }

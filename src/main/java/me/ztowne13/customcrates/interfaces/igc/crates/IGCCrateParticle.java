@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
-import me.ztowne13.customcrates.CustomCrates;
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import me.ztowne13.customcrates.crates.options.particles.ParticleEffect;
@@ -27,7 +27,7 @@ public class IGCCrateParticle extends IGCTierMenu
 {
     ParticleData pd;
 
-    public IGCCrateParticle(CustomCrates cc, Player p, IGCMenu lastMenu, Crate crates, ParticleData pd, String tier)
+    public IGCCrateParticle(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, ParticleData pd, String tier)
     {
         super(cc, p, lastMenu, "&7&l> &6&lParticles", crates, tier);
         this.pd = pd;
