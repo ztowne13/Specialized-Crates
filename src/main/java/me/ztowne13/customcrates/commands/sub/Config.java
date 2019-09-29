@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.commands.sub;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.commands.Commands;
-import me.ztowne13.customcrates.interfaces.igc.fileconfigs.IGCMenuMain;
+import me.ztowne13.customcrates.interfaces.igc.IGCMenuMain;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

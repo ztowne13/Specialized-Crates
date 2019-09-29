@@ -51,25 +51,25 @@ public class IGCCratesMain extends IGCMenuCrate
                 .setName(errors == 0 ? "&a This crate has no errors!" : "&c&lClick to view ERRORS")
                 .addLore("&7Errors: " + errors));
 
-        ib.setItem(10, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aThe Defaults")
+        ib.setItem(10, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aThe &lEssentials")
                 .setLore("&7This includes things such as").addLore("&7crate / key material,")
                 .addLore("&7crate-animation, obtain methods").addLore("&7and more"));
         ib.setItem(16,
-                new ItemBuilder(Material.NETHER_STAR, 1, 0).setName("&aParticles").setLore("&7Modify particles for play")
+                new ItemBuilder(Material.NETHER_STAR, 1, 0).setName("&a&lParticles").setLore("&7Modify particles for play")
                         .addLore("&7and open use."));
-        ib.setItem(21, new ItemBuilder(Material.BOOK, 1, 0).setName("&aHolograms").setLore("&7Modify the holograms."));
+        ib.setItem(21, new ItemBuilder(Material.BOOK, 1, 0).setName("&a&lHolograms").setLore("&7Modify the holograms."));
 
         if (!crates.isMultiCrate())
         {
             ib.setItem(23,
-                    new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&aSounds").setLore("&7Modify the sounds for when")
+                    new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&a&lSounds").setLore("&7Modify the sounds for when")
                             .addLore("&7the crate is opened and").addLore("&7reward is given."));
-            ib.setItem(28, new ItemBuilder(DynamicMaterial.FIREWORK_ROCKET, 1).setName("&aFireworks")
+            ib.setItem(28, new ItemBuilder(DynamicMaterial.FIREWORK_ROCKET, 1).setName("&a&lFireworks")
                     .setLore("&7Modify the fireworks."));
             ib.setItem(34,
-                    new ItemBuilder(Material.PAPER, 1, 0).setName("&aActions").setLore("&7Modify messages, broadcasts,")
+                    new ItemBuilder(Material.PAPER, 1, 0).setName("&a&lActions").setLore("&7Modify messages, broadcasts,")
                             .addLore("&7titles, subtitles, and").addLore("&7actionbars."));
-            ib.setItem(40, new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1).setName("&aRewards")
+            ib.setItem(40, new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1).setName("&a&lRewards")
                     .setLore("&7Add and remove rewards that").addLore("&7players will receive from")
                     .addLore("&7this crate."));
         }

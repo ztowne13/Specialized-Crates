@@ -1,4 +1,4 @@
-package me.ztowne13.customcrates.interfaces.igc.fileconfigs;
+package me.ztowne13.customcrates.interfaces.igc;
 
 import me.ztowne13.customcrates.CustomCrates;
 import me.ztowne13.customcrates.Messages;
@@ -7,8 +7,10 @@ import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
-import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
-import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
+import me.ztowne13.customcrates.interfaces.igc.fileconfigs.IGCMenuConfig;
+import me.ztowne13.customcrates.interfaces.igc.fileconfigs.IGCMenuCrateConfig;
+import me.ztowne13.customcrates.interfaces.igc.fileconfigs.IGCMenuCrates;
+import me.ztowne13.customcrates.interfaces.igc.fileconfigs.IGCMenuMessages;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCMenuRewards;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import org.bukkit.Material;
@@ -34,24 +36,23 @@ public class IGCMenuMain extends IGCMenu
 
         ItemBuilder paper = new ItemBuilder(Material.PAPER, 1, 0);
 
-        paper.setName("&aConfig.YML").setLore("")
-                .addLore("&7Amount of values: &f" + getCc().getSettings().getConfigValues().keySet().size()).addLore("")
-                .addLore("&7Config values from the Config.YML");
+        paper.setDisplayName("&aConfig.YML");
+        paper.setLore("").addLore("&6&lEdit various plugin features").addLore("").addLore("&7Amount of values: &f" + getCc().getSettings().getConfigValues().keySet().size());
         ib.setItem(11, paper);
 
-        paper.setName("&aCrateConfig.YML").setLore("").addLore("&7Amount of animations: &f" + CrateType.values().length)
-                .addLore("").addLore("&7Config values from the CrateConfig.YML");
+        paper.setDisplayName("&aCrateConfig.YML");
+        paper.setLore("").addLore("&6&lEdit crate animations").addLore("").addLore("&7Amount of animations: &f" + CrateType.values().length);
         ib.setItem(12, paper);
 
-        paper.setName("&aRewards.YML").setLore("").addLore("&7Amount of rewards: &f" + CRewards.allRewards.keySet().size())
-                .addLore("").addLore("&7Config values from the Rewards.YML");
+        paper.setDisplayName("&aRewards.YML");
+        paper.setLore("").addLore("&6&lCreate / edit rewards").addLore("").addLore("&7Amount of rewards: &f" + CRewards.allRewards.keySet().size());
         ib.setItem(13, paper);
 
-        paper.setName("&aMessages.YML").setLore("").addLore("&7Amount of messages: &f" + (Messages.values().length - 5))
-                .addLore("").addLore("&7Config values from the Messages.YML");
+        paper.setDisplayName("&aMessages.YML");
+        paper.setLore("").addLore("&6&lChange chat messages").addLore("").addLore("&7Amount of messages: &f" + (Messages.values().length - 5));
         ib.setItem(14, paper);
 
-        ib.setItem(16, new ItemBuilder(Material.CHEST, 1, 0).setName("&aCrates").setLore("")
+        ib.setItem(16, new ItemBuilder(Material.CHEST, 1, 0).setName("&aCrates").setLore("").addLore("&6&lCreate / edit crates").addLore("")
                 .addLore("&7Amount: &f" + Crate.getLoadedCrates().keySet().size())
                 .addLore("&7Amount Placed: &f" + PlacedCrate.getPlacedCrates().keySet().size()));
         ib.open();
@@ -67,7 +68,7 @@ public class IGCMenuMain extends IGCMenu
                 getCc().saveEverything();
                 break;
             case 9:
-                getCc().reload();
+                reload();
                 break;
             case 18:
                 getP().closeInventory();
