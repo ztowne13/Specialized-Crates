@@ -29,8 +29,8 @@ public class FileHandler
     boolean properLoad = false;
     boolean newFile;
 
-    FileConfiguration data = null;
-    File dataFile = null;
+    private FileConfiguration data = null;
+    private File dataFile = null;
 
     public FileHandler(CustomCrates cc, String name, String directory, boolean canBeEdited, boolean saveWithCustomSave,
                        boolean newFile)
