@@ -69,10 +69,6 @@ public class IGCCratesBase extends IGCMenuCrate
                 new ItemBuilder(DynamicMaterial.BIRCH_FENCE_GATE, 1).setName("&aSet auto-close").setLore("&7Current value: ")
                         .addLore("&7" + cs.isAutoClose()).addLore("").addAutomaticLore("&f", 30,
                         "If the crate is in an inventory, should it automatically close when it is done?"));
-        ib.setItem(13,
-                new ItemBuilder(Material.ARMOR_STAND, 1, 0).setName("&aSet hologram-offset").setLore("&7Current value: ")
-                        .addLore("&7" + cs.getHologramOffset()).addLore("").addAutomaticLore("&f", 30,
-                        "Change if the hologram is displayed higher or lower than the default height."));
         ib.setItem(11,
                 new ItemBuilder(DynamicMaterial.SNOWBALL, 1).setName("&aSet the cooldown").setLore("&7Current value: ")
                         .addLore("&7" + cs.getCooldown()).addLore("").addAutomaticLore("&f", 30,
@@ -87,7 +83,7 @@ public class IGCCratesBase extends IGCMenuCrate
             ib.setItem(5, new ItemBuilder(Material.ITEM_FRAME, 1, 0).setName("&aSet the crate animation")
                     .setLore("&7Current Value: ").addLore("&7" + cs.getCt().name()).addLore("")
                     .addAutomaticLore("&f", 30, "This is the animation that will play when the crate is opened."));
-            ib.setItem(14,
+            ib.setItem(13,
                     new ItemBuilder(Material.SLIME_BALL, 1, 0).setName("&aSet require key").setLore("&7Current value: ")
                             .addLore("&7" + cs.isRequireKey()).addLore("").addAutomaticLore("&f", 30,
                             "Does the crate require a key? Best for keyless weekly/monthly crates or DYNAMIC crates that can be placed to open without a key. Or if minecrates can be opened without needing a key."));
@@ -162,10 +158,6 @@ public class IGCCratesBase extends IGCMenuCrate
                 new InputMenu(getCc(), getP(), "autoclose", cs.isAutoClose() + "",
                         "Set if they crate will close automatically when done", Integer.class, this);
                 break;
-            case 13:
-                new InputMenu(getCc(), getP(), "hologramoffset", cs.getHologramOffset() + "",
-                        "Set how high, up or down, the hologram will be", Integer.class, this);
-                break;
             case 8:
                 new IGCItemEditor(getCc(), getP(), this, crates.getCs().getCrate()).open();
                 break;
@@ -176,7 +168,7 @@ public class IGCCratesBase extends IGCMenuCrate
                 new InputMenu(getCc(), getP(), "animation", cs.getCt().name(),
                         "Available animations: " + Arrays.toString(CrateType.values()), String.class, this, true);
                 break;
-            case 14:
+            case 13:
                 new InputMenu(getCc(), getP(), "require key", cs.isRequireKey() + "",
                         "Set whether or not this crate requires a key to be opened.", Boolean.class, this);
         }

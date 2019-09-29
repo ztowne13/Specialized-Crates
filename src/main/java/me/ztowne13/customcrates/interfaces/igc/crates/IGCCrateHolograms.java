@@ -13,7 +13,6 @@ import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -41,10 +40,10 @@ public class IGCCrateHolograms extends IGCMenuCrate
 
         // Reward Hologram
         String rewardHolo = cholo.getRewardHologram();
-        Bukkit.broadcastMessage(rewardHolo);
         ItemBuilder rewardHologram = new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1);
         rewardHologram.setName("&aEdit the reward-hologram");
-        rewardHologram.addLore("&7Current value:").addLore(ChatUtils.toChatColor(rewardHolo) == "" ? "&7&oNot in use" : rewardHolo).addLore("");
+        rewardHologram.addLore("&7Current value:")
+                .addLore(ChatUtils.toChatColor(rewardHolo) == "" ? "&7&oNot in use" : rewardHolo).addLore("");
         rewardHologram.addAutomaticLore("&f", 30,
                 "This is the hologram that appears after someone wins a reward. Type 'none' to remove it. " +
                         "Use %reward% as a placeholder for the reward name and %player% as a placeholder for the player name.");
@@ -62,7 +61,9 @@ public class IGCCrateHolograms extends IGCMenuCrate
         rewardHoloYOffset.setName("&aEdit the reward-hologram Y-Offset");
         rewardHoloYOffset.addLore("&7Current value:").addLore("&7" + cholo.getRewardHoloYOffset()).addLore("");
         rewardHoloYOffset
-                .addAutomaticLore("&f", 30, "This is the amount up or down from the crate the hologram will appear.");
+                .addAutomaticLore("&f", 30, "This is the amount up or down from the crate the REWARD-hologram will appear.");
+        rewardHoloYOffset.addLore("")
+                .addAutomaticLore("&e", 30, "&6&lNOTE: &eTHIS IS FOR THE REWARD HOLOGRAM, NOT THE NORMAL HOLOGRAM.");
         ib.setItem(20, rewardHoloYOffset);
 
         //Hologram Lines
@@ -87,7 +88,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
         usingDefaultOrAnimate.addLore("").addAutomaticLore("&f", 30, usingDefault ?
                 "To use animated holograms, change the hologram animation type to something other than NONE." :
                 "To stop using animated holograms, change the hologram animation type to NONE.");
-        ib.setItem(22, usingDefaultOrAnimate);
+        ib.setItem(9, usingDefaultOrAnimate);
 
         // Animated Hologram
         ItemBuilder animatedHolo = new ItemBuilder(DynamicMaterial.WRITABLE_BOOK, 1);
@@ -115,6 +116,14 @@ public class IGCCrateHolograms extends IGCMenuCrate
         animatedHoloSpeed.addAutomaticLore("&f", 30,
                 "This is the delay between frame updates. The lower the value, the faster the frames cycle. A value of 10 is a frame update every second.");
         ib.setItem(24, animatedHoloSpeed);
+
+        // Hologram offset
+        ItemBuilder hologramOffset = new ItemBuilder(DynamicMaterial.BLAZE_ROD, 1);
+        hologramOffset.setDisplayName("&aEdit the hologram Y-Offset");
+        hologramOffset.addLore("&7Current value:").addLore("&7" + cs.getHologramOffset());
+        hologramOffset.addLore("").addAutomaticLore("&f", 30,
+                "This is the amount up or down from the crate that the NORMAL hologram will appear.");
+        ib.setItem(13, hologramOffset);
 
         ib.open();
         putInMenu();
@@ -156,6 +165,11 @@ public class IGCCrateHolograms extends IGCMenuCrate
             new IGCListEditor(getCc(), getP(), this, "Animation Editor", "Frame", cs.getCholoCopy().getPrefixes(),
                     DynamicMaterial.BOOK,
                     1).open();
+        }
+        else if(slot == 13)
+        {
+            new InputMenu(getCc(), getP(), "hologram-offset",
+                    crates.getCs().getHologramOffset() + "", Double.class, this);
         }
         else if (slot == 15)
         {
@@ -203,6 +217,20 @@ public class IGCCrateHolograms extends IGCMenuCrate
             {
                 double newYOff = Double.parseDouble(input);
                 cs.getCholoCopy().setRewardHoloYOffset(newYOff);
+                ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
+                return true;
+            }
+            else
+            {
+                ChatUtils.msgError(getP(), input + " is not a valid decimal-number.");
+            }
+        }
+        else if (value.equalsIgnoreCase("hologram-offset"))
+        {
+            if (Utils.isDouble(input))
+            {
+                double newYOff = Double.parseDouble(input);
+                cs.setHologramOffset(newYOff);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
             }
