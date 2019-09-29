@@ -145,7 +145,9 @@ public class CActions extends CSetting
 
     public void playAll(Player p, PlacedCrate placedCrate, ArrayList<Reward> rewards, boolean pre)
     {
-        if(rewards.isEmpty())
+        cc.getDu().log("playAll() - CALL (pre: " + pre + ")", getClass());
+
+        if(rewards.isEmpty() && !pre)
             return;
 
         ActionEffect actionEffect =
