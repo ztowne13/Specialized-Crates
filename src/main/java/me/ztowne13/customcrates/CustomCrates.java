@@ -64,6 +64,9 @@ public class CustomCrates extends JavaPlugin
         if(metricsLite == null)
             metricsLite = new MetricsLite(this);
 
+        if (du == null)
+            du = new DebugUtils(this);
+
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && placeHolderAPIHandler == null){
             placeHolderAPIHandler = new PlaceHolderAPIHandler(this);
             placeHolderAPIHandler.register();
@@ -80,11 +83,6 @@ public class CustomCrates extends JavaPlugin
         getSettings().load();
 
         //updateChecker = new UpdateChecker(this);
-
-        if (du == null)
-        {
-            du = new DebugUtils(this);
-        }
 
         registerCommands();
         if (register)
@@ -127,6 +125,7 @@ public class CustomCrates extends JavaPlugin
         NPCUtils.checkUncheckMobs(true);
         OpenChestAnimation.removeAllItems();
         OpenChestRollingAnimation.removeAllItems();
+        Messages.clearCache();
 
     }
 

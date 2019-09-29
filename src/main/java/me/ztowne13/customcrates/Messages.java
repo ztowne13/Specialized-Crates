@@ -3,6 +3,8 @@ package me.ztowne13.customcrates;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+
 public enum Messages
 {
     NO_PERMISSIONS,
@@ -78,8 +80,13 @@ public enum Messages
         this.msg = msg;
     }
 
+    static HashMap<Messages, String> cachedMessages = new HashMap<Messages, String>();
+
     public String getFromConf(CustomCrates cc)
     {
+        if(cachedMessages.containsKey(this))
+            return cachedMessages.get(this);
+
         try
         {
             String val = cc.getMessageFile().get().getString(name().toLowerCase().replace("_", "-"));
@@ -87,10 +94,13 @@ public enum Messages
             if (val == null)
                 throw new Exception();
 
+            cachedMessages.put(this, ChatUtils.toChatColor(val));
             return ChatUtils.toChatColor(val);
         }
         catch (Exception exc)
         {
+            cachedMessages.put(this, ChatUtils.toChatColor(
+                    "&eThis value isn't set, please tell the server operator to configure the " + name() + " value."));
             return ChatUtils.toChatColor(
                     "&eThis value isn't set, please tell the server operator to configure the " + name() + " value.");
         }
@@ -131,5 +141,10 @@ public enum Messages
     public void setMsg(String msg)
     {
         this.msg = msg;
+    }
+
+    public static void clearCache()
+    {
+        cachedMessages.clear();
     }
 }
