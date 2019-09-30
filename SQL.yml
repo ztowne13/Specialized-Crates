@@ -3,4 +3,4 @@ database:
   ip: 10.0.0.1
   port: 3306
   username: user
-  password: passasd
+  password: pass

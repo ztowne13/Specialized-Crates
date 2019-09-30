@@ -1,7 +1,6 @@
 package me.ztowne13.customcrates.interfaces.sql;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import org.bukkit.Bukkit;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,16 +50,8 @@ public class SQL
             attempts++;
             if (attempts <= 10)
             {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(sc, new Runnable()
-                {
-
-                    @Override
-                    public void run()
-                    {
-                        sqlc.open();
-                    }
-
-                }, 40);
+                sqlc.open();
+                return get(table, where, whereResult, sec);
             }
             else
             {
@@ -68,7 +59,7 @@ public class SQL
 //                new SQLLog("ERROR: SQL CONNECTION ATTEMPT LIMIT REACHED");
             }
         }
-        return get(table, where, whereResult, sec);
+        return null;
     }
 
     public ResultSet get(String table, String where, String whereResult)
@@ -101,16 +92,8 @@ public class SQL
             attempts++;
             if (attempts <= 10)
             {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(sc, new Runnable()
-                {
-
-                    @Override
-                    public void run()
-                    {
-                        sqlc.open();
-                    }
-
-                }, 40);
+                sqlc.open();
+                return get(table, where, whereResult);
             }
             else
             {
@@ -118,7 +101,7 @@ public class SQL
 //                new SQLLog("ERROR: SQL CONNECTION ATTEMPT LIMIT REACHED");
             }
         }
-        return get(table, where, whereResult);
+        return null;
     }
 
     public void write(final String table, final String set_where, final String where_value, final String set_path, final String set_value)
@@ -145,17 +128,8 @@ public class SQL
             attempts++;
             if (attempts <= 10)
             {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(sc, new Runnable()
-                {
-
-                    @Override
-                    public void run()
-                    {
-                        sqlc.open();
-                        write(table, set_where, where_value, set_path, set_value);
-                    }
-
-                }, 40);
+                sqlc.open();
+                write(table, set_where, where_value, set_path, set_value);
             }
             else
             {
@@ -209,6 +183,17 @@ public class SQL
         else
         {
             sc.getDu().log("create() - ISSUE: SQLConnection is not open.", getClass());
+            attempts++;
+            if (attempts <= 10)
+            {
+                sqlc.open();
+                create(table, format, uniqueUuid);
+            }
+            else
+            {
+                sc.getDu().log("get() - Attempt limit reached");
+//                new SQLLog("ERROR: SQL CONNECTION ATTEMPT LIMIT REACHED");
+            }
         }
     }
 
@@ -238,17 +223,8 @@ public class SQL
             attempts++;
             if (attempts <= 10)
             {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(sc, new Runnable()
-                {
-
-                    @Override
-                    public void run()
-                    {
-                        sqlc.open();
-                        insert(table, toSet, ignore);
-                    }
-
-                }, 40);
+                sqlc.open();
+                insert(table, toSet, ignore);
             }
             else
             {

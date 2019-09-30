@@ -4,10 +4,12 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.sql.SQLQueryThread;
 import me.ztowne13.customcrates.players.data.DataHandler;
+import me.ztowne13.customcrates.players.data.FlatFileDataHandler;
 import me.ztowne13.customcrates.players.data.SQLDataHandler;
 import me.ztowne13.customcrates.players.data.VirtualCrateData;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.players.data.events.HistoryEvent;
+import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
 
 import java.util.ArrayList;
@@ -55,7 +57,18 @@ public class PlayerDataManager
                     String toSetUUID = "uuid='" + pm.getP().getUniqueId() + "'";
                     SQLDataHandler.sql.insert(SQLDataHandler.table,
                             toSetUUID + ", history='', crateCooldowns='', virtualCrates='', rewardLimits=''", true);
-                    loadAllInformationHelper();
+
+                    try
+                    {
+                        loadAllInformationHelper();
+                    }
+                    catch (Exception exc)
+                    {
+                        ChatUtils.log("Failed to load the SQL Database Handler, using FLATFILE in the meantime.");
+                        setDh(new FlatFileDataHandler(getPm()));
+                        loadAllInformation();
+                    }
+
                     loaded = true;
                 }
             };

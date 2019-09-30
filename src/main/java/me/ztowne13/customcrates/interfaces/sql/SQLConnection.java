@@ -14,6 +14,8 @@ public class SQLConnection
 
     static int queries = 0;
 
+    boolean saidOnce = false;
+
     public SQLConnection(SQL sql, String dbIP, String db, String user, String pass)
     {
         this.dbIP = dbIP;
@@ -35,7 +37,11 @@ public class SQLConnection
         }
         catch (SQLException exc)
         {
-            ChatUtils.log("[SpecializedCrates] Error connecting to the database, are the values in the config correct?");
+            if(!saidOnce)
+            {
+                saidOnce = true;
+                ChatUtils.log("[SpecializedCrates] Error connecting to the database, are the values in the config correct?");
+            }
             return null;
         }
     }
