@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 public class DebugUtils
 {
     SpecializedCrates cc;
-    boolean forceDebug = true;
+    boolean forceDebug = false;
 
     String[] sort = new String[]
             {
@@ -37,26 +37,33 @@ public class DebugUtils
 
     public void log(String s, Class<?> clas, boolean dumpStack)
     {
-        boolean debug = forceDebug || Boolean.valueOf(cc.getSettings().getConfigValues().get("debug").toString());
-
-        String msg = clas.getName() + "." + s;
-
-        boolean found = sort.length == 0;
-        for(String toSort : sort)
+        try
         {
-            if(msg.startsWith(toSort))
+            boolean debug = forceDebug || Boolean.valueOf(cc.getSettings().getConfigValues().get("debug").toString());
+
+            String msg = clas.getName() + "." + s;
+
+            boolean found = sort.length == 0;
+            for (String toSort : sort)
             {
-                found = true;
-                break;
+                if (msg.startsWith(toSort))
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found)
+            {
+                if (debug)
+                    Bukkit.getLogger().info("[DEBUG] " + msg);
+                if (dumpStack)
+                    dumpStack();
             }
         }
-
-        if(found)
+        catch(Exception exc)
         {
-            if (debug)
-                Bukkit.getLogger().info("[DEBUG] " + msg);
-            if (dumpStack)
-                dumpStack();
+
         }
     }
 
