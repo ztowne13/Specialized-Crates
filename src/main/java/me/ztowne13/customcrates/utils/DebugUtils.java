@@ -8,6 +8,12 @@ public class DebugUtils
     SpecializedCrates cc;
     boolean forceDebug = true;
 
+    String[] sort = new String[]
+            {
+                    "me.ztowne13.customcrates.players",
+                    "me.ztowne13.customcrates.interfaces.sql",
+            };
+
     public DebugUtils(SpecializedCrates cc)
     {
         this.cc = cc;
@@ -32,10 +38,26 @@ public class DebugUtils
     public void log(String s, Class<?> clas, boolean dumpStack)
     {
         boolean debug = forceDebug || Boolean.valueOf(cc.getSettings().getConfigValues().get("debug").toString());
-        if (debug)
-            Bukkit.getLogger().info("[DEBUG] " + clas.getName() + "." + s);
-        if(dumpStack)
-            dumpStack();
+
+        String msg = clas.getName() + "." + s;
+
+        boolean found = sort.length == 0;
+        for(String toSort : sort)
+        {
+            if(msg.startsWith(toSort))
+            {
+                found = true;
+                break;
+            }
+        }
+
+        if(found)
+        {
+            if (debug)
+                Bukkit.getLogger().info("[DEBUG] " + msg);
+            if (dumpStack)
+                dumpStack();
+        }
     }
 
     public void dumpStack()

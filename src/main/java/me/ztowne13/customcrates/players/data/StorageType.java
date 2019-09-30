@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.players.data;
 
 public enum StorageType
 {
-    MYSQL(false),
+    MYSQL(true),
 
     FLATFILE(true),
 

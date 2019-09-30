@@ -16,6 +16,7 @@ import me.ztowne13.customcrates.external.PlaceHolderAPIHandler;
 import me.ztowne13.customcrates.external.holograms.HologramInteractListener;
 import me.ztowne13.customcrates.external.holograms.HologramManager;
 import me.ztowne13.customcrates.external.holograms.HologramManagerNMS;
+import me.ztowne13.customcrates.interfaces.sql.SQLQueryThread;
 import me.ztowne13.customcrates.listeners.*;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 
 public class SpecializedCrates extends JavaPlugin
 {
-    FileHandler messageFile, rewardsFile, activecratesFile, crateconfigFile, dataFile;
+    FileHandler messageFile, rewardsFile, activecratesFile, crateconfigFile, dataFile, sqlFile;
     Settings settings;
     //UpdateChecker updateChecker;
     HologramManager hologramManager;
@@ -126,7 +127,8 @@ public class SpecializedCrates extends JavaPlugin
         OpenChestAnimation.removeAllItems();
         OpenChestRollingAnimation.removeAllItems();
         Messages.clearCache();
-
+        SQLQueryThread.sql_query.clear();
+        SQLQueryThread.task_query.clear();
     }
 
     public void saveEverything()
@@ -160,6 +162,7 @@ public class SpecializedCrates extends JavaPlugin
         setCrateconfigFile(null);
         setSettings(null);
         setDataFile(null);
+        setSqlFile(null);
 
         getCommand("scrates").setExecutor(null);
         getCommand("scrates").setTabCompleter(null);
@@ -253,12 +256,14 @@ public class SpecializedCrates extends JavaPlugin
         setCrateconfigFile(new FileHandler(this, "CrateConfig.yml", true, false));
         setMessageFile(new FileHandler(this, "Messages.yml", true, false));
         setDataFile(new FileHandler(this, "PluginData.db", false, false));
+        setSqlFile(new FileHandler(this, "SQL.yml", true, false));
 
         getMessageFile().saveDefaults();
         getRewardsFile().saveDefaults();
         getActivecratesFile().saveDefaults();
         getCrateconfigFile().saveDefaults();
         getDataFile().saveDefaults();
+        getSqlFile().saveDefaults();
     }
 
     public void firstLoadFiles()
@@ -471,5 +476,15 @@ public class SpecializedCrates extends JavaPlugin
     public CommandCrate getCommandCrate()
     {
         return commandCrate;
+    }
+
+    public FileHandler getSqlFile()
+    {
+        return sqlFile;
+    }
+
+    public void setSqlFile(FileHandler sqlFile)
+    {
+        this.sqlFile = sqlFile;
     }
 }

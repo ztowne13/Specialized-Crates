@@ -2,7 +2,9 @@ package me.ztowne13.customcrates.players;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.interfaces.sql.SQLQueryThread;
 import me.ztowne13.customcrates.players.data.DataHandler;
+import me.ztowne13.customcrates.players.data.SQLDataHandler;
 import me.ztowne13.customcrates.players.data.VirtualCrateData;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.players.data.events.HistoryEvent;
@@ -18,6 +20,8 @@ public class PlayerDataManager
 {
     PlayerManager pm;
     DataHandler dh;
+
+    boolean loaded = false;
 
     String history = "";
     ArrayList<HistoryEvent> historyEvents = new ArrayList<HistoryEvent>();
@@ -39,13 +43,41 @@ public class PlayerDataManager
 
     public void loadAllInformation()
     {
+        pm.getCc().getDu().log("loadAllInformation() - CALL", getClass());
+        if (isSQL())
+        {
+            pm.getCc().getDu().log("loadAllInformation() - isSQL", getClass());
+            Runnable runnable = new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    String toSetUUID = "uuid='" + pm.getP().getUniqueId() + "'";
+                    SQLDataHandler.sql.insert(SQLDataHandler.table,
+                            toSetUUID + ", history='', crateCooldowns='', virtualCrates='', rewardLimits=''", true);
+                    loadAllInformationHelper();
+                    loaded = true;
+                }
+            };
+
+            SQLQueryThread.addQuery(runnable);
+        }
+        else
+        {
+            loadAllInformationHelper();
+            loaded = true;
+        }
+    }
+
+    public void loadAllInformationHelper()
+    {
         if (getDh().hasDataValue("history"))
         {
-            setHistory(getDh().get("history").toString());
+            setHistory(getDh().get("history").toString(), false);
         }
         if (getDh().hasDataValue("crate-cooldowns"))
         {
-            setCrateCooldowns(getDh().get("crate-cooldowns").toString());
+            setCrateCooldowns(getDh().get("crate-cooldowns").toString(), false);
         }
         if (getDh().hasDataValue("virtual-crates"))
         {
@@ -55,7 +87,11 @@ public class PlayerDataManager
             rewardLimits = dh.get("reward-limits").toString();
         }*/
 
+        getPm().getCc().getDataHandler().playAllQueuedGiveCommands(getPm().getP().getUniqueId());
+
         parseAll();
+
+        loaded = true;
     }
 
     public void parseAll()
@@ -265,16 +301,33 @@ public class PlayerDataManager
         return null;
     }
 
+    public boolean isSQL()
+    {
+        return getDh() instanceof SQLDataHandler;
+    }
+
     public void setCrateCooldowns(String crateCooldowns)
     {
+        setCrateCooldowns(crateCooldowns, true);
+    }
+
+    public void setCrateCooldowns(String crateCooldowns, boolean write)
+    {
         this.crateCooldowns = crateCooldowns;
-        getDh().write("crate-cooldowns", crateCooldowns);
+        if(write)
+            getDh().write("crate-cooldowns", crateCooldowns);
     }
 
     public void setHistory(String history)
     {
+        setHistory(history, true);
+    }
+
+    public void setHistory(String history, boolean write)
+    {
         this.history = history;
-        getDh().write("history", getHistory());
+        if(write)
+            getDh().write("history", getHistory());
     }
 
     public String getHistory()
@@ -355,6 +408,16 @@ public class PlayerDataManager
     public void setVirtualCrateData(HashMap<Crate, VirtualCrateData> virtualCrateData)
     {
         this.virtualCrateData = virtualCrateData;
+    }
+
+    public boolean isLoaded()
+    {
+        return loaded;
+    }
+
+    public void setLoaded(boolean loaded)
+    {
+        this.loaded = loaded;
     }
 
     /* public String getRewardLimits() {
