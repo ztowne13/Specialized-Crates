@@ -26,6 +26,7 @@ public class SQLQueryThread extends Thread
     @Override
     public void run()
     {
+        boolean tryReconnect = false;
         while (true)
         {
             try
@@ -43,11 +44,23 @@ public class SQLQueryThread extends Thread
                 try
                 {
                     sql.getSqlc().get().prepareStatement(query).executeUpdate();
+                    tryReconnect = false;
                 }
                 catch (Exception exc)
                 {
                     //new SQLLog("Failed query: " + query);
-                    exc.printStackTrace();
+                    //exc.printStackTrace();
+                    if(!tryReconnect)
+                    {
+                        tryReconnect = true;
+                        sql.getSqlc().open();
+                        sql.sc.getDu().log("Trying to reconnect to SQL servers.");
+                    }
+                    else
+                    {
+                        sql.sc.getDu().log("Failed to reconnect to SQL servers.");
+                        exc.printStackTrace();
+                    }
                 }
 
                 sql_query.remove(query);
