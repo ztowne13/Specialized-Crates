@@ -25,14 +25,20 @@ public class SQLConnection
         this.sql = sql;
     }
 
-    @SuppressWarnings("deprecation")
     public Connection open()
+    {
+        return open(true);
+    }
+
+    @SuppressWarnings("deprecation")
+    public Connection open(boolean log)
     {
         try
         {
             Connection c = connection =
                     DriverManager.getConnection("jdbc:mysql://" + this.dbIP + "/" + this.db, this.user, this.pass);
-            ChatUtils.log("[SpecializedCrates] Connection to the SQL database was successfuly.");
+            if(log)
+                ChatUtils.log("[SpecializedCrates] Connection to the SQL database was completed successfuly.");
             return c;
         }
         catch (SQLException exc)
@@ -40,7 +46,8 @@ public class SQLConnection
             if(!saidOnce)
             {
                 saidOnce = true;
-                ChatUtils.log("[SpecializedCrates] Error connecting to the database, are the values in the config correct?");
+                if(log)
+                    ChatUtils.log("[SpecializedCrates] Error connecting to the database, are the values in the config correct?");
             }
             return null;
         }

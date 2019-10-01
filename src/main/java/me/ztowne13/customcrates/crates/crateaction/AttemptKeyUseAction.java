@@ -7,6 +7,7 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.players.PlayerManager;
+import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -26,6 +27,15 @@ public class AttemptKeyUseAction extends CrateAction
 
         if (PlacedCrate.crateExistsAt(cc, location))
         {
+            if(!cc.getAntiFraudSQLHandler().isAuthenticated())
+            {
+                ChatUtils.msgError(pm.getP(), "This plugin has been blacklisted because it has been assumed to be on more servers than just the" +
+                        "person who purchased this plugin. If you believe this is in error, please try re-downloading the plugin" +
+                        " (this does not mean deleting the plugin files, just the .jar) and try again. If the issue persists and" +
+                        "you still believe it is in error, please contact the plugin author, Ztowne13.");
+                return false;
+            }
+
             if(!pm.getPdm().isLoaded())
             {
                 Messages.LOADING_FROM_DATABASE.msgSpecified(cc, player);

@@ -10,8 +10,7 @@ public class DebugUtils
 
     String[] sort = new String[]
             {
-                    "me.ztowne13.customcrates.players",
-                    "me.ztowne13.customcrates.interfaces.sql",
+                    "",
             };
 
     public DebugUtils(SpecializedCrates cc)

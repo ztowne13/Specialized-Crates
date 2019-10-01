@@ -52,6 +52,15 @@ public class CommandCrate extends Commands implements CommandExecutor
     {
         setCmdSender(sender);
 
+        if(!cc.getAntiFraudSQLHandler().isAuthenticated())
+        {
+            msgError("This plugin has been blacklisted because it has been assumed to be on more servers than just the" +
+                    "person who purchased this plugin. If you believe this is in error, please try re-downloading the plugin" +
+                    " (this does not mean deleting the plugin files, just the .jar) and try again. If the issue persists and" +
+                    "you still believe it is in error, please contact the plugin author, Ztowne13.");
+            return false;
+        }
+
         if (canExecute(true, true, "customcrates.admin"))
         {
             if (args.length > 0)

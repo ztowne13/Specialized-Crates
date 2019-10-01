@@ -38,6 +38,16 @@ public class AttemptCrateUseAction extends CrateAction
             {
                 if (location.getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR))
                 {
+
+                    if(!cc.getAntiFraudSQLHandler().isAuthenticated())
+                    {
+                        ChatUtils.msgError(pm.getP(), "This plugin has been blacklisted because it has been assumed to be on more servers than just the" +
+                                "person who purchased this plugin. If you believe this is in error, please try re-downloading the plugin" +
+                                " (this does not mean deleting the plugin files, just the .jar) and try again. If the issue persists and" +
+                                "you still believe it is in error, please contact the plugin author, Ztowne13.");
+                        return false;
+                    }
+
                     // is crate enabled
                     if (CrateUtils.isCrateUsable(crates))
                     {

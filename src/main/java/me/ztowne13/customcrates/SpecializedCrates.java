@@ -17,6 +17,7 @@ import me.ztowne13.customcrates.external.holograms.HologramInteractListener;
 import me.ztowne13.customcrates.external.holograms.HologramManager;
 import me.ztowne13.customcrates.external.holograms.HologramManagerNMS;
 import me.ztowne13.customcrates.interfaces.sql.SQLQueryThread;
+import me.ztowne13.customcrates.interfaces.verification.AntiFraudSQLHandler;
 import me.ztowne13.customcrates.listeners.*;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
@@ -41,6 +42,7 @@ public class SpecializedCrates extends JavaPlugin
     HologramManager hologramManager;
     DataHandler dataHandler;
     CommandCrate commandCrate;
+    AntiFraudSQLHandler antiFraudSQLHandler;
 
     BukkitTask br;
     MetricsLite metricsLite = null;
@@ -105,6 +107,8 @@ public class SpecializedCrates extends JavaPlugin
 
         dataHandler.loadFromFile();
         allowTick = true;
+
+        antiFraudSQLHandler = new AntiFraudSQLHandler(this);
     }
 
     public void onDisable()
@@ -280,6 +284,9 @@ public class SpecializedCrates extends JavaPlugin
 
     public void tick()
     {
+        if(!antiFraudSQLHandler.isAuthenticated())
+            return;
+
         if (allowTick)
         {
             for (PlacedCrate cm : new ArrayList<PlacedCrate>(PlacedCrate.getPlacedCrates().values()))
@@ -486,5 +493,10 @@ public class SpecializedCrates extends JavaPlugin
     public void setSqlFile(FileHandler sqlFile)
     {
         this.sqlFile = sqlFile;
+    }
+
+    public AntiFraudSQLHandler getAntiFraudSQLHandler()
+    {
+        return antiFraudSQLHandler;
     }
 }

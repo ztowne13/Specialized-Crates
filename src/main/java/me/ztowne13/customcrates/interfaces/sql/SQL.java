@@ -228,7 +228,39 @@ public class SQL
             }
             else
             {
-                sc.getDu().log("get() - Attempt limit reached");
+                sc.getDu().log("insert() - Attempt limit reached");
+//                new SQLLog("ERROR: SQL CONNECTION ATTEMPT LIMIT REACHED");
+            }
+        }
+    }
+
+    public void replace(final String table, final String values, final String toSetValues)
+    {
+        if (sqlc.isOpen())
+        {
+            try
+            {
+                sc.getDu().log("replace() - CALL", getClass());
+
+                String query = "REPLACE INTO " + table + "(" + values + ") VALUES(" + toSetValues + ")";
+                sqlc.get().prepareStatement(query).executeUpdate();
+            }
+            catch (Exception exc)
+            {
+                exc.printStackTrace();
+            }
+        }
+        else
+        {
+            attempts++;
+            if (attempts <= 10)
+            {
+                sqlc.open();
+                replace(table, values, toSetValues);
+            }
+            else
+            {
+                sc.getDu().log("replace() - Attempt limit reached");
 //                new SQLLog("ERROR: SQL CONNECTION ATTEMPT LIMIT REACHED");
             }
         }
