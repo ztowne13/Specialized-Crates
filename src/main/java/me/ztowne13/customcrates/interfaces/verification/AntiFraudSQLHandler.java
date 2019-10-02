@@ -1,12 +1,18 @@
 package me.ztowne13.customcrates.interfaces.verification;
 
+import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.interfaces.sql.SQL;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.FileHandler;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
-import java.sql.ResultSet;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.UUID;
 
 
@@ -17,15 +23,6 @@ public class AntiFraudSQLHandler extends Thread
     SpecializedCrates specializedCrates;
 
     UUID id;
-
-    String loggedTable = "sclogging";
-    String blacklistTable = "scblacklist";
-    String databaseName = "u490810685_sc";
-    String databaseIp = "213.190.6.167";
-    String databaseUsername = "u490810685_root";
-    String databasePassword = "pJKIv5j!";
-
-    SQL sql;
 
     public AntiFraudSQLHandler(SpecializedCrates specializedCrates)
     {
@@ -46,7 +43,7 @@ public class AntiFraudSQLHandler extends Thread
         }
 
         start();
-        setName("SpecializedCrates-SQL");
+        setName("SpecializedCrates-HTML");
     }
 
     @Override
@@ -54,74 +51,80 @@ public class AntiFraudSQLHandler extends Thread
     {
         try
         {
-            sql = new SQL(specializedCrates, databaseIp, databaseName, databaseUsername, databasePassword);
-            sql.getSqlc().open(false);
 
-            sql.replace(loggedTable, "serverid, user, resource, nonce",
-                    "'" + id + "', '" + AntiFraudPlaceholders.USER + "', '" + AntiFraudPlaceholders.RESOURCE + "', '" +
-                            AntiFraudPlaceholders.NONCE + "'");
+            String values = "'" + id + "','" + AntiFraudPlaceholders.USER + "','" + AntiFraudPlaceholders.RESOURCE + "','" +
+                    AntiFraudPlaceholders.NONCE + "'";
 
-            ResultSet ids = sql.get(blacklistTable, "type", "SERVERID");
-            if (ids != null)
-            {
-                while (!ids.isAfterLast())
-                {
-                    if (ids.getString("value").equalsIgnoreCase(id.toString()))
-                        authenticated = false;
+            URL updateURL = new URL("http://vps210053.vps.ovh.ca/specializedcrates_update.php?values=" + values);
+            URLConnection connection = updateURL.openConnection();
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(
+                            connection.getInputStream()));
+            String inputLine;
 
-                    ids.next();
-                }
-            }
+            while ((inputLine = in.readLine()) != null)
+                specializedCrates.getDu().log("run() - updateURL: " + inputLine, getClass());
+            in.close();
 
-            ResultSet nonces = sql.get(blacklistTable, "type", "NONCE");
-            if (nonces != null)
-            {
-                while (!nonces.isAfterLast())
-                {
-                    if (nonces.getString("value").equalsIgnoreCase(AntiFraudPlaceholders.NONCE))
-                        authenticated = false;
-                    nonces.next();
-                }
-            }
+            updateURL.openStream();
 
-            ResultSet users = sql.get(blacklistTable, "type", "USER");
-            if (users != null)
-            {
-                while (!users.isAfterLast())
-                {
-                    if (users.getString("value").equalsIgnoreCase(AntiFraudPlaceholders.USER))
-                        authenticated = false;
-                    users.next();
-                }
-            }
+            if(!authenticate("SERVERID", id.toString()))
+                authenticated = false;
 
-            ResultSet resources = sql.get(blacklistTable, "type", "RESOURCE");
-            if (resources != null)
-            {
-                while (!resources.isAfterLast())
-                {
-                    if (resources.getString("value").equalsIgnoreCase(AntiFraudPlaceholders.RESOURCE))
-                        authenticated = false;
-                    resources.next();
-                }
-            }
+            if(!authenticate("NONCE", AntiFraudPlaceholders.NONCE))
+                authenticated = false;
+
+            if(!authenticate("USER", AntiFraudPlaceholders.USER))
+                authenticated = false;
+
+            if(!authenticate("RESOURCE", AntiFraudPlaceholders.RESOURCE))
+                authenticated = false;
 
             if (!authenticated)
             {
-                ChatUtils
-                        .log("&cIMPORTANT: THIS COPY OF THE SPECIALIZED CRATES HAS BEEN BLACKLISTED BECAUSE THE USER WHO PURCHASED IT" +
-                                " IS NOT THE ONLY PERSON USING IT. IF YOU BELIEVE THIS IS AN ERROR, PLEASE RE-DOWNLOAD THE PLUGIN (NO" +
-                                " NEED TO REGENERATE CONFIG) AND TRY AGAIN. IF IT'S STILL NOT WORKING, PLEASE CONTACT ZTOWNE13.");
+                ChatUtils.log(Messages.BLACKLISTED_PLUGIN.getMsg());
             }
         }
-        catch (
-                Exception exc)
-
+        catch (Exception exc)
         {
             exc.printStackTrace();
-            specializedCrates.getDu().log("run() - Failed to load to the authentication database");
         }
 
+    }
+
+    public boolean authenticate(String type, String toMatch) throws Exception
+    {
+        URL idsURL = new URL("http://vps210053.vps.ovh.ca/specializedcrates_service.php?type='" + type + "'");
+        URLConnection connection = idsURL.openConnection();
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(
+                        connection.getInputStream()));
+
+        String inputLine;
+
+        while ((inputLine = in.readLine()) != null)
+        {
+            specializedCrates.getDu().log("run() - idsURL: " + inputLine, getClass());
+            Object obj = new JSONParser().parse(inputLine);
+            JSONArray jsonArray = (JSONArray) obj;
+
+            for (int i = 0; i < jsonArray.size(); i++)
+            {
+                JSONObject jobj = (JSONObject) jsonArray.get(i);
+                String toCompareVal = jobj.get("value").toString();
+
+                if(toCompareVal.equals(toMatch))
+                    return false;
+
+                specializedCrates.getDu()
+                        .log("authenticate() - i: " + i + ", val: " + jsonArray.get(i) + ", val2: " + jobj.get("value"), getClass());
+            }
+        }
+        in.close();
+
+        idsURL.openStream();
+
+        return true;
     }
 
     public boolean isAuthenticated()
