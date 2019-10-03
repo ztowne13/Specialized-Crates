@@ -179,7 +179,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation
                     {
                         if (ddh.getAlreadyDisplayedRewards().keySet().contains(i))
                         {
-                            ib.setItem(i, ddh.getAlreadyDisplayedRewards().get(i).getItemBuilder());
+                            ib.setItem(i, ddh.getAlreadyDisplayedRewards().get(i).getDisplayBuilder());
                         }
                         else
                         {

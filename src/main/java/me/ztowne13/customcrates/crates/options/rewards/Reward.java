@@ -34,7 +34,8 @@ public class Reward
     String rarity = "default";
     boolean giveDisplayItem = false, giveDisplayItemLore = false;
 
-    ItemBuilder itemBuilder;
+    ItemBuilder displayBuilder;
+    ItemBuilder saveBuilder;
 
     double chance;
     List<String> commands;
@@ -49,8 +50,9 @@ public class Reward
         needsMoreConfig = true;
         this.cc = cc;
         setRewardName(rewardName);
-        itemBuilder = new ItemBuilder(DynamicMaterial.STONE, 1);
-        itemBuilder.setDisplayName(rewardName);
+        saveBuilder = new ItemBuilder(DynamicMaterial.STONE, 1);
+        saveBuilder.setDisplayName(rewardName);
+        displayBuilder = new ItemBuilder(saveBuilder.getStack());
         giveDisplayItem = true;
         this.r = new Random();
     }
@@ -77,7 +79,7 @@ public class Reward
     {
         if(isGiveDisplayItem())
         {
-            ItemBuilder stack = new ItemBuilder(getItemBuilder().get());
+            ItemBuilder stack = new ItemBuilder(displayBuilder.get());
             try
             {
                 if (!isGiveDisplayItemLore())
@@ -179,12 +181,12 @@ public class Reward
     {
         FileHandler fu = getCc().getRewardsFile();
         FileConfiguration fc = fu.get();
-        fc.set(getPath("name"), itemBuilder.getDisplayName() == null ? itemBuilder.get().getType().toString() : itemBuilder.getDisplayNameStripped());
+        fc.set(getPath("name"), saveBuilder.getDisplayName() == null ? saveBuilder.get().getType().toString() : saveBuilder.getDisplayNameStripped());
         fc.set(getPath("commands"), getCommands());
-        fc.set(getPath("item"), DynamicMaterial.fromItemStack(itemBuilder.get()).name());
-        fc.set(getPath("glow"), itemBuilder.isGlowing());
-        fc.set(getPath("amount"), itemBuilder.get().getAmount());
-        fc.set(getPath("head-player-name"), itemBuilder.getPlayerHeadName());
+        fc.set(getPath("item"), DynamicMaterial.fromItemStack(saveBuilder.get()).name());
+        fc.set(getPath("glow"), saveBuilder.isGlowing());
+        fc.set(getPath("amount"), saveBuilder.get().getAmount());
+        fc.set(getPath("head-player-name"), saveBuilder.getPlayerHeadName());
         fc.set(getPath("chance"), getChance());
         fc.set(getPath("rarity"), getRarity());
         fc.set(getPath("receive-limit"), /*getTotalUses()*/null);
@@ -192,10 +194,10 @@ public class Reward
         fc.set(getPath("give-display-item.with-lore"), giveDisplayItemLore);
 
         // Enchantments
-        if (!itemBuilder.getEnchantments().isEmpty())
+        if (!saveBuilder.getEnchantments().isEmpty())
         {
             ArrayList<String> parsedEnchs = new ArrayList<>();
-            for (CompressedEnchantment ench : itemBuilder.getEnchantments())
+            for (CompressedEnchantment ench : saveBuilder.getEnchantments())
                 parsedEnchs.add(ench.toString());
 
             fc.set(getPath("enchantments"), parsedEnchs);
@@ -204,10 +206,10 @@ public class Reward
             fc.set(getPath("enchantments"), null);
 
         // Potion Effects
-        if (!itemBuilder.getPotionEffects().isEmpty())
+        if (!saveBuilder.getPotionEffects().isEmpty())
         {
             ArrayList<String> parsedPots = new ArrayList<>();
-            for (CompressedPotionEffect compressedPotionEffect : itemBuilder.getPotionEffects())
+            for (CompressedPotionEffect compressedPotionEffect : saveBuilder.getPotionEffects())
                 parsedPots.add(compressedPotionEffect.toString());
 
             fc.set(getPath("potion-effects"), parsedPots);
@@ -216,16 +218,16 @@ public class Reward
             fc.set(getPath("potion-effects"), null);
 
         // Lore
-        if (!itemBuilder.getLore().isEmpty())
-            fc.set(getPath("lore"), itemBuilder.getLore());
+        if (!saveBuilder.getLore().isEmpty())
+            fc.set(getPath("lore"), saveBuilder.getLore());
         else
             fc.set(getPath("lore"), null);
 
         // NBT Tags
         if (NMSUtils.Version.v1_12.isServerVersionOrEarlier() && NMSUtils.Version.v1_8.isServerVersionOrLater())
         {
-            if (!itemBuilder.getNBTTags().isEmpty())
-                fc.set(getPath("nbt-tags"), itemBuilder.getNBTTags());
+            if (!saveBuilder.getNBTTags().isEmpty())
+                fc.set(getPath("nbt-tags"), saveBuilder.getNBTTags());
             else
                 fc.set(getPath("nbt-tags"), null);
         }
@@ -267,7 +269,7 @@ public class Reward
     public String applyVariablesTo(String s)
     {
         return ChatUtils.toChatColor(s.replace("%rewardname%", getRewardName()).
-                replace("%displayname%", itemBuilder.getDisplayName()).
+                replace("%displayname%", saveBuilder.getDisplayName()).
                 replace("%writtenchance%", getChance() + "").
                 replace("%rarity%", rarity)).
                 replace("%chance%", getFormattedChance());
@@ -321,7 +323,7 @@ public class Reward
                 return false;
             }
 
-            itemBuilder = new ItemBuilder(m, 1);
+            saveBuilder = new ItemBuilder(m, 1);
         }
         catch (Exception exc)
         {
@@ -330,11 +332,11 @@ public class Reward
 
         try
         {
-            itemBuilder.setDisplayName(getFc().getString(getPath("name")));
+            saveBuilder.setDisplayName(getFc().getString(getPath("name")));
         }
         catch (Exception exc)
         {
-            itemBuilder.setDisplayName(itemBuilder.getStack().getType().name().toLowerCase());
+            saveBuilder.setDisplayName(saveBuilder.getStack().getType().name().toLowerCase());
             needsMoreConfig = true;
             if (toLog)
             {
@@ -377,11 +379,11 @@ public class Reward
 
         try
         {
-            itemBuilder.setGlowing(getFc().getBoolean(getPath("glow")));
+            saveBuilder.setGlowing(getFc().getBoolean(getPath("glow")));
         }
         catch (Exception exc)
         {
-            itemBuilder.setGlowing(false);
+            saveBuilder.setGlowing(false);
         }
 
         try
@@ -420,19 +422,27 @@ public class Reward
             }
         }
 
-        if (itemBuilder.getDisplayName() == null)
-            itemBuilder.setDisplayName(rewardName);
+        if (saveBuilder.getDisplayName() == null)
+            saveBuilder.setDisplayName(rewardName);
 
         if (getRarity() == null)
             rarity = "default";
+
+        displayBuilder = new ItemBuilder(saveBuilder.getStack());
+        displayBuilder.setDisplayName(applyVariablesTo(saveBuilder.getDisplayName()));
+
+        displayBuilder.clearLore();
+        for(String loreLine : saveBuilder.getLore())
+        {
+            displayBuilder.addLore(applyVariablesTo(loreLine));
+        }
 
         return success;
     }
 
     public void buildDisplayItemFromConfig()
     {
-        itemBuilder
-                .setDisplayName(applyVariablesTo(cc.getSettings().getConfigValues().get("inv-reward-item-name").toString()));
+        saveBuilder.setDisplayName(applyVariablesTo(cc.getSettings().getConfigValues().get("inv-reward-item-name").toString()));
 
         // If an item has a custom lore, apply that. Otherwise apply the general lore.
         if (getFc().contains(getPath("lore")))
@@ -440,20 +450,20 @@ public class Reward
 
             for (String s : getFc().getStringList(getPath("lore")))
             {
-                itemBuilder.addLore(applyVariablesTo(s));
+                saveBuilder.addLore(s);
             }
         }
         else
         {
             for (Object s : (ArrayList<String>) cc.getSettings().getConfigValues().get("inv-reward-item-lore"))
             {
-                itemBuilder.addLore(applyVariablesTo(s.toString()));
+                saveBuilder.addLore(s.toString());
             }
         }
 
         if (getFc().contains(getPath("head-player-name")))
         {
-            itemBuilder.setPlayerHeadName(getFc().getString(getPath("head-player-name")));
+            saveBuilder.setPlayerHeadName(getFc().getString(getPath("head-player-name")));
         }
 
         if (getFc().contains(getPath("amount")))
@@ -461,11 +471,11 @@ public class Reward
             try
             {
                 int amnt = Integer.parseInt(getFc().getString(getPath("amount")));
-                itemBuilder.getStack().setAmount(amnt);
+                saveBuilder.getStack().setAmount(amnt);
             }
             catch (Exception exc)
             {
-                StatusLoggerEvent.REWARD_AMOUNT_INVALID.log(getCr().getCrates(), new String[]{itemBuilder.getDisplayName()});
+                StatusLoggerEvent.REWARD_AMOUNT_INVALID.log(getCr().getCrates(), new String[]{saveBuilder.getDisplayName()});
             }
         }
 
@@ -475,7 +485,7 @@ public class Reward
             {
                 for (String s : fc.getStringList(getPath("nbt-tags")))
                 {
-                    itemBuilder.addNBTTag(s);
+                    saveBuilder.addNBTTag(s);
                 }
             }
         }
@@ -491,12 +501,12 @@ public class Reward
                     if (compressedPotionEffect == null)
                         throw new Exception();
                     else
-                        itemBuilder.addPotionEffect(compressedPotionEffect);
+                        saveBuilder.addPotionEffect(compressedPotionEffect);
                 }
                 catch (Exception exc)
                 {
                     StatusLoggerEvent.REWARD_POTION_INVALID
-                            .log(getCr().getCrates(), new String[]{itemBuilder.getDisplayName(), unparsedPot});
+                            .log(getCr().getCrates(), new String[]{saveBuilder.getDisplayName(), unparsedPot});
                 }
             }
         }
@@ -523,28 +533,28 @@ public class Reward
                     cause = args[1] + " is not a valid Integer.";
                     int level = Integer.parseInt(args[1]);
 
-                    itemBuilder.addEnchantment(ench, level);
+                    saveBuilder.addEnchantment(ench, level);
                     continue;
                 }
             }
             catch (Exception exc)
             {
                 StatusLoggerEvent.REWARD_ENCHANT_INVALID
-                        .log(getCr().getCrates(), new String[]{itemBuilder.getDisplayName(), cause});
+                        .log(getCr().getCrates(), new String[]{saveBuilder.getDisplayName(), cause});
             }
         }
     }
 
     public String getDisplayName()
     {
-        if (itemBuilder == null || itemBuilder.getDisplayName() == null)
+        if (displayBuilder == null || displayBuilder.getDisplayName() == null)
             return rewardName;
-        return itemBuilder.getDisplayName();
+        return displayBuilder.getDisplayName();
     }
 
     public void checkIsNeedMoreConfig()
     {
-        needsMoreConfig = !(chance != -1 && itemBuilder.getDisplayName() != null && rarity != null && itemBuilder != null);
+        needsMoreConfig = !(chance != -1 && saveBuilder.getDisplayName() != null && rarity != null && saveBuilder != null);
     }
 
     public boolean equals(Reward r)
@@ -657,26 +667,6 @@ public class Reward
         this.needsMoreConfig = needsMoreConfig;
     }
 
-    public String getTempDisplayName()
-    {
-        return tempDisplayName;
-    }
-
-    public void setTempDisplayName(String tempDisplayName)
-    {
-        this.tempDisplayName = tempDisplayName;
-    }
-
-    public ItemBuilder getItemBuilder()
-    {
-        return itemBuilder;
-    }
-
-    public void setItemBuilder(ItemBuilder itemBuilder)
-    {
-        this.itemBuilder = itemBuilder;
-    }
-
     public boolean isGiveDisplayItem()
     {
         return giveDisplayItem;
@@ -695,5 +685,31 @@ public class Reward
     public void setGiveDisplayItemLore(boolean giveDisplayItemLore)
     {
         this.giveDisplayItemLore = giveDisplayItemLore;
+    }
+
+    public ItemBuilder getDisplayBuilder()
+    {
+        return displayBuilder;
+    }
+
+    public void setDisplayBuilder(ItemBuilder displayBuilder)
+    {
+        this.displayBuilder = displayBuilder;
+    }
+
+    public ItemBuilder getSaveBuilder()
+    {
+        return saveBuilder;
+    }
+
+    public void setSaveBuilder(ItemBuilder saveBuilder)
+    {
+        this.saveBuilder = saveBuilder;
+    }
+
+    public void setBuilder(ItemBuilder setBuilder)
+    {
+        this.saveBuilder = new ItemBuilder(setBuilder.get());
+        this.displayBuilder = new ItemBuilder(displayBuilder.get());
     }
 }

@@ -94,7 +94,7 @@ public class IGCMenuRewards extends IGCMenu
                 newR = new ItemBuilder(DynamicMaterial.BARRIER, 1).setName("&4&l" + rName)
                         .setLore("&cThis reward isn't fully configured,").addLore("&cplease fix it and reload the plugin.");
             else
-                newR = new ItemBuilder(r.getItemBuilder().getStack()).setName("&a" + rName);
+                newR = new ItemBuilder(r.getDisplayBuilder().getStack()).setName("&a" + rName);
 
             newR.addLore("").addLore("&7Used by crates:").addLore("");
             for (String s : r.delete(false).replace("[", "").replace("]", "").split(", "))

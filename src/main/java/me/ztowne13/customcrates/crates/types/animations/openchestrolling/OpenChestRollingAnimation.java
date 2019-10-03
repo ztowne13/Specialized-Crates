@@ -75,7 +75,7 @@ public class OpenChestRollingAnimation extends InventoryCrateAnimation
 
             lastReward = getCrates().getCs().getCr().getRandomReward(p);
 
-            item = l.getWorld().dropItem(upOne, lastReward.getItemBuilder().getStack());
+            item = l.getWorld().dropItem(upOne, lastReward.getDisplayBuilder().getStack());
             item.setPickupDelay(100000);
             item.setVelocity(new Vector(0, item.getVelocity().getY(), 0));
             items.add(item);
@@ -95,7 +95,7 @@ public class OpenChestRollingAnimation extends InventoryCrateAnimation
                     if (getTicks() >= getCurrentTicks() - 1.1)
                     {
                         lastReward = getCrates().getCs().getCr().getRandomReward(p);
-                        item.setItemStack(lastReward.getItemBuilder().getStack());
+                        item.setItemStack(lastReward.getDisplayBuilder().getStack());
 
                         setUpdates(getUpdates() + 1);
                         setTicks(0);
