@@ -35,21 +35,7 @@ public class IGCMenuRewards extends IGCMenu
 
         boolean newValues = false;
 
-        for(String rName : getCc().getRewardsFile().get().getKeys(false))
-        {
-            if (!CRewards.getAllRewards().keySet().contains(rName))
-            {
-                if(!newValues)
-                {
-                    newValues = true;
-                    ChatUtils.msgInfo(getP(), "It can take a while to load all of the rewards for the first time...");
-                }
-                Reward r = new Reward(getCc(), rName);
-                r.loadFromConfig();
-                r.loadChance();
-                CRewards.allRewards.put(rName, r);
-            }
-        }
+        CRewards.loadAll(getCc(), getP());
 
         if (CRewards.getAllRewards().size() - ((page - 1) * 28) >= 28)
         {
