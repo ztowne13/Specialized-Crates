@@ -193,7 +193,7 @@ public class CActions extends CSetting
                         {
 //                            for (Player onlinePlayer : Bukkit.getOnlinePlayers())
 //                            {
-//                                onlinePlayer.sendMessage(msg);
+//                                onlinePla\yer.sendMessage(msg);
 //                            }
 
                             Bukkit.broadcastMessage(msg);

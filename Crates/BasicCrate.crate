@@ -1,5 +1,5 @@
 enabled: true
-obtain-method: DYNAMIC
+obtain-method: STATIC
 inventory-name: 'Super basic crate'
 reward-count: 3
 
@@ -11,7 +11,7 @@ crate:
   name: '&7&lCrate &3&l>> &eBasic Crate'
 
 key:
-  require: false
+  require: true
   material: TRIPWIRE_HOOK
   name: '&7&lKey &3&l>> &eBasic Crate'
 
