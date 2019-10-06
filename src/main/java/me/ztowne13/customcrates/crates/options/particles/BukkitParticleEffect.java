@@ -1,6 +1,5 @@
 package me.ztowne13.customcrates.crates.options.particles;
 
-import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 
@@ -33,13 +32,13 @@ public class BukkitParticleEffect extends ParticleData
         {
             if (isHasAnimation())
             {
-                l.getWorld().spawnParticle(particle, LocationUtils.getLocationCentered(l), 1, 0, 0, 0, 0);
+                //l.getWorld().spawnParticle(particle, LocationUtils.getLocationCentered(l), 1, 0, 0, 0, 0);
             }
             else
             {
-                l.getWorld().spawnParticle(particle,
-                        LocationUtils.getLocationCentered(l).add(getCenterX(), getCenterY(), getCenterZ()), getAmount(),
-                        getRangeX(), getRangeY(), getRangeZ(), getSpeed());
+//                l.getWorld().spawnParticle(particle,
+//                        LocationUtils.getLocationCentered(l).add(getCenterX(), getCenterY(), getCenterZ()), getAmount(),
+//                        getRangeX(), getRangeY(), getRangeZ(), getSpeed());
             }
         }
     }

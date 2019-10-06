@@ -70,7 +70,7 @@ public class IGCDragAndDrop extends IGCMenu
                     r.setChance(10);
                     r.setRarity("default");
                     r.setCommands((ArrayList<String>) cmds.clone());
-                    r.setItemBuilder(new ItemBuilder(stack));
+                    r.setBuilder(new ItemBuilder(stack));
                     r.setGiveDisplayItem(true);
                     r.setGiveDisplayItemLore(false);
                     r.setNeedsMoreConfig(false);

@@ -71,7 +71,7 @@ public class OpenChestAnimation extends CrateAnimation
         upOne.setX(upOne.getX() + .5);
         upOne.setZ(upOne.getZ() + .5);
 
-        final Item item = l.getWorld().dropItem(upOne, reward.getItemBuilder().getStack());
+        final Item item = l.getWorld().dropItem(upOne, reward.getDisplayBuilder().getStack());
         item.setPickupDelay(100000);
         item.setVelocity(new Vector(0, item.getVelocity().getY(), 0));
         items.add(item);

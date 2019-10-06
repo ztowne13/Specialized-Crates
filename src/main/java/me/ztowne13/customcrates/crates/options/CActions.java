@@ -4,9 +4,6 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
-import me.ztowne13.customcrates.crates.options.actions.ActionEffect;
-import me.ztowne13.customcrates.crates.options.actions.BukkitActionEffect;
-import me.ztowne13.customcrates.crates.options.actions.NMSActionEffect;
 import me.ztowne13.customcrates.crates.options.holograms.DynamicHologram;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.CrateType;
@@ -14,7 +11,6 @@ import me.ztowne13.customcrates.crates.types.animations.openchest.OpenChestAnima
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.NMSUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -150,9 +146,6 @@ public class CActions extends CSetting
         if(rewards.isEmpty() && !pre)
             return;
 
-        ActionEffect actionEffect =
-                NMSUtils.Version.v1_12.isServerVersionOrLater() ? new BukkitActionEffect(cc) : new NMSActionEffect(cc);
-        actionEffect.newTitle();
         boolean toRunTitle = false;
 
         ArrayList<String> rewardsAsDisplayname = new ArrayList<>();
@@ -203,26 +196,12 @@ public class CActions extends CSetting
                         }
                         else if (s.equalsIgnoreCase("BROADCAST"))
                         {
-                            for (Player onlinePlayer : Bukkit.getOnlinePlayers())
-                            {
-                                onlinePlayer.sendMessage(msg);
-                            }
+//                            for (Player onlinePlayer : Bukkit.getOnlinePlayers())
+//                            {
+//                                onlinePlayer.sendMessage(msg);
+//                            }
 
-                            //Bukkit.broadcastMessage(msg);
-                        }
-                        else if (s.equalsIgnoreCase("ACTIONBAR"))
-                        {
-                            actionEffect.getActionBarExecutor().play(p, msg);
-                        }
-                        else if (s.equalsIgnoreCase("TITLE"))
-                        {
-                            actionEffect.setDisplayTitle(msg);
-                            toRunTitle = true;
-                        }
-                        else if (s.equalsIgnoreCase("SUBTITLE"))
-                        {
-                            actionEffect.setDisplaySubtitle(msg);
-                            toRunTitle = true;
+                            Bukkit.broadcastMessage(msg);
                         }
                         else
                         {
@@ -234,11 +213,6 @@ public class CActions extends CSetting
                     }
                 }
             }
-        }
-
-        if (toRunTitle)
-        {
-            actionEffect.playTitle(p);
         }
 
         if (!pre)
@@ -330,24 +304,24 @@ public class CActions extends CSetting
 
         for (Entity entity : item.getLocation().getChunk().getEntities())
         {
-            if (item.getLocation().distance(entity.getLocation()) < 2 &&
-                    ChatUtils.removeColor(rewardName).equalsIgnoreCase(ChatUtils.removeColor(entity.getName())) &&
-                    !entity.equals(item))
-            {
-                real = entity;
-                break;
-            }
+//            if (item.getLocation().distance(entity.getLocation()) < 2 &&
+//                    ChatUtils.removeColor(rewardName).equalsIgnoreCase(ChatUtils.removeColor(entity.getName())) &&
+//                    !entity.equals(item))
+//            {
+//                real = entity;
+//                break;
+//            }
         }
 
         try
         {
-            if (real != null)
-            {
-                if (NMSUtils.Version.v1_13.isServerVersionOrLater())
-                    item.addPassenger(real);
-                else
-                    item.setPassenger(real);
-            }
+//            if (real != null)
+//            {
+//                if (NMSUtils.Version.v1_13.isServerVersionOrLater())
+//                    item.addPassenger(real);
+//                else
+//                    item.setPassenger(real);
+//            }
         }
         catch (Exception exc)
         {

@@ -32,7 +32,7 @@ public class RewardDisplayer
         int i = 0;
         for (Reward r : crewards)
         {
-            ib.setItem(i, r.getItemBuilder());
+            ib.setItem(i, r.getDisplayBuilder());
             i++;
         }
         return ib;

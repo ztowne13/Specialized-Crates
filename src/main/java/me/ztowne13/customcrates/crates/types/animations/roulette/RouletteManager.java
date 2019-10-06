@@ -93,11 +93,11 @@ public class RouletteManager extends InventoryCrateAnimation
                 {
                     Reward r = getCrates().getCs().getCr().getRandomReward(rdh.getP());
                     rdh.setLastShownReward(r);
-                    inv.setItem(i, r.getItemBuilder());
+                    inv.setItem(i, r.getDisplayBuilder());
                 }
                 else
                 {
-                    inv.setItem(i, rdh.getLastShownReward().getItemBuilder());
+                    inv.setItem(i, rdh.getLastShownReward().getDisplayBuilder());
                 }
             }
             else

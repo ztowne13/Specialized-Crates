@@ -21,8 +21,6 @@ public enum EntityTypes
 
     ENDERMAN(EntityType.ENDERMAN, 2.9),
 
-    ENDERMITE(EntityType.ENDERMITE, .5),
-
     HORSE(EntityType.HORSE, 1.2),
 
     IRON_GOLEM(EntityType.IRON_GOLEM, 2.7),
@@ -36,8 +34,6 @@ public enum EntityTypes
     PIG(EntityType.PIG, .8),
 
     PIG_ZOMBIE(EntityType.PIG_ZOMBIE, 2),
-
-    RABBIT(EntityType.RABBIT, .5),
 
     SHEEP(EntityType.SHEEP, 1.2),
 

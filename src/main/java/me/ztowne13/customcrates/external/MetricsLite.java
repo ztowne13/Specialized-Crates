@@ -211,7 +211,7 @@ public class MetricsLite {
                     ? ((Collection<?>) onlinePlayersMethod.invoke(Bukkit.getServer())).size()
                     : ((Player[]) onlinePlayersMethod.invoke(Bukkit.getServer())).length;
         } catch (Exception e) {
-            playerAmount = Bukkit.getOnlinePlayers().size(); // Just use the new method if the Reflection failed
+            //playerAmount = Bukkit.getOnlinePlayers().size(); // Just use the new method if the Reflection failed
         }
         int onlineMode = Bukkit.getOnlineMode() ? 1 : 0;
         String bukkitVersion = Bukkit.getVersion();
@@ -228,7 +228,7 @@ public class MetricsLite {
 
         data.addProperty("serverUUID", serverUUID);
 
-        data.addProperty("playerAmount", playerAmount);
+        //data.addProperty("playerAmount", playerAmount);
         data.addProperty("onlineMode", onlineMode);
         data.addProperty("bukkitVersion", bukkitVersion);
         data.addProperty("bukkitName", bukkitName);

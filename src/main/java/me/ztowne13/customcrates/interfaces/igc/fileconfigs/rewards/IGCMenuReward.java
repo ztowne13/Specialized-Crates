@@ -82,8 +82,8 @@ public class IGCMenuReward extends IGCMenu
 
         // Display item
         ib.setItem(11,
-                (r == null || r.getItemBuilder() == null ? new ItemBuilder(DynamicMaterial.RED_DYE, 1) :
-                        new ItemBuilder(r.getItemBuilder().getStack())).clearLore().setName("&aEdit the display item.")
+                (r == null || r.getDisplayBuilder() == null ? new ItemBuilder(DynamicMaterial.RED_DYE, 1) :
+                        new ItemBuilder(r.getDisplayBuilder().getStack())).clearLore().setName("&aEdit the display item.")
                         .clearLore()
                         .addAutomaticLore("&f", 40,
                                 "Edit the display item, including the 'displayname' which is the name &edisplayed &eto &eplayers&f. " +
@@ -190,7 +190,7 @@ public class IGCMenuReward extends IGCMenu
         }
         else if (slot == 11)
         {
-            new IGCItemEditor(getCc(), getP(), this, r.getItemBuilder()).open();
+            new IGCItemEditor(getCc(), getP(), this, r.getSaveBuilder()).open();
         }
         else if (slot == 14)
         {
@@ -218,7 +218,7 @@ public class IGCMenuReward extends IGCMenu
             {
                 b.setLore("&creward name.");
             }
-            else if (r.getItemBuilder() == null)
+            else if (r.getSaveBuilder() == null)
             {
                 b.setLore("&creward item.");
             }
@@ -312,12 +312,7 @@ public class IGCMenuReward extends IGCMenu
 				ChatUtils.msgError(getP(), input + " cannot have any spaces in it.");
 				return false;
 			}*/
-            if (value.equalsIgnoreCase("displayname"))
-            {
-                r.getItemBuilder().setDisplayName(input);
-                ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
-            }
-            else if (value.equalsIgnoreCase("addcommand"))
+            if (value.equalsIgnoreCase("addcommand"))
             {
                 r.getCommands().add(input.replace("/", ""));
                 ChatUtils.msgSuccess(getP(), "Added '" + input + "' to the reward commands.");
@@ -343,7 +338,7 @@ public class IGCMenuReward extends IGCMenu
             }
             else if (value.equalsIgnoreCase("head-player-name"))
             {
-                r.getItemBuilder().setPlayerHeadName(input);
+                r.getSaveBuilder().setPlayerHeadName(input);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
             }
         }

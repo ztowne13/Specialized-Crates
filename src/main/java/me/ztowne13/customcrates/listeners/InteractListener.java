@@ -11,7 +11,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 
 public class InteractListener implements Listener
 {
@@ -27,18 +26,18 @@ public class InteractListener implements Listener
     {
         cc.getDu().log("onInteract - CALL", this.getClass());
 
-        try
-        {
-            if (!e.getHand().equals(EquipmentSlot.HAND) && !(e.getPlayer().isSneaking() && e.getHand().equals(EquipmentSlot.OFF_HAND)))
-            {
-                cc.getDu().log("onInteract - Equipment slot isn't hand. It's " + e.getHand().name(), this.getClass());
-                return;
-            }
-        }
-        catch (Throwable exc)
-        {
-            cc.getDu().log("onInteract - Failed to handle equipment slot check", getClass());
-        }
+//        try
+//        {
+//            if (!e.getHand().equals(EquipmentSlot.HAND) && !(e.getPlayer().isSneaking() && e.getHand().equals(EquipmentSlot.OFF_HAND)))
+//            {
+//                cc.getDu().log("onInteract - Equipment slot isn't hand. It's " + e.getHand().name(), this.getClass());
+//                return;
+//            }
+//        }
+//        catch (Throwable exc)
+//        {
+//            cc.getDu().log("onInteract - Failed to handle equipment slot check", getClass());
+//        }
 
         cc.getDu().log("onInteract - (cancelled: " + e.isCancelled() + ")");
 

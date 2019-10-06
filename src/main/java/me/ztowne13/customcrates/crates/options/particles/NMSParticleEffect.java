@@ -1,12 +1,7 @@
 package me.ztowne13.customcrates.crates.options.particles;
 
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.LocationUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
-
-import java.util.Iterator;
 
 /**
  * Created by ztowne13 on 6/24/16.
@@ -26,20 +21,20 @@ public class NMSParticleEffect extends ParticleData
     {
         try
         {
-            Iterator iterator = Bukkit.getOnlinePlayers().iterator();
-            while (iterator.hasNext())
-            {
-                Player p = (Player) iterator.next();
-                if (isHasAnimation())
-                {
-                    particleEffect.sendToPlayer(p, LocationUtils.getLocationCentered(l), 0, 0, 0, 0, 1);
-                }
-                else
-                {
-                    particleEffect.sendToPlayer(p, LocationUtils.getLocationCentered(l), getRangeX(), getRangeY(), getRangeZ(),
-                            getSpeed(), getAmount());
-                }
-            }
+//            Iterator iterator = Bukkit.getOnlinePlayers().iterator();
+//            while (iterator.hasNext())
+//            {
+//                Player p = (Player) iterator.next();
+//                if (isHasAnimation())
+//                {
+//                    particleEffect.sendToPlayer(p, LocationUtils.getLocationCentered(l), 0, 0, 0, 0, 1);
+//                }
+//                else
+//                {
+//                    particleEffect.sendToPlayer(p, LocationUtils.getLocationCentered(l), getRangeX(), getRangeY(), getRangeZ(),
+//                            getSpeed(), getAmount());
+//                }
+//            }
         }
         catch (Exception e)
         {

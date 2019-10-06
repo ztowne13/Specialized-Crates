@@ -7,7 +7,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
@@ -21,16 +20,6 @@ public class BlockRemoveListener implements Listener
     public BlockRemoveListener(SpecializedCrates cc)
     {
         this.cc = cc;
-    }
-
-    @EventHandler
-    public void onBlockChange(BlockExplodeEvent e)
-    {
-        if(cc.isAllowTick())
-            if ((Boolean) SettingsValues.EXPLODE_DYNAMIC.getValue(cc))
-                for (Block b : new ArrayList<Block>(e.blockList()))
-                    if (PlacedCrate.crateExistsAt(cc, b.getLocation()))
-                        e.blockList().remove(b);
     }
 
     @EventHandler

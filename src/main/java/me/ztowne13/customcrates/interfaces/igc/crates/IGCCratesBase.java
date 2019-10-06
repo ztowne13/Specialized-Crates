@@ -66,7 +66,7 @@ public class IGCCratesBase extends IGCMenuCrate
         }
 
         ib.setItem(12,
-                new ItemBuilder(DynamicMaterial.BIRCH_FENCE_GATE, 1).setName("&aSet auto-close").setLore("&7Current value: ")
+                new ItemBuilder(DynamicMaterial.DARK_OAK_TRAPDOOR, 1).setName("&aSet auto-close").setLore("&7Current value: ")
                         .addLore("&7" + cs.isAutoClose()).addLore("").addAutomaticLore("&f", 30,
                         "If the crate is in an inventory, should it automatically close when it is done?"));
         ib.setItem(11,

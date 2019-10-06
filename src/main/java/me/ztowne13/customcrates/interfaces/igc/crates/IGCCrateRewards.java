@@ -7,8 +7,8 @@ import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
+import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCMenuAddReward;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCMenuRewards;
-import me.ztowne13.customcrates.interfaces.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -97,7 +97,7 @@ public class IGCCrateRewards extends IGCMenuCrate
                     i += 4;
                 }
 
-                ib.setItem(i, new ItemBuilder(r.getItemBuilder().getStack()).setName("&a" + r.getRewardName())
+                ib.setItem(i, new ItemBuilder(r.getDisplayBuilder().getStack()).setName("&a" + r.getRewardName())
                         .setLore("&7- " + r.getDisplayName()).addLore("&7- " + r.getChance())
                         .addLore("&7- " + r.getRarity()));
                 i++;
@@ -155,10 +155,14 @@ public class IGCCrateRewards extends IGCMenuCrate
                         .setLore("&7This will stop you from").addLore("&7removing rewards"));
             }
         }
-        else if (slot == 17)
+//        else if (slot == 17)
+//        {
+//            new InputMenu(getCc(), getP(), "add reward", "null",
+//                    "Addable rewards: " + getCc().getRewardsFile().get().getKeys(false).toString(), String.class, this, true);
+//        }
+        else if(slot == 17)
         {
-            new InputMenu(getCc(), getP(), "add reward", "null",
-                    "Addable rewards: " + getCc().getRewardsFile().get().getKeys(false).toString(), String.class, this, true);
+            new IGCMenuAddReward(getCc(), getP(), this, crates, 1).open();
         }
         else if (slot == 26)
         {

@@ -110,7 +110,7 @@ public class EnclosementAnimation extends InventoryCrateAnimation
                     i < midPoint + edh.getCurrentTicksIn() + rewardAmount)
             {
                 Reward r = getCrates().getCs().getCr().getRandomReward(edh.getP());
-                ib.setItem(i, r.getItemBuilder());
+                ib.setItem(i, r.getDisplayBuilder());
                 edh.getLastDisplayRewards().add(r);
             }
         }
