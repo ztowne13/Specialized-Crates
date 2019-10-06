@@ -9,12 +9,14 @@ import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.events.HistoryEvent;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
 public class AnimationKeyCrate extends CrateAnimation
 {
+    int count;
 
     public AnimationKeyCrate(Crate crate)
     {
@@ -26,11 +28,15 @@ public class AnimationKeyCrate extends CrateAnimation
     {
         if (canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
         {
-            Reward r = getCrates().getCs().getCr().getRandomReward(p);
-            r.runCommands(p);
-
             ArrayList<Reward> rewards = new ArrayList<Reward>();
-            rewards.add(r);
+
+            for(int i = 0; i < count; i++)
+            {
+                Reward r = getCrates().getCs().getCr().getRandomReward(p);
+                r.runCommands(p);
+
+                rewards.add(r);
+            }
 
             getCrates().tick(l, cs, p, rewards);
             takeKeyFromPlayer(p, !requireKeyInHand);
@@ -43,10 +49,18 @@ public class AnimationKeyCrate extends CrateAnimation
         return false;
     }
 
+
+    /*
+    CrateType:
+      Other:
+        GiveKey:
+          reward-count: 3
+     */
     @Override
     public void loadValueFromConfig(StatusLogger sl)
     {
-
+        FileConfiguration fc = cc.getCrateconfigFile().get();
+        count = fc.getInt("CrateType.Other.GiveKey.reward-count");
     }
 
     @Override

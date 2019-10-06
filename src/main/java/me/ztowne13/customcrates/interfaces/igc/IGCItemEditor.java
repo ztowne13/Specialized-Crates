@@ -13,8 +13,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionEffect;
 
 public class IGCItemEditor extends IGCMenu
 {
@@ -166,7 +164,7 @@ public class IGCItemEditor extends IGCMenu
             case 10:
                 ItemStack stack;
                 if(NMSUtils.Version.v1_9.isServerVersionOrLater())
-                    stack = getP().getInventory().getItemInMainHand();
+                    stack = getP().getInventory().getItemInHand();
                 else
                     stack = getP().getItemInHand();
 
@@ -201,18 +199,18 @@ public class IGCItemEditor extends IGCMenu
                         editableItem.getPotionEffects().clear();
                         if (stack.getItemMeta() instanceof PotionMeta)
                         {
-                            PotionMeta pm = (PotionMeta) stack.getItemMeta();
-
-                            PotionData pd = pm.getBasePotionData();
-                            editableItem.getPotionEffects()
-                                    .add(new CompressedPotionEffect(pd.getType().getEffectType(), pd.isExtended() ? 1 : 0,
-                                            pd.isUpgraded() ? 1 : 0));
-
-                            for (PotionEffect pe : pm.getCustomEffects())
-                            {
-                                editableItem.getPotionEffects()
-                                        .add(new CompressedPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier()));
-                            }
+//                            PotionMeta pm = (PotionMeta) stack.getItemMeta();
+//
+//                            PotionData pd = pm.get();
+//                            editableItem.getPotionEffects()
+//                                    .add(new CompressedPotionEffect(pd.getType().getEffectType(), pd.isExtended() ? 1 : 0,
+//                                            pd.isUpgraded() ? 1 : 0));
+//
+//                            for (PotionEffect pe : pm.getCustomEffects())
+//                            {
+//                                editableItem.getPotionEffects()
+//                                        .add(new CompressedPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier()));
+//                            }
                         }
 
                         editableItem.setDisplayName(

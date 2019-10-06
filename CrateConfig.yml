@@ -1,4 +1,7 @@
 CrateType:
+  Other:
+    GiveKey:
+      reward-count: 3
   Block:
     OpenChest:
       chest-open-duration: 60

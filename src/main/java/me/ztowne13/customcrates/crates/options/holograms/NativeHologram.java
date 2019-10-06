@@ -6,7 +6,6 @@ import me.ztowne13.customcrates.external.holograms.Hologram;
 import me.ztowne13.customcrates.external.holograms.HologramManager;
 import me.ztowne13.customcrates.external.holograms.HologramNMS;
 import me.ztowne13.customcrates.utils.LocationUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 @Deprecated
@@ -35,7 +34,7 @@ public class NativeHologram extends DynamicHologram
 
         if(hologram instanceof HologramNMS)
         {
-            ((HologramNMS)hologram).displayTo(Bukkit.getOnlinePlayers().iterator().next());
+            //((HologramNMS)hologram).displayTo(Bukkit.getOnlinePlayers().iterator().next());
         }
     }
 
@@ -45,7 +44,7 @@ public class NativeHologram extends DynamicHologram
         hologram.setLine(lineNum, line);
         if(hologram instanceof HologramNMS)
         {
-            ((HologramNMS)hologram).displayTo(Bukkit.getOnlinePlayers().iterator().next());
+            //((HologramNMS)hologram).displayTo(Bukkit.getOnlinePlayers().iterator().next());
         }
     }
 
@@ -61,7 +60,7 @@ public class NativeHologram extends DynamicHologram
         hologram.setLocation(LocationUtils.getLocationCentered(l.clone()));
         if(hologram instanceof HologramNMS)
         {
-            ((HologramNMS)hologram).displayTo(Bukkit.getOnlinePlayers().iterator().next());
+            //((HologramNMS)hologram).displayTo(Bukkit.getOnlinePlayers().iterator().next());
         }
     }
 }

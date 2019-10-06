@@ -12,7 +12,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.Potion;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 
@@ -353,7 +352,7 @@ public class ItemBuilder implements EditableItem
                 if (NMSUtils.Version.v1_9.isServerVersionOrLater())
                 {
                     PotionType.valueOf(firstVal.getType().getName());
-                    pm.setBasePotionData(new PotionData(PotionType.getByEffect(firstVal.getType())));
+                    //pm.setBasePotionData(new PotionData(PotionType.getByEffect(firstVal.getType())));
                 }
                 else
                 {

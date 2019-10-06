@@ -19,9 +19,7 @@ import me.ztowne13.customcrates.external.holograms.HologramManagerNMS;
 import me.ztowne13.customcrates.interfaces.sql.SQLQueryThread;
 import me.ztowne13.customcrates.interfaces.verification.AntiFraudSQLHandler;
 import me.ztowne13.customcrates.listeners.*;
-import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
-import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.DebugUtils;
 import me.ztowne13.customcrates.utils.FileHandler;
@@ -64,9 +62,6 @@ public class SpecializedCrates extends JavaPlugin
 
     public void onEnable(boolean register)
     {
-        if(metricsLite == null)
-            metricsLite = new MetricsLite(this);
-
         if (du == null)
             du = new DebugUtils(this);
 
@@ -312,17 +307,17 @@ public class SpecializedCrates extends JavaPlugin
             {
                 setTick(0);
 
-                for (Player p : Bukkit.getOnlinePlayers())
-                {
-                    PlayerDataManager pdm = PlayerManager.get(this, p).getPdm();
-                    ArrayList<CrateCooldownEvent> list =
-                            ((ArrayList<CrateCooldownEvent>) pdm.getCrateCooldownEvents().clone());
-
-                    for (CrateCooldownEvent cce : list)
-                    {
-                        cce.tickSecond(pdm);
-                    }
-                }
+//                for (Player p : Bukkit.getOnlinePlayers())
+//                {
+//                    PlayerDataManager pdm = PlayerManager.get(this, p).getPdm();
+//                    ArrayList<CrateCooldownEvent> list =
+//                            ((ArrayList<CrateCooldownEvent>) pdm.getCrateCooldownEvents().clone());
+//
+//                    for (CrateCooldownEvent cce : list)
+//                    {
+//                        cce.tickSecond(pdm);
+//                    }
+//                }
             }
         }
     }
@@ -341,22 +336,22 @@ public class SpecializedCrates extends JavaPlugin
 
     public void finishUpPlayers()
     {
-        for (Player p : Bukkit.getOnlinePlayers())
-        {
-            PlayerManager pm = PlayerManager.get(this, p);
-            if (pm.isWaitingForClose())
-            {
-                pm.closeCrate();
-
-                for (Reward r : pm.getWaitingForClose())
-                {
-                    r.runCommands(p);
-                }
-
-                pm.setWaitingForClose(null);
-                p.closeInventory();
-            }
-        }
+//        for (Player p : Bukkit.getOnlinePlayers())
+//        {
+//            PlayerManager pm = PlayerManager.get(this, p);
+//            if (pm.isWaitingForClose())
+//            {
+//                pm.closeCrate();
+//
+//                for (Reward r : pm.getWaitingForClose())
+//                {
+//                    r.runCommands(p);
+//                }
+//
+//                pm.setWaitingForClose(null);
+//                p.closeInventory();
+//            }
+//        }
     }
 
     public void stopRun()

@@ -4,7 +4,6 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,14 +80,15 @@ public class HologramAS extends Hologram
 
     private ArmorStand spawnNewArmourStand(Location spawnLoc)
     {
-        ArmorStand as = (ArmorStand) spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
-
-        as.setGravity(false);
-        as.setCanPickupItems(false);
-        as.setCustomNameVisible(true);
-        as.setVisible(false);
-
-        return as;
+//        ArmorStand as = (ArmorStand) spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
+//
+//        as.setGravity(false);
+//        as.setCanPickupItems(false);
+//        as.setCustomNameVisible(true);
+//        as.setVisible(false);
+//
+//        return as;
+        return null;
     }
 
     public String getName()
