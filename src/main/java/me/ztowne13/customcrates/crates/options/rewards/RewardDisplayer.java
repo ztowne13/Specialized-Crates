@@ -1,28 +1,30 @@
-package me.ztowne13.customcrates.crates.options.rewards.displaymenu;
+package me.ztowne13.customcrates.crates.options.rewards;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.CRewards;
-import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.players.PlayerManager;
+import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.entity.Player;
 
-public class SortedRewardDisplayer extends RewardDisplayer
+public class RewardDisplayer
 {
-    public SortedRewardDisplayer(Crate crate)
+    Crate crates;
+
+    public RewardDisplayer(Crate crates)
     {
-        super(crate);
+        this.crates = crates;
     }
 
     public void openFor(Player p)
     {
         p.openInventory(createInventory(p).getInv());
-        PlayerManager.get(getCrate().getCc(), p).setInRewardMenu(true);
+        PlayerManager.get(getCrates().getCc(), p).setInRewardMenu(true);
     }
 
     public InventoryBuilder createInventory(Player p)
     {
-        CRewards cr = getCrate().getCs().getCr();
+        CRewards cr = getCrates().getCs().getCr();
         int amount = cr.getCrateRewards().length;
         int rows = amount % 9 == 0 ? amount / 9 : (amount / 9) + 1;
         InventoryBuilder ib = new InventoryBuilder(p, rows * 9, getInvName());
@@ -35,4 +37,22 @@ public class SortedRewardDisplayer extends RewardDisplayer
         }
         return ib;
     }
+
+    public String getInvName()
+    {
+        return ChatUtils.toChatColor(
+                getCrates().getCc().getSettings().getConfigValues().get("inv-reward-display-name").toString()
+                        .replace("%crate%", getCrates().getName()));
+    }
+
+    public Crate getCrates()
+    {
+        return crates;
+    }
+
+    public void setCrates(Crate crates)
+    {
+        this.crates = crates;
+    }
+
 }

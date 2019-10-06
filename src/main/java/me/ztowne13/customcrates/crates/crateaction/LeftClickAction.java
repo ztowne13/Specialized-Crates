@@ -4,7 +4,7 @@ import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
-import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayer;
+import me.ztowne13.customcrates.crates.options.rewards.RewardDisplayer;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import org.bukkit.GameMode;
