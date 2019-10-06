@@ -23,21 +23,7 @@ public class CMIHologram extends DynamicHologram
     public void create(Location l)
     {
 
-        if (!getCm().isDeleted())
-        {
-            l.setY(l.getY() + getCm().getCholo().getHologramOffset() - 1);
-            l = LocationUtils.getLocationCentered(l);
 
-            this.l = l;
-
-            this.cmiHologram =
-                    new com.Zrips.CMI.Modules.Holograms.CMIHologram(
-                            "Crate(" + l.getWorld().getName() + "," + l.getBlockX() + "," + l.getBlockY() + "," +
-                                    l.getBlockZ(), l);
-
-            CMI.getInstance().getHologramManager().addHologram(this.cmiHologram);
-            this.cmiHologram.update();
-        }
     }
 
     @Override
@@ -72,7 +58,6 @@ public class CMIHologram extends DynamicHologram
     @Override
     public void teleport(Location l)
     {
-        l.setY(l.getY() + getCm().getCholo().getHologramOffset());
         cmiHologram.setLoc(LocationUtils.getLocationCentered(l));
         cmiHologram.refresh();
     }

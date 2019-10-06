@@ -1,6 +1,7 @@
 enabled: true
 obtain-method: DYNAMIC
 inventory-name: 'Super basic crate'
+reward-count: 3
 
 display:
   type: block

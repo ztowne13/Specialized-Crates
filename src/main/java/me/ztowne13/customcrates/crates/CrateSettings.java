@@ -28,6 +28,8 @@ public class CrateSettings
     Crate crates;
     StatusLogger sl;
 
+    public int COUNT = 0;
+
     String name, crateInventoryName = "", permission = "no permission";
     FileConfiguration fc;
     FileHandler fu;
@@ -180,6 +182,9 @@ public class CrateSettings
         // Crate Loging
         String toLog = SettingsValues.LOG_SUCCESSES.getValue(getCrates().getCc()).toString();
         loadNotice(toLog);
+
+        if(getFc().contains("reward-count"))
+            COUNT = getFc().getInt("reward-count");
 
         setCp(new CParticles(getCrates()));
         setCholoCopy(new CHolograms(getCrates()));
@@ -665,4 +670,13 @@ public class CrateSettings
         this.hologramOffset = hologramOffset;
     }
 
+    public int getCOUNT()
+    {
+        return COUNT;
+    }
+
+    public void setCOUNT(int COUNT)
+    {
+        this.COUNT = COUNT;
+    }
 }

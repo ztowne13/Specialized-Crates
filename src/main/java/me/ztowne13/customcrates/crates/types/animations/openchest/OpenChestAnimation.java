@@ -84,22 +84,6 @@ public class OpenChestAnimation extends CrateAnimation
             getCrates().tick(loc, CrateState.OPEN, p, rewardsStr);
         }
 
-        if(attachTo)
-        {
-            crates.getCs().getCa().playRewardCrate(p, rewards, .6, true, item, openDuration);
-        }
-        else if (isEarlyRewardHologram())
-        {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    crates.getCs().getCa().playRewardCrate(p, rewards, .6);
-                }
-            }, rewardHoloDelay);
-        }
-
         new NMSChestState().playChestAction(l.getBlock(), true);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()

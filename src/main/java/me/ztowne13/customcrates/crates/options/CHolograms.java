@@ -301,10 +301,7 @@ public class CHolograms extends CSetting
     {
         for (PlacedCrate cm : PlacedCrate.getPlacedCrates().values())
         {
-            if (!(cm.getCholo() == null))
-            {
-                cm.getCholo().getDh().delete();
-            }
+
         }
 
     }

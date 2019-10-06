@@ -49,7 +49,6 @@ public class HolographicDisplaysHologram extends DynamicHologram
     @Override
     public void teleport(Location l)
     {
-        l.setY(l.getY() + getCm().getCholo().getHologramOffset());
         getH().teleport(LocationUtils.getLocationCentered(l));
     }
 

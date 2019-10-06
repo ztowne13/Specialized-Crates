@@ -2,7 +2,6 @@ package me.ztowne13.customcrates.crates;
 
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.options.CHolograms;
 import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import me.ztowne13.customcrates.utils.LocationUtils;
@@ -23,8 +22,6 @@ public class PlacedCrate
     boolean isCratesEnabled;
     boolean deleted = false;
 
-    CHolograms cholo;
-
     Location l;
     Long placedTime;
     boolean used = false;
@@ -42,7 +39,6 @@ public class PlacedCrate
     {
         getCc().getActivecratesFile().get().set(LocationUtils.locToString(getL()), null);
         getCc().getActivecratesFile().save();
-        getCholo().getDh().delete();
         getCrates().getCs().getDcp().remove(this);
         getPlacedCrates().remove(getL());
         deleted = true;
@@ -64,7 +60,6 @@ public class PlacedCrate
         if (CrateUtils.isCrateUsable(this))
         {
             setupDisplay();
-            setupHolo(crates);
 
             getCrates().getCs().getDcp().fixHologram(this);
 
@@ -81,22 +76,13 @@ public class PlacedCrate
         getCrates().getCs().getDcp().place(this);
     }
 
-
-    public void setupHolo(Crate crates)
-    {
-        setCholo(crates.getCs().getCholoCopy().clone());
-        Location dupeLoc = getL().clone();
-        dupeLoc.setY(dupeLoc.getY() + .5);
-        getCholo().setDh(getCholo().createHologram(this, dupeLoc));
-    }
-
     public void tick(CrateState cs)
     {
         if (isCratesEnabled())
         {
             getCrates().tick(getL(), cs);
             //getCrates().getCs().getCh().tick(null, getL(), cs, !getCrates().isMultiCrate());
-            getCholo().getDh().tick();
+            //getCholo().getDh().tick();
         }
 
         if (crates.getCs().getOt().equals(ObtainType.LUCKYCHEST))
@@ -124,16 +110,6 @@ public class PlacedCrate
     {
         getPlacedCrates().clear();
         setPlacedCrates(new HashMap<Location, PlacedCrate>());
-    }
-
-    public CHolograms getCholo()
-    {
-        return cholo;
-    }
-
-    public void setCholo(CHolograms cholo)
-    {
-        this.cholo = cholo;
     }
 
     public SpecializedCrates getCc()

@@ -4,15 +4,10 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
-import me.ztowne13.customcrates.crates.options.holograms.DynamicHologram;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.crates.types.CrateType;
-import me.ztowne13.customcrates.crates.types.animations.openchest.OpenChestAnimation;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
-import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -143,7 +138,7 @@ public class CActions extends CSetting
     {
         cc.getDu().log("playAll() - CALL (pre: " + pre + ")", getClass());
 
-        if(rewards.isEmpty() && !pre)
+        if (rewards.isEmpty() && !pre)
             return;
 
         boolean toRunTitle = false;
@@ -212,88 +207,6 @@ public class CActions extends CSetting
                         }
                     }
                 }
-            }
-        }
-
-        if (!pre)
-        {
-            if (!crates.getCs().getCt().equals(CrateType.BLOCK_CRATEOPEN) ||
-                    !((OpenChestAnimation) crates.getCs().getCh()).isEarlyRewardHologram())
-            {
-                if (crates.getCs().getOt().isStatic() || crates.getCs().getCt().isSpecialDynamicHandling())
-                    playRewardCrate(p, rewardsAsDisplayname);
-            }
-        }
-    }
-
-    public void playRewardCrate(Player p, ArrayList<String> rewards, double additionalYOffset)
-    {
-        playRewardCrate(p, rewards, additionalYOffset, false, null, -1);
-    }
-
-    public void playRewardCrate(Player p, ArrayList<String> rewards)
-    {
-        playRewardCrate(p, rewards, 0, false, null, -1);
-    }
-
-    public void playRewardCrate(Player p, ArrayList<String> rewards, double additionalYOffset, boolean attach, Item item,
-                                int openDuration)
-    {
-        if(rewards.isEmpty())
-            return;
-
-        final PlayerManager pm = PlayerManager.get(cc, p);
-        if (!(pm.getLastOpenedPlacedCrate() == null))
-        {
-            final PlacedCrate placedCrate = pm.getLastOpenedPlacedCrate();
-            String msg = placedCrate.getCrates().getCs().getCholoCopy().getRewardHologram();
-            if (!msg.equalsIgnoreCase(""))
-            {
-//                msg = ChatUtils.toChatColor(msg.replace("%reward%", rewards.toString().replace("[", "").replace("]", ""))).replace("%player%", p.getName()));
-
-                msg = ChatUtils.toChatColor(msg.replace("%reward%", rewards.toString().substring(1, rewards.toString().length() - 1)).replace("%player%", p.getName()));
-
-
-                final DynamicHologram dynamicHologram = placedCrate.getCholo().getDh();
-                dynamicHologram.setDisplayingRewardHologram(true);
-                dynamicHologram.delete();
-
-                Location rewardLoc = placedCrate.getL().clone();
-                rewardLoc.setY(rewardLoc.getY() - .3 + getCrates().getCs().getCholoCopy().getRewardHoloYOffset() +
-                        additionalYOffset);
-                dynamicHologram.create(rewardLoc);
-                dynamicHologram.addLine(msg);
-
-
-                if (attach)
-                {
-                    attachTo(item, msg);
-                }
-
-                Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        dynamicHologram.delete();
-
-                        final Location cloneY = placedCrate.getL().clone();
-                        cloneY.setY(cloneY.getY() + .5);
-
-                        placedCrate.getCrates().getCs().getCholoCopy()
-                                .createHologram(placedCrate, cloneY, dynamicHologram);
-
-                        pm.setLastOpenedPlacedCrate(null);
-                        dynamicHologram.setDisplayingRewardHologram(false);
-
-                        if (!(dynamicHologram.getHa() == null))
-                        {
-                            dynamicHologram.getHa().update(true);
-                        }
-
-                    }
-                }, attach ? openDuration : getCrates().getCs().getCholoCopy().getRewardHoloDuration());
-
             }
         }
     }
