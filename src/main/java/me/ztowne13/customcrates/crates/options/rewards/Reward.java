@@ -23,14 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Reward
+public class Reward implements Comparable<Reward>
 {
     SpecializedCrates cc;
     FileConfiguration fc;
     Random r;
 
     CRewards cr;
-    String rewardName, tempDisplayName;
+    String rewardName;
     String rarity = "default";
     boolean giveDisplayItem = false, giveDisplayItemLore = false;
 
@@ -66,6 +66,11 @@ public class Reward
         loadChance();
     }
 
+    @Override
+    public int compareTo(Reward otherReward)
+    {
+        return (int) (getChance()*1000 - otherReward.getChance()*1000);
+    }
 
     public void init()
     {
@@ -710,6 +715,6 @@ public class Reward
     public void setBuilder(ItemBuilder setBuilder)
     {
         this.saveBuilder = new ItemBuilder(setBuilder.get());
-        this.displayBuilder = new ItemBuilder(displayBuilder.get());
+        this.displayBuilder = new ItemBuilder(setBuilder.get());
     }
 }

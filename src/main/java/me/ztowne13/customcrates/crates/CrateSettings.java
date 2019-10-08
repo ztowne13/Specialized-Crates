@@ -4,6 +4,7 @@ import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.*;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayer;
 import me.ztowne13.customcrates.crates.types.CrateAnimation;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
@@ -43,6 +44,7 @@ public class CrateSettings
 
     CrateDisplayType cdt;
     DynamicCratePlaceholder dcp;
+    RewardDisplayer displayer;
 
     CrateAnimation ch;
     CHolograms choloCopy;
@@ -209,6 +211,7 @@ public class CrateSettings
             getCsb().setupPermission();
             getCsb().setupAutoClose();
             getCsb().setupHologramOffset();
+            getCsb().setupDisplayer();
 
             // Base Settings for non-MultiCrates
             if (!getCrates().isMultiCrate())
@@ -665,4 +668,13 @@ public class CrateSettings
         this.hologramOffset = hologramOffset;
     }
 
+    public RewardDisplayer getDisplayer()
+    {
+        return displayer;
+    }
+
+    public void setDisplayer(RewardDisplayer displayer)
+    {
+        this.displayer = displayer;
+    }
 }

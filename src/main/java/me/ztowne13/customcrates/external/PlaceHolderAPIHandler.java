@@ -104,7 +104,7 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
                 else
                     formatted = formatted.substring(0, formatted.length() - 2);
 
-                return formatted;
+                return formatted.equals("") ? "0" : formatted;
             }
         }
         else if (args.length == 3)
@@ -121,11 +121,15 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
                 // specializedcrates_virtual_keys_[cratename]
                 if (args[1].equalsIgnoreCase("keys"))
                 {
+                    if((playerDataManager.getVirtualCrateData().get(crate).getKeys() + "").equalsIgnoreCase(""))
+                        return "0";
                     return "" + playerDataManager.getVirtualCrateData().get(crate).getKeys();
                 }
                 // specializedcrates_virtual_crates_[cratename]
                 else if (args[1].equalsIgnoreCase("crates"))
                 {
+                    if((playerDataManager.getVirtualCrateData().get(crate).getCrates() + "").equalsIgnoreCase(""))
+                        return "0";
                     return "" + playerDataManager.getVirtualCrateData().get(crate).getCrates();
                 }
             }

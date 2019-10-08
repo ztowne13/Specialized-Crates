@@ -6,7 +6,6 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
-import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayer;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
@@ -402,7 +401,7 @@ public class CMultiCrateInventory extends CSetting
                     cc.getSettings().getConfigValues().get("mc-reward-display-leftclick").toString().toUpperCase()) ?
                     ClickType.LEFT : ClickType.RIGHT) && (Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(cc))
             {
-                new RewardDisplayer(clickedCrate).openFor(p);
+                clickedCrate.getCs().getDisplayer().openFor(p);
             }
             else if (pm.isUseVirtualCrate() ? pm.getPdm().getVCCrateData(clickedCrate).getCrates() > 0 : true)
             {

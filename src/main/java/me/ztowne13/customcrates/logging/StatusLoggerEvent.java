@@ -246,6 +246,12 @@ public enum StatusLoggerEvent
 
     SETTINGS_PERMISSION_SUCCESS(true, "Settings", "Loaded the 'permission' value", "NONE"),
 
+    SETTINGS_REWARD_DISPLAYER_SUCCESS(true, "Settings", "Loaded the 'reward-displayer' value", "NONE"),
+
+    SETTINGS_REWARD_DISPLAYER_NONEXISTENT(false, "Settings", "Failed to load the 'reward-displayer' value.", "It does not exist."),
+
+    SETTINGS_REWARD_DISPLAYER_INVALID(false, "Settings", "Failed to load the 'reward-displayer' value.", "$?$ is not a valid reward display type."),
+
     SETTINGS_AUTOCLOSE_SUCCESS(true, "Settings", "Loaded the 'auto-close' value", "NONE"),
 
     SETTINGS_HOLOGRAMOFFSET_SUCCESS(true, "Settings", "Loaded the 'hologram-offset' value", ""),

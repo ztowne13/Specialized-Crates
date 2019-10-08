@@ -2,6 +2,9 @@ package me.ztowne13.customcrates.crates;
 
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.ObtainType;
+import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayType;
+import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SimpleRewardDisplayer;
+import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SortedRewardDisplayer;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
@@ -286,181 +289,46 @@ public class CrateSettingsBuilder
         }
     }
 
-//    public void setupCrate()
-//    {
-//
-//
-//
-//        String cause = "The 'crate.material' value does not exist.";
-//        if (hasV("crate.material"))
-//        {
-//            cause = "The 'crate.name' value does not exist.";
-//            if (hasV("crate.name"))
-//            {
-//                cause = "NONE";
-//                try
-//                {
-//                    String unsplitMaterial = getFc().getString("crate.material");
-//                    String[] args = unsplitMaterial.split(";");
-//                    cause = "The material '" + args[0] + "' does not exist.";
-//
-//                    DynamicMaterial m = DynamicMaterial.fromString(unsplitMaterial);
-//
-//                    cause = "The crate.name value does not exist.";
-//                    String name = ChatUtils.toChatColor(getFc().getString(("crate.name")));
-//                    ItemBuilder ib = new ItemBuilder(m, 1).setName(name);
-//                    cause = "NONE";
-//
-//                    if (hasV("crate.lore"))
-//                    {
-//                        for (String value : getFc().getStringList(("crate.lore")))
-//                        {
-//                            ib.addLore(value);
-//                            StatusLoggerEvent.SETTINGS_CRATE_LORE_ADDLINE_SUCCESS.log(getSl(), new String[]{value});
-//                        }
-//                    }
-//
-//
-//                    if (hasV("crate.enchantment"))
-//                    {
-//                        String enchantCause = "crate.enchantment value is improperly set up.";
-//                        try
-//                        {
-//                            String[] enchantArgs = getFc().getString("crate.enchantment").split(";");
-//                            enchantCause = "Enchantment " + enchantArgs[0] + " doesn't exist";
-//                            Enchantment ench = Enchantment.getByName(enchantArgs[0].toUpperCase());
-//
-//                            if (ench == null)
-//                                throw new Exception();
-//
-//                            enchantCause = "The enchantment is improperly formatted. Use ENCHANTMENT;LEVEL";
-//                            enchantCause = enchantArgs[1] + " is not a valid enchantment level number.";
-//                            int level = Integer.parseInt(enchantArgs[1]);
-//
-//                            ib.addEnchantment(ench, level);
-//
-//                            StatusLoggerEvent.SETTINGS_CRATE_ENCHANTMENT_ADD_SUCCESS
-//                                    .log(getSl(), new String[]{enchantArgs[0]});
-//                        }
-//                        catch (Exception exc)
-//                        {
-//                            StatusLoggerEvent.SETTINGS_CRATE_ENCHANTMENT_ADD_FAILURE
-//                                    .log(getSl(), new String[]{enchantCause});
-//                        }
-//                    }
-//
-//                    StatusLoggerEvent.SETTINGS_CRATE_SUCCESS.log(getSl());
-//                    getSettings().setCrate(ib.get());
-//                    return;
-//                }
-//                catch (Exception exc)
-//                {
-//                    getSettings().getCrates().setEnabled(false);
-//                    getSettings().getCrates().setCanBeEnabled(false);
-//
-//                    StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(getSl(), new String[]{cause});
-//                }
-//            }
-//        }
-//
-//        StatusLoggerEvent.SETTINGS_CRATE_FAILURE.log(getSl(), new String[]{cause});
-//    }
-//
-//
-//    public void setupKey()
-//    {
-//        String cause = "The 'key.material' value does not exist.";
-//        if (hasV("key.material"))
-//        {
-//            cause = "The 'key.name' value does not exist.";
-//            if (hasV("key.name"))
-//            {
-//                cause = "NONE";
-//                try
-//                {
-//                    String unsplitMaterial = getFc().getString("key.material");
-//                    String[] args = unsplitMaterial.split(";");
-//                    cause = "The material '" + args[0] + "' does not exist.";
-//
-//                    DynamicMaterial m = DynamicMaterial.fromString(unsplitMaterial);
-//
-//                    cause = "NONE";
-//                    String name = ChatUtils.toChatColor(getFc().getString(("key.name")));
-//                    ItemBuilder ib = new ItemBuilder(m, 1).setName(name);
-//
-//                    if (hasV("key.lore"))
-//                    {
-//                        for (String value : getFc().getStringList(("key.lore")))
-//                        {
-//                            ib.addLore(value);
-//                            StatusLoggerEvent.SETTINGS_KEY_LORE_ADDLINE.log(getSl(), new String[]{value});
-//                        }
-//                    }
-//
-//                    if (hasV("key.enchantment") || hasV("key.enchantments"))
-//                    {
-//                        String enchantCause = "key.enchantment value is improperly set up.";
-//                        try
-//                        {
-//                            String updatedPath = hasV("key.enchantment") ? "key.enchantment" : "key.enchantments";
-//
-//                            boolean isSet = !getFc().getStringList(updatedPath).isEmpty();
-//                            ArrayList<String> oneEnchantment = null;
-//                            if (!isSet)
-//                            {
-//                                oneEnchantment = new ArrayList<String>();
-//                                oneEnchantment.add(getFc().getString(updatedPath));
-//                            }
-//
-//                            for (String enchantment : (isSet ? getFc().getStringList(updatedPath) : oneEnchantment))
-//                            {
-//                                String[] enchantArgs = enchantment.split(";");
-//                                enchantCause = "Enchantment " + enchantArgs[0] + " doesn't exist";
-//                                Enchantment ench = Enchantment.getByName(enchantArgs[0].toUpperCase());
-//
-//                                if (ench == null)
-//                                    throw new Exception();
-//
-//                                enchantCause = "The enchantment is improperly formatted. Use ENCHANTMENT;LEVEL";
-//                                enchantCause = enchantArgs[1] + " is not a valid enchantment level number.";
-//                                int level = Integer.parseInt(enchantArgs[1]);
-//
-//                                ib.addEnchantment(ench, level);
-//                                StatusLoggerEvent.SETTINGS_KEY_ENCHANTMENT_ADD_SUCCESS
-//                                        .log(getSl(), new String[]{enchantArgs[0]});
-//                            }
-//                        }
-//                        catch (Exception exc)
-//                        {
-//                            StatusLoggerEvent.SETTINGS_KEY_ENCHANTMENT_ADD_FAILURE.log(getSl(), new String[]{enchantCause});
-//                        }
-//                    }
-//
-//                    StatusLoggerEvent.SETTINGS_KEY_SUCCESS.log(getSl());
-//                    getSettings().setKey(ib.get());
-//
-//                    if (hasV("key.require"))
-//                    {
-//                        cause = "The 'key.require' value is not true or false";
-//                        getSettings().setRequireKey(getFc().getBoolean(("key.require")));
-//                    }
-//                    else
-//                    {
-//                        StatusLoggerEvent.SETTINGS_KEY_REQUIRE_NONEXISTENT.log(getSl());
-//                    }
-//
-//                    return;
-//                }
-//                catch (Exception exc)
-//                {
-//                    getSettings().getCrates().setEnabled(false);
-//                    getSettings().getCrates().setCanBeEnabled(false);
-//                    StatusLoggerEvent.SETTINGS_KEY_FAILURE_DISABLE.log(getSl(), new String[]{cause});
-//                }
-//            }
-//        }
-//        StatusLoggerEvent.SETTINGS_KEY_FAILURE.log(getSl(), new String[]{cause});
-//    }
+    public void setupDisplayer()
+    {
+        if (hasV("reward-displayer.display-type"))
+        {
+            String displayerString = getFc().getString("reward-displayer.display-type").toUpperCase();
+
+            try
+            {
+                RewardDisplayType rewardDisplayType = RewardDisplayType.valueOf(displayerString);
+                Crate crate = getSettings().getCrates();
+
+                switch(rewardDisplayType)
+                {
+                    case CUSTOM:
+
+                        break;
+                    case IN_ORDER:
+                        getSettings().setDisplayer(new SimpleRewardDisplayer(crate));
+                        break;
+                    case SORTED_HIGH_TO_LOW:
+                        getSettings().setDisplayer(new SortedRewardDisplayer(crate, false));
+                        break;
+                    case SORTED_LOW_TO_HIGH:
+                        getSettings().setDisplayer(new SortedRewardDisplayer(crate, true));
+                        break;
+                }
+
+                StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_SUCCESS.log(getSl());
+            }
+            catch(Exception exc)
+            {
+                getSettings().setDisplayer(new SimpleRewardDisplayer(getSettings().getCrates()));
+                StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_INVALID.log(getSl(), new String[]{displayerString});
+            }
+            return;
+        }
+
+        getSettings().setDisplayer(new SimpleRewardDisplayer(getSettings().getCrates()));
+        StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_NONEXISTENT.log(getSl());
+    }
 
     public StatusLogger getSl()
     {

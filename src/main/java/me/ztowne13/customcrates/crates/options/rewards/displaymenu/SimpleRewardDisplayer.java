@@ -37,4 +37,10 @@ public class SimpleRewardDisplayer extends RewardDisplayer
         }
         return ib;
     }
+
+    @Override
+    public void load()
+    {
+        loadDefaults();
+    }
 }

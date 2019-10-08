@@ -4,7 +4,6 @@ import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
-import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayer;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import org.bukkit.GameMode;
@@ -44,7 +43,7 @@ public class LeftClickAction extends CrateAction
                 {
                     if (!cm.getCrates().isMultiCrate())
                     {
-                        new RewardDisplayer(cm.getCrates()).openFor(player);
+                        cm.getCrates().getCs().getDisplayer().openFor(player);
                     }
                     return true;
                 }
