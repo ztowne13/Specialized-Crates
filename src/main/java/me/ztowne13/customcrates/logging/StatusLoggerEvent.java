@@ -252,6 +252,16 @@ public enum StatusLoggerEvent
 
     SETTINGS_REWARD_DISPLAYER_INVALID(false, "Settings", "Failed to load the 'reward-displayer' value.", "$?$ is not a valid reward display type."),
 
+    SETTINGS_REWARD_DISPLAYER_ITEM_FAILURE(false, "Settings", "Failed to load a reward preview menu item.", "$?$"),
+
+    SETTINGS_REWARD_DISPLAYER_ENCHANTMENT_ADD_FAILURE(false, "Settings", "Failed to load the a reward preview menu item enchantment.", "$?$"),
+
+    SETTINGS_REWARD_DISPLAYER_POTION_ADD_FAILURE(false, "Settings", "Failed to load the a reward preview menu item.", "$?$"),
+
+    SETTINGS_REWARD_DISPLAYER_GLOW_FAILURE(false, "Settings", "Failed to load the reward preview menu item glow value.", "$?$"),
+
+    SETTINGS_REWARD_DISPLAYER_AMOUNT_FAILURE(false, "Settings", "Failed to load the reward preview menu item amount value.", "$?$"),
+
     SETTINGS_AUTOCLOSE_SUCCESS(true, "Settings", "Loaded the 'auto-close' value", "NONE"),
 
     SETTINGS_HOLOGRAMOFFSET_SUCCESS(true, "Settings", "Loaded the 'hologram-offset' value", ""),
@@ -580,6 +590,7 @@ public enum StatusLoggerEvent
     ANIMATION_OPENCHEST_EARLY_OPEN_ACTIONS_INVALID(false, "Animation",
             "Faield to load the open chest early-open-actions value.",
             "It is either nonexistent or not a valid true/false value.");
+
 
     boolean success;
     String event, cause, section;

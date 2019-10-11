@@ -291,9 +291,9 @@ public class CrateSettingsBuilder
 
     public void setupDisplayer()
     {
-        if (hasV("reward-displayer.display-type"))
+        if (hasV("reward-displayer.type"))
         {
-            String displayerString = getFc().getString("reward-displayer.display-type").toUpperCase();
+            String displayerString = getFc().getString("reward-displayer.type").toUpperCase();
 
             try
             {
