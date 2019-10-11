@@ -49,6 +49,8 @@ public abstract class IGCMenu
 
     public InventoryBuilder createDefault(int slots, int minSlots)
     {
+        if(slots > 54)
+            slots = 54;
         ib = new InventoryBuilder(p, slots, inventoryName, minSlots);
         return ib;
     }
