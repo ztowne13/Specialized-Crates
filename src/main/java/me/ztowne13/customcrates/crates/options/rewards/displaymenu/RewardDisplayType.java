@@ -8,5 +8,5 @@ public enum RewardDisplayType
 
     SORTED_HIGH_TO_LOW,
 
-    CUSTOM;
+    CUSTOM
 }

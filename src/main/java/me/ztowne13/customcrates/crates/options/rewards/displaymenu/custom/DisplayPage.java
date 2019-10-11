@@ -49,7 +49,7 @@ public class DisplayPage
         }
     }
 
-    public void buildInventoryBuilder(Player player)
+    public InventoryBuilder buildInventoryBuilder(Player player)
     {
         InventoryBuilder ib = new InventoryBuilder(player, slots, customRewardDisplayer.getInvName());
 
@@ -78,5 +78,7 @@ public class DisplayPage
         }
 
         ib.open();
+
+        return ib;
     }
 }

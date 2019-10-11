@@ -33,7 +33,7 @@ public class CustomRewardDisplayer extends RewardDisplayer
     @Override
     public void openFor(Player p)
     {
-        p.openInventory(createInventory(p).getInv());
+        createInventory(p);
         PlayerManager.get(getCrates().getCc(), p).setInRewardMenu(true);
     }
 
@@ -41,7 +41,7 @@ public class CustomRewardDisplayer extends RewardDisplayer
     public InventoryBuilder createInventory(Player p)
     {
         if(pages.containsKey(1))
-            pages.get(1).buildInventoryBuilder(p);
+            return pages.get(1).buildInventoryBuilder(p);
         return null;
     }
 

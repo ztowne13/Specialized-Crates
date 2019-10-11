@@ -5,6 +5,7 @@ import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayType;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SimpleRewardDisplayer;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SortedRewardDisplayer;
+import me.ztowne13.customcrates.crates.options.rewards.displaymenu.custom.CustomRewardDisplayer;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
@@ -291,9 +292,9 @@ public class CrateSettingsBuilder
 
     public void setupDisplayer()
     {
-        if (hasV("reward-displayer.type"))
+        if (hasV("reward-display.type"))
         {
-            String displayerString = getFc().getString("reward-displayer.type").toUpperCase();
+            String displayerString = getFc().getString("reward-display.type").toUpperCase();
 
             try
             {
@@ -303,7 +304,7 @@ public class CrateSettingsBuilder
                 switch(rewardDisplayType)
                 {
                     case CUSTOM:
-
+                        getSettings().setDisplayer(new CustomRewardDisplayer(crate));
                         break;
                     case IN_ORDER:
                         getSettings().setDisplayer(new SimpleRewardDisplayer(crate));
@@ -315,6 +316,8 @@ public class CrateSettingsBuilder
                         getSettings().setDisplayer(new SortedRewardDisplayer(crate, true));
                         break;
                 }
+
+                getSettings().getDisplayer().load();
 
                 StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_SUCCESS.log(getSl());
             }
