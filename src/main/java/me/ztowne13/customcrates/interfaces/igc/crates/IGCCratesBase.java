@@ -7,6 +7,7 @@ import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCItemEditor;
+import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
@@ -74,12 +75,13 @@ public class IGCCratesBase extends IGCMenuCrate
                         .addLore("&7" + cs.getCooldown()).addLore("").addAutomaticLore("&f", 30,
                         "The duration of time, in seconds, between when a player can open the crate. Set to -1 to have no cooldown."));
         ib.setItem(8, new ItemBuilder(DynamicMaterial.CHEST, 1).setName("&a&lEdit the crate item.").addLore("")
-                        .addAutomaticLore("&f", 30, "Click to open the item editor."));
+                .addAutomaticLore("&f", 30, "Click to open the item editor."));
         if (!crates.isMultiCrate())
         {
             ib.setItem(17,
-                    new ItemBuilder(DynamicMaterial.TRIPWIRE_HOOK, 1).setName("&a&lEdit the crate key.").addLore("").addAutomaticLore("&f", 30,
-                            "Click to open the item editor."));
+                    new ItemBuilder(DynamicMaterial.TRIPWIRE_HOOK, 1).setName("&a&lEdit the crate key.").addLore("")
+                            .addAutomaticLore("&f", 30,
+                                    "Click to open the item editor."));
             ib.setItem(5, new ItemBuilder(Material.ITEM_FRAME, 1, 0).setName("&aSet the crate animation")
                     .setLore("&7Current Value: ").addLore("&7" + cs.getCt().name()).addLore("")
                     .addAutomaticLore("&f", 30, "This is the animation that will play when the crate is opened."));
@@ -128,20 +130,25 @@ public class IGCCratesBase extends IGCMenuCrate
                         String.class, this, true);
                 break;
             case 3:
-                new InputMenu(getCc(), getP(), "obtain-method", cs.getOt().name(),
-                        "Available obtain methods: " + Arrays.toString(ObtainType.values()), String.class, this, true);
+//                new InputMenu(getCc(), getP(), "obtain-method", cs.getOt().name(),
+//                        "Available obtain methods: " + Arrays.toString(ObtainType.values()), String.class, this, true);
+                new IGCListSelector(getCc(), getP(), this, "Obtain Type", Arrays.asList(ObtainType.values()),
+                        DynamicMaterial.PAPER, 1, ObtainType.descriptors()).open();
                 break;
             case 4:
                 new InputMenu(getCc(), getP(), "inventory-name", cs.getCrateInventoryName(),
                         "Set to 'none' to use the inv-name from the CrateConfig.YML", String.class, this, true);
                 break;
             case 6:
-                new InputMenu(getCc(), getP(), "display.type", cs.getDcp().toString(),
-                        "Available display types: block, mob, npc",
-                        String.class, this, true);
+//                new InputMenu(getCc(), getP(), "display.type", cs.getDcp().toString(),
+//                        "Available display types: block, mob, npc",
+//                        String.class, this, true);
+                new IGCListSelector(getCc(), getP(), this, "Display Type",
+                        Arrays.asList(new String[]{"BLOCK", "MOB", "NPC"}), DynamicMaterial.PAPER, 1,
+                        Arrays.asList(new String[]{"", "Requires Citizens v2", "Requires Citizens v2"})).open();
                 break;
             case 15:
-                if (cs.getDcp().toString().equalsIgnoreCase("mob") || cs.getDcp().toString().equalsIgnoreCase("npc"))
+                if (cs.getDcp().toString().equalsIgnoreCase("npc"))
                 {
                     new InputMenu(getCc(), getP(),
                             "display." + (cs.getDcp().toString().equalsIgnoreCase("mob") ? "creature" : "name"),
@@ -149,14 +156,19 @@ public class IGCCratesBase extends IGCMenuCrate
                             "Available mob types: " + Arrays.toString(EntityTypes.values()) : "Use a player's name",
                             String.class, this, true);
                 }
+                else if (cs.getDcp().toString().equalsIgnoreCase("mob"))
+                {
+                    new IGCListSelector(getCc(), getP(), this, "Mob Type", Arrays.asList(EntityTypes.values()),
+                            DynamicMaterial.PAPER, 1, null).open();
+                }
                 break;
             case 11:
                 new InputMenu(getCc(), getP(), "cooldown", cs.getCooldown() + "", "Time is measured in seconds.",
                         Integer.class, this);
                 break;
             case 12:
-                new InputMenu(getCc(), getP(), "autoclose", cs.isAutoClose() + "",
-                        "Set if they crate will close automatically when done", Integer.class, this);
+                cs.setAutoClose(!cs.isAutoClose());
+                open();
                 break;
             case 8:
                 new IGCItemEditor(getCc(), getP(), this, crates.getCs().getCrate()).open();
@@ -165,25 +177,27 @@ public class IGCCratesBase extends IGCMenuCrate
                 new IGCItemEditor(getCc(), getP(), this, crates.getCs().getKey()).open();
                 break;
             case 5:
-                new InputMenu(getCc(), getP(), "animation", cs.getCt().name(),
-                        "Available animations: " + Arrays.toString(CrateType.values()), String.class, this, true);
+//                new InputMenu(getCc(), getP(), "animation", cs.getCt().name(),
+//                        "Available animations: " + Arrays.toString(CrateType.values()), String.class, this, true);
+                new IGCListSelector(getCc(), getP(), this, "Animation Type", Arrays.asList(CrateType.values()),
+                        DynamicMaterial.PAPER, 1, null).open();
                 break;
             case 13:
-                new InputMenu(getCc(), getP(), "require key", cs.isRequireKey() + "",
-                        "Set whether or not this crate requires a key to be opened.", Boolean.class, this);
+                cs.setRequireKey(!cs.isRequireKey());
+                open();
         }
     }
 
     @Override
     public boolean handleInput(String value, String input)
     {
-        if (value.equalsIgnoreCase("obtain-method"))
+        if (value.equalsIgnoreCase("Obtain Type"))
         {
             try
             {
                 ObtainType ot = ObtainType.valueOf(input.toUpperCase());
                 cs.setOt(ot);
-                ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
+                ChatUtils.msgSuccess(getP(), "Set the obtain type to " + input);
                 return true;
             }
             catch (Exception exc)
@@ -206,27 +220,13 @@ public class IGCCratesBase extends IGCMenuCrate
             }
             return true;
         }
-        else if (value.equalsIgnoreCase("require key"))
-        {
-            try
-            {
-                Boolean b = Boolean.valueOf(input);
-                cs.setRequireKey(b);
-                ChatUtils.msgSuccess(getP(), "Set " + input + " to " + input);
-                return true;
-            }
-            catch (Exception exc)
-            {
-                ChatUtils.msgError(getP(), input + " is not a valid true / false response.");
-            }
-        }
-        else if (value.equalsIgnoreCase("animation"))
+        else if (value.equalsIgnoreCase("Animation Type"))
         {
             try
             {
                 CrateType ct = CrateType.valueOf(input.toUpperCase());
                 cs.setCt(ct);
-                ChatUtils.msgSuccess(getP(), "Set the " + value + " to " + input);
+                ChatUtils.msgSuccess(getP(), "Set the Animation Type to " + input);
                 return true;
             }
             catch (Exception exc)
@@ -250,7 +250,7 @@ public class IGCCratesBase extends IGCMenuCrate
             }
             ChatUtils.msgError(getP(), input + " as an inventory-name cannot be longer than 32 characters.");
         }
-        else if (value.equalsIgnoreCase("display.type"))
+        else if (value.equalsIgnoreCase("Display Type"))
         {
             switch (input.toUpperCase())
             {
@@ -288,13 +288,13 @@ public class IGCCratesBase extends IGCMenuCrate
                                 .setLore("&7Current value: ").addLore("&7" + cs.getDcp().getType()));
             }
         }
-        else if (value.equalsIgnoreCase("display.creature"))
+        else if (value.equalsIgnoreCase("Mob Type"))
         {
             try
             {
                 EntityTypes et = EntityTypes.valueOf(input.toUpperCase());
                 cs.getDcp().setType(et.name());
-                ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
+                ChatUtils.msgSuccess(getP(), "Set mob type to " + input);
                 return true;
             }
             catch (Exception exc)
@@ -319,19 +319,6 @@ public class IGCCratesBase extends IGCMenuCrate
             else
             {
                 ChatUtils.msgError(getP(), input + " is not a valid number.");
-            }
-        }
-        else if (value.equalsIgnoreCase("autoclose"))
-        {
-            if (Utils.isBoolean(input))
-            {
-                cs.setAutoClose(Boolean.valueOf(input));
-                ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
-                return true;
-            }
-            else
-            {
-                ChatUtils.msgError(getP(), input + " is not a valid true or false value.");
             }
         }
         else if (value.equalsIgnoreCase("hologramoffset"))

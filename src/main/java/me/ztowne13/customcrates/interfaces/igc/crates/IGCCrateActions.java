@@ -5,6 +5,7 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
+import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
@@ -122,8 +123,9 @@ public class IGCCrateActions extends IGCTierMenu
         }
         else if (slot == 17)
         {
-            new InputMenu(getCc(), getP(), "new action - type", "null", "Valid action types: " + actionTypes.toString(),
-                    String.class, this, true);
+//            new InputMenu(getCc(), getP(), "new action - type", "null", "Valid action types: " + actionTypes.toString(),
+//                    String.class, this, true);
+            new IGCListSelector(getCc(), getP(), this, "Actions", actionTypes, DynamicMaterial.PAPER, 1, null, true).open();
         }
         else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType().equals(Material.BOOK))
         {
@@ -141,7 +143,7 @@ public class IGCCrateActions extends IGCTierMenu
     @Override
     public boolean handleInput(String value, String input)
     {
-        if (value.equalsIgnoreCase("new action - type"))
+        if (value.equalsIgnoreCase("Actions"))
         {
             if (actionTypes.contains(input.toUpperCase()))
             {

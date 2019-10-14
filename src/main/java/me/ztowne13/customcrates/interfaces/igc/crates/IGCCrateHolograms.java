@@ -7,6 +7,7 @@ import me.ztowne13.customcrates.crates.options.CHolograms;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCListEditor;
+import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
@@ -166,15 +167,17 @@ public class IGCCrateHolograms extends IGCMenuCrate
                     DynamicMaterial.BOOK,
                     1).open();
         }
-        else if(slot == 13)
+        else if (slot == 13)
         {
             new InputMenu(getCc(), getP(), "hologram-offset",
                     crates.getCs().getHologramOffset() + "", Double.class, this);
         }
         else if (slot == 15)
         {
-            new InputMenu(getCc(), getP(), "hologram.animation.type", crates.getCs().getCholoCopy().getHat().toString(),
-                    "Animation types: " + Arrays.toString(HoloAnimType.values()), String.class, this, true);
+//            new InputMenu(getCc(), getP(), "hologram.animation.type", crates.getCs().getCholoCopy().getHat().toString(),
+//                    "Animation types: " + Arrays.toString(HoloAnimType.values()), String.class, this, true);
+            new IGCListSelector(getCc(), getP(), this, "Holo Animation Type", Arrays.asList(HoloAnimType.values()),
+                    DynamicMaterial.PAPER, 1, HoloAnimType.descriptors()).open();
         }
         else if (slot == 24)
         {
@@ -239,13 +242,13 @@ public class IGCCrateHolograms extends IGCMenuCrate
                 ChatUtils.msgError(getP(), input + " is not a valid decimal-number.");
             }
         }
-        else if (value.equalsIgnoreCase("hologram.animation.type"))
+        else if (value.equalsIgnoreCase("Holo Animation Type"))
         {
             try
             {
                 HoloAnimType newHoloAnim = HoloAnimType.valueOf(input.toUpperCase());
                 cs.getCholoCopy().setHat(newHoloAnim);
-                ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
+                ChatUtils.msgSuccess(getP(), "Set hologram.animation.type to " + input);
                 return true;
             }
             catch (Exception exc)

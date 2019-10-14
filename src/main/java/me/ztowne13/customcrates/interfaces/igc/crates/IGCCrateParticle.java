@@ -9,13 +9,16 @@ import me.ztowne13.customcrates.crates.options.particles.effects.PEAnimationType
 import me.ztowne13.customcrates.crates.options.particles.effects.TiltedRingsPA;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
+import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -170,13 +173,18 @@ public class IGCCrateParticle extends IGCTierMenu
                 up();
                 break;
             case 10:
-                new InputMenu(getCc(), getP(), "particle animation", pd.getParticleName(),
-                        "Type 'NONE' to remove animations\nAvaialable animations: " +
-                                Arrays.toString(PEAnimationType.values()), String.class, this, true);
+//                new InputMenu(getCc(), getP(), "particle animation", pd.getParticleName(),
+//                        "Type 'NONE' to remove animations\nAvaialable animations: " +
+//                                Arrays.toString(PEAnimationType.values()), String.class, this, true);
+                new IGCListSelector(getCc(), getP(), this, "Particle Animation", Arrays.asList(PEAnimationType.values()),
+                        DynamicMaterial.BEACON, 1, null).open();
                 break;
             case 11:
-                new InputMenu(getCc(), getP(), "particle type", pd.getParticleName(),
-                        "Avaialable particles: " + Arrays.toString(ParticleEffect.values()), String.class, this, true);
+//                new InputMenu(getCc(), getP(), "particle type", pd.getParticleName(),
+//                        "Avaialable particles: " + Arrays.toString(ParticleEffect.values()), String.class, this, true);
+                new IGCListSelector(getCc(), getP(), this, "Particle Type", Arrays.asList(
+                        NMSUtils.Version.v1_9.isServerVersionOrEarlier() ? ParticleEffect.values() : Particle.values()),
+                        DynamicMaterial.NETHER_STAR, 1, null).open();
                 break;
             case 12:
                 new InputMenu(getCc(), getP(), "x range", pd.getRangeX() + "",
@@ -200,19 +208,19 @@ public class IGCCrateParticle extends IGCTierMenu
                         "How many particles spawn every tick (1/20th of a second).", Integer.class, this);
                 break;
             case 21:
-                if(pd.getParticleAnimationEffect() == null)
+                if (pd.getParticleAnimationEffect() == null)
                     new InputMenu(getCc(), getP(), "x center offset", pd.getCenterX() + "",
-                        "Adjust the center of where the particles will spawn in the x direction.", Double.class, this);
+                            "Adjust the center of where the particles will spawn in the x direction.", Double.class, this);
                 break;
             case 22:
-                if(pd.getParticleAnimationEffect() == null)
+                if (pd.getParticleAnimationEffect() == null)
                     new InputMenu(getCc(), getP(), "y center offset", pd.getCenterY() + "",
-                        "Adjust the center of where the particles will spawn in the y direction.", Double.class, this);
+                            "Adjust the center of where the particles will spawn in the y direction.", Double.class, this);
                 break;
             case 23:
-                if(pd.getParticleAnimationEffect() == null)
+                if (pd.getParticleAnimationEffect() == null)
                     new InputMenu(getCc(), getP(), "z center offset", pd.getCenterZ() + "",
-                        "Adjust the center of where the particles will spawn in the z direction.", Double.class, this);
+                            "Adjust the center of where the particles will spawn in the z direction.", Double.class, this);
                 break;
         }
     }
@@ -220,7 +228,59 @@ public class IGCCrateParticle extends IGCTierMenu
     @Override
     public boolean handleInput(String value, String input)
     {
-        if (getInputMenu().getType() == Double.class)
+        if (value.equalsIgnoreCase("amount"))
+        {
+            if (Utils.isInt(input))
+            {
+                pd.setAmount(Integer.parseInt(input));
+                ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
+                return true;
+            }
+            else
+            {
+                ChatUtils.msgError(getP(), input + " is not a valid integer (number).");
+            }
+        }
+        else if (value.equalsIgnoreCase("Particle Type"))
+        {
+            if (pd.setParticle(input))
+            {
+                ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
+                return true;
+            }
+            else
+            {
+                ChatUtils.msgError(getP(),
+                        input + " is not valid from the list of particles: " + Arrays.toString(ParticleEffect.values()));
+            }
+        }
+        else if (value.equalsIgnoreCase("Particle Animation"))
+        {
+            try
+            {
+                if (input.equalsIgnoreCase("none"))
+                {
+                    pd.setParticleAnimationEffect(null);
+                    ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
+                    return true;
+                }
+                else
+                {
+                    PEAnimationType peAnimationType = PEAnimationType.valueOf(input.toUpperCase());
+                    pd.setParticleAnimationEffect(peAnimationType.getAnimationEffectInstance(getCc(), pd));
+                    pd.setHasAnimation(true);
+                    ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
+                    return true;
+                }
+            }
+            catch (Exception exc)
+            {
+                ChatUtils.msgError(getP(),
+                        input + " is not valid from the list of animations: " + Arrays.toString(PEAnimationType.values()));
+                return false;
+            }
+        }
+        else if (getInputMenu().getType() == Double.class)
         {
             if (Utils.isDouble(input))
             {
@@ -259,58 +319,6 @@ public class IGCCrateParticle extends IGCTierMenu
             else
             {
                 ChatUtils.msgError(getP(), input + " is not a valid double (number).");
-            }
-        }
-        else if (value.equalsIgnoreCase("amount"))
-        {
-            if (Utils.isInt(input))
-            {
-                pd.setAmount(Integer.parseInt(input));
-                ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
-                return true;
-            }
-            else
-            {
-                ChatUtils.msgError(getP(), input + " is not a valid integer (number).");
-            }
-        }
-        else if (value.equalsIgnoreCase("particle type"))
-        {
-            if (pd.setParticle(input))
-            {
-                ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
-                return true;
-            }
-            else
-            {
-                ChatUtils.msgError(getP(),
-                        input + " is not valid from the list of particles: " + Arrays.toString(ParticleEffect.values()));
-            }
-        }
-        else if (value.equalsIgnoreCase("particle animation"))
-        {
-            try
-            {
-                if (input.equalsIgnoreCase("none"))
-                {
-                    pd.setParticleAnimationEffect(null);
-                    ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
-                    return true;
-                }
-                else
-                {
-                    PEAnimationType peAnimationType = PEAnimationType.valueOf(input.toUpperCase());
-                    pd.setParticleAnimationEffect(peAnimationType.getAnimationEffectInstance(getCc(), pd));
-                    pd.setHasAnimation(true);
-                    ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
-                    return true;
-                }
-            }
-            catch (Exception exc)
-            {
-                ChatUtils.msgError(getP(),
-                        input + " is not valid from the list of animations: " + Arrays.toString(PEAnimationType.values()));
-                return false;
             }
         }
         return false;
