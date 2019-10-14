@@ -1,7 +1,10 @@
 package me.ztowne13.customcrates.crates.options.rewards.displaymenu.custom;
 
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
+import me.ztowne13.customcrates.players.PlayerManager;
+import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.FileHandler;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -24,12 +27,25 @@ public class DisplayPage
         this.pageNum = pageNum;
     }
 
-    public void load()
+    public boolean load()
     {
         FileHandler fileHandler = customRewardDisplayer.getCrates().getCs().getFu();
         FileConfiguration fc = fileHandler.get();
 
-        List<String> values = (List<String>) fc.getList(PREFIX + "." + pageNum);
+        if(!fc.contains(PREFIX + "." + pageNum))
+            return false;
+
+        List<String> values = null;
+        try
+        {
+            values = (List<String>) fc.getList(PREFIX + "." + pageNum);
+        }
+        catch(Exception exc)
+        {
+            exc.printStackTrace();
+            return false;
+        }
+
         slots = values.size() * 9;
 
         unformattedInv = new String[values.size()][9];
@@ -47,6 +63,8 @@ public class DisplayPage
                     unformattedInv[i][j] = args[j];
             }
         }
+
+        return true;
     }
 
     public InventoryBuilder buildInventoryBuilder(Player player)
@@ -79,6 +97,43 @@ public class DisplayPage
 
         ib.open();
 
+
+        PlayerManager pm = PlayerManager.get(customRewardDisplayer.getCrates().getCc(), player);
+        pm.setLastPage(this);
+        pm.setInRewardMenu(true);
+
         return ib;
+    }
+
+    public void handleInput(Player player, int slot)
+    {
+        SpecializedCrates sc = customRewardDisplayer.getCrates().getCc();
+        int x = slot / 9;
+        sc.getDu().log("handleInput() - x: " + x, getClass());
+        int y = slot % 9;
+        sc.getDu().log("handleInput() - y: " + y, getClass());
+        String symbolAt = unformattedInv[x][y];
+        sc.getDu().log("handleInput() - symbolAt: " + symbolAt, getClass());
+        sc.getDu().log("handleInput() - nextPageItem: " + customRewardDisplayer.getNextPageItem(), getClass());
+        sc.getDu().log("handleInput() - backpageitem: " + customRewardDisplayer.getPrevPageItem(), getClass());
+
+        if(symbolAt.equalsIgnoreCase(customRewardDisplayer.getNextPageItem()))
+        {
+            if(customRewardDisplayer.getPages().containsKey(pageNum + 1))
+                customRewardDisplayer.getPages().get(pageNum + 1).buildInventoryBuilder(player);
+            else
+                ChatUtils.msgError(player, "Page " + (pageNum + 1) + " does not exist. Please contact an administrator" +
+                        "to create the next page of the reward-preview menu OR remove this 'next page arrow' because there" +
+                        "is no next page.");
+        }
+        else if(symbolAt.equalsIgnoreCase(customRewardDisplayer.getPrevPageItem()))
+        {
+            if(customRewardDisplayer.getPages().containsKey(pageNum - 1))
+                customRewardDisplayer.getPages().get(pageNum - 1).buildInventoryBuilder(player);
+            else
+                ChatUtils.msgError(player, "Page " + (pageNum - 1) + " does not exist. Please contact an administrator" +
+                        "to create the previous page of the reward-preview menu OR remove this 'previous page arrow' because there" +
+                        "is no previous page.");
+        }
     }
 }

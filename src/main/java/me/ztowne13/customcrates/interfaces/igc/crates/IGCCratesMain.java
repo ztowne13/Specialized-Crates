@@ -69,9 +69,12 @@ public class IGCCratesMain extends IGCMenuCrate
             ib.setItem(34,
                     new ItemBuilder(Material.PAPER, 1, 0).setName("&a&lActions").setLore("&7Modify messages, broadcasts,")
                             .addLore("&7titles, subtitles, and").addLore("&7actionbars."));
-            ib.setItem(40, new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1).setName("&a&lRewards")
-                    .setLore("&7Add and remove rewards that").addLore("&7players will receive from")
-                    .addLore("&7this crate."));
+
+            ItemBuilder rewards = new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1);
+            rewards.setDisplayName("&a&lRewards");
+            rewards.addAutomaticLore("&7", 30, "Edit the rewards and edit the reward preview menu.");
+
+            ib.setItem(40, rewards);
         }
         else
         {
@@ -209,7 +212,7 @@ public class IGCCratesMain extends IGCMenuCrate
                     return;
                 }
             case 40:
-                new IGCCrateRewards(getCc(), getP(), this, crates, 1).open();
+                new IGCRewardOrPreviewMenu(getCc(), getP(), crates,this).open();
                 break;
             case 44:
                 if (cs.getOt().equals(ObtainType.LUCKYCHEST))

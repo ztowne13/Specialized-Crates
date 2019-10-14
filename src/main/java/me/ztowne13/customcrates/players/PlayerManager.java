@@ -5,6 +5,7 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.crates.options.rewards.displaymenu.custom.DisplayPage;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.players.data.*;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -34,7 +35,10 @@ public class PlayerManager
     Crate openCrate = null;
     Location lastOpenCrate = null;
     private IGCMenu openMenu = null, lastOpenMenu = null;
+
     boolean inRewardMenu = false;
+    DisplayPage lastPage;
+
     boolean canClose = true;
     boolean deleteCrate = false;
     boolean useVirtualCrate = false;
@@ -336,5 +340,15 @@ public class PlayerManager
     public PlacedCrate getLastOpenedPlacedCrate()
     {
         return lastOpenedPlacedCrate;
+    }
+
+    public DisplayPage getLastPage()
+    {
+        return lastPage;
+    }
+
+    public void setLastPage(DisplayPage lastPage)
+    {
+        this.lastPage = lastPage;
     }
 }

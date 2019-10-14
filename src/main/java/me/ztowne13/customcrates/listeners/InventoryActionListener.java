@@ -62,6 +62,12 @@ public class InventoryActionListener implements Listener
                 {
                     cc.getDu().log("onInventoryClick - CANCELLED");
                     e.setCancelled(true);
+
+                    cc.getDu().log("onInventoryClick - inRewardMenu: " + pm.isInRewardMenu() + " lastPage: " + pm.getLastPage());
+                    if(pm.isInRewardMenu() && pm.getLastPage() != null)
+                    {
+                        pm.getLastPage().handleInput(p, e.getSlot());
+                    }
                 }
             }
 
@@ -125,6 +131,7 @@ public class InventoryActionListener implements Listener
         final PlayerManager pm = PlayerManager.get(cc, p);
 
         pm.setInRewardMenu(false);
+        pm.setLastPage(null);
 
         if (pm.isInOpenMenu() && !pm.getOpenMenu().isInInputMenu())
         {

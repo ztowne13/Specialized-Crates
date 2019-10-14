@@ -40,7 +40,7 @@ public class CustomRewardDisplayer extends RewardDisplayer
     @Override
     public InventoryBuilder createInventory(Player p)
     {
-        if(pages.containsKey(1))
+        if (pages.containsKey(1))
             return pages.get(1).buildInventoryBuilder(p);
         return null;
     }
@@ -55,31 +55,43 @@ public class CustomRewardDisplayer extends RewardDisplayer
 
         ConfigurationSection configSection = fc.getConfigurationSection(PREFIX);
 
-        for(String key : configSection.getKeys(false))
+        for (String key : configSection.getKeys(false))
         {
             SaveableItemBuilder itemBuilder = new SaveableItemBuilder(DynamicMaterial.STONE, 1);
-            itemBuilder.loadItem(getCrates().getCs().getFu(), PREFIX + "." + key, getCrates().getCs().getSl(),
-                    StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_ITEM_FAILURE,
-                    StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_ENCHANTMENT_ADD_FAILURE,
-                    StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_POTION_ADD_FAILURE,
-                    StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_GLOW_FAILURE,
-                    StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_AMOUNT_FAILURE);
-            items.put(key, itemBuilder);
+            boolean successLoadItem =
+                    itemBuilder.loadItem(getCrates().getCs().getFu(), PREFIX + "." + key, getCrates().getCs().getSl(),
+                            StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_ITEM_FAILURE,
+                            StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_ENCHANTMENT_ADD_FAILURE,
+                            StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_POTION_ADD_FAILURE,
+                            StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_GLOW_FAILURE,
+                            StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_AMOUNT_FAILURE);
+            if(successLoadItem)
+                items.put(key, itemBuilder);
         }
+
+        configSection = fc.getConfigurationSection("reward-display.custom-display");
+
+        if(configSection.contains("nextpageitem"))
+            nextPageItem = configSection.getString("nextpageitem");
+        if(configSection.contains("lastpageitem"))
+            prevPageItem = configSection.getString("lastpageitem");
 
         configSection = fc.getConfigurationSection(DisplayPage.PREFIX);
 
-        for(String key : configSection.getKeys(false))
+        for (String key : configSection.getKeys(false))
         {
-            if(Utils.isInt(key))
+            if (Utils.isInt(key))
             {
                 int pageNum = Integer.parseInt(key);
                 DisplayPage displayPage = new DisplayPage(this, pageNum);
-                displayPage.load();
+                boolean successLoadPage = displayPage.load();
 
-                pages.put(pageNum, displayPage);
+                if(successLoadPage)
+                    pages.put(pageNum, displayPage);
             }
         }
+
+
     }
 
     public HashMap<String, ItemBuilder> getItems()
@@ -95,5 +107,10 @@ public class CustomRewardDisplayer extends RewardDisplayer
     public String getPrevPageItem()
     {
         return prevPageItem;
+    }
+
+    public HashMap<Integer, DisplayPage> getPages()
+    {
+        return pages;
     }
 }
