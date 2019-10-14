@@ -41,9 +41,9 @@ public abstract class RewardDisplayer
     {
         FileConfiguration fc = fileHandler.get();
 
-        if(fc.contains("reward-displayer.name"))
+        if(fc.contains("reward-display.name"))
         {
-            this.name = fc.getString("reward-displayer.name");
+            this.name = fc.getString("reward-display.name");
         }
     }
 

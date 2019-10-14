@@ -300,6 +300,7 @@ public class CrateSettingsBuilder
             {
                 RewardDisplayType rewardDisplayType = RewardDisplayType.valueOf(displayerString);
                 Crate crate = getSettings().getCrates();
+                getSettings().setRewardDisplayType(rewardDisplayType);
 
                 switch(rewardDisplayType)
                 {
@@ -323,12 +324,14 @@ public class CrateSettingsBuilder
             }
             catch(Exception exc)
             {
+                getSettings().setRewardDisplayType(RewardDisplayType.IN_ORDER);
                 getSettings().setDisplayer(new SimpleRewardDisplayer(getSettings().getCrates()));
                 StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_INVALID.log(getSl(), new String[]{displayerString});
             }
             return;
         }
 
+        getSettings().setRewardDisplayType(RewardDisplayType.IN_ORDER);
         getSettings().setDisplayer(new SimpleRewardDisplayer(getSettings().getCrates()));
         StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_NONEXISTENT.log(getSl());
     }

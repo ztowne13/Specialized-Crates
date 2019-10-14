@@ -4,6 +4,7 @@ import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.*;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayType;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayer;
 import me.ztowne13.customcrates.crates.types.CrateAnimation;
 import me.ztowne13.customcrates.crates.types.CrateType;
@@ -45,6 +46,7 @@ public class CrateSettings
     CrateDisplayType cdt;
     DynamicCratePlaceholder dcp;
     RewardDisplayer displayer;
+    RewardDisplayType rewardDisplayType;
 
     CrateAnimation ch;
     CHolograms choloCopy;
@@ -676,5 +678,15 @@ public class CrateSettings
     public void setDisplayer(RewardDisplayer displayer)
     {
         this.displayer = displayer;
+    }
+
+    public RewardDisplayType getRewardDisplayType()
+    {
+        return rewardDisplayType;
+    }
+
+    public void setRewardDisplayType(RewardDisplayType rewardDisplayType)
+    {
+        this.rewardDisplayType = rewardDisplayType;
     }
 }
