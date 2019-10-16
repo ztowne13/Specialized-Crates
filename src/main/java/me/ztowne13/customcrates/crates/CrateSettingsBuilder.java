@@ -336,6 +336,7 @@ public class CrateSettingsBuilder
         StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_NONEXISTENT.log(getSl());
     }
 
+
     public StatusLogger getSl()
     {
         return getSettings().getSl();

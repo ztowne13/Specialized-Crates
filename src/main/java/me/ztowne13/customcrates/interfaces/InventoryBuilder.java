@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces;
 
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,6 +33,12 @@ public class InventoryBuilder
 //        else if (slots > 27)
 //            minimumSlots = 27 * 2;
         setInv(Bukkit.createInventory(p, max(minimumSlots, slots), ChatColor.translateAlternateColorCodes('&', invName)));
+    }
+
+    public void clear()
+    {
+        for(int i = 0; i < inv.getSize(); i++)
+            setItem(i, new ItemBuilder(DynamicMaterial.AIR , 1));
     }
 
     public String getName()

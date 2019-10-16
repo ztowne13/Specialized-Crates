@@ -375,6 +375,38 @@ public class ItemBuilder implements EditableItem
         }
     }
 
+    @Override
+    public boolean equals(Object obj)
+    {
+        ItemBuilder compare = (ItemBuilder) obj;
+
+        boolean loreEquals = true;
+
+        if(compare == null)
+            return false;
+
+        if(getLore().size() == compare.getLore().size())
+        {
+            for(int i = 0; i < getLore().size(); i++)
+            {
+                if(!getLore().get(i).equals(compare.getLore().get(i)))
+                    loreEquals = false;
+            }
+        }
+        else
+        {
+            loreEquals = false;
+        }
+
+        boolean equal =
+                compare.getDisplayName().equals(getDisplayName())
+                && loreEquals
+                && compare.getStack().getType().equals(getStack().getType())
+                && compare.getStack().getAmount() == getStack().getAmount();
+
+        return equal;
+    }
+
     public ItemStack get()
     {
         return getStack();

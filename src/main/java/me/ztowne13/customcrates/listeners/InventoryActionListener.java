@@ -9,6 +9,7 @@ import me.ztowne13.customcrates.crates.types.animations.discover.DiscoverAnimati
 import me.ztowne13.customcrates.crates.types.animations.discover.DiscoverDataHolder;
 import me.ztowne13.customcrates.crates.types.animations.menu.MenuAnimation;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCMultiCrateMain;
+import me.ztowne13.customcrates.interfaces.igc.crates.previeweditor.IGCCratePreviewEditor;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCDragAndDrop;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -42,6 +43,26 @@ public class InventoryActionListener implements Listener
             cc.getDu().log("onInventoryDrag - CANCELLED");
             e.setCancelled(true);
         }
+        else if (playerManager.isInOpenMenu())
+        {
+            if (e.getView().getTopInventory() != null)
+            {
+                if (playerManager.getOpenMenu() instanceof IGCCratePreviewEditor && e.getRawSlots().equals(e.getInventorySlots()))
+                {
+                    try
+                    {
+                        for (int slot : e.getInventorySlots())
+                            ((IGCCratePreviewEditor) playerManager.getOpenMenu())
+                                    .manageClick(slot, true, e.getNewItems().values().iterator().next());
+                        e.setCancelled(true);
+                    }
+                    catch (Exception exc)
+                    {
+                        exc.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     @EventHandler
@@ -63,8 +84,9 @@ public class InventoryActionListener implements Listener
                     cc.getDu().log("onInventoryClick - CANCELLED");
                     e.setCancelled(true);
 
-                    cc.getDu().log("onInventoryClick - inRewardMenu: " + pm.isInRewardMenu() + " lastPage: " + pm.getLastPage());
-                    if(pm.isInRewardMenu() && pm.getLastPage() != null)
+                    cc.getDu().log("onInventoryClick - inRewardMenu: " + pm.isInRewardMenu() + " lastPage: " +
+                            pm.getLastPage());
+                    if (pm.isInRewardMenu() && pm.getLastPage() != null)
                     {
                         pm.getLastPage().handleInput(p, e.getSlot());
                     }
@@ -161,6 +183,19 @@ public class InventoryActionListener implements Listener
                     public void run()
                     {
                         pm.getOpenMenu().open();
+                    }
+                }, 1);
+            }
+            else if(pm.getOpenMenu() instanceof IGCCratePreviewEditor)
+            {
+                ((IGCCratePreviewEditor) pm.getOpenMenu()).getCustomRewardDisplayer().saveAllPages();
+                Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        if(pm.getOpenMenu() instanceof IGCCratePreviewEditor)
+                            pm.getOpenMenu().up();
                     }
                 }, 1);
             }

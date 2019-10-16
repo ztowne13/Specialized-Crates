@@ -1,54 +1,46 @@
-package me.ztowne13.customcrates.interfaces.igc;
+package me.ztowne13.customcrates.interfaces.igc.crates.previeweditor;
 
 import me.ztowne13.customcrates.SpecializedCrates;
+import me.ztowne13.customcrates.crates.Crate;
+import me.ztowne13.customcrates.crates.options.rewards.displaymenu.custom.CustomRewardDisplayer;
+import me.ztowne13.customcrates.crates.options.rewards.displaymenu.custom.DisplayPage;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
+import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
+import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
+import me.ztowne13.customcrates.interfaces.igc.crates.IGCMenuCrate;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
+import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class IGCListSelector extends IGCMenu
+public class IGCCratePreviewPageChooser extends IGCMenuCrate
 {
     int page;
-    String header;
-    DynamicMaterial displayItem;
-    List values;
-    List<ItemBuilder> builders = null;
-    List<String> descriptors = null;
-    boolean reopen = true;
+    List<Integer> values;
+    CustomRewardDisplayer displayer;
 
-    public IGCListSelector(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header,
-                           List values, DynamicMaterial displayItem, int page, List<String> descriptors, boolean reopen)
+    public IGCCratePreviewPageChooser(SpecializedCrates specializedCrates, Player player, Crate crate, IGCMenu lastMenu, int page)
     {
-        super(cc, p, lastMenu, "&7&l> &6&l" + header + " PG" + page);
-        this.header = header;
-        this.values = values;
+        super(specializedCrates, player, lastMenu, "&7&l> &6&lReward Preview Menu", crate);
+
+        this.displayer = (CustomRewardDisplayer) getCrates().getCs().getDisplayer();
         this.page = page;
-        this.displayItem = displayItem;
-        this.descriptors = descriptors;
-        this.reopen = reopen;
-    }
 
-    public IGCListSelector(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header,
-                           List values, DynamicMaterial displayItem, int page, List<String> descriptors)
-    {
-        this(cc, p, lastMenu, header, values, displayItem, page, descriptors, true);
-    }
+        values = new ArrayList<Integer>();
 
-    public IGCListSelector(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header,
-                           List values, DynamicMaterial displayItem, int page, List<String> descriptors,
-                           List<ItemBuilder> builders)
-    {
-        this(cc, p, lastMenu, header, values, displayItem, page, descriptors);
-        this.builders = builders;
+        for(Integer i : displayer.getPages().keySet())
+            values.add(i);
     }
 
     @Override
     public void open()
     {
+
         int slots;
 
         if (values.size() - ((page - 1) * 28) > 28)
@@ -58,10 +50,16 @@ public class IGCListSelector extends IGCMenu
 
         slots = InventoryUtils.getRowsFor(2, slots) + 9;
 
-        setInventoryName("&7&l> &6&l" + header + " PG" + page);
+        setInventoryName("&7&l> &6&lPreview Menu PG" + page);
         InventoryBuilder ib = createDefault(slots, 18);
 
-        ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
+        ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
+        ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
+
+        ItemBuilder builder = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        builder.setDisplayName("&aAdd a page");
+
+        ib.setItem(8, builder);
 
         int i = 10;
         int toSkip = ((page - 1) * 28);
@@ -86,28 +84,12 @@ public class IGCListSelector extends IGCMenu
             itemNum++;
             ItemBuilder item;
 
-            if (builders == null)
-            {
-                item = new ItemBuilder(displayItem, 1).setName("&a" + val);
+            item = new ItemBuilder(DynamicMaterial.BOOK, 1).setName("&a" + val);
 
-                if (descriptors != null)
-                    item.addAutomaticLore("&f", 30, descriptors.get(added));
+            item.addLore("")
+                    .addLore("&7&oClick to edit this page.");
 
-                item.addLore("")
-                        .addLore("&7&oClick to select this.");
-
-                added++;
-            }
-            else
-            {
-                item = builders.get(added);
-                item.setDisplayName("&a" + val);
-
-                if (descriptors != null)
-                    item.addAutomaticLore("&f", 30, descriptors.get(added));
-
-                added++;
-            }
+            added++;
 
             ib.setItem(i, item);
             i++;
@@ -133,6 +115,11 @@ public class IGCListSelector extends IGCMenu
     {
         if (slot == 0)
         {
+            getCrates().getCs().getFu().save();
+            ChatUtils.msgSuccess(getP(), "Saved!");
+        }
+        else if(slot == 9)
+        {
             up();
         }
         else if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
@@ -145,16 +132,30 @@ public class IGCListSelector extends IGCMenu
             page++;
             open();
         }
+        else if(slot == 8)
+        {
+            for(int i = 1; i < 1000; i++)
+            {
+                if (!values.contains(i))
+                {
+                    DisplayPage page = new DisplayPage(displayer, i);
+                    page.load();
+                    displayer.getPages().put(i, page);
+
+                    new IGCCratePreviewPageChooser(getCc(), getP(), getCrates(), getLastMenu(), 1).open();
+                    break;
+                }
+            }
+        }
         else if (getIb().getInv().getItem(slot) != null)
         {
             int row = slot / 9;
             int slotInRow = slot % 9;
             int num = ((page - 1) * 28) + ((row - 1) * 7) + (slotInRow - 1);
 
-            if(reopen)
-                up();
+            int pageNum = values.get(num);
 
-            lastMenu.handleInput(header, values.get(num).toString());
+            new IGCCratePreviewEditor(getCc(), getP(), getCrates(), this, displayer.getPages().get(pageNum)).open();
         }
     }
 

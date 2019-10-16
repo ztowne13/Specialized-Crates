@@ -1,17 +1,19 @@
-package me.ztowne13.customcrates.interfaces.igc.crates;
+package me.ztowne13.customcrates.interfaces.igc.crates.previeweditor;
 
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
+import me.ztowne13.customcrates.interfaces.igc.crates.IGCCrateRewards;
+import me.ztowne13.customcrates.interfaces.igc.crates.IGCMenuCrate;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import org.bukkit.entity.Player;
 
-public class IGCRewardOrPreviewMenu extends IGCMenuCrate
+public class IGCPreviewOrRewardMenu extends IGCMenuCrate
 {
-    public IGCRewardOrPreviewMenu(SpecializedCrates specializedCrates, Player player, Crate crate, IGCMenu lastMenu)
+    public IGCPreviewOrRewardMenu(SpecializedCrates specializedCrates, Player player, Crate crate, IGCMenu lastMenu)
     {
         super(specializedCrates, player, lastMenu, "&7&l> &6&lRewards", crate);
     }
@@ -48,10 +50,10 @@ public class IGCRewardOrPreviewMenu extends IGCMenuCrate
                 up();
                 break;
             case 3:
-                new IGCCrateRewards(getCc(), getP(), this, crates, 1).open();
+                new IGCCrateRewards(getCc(), getP(), this, getCrates(), 1).open();
                 break;
             case 5:
-                new IGCCratePreviewMenu(getCc(), getP(), crates, this).open();
+                new IGCCratePreviewMenu(getCc(), getP(), getCrates(), this).open();
                 break;
         }
     }

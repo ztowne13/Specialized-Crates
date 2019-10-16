@@ -100,7 +100,6 @@ public class CrateSettings
             getCmci().saveToFile();
         }
 
-
         getFu().save();
     }
 
