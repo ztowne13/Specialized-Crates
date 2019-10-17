@@ -38,13 +38,10 @@ public class LeftClickAction extends CrateAction
             // Preventing crates from being broken and displaying reward menu if need be
             if (CrateUtils.isCrateUsable(cm))
             {
-
                 if (!pm.isDeleteCrate() && (Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(cc))
                 {
                     if (!cm.getCrates().isMultiCrate())
-                    {
                         cm.getCrates().getCs().getDisplayer().openFor(player);
-                    }
                     return true;
                 }
             }

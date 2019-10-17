@@ -34,33 +34,8 @@ public class NPCEventListener implements Listener
     public void onNPCClickLeft(NPCLeftClickEvent e)
     {
         Player p = e.getClicker();
-        new LeftClickAction(cc, p, e.getNPC().getStoredLocation());
+        new LeftClickAction(cc, p, e.getNPC().getStoredLocation()).run();
 
     }
-
-    /**if (PlacedCrate.crateExistsAt(cc, e.getNPC().getStoredLocation()))
-     {
-     PlacedCrate cm = PlacedCrate.get(cc, e.getNPC().getStoredLocation());
-     if (CrateUtils.isCrateUsable(cm))
-     {
-     if (pm.isDeleteCrate())
-     {
-     cm.getCrates().getCs().getDcp().remove(cm);
-     cm.delete();
-     pm.setDeleteCrate(false);
-     Messages.SUCCESS_DELETE.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{cm.getCrates().getName()});
-     }
-     else if ((Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(cc))
-     {
-     new RewardDisplayer(cm.getCrates()).openFor(p);
-     e.setCancelled(true);
-     }
-     }
-     else
-     {
-     Messages.CRATE_DISABLED.msgSpecified(cc, p);
-     e.setCancelled(true);
-     }
-     }**/
 
 }
