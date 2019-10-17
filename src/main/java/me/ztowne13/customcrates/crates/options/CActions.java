@@ -112,17 +112,14 @@ public class CActions extends CSetting
         for (String words : split)
         {
             if (b)
-            {
                 action = words + " ";
-            }
             b = true;
         }
 
         if (action.startsWith(" "))
-        {
             action = action.substring(1);
-        }
 
+        action = action.substring(0, action.length() - 1);
         action = ChatUtils.toChatColor(action);
 
         addEntry(type, action, crateTier);
