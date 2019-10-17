@@ -76,7 +76,11 @@ public class DisplayPage
                 }
 
                 if(!found)
-                    customRewardDisplayer.getItems().put(customRewardDisplayer.getNextSymbol(), stack);
+                {
+                    String symbol = customRewardDisplayer.getNextSymbol();
+                    customRewardDisplayer.getItems().put(symbol, stack);
+                    lineFormat = lineFormat + symbol + ",";
+                }
             }
             format.add(lineFormat.substring(0, lineFormat.length() - 1));
         }

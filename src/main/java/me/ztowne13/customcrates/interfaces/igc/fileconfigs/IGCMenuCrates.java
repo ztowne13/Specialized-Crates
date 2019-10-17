@@ -5,6 +5,8 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.crates.options.ObtainType;
+import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayType;
+import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SimpleRewardDisplayer;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
@@ -14,6 +16,7 @@ import me.ztowne13.customcrates.interfaces.igc.crates.IGCCratesMain;
 import me.ztowne13.customcrates.interfaces.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
+import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.visuals.MaterialPlaceholder;
 import org.bukkit.Material;
@@ -144,6 +147,14 @@ public class IGCMenuCrates extends IGCMenu
                     cs.setDcp(new MaterialPlaceholder(getCc()));
                     cs.setCt(CrateType.INV_ROULETTE);
                     cs.setRequireKey(true);
+                    cs.setRewardDisplayType(RewardDisplayType.IN_ORDER);
+                    cs.setDisplayer(new SimpleRewardDisplayer(newCrate));
+
+                    SaveableItemBuilder builder = new SaveableItemBuilder(DynamicMaterial.CHEST, 1);
+                    builder.setDisplayName(input);
+
+                    cs.setCrate(builder);
+
                     newCrate.setEnabled(true);
                     newCrate.setCanBeEnabled(false);
 
@@ -152,8 +163,10 @@ public class IGCMenuCrates extends IGCMenu
                         cs.getCr().addReward(CRewards.getAllRewards().values().iterator().next().getRewardName());
                     }
 
+                    cs.saveAll();
+
                     new IGCCratesMain(getCc(), getP(), this, newCrate).open();
-                    ChatUtils.msgSuccess(getP(), "Create a new crate with the name " + input);
+                    ChatUtils.msgSuccess(getP(), "Created a new crate with the name " + input);
                     //	new InputMenu(getCc(), getP(), "crate obtain method", "null", "Available obtain methods: " + Arrays.toString(ObtainType.values()), String.class, this);
                 }
                 else
