@@ -21,6 +21,8 @@ import me.ztowne13.customcrates.interfaces.verification.AntiFraudSQLHandler;
 import me.ztowne13.customcrates.listeners.*;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
+import me.ztowne13.customcrates.players.data.FlatFileDataHandler;
+import me.ztowne13.customcrates.players.data.IndividualFileDataHandler;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.DebugUtils;
@@ -311,6 +313,7 @@ public class SpecializedCrates extends JavaPlugin
             if (getTick() == 10)
             {
                 setTick(0);
+                saveFilesTick();
 
                 for (Player p : Bukkit.getOnlinePlayers())
                 {
@@ -325,6 +328,21 @@ public class SpecializedCrates extends JavaPlugin
                 }
             }
         }
+    }
+
+    public void saveFilesTick()
+    {
+        for(FlatFileDataHandler file : FlatFileDataHandler.toSave)
+        {
+            file.getFu().save();
+        }
+        FlatFileDataHandler.toSave.clear();
+
+        for(IndividualFileDataHandler file : IndividualFileDataHandler.toSave)
+        {
+            file.getFu().save();
+        }
+        IndividualFileDataHandler.toSave.clear();
     }
 
     public void run()
