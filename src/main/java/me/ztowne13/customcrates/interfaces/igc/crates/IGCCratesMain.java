@@ -6,7 +6,7 @@ import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
-import me.ztowne13.customcrates.interfaces.igc.crates.previeweditor.IGCPreviewOrRewardMenu;
+import me.ztowne13.customcrates.interfaces.igc.crates.previeweditor.IGCCratePreviewOrRewardMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -213,7 +213,7 @@ public class IGCCratesMain extends IGCMenuCrate
                     return;
                 }
             case 40:
-                new IGCPreviewOrRewardMenu(getCc(), getP(), crates,this).open();
+                new IGCCratePreviewOrRewardMenu(getCc(), getP(), crates,this).open();
                 break;
             case 44:
                 if (cs.getOt().equals(ObtainType.LUCKYCHEST))

@@ -11,9 +11,9 @@ import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import org.bukkit.entity.Player;
 
-public class IGCPreviewOrRewardMenu extends IGCMenuCrate
+public class IGCCratePreviewOrRewardMenu extends IGCMenuCrate
 {
-    public IGCPreviewOrRewardMenu(SpecializedCrates specializedCrates, Player player, Crate crate, IGCMenu lastMenu)
+    public IGCCratePreviewOrRewardMenu(SpecializedCrates specializedCrates, Player player, Crate crate, IGCMenu lastMenu)
     {
         super(specializedCrates, player, lastMenu, "&7&l> &6&lRewards", crate);
     }
