@@ -12,6 +12,7 @@ import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
@@ -70,7 +71,16 @@ public class IGCDragAndDrop extends IGCMenu
                     r.setChance(10);
                     r.setRarity("default");
                     r.setCommands((ArrayList<String>) cmds.clone());
-                    r.setItemBuilder(new ItemBuilder(stack));
+
+                    if(!stack.getItemMeta().hasDisplayName())
+                    {
+                        ItemMeta meta = stack.getItemMeta();
+                        meta.setDisplayName(rewardName);
+                        stack.setItemMeta(meta);
+                    }
+
+                    r.setBuilder(new ItemBuilder(stack));
+
                     r.setGiveDisplayItem(true);
                     r.setGiveDisplayItemLore(false);
                     r.setNeedsMoreConfig(false);

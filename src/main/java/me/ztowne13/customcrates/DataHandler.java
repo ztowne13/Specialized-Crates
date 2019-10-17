@@ -47,7 +47,8 @@ public class DataHandler
                 for (String cmd : configSection.getStringList(uuidStr))
                 {
                     QueuedGiveCommand queuedGiveCommand = new QueuedGiveCommand(cmd);
-                    cmds.add(queuedGiveCommand);
+                    if(queuedGiveCommand.isStillExists())
+                        cmds.add(queuedGiveCommand);
                 }
 
                 quedGiveCommands.put(uuid, cmds);
@@ -105,6 +106,11 @@ public class DataHandler
         }, LOGIN_WAIT);
     }
 
+    public HashMap<UUID, ArrayList<QueuedGiveCommand>> getQuedGiveCommands()
+    {
+        return quedGiveCommands;
+    }
+
     public class QueuedGiveCommand
     {
         UUID uuid;
@@ -112,6 +118,7 @@ public class DataHandler
         boolean virtual;
         int amount;
         Crate crate;
+        boolean stillExists = true;
 
         public QueuedGiveCommand(String cmd)
         {
@@ -120,7 +127,14 @@ public class DataHandler
             this.key = Boolean.valueOf(args[1]);
             this.virtual = Boolean.valueOf(args[2]);
             this.amount = Integer.parseInt(args[3]);
-            this.crate = Crate.getCrate(cc, args[4]);
+            try
+            {
+                this.crate = Crate.getCrate(cc, args[4]);
+            }
+            catch(Exception exc)
+            {
+                stillExists = false;
+            }
         }
 
         public QueuedGiveCommand(UUID uuid, boolean key, boolean virtual, int amount, Crate crate)
@@ -177,6 +191,16 @@ public class DataHandler
                                 " no longer exists. The qued command will be removed.");
                 exc.printStackTrace();
             }
+        }
+
+        public boolean isStillExists()
+        {
+            return stillExists;
+        }
+
+        public Crate getCrate()
+        {
+            return crate;
         }
 
         @Override

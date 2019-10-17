@@ -116,13 +116,13 @@ public class CSGOManager extends InventoryCrateAnimation
                 {
                     cdh.getDisplayedRewards()[numToSet] = cdh.getDisplayedRewards()[i];
 
-                    inv.setItem(numToSet + 10, cdh.getDisplayedRewards()[numToSet].getItemBuilder());
+                    inv.setItem(numToSet + 10, cdh.getDisplayedRewards()[numToSet].getDisplayBuilder());
                 }
             }
 
             Reward r = getCrates().getCs().getCr().getRandomReward(cdh.getP());
             cdh.getDisplayedRewards()[cdh.getDisplayedRewards().length - 1] = r;
-            inv.setItem(cdh.getDisplayedRewards().length + 9, r.getItemBuilder());
+            inv.setItem(cdh.getDisplayedRewards().length + 9, r.getDisplayBuilder());
         }
         else
         {
@@ -131,7 +131,7 @@ public class CSGOManager extends InventoryCrateAnimation
                 Reward r = cdh.getDisplayedRewards()[i];
                 if (r != null)
                 {
-                    inv.setItem(i + 10, r.getItemBuilder());
+                    inv.setItem(i + 10, r.getDisplayBuilder());
                 }
             }
         }

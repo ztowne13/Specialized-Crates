@@ -4,8 +4,12 @@ import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.FileHandler;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
+
 public class IndividualFileDataHandler extends DataHandler
 {
+    public static ArrayList<IndividualFileDataHandler> toSave = new ArrayList<>();
+
     FileHandler fu;
     FileConfiguration fc;
 
@@ -35,7 +39,9 @@ public class IndividualFileDataHandler extends DataHandler
     public void write(String value, String toWrite)
     {
         getFc().set(value, toWrite);
-        getFu().save();
+
+        if(!toSave.contains(this))
+            toSave.add(this);
     }
 
     @Override

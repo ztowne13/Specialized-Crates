@@ -20,4 +20,14 @@ public abstract class IGCMenuCrate extends IGCMenu
         this.crates = crates;
         this.cs = crates.getCs();
     }
+
+    public Crate getCrates()
+    {
+        return crates;
+    }
+
+    public CrateSettings getCs()
+    {
+        return cs;
+    }
 }

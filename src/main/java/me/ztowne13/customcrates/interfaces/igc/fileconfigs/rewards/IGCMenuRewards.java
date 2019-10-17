@@ -35,21 +35,7 @@ public class IGCMenuRewards extends IGCMenu
 
         boolean newValues = false;
 
-        for(String rName : getCc().getRewardsFile().get().getKeys(false))
-        {
-            if (!CRewards.getAllRewards().keySet().contains(rName))
-            {
-                if(!newValues)
-                {
-                    newValues = true;
-                    ChatUtils.msgInfo(getP(), "It can take a while to load all of the rewards for the first time...");
-                }
-                Reward r = new Reward(getCc(), rName);
-                r.loadFromConfig();
-                r.loadChance();
-                CRewards.allRewards.put(rName, r);
-            }
-        }
+        CRewards.loadAll(getCc(), getP());
 
         if (CRewards.getAllRewards().size() - ((page - 1) * 28) >= 28)
         {
@@ -108,7 +94,7 @@ public class IGCMenuRewards extends IGCMenu
                 newR = new ItemBuilder(DynamicMaterial.BARRIER, 1).setName("&4&l" + rName)
                         .setLore("&cThis reward isn't fully configured,").addLore("&cplease fix it and reload the plugin.");
             else
-                newR = new ItemBuilder(r.getItemBuilder().getStack()).setName("&a" + rName);
+                newR = new ItemBuilder(r.getDisplayBuilder().getStack()).setName("&a" + rName);
 
             newR.addLore("").addLore("&7Used by crates:").addLore("");
             for (String s : r.delete(false).replace("[", "").replace("]", "").split(", "))

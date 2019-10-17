@@ -225,7 +225,7 @@ public class PlayerDataManager
         setHistory(history);
         getHistoryEvents().add(he);
         he.getCrates().setLastOpenedName(getPm().getP().getName());
-
+        
         String rewards = he.getRewards().toString();
 
         he.getCrates().setLastOpenedReward(rewards.substring(1, rewards.length() - 1));

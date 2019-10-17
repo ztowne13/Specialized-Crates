@@ -7,7 +7,10 @@ import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import java.util.Arrays;
 
 public class PlaceHolderAPIHandler extends PlaceholderExpansion
 {
@@ -81,30 +84,38 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
             // specializedcrates_cooldown
             if (args[0].equalsIgnoreCase("cooldown"))
             {
-                // specializedcrates_cooldown_[cratename]
-                if (!Crate.exists(args[1]))
-                    return "[" + args[1] + " is an invalid crate]";
+                try
+                {
+                    // specializedcrates_cooldown_[cratename]
+                    if (!Crate.exists(args[1]))
+                        return "[" + args[1] + " is an invalid crate]";
 
-                Crate crate = Crate.getCrate(cc, args[1]);
+                    Crate crate = Crate.getCrate(cc, args[1]);
 
-                if (playerDataManager.getCrateCooldownEventByCrates(crate) == null)
-                    return "0";
+                    if (playerDataManager.getCrateCooldownEventByCrates(crate) == null)
+                        return "-";
 
-                int seconds = Math.round(playerDataManager.getCrateCooldownEventByCrates(crate).isCooldownOver());
-                String[] values = Utils.ConvertSecondToHHMMString(seconds);
-                String formatted = "";
-                if (!values[0].equalsIgnoreCase("0"))
-                    formatted = formatted + values[0] + " days, ";
-                if (!values[1].equalsIgnoreCase("00"))
-                    formatted = formatted + values[1] + " hours, ";
-                if (!values[2].equalsIgnoreCase("00"))
-                    formatted = formatted + values[2] + " minutes, ";
-                if (!values[3].equalsIgnoreCase("00"))
-                    formatted = formatted + values[3] + " seconds";
-                else
-                    formatted = formatted.substring(0, formatted.length() - 2);
+                    int seconds = Math.round(playerDataManager.getCrateCooldownEventByCrates(crate).isCooldownOver());
 
-                return formatted;
+                    String[] values = Utils.ConvertSecondToHHMMString(seconds);
+                    String formatted = "";
+
+                    Bukkit.broadcastMessage(Arrays.toString(values));
+
+                    if (!values[0].equalsIgnoreCase("0"))
+                        formatted = formatted + values[0] + " days, ";
+                    if (!values[1].equalsIgnoreCase("00"))
+                        formatted = formatted + values[1] + " hours, ";
+                    if (!values[2].equalsIgnoreCase("00"))
+                        formatted = formatted + values[2] + " minutes, ";
+                    if (!values[3].equalsIgnoreCase("00"))
+                        formatted = formatted + values[3] + " seconds";
+//                    else
+//                        formatted = formatted.substring(0, formatted.length() - 2);
+
+                    return formatted.equals("") ? "0" : formatted;
+                }
+                catch(Exception exc) {exc.printStackTrace();}
             }
         }
         else if (args.length == 3)
@@ -121,12 +132,26 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
                 // specializedcrates_virtual_keys_[cratename]
                 if (args[1].equalsIgnoreCase("keys"))
                 {
-                    return "" + playerDataManager.getVirtualCrateData().get(crate).getKeys();
+                    String value = "0";
+                    try
+                    {
+                        value = "" + playerDataManager.getVirtualCrateData().get(crate).getKeys();
+                    }
+                    catch (Exception exc) {}
+
+                    return value;
                 }
                 // specializedcrates_virtual_crates_[cratename]
                 else if (args[1].equalsIgnoreCase("crates"))
                 {
-                    return "" + playerDataManager.getVirtualCrateData().get(crate).getCrates();
+                    String value = "0";
+
+                    try
+                    {
+                        value = playerDataManager.getVirtualCrateData().get(crate).getCrates() + "";
+                    } catch (Exception exc) {}
+
+                    return value;
                 }
             }
             else if (args[0].equalsIgnoreCase("last"))

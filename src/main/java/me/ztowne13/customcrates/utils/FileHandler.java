@@ -4,10 +4,8 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -142,7 +140,8 @@ public class FileHandler
         {
             try
             {
-                FileInputStream fileInputSteam = new FileInputStream(getDataFile());
+                FileInputStream fileInputSteamBefore = new FileInputStream(getDataFile());
+                InputStreamReader fileInputSteam = new InputStreamReader(fileInputSteamBefore, Charset.forName("UTF-8"));
 
                 setLoaded("");
 

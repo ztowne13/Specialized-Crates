@@ -6,6 +6,7 @@ import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -188,6 +189,27 @@ public class CRewards extends CSetting
             totalOdds += odds;
         }
         return totalOdds;
+    }
+
+    public static void loadAll(SpecializedCrates specializedCrates, Player player)
+    {
+        boolean newValues = false;
+
+        for(String rName : specializedCrates.getRewardsFile().get().getKeys(false))
+        {
+            if (!getAllRewards().keySet().contains(rName))
+            {
+                if(!newValues)
+                {
+                    newValues = true;
+                    ChatUtils.msgInfo(player, "It can take a while to load all of the rewards for the first time...");
+                }
+                Reward r = new Reward(specializedCrates, rName);
+                r.loadFromConfig();
+                r.loadChance();
+                allRewards.put(rName, r);
+            }
+        }
     }
 
     public static boolean rewardNameExists(SpecializedCrates cc, String name)
