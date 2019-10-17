@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.crates;
 
+import me.ztowne13.customcrates.DataHandler;
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.*;
@@ -16,13 +17,16 @@ import me.ztowne13.customcrates.utils.CrateUtils;
 import me.ztowne13.customcrates.utils.FileHandler;
 import me.ztowne13.customcrates.visuals.CrateDisplayType;
 import me.ztowne13.customcrates.visuals.DynamicCratePlaceholder;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class CrateSettings
 {
@@ -293,14 +297,39 @@ public class CrateSettings
         crates.deleteAllPlaced();
         try
         {
-            org.apache.commons.io.FileUtils.forceDelete(getFu().getDataFile());
+            FileUtils.forceDelete(getFu().getDataFile());
         }
         catch (Exception exc)
         {
             exc.printStackTrace();
             return "File nonexistent, please try reloading or contacting the plugin author.";
         }
-        cc.reload();
+
+        for(UUID id : cc.getDataHandler().getQuedGiveCommands().keySet())
+        {
+            ArrayList<DataHandler.QueuedGiveCommand> cmds = cc.getDataHandler().getQuedGiveCommands().get(id);
+            for(DataHandler.QueuedGiveCommand cmd : cmds)
+            {
+                if(cmd.getCrate().equals(getCrates()))
+                {
+                    cmds.remove(cmd);
+                    cc.getDataHandler().getQuedGiveCommands().remove(id);
+                    cc.getDataHandler().getQuedGiveCommands().put(id, cmds);
+                }
+            }
+        }
+
+        cc.getDataHandler().saveToFile();
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                cc.reload();
+
+            }
+        }, 20);
         return path.toString();
     }
 
