@@ -53,6 +53,7 @@ public class Edit extends SubCommand
                     Crate crate = Crate.getCrate(cc, args[1]);
                     new IGCCratesMain(cc, p, null, crate).open();
                     ChatUtils.msgSuccess(p, "Opening config menu for crate: " + crate.getName());
+                    return true;
                 }
                 ChatUtils.msgError(p, args[1] + " is not a valid crate name.");
             }
