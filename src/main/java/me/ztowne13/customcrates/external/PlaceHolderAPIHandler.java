@@ -7,10 +7,7 @@ import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import java.util.Arrays;
 
 public class PlaceHolderAPIHandler extends PlaceholderExpansion
 {
@@ -99,8 +96,6 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
 
                     String[] values = Utils.ConvertSecondToHHMMString(seconds);
                     String formatted = "";
-
-                    Bukkit.broadcastMessage(Arrays.toString(values));
 
                     if (!values[0].equalsIgnoreCase("0"))
                         formatted = formatted + values[0] + " days, ";
