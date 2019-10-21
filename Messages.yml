@@ -23,3 +23,7 @@ insufficient-virtual-crates: '&4&lERROR! &cYou do not have enough virtual crates
 confirm-open-all: '&6&lINFO: &eConfirm opening ALL KEYS AT ONCE by shift-clicking again. This will cancel after %timeout% seconds.'
 confirm-open: '&6&lINFO: &eConfirm opening crate by clicking again. This will cancel after %timeout% seconds.'
 loading-from-database: '&6&lINFO: &ePlease wait till your information is loaded.'
+placeholder-seconds: 'seconds'
+placeholder-minutes: 'minutes'
+placeholder-hours: 'hours'
+placeholder-days: 'days'
