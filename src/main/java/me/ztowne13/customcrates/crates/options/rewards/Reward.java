@@ -92,6 +92,8 @@ public class Reward
             catch(Exception exc) { }
 
             Utils.addItemAndDropRest(p, stack.get());
+
+            p.updateInventory();
         }
 
         for (String command : getCommands())
