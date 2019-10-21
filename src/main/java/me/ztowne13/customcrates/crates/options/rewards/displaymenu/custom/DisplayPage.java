@@ -126,7 +126,7 @@ public class DisplayPage
 
         for (int i = 0; i < values.size(); i++)
         {
-            String line = values.get(i).replaceAll("\\s", "");
+            String line = values.get(i).replaceAll(", ", ",");
             String[] args = line.split(",");
 
             for (int j = 0; j < 9; j++)

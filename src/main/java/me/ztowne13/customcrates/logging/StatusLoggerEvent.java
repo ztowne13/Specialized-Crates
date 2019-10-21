@@ -101,6 +101,8 @@ public enum StatusLoggerEvent
 
     REWARD_ADD_SUCCESS(true, "Rewards", "Added reward $?$", "NONE"),
 
+    REWARD_ADD_FAILURE_SPACE(false, "Rewards", "Failed to add reward $?$", "It cannot have any spaces in its name!"),
+
     REWARD_NONEXISTENT(false, "Rewards", "The 'rewards' path does not exist in the config", "NONE"),
 
     REWARD_CHANCE_NONEXISTENT(false, "Rewards", "Failed to load CHANCE for reward: $?$",

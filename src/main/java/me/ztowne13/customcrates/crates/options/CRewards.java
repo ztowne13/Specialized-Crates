@@ -105,6 +105,7 @@ public class CRewards extends CSetting
             for (int i = 0; i < unparsedRewards.size(); i++)
             {
                 String s = unparsedRewards.get(i);
+
                 Reward reward = new Reward(getCrates().getCc(), this, s);
 
                 setReward(slot, reward);
