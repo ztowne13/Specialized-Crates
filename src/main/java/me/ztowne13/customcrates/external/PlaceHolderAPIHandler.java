@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.external;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
@@ -98,13 +99,13 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
                     String formatted = "";
 
                     if (!values[0].equalsIgnoreCase("0"))
-                        formatted = formatted + values[0] + " days, ";
+                        formatted = formatted + values[0] + " " + Messages.PLACEHOLDER_DAYS.getPropperMsg(crate.getCc()) + ", ";
                     if (!values[1].equalsIgnoreCase("00"))
-                        formatted = formatted + values[1] + " hours, ";
+                        formatted = formatted + values[1] + " " + Messages.PLACEHOLDER_HOURS.getPropperMsg(crate.getCc()) + ", ";
                     if (!values[2].equalsIgnoreCase("00"))
-                        formatted = formatted + values[2] + " minutes, ";
+                        formatted = formatted + values[2] + " " + Messages.PLACEHOLDER_MINUTES.getPropperMsg(crate.getCc()) + ", ";
                     if (!values[3].equalsIgnoreCase("00"))
-                        formatted = formatted + values[3] + " seconds";
+                        formatted = formatted + values[3] + " " + Messages.PLACEHOLDER_SECONDS.getPropperMsg(crate.getCc());
 //                    else
 //                        formatted = formatted.substring(0, formatted.length() - 2);
 

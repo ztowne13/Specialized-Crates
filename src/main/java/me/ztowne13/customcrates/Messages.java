@@ -57,8 +57,16 @@ public enum Messages
 
     LOADING_FROM_DATABASE,
 
+    PLACEHOLDER_SECONDS("","seconds"),
+
+    PLACEHOLDER_MINUTES("","minutes"),
+
+    PLACEHOLDER_HOURS("","hours"),
+
+    PLACEHOLDER_DAYS("","days"),
+
     BLACKLISTED_PLUGIN("&cIMPORTANT: THIS COPY OF THE SPECIALIZED CRATES HAS BEEN BLACKLISTED BECAUSE THE USER WHO PURCHASED IT" +
-            " IS NOT THE ONLY PERSON USING IT. IF YOU BELIEVE THIS IS AN ERROR, PLEASE RE-DOWNLOAD THE PLUGIN (NO" +
+            " IS NOT THE ONLY PERSON USING IT, OR THIS PERSON HAS REFUNDED IT. IF YOU BELIEVE THIS IS AN ERROR, PLEASE RE-DOWNLOAD THE PLUGIN (NO" +
             " NEED TO REGENERATE CONFIG) AND TRY AGAIN. IF IT'S STILL NOT WORKING, PLEASE CONTACT ZTOWNE13."),
 
     BYPASS_BREAK_RESTRICTIONS("&9&lNOTICE! &bThis crate typically isn't placeable, you have bypassed this restriction."),
@@ -75,6 +83,7 @@ public enum Messages
     FOOTER("&3&l>> &7&m----------------------------------------------&3&l <<");
 
     String msg;
+    String defaultMsg;
 
     Messages()
     {
@@ -83,7 +92,13 @@ public enum Messages
 
     Messages(String msg)
     {
+        this(msg, "");
+    }
+
+    Messages(String msg, String defaultMsg)
+    {
         this.msg = msg;
+        this.defaultMsg = defaultMsg;
     }
 
     static HashMap<Messages, String> cachedMessages = new HashMap<Messages, String>();
@@ -95,7 +110,7 @@ public enum Messages
 
         try
         {
-            String val = cc.getMessageFile().get().getString(name().toLowerCase().replace("_", "-"));
+            String val = cc.getMessageFile().get().getString(nameFormatted());
 
             if (val == null)
                 throw new Exception();
@@ -105,11 +120,25 @@ public enum Messages
         }
         catch (Exception exc)
         {
-            cachedMessages.put(this, ChatUtils.toChatColor(
-                    "&eThis value isn't set, please tell the server operator to configure the " + name() + " value."));
+            if(defaultMsg.equalsIgnoreCase(""))
+            {
+                cachedMessages.put(this, ChatUtils.toChatColor(
+                        "&eThis value isn't set, please tell the server operator to configure the " + name() + " value."));
+            }
+            else
+            {
+                cachedMessages.put(this, ChatUtils.toChatColor(defaultMsg));
+                cc.getMessageFile().get().set(nameFormatted(), defaultMsg);
+                cc.getMessageFile().save();
+            }
             return ChatUtils.toChatColor(
                     "&eThis value isn't set, please tell the server operator to configure the " + name() + " value.");
         }
+    }
+
+    public String nameFormatted()
+    {
+        return name().toLowerCase().replace("_", "-");
     }
 
     public void msgSpecified(SpecializedCrates cc, Player p)
