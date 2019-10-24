@@ -170,6 +170,8 @@ public enum StatusLoggerEvent
 
     SETTINGS_CRATE_FAILURE_DISABLE(false, "Settings", "Failed to load the crate settings for the crate... disabling", "$?$"),
 
+    SETTINGS_CRATE_FAILURE_INDIVIDUAL(false, "Settings", "Failed to place an instance of this crate.", "$?$"),
+
     SETTINGS_CRATE_FAILURE(false, "Settings", "Failed to load the crate item.", "$?$"),
 
     SETTINGS_KEY_LORE_ADDLINE(true, "Settings", "Added line to the key's lore: $?$", "NONE"),
