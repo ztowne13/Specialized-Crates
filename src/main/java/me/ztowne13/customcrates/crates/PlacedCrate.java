@@ -4,6 +4,7 @@ import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.CHolograms;
 import me.ztowne13.customcrates.crates.options.ObtainType;
+import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Location;
@@ -116,7 +117,17 @@ public class PlacedCrate
 
     public static PlacedCrate get(SpecializedCrates cc, Location l)
     {
-        Location bl = l.getBlock().getLocation();
+        Location bl;
+        try
+        {
+            bl = l.getBlock().getLocation();
+        }
+        catch(Exception exc)
+        {
+            ChatUtils.log("A crate is trying to be placed in an ungenerated chunk or world. Deleting that placed instance.");
+            return null;
+        }
+
         return getPlacedCrates().containsKey(bl) ? getPlacedCrates().get(bl) : new PlacedCrate(cc, l);
     }
 

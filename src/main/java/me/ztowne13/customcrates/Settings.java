@@ -77,7 +77,14 @@ public class Settings
             {
                 Crate crates = Crate.getCrate(getCc(), crateName);
 
-                PlacedCrate cm = new PlacedCrate(getCc(), l);
+                PlacedCrate cm = PlacedCrate.get(getCc(), l);
+                if(cm == null)
+                {
+                    ChatUtils.log("location: " + s);
+                    getCc().getActivecratesFile().get().set(s, null);
+                    getCc().getActivecratesFile().save();
+                    continue;
+                }
 
                 if (crates.isEnabled())
                 {

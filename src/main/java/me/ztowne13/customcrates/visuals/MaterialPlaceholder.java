@@ -20,14 +20,7 @@ public class MaterialPlaceholder extends DynamicCratePlaceholder
         Material m = cm.getCrates().getCs().getCrate(1).getType();
         if (cm.getCrates().isEnabled())
         {
-            if(cm.getL().getBlock() == null)
-            {
-                StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(cm.getCrates().getCs().getSl(),
-                        new String[]{"A crate is trying to be placed in an ungenerated chunk. Deleting that placed instance."});
-                cm.setCratesEnabled(false);
-                cm.delete();
-            }
-            else if (!cm.getL().getBlock().getType().equals(cm.getCrates().getCs().getCrate(1).getType()))
+            if (!cm.getL().getBlock().getType().equals(cm.getCrates().getCs().getCrate(1).getType()))
             {
                 try
                 {
