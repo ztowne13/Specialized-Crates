@@ -309,7 +309,6 @@ public class Utils
         HashMap<Integer, ItemStack> list = player.getInventory().addItem(stack);
         for(ItemStack toDrop : list.values())
         {
-            Bukkit.broadcastMessage(toDrop.getType().name() + " - " + toDrop.getAmount());
             player.getWorld().dropItemNaturally(player.getLocation(), toDrop);
         }
     }

@@ -4,7 +4,6 @@ import me.ztowne13.customcrates.logging.StatusLogger;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.FileHandler;
-import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -64,13 +63,10 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
             fc.set(prefix + ".lore", null);
 
         // NBT Tags
-        if (NMSUtils.Version.v1_12.isServerVersionOrEarlier() && NMSUtils.Version.v1_8.isServerVersionOrLater())
-        {
-            if (!getNBTTags().isEmpty())
-                fc.set(prefix + ".nbt-tags", getNBTTags());
-            else
-                fc.set(prefix + ".nbt-tags", null);
-        }
+        if (!getNBTTags().isEmpty())
+            fc.set(prefix + ".nbt-tags", getNBTTags());
+        else
+            fc.set(prefix + ".nbt-tags", null);
 
     }
 

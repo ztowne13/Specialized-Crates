@@ -10,7 +10,6 @@ import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.FileHandler;
-import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -229,13 +228,17 @@ public class Reward implements Comparable<Reward>
             fc.set(getPath("lore"), null);
 
         // NBT Tags
-        if (NMSUtils.Version.v1_12.isServerVersionOrEarlier() && NMSUtils.Version.v1_8.isServerVersionOrLater())
-        {
-            if (!saveBuilder.getNBTTags().isEmpty())
-                fc.set(getPath("nbt-tags"), saveBuilder.getNBTTags());
-            else
-                fc.set(getPath("nbt-tags"), null);
-        }
+//        if (NMSUtils.Version.v1_12.isServerVersionOrEarlier() && NMSUtils.Version.v1_8.isServerVersionOrLater())
+//        {
+//            if (!saveBuilder.getNBTTags().isEmpty())
+//                fc.set(getPath("nbt-tags"), saveBuilder.getNBTTags());
+//            else
+//                fc.set(getPath("nbt-tags"), null);
+//        }
+        if (!saveBuilder.getNBTTags().isEmpty())
+            fc.set(getPath("nbt-tags"), saveBuilder.getNBTTags());
+        else
+            fc.set(getPath("nbt-tags"), null);
 
         fu.save();
     }
@@ -484,14 +487,12 @@ public class Reward implements Comparable<Reward>
             }
         }
 
-        if (NMSUtils.Version.v1_12.isServerVersionOrEarlier() && NMSUtils.Version.v1_8.isServerVersionOrLater())
+
+        if (getFc().contains(getPath("nbt-tags")))
         {
-            if (getFc().contains(getPath("nbt-tags")))
+            for (String s : fc.getStringList(getPath("nbt-tags")))
             {
-                for (String s : fc.getStringList(getPath("nbt-tags")))
-                {
-                    saveBuilder.addNBTTag(s);
-                }
+                saveBuilder.addNBTTag(s);
             }
         }
 

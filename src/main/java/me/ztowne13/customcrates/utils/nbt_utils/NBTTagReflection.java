@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ztowne13 on 6/11/16.
@@ -68,6 +69,7 @@ public class NBTTagReflection
 
     public static ItemStack applyTo(ItemStack item, String tag)
     {
+
         Object stack = getNMSItemStack(item);
         Object tagCompound = getNBTTagCompound(stack);
         if (tagCompound == null)
@@ -93,14 +95,23 @@ public class NBTTagReflection
         }
         else
         {
+            String[] args = tag.split(" ");
+            String key = args[0];
+            String value = args[1];
+
+            Object idNTC = getNewNBTTagCompound();
             try
             {
-                tagCompound.getClass().getMethod("setString", String.class, String.class)
-                        .invoke(tagCompound, "Potion", "minecraft:" + tag);
+                idNTC.getClass().getMethod("setString", String.class, String.class)
+                        .invoke(idNTC, "id", value);
+
+                tagCompound.getClass().getMethod("set", String.class,
+                        Class.forName("net.minecraft.server." + NMSUtils.getVersionRaw() + ".NBTBase"))
+                        .invoke(tagCompound, key, idNTC);
             }
             catch (Exception exc)
             {
-                ChatUtils.log("Failed to get apply potion NBT Tag Compound. Please check plugin is up to date.");
+                ChatUtils.log("Failed to get apply '" + key + " " + value + "' tag. Please check plugin is up to date.");
             }
         }
 
@@ -116,6 +127,14 @@ public class NBTTagReflection
         }
         return null;
     }
+
+    private static String[] excludedTags = new String[]{
+            "display",
+            "Enchantments",
+            "SkullOwner",
+            "HideFlags",
+            "Potion"
+    };
 
     public static List<String> getFrom(ItemStack item)
     {
@@ -140,16 +159,36 @@ public class NBTTagReflection
         }
         else
         {
-//            try
-//            {
-//                list.add(tagCompound.getClass().getMethod("getString", String.class).invoke(tagCompound, "Potion").toString()
-//                        .split(":")[1]);
-//            }
-//            catch (Exception exc)
-//            {
-//                exc.printStackTrace();
-//                ChatUtils.log("Failed to load NBT Tag Compound from stack. Please check plugin is up to date.");
-//            }
+            try
+            {
+                Set<String> keys = (Set<String>) tagCompound.getClass().getMethod("getKeys").invoke(tagCompound);
+
+                for (String key : keys)
+                {
+                    boolean toSkip = false;
+                    for (String excludedTag : excludedTags)
+                    {
+                        if (key.equalsIgnoreCase(excludedTag))
+                        {
+                            toSkip = true;
+                            break;
+                        }
+                    }
+
+                    if (!toSkip)
+                    {
+
+                        Object nbtBase = tagCompound.getClass().getMethod("get", String.class).invoke(tagCompound, key);
+
+                        list.add(key + " " + nbtBase);
+                    }
+                }
+            }
+            catch(Exception exc)
+            {
+                exc.printStackTrace();
+                ChatUtils.log("Failed to load NBT Tag Compound BASE from stack. Please check plugin is up to date.");
+            }
         }
         return list;
     }
