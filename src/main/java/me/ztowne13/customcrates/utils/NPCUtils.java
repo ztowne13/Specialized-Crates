@@ -1,9 +1,9 @@
 package me.ztowne13.customcrates.utils;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.visuals.npcs.Citizens2NPCPlaceHolder;
-import me.ztowne13.customcrates.visuals.npcs.IdentifierTrait;
-import me.ztowne13.customcrates.visuals.npcs.MobPlaceholder;
+import me.ztowne13.customcrates.crates.types.display.npcs.Citizens2NPCPlaceHolder;
+import me.ztowne13.customcrates.crates.types.display.npcs.IdentifierTrait;
+import me.ztowne13.customcrates.crates.types.display.npcs.MobPlaceholder;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;

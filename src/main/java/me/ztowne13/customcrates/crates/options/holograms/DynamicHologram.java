@@ -1,9 +1,9 @@
 package me.ztowne13.customcrates.crates.options.holograms;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.animations.holo.HoloAnimType;
-import me.ztowne13.customcrates.animations.holo.HoloAnimation;
 import me.ztowne13.customcrates.crates.PlacedCrate;
+import me.ztowne13.customcrates.crates.options.holograms.animations.HoloAnimType;
+import me.ztowne13.customcrates.crates.options.holograms.animations.HoloAnimation;
 import org.bukkit.Location;
 
 public abstract class DynamicHologram

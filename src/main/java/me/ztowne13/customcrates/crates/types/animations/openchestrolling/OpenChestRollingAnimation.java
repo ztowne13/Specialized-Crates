@@ -3,7 +3,7 @@ package me.ztowne13.customcrates.crates.types.animations.openchestrolling;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.crates.types.InventoryCrateAnimation;
+import me.ztowne13.customcrates.crates.types.animations.InventoryCrateAnimation;
 import me.ztowne13.customcrates.crates.types.animations.openchest.NMSChestState;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.players.PlayerManager;

@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.interfaces.igc;
 
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
-import me.ztowne13.customcrates.interfaces.inputmenus.InputMenu;
+import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.*;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;

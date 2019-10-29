@@ -6,16 +6,16 @@ import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplay
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SimpleRewardDisplayer;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SortedRewardDisplayer;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.custom.CustomRewardDisplayer;
-import me.ztowne13.customcrates.crates.types.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateType;
+import me.ztowne13.customcrates.crates.types.display.CrateDisplayType;
+import me.ztowne13.customcrates.crates.types.display.EntityTypes;
+import me.ztowne13.customcrates.crates.types.display.MaterialPlaceholder;
+import me.ztowne13.customcrates.crates.types.display.npcs.Citizens2NPCPlaceHolder;
+import me.ztowne13.customcrates.crates.types.display.npcs.MobPlaceholder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.NPCUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import me.ztowne13.customcrates.visuals.CrateDisplayType;
-import me.ztowne13.customcrates.visuals.EntityTypes;
-import me.ztowne13.customcrates.visuals.MaterialPlaceholder;
-import me.ztowne13.customcrates.visuals.npcs.Citizens2NPCPlaceHolder;
-import me.ztowne13.customcrates.visuals.npcs.MobPlaceholder;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class CrateSettingsBuilder

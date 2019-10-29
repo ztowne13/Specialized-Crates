@@ -5,7 +5,7 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.CRewards;
-import me.ztowne13.customcrates.crates.types.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.*;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCMenuRewards;

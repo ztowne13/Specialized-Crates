@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.types.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateType;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.utils.FileHandler;
 import org.bukkit.configuration.file.FileConfiguration;
