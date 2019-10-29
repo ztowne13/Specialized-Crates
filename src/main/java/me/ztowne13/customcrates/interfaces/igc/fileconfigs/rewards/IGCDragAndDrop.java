@@ -82,7 +82,7 @@ public class IGCDragAndDrop extends IGCMenu
                     r.setBuilder(new ItemBuilder(stack));
 
                     r.setGiveDisplayItem(true);
-                    r.setGiveDisplayItemLore(false);
+                    r.setGiveDisplayItemLore(true);
                     r.setNeedsMoreConfig(false);
 
                     r.writeToFile();
