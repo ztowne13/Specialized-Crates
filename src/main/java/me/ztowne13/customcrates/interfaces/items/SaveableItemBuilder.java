@@ -6,6 +6,7 @@ import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.FileHandler;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -68,12 +69,24 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         else
             fc.set(prefix + ".nbt-tags", null);
 
+        // Item Flags
+        if(!getItemFlags().isEmpty())
+        {
+            ArrayList<String> flags = new ArrayList<>();
+            for(ItemFlag flag : getItemFlags())
+                flags.add(flag.name());
+
+            fc.set(prefix + ".item-flags", flags);
+        }
+        else
+            fc.set(prefix + ".item-flags", null);
+
     }
 
     @Override
     public boolean loadItem(FileHandler fileHandler, String prefix, StatusLogger statusLogger, StatusLoggerEvent itemFailure,
                             StatusLoggerEvent improperEnchant, StatusLoggerEvent improperPotion,
-                            StatusLoggerEvent improperGlow, StatusLoggerEvent improperAmount)
+                            StatusLoggerEvent improperGlow, StatusLoggerEvent improperAmount, StatusLoggerEvent invalidItemFlag)
     {
         FileConfiguration fc = fileHandler.get();
 
@@ -153,6 +166,23 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
             for (String line : fc.getStringList(prefix + ".nbt-tags"))
                 addNBTTag(line);
 
+        // Item Flags
+        if(fc.contains(prefix + ".item-flags"))
+        {
+            for (String line : fc.getStringList(prefix + ".item-flags"))
+            {
+                try
+                {
+                    ItemFlag flag = ItemFlag.valueOf(line);
+                    addItemFlag(flag);
+                }
+                catch(Exception exc)
+                {
+                    invalidItemFlag.log(statusLogger, new String[]{line + " is an invalid flag."});
+                }
+            }
+        }
+
         // Glow
 
         if (fc.contains(prefix + ".glow"))
@@ -180,6 +210,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
 
         if (fc.contains(prefix + ".player-head-name"))
             setPlayerHeadName(fc.getString(prefix + ".player-head-name"));
+
 
         return true;
     }

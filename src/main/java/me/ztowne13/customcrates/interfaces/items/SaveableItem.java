@@ -10,5 +10,5 @@ public interface SaveableItem extends EditableItem
 
     boolean loadItem(FileHandler fileHandler, String prefix, StatusLogger statusLogger, StatusLoggerEvent itemFailure,
                      StatusLoggerEvent improperEnchant, StatusLoggerEvent improperPotion,
-                     StatusLoggerEvent improperGlow, StatusLoggerEvent improperAmount);
+                     StatusLoggerEvent improperGlow, StatusLoggerEvent improperAmount, StatusLoggerEvent invalidItemFlag);
 }

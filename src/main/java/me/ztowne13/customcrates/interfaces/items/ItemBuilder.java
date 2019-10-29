@@ -1,12 +1,12 @@
 package me.ztowne13.customcrates.interfaces.items;
 
-import me.ztowne13.customcrates.crates.options.rewards.BukkitGlowEffect;
-import me.ztowne13.customcrates.crates.options.rewards.GlowEffect;
+import me.ztowne13.customcrates.interfaces.items.attributes.BukkitGlowEffect;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -28,15 +28,14 @@ public class ItemBuilder implements EditableItem
     List<CompressedPotionEffect> potionEffects = null;
     List<String> nbtTags = null;
     List<String> lore;
+    List<ItemFlag> flags = null;
 
     public ItemBuilder(ItemStack fromStack)
     {
         stack = fromStack.clone();
 
         for (Enchantment enchantment : stack.getEnchantments().keySet())
-        {
             addEnchantment(enchantment, stack.getEnchantmentLevel(enchantment));
-        }
 
         if (stack.hasItemMeta() && im() instanceof PotionMeta)
         {
@@ -51,12 +50,12 @@ public class ItemBuilder implements EditableItem
             addNBTTag(tags);
 
         if (stack.hasItemMeta() && stack.getItemMeta().hasLore())
-        {
             for (String line : stack.getItemMeta().getLore())
-            {
                 addLore(line);
-            }
-        }
+
+        if(stack.hasItemMeta() && stack.getItemMeta().getItemFlags() != null)
+            for(ItemFlag flag : stack.getItemMeta().getItemFlags())
+                flags.add(flag);
     }
 
     @Deprecated
@@ -248,6 +247,12 @@ public class ItemBuilder implements EditableItem
         reapplyNBTTags();
     }
 
+    public void addItemFlag(ItemFlag flag)
+    {
+        getItemFlags().add(flag);
+        reapplyItemFlags();
+    }
+
     @Override
     public void setPlayerHeadName(String name)
     {
@@ -280,7 +285,7 @@ public class ItemBuilder implements EditableItem
     @Override
     public void setGlowing(boolean glow)
     {
-        GlowEffect ge = new BukkitGlowEffect(stack);
+        BukkitGlowEffect ge = new BukkitGlowEffect(stack);
         if (glow)
             stack = ge.apply();
         else
@@ -305,6 +310,25 @@ public class ItemBuilder implements EditableItem
         {
             stack = NBTTagManager.applyTo(stack, tag);
         }
+    }
+
+    @Override
+    public List<ItemFlag> getItemFlags()
+    {
+        if(flags == null)
+            flags = new ArrayList<>();
+
+        return flags;
+    }
+
+    @Override
+    public void reapplyItemFlags()
+    {
+        for(ItemFlag flag : ItemFlag.values())
+            im().removeItemFlags(flag);
+
+        for(ItemFlag flag : getItemFlags())
+            im().addItemFlags(flag);
     }
 
     @Override

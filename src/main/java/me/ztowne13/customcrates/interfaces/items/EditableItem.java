@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.items;
 
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -40,4 +41,8 @@ public interface EditableItem
     List<String> getLore();
 
     void reapplyLore();
+
+    List<ItemFlag> getItemFlags();
+
+    void reapplyItemFlags();
 }
