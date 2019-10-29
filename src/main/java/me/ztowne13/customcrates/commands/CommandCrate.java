@@ -43,6 +43,7 @@ public class CommandCrate extends Commands implements CommandExecutor
                 new Reload(),
                 new Errors(),
                 new Edit(),
+                new Debug(),
                 vcSubCommand
         }));
     }

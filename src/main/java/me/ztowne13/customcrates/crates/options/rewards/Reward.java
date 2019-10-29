@@ -31,7 +31,7 @@ public class Reward implements Comparable<Reward>
     CRewards cr;
     String rewardName;
     String rarity = "default";
-    boolean giveDisplayItem = false, giveDisplayItemLore = false;
+    boolean giveDisplayItem = false, giveDisplayItemLore = true;
 
     ItemBuilder displayBuilder;
     ItemBuilder saveBuilder;

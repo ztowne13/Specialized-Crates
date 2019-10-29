@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.utils.nbt_utils;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
+import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -99,15 +100,28 @@ public class NBTTagReflection
             String key = args[0];
             String value = args[1];
 
-            Object idNTC = getNewNBTTagCompound();
             try
             {
-                idNTC.getClass().getMethod("setString", String.class, String.class)
-                        .invoke(idNTC, "id", value);
-
-                tagCompound.getClass().getMethod("set", String.class,
-                        Class.forName("net.minecraft.server." + NMSUtils.getVersionRaw() + ".NBTBase"))
-                        .invoke(tagCompound, key, idNTC);
+                if(Utils.isInt(value))
+                {
+                    tagCompound.getClass().getMethod("setInt", String.class, int.class)
+                            .invoke(tagCompound, key, Integer.parseInt(value));
+                }
+                else if(Utils.isDouble(value))
+                {
+                    tagCompound.getClass().getMethod("setDouble", String.class, double.class)
+                            .invoke(tagCompound, key, Double.valueOf(value));
+                }
+                else if(Utils.isBoolean(value))
+                {
+                    tagCompound.getClass().getMethod("set", String.class, boolean.class)
+                            .invoke(tagCompound, key, Boolean.valueOf(value));
+                }
+                else
+                {
+                    tagCompound.getClass().getMethod("setString", String.class, String.class)
+                            .invoke(tagCompound, key, value);
+                }
             }
             catch (Exception exc)
             {
@@ -161,7 +175,8 @@ public class NBTTagReflection
         {
             try
             {
-                Set<String> keys = (Set<String>) tagCompound.getClass().getMethod("getKeys").invoke(tagCompound);
+                //Bukkit.broadcastMessage("VALS: " + tagCompound.getClass().getMethod(NMSUtils.Version.v1_12.isServerVersionOrLater() ? "getKeys" : "c"));
+                Set<String> keys = (Set<String>) tagCompound.getClass().getMethod(NMSUtils.Version.v1_12.isServerVersionOrLater() ? "getKeys" : "c").invoke(tagCompound);
 
                 for (String key : keys)
                 {
