@@ -11,7 +11,7 @@ import me.ztowne13.customcrates.crates.options.holograms.DynamicHologram;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.crates.types.animations.openchest.OpenChestAnimation;
-import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;

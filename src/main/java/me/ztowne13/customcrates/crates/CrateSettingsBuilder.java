@@ -7,8 +7,8 @@ import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SimpleRewardD
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SortedRewardDisplayer;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.custom.CustomRewardDisplayer;
 import me.ztowne13.customcrates.crates.types.CrateType;
-import me.ztowne13.customcrates.logging.StatusLogger;
-import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
+import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.NPCUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import me.ztowne13.customcrates.visuals.CrateDisplayType;
@@ -267,7 +267,7 @@ public class CrateSettingsBuilder
                 .loadItem(getSettings().getFu(), "crate", getSl(), StatusLoggerEvent.SETTINGS_CRATE_FAILURE,
                         StatusLoggerEvent.SETTINGS_CRATE_ENCHANTMENT_ADD_FAILURE,
                         StatusLoggerEvent.SETTINGS_CRATE_POTION_ADD_FAILURE, StatusLoggerEvent.SETTINGS_CRATE_GLOW_FAILURE,
-                        StatusLoggerEvent.SETTINGS_CRATE_AMOUNT_FAILURE);
+                        StatusLoggerEvent.SETTINGS_CRATE_AMOUNT_FAILURE, StatusLoggerEvent.SETTINGS_CRATE_FLAG_FAILURE);
         if (!result)
         {
             StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(getSl());
@@ -282,7 +282,7 @@ public class CrateSettingsBuilder
                 .loadItem(getSettings().getFu(), "key", getSl(), StatusLoggerEvent.SETTINGS_KEY_FAILURE,
                         StatusLoggerEvent.SETTINGS_KEY_ENCHANTMENT_ADD_FAILURE,
                         StatusLoggerEvent.SETTINGS_KEY_POTION_ADD_FAILURE, StatusLoggerEvent.SETTINGS_KEY_GLOW_FAILURE,
-                        StatusLoggerEvent.SETTINGS_KEY_AMOUNT_FAILURE);
+                        StatusLoggerEvent.SETTINGS_KEY_AMOUNT_FAILURE, StatusLoggerEvent.SETTINGS_KEY_FLAG_FAILURE);
 
         if (!result)
         {

@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.visuals;
 
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
-import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import org.bukkit.Material;
 
 /**

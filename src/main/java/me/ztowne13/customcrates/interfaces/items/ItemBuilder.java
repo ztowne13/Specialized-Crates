@@ -55,7 +55,7 @@ public class ItemBuilder implements EditableItem
 
         if(stack.hasItemMeta() && stack.getItemMeta().getItemFlags() != null)
             for(ItemFlag flag : stack.getItemMeta().getItemFlags())
-                flags.add(flag);
+                addItemFlag(flag);
     }
 
     @Deprecated

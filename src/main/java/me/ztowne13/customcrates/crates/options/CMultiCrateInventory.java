@@ -9,7 +9,7 @@ import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
-import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.VirtualCrateData;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;

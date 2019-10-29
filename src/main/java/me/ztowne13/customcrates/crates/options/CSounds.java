@@ -5,7 +5,7 @@ import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
-import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

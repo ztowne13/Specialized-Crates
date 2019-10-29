@@ -10,7 +10,7 @@ import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import me.ztowne13.customcrates.crates.options.particles.ParticleEffect;
 import me.ztowne13.customcrates.crates.options.particles.effects.PEAnimationType;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.NMSUtils;
 import org.bukkit.Location;
 

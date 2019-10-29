@@ -1,4 +1,4 @@
-package me.ztowne13.customcrates.logging;
+package me.ztowne13.customcrates.interfaces.logging;
 
 import me.ztowne13.customcrates.crates.Crate;
 
@@ -166,6 +166,8 @@ public enum StatusLoggerEvent
 
     SETTINGS_CRATE_AMOUNT_FAILURE(false, "Settings", "Failed to load the 'crate.amount' value.", "$?$"),
 
+    SETTINGS_CRATE_FLAG_FAILURE(false, "Settings", "Failed to load the 'crate.item-flags' value.", "$?$"),
+
     SETTINGS_CRATE_SUCCESS(true, "Settings", "Set up crate item.", "NONE"),
 
     SETTINGS_CRATE_FAILURE_DISABLE(false, "Settings", "Failed to load the crate settings for the crate... disabling", "$?$"),
@@ -185,6 +187,8 @@ public enum StatusLoggerEvent
     SETTINGS_KEY_GLOW_FAILURE(false, "Settings", "Failed to load the 'key.glow' value.", "$?$"),
 
     SETTINGS_KEY_AMOUNT_FAILURE(false, "Settings", "Failed to load the 'key.amount' value.", "$?$"),
+
+    SETTINGS_KEY_FLAG_FAILURE(false, "Settings", "Failed to load the 'key.item-flags' value.", "$?$"),
 
     SETTINGS_KEY_SUCCESS(true, "Settings", "Set up key item.", "NONE"),
 
@@ -265,6 +269,8 @@ public enum StatusLoggerEvent
     SETTINGS_REWARD_DISPLAYER_GLOW_FAILURE(false, "Settings", "Failed to load the reward preview menu item glow value.", "$?$"),
 
     SETTINGS_REWARD_DISPLAYER_AMOUNT_FAILURE(false, "Settings", "Failed to load the reward preview menu item amount value.", "$?$"),
+
+    SETTINGS_REWARD_DISPLAYER_FLAG_FAILURE(false, "Settings", "Failed to load the reward preview menu item-flags value.", "$?$"),
 
     SETTINGS_AUTOCLOSE_SUCCESS(true, "Settings", "Loaded the 'auto-close' value", "NONE"),
 

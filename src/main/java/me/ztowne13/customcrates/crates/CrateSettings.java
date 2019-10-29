@@ -11,7 +11,7 @@ import me.ztowne13.customcrates.crates.types.CrateAnimation;
 import me.ztowne13.customcrates.crates.types.CrateType;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
-import me.ztowne13.customcrates.logging.StatusLogger;
+import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import me.ztowne13.customcrates.utils.FileHandler;

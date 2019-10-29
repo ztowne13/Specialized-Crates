@@ -4,7 +4,7 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.CrateAnimation;
-import me.ztowne13.customcrates.logging.StatusLogger;
+import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.events.HistoryEvent;
 import me.ztowne13.customcrates.utils.Utils;

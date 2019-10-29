@@ -6,7 +6,7 @@ import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.holograms.*;
-import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Location;

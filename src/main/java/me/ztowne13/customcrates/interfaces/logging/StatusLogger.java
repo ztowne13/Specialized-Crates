@@ -1,4 +1,4 @@
-package me.ztowne13.customcrates.logging;
+package me.ztowne13.customcrates.interfaces.logging;
 
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;

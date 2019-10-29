@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.interfaces.items;
 
-import me.ztowne13.customcrates.logging.StatusLogger;
-import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
+import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.FileHandler;
 
 public interface SaveableItem extends EditableItem

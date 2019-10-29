@@ -5,7 +5,7 @@ import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.InventoryCrateAnimation;
 import me.ztowne13.customcrates.crates.types.animations.openchest.NMSChestState;
-import me.ztowne13.customcrates.logging.StatusLogger;
+import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.players.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

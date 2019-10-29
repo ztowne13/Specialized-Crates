@@ -3,7 +3,7 @@ package me.ztowne13.customcrates.crates.options.particles;
 import me.ztowne13.customcrates.FileSettings;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.CrateSettings;
-import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;

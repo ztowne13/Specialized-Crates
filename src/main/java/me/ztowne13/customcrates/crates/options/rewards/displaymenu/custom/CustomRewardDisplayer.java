@@ -5,7 +5,7 @@ import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplay
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
-import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.FileHandler;
 import me.ztowne13.customcrates.utils.Utils;
@@ -68,7 +68,8 @@ public class CustomRewardDisplayer extends RewardDisplayer
                                 StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_ENCHANTMENT_ADD_FAILURE,
                                 StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_POTION_ADD_FAILURE,
                                 StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_GLOW_FAILURE,
-                                StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_AMOUNT_FAILURE);
+                                StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_AMOUNT_FAILURE,
+                                StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_FLAG_FAILURE);
                 if (successLoadItem)
                     items.put(key, itemBuilder);
             }
