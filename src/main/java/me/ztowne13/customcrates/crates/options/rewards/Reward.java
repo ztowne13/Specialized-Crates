@@ -3,17 +3,13 @@ package me.ztowne13.customcrates.crates.options.rewards;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.CRewards;
-import me.ztowne13.customcrates.interfaces.items.CompressedEnchantment;
-import me.ztowne13.customcrates.interfaces.items.CompressedPotionEffect;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
-import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
-import me.ztowne13.customcrates.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.interfaces.items.*;
+import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.FileHandler;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -31,10 +27,10 @@ public class Reward implements Comparable<Reward>
     CRewards cr;
     String rewardName;
     String rarity = "default";
-    boolean giveDisplayItem = false, giveDisplayItemLore = true;
+    boolean giveDisplayItem = true, giveDisplayItemLore = true;
 
     ItemBuilder displayBuilder;
-    ItemBuilder saveBuilder;
+    SaveableItemBuilder saveBuilder;
 
     double chance;
     List<String> commands;
@@ -49,7 +45,7 @@ public class Reward implements Comparable<Reward>
         needsMoreConfig = true;
         this.cc = cc;
         setRewardName(rewardName);
-        saveBuilder = new ItemBuilder(DynamicMaterial.STONE, 1);
+        saveBuilder = new SaveableItemBuilder(DynamicMaterial.STONE, 1);
         saveBuilder.setDisplayName(rewardName);
         displayBuilder = new ItemBuilder(saveBuilder.getStack());
         giveDisplayItem = true;
@@ -185,7 +181,8 @@ public class Reward implements Comparable<Reward>
     {
         FileHandler fu = getCc().getRewardsFile();
         FileConfiguration fc = fu.get();
-        fc.set(getPath("name"), saveBuilder.getDisplayName() == null ? saveBuilder.get().getType().toString() : saveBuilder.getDisplayNameStripped());
+        fc.set(getPath("name"), saveBuilder.getDisplayName() == null ? saveBuilder.get().getType().toString() :
+                saveBuilder.getDisplayNameStripped());
         fc.set(getPath("commands"), getCommands());
         fc.set(getPath("item"), DynamicMaterial.fromItemStack(saveBuilder.get()).name());
         fc.set(getPath("glow"), saveBuilder.isGlowing());
@@ -314,45 +311,44 @@ public class Reward implements Comparable<Reward>
         }
     }
 
+    @Deprecated
     public boolean loadFromConfig()
     {
         setFc(getCc().getRewardsFile().get());
         boolean success = true;
         needsMoreConfig = false;
 
-        try
+        if(fc.contains(getPath("item")))
         {
-            String unsplitMat = getFc().getString(getPath("item"));
-            DynamicMaterial m = DynamicMaterial.fromString(unsplitMat);
-
-            if(m.equals(DynamicMaterial.AIR))
-            {
-                StatusLoggerEvent.REWARD_ITEM_AIR.log(getCr().getCrates(), new String[]{this.toString()});
-                return false;
-            }
-
-            saveBuilder = new ItemBuilder(m, 1);
+            RewardConverter rewardConverter = new RewardConverter(this);
+            rewardConverter.loadFromConfig();
         }
-        catch (Exception exc)
+        else
         {
-            return false;
+
         }
 
-        try
+        if(!loadNonItemValsFromConfig())
+            success = false;
+
+        if (getRarity() == null)
+            rarity = "default";
+
+        displayBuilder = new ItemBuilder(saveBuilder.getStack());
+        displayBuilder.setDisplayName(applyVariablesTo(saveBuilder.getDisplayName()));
+
+        displayBuilder.clearLore();
+        for(String loreLine : saveBuilder.getLore())
         {
-            saveBuilder.setDisplayName(getFc().getString(getPath("name")));
-        }
-        catch (Exception exc)
-        {
-            saveBuilder.setDisplayName(saveBuilder.getStack().getType().name().toLowerCase());
-            needsMoreConfig = true;
-            if (toLog)
-            {
-                StatusLoggerEvent.REWARD_NAME_NONEXISTENT.log(getCr().getCrates(), new String[]{this.toString()});
-                success = false;
-            }
+            displayBuilder.addLore(applyVariablesTo(loreLine));
         }
 
+        return success;
+    }
+
+    public boolean loadNonItemValsFromConfig()
+    {
+        boolean success = true;
         try
         {
             setRarity(getFc().getString(getPath("rarity")));
@@ -387,15 +383,6 @@ public class Reward implements Comparable<Reward>
 
         try
         {
-            saveBuilder.setGlowing(getFc().getBoolean(getPath("glow")));
-        }
-        catch (Exception exc)
-        {
-            saveBuilder.setGlowing(false);
-        }
-
-        try
-        {
             setCommands(getFc().getStringList(getPath("commands")));
         }
         catch (Exception exc)
@@ -416,139 +403,7 @@ public class Reward implements Comparable<Reward>
             setTotalUses(-1);
         }
 
-        try
-        {
-            buildDisplayItemFromConfig();
-        }
-        catch (Exception exc)
-        {
-            needsMoreConfig = true;
-            if (toLog)
-            {
-                StatusLoggerEvent.REWARD_ITEM_NONEXISTENT.log(getCr().getCrates(), new String[]{this.toString()});
-                success = false;
-            }
-        }
-
-        if (saveBuilder.getDisplayName() == null)
-            saveBuilder.setDisplayName(rewardName);
-
-        if (getRarity() == null)
-            rarity = "default";
-
-        displayBuilder = new ItemBuilder(saveBuilder.getStack());
-        displayBuilder.setDisplayName(applyVariablesTo(saveBuilder.getDisplayName()));
-
-        displayBuilder.clearLore();
-        for(String loreLine : saveBuilder.getLore())
-        {
-            displayBuilder.addLore(applyVariablesTo(loreLine));
-        }
-
         return success;
-    }
-
-    public void buildDisplayItemFromConfig()
-    {
-        saveBuilder.setDisplayName(applyVariablesTo(cc.getSettings().getConfigValues().get("inv-reward-item-name").toString()));
-
-        // If an item has a custom lore, apply that. Otherwise apply the general lore.
-        if (getFc().contains(getPath("lore")))
-        {
-
-            for (String s : getFc().getStringList(getPath("lore")))
-            {
-                saveBuilder.addLore(s);
-            }
-        }
-        else
-        {
-            for (Object s : (ArrayList<String>) cc.getSettings().getConfigValues().get("inv-reward-item-lore"))
-            {
-                saveBuilder.addLore(s.toString());
-            }
-        }
-
-        if (getFc().contains(getPath("head-player-name")))
-        {
-            saveBuilder.setPlayerHeadName(getFc().getString(getPath("head-player-name")));
-        }
-
-        if (getFc().contains(getPath("amount")))
-        {
-            try
-            {
-                int amnt = Integer.parseInt(getFc().getString(getPath("amount")));
-                saveBuilder.getStack().setAmount(amnt);
-            }
-            catch (Exception exc)
-            {
-                StatusLoggerEvent.REWARD_AMOUNT_INVALID.log(getCr().getCrates(), new String[]{saveBuilder.getDisplayName()});
-            }
-        }
-
-
-        if (getFc().contains(getPath("nbt-tags")))
-        {
-            for (String s : fc.getStringList(getPath("nbt-tags")))
-            {
-                saveBuilder.addNBTTag(s);
-            }
-        }
-
-        if (getFc().contains(getPath("potion-effects")))
-        {
-            for (String unparsedPot : getFc().getStringList(getPath("potion-effects")))
-            {
-                try
-                {
-                    CompressedPotionEffect compressedPotionEffect = CompressedPotionEffect.fromString(unparsedPot);
-
-                    if (compressedPotionEffect == null)
-                        throw new Exception();
-                    else
-                        saveBuilder.addPotionEffect(compressedPotionEffect);
-                }
-                catch (Exception exc)
-                {
-                    StatusLoggerEvent.REWARD_POTION_INVALID
-                            .log(getCr().getCrates(), new String[]{saveBuilder.getDisplayName(), unparsedPot});
-                }
-            }
-        }
-
-        if (getFc().contains(getPath("enchantments")))
-        {
-            String cause = getPath("enchantments") + " value is not a valid list of enchantments.";
-            try
-            {
-                for (String s : getFc().getStringList(getPath("enchantments")))
-                {
-                    cause = "Enchantment " + s + " is not formatted ENCHANTMENT;LEVEL";
-                    String[] args = s.split(";");
-
-                    cause = args[0] + " is not a valid enchantment.";
-                    Enchantment ench = Enchantment.getByName(args[0].toUpperCase());
-
-                    if (ench == null)
-                    {
-                        throw new NullPointerException(cause);
-                    }
-
-                    cause = "Enchantment " + s + " is not formatted ENCHANTMENT;LEVEL";
-                    cause = args[1] + " is not a valid Integer.";
-                    int level = Integer.parseInt(args[1]);
-
-                    saveBuilder.addEnchantment(ench, level);
-                    continue;
-                }
-            }
-            catch (Exception exc)
-            {
-                StatusLoggerEvent.REWARD_ENCHANT_INVALID
-                        .log(getCr().getCrates(), new String[]{saveBuilder.getDisplayName(), cause});
-            }
-        }
     }
 
     public String getDisplayName()
@@ -708,14 +563,14 @@ public class Reward implements Comparable<Reward>
         return saveBuilder;
     }
 
-    public void setSaveBuilder(ItemBuilder saveBuilder)
+    public void setSaveBuilder(SaveableItemBuilder saveBuilder)
     {
         this.saveBuilder = saveBuilder;
     }
 
     public void setBuilder(ItemBuilder setBuilder)
     {
-        this.saveBuilder = new ItemBuilder(setBuilder.get());
+        this.saveBuilder = new SaveableItemBuilder(setBuilder.get());
         this.displayBuilder = new ItemBuilder(setBuilder.get());
     }
 }
