@@ -123,10 +123,22 @@ public enum StatusLoggerEvent
 
     REWARD_ENCHANT_INVALID(false, "Rewards", "Failed to load specified enchantments for reward $?$", "$?$"),
 
-    REWARD_POTION_INVALID(false, "Rewards", "Failed to load specified potion for reward $?$",
-            "'$?$' is not formatted potiontype;duration;amplifier, potiontype is not a valid potion type, or duration/amplifier are not valid numbers."),
+    REWARD_POTION_INVALID(false, "Rewards", "Failed to load specified potion effect",
+            "'$?$'"),
 
     REWARD_AMOUNT_INVALID(false, "Rewards", "Failed to load amount for reward $?$", "It is not a valid number."),
+
+    REWARD_ITEM_FAILURE(false, "Settings", "Failed to load a reward menu item.", "$?$"),
+
+    REWARD_ENCHANTMENT_ADD_FAILURE(false, "Settings", "Failed to load the a rewar item enchantment.", "$?$"),
+
+    REWARD_POTION_ADD_FAILURE(false, "Settings", "Failed to load the a reward item.", "$?$"),
+
+    REWARD_GLOW_FAILURE(false, "Settings", "Failed to load the reward item glow value.", "$?$"),
+
+    REWARD_AMOUNT_FAILURE(false, "Settings", "Failed to load the reward item amount value.", "$?$"),
+
+    REWARD_FLAG_FAILURE(false, "Settings", "Failed to load the reward item-flags value.", "$?$"),
 
     SOUND_NONEXISTENT(false, "Sounds", "The sound value: $?$ is improperly setup.", "Sound '$?$' is invalid."),
 

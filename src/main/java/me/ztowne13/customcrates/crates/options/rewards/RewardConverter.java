@@ -24,6 +24,7 @@ public class RewardConverter
     {
         FileHandler fu = reward.getCc().getRewardsFile();
         FileConfiguration fc = fu.get();
+
         fc.set(reward.getPath("name"), null);
         fc.set(reward.getPath("item"), null);
         fc.set(reward.getPath("glow"), null);
@@ -33,8 +34,6 @@ public class RewardConverter
         fc.set(reward.getPath("potion-effects"), null);
         fc.set(reward.getPath("lore"), null);
         fc.set(reward.getPath("nbt-tags"), null);
-
-        fu.save();
     }
 
     @Deprecated

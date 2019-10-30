@@ -70,10 +70,10 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
             fc.set(prefix + ".nbt-tags", null);
 
         // Item Flags
-        if(!getItemFlags().isEmpty())
+        if (!getItemFlags().isEmpty())
         {
             ArrayList<String> flags = new ArrayList<>();
-            for(ItemFlag flag : getItemFlags())
+            for (ItemFlag flag : getItemFlags())
                 flags.add(flag.name());
 
             fc.set(prefix + ".item-flags", flags);
@@ -83,17 +83,24 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
 
     }
 
+    public boolean loadItem(FileHandler fileHandler, String prefix)
+    {
+        return loadItem(fileHandler, prefix, null, null, null, null, null, null, null);
+    }
+
     @Override
     public boolean loadItem(FileHandler fileHandler, String prefix, StatusLogger statusLogger, StatusLoggerEvent itemFailure,
                             StatusLoggerEvent improperEnchant, StatusLoggerEvent improperPotion,
-                            StatusLoggerEvent improperGlow, StatusLoggerEvent improperAmount, StatusLoggerEvent invalidItemFlag)
+                            StatusLoggerEvent improperGlow, StatusLoggerEvent improperAmount,
+                            StatusLoggerEvent invalidItemFlag)
     {
         FileConfiguration fc = fileHandler.get();
 
         // material
         if (!fc.contains(prefix + ".material"))
         {
-            itemFailure.log(statusLogger, new String[]{"The '" + prefix + ".material' value does not exist."});
+            if (itemFailure != null)
+                itemFailure.log(statusLogger, new String[]{"The '" + prefix + ".material' value does not exist."});
             return false;
         }
         else
@@ -106,7 +113,8 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
             }
             catch (Exception exc)
             {
-                itemFailure.log(statusLogger, new String[]{mat + " is not a valid material."});
+                if (itemFailure != null)
+                    itemFailure.log(statusLogger, new String[]{mat + " is not a valid material."});
                 return false;
             }
         }
@@ -114,7 +122,8 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         // Name
         if (!fc.contains(prefix + ".name"))
         {
-            itemFailure.log(statusLogger, new String[]{"The '" + prefix + ".name' value does not exist."});
+            if (itemFailure != null)
+                itemFailure.log(statusLogger, new String[]{"The '" + prefix + ".name' value does not exist."});
             return false;
         }
         setDisplayName(fc.getString(prefix + ".name"));
@@ -137,8 +146,9 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
                 }
                 catch (Exception exc)
                 {
-                    improperEnchant.log(statusLogger, new String[]{unparsedEnchant +
-                            " is not formatted enchant;level or either the enchant is not a valid enchantment or the level is not a number."});
+                    if (improperEnchant != null)
+                        improperEnchant.log(statusLogger, new String[]{unparsedEnchant +
+                                " is not formatted enchant;level or either the enchant is not a valid enchantment or the level is not a number."});
                 }
             }
         }
@@ -155,8 +165,9 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
                 }
                 catch (Exception exc)
                 {
-                    improperPotion.log(statusLogger, new String[]{unparsedPotion +
-                            " is not formatted potiontype;duration;amplifier or either the potion is not a valid potion type or the duration/amplifier is not a number."});
+                    if (improperPotion != null)
+                        improperPotion.log(statusLogger, new String[]{unparsedPotion +
+                                " is not formatted potiontype;duration;amplifier or either the potion is not a valid potion type or the duration/amplifier is not a number."});
                 }
             }
         }
@@ -167,7 +178,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
                 addNBTTag(line);
 
         // Item Flags
-        if(fc.contains(prefix + ".item-flags"))
+        if (fc.contains(prefix + ".item-flags"))
         {
             for (String line : fc.getStringList(prefix + ".item-flags"))
             {
@@ -176,9 +187,10 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
                     ItemFlag flag = ItemFlag.valueOf(line);
                     addItemFlag(flag);
                 }
-                catch(Exception exc)
+                catch (Exception exc)
                 {
-                    invalidItemFlag.log(statusLogger, new String[]{line + " is an invalid flag."});
+                    if (invalidItemFlag != null)
+                        invalidItemFlag.log(statusLogger, new String[]{line + " is an invalid flag."});
                 }
             }
         }
@@ -190,7 +202,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
             String unparsedGlow = fc.getString(prefix + ".glow");
             if (Utils.isBoolean(unparsedGlow))
                 setGlowing(Boolean.parseBoolean(unparsedGlow));
-            else
+            else if (improperGlow != null)
                 improperGlow
                         .log(statusLogger, new String[]{"The '" + prefix + ".glow' value is not a proper true/false value"});
         }
@@ -202,7 +214,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
             String unparsedAmount = fc.getString(prefix + ".amount");
             if (Utils.isInt(unparsedAmount))
                 getStack().setAmount(Integer.parseInt(unparsedAmount));
-            else
+            else if (improperAmount != null)
                 improperAmount.log(statusLogger, new String[]{"The '" + prefix + ".amount' value is not a valid number."});
         }
 

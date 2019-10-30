@@ -3,7 +3,9 @@ package me.ztowne13.customcrates.crates.options.rewards;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.CRewards;
-import me.ztowne13.customcrates.interfaces.items.*;
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
+import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
+import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.FileHandler;
@@ -181,61 +183,14 @@ public class Reward implements Comparable<Reward>
     {
         FileHandler fu = getCc().getRewardsFile();
         FileConfiguration fc = fu.get();
-        fc.set(getPath("name"), saveBuilder.getDisplayName() == null ? saveBuilder.get().getType().toString() :
-                saveBuilder.getDisplayNameStripped());
         fc.set(getPath("commands"), getCommands());
-        fc.set(getPath("item"), DynamicMaterial.fromItemStack(saveBuilder.get()).name());
-        fc.set(getPath("glow"), saveBuilder.isGlowing());
-        fc.set(getPath("amount"), saveBuilder.get().getAmount());
-        fc.set(getPath("head-player-name"), saveBuilder.getPlayerHeadName());
         fc.set(getPath("chance"), getChance());
         fc.set(getPath("rarity"), getRarity());
         fc.set(getPath("receive-limit"), /*getTotalUses()*/null);
         fc.set(getPath("give-display-item.value"), giveDisplayItem);
         fc.set(getPath("give-display-item.with-lore"), giveDisplayItemLore);
 
-        // Enchantments
-        if (!saveBuilder.getEnchantments().isEmpty())
-        {
-            ArrayList<String> parsedEnchs = new ArrayList<>();
-            for (CompressedEnchantment ench : saveBuilder.getEnchantments())
-                parsedEnchs.add(ench.toString());
-
-            fc.set(getPath("enchantments"), parsedEnchs);
-        }
-        else
-            fc.set(getPath("enchantments"), null);
-
-        // Potion Effects
-        if (!saveBuilder.getPotionEffects().isEmpty())
-        {
-            ArrayList<String> parsedPots = new ArrayList<>();
-            for (CompressedPotionEffect compressedPotionEffect : saveBuilder.getPotionEffects())
-                parsedPots.add(compressedPotionEffect.toString());
-
-            fc.set(getPath("potion-effects"), parsedPots);
-        }
-        else
-            fc.set(getPath("potion-effects"), null);
-
-        // Lore
-        if (!saveBuilder.getLore().isEmpty())
-            fc.set(getPath("lore"), saveBuilder.getLore());
-        else
-            fc.set(getPath("lore"), null);
-
-        // NBT Tags
-//        if (NMSUtils.Version.v1_12.isServerVersionOrEarlier() && NMSUtils.Version.v1_8.isServerVersionOrLater())
-//        {
-//            if (!saveBuilder.getNBTTags().isEmpty())
-//                fc.set(getPath("nbt-tags"), saveBuilder.getNBTTags());
-//            else
-//                fc.set(getPath("nbt-tags"), null);
-//        }
-        if (!saveBuilder.getNBTTags().isEmpty())
-            fc.set(getPath("nbt-tags"), saveBuilder.getNBTTags());
-        else
-            fc.set(getPath("nbt-tags"), null);
+        saveBuilder.saveItem(getCc().getRewardsFile(), getPath("display-item"));
 
         fu.save();
     }
@@ -320,12 +275,23 @@ public class Reward implements Comparable<Reward>
 
         if(fc.contains(getPath("item")))
         {
+            ChatUtils.log("Converting " + getRewardName() + " to new reward format.");
             RewardConverter rewardConverter = new RewardConverter(this);
             rewardConverter.loadFromConfig();
+            rewardConverter.saveAllAsNull();
+
+            saveBuilder.saveItem(cc.getRewardsFile(), getPath("display-item"));
+            cc.getRewardsFile().save();
         }
         else
         {
-
+            if(toLog)
+                saveBuilder.loadItem(getCc().getRewardsFile(), getRewardName() + ".display-item", getCr().getCrates().getCs().getSl(),
+                        StatusLoggerEvent.REWARD_ITEM_FAILURE, StatusLoggerEvent.REWARD_ENCHANT_INVALID,
+                        StatusLoggerEvent.REWARD_POTION_INVALID, StatusLoggerEvent.REWARD_GLOW_FAILURE,
+                        StatusLoggerEvent.REWARD_AMOUNT_INVALID, StatusLoggerEvent.REWARD_FLAG_FAILURE);
+            else
+                saveBuilder.loadItem(getCc().getRewardsFile(), getRewardName() + ".display-item");
         }
 
         if(!loadNonItemValsFromConfig())
@@ -339,9 +305,7 @@ public class Reward implements Comparable<Reward>
 
         displayBuilder.clearLore();
         for(String loreLine : saveBuilder.getLore())
-        {
             displayBuilder.addLore(applyVariablesTo(loreLine));
-        }
 
         return success;
     }
