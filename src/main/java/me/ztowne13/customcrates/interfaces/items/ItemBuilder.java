@@ -74,7 +74,7 @@ public class ItemBuilder implements EditableItem
         stack = m.parseItem();
         stack.setAmount(amnt);
         if (m.preProgrammedNBTTag && NMSUtils.Version.v1_12.isServerVersionOrEarlier())
-            addNBTTag(m.nbtTag);
+            addNBTTag("EntityTag " + m.nbtTag);
     }
 
     public ItemMeta im()

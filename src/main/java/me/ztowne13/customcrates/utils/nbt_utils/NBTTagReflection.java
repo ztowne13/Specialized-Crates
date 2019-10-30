@@ -1,10 +1,8 @@
 package me.ztowne13.customcrates.utils.nbt_utils;
 
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -78,56 +76,37 @@ public class NBTTagReflection
             tagCompound = getNewNBTTagCompound();
         }
 
-        if (DynamicMaterial.BAT_SPAWN_EGG.isSameMaterial(item))
+        String[] args = tag.split(" ");
+        String key = args[0];
+        String value = args[1];
+
+        try
         {
-            Object idNTC = getNewNBTTagCompound();
-            try
+            if((value.startsWith("'") && value.endsWith("'")) || (value.startsWith("\"") && value.endsWith("\"")))
             {
-                idNTC.getClass().getMethod("setString", String.class, String.class)
-                        .invoke(idNTC, "id", EntityType.valueOf(tag.toUpperCase()).getName());
-                tagCompound.getClass().getMethod("set", String.class,
-                        Class.forName("net.minecraft.server." + NMSUtils.getVersionRaw() + ".NBTBase"))
-                        .invoke(tagCompound, "EntityTag", idNTC);
+                value = ChatUtils.stripQuotes(value);
+                tagCompound.getClass().getMethod("setString", String.class, String.class)
+                        .invoke(tagCompound, key, value);
             }
-            catch (Exception exc)
+            else if(Utils.isInt(value))
             {
-                ChatUtils.log("Failed to get apply monster egg NBT Tag Compound. Please check plugin is up to date.");
+                tagCompound.getClass().getMethod("setInt", String.class, int.class)
+                        .invoke(tagCompound, key, Integer.parseInt(value));
+            }
+            else if(Utils.isDouble(value))
+            {
+                tagCompound.getClass().getMethod("setDouble", String.class, double.class)
+                        .invoke(tagCompound, key, Double.valueOf(value));
+            }
+            else
+            {
+                tagCompound.getClass().getMethod("setString", String.class, String.class)
+                        .invoke(tagCompound, key, value);
             }
         }
-        else
+        catch (Exception exc)
         {
-            String[] args = tag.split(" ");
-            String key = args[0];
-            String value = args[1];
-
-            try
-            {
-                if((value.startsWith("'") && value.endsWith("'")) || (value.startsWith("\"") && value.endsWith("\"")))
-                {
-                    value = ChatUtils.stripQuotes(value);
-                    tagCompound.getClass().getMethod("setString", String.class, String.class)
-                            .invoke(tagCompound, key, value);
-                }
-                else if(Utils.isInt(value))
-                {
-                    tagCompound.getClass().getMethod("setInt", String.class, int.class)
-                            .invoke(tagCompound, key, Integer.parseInt(value));
-                }
-                else if(Utils.isDouble(value))
-                {
-                    tagCompound.getClass().getMethod("setDouble", String.class, double.class)
-                            .invoke(tagCompound, key, Double.valueOf(value));
-                }
-                else
-                {
-                    tagCompound.getClass().getMethod("setString", String.class, String.class)
-                            .invoke(tagCompound, key, value);
-                }
-            }
-            catch (Exception exc)
-            {
-                ChatUtils.log("Failed to get apply '" + key + " " + value + "' tag. Please check plugin is up to date.");
-            }
+            ChatUtils.log("Failed to get apply '" + key + " " + value + "' tag. Please check plugin is up to date.");
         }
 
         try
@@ -158,52 +137,34 @@ public class NBTTagReflection
         Object stack = getNMSItemStack(item);
         Object tagCompound = getNBTTagCompound(stack);
 
-        if (DynamicMaterial.BAT_SPAWN_EGG.isSameMaterial(item))
+        try
         {
-            try
-            {
-                Object nbtTagCompound =
-                        tagCompound.getClass().getMethod("getCompound", String.class).invoke(tagCompound, "EntityTag");
-                list.add(nbtTagCompound.getClass().getMethod("getString", String.class).invoke(nbtTagCompound, "id")
-                        .toString());
-            }
-            catch (Exception exc)
-            {
-                ChatUtils.log("Failed to load NBT Tag Compound BASE from stack. Please check plugin is up to date.");
-            }
-        }
-        else
-        {
-            try
-            {
-                //Bukkit.broadcastMessage("VALS: " + tagCompound.getClass().getMethod(NMSUtils.Version.v1_12.isServerVersionOrLater() ? "getKeys" : "c"));
-                Set<String> keys = (Set<String>) tagCompound.getClass().getMethod(NMSUtils.Version.v1_12.isServerVersionOrLater() ? "getKeys" : "c").invoke(tagCompound);
+            Set<String> keys = (Set<String>) tagCompound.getClass().getMethod(NMSUtils.Version.v1_12.isServerVersionOrLater() ? "getKeys" : "c").invoke(tagCompound);
 
-                for (String key : keys)
+            for (String key : keys)
+            {
+                boolean toSkip = false;
+                for (String excludedTag : excludedTags)
                 {
-                    boolean toSkip = false;
-                    for (String excludedTag : excludedTags)
+                    if (key.equalsIgnoreCase(excludedTag))
                     {
-                        if (key.equalsIgnoreCase(excludedTag))
-                        {
-                            toSkip = true;
-                            break;
-                        }
-                    }
-
-                    if (!toSkip)
-                    {
-
-                        Object nbtBase = tagCompound.getClass().getMethod("get", String.class).invoke(tagCompound, key);
-
-                        list.add(key + " " + nbtBase);
+                        toSkip = true;
+                        break;
                     }
                 }
-            }
-            catch(Exception exc)
-            {
 
+                if (!toSkip)
+                {
+
+                    Object nbtBase = tagCompound.getClass().getMethod("get", String.class).invoke(tagCompound, key);
+
+                    list.add(key + " " + nbtBase);
+                }
             }
+        }
+        catch(Exception exc)
+        {
+
         }
         return list;
     }

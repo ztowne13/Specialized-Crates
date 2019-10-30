@@ -58,6 +58,7 @@ public class RewardConverter
         }
         catch (Exception exc)
         {
+            exc.printStackTrace();
             return false;
         }
 
