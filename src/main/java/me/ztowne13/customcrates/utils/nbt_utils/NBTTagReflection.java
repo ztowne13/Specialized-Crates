@@ -102,7 +102,13 @@ public class NBTTagReflection
 
             try
             {
-                if(Utils.isInt(value))
+                if((value.startsWith("'") && value.endsWith("'")) || (value.startsWith("\"") && value.endsWith("\"")))
+                {
+                    value = ChatUtils.stripQuotes(value);
+                    tagCompound.getClass().getMethod("setString", String.class, String.class)
+                            .invoke(tagCompound, key, value);
+                }
+                else if(Utils.isInt(value))
                 {
                     tagCompound.getClass().getMethod("setInt", String.class, int.class)
                             .invoke(tagCompound, key, Integer.parseInt(value));
@@ -111,11 +117,6 @@ public class NBTTagReflection
                 {
                     tagCompound.getClass().getMethod("setDouble", String.class, double.class)
                             .invoke(tagCompound, key, Double.valueOf(value));
-                }
-                else if(Utils.isBoolean(value))
-                {
-                    tagCompound.getClass().getMethod("set", String.class, boolean.class)
-                            .invoke(tagCompound, key, Boolean.valueOf(value));
                 }
                 else
                 {
@@ -201,8 +202,7 @@ public class NBTTagReflection
             }
             catch(Exception exc)
             {
-                exc.printStackTrace();
-                ChatUtils.log("Failed to load NBT Tag Compound BASE from stack. Please check plugin is up to date.");
+
             }
         }
         return list;

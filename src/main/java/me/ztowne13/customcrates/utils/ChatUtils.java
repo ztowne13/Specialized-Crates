@@ -69,6 +69,17 @@ public class ChatUtils
         return s.replace("§", "&");
     }
 
+    public static String stripQuotes(String s)
+    {
+        while(s.startsWith("'") || s.startsWith("\""))
+            s = s.substring(1);
+
+        while(s.endsWith("'") || s.endsWith("\""))
+            s = s.substring(0, s.length() - 1);
+
+        return s;
+    }
+
     public static String removeColor(String s)
     {
         s = ChatColor.stripColor(s);
