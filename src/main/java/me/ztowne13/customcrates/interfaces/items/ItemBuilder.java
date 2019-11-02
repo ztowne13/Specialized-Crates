@@ -247,11 +247,20 @@ public class ItemBuilder implements EditableItem
         reapplyNBTTags();
     }
 
+    @Override
     public void addItemFlag(ItemFlag flag)
     {
         getItemFlags().add(flag);
         reapplyItemFlags();
     }
+
+    @Override
+    public void removeItemFlag(ItemFlag flag)
+    {
+        getItemFlags().remove(flag);
+        reapplyItemFlags();
+    }
+
 
     @Override
     public void setPlayerHeadName(String name)
@@ -318,17 +327,30 @@ public class ItemBuilder implements EditableItem
         if(flags == null)
             flags = new ArrayList<>();
 
+        if(glowing)
+        {
+            if (!flags.contains(ItemFlag.HIDE_ENCHANTS))
+                flags.add(ItemFlag.HIDE_ENCHANTS);
+        }
+        else
+        {
+            if(flags.contains(ItemFlag.HIDE_ENCHANTS))
+                flags.remove(ItemFlag.HIDE_ENCHANTS);
+        }
+
         return flags;
     }
 
     @Override
     public void reapplyItemFlags()
     {
+        ItemMeta im = im();
         for(ItemFlag flag : ItemFlag.values())
-            im().removeItemFlags(flag);
+            im.removeItemFlags(flag);
 
         for(ItemFlag flag : getItemFlags())
-            im().addItemFlags(flag);
+            im.addItemFlags(flag);
+        setIm(im);
     }
 
     @Override

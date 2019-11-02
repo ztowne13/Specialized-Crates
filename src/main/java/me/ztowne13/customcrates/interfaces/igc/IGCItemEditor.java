@@ -11,10 +11,15 @@ import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class IGCItemEditor extends IGCMenu
 {
@@ -37,7 +42,7 @@ public class IGCItemEditor extends IGCMenu
         editableItem.reapplyPotionEffects();
         editableItem.reapplyNBTTags();
 
-        InventoryBuilder ib = createDefault(36);
+        InventoryBuilder ib = createDefault(45);
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
@@ -81,7 +86,7 @@ public class IGCItemEditor extends IGCMenu
         glow.addLore("&7Current value:").addLore("&7" + editableItem.isGlowing());
         glow.addLore("").addAutomaticLore("&f", 30,
                 "This will toggle whether or not the display item will have a glowing effect. For enchanted items, if this value is true, the enchantments will be hidden.");
-        glow.addLore("").addAutomaticLore( "&e&l", 30, "Same as HIDE ENCHANTS");
+        glow.addLore("").addAutomaticLore("&e&l", 30, "Same as HIDE ENCHANTS");
 
         DynamicMaterial editableItemDM = DynamicMaterial.fromItemStack(editableItem.getStack());
 
@@ -140,6 +145,14 @@ public class IGCItemEditor extends IGCMenu
                 "values to the item you are HOLDING IN HAND. The only value it will not effect is the 'glowing' effect, everything " +
                 "else will be updated: name, lore, enchants, etc. Therefore, everything will be overwritten!");
 
+        // Edit attributes
+        ItemBuilder attributes = new ItemBuilder(DynamicMaterial.REDSTONE, 1);
+        attributes.setDisplayName("&aEdit the Item Flags");
+        attributes.addLore("").addAutomaticLore("&f", 30, "Edit the attributes of the item such as HIDE_ENCHANTS, " +
+                "HIDE_ATTRIBUTES, etc.");
+        attributes.addLore("").addAutomaticLore("&c", 30, "Note: If glow is set to true, HIDE_ENCHANTS will ALWAYS" +
+                " be true unless glow: false.");
+
         ib.setItem(10, everything);
         ib.setItem(11, item);
         ib.setItem(13, displayName);
@@ -149,7 +162,8 @@ public class IGCItemEditor extends IGCMenu
         ib.setItem(22, nbtTags);
         ib.setItem(23, amount);
         ib.setItem(24, potion);
-        ib.setItem(25, playerHead);
+        ib.setItem(25, attributes);
+        ib.setItem(31, playerHead);
 
         ib.open();
         putInMenu();
@@ -165,7 +179,7 @@ public class IGCItemEditor extends IGCMenu
                 break;
             case 10:
                 ItemStack stack;
-                if(NMSUtils.Version.v1_9.isServerVersionOrLater())
+                if (NMSUtils.Version.v1_9.isServerVersionOrLater())
                     stack = getP().getInventory().getItemInMainHand();
                 else
                     stack = getP().getItemInHand();
@@ -264,6 +278,20 @@ public class IGCItemEditor extends IGCMenu
                     ChatUtils.msgError(getP(), "The current item is not a potion.");
                 break;
             case 25:
+                List<String> descriptors = new ArrayList<>();
+                List<ItemBuilder> builders = new ArrayList<>();
+                for(ItemFlag flag : ItemFlag.values())
+                {
+                    descriptors.add("");
+                    if(editableItem.getItemFlags().contains(flag))
+                        builders.add(new ItemBuilder(DynamicMaterial.LIME_WOOL, 1));
+                    else
+                        builders.add(new ItemBuilder(DynamicMaterial.RED_WOOL, 1));
+                }
+                new IGCListSelector(getCc(), getP(), this, "Item Flags", Arrays.asList(ItemFlag.values()), DynamicMaterial.PAPER, 1,
+                        descriptors, builders).open();
+                break;
+            case 31:
                 if (DynamicMaterial.fromItemStack(editableItem.getStack()).equals(DynamicMaterial.PLAYER_HEAD))
                     new InputMenu(getCc(), getP(), "player-head-name", editableItem.getPlayerHeadName(), String.class,
                             this, true);
@@ -315,6 +343,20 @@ public class IGCItemEditor extends IGCMenu
             else
             {
                 ChatUtils.msgError(getP(), input + " is not a valid number.");
+            }
+        }
+        else if (value.equalsIgnoreCase("Item Flags"))
+        {
+            ItemFlag flag = ItemFlag.valueOf(input);
+            if(editableItem.getItemFlags().contains(flag))
+            {
+                editableItem.addItemFlag(flag);
+                ChatUtils.msgSuccess(getP(), "Removed flag: " + flag.name());
+            }
+            else
+            {
+                editableItem.addItemFlag(flag);
+                ChatUtils.msgSuccess(getP(), "Added flag: " + flag.name());
             }
         }
         return false;

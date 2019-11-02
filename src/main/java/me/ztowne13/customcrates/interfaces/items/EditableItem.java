@@ -45,4 +45,8 @@ public interface EditableItem
     List<ItemFlag> getItemFlags();
 
     void reapplyItemFlags();
+
+    void addItemFlag(ItemFlag flag);
+
+    void removeItemFlag(ItemFlag flag);
 }
