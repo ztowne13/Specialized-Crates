@@ -41,6 +41,7 @@ public class IGCItemEditor extends IGCMenu
         editableItem.reapplyEnchantments();
         editableItem.reapplyPotionEffects();
         editableItem.reapplyNBTTags();
+        editableItem.reapplyItemFlags();
 
         InventoryBuilder ib = createDefault(45);
 
@@ -350,7 +351,7 @@ public class IGCItemEditor extends IGCMenu
             ItemFlag flag = ItemFlag.valueOf(input);
             if(editableItem.getItemFlags().contains(flag))
             {
-                editableItem.addItemFlag(flag);
+                editableItem.removeItemFlag(flag);
                 ChatUtils.msgSuccess(getP(), "Removed flag: " + flag.name());
             }
             else

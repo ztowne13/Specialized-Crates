@@ -121,7 +121,7 @@ public enum StatusLoggerEvent
     REWARD_COMMAND_INVALID(false, "Rewards", "Failed to load COMMANDS for reward: $?$",
             "The 'commands' value does not exist or is not a valid list."),
 
-    REWARD_ENCHANT_INVALID(false, "Rewards", "Failed to load specified enchantments for reward $?$", "$?$"),
+    REWARD_ENCHANT_INVALID(false, "Rewards", "Failed to load specified enchantments for reward.", "$?$"),
 
     REWARD_POTION_INVALID(false, "Rewards", "Failed to load specified potion effect",
             "'$?$'"),

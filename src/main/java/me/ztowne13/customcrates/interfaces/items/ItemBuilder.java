@@ -50,12 +50,16 @@ public class ItemBuilder implements EditableItem
             addNBTTag(tags);
 
         if (stack.hasItemMeta() && stack.getItemMeta().hasLore())
+        {
             for (String line : stack.getItemMeta().getLore())
                 addLore(line);
+        }
 
         if(stack.hasItemMeta() && stack.getItemMeta().getItemFlags() != null)
-            for(ItemFlag flag : stack.getItemMeta().getItemFlags())
+        {
+            for (ItemFlag flag : stack.getItemMeta().getItemFlags())
                 addItemFlag(flag);
+        }
     }
 
     @Deprecated
@@ -327,30 +331,22 @@ public class ItemBuilder implements EditableItem
         if(flags == null)
             flags = new ArrayList<>();
 
-        if(glowing)
-        {
-            if (!flags.contains(ItemFlag.HIDE_ENCHANTS))
-                flags.add(ItemFlag.HIDE_ENCHANTS);
-        }
-        else
-        {
-            if(flags.contains(ItemFlag.HIDE_ENCHANTS))
-                flags.remove(ItemFlag.HIDE_ENCHANTS);
-        }
-
         return flags;
     }
 
     @Override
     public void reapplyItemFlags()
     {
-        ItemMeta im = im();
-        for(ItemFlag flag : ItemFlag.values())
-            im.removeItemFlags(flag);
+        ItemStack stack = get();
+        ItemMeta im = stack.getItemMeta();
+
+        im.getItemFlags().clear();
 
         for(ItemFlag flag : getItemFlags())
             im.addItemFlags(flag);
-        setIm(im);
+
+        stack.setItemMeta(im);
+        setStack(stack);
     }
 
     @Override
