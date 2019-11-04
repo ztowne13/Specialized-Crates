@@ -79,7 +79,8 @@ public class IGCDragAndDrop extends IGCMenu
                         stack.setItemMeta(meta);
                     }
 
-                    r.setBuilder(new ItemBuilder(stack));
+                    ItemBuilder builderToSet = new ItemBuilder(stack);
+                    r.setBuilder(builderToSet);
 
                     r.setGiveDisplayItem(true);
                     r.setGiveDisplayItemLore(true);

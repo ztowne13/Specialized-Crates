@@ -6,6 +6,7 @@ import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -77,8 +78,17 @@ public class NBTTagReflection
         }
 
         String[] args = tag.split(" ");
-        String key = args[0];
-        String value = args[1];
+        String key = null, value = null;
+
+        try
+        {
+            key = args[0];
+            value = args[1];
+        }
+        catch(Exception exc)
+        {
+            ChatUtils.log("Tag " + tag + " is not formatted 'TagType Tag' (without the quotes)");
+        }
 
         try
         {
@@ -130,6 +140,10 @@ public class NBTTagReflection
             "Potion"
     };
 
+    private static String[] booleanTags = new String[] {
+            "Unbreakable"
+    };
+
     public static List<String> getFrom(ItemStack item)
     {
         List<String> list = new ArrayList<>();
@@ -155,16 +169,27 @@ public class NBTTagReflection
 
                 if (!toSkip)
                 {
+                    Object nbtBase;
+                    if(Arrays.asList(booleanTags).contains(key))
+                    {
+                        nbtBase = tagCompound.getClass().getMethod("getBoolean", String.class).invoke(tagCompound, key);
+                        if((boolean) nbtBase)
+                            list.add(key + " " + 1);
+                        else
+                            list.add(key + " " + 0);
+                    }
+                    else
+                    {
+                        nbtBase = tagCompound.getClass().getMethod("get", String.class).invoke(tagCompound, key);
+                        list.add(key + " " + nbtBase);
+                    }
 
-                    Object nbtBase = tagCompound.getClass().getMethod("get", String.class).invoke(tagCompound, key);
-
-                    list.add(key + " " + nbtBase);
                 }
             }
         }
         catch(Exception exc)
         {
-
+            ChatUtils.log("Failed to get Tag. Please check plugin is up to date.");
         }
         return list;
     }

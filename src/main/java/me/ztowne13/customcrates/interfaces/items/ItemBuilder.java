@@ -47,7 +47,9 @@ public class ItemBuilder implements EditableItem
         }
 
         for (String tags : NBTTagManager.getFrom(stack))
+        {
             addNBTTag(tags);
+        }
 
         if (stack.hasItemMeta() && stack.getItemMeta().hasLore())
         {
@@ -60,6 +62,7 @@ public class ItemBuilder implements EditableItem
             for (ItemFlag flag : stack.getItemMeta().getItemFlags())
                 addItemFlag(flag);
         }
+
     }
 
     @Deprecated
@@ -318,7 +321,6 @@ public class ItemBuilder implements EditableItem
     @Override
     public void reapplyNBTTags()
     {
-        //clear old nbt tags;
         for (String tag : getNBTTags())
         {
             stack = NBTTagManager.applyTo(stack, tag);
