@@ -80,6 +80,16 @@ public class IGCDragAndDrop extends IGCMenu
                     }
 
                     ItemBuilder builderToSet = new ItemBuilder(stack);
+
+                    if(builderToSet.getLore().isEmpty() || builderToSet.getLore().size() == 0)
+                    {
+                        for (Object s : (ArrayList<String>) getCc().getSettings().getConfigValues()
+                                .get("inv-reward-item-lore"))
+                        {
+                            builderToSet.addLore(s.toString());
+                        }
+                    }
+
                     r.setBuilder(builderToSet);
 
                     r.setGiveDisplayItem(true);
