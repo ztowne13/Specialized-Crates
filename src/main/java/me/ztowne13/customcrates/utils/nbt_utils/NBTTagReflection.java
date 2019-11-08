@@ -92,7 +92,25 @@ public class NBTTagReflection
 
         try
         {
-            if((value.startsWith("'") && value.endsWith("'")) || (value.startsWith("\"") && value.endsWith("\"")))
+            if(value.startsWith("{") && value.endsWith("}"))
+            {
+                Class clazz = NMSUtils.getNmsClass("MojangsonParser");
+                Object newComp = clazz.getMethod("parse", String.class).invoke(clazz, value);
+
+                tagCompound.getClass().getMethod("set", String.class, NMSUtils.getNmsClass("NBTBase"))
+                        .invoke(tagCompound, key, newComp);
+
+//                NBTTagCompound newComp = MojangsonParser.parse(value);
+//
+//                NBTTagCompound tagg = ((NBTTagCompound) tagCompound);
+//
+//                tagg.set(key, newComp);
+//                Bukkit.broadcastMessage("TAGCOMP: " + tagg);
+//
+//                net.minecraft.server.v1_14_R1.ItemStack st = CraftItemStack.asNMSCopy(item);
+//                st.setTag(tagg);
+            }
+            else if((value.startsWith("'") && value.endsWith("'")) || (value.startsWith("\"") && value.endsWith("\"")))
             {
                 value = ChatUtils.stripQuotes(value);
                 tagCompound.getClass().getMethod("setString", String.class, String.class)
@@ -138,8 +156,7 @@ public class NBTTagReflection
             "display",
             "Enchantments",
             "HideFlags",
-            "Potion",
-            "SkullOwner"
+            "Potion"
     };
 
     private static String[] booleanTags = new String[] {
