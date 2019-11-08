@@ -4,7 +4,9 @@ import me.ztowne13.customcrates.interfaces.items.attributes.BukkitGlowEffect;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -18,6 +20,7 @@ import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ItemBuilder implements EditableItem
 {
@@ -277,7 +280,17 @@ public class ItemBuilder implements EditableItem
             if(Character.isLetterOrDigit(name.charAt(0)))
             {
                 SkullMeta skullMeta = (SkullMeta) im();
-                skullMeta.setOwner(name);
+                try
+                {
+                    UUID uuid = UUID.fromString(name);
+                    OfflinePlayer op = Bukkit.getOfflinePlayer(uuid);
+                    skullMeta.setOwningPlayer(op);
+                }
+                catch(Exception exc)
+                {
+                    skullMeta.setOwner(name);
+
+                }
                 setIm(skullMeta);
             }
         }

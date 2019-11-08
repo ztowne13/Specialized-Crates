@@ -3,9 +3,6 @@ package me.ztowne13.customcrates.utils.nbt_utils;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import net.minecraft.server.v1_14_R1.MojangsonParser;
-import net.minecraft.server.v1_14_R1.NBTTagCompound;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -95,14 +92,7 @@ public class NBTTagReflection
 
         try
         {
-            if(value.startsWith("{") && value.endsWith("}"))
-            {
-                NBTTagCompound newComp = MojangsonParser.parse(value);
-                Bukkit.broadcastMessage("COMP: " + newComp);
-                ((NBTTagCompound) tagCompound).set(key, newComp);
-                Bukkit.broadcastMessage("TAGCOMP: " + tagCompound);
-            }
-            else if((value.startsWith("'") && value.endsWith("'")) || (value.startsWith("\"") && value.endsWith("\"")))
+            if((value.startsWith("'") && value.endsWith("'")) || (value.startsWith("\"") && value.endsWith("\"")))
             {
                 value = ChatUtils.stripQuotes(value);
                 tagCompound.getClass().getMethod("setString", String.class, String.class)
@@ -132,8 +122,10 @@ public class NBTTagReflection
         try
         {
             stack.getClass().getMethod("setTag", tagCompound.getClass()).invoke(stack, tagCompound);
-            return (ItemStack) getCraftItemStack().getMethod("asBukkitCopy", stack.getClass())
+            ItemStack toReturn =  (ItemStack) getCraftItemStack().getMethod("asBukkitCopy", stack.getClass())
                     .invoke(getCraftItemStack(), stack);
+
+            return toReturn;
         }
         catch (Exception exc)
         {
@@ -146,7 +138,8 @@ public class NBTTagReflection
             "display",
             "Enchantments",
             "HideFlags",
-            "Potion"
+            "Potion",
+            "SkullOwner"
     };
 
     private static String[] booleanTags = new String[] {
@@ -201,10 +194,5 @@ public class NBTTagReflection
 
         }
         return list;
-    }
-
-    public static boolean isUnformattable(Object s)
-    {
-        return s.toString().startsWith("{") && s.toString().endsWith("}");
     }
 }
