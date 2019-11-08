@@ -51,7 +51,6 @@ public class AntiFraudSQLHandler extends Thread
     {
         try
         {
-
             String values = "'" + id + "','" + AntiFraudPlaceholders.USER + "','" + AntiFraudPlaceholders.RESOURCE + "','" +
                     AntiFraudPlaceholders.NONCE + "'";
 

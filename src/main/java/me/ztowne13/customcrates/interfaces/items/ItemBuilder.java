@@ -274,9 +274,12 @@ public class ItemBuilder implements EditableItem
     {
         if (DynamicMaterial.fromItemStack(getStack()).equals(DynamicMaterial.PLAYER_HEAD))
         {
-            SkullMeta skullMeta = (SkullMeta) im();
-            skullMeta.setOwner(name);
-            setIm(skullMeta);
+            if(Character.isLetterOrDigit(name.charAt(0)))
+            {
+                SkullMeta skullMeta = (SkullMeta) im();
+                skullMeta.setOwner(name);
+                setIm(skullMeta);
+            }
         }
     }
 

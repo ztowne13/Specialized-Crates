@@ -30,7 +30,7 @@ public class Debug extends SubCommand
             {
                 if(args.length == 1)
                 {
-                    ChatUtils.msgInfo(player, "Commands: iteminfo[-,tostring], applytag[{tag id}]");
+                    ChatUtils.msgInfo(player, "Commands: iteminfo[-,tostring,nolore], applytag[{tag id}]");
                     return true;
                 }
 
@@ -47,9 +47,12 @@ public class Debug extends SubCommand
 
                     cmds.msg("Type: " + stack.getType().name());
 
-                    cmds.msg("Lore:");
-                    for(String s : im.getLore())
-                        cmds.msg("- " + s);
+                    if(!(args.length == 3 && args[2].equalsIgnoreCase("nolore")))
+                    {
+                        cmds.msg("Lore:");
+                        for (String s : im.getLore())
+                            cmds.msg("- " + s);
+                    }
 
                     cmds.msg("Enchants: ");
                     for(Enchantment ench : im.getEnchants().keySet())
