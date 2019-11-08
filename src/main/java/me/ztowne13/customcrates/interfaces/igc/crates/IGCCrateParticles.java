@@ -10,13 +10,16 @@ import me.ztowne13.customcrates.crates.options.particles.effects.PEAnimationType
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
+import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -85,8 +88,9 @@ public class IGCCrateParticles extends IGCTierMenu
         }
         else if (slot == 8)
         {
-            new InputMenu(getCc(), getP(), "particle type", "null",
-                    "Available particles: " + Arrays.toString(ParticleEffect.values()), String.class, this, true);
+            new IGCListSelector(getCc(), getP(), this, "particle type", Arrays.asList(
+                    NMSUtils.Version.v1_9.isServerVersionOrEarlier() ? ParticleEffect.values() : Particle.values()),
+                    DynamicMaterial.NETHER_STAR, 1, null).open();
         }
         else if (getIb().getInv().getItem(slot) != null &&
                 getIb().getInv().getItem(slot).getType().equals(Material.NETHER_STAR))
