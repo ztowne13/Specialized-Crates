@@ -6,6 +6,7 @@ import me.ztowne13.customcrates.utils.*;
 import org.bukkit.Location;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Settings
@@ -14,6 +15,8 @@ public class Settings
 
     HashMap<String, String> infoToLog = new HashMap<String, String>();
     HashMap<String, Object> configValues = new HashMap<String, Object>();
+
+    ArrayList<String> failedPlacedCrate = new ArrayList<>();
 
     public Settings(SpecializedCrates cc)
     {
@@ -68,47 +71,51 @@ public class Settings
     public void loadPlacedCrates()
     {
         for (String s : getCc().getActivecratesFile().get().getKeys(false))
+            if(!loadCrateFromFile(s))
+                failedPlacedCrate.add(s);
+    }
+
+    public boolean loadCrateFromFile(String s)
+    {
+        FileHandler activeCrates = getCc().getActivecratesFile();
+        String crateName = activeCrates.get().getString(s + ".crate");
+        Location l = LocationUtils.stringToLoc(s);
+
+        if (Crate.exists(crateName) && l != null)
         {
-            FileHandler activeCrates = getCc().getActivecratesFile();
-            String crateName = activeCrates.get().getString(s + ".crate");
-            Location l = LocationUtils.stringToLoc(s);
+            Crate crates = Crate.getCrate(getCc(), crateName);
 
-            if (Crate.exists(crateName) && l != null)
+            PlacedCrate cm = PlacedCrate.get(getCc(), l);
+            if(cm == null)
             {
-                Crate crates = Crate.getCrate(getCc(), crateName);
+                ChatUtils.log("location: " + s);
+                return false;
+            }
 
-                PlacedCrate cm = PlacedCrate.get(getCc(), l);
-                if(cm == null)
-                {
-                    ChatUtils.log("location: " + s);
-                    getCc().getActivecratesFile().get().set(s, null);
-                    getCc().getActivecratesFile().save();
-                    continue;
-                }
-
-                if (crates.isEnabled())
-                {
-                    cm.setup(crates, false);
-                }
-                else
-                {
-                    cm.setCratesEnabled(false);
-                }
-
-                if (activeCrates.get().contains(s + ".placedTime"))
-                {
-                    cm.setPlacedTime(activeCrates.get().getLong(s + ".placedTime"));
-                }
-                else
-                {
-                    cm.setPlacedTime(0L);
-                }
+            if (crates.isEnabled())
+            {
+                cm.setup(crates, false);
             }
             else
             {
-                ChatUtils.log(new String[]{"ERROR: " + crateName + " DOES NOT EXIST TO BE USED AT LOCATION: " + s});
+                cm.setCratesEnabled(false);
+            }
+
+            if (activeCrates.get().contains(s + ".placedTime"))
+            {
+                cm.setPlacedTime(activeCrates.get().getLong(s + ".placedTime"));
+            }
+            else
+            {
+                cm.setPlacedTime(0L);
             }
         }
+        else
+        {
+            ChatUtils.log(new String[]{"ERROR: " + crateName + " DOES NOT EXIST TO BE USED AT LOCATION: " + s});
+        }
+
+        return true;
     }
 
     public void loadSettings()
@@ -186,5 +193,15 @@ public class Settings
     public void setInfoToLog(HashMap<String, String> infoToLog)
     {
         this.infoToLog = infoToLog;
+    }
+
+    public ArrayList<String> getFailedPlacedCrate()
+    {
+        return failedPlacedCrate;
+    }
+
+    public void setFailedPlacedCrate(ArrayList<String> failedPlacedCrate)
+    {
+        this.failedPlacedCrate = failedPlacedCrate;
     }
 }

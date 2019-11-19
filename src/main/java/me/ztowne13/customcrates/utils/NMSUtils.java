@@ -14,10 +14,10 @@ public class NMSUtils
         return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
     }
 
-    public static String getServerVersion()
-    {
-        return Bukkit.getServer().getClass().getPackage().getName().substring(23);
-    }
+        public static String getServerVersion()
+        {
+            return Bukkit.getServer().getClass().getPackage().getName().substring(23);
+        }
 
     public enum Version
     {

@@ -34,5 +34,11 @@ public class PluginEnableListener implements Listener
                 }
             }
         }
+
+        if(pluginEnableEvent.getPlugin().getName().equalsIgnoreCase("Multiverse-Core"))
+        {
+            for(String s : sc.getSettings().getFailedPlacedCrate())
+                sc.getSettings().loadCrateFromFile(s);
+        }
     }
 }

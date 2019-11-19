@@ -1,10 +1,10 @@
 name: SpecializedCrates
 author: Ztowne13
-version: 2.9.2.3
+version: 2.9.2.4
 main: me.ztowne13.customcrates.SpecializedCrates
 api-version: 1.13
 description: A 100% customizable crate plugin for your server.
-softdepend: [HolographicDisplays,IndividualHolograms,Holograms,Citizens,CMI,PlaceholderAPI]
+softdepend: [HolographicDisplays,IndividualHolograms,Holograms,Citizens,CMI,PlaceholderAPI,Multiverse-Core]
 commands:
   scrates:
     description: All commands for the specialized crates plugin.
