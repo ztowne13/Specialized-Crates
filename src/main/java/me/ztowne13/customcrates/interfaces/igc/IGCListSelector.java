@@ -151,10 +151,10 @@ public class IGCListSelector extends IGCMenu
             int slotInRow = slot % 9;
             int num = ((page - 1) * 28) + ((row - 1) * 7) + (slotInRow - 1);
 
+            lastMenu.handleInput(header, values.get(num).toString());
+
             if(reopen)
                 up();
-
-            lastMenu.handleInput(header, values.get(num).toString());
         }
     }
 
