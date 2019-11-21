@@ -25,23 +25,12 @@ public class BukkitParticleEffect extends ParticleData
     @Override
     public void display(Location l)
     {
-        if (false /*isHasColor()*/)
-        {
-            //l.getWorld().spawnParticle(particle, l, 1, isHasAnimation() ? 0 : getRangeX(), isHasAnimation() ? 0 : getRangeY(), isHasAnimation() ? 0 : getRangeZ(), getSpeed(), red, green, blue);
-        }
+        if (isHasAnimation())
+            l.getWorld().spawnParticle(particle, LocationUtils.getLocationCentered(l), 1, 0, 0, 0, 0, getValidData());
         else
-        {
-            if (isHasAnimation())
-            {
-                l.getWorld().spawnParticle(particle, LocationUtils.getLocationCentered(l), 1, 0, 0, 0, 0);
-            }
-            else
-            {
-                l.getWorld().spawnParticle(particle,
-                        LocationUtils.getLocationCentered(l).add(getCenterX(), getCenterY(), getCenterZ()), getAmount(),
-                        getRangeX(), getRangeY(), getRangeZ(), getSpeed());
-            }
-        }
+            l.getWorld().spawnParticle(particle,
+                    LocationUtils.getLocationCentered(l).add(getCenterX(), getCenterY(), getCenterZ()), getAmount(),
+                    getRangeX(), getRangeY(), getRangeZ(), getSpeed(), getValidData());
     }
 
     @Override
@@ -62,5 +51,15 @@ public class BukkitParticleEffect extends ParticleData
     public String getParticleName()
     {
         return particle.name();
+    }
+
+    public Object getValidData()
+    {
+        if (particle.equals(Particle.REDSTONE))
+        {
+            return getDustOptions();
+        }
+
+        return null;
     }
 }

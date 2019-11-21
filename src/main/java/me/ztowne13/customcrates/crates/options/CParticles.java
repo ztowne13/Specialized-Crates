@@ -12,7 +12,10 @@ import me.ztowne13.customcrates.crates.options.particles.effects.PEAnimationType
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.NMSUtils;
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,27 +80,32 @@ public class CParticles extends CSetting
     {
         SettingsConverter.convertParticles(getFu(), path);
 
+        FileConfiguration fc = getFu().get();
+
         try
         {
             for (String parent : getFu().get().getConfigurationSection(path).getValues(false).keySet())
             {
                 String particleTypeAS = getFu().get().getString(path + "." + parent + ".type");
-                String rangeXAS = getFu().get().getString(path + "." + parent + ".range-x");
-                String rangeYAS = getFu().get().getString(path + "." + parent + ".range-y");
-                String rangeZAS = getFu().get().getString(path + "." + parent + ".range-z");
-                String centerXAS = getFu().get().getString(path + "." + parent + ".center-x");
-                String centerYAS = getFu().get().getString(path + "." + parent + ".center-y");
-                String centerZAS = getFu().get().getString(path + "." + parent + ".center-z");
-                String speedAS = getFu().get().getString(path + "." + parent + ".speed");
-                String amountAS = getFu().get().getString(path + "." + parent + ".amount");
-                String animationAS = getFu().get().getString(path + "." + parent + ".animation");
-
+                String rangeXAS = fc.getString(path + "." + parent + ".range-x");
+                String rangeYAS = fc.getString(path + "." + parent + ".range-y");
+                String rangeZAS = fc.getString(path + "." + parent + ".range-z");
+                String centerXAS = fc.getString(path + "." + parent + ".center-x");
+                String centerYAS = fc.getString(path + "." + parent + ".center-y");
+                String centerZAS = fc.getString(path + "." + parent + ".center-z");
+                String speedAS = fc.getString(path + "." + parent + ".speed");
+                String amountAS = fc.getString(path + "." + parent + ".amount");
+                String animationAS = fc.getString(path + "." + parent + ".animation");
+                String redstoneRed = fc.getString(path + "." + parent + ".redstone.red");
+                String redstoneGreen = fc.getString(path + "." + parent + ".redstone.green");
+                String redstoneBlue = fc.getString(path + "." + parent + ".redstone.blue");
+                String redstoneSize = fc.getString(path + "." + parent + ".redstone.size");
 
                 try
                 {
                     ParticleData pd;
 
-                    if (!NMSUtils.Version.v1_10.isServerVersionOrLater())
+                    if (NMSUtils.Version.v1_9.isServerVersionOrEarlier())
                     {
                         ParticleEffect pe = null;
                         try
@@ -138,31 +146,36 @@ public class CParticles extends CSetting
                     try
                     {
                         pd.setCenterX(Float.valueOf(centerXAS));
-                    }
-                    catch (Exception exc)
-                    {
-
-                    }
+                    } catch (Exception exc) { }
 
                     // center y
                     try
                     {
                         pd.setCenterY(Float.valueOf(centerYAS));
-                    }
-                    catch (Exception exc)
-                    {
-
-                    }
+                    } catch (Exception exc) { }
 
                     // center z
                     try
                     {
                         pd.setCenterZ(Float.valueOf(centerZAS));
-                    }
-                    catch (Exception exc)
-                    {
+                    } catch (Exception exc) { }
 
-                    }
+                    // Redstone info
+                    try
+                    {
+                        if(NMSUtils.Version.v1_13.isServerVersionOrLater() && particleTypeAS.equalsIgnoreCase("REDSTONE"))
+                        {
+                            int red = Integer.parseInt(redstoneRed);
+                            int green = Integer.parseInt(redstoneGreen);
+                            int blue = Integer.parseInt(redstoneBlue);
+                            float size = Float.parseFloat(redstoneSize);
+
+                            Color color = Color.fromBGR(blue, green, red);
+                            Particle.DustOptions dustOptions = new Particle.DustOptions(color, size);
+
+                            pd.setDustOptions(dustOptions);
+                        }
+                    } catch (Exception exc) { }
 
                     try
                     {

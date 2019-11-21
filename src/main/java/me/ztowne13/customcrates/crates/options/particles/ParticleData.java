@@ -4,6 +4,8 @@ import me.ztowne13.customcrates.crates.options.particles.effects.PEAnimationType
 import me.ztowne13.customcrates.crates.options.particles.effects.ParticleAnimationEffect;
 import me.ztowne13.customcrates.utils.FileHandler;
 import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.configuration.file.FileConfiguration;
 
 public abstract class ParticleData
 {
@@ -11,8 +13,10 @@ public abstract class ParticleData
     float rangeX, rangeY, rangeZ;
     float centerX, centerY, centerZ;
     float speed;
-    boolean hasAnimation, hasColor;
-    int amount, red, green, blue;
+    boolean hasAnimation;
+    int amount;
+
+    Particle.DustOptions dustOptions;
 
     ParticleAnimationEffect particleAnimationEffect;
 
@@ -40,21 +44,30 @@ public abstract class ParticleData
 
     public void save(FileHandler fileHandler, String path)
     {
-        fileHandler.get().set(path + "." + getName() + ".type", getParticleName());
-        fileHandler.get().set(path + "." + getName() + ".range-x", getRangeX());
-        fileHandler.get().set(path + "." + getName() + ".range-y", getRangeY());
-        fileHandler.get().set(path + "." + getName() + ".range-z", getRangeZ());
-        fileHandler.get().set(path + "." + getName() + ".center-x", getCenterX());
-        fileHandler.get().set(path + "." + getName() + ".center-y", getCenterY());
-        fileHandler.get().set(path + "." + getName() + ".center-z", getCenterZ());
-        fileHandler.get().set(path + "." + getName() + ".speed", getSpeed());
-        fileHandler.get().set(path + "." + getName() + ".amount", getAmount());
+        FileConfiguration fc = fileHandler.get();
+        fc.set(path + "." + getName() + ".type", getParticleName());
+        fc.set(path + "." + getName() + ".range-x", getRangeX());
+        fc.set(path + "." + getName() + ".range-y", getRangeY());
+        fc.set(path + "." + getName() + ".range-z", getRangeZ());
+        fc.set(path + "." + getName() + ".center-x", getCenterX());
+        fc.set(path + "." + getName() + ".center-y", getCenterY());
+        fc.set(path + "." + getName() + ".center-z", getCenterZ());
+        fc.set(path + "." + getName() + ".speed", getSpeed());
+        fc.set(path + "." + getName() + ".amount", getAmount());
 
         if (!(getParticleAnimationEffect() == null))
             fileHandler.get().set(path + "." + getName() + ".animation",
                     PEAnimationType.getFromParticleAnimationEffect(getParticleAnimationEffect()).name());
         else
             fileHandler.get().set(path + "." + getName() + ".animation", "NONE");
+
+        if(dustOptions != null)
+        {
+            fc.set(path + "." + getName() + ".redstone.red", dustOptions.getColor().getRed());
+            fc.set(path + "." + getName() + ".redstone.green", dustOptions.getColor().getGreen());
+            fc.set(path + "." + getName() + ".redstone.blue", dustOptions.getColor().getBlue());
+            fc.set(path + "." + getName() + ".redstone.size", dustOptions.getSize());
+        }
     }
 
     public ParticleData setRangeX(float rangeX)
@@ -127,46 +140,6 @@ public abstract class ParticleData
         this.particleAnimationEffect = particleAnimationEffect;
     }
 
-    public int getRed()
-    {
-        return red;
-    }
-
-    public void setRed(int red)
-    {
-        this.red = red;
-    }
-
-    public int getGreen()
-    {
-        return green;
-    }
-
-    public void setGreen(int green)
-    {
-        this.green = green;
-    }
-
-    public int getBlue()
-    {
-        return blue;
-    }
-
-    public void setBlue(int blue)
-    {
-        this.blue = blue;
-    }
-
-    public boolean isHasColor()
-    {
-        return hasColor;
-    }
-
-    public void setHasColor(boolean hasColor)
-    {
-        this.hasColor = hasColor;
-    }
-
     public String getName()
     {
         return name;
@@ -205,5 +178,15 @@ public abstract class ParticleData
     public void setCenterZ(float centerZ)
     {
         this.centerZ = centerZ;
+    }
+
+    public Particle.DustOptions getDustOptions()
+    {
+        return dustOptions;
+    }
+
+    public void setDustOptions(Particle.DustOptions dustOptions)
+    {
+        this.dustOptions = dustOptions;
     }
 }
