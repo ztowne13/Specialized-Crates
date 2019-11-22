@@ -96,10 +96,10 @@ public class CParticles extends CSetting
                 String speedAS = fc.getString(path + "." + parent + ".speed");
                 String amountAS = fc.getString(path + "." + parent + ".amount");
                 String animationAS = fc.getString(path + "." + parent + ".animation");
-                String redstoneRed = fc.getString(path + "." + parent + ".redstone.red");
-                String redstoneGreen = fc.getString(path + "." + parent + ".redstone.green");
-                String redstoneBlue = fc.getString(path + "." + parent + ".redstone.blue");
-                String redstoneSize = fc.getString(path + "." + parent + ".redstone.size");
+                String colorRed = fc.getString(path + "." + parent + ".color.red");
+                String colorGreen = fc.getString(path + "." + parent + ".color.green");
+                String colorBlue = fc.getString(path + "." + parent + ".color.blue");
+                String redstoneSize = fc.getString(path + "." + parent + ".redstone-size");
 
                 try
                 {
@@ -160,17 +160,24 @@ public class CParticles extends CSetting
                         pd.setCenterZ(Float.valueOf(centerZAS));
                     } catch (Exception exc) { }
 
+                    // colors
+                    try
+                    {
+                        pd.setColorRed(Integer.parseInt(colorRed));
+                        pd.setColorBlue(Integer.parseInt(colorBlue));
+                        pd.setColorGreen(Integer.parseInt(colorGreen));
+                        pd.setHasColor(true);
+                    } catch (Exception exc) {}
+
                     // Redstone info
                     try
                     {
                         if(NMSUtils.Version.v1_13.isServerVersionOrLater() && particleTypeAS.equalsIgnoreCase("REDSTONE"))
                         {
-                            int red = Integer.parseInt(redstoneRed);
-                            int green = Integer.parseInt(redstoneGreen);
-                            int blue = Integer.parseInt(redstoneBlue);
                             float size = Float.parseFloat(redstoneSize);
+                            pd.setSize(size);
 
-                            Color color = Color.fromBGR(blue, green, red);
+                            Color color = Color.fromBGR(pd.getColorBlue(), pd.getColorGreen(), pd.getColorRed());
                             Particle.DustOptions dustOptions = new Particle.DustOptions(color, size);
 
                             pd.setDustOptions(dustOptions);

@@ -13,8 +13,10 @@ public abstract class ParticleData
     float rangeX, rangeY, rangeZ;
     float centerX, centerY, centerZ;
     float speed;
-    boolean hasAnimation;
+    boolean hasAnimation, hasColor;
     int amount;
+    int colorRed, colorGreen, colorBlue;
+    float size;
 
     Particle.DustOptions dustOptions;
 
@@ -61,13 +63,10 @@ public abstract class ParticleData
         else
             fileHandler.get().set(path + "." + getName() + ".animation", "NONE");
 
-        if(dustOptions != null)
-        {
-            fc.set(path + "." + getName() + ".redstone.red", dustOptions.getColor().getRed());
-            fc.set(path + "." + getName() + ".redstone.green", dustOptions.getColor().getGreen());
-            fc.set(path + "." + getName() + ".redstone.blue", dustOptions.getColor().getBlue());
-            fc.set(path + "." + getName() + ".redstone.size", dustOptions.getSize());
-        }
+        fc.set(path + "." + getName() + ".color.red", getColorRed());
+        fc.set(path + "." + getName() + ".color.green", getColorGreen());
+        fc.set(path + "." + getName() + ".color.blue", getColorBlue());
+        fc.set(path + "." + getName() + ".redstone-size", getSize() == 0 ? null : getSize());
     }
 
     public ParticleData setRangeX(float rangeX)
@@ -188,5 +187,55 @@ public abstract class ParticleData
     public void setDustOptions(Particle.DustOptions dustOptions)
     {
         this.dustOptions = dustOptions;
+    }
+
+    public int getColorRed()
+    {
+        return colorRed;
+    }
+
+    public void setColorRed(int colorRed)
+    {
+        this.colorRed = colorRed;
+    }
+
+    public int getColorGreen()
+    {
+        return colorGreen;
+    }
+
+    public void setColorGreen(int colorGreen)
+    {
+        this.colorGreen = colorGreen;
+    }
+
+    public int getColorBlue()
+    {
+        return colorBlue;
+    }
+
+    public void setColorBlue(int colorBlue)
+    {
+        this.colorBlue = colorBlue;
+    }
+
+    public float getSize()
+    {
+        return size;
+    }
+
+    public void setSize(float size)
+    {
+        this.size = size;
+    }
+
+    public boolean isHasColor()
+    {
+        return hasColor;
+    }
+
+    public void setHasColor(boolean hasColor)
+    {
+        this.hasColor = hasColor;
     }
 }
