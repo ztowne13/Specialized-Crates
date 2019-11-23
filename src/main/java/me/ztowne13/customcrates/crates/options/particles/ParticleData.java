@@ -17,6 +17,7 @@ public abstract class ParticleData
     int amount;
     int colorRed, colorGreen, colorBlue;
     float size;
+    boolean colorEnabled;
 
     Particle.DustOptions dustOptions;
 
@@ -63,6 +64,7 @@ public abstract class ParticleData
         else
             fileHandler.get().set(path + "." + getName() + ".animation", "NONE");
 
+        fc.set(path + "." + getName() + ".color.enabled", isColorEnabled());
         fc.set(path + "." + getName() + ".color.red", getColorRed());
         fc.set(path + "." + getName() + ".color.green", getColorGreen());
         fc.set(path + "." + getName() + ".color.blue", getColorBlue());
@@ -237,5 +239,15 @@ public abstract class ParticleData
     public void setHasColor(boolean hasColor)
     {
         this.hasColor = hasColor;
+    }
+
+    public boolean isColorEnabled()
+    {
+        return colorEnabled;
+    }
+
+    public void setColorEnabled(boolean colorEnabled)
+    {
+        this.colorEnabled = colorEnabled;
     }
 }

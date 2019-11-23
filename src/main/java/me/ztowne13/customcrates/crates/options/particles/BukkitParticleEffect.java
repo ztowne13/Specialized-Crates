@@ -51,7 +51,7 @@ public class BukkitParticleEffect extends ParticleData
         }
 
         if ((particle.equals(Particle.SPELL_MOB) || particle.equals(Particle.SPELL_MOB_AMBIENT) ||
-                particle.equals(Particle.NOTE)) && isHasColor())
+                particle.equals(Particle.NOTE)) && isHasColor() && isColorEnabled())
         {
             // Artificial 'offset'
             if (!isHasAnimation())

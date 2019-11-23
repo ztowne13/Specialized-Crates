@@ -30,6 +30,13 @@ public class IGCCrateParticle extends IGCTierMenu
 {
     ParticleData pd;
 
+    String[] colorableParticles = new String[]{
+            "SPELL_MOB",
+            "SPELL_MOB_AMBIENT",
+            "NOTE",
+            "REDSTONE"
+    };
+
     public IGCCrateParticle(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, ParticleData pd, String tier)
     {
         super(cc, p, lastMenu, "&7&l> &6&lParticles", crates, tier);
@@ -54,6 +61,13 @@ public class IGCCrateParticle extends IGCTierMenu
         ib.setItem(11, new ItemBuilder(Material.NETHER_STAR, 1, 0).setName("&aParticle Type").setLore("&7Current value: ")
                 .addLore("&7" + pd.getParticleName()).addLore("")
                 .addAutomaticLore("&f", 30, "The particle type that this particle will display."));
+
+        ItemBuilder colorEditor = new ItemBuilder(DynamicMaterial.LIME_DYE, 1);
+        colorEditor.setDisplayName("&aEdit the color of the particle");
+
+        for(String s : colorableParticles)
+            if(s.equalsIgnoreCase(pd.getParticleName()))
+                ib.setItem(20, colorEditor);
 
         if (pd.getParticleAnimationEffect() == null)
         {
@@ -207,6 +221,11 @@ public class IGCCrateParticle extends IGCTierMenu
                 new InputMenu(getCc(), getP(), "amount", pd.getAmount() + "",
                         "How many particles spawn every tick (1/20th of a second).", Integer.class, this);
                 break;
+            case 20:
+                for(String s : colorableParticles)
+                    if(s.equalsIgnoreCase(pd.getParticleName()))
+                        new IGCCrateParticleColor(getCc(), getP(), this, getCrates(), pd, tier).open();
+                break;
             case 21:
                 if (pd.getParticleAnimationEffect() == null)
                     new InputMenu(getCc(), getP(), "x center offset", pd.getCenterX() + "",
@@ -214,7 +233,7 @@ public class IGCCrateParticle extends IGCTierMenu
                 break;
             case 22:
                 if (pd.getParticleAnimationEffect() == null)
-                    new InputMenu(getCc(), getP(), "y center offset", pd.getCenterY() + "",
+                        new InputMenu(getCc(), getP(), "y center offset", pd.getCenterY() + "",
                             "Adjust the center of where the particles will spawn in the y direction.", Double.class, this);
                 break;
             case 23:

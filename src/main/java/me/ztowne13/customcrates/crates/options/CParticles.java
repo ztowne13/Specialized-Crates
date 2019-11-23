@@ -99,6 +99,7 @@ public class CParticles extends CSetting
                 String colorRed = fc.getString(path + "." + parent + ".color.red");
                 String colorGreen = fc.getString(path + "." + parent + ".color.green");
                 String colorBlue = fc.getString(path + "." + parent + ".color.blue");
+                String colorEnabled = fc.getString(path + "." + parent + ".color.enabled");
                 String redstoneSize = fc.getString(path + "." + parent + ".redstone-size");
 
                 try
@@ -166,6 +167,7 @@ public class CParticles extends CSetting
                         pd.setColorRed(Integer.parseInt(colorRed));
                         pd.setColorBlue(Integer.parseInt(colorBlue));
                         pd.setColorGreen(Integer.parseInt(colorGreen));
+                        pd.setColorEnabled(Boolean.parseBoolean(colorEnabled));
                         pd.setHasColor(true);
                     } catch (Exception exc) {}
 
@@ -174,6 +176,7 @@ public class CParticles extends CSetting
                     {
                         if(NMSUtils.Version.v1_13.isServerVersionOrLater() && particleTypeAS.equalsIgnoreCase("REDSTONE"))
                         {
+                            pd.setColorEnabled(true);
                             float size = Float.parseFloat(redstoneSize);
                             pd.setSize(size);
 
