@@ -77,59 +77,6 @@ public class AttemptCrateUseAction extends CrateAction
                                     .get("place-creative"))
                             {
                                 createCrateAt(crates, location);
-//                                // Does require key AND IS STATIC
-//                                if (ot.isStatic() || crates.getCs().isRequireKey() || crates.isMultiCrate())
-//                                {
-//                                    createCrateAt(crates, location);
-//                                }
-//                                // Doesn't require key AND ISN'T STATIC
-//                                else
-//                                {
-//                                    CrateSettings cs = crates.getCs();
-//                                    if (player.hasPermission(cs.getPermission()) ||
-//                                            cs.getPermission().equalsIgnoreCase("no permission"))
-//                                    {
-//                                        //Inventory has at least 1 space open
-//                                        if (isInventoryTooEmpty(cc, player))
-//                                        {
-//                                            CrateCooldownEvent cce = pdm.getCrateCooldownEventByCrates(crates);
-//                                            if (cce == null || cce.isCooldownOverAsBoolean())
-//                                            {
-//                                                Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
-//                                                {
-//                                                    @Override
-//                                                    public void run()
-//                                                    {
-//                                                        PlacedCrate cm = PlacedCrate.get(cc, location);
-//                                                        cm.setup(crates, false);
-//
-//                                                        CrateAnimation ch = cm.getCrates().getCs().getCh();
-//
-//                                                        ch.tick(player, location, CrateState.OPEN, !cm.getCrates().isMultiCrate());
-//                                                        ch.takeKeyFromPlayer(player, false);
-//                                                        cm.delete();
-//
-//                                                        location.getBlock().setType(Material.AIR);
-//                                                        new CrateCooldownEvent(crates, System.currentTimeMillis(), true)
-//                                                                .addTo(pdm);
-//                                                    }
-//                                                }, 1);
-//                                                return true;
-//                                            }
-//                                            cce.playFailure(pdm);
-//                                            return true;
-//                                        }
-//                                        Messages.INVENTORY_TOO_FULL.msgSpecified(cc, player);
-//                                        crates.getCs().getCh().playFailToOpen(player, false);
-//                                        return true;
-//                                    }
-//                                    else
-//                                    {
-//                                        crates.getCs().getCh().playFailToOpen(player, false);
-//                                        Messages.NO_PERMISSION_CRATE.msgSpecified(cc, player);
-//                                    }
-//                                    return true;
-//                                }
                             }
                             else
                             {

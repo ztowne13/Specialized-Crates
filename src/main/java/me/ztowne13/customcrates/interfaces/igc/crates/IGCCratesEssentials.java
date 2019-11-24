@@ -24,9 +24,9 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
-public class IGCCratesBase extends IGCMenuCrate
+public class IGCCratesEssentials extends IGCMenuCrate
 {
-    public IGCCratesBase(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates)
+    public IGCCratesEssentials(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates)
     {
         super(cc, p, lastMenu, "&7&l> &6&lThe Defaults", crates);
     }
@@ -89,6 +89,14 @@ public class IGCCratesBase extends IGCMenuCrate
                     new ItemBuilder(Material.SLIME_BALL, 1, 0).setName("&aSet require key").setLore("&7Current value: ")
                             .addLore("&7" + cs.isRequireKey()).addLore("").addAutomaticLore("&f", 30,
                             "Does the crate require a key? Best for keyless weekly/monthly crates or DYNAMIC crates that can be placed to open without a key. Or if minecrates can be opened without needing a key."));
+
+            ItemBuilder cost = new ItemBuilder(DynamicMaterial.DIAMOND, 1);
+            cost.setDisplayName("&aEdit the cost.");
+            cost.addLore("&7Current Value:").addLore("&7" + crates.getCs().getCost());
+            cost.addLore("").addAutomaticLore("&f", 30, "This is how much it costs to open the crate, " +
+                    "regardless of whether or not require-key is set to true or false.");
+            cost.addLore("").addAutomaticLore("&c", 30, "REQUIRES Vault");
+            ib.setItem(14, cost);
         }
 
         getIb().open();
@@ -185,6 +193,9 @@ public class IGCCratesBase extends IGCMenuCrate
             case 13:
                 cs.setRequireKey(!cs.isRequireKey());
                 open();
+            case 14:
+                new InputMenu(getCc(), getP(), "cost", cs.getCost() + "",
+                        "How much the crate will cost to open. Set to 0 to have no cost.", Integer.class, this, true);
         }
     }
 
@@ -321,11 +332,11 @@ public class IGCCratesBase extends IGCMenuCrate
                 ChatUtils.msgError(getP(), input + " is not a valid number.");
             }
         }
-        else if (value.equalsIgnoreCase("hologramoffset"))
+        else if (value.equalsIgnoreCase("cost"))
         {
-            if (Utils.isDouble(input))
+            if (Utils.isInt(input))
             {
-                cs.setHologramOffset(Double.valueOf(input));
+                cs.setCost(Integer.valueOf(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
             }

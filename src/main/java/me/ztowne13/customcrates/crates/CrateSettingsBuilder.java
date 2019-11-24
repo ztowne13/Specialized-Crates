@@ -154,6 +154,25 @@ public class CrateSettingsBuilder
         getFc().set("cooldown", 0);
     }
 
+    public void setupCost()
+    {
+        if (hasV("cost"))
+        {
+            try
+            {
+                getSettings().setCost(getFc().getInt("cost"));
+                StatusLoggerEvent.SETTINGS_COST_SUCCESS.log(getSl());
+            }
+            catch (Exception exc)
+            {
+                StatusLoggerEvent.SETTINGS_COST_INVALID.log(getSl());
+            }
+            return;
+        }
+
+        getFc().set("cost", -1);
+    }
+
     public void setupDisplay()
     {
         if (hasV("display"))

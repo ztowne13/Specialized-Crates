@@ -63,10 +63,11 @@ public abstract class IGCMenu
 
     public void reload()
     {
+        long start = System.currentTimeMillis();
         getP().closeInventory();
         ChatUtils.msg(getP(), "&6&lINFO! &eReloading...");
         getCc().reload();
-        ChatUtils.msgSuccess(getP(), "Reloaded the Specialized Crate plugin.");
+        ChatUtils.msgSuccess(getP(), "Reloaded the Specialized Crate plugin &7(" + (System.currentTimeMillis() - start) + "ms)&a.");
     }
 
 

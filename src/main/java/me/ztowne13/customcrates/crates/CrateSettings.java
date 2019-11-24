@@ -45,6 +45,7 @@ public class CrateSettings
     ObtainType ot;
     CrateType ct;
     int cooldown = 0;
+    int cost = -1;
     double hologramOffset = 0;
 
     CrateDisplayType cdt;
@@ -117,6 +118,7 @@ public class CrateSettings
         fc.set("hologram-offset", getHologramOffset());
         fc.set("auto-close", isAutoClose());
         fc.set("key.require", isRequireKey());
+        fc.set("cost", getCost());
 
         fc.set("permission", getPermission().equalsIgnoreCase("no permission") ? null : getPermission());
 
@@ -140,47 +142,6 @@ public class CrateSettings
         }
 
     }
-
-//    public void saveCrate()
-//    {
-//        fc.set("crate.material", getCrate().getType() + ";" + getCrate().getDurability());
-//        fc.set("crate.name", ChatUtils.fromChatColor(getCrate().getItemMeta().getDisplayName()));
-//
-//        if (getCrate().getEnchantments().keySet().iterator().hasNext())
-//        {
-//            Enchantment e = getCrate().getEnchantments().keySet().iterator().next();
-//            fc.set("crate.enchantment", e.getName() + ";" + getCrate().getEnchantments().get(e));
-//        }
-//
-//        if (getCrate().getItemMeta().hasLore())
-//        {
-//            fc.set("crate.lore", ChatUtils.removeColorFrom(getCrate().getItemMeta().getLore()));
-//        }
-//
-//    }
-//
-//    public void saveKey()
-//    {
-//        fc.set("key.material", getKey().getType() + ";" + getKey().getDurability());
-//        fc.set("key.name", ChatUtils.fromChatColor(getKey().getItemMeta().getDisplayName()));
-//
-//        if (getKey().getEnchantments().keySet().iterator().hasNext())
-//        {
-//            ArrayList<String> enchants = new ArrayList<String>();
-//            for (Enchantment enchant : getKey().getEnchantments().keySet())
-//            {
-//                int lvl = getKey().getEnchantments().get(enchant);
-//                enchants.add(enchant.getName() + ";" + lvl);
-//            }
-//            String updatedPath = fc.contains("key.enchantment") ? "key.enchantment" : "key.enchantments";
-//            fc.set(updatedPath, enchants);
-//        }
-//
-//        if (getKey().getItemMeta().hasLore())
-//        {
-//            fc.set("key.lore", ChatUtils.removeColorFrom(getKey().getItemMeta().getLore()));
-//        }
-//    }
 
     public void loadAll()
     {
@@ -217,6 +178,7 @@ public class CrateSettings
             getCsb().setupAutoClose();
             getCsb().setupHologramOffset();
             getCsb().setupDisplayer();
+            getCsb().setupCost();
 
             // Base Settings for non-MultiCrates
             if (!getCrates().isMultiCrate())
@@ -716,5 +678,15 @@ public class CrateSettings
     public void setRewardDisplayType(RewardDisplayType rewardDisplayType)
     {
         this.rewardDisplayType = rewardDisplayType;
+    }
+
+    public int getCost()
+    {
+        return cost;
+    }
+
+    public void setCost(int cost)
+    {
+        this.cost = cost;
     }
 }

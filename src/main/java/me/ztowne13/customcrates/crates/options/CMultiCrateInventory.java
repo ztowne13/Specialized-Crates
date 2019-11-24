@@ -411,40 +411,43 @@ public class CMultiCrateInventory extends CSetting
                     CrateCooldownEvent cce = pm.getPdm().getCrateCooldownEventByCrates(clickedCrate);
                     if (cce == null || cce.isCooldownOverAsBoolean())
                     {
-                        if (clickedCrate.getCs().getCh().tick(p, pm.getLastOpenCrate(), CrateState.OPEN, false))
+                        if(cc.getEconomyHandler().handleCheck(p, clickedCrate.getCs().getCost(), true))
                         {
-                            if (pm.isUseVirtualCrate())
+                            if (clickedCrate.getCs().getCh().tick(p, pm.getLastOpenCrate(), CrateState.OPEN, false))
                             {
-                                pm.getPdm().setVirtualCrateCrates(clickedCrate,
-                                        pm.getPdm().getVCCrateData(clickedCrate).getCrates() - 1);
-                            }
-                            else if (!crates.getCs().getOt().equals(ObtainType.STATIC))
-                            {
-                                try
+                                if (pm.isUseVirtualCrate())
                                 {
-                                    PlacedCrate pc = PlacedCrate.get(cc, pm.getLastOpenCrate());
-                                    pc.delete();
+                                    pm.getPdm().setVirtualCrateCrates(clickedCrate,
+                                            pm.getPdm().getVCCrateData(clickedCrate).getCrates() - 1);
                                 }
-                                catch (Exception exc)
+                                else if (!crates.getCs().getOt().equals(ObtainType.STATIC))
                                 {
+                                    try
+                                    {
+                                        PlacedCrate pc = PlacedCrate.get(cc, pm.getLastOpenCrate());
+                                        pc.delete();
+                                    }
+                                    catch (Exception exc)
+                                    {
 
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                invCheck(p, pm);
+                                cc.getEconomyHandler().failSoReturn(p, clickedCrate.getCs().getCost());
                             }
                         }
                         else
                         {
-                            if (p.getLocation().distance(pm.getLastOpenCrate()) > 10)
-                            {
-                                p.closeInventory();
-                            }
+                            crate.getCs().getCh().playFailToOpen(p, false);
+                            invCheck(p, pm);
                         }
                     }
                     else
                     {
-                        if (p.getLocation().distance(pm.getLastOpenCrate()) > 10)
-                        {
-                            p.closeInventory();
-                        }
+                        invCheck(p, pm);
                         cce.playFailure(pm.getPdm());
                     }
                 }
@@ -457,6 +460,14 @@ public class CMultiCrateInventory extends CSetting
             {
                 Messages.INSUFFICIENT_VIRTUAL_CRATES.msgSpecified(pm.getCc(), p);
             }
+        }
+    }
+
+    public void invCheck(Player p, PlayerManager pm)
+    {
+        if (p.getLocation().distance(pm.getLastOpenCrate()) > 10)
+        {
+            p.closeInventory();
         }
     }
 

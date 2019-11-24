@@ -176,7 +176,7 @@ public abstract class CrateAnimation
 
     public void playFailToOpen(Player p, boolean playMessage)
     {
-        playFailToOpen(p, true, true);
+        playFailToOpen(p, playMessage, true);
     }
 
     public void playFailToOpen(Player p, boolean playMessage, boolean failOpen)

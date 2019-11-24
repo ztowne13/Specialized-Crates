@@ -65,7 +65,7 @@ public abstract class CrateAction
                 {
                     pm.setLastOpenedPlacedCrate(cm);
 
-                    // SHIFT CLICK
+                    // SHIFT-CLICK OPEN
                     // If the animation needs to be skipped (shift click). Also required to be a static crate
                     if (skipAnimation && cs.getOt().equals(ObtainType.STATIC))
                     {
@@ -73,24 +73,28 @@ public abstract class CrateAction
                         {
                             if (cs.getCh().canExecuteFor(CrateState.OPEN, CrateState.OPEN, player, !crates.isMultiCrate()))
                             {
-
-                                Reward reward = cs.getCr().getRandomReward(player);
-                                ArrayList<Reward> rewards = new ArrayList<>();
-                                rewards.add(reward);
-                                reward.runCommands(player);
-
-                                cs.getCh().takeKeyFromPlayer(player, false);
-                                new HistoryEvent(Utils.currentTimeParsed(), crates, rewards, true)
-                                        .addTo(PlayerManager.get(cc, player).getPdm());
-                                useCrate(pm, cm, true, true);
-
-                                if (!hasSkipped)
+                                if(cc.getEconomyHandler().handleCheck(player, crates.getCs().getCost(), true))
                                 {
-                                    crates.tick(location, cm, CrateState.OPEN, player, new ArrayList<Reward>());
-                                    pm.setConfirming(false);
-                                }
+                                    Reward reward = cs.getCr().getRandomReward(player);
+                                    ArrayList<Reward> rewards = new ArrayList<>();
+                                    rewards.add(reward);
+                                    reward.runCommands(player);
 
-                                return true;
+                                    cs.getCh().takeKeyFromPlayer(player, false);
+                                    new HistoryEvent(Utils.currentTimeParsed(), crates, rewards, true)
+                                            .addTo(PlayerManager.get(cc, player).getPdm());
+                                    useCrate(pm, cm, true, true);
+
+                                    if (!hasSkipped)
+                                    {
+                                        crates.tick(location, cm, CrateState.OPEN, player, new ArrayList<Reward>());
+                                        pm.setConfirming(false);
+                                    }
+
+                                    return true;
+                                }
+                                else
+                                    return false;
                             }
 
                             if (!hasSkipped)
@@ -110,19 +114,28 @@ public abstract class CrateAction
                     {
                         if(pm.isConfirming() || !((Boolean) SettingsValues.CONFIRM_OPEN.getValue(cc)))
                         {
-                            if (cs.getCh().tick(player, location, CrateState.OPEN, !crates.isMultiCrate()))
+                            if(cc.getEconomyHandler().handleCheck(player, cs.getCost(), true))
                             {
-                                // Crate isn't static but it ALSO isn't special handling (i.e. the BLOCK_ CrateTypes)
-                                if (!cs.getOt().equals(ObtainType.STATIC) && !cs.getCt().isSpecialDynamicHandling())
+                                if (cs.getCh().tick(player, location, CrateState.OPEN, !crates.isMultiCrate()))
                                 {
-                                    cm.delete();
-                                    location.getBlock().setType(Material.AIR);
+                                    // Crate isn't static but it ALSO isn't special handling (i.e. the BLOCK_ CrateTypes)
+                                    if (!cs.getOt().equals(ObtainType.STATIC) && !cs.getCt().isSpecialDynamicHandling())
+                                    {
+                                        cm.delete();
+                                        location.getBlock().setType(Material.AIR);
+                                    }
+                                    new CrateCooldownEvent(crates, System.currentTimeMillis(), true).addTo(pdm);
+                                    return !skipAnimation;
                                 }
-                                new CrateCooldownEvent(crates, System.currentTimeMillis(), true).addTo(pdm);
-                                return !skipAnimation;
+                                cc.getEconomyHandler().failSoReturn(player, cs.getCost());
+                                pm.setLastOpenedPlacedCrate(null);
+                                return false;
                             }
-                            pm.setLastOpenedPlacedCrate(null);
-                            return false;
+                            else
+                            {
+                                cs.getCh().playFailToOpen(player, false);
+                                return false;
+                            }
                         }
                         else
                         {

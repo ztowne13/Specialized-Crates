@@ -231,6 +231,11 @@ public enum StatusLoggerEvent
     SETTINGS_COOLDOWN_INVALID(false, "Settings", "Failed to load the 'cooldown' value.",
             "It is not of a valid integer (number) type."),
 
+    SETTINGS_COST_SUCCESS(true, "Settings", "Loaded the 'cost' value", "NONE"),
+
+    SETTINGS_COST_INVALID(false, "Settings", "Failed to load the 'cost' value.",
+            "It is not of a valid integer (number) type."),
+
     SETTINGS_DISPLAYTYPE_SUCCESS(true, "Settings", "Loaded the 'display.type' crate value.", "NONE"),
 
     SETTINGS_DISPLAYTYPE_NONEXISTENT(false, "Settings",

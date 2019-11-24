@@ -167,7 +167,7 @@ public class IGCCratesMain extends IGCMenuCrate
                 getP().chat("/ccrates delallcratetype " + crates.getName());
                 break;
             case 10:
-                new IGCCratesBase(getCc(), getP(), this, crates).open();
+                new IGCCratesEssentials(getCc(), getP(), this, crates).open();
                 break;
             case 16:
                 Set<String> blankParticles = new HashSet<String>();
