@@ -3,7 +3,6 @@ package me.ztowne13.customcrates.interfaces.externalhooks;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -53,7 +52,6 @@ public class EconomyHandler
             economy.withdrawPlayer(p, cost);
         }
 
-        Bukkit.broadcastMessage("3");
         return true;
     }
 

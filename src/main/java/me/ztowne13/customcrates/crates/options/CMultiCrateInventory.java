@@ -415,6 +415,7 @@ public class CMultiCrateInventory extends CSetting
                         {
                             if (clickedCrate.getCs().getCh().tick(p, pm.getLastOpenCrate(), CrateState.OPEN, false))
                             {
+                                // Post Conditions
                                 if (pm.isUseVirtualCrate())
                                 {
                                     pm.getPdm().setVirtualCrateCrates(clickedCrate,
