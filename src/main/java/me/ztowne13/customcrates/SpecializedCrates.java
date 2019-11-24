@@ -11,6 +11,7 @@ import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.animations.openchest.OpenChestAnimation;
 import me.ztowne13.customcrates.crates.types.animations.openchestrolling.OpenChestRollingAnimation;
+import me.ztowne13.customcrates.interfaces.externalhooks.EconomyHandler;
 import me.ztowne13.customcrates.interfaces.externalhooks.MetricsLite;
 import me.ztowne13.customcrates.interfaces.externalhooks.PlaceHolderAPIHandler;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramInteractListener;
@@ -43,6 +44,7 @@ public class SpecializedCrates extends JavaPlugin
     //UpdateChecker updateChecker;
     HologramManager hologramManager;
     DataHandler dataHandler;
+    EconomyHandler economyHandler;
     CommandCrate commandCrate;
     AntiFraudSQLHandler antiFraudSQLHandler;
 
@@ -83,6 +85,7 @@ public class SpecializedCrates extends JavaPlugin
 
         this.hologramManager = new HologramManagerNMS(this);
         this.dataHandler = new DataHandler(this, dataFile);
+        this.economyHandler = new EconomyHandler(this);
 
         setSettings(new Settings(this));
         getSettings().load();
@@ -187,17 +190,10 @@ public class SpecializedCrates extends JavaPlugin
         CRewards.getAllRewards().clear();
         SettingsValues.valuesCache.clear();
 
-        ChatUtils.log("Enabling, wait 1 second...");
+//        ChatUtils.log("Enabling, wait 1 second...");
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable()
-        {
-            public void run()
-            {
-                ChatUtils.log("Enabling SpecializedCrates");
-                onEnable(false);
-            }
-
-        }, 20);
+        ChatUtils.log("Enabling SpecializedCrates");
+        onEnable(false);
 
     }
 
@@ -494,11 +490,6 @@ public class SpecializedCrates extends JavaPlugin
         return dataHandler;
     }
 
-    public void setDataHandler(DataHandler dataHandler)
-    {
-        this.dataHandler = dataHandler;
-    }
-
     public CommandCrate getCommandCrate()
     {
         return commandCrate;
@@ -517,5 +508,10 @@ public class SpecializedCrates extends JavaPlugin
     public AntiFraudSQLHandler getAntiFraudSQLHandler()
     {
         return antiFraudSQLHandler;
+    }
+
+    public EconomyHandler getEconomyHandler()
+    {
+        return economyHandler;
     }
 }
