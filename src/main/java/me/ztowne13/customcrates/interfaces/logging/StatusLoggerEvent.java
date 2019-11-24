@@ -268,7 +268,7 @@ public enum StatusLoggerEvent
 
     SETTINGS_REWARD_DISPLAYER_SUCCESS(true, "Settings", "Loaded the 'reward-displayer' value", "NONE"),
 
-    SETTINGS_REWARD_DISPLAYER_NONEXISTENT(false, "Settings", "Failed to load the 'reward-displayer' value.", "It does not exist."),
+    SETTINGS_REWARD_DISPLAYER_NONEXISTENT(false, "Settings", "Failed to load the 'reward-displayer' value.", "It does not exist. You can IGNORE this error if you'd like. To get rid, set the reward preview menu type."),
 
     SETTINGS_REWARD_DISPLAYER_INVALID(false, "Settings", "Failed to load the 'reward-displayer' value.", "$?$ is not a valid reward display type."),
 
