@@ -29,7 +29,9 @@ public class Reward implements Comparable<Reward>
     CRewards cr;
     String rewardName;
     String rarity = "default";
-    boolean giveDisplayItem = true, giveDisplayItemLore = true;
+    boolean giveDisplayItem = true;
+    boolean giveDisplayItemLore = true;
+    boolean giveDisplayItemName = true;
 
     ItemBuilder displayBuilder;
     SaveableItemBuilder saveBuilder;
@@ -82,6 +84,7 @@ public class Reward implements Comparable<Reward>
         if(isGiveDisplayItem())
         {
             ItemBuilder stack = new ItemBuilder(displayBuilder.get());
+
             try
             {
                 if (!isGiveDisplayItemLore())
@@ -92,6 +95,11 @@ public class Reward implements Comparable<Reward>
                 }
             }
             catch(Exception exc) { }
+
+            if(!isGiveDisplayItemName())
+            {
+                stack.removeDisplayName();
+            }
 
             Utils.addItemAndDropRest(p, stack.get());
         }
@@ -189,6 +197,7 @@ public class Reward implements Comparable<Reward>
         fc.set(getPath("receive-limit"), /*getTotalUses()*/null);
         fc.set(getPath("give-display-item.value"), giveDisplayItem);
         fc.set(getPath("give-display-item.with-lore"), giveDisplayItemLore);
+        fc.set(getPath("give-display-item.with-name"), giveDisplayItemName);
 
         saveBuilder.saveItem(getCc().getRewardsFile(), getPath("display-item"));
 
@@ -342,7 +351,17 @@ public class Reward implements Comparable<Reward>
         }
         catch(Exception exc)
         {
-            setGiveDisplayItemLore(false);
+            setGiveDisplayItemLore(true);
+        }
+
+        try
+        {
+            if(getFc().contains(getPath("give-display-item.with-name")))
+                setGiveDisplayItemName(getFc().getBoolean(getPath("give-display-item.with-name")));
+        }
+        catch(Exception exc)
+        {
+            setGiveDisplayItemName(true);
         }
 
         try
@@ -395,6 +414,16 @@ public class Reward implements Comparable<Reward>
     public String getPath(String s)
     {
         return getRewardName() + "." + s;
+    }
+
+    public boolean isGiveDisplayItemName()
+    {
+        return giveDisplayItemName;
+    }
+
+    public void setGiveDisplayItemName(boolean giveDisplayItemName)
+    {
+        this.giveDisplayItemName = giveDisplayItemName;
     }
 
     public List<String> getCommands()

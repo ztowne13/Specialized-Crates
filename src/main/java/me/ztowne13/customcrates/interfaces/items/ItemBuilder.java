@@ -112,6 +112,13 @@ public class ItemBuilder implements EditableItem
         setIm(im);
     }
 
+    public void removeDisplayName()
+    {
+        ItemMeta im = im();
+        im.setDisplayName(null);
+        setIm(im);
+    }
+
     public String getDisplayNameStripped()
     {
         return ChatUtils.fromChatColor(getDisplayName());

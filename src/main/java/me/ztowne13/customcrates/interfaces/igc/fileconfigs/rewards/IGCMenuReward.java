@@ -127,6 +127,15 @@ public class IGCMenuReward extends IGCMenu
                 "IF the display item is being given to the player, should it include it's display-item lore?");
         ib.setItem(23, giveDisplayItemLore);
 
+        ItemBuilder giveDisplayItemName = new ItemBuilder(DynamicMaterial.BOOK, 1);
+        giveDisplayItemName.setDisplayName("&aGive the Display Item with its Name");
+        giveDisplayItemName.addLore("&7Current value: ");
+        giveDisplayItemName.addLore("&7" + r.isGiveDisplayItemName());
+        giveDisplayItemName.addLore("");
+        giveDisplayItemName.addAutomaticLore("&f", 30,
+                "IF the display item is being given to the player, should it include it's display-item name? or should the name be removed?");
+        ib.setItem(24, giveDisplayItemName);
+
 
         getIb().open();
         putInMenu();
@@ -208,6 +217,11 @@ public class IGCMenuReward extends IGCMenu
         else if (slot == 23)
         {
             r.setGiveDisplayItemLore(!r.isGiveDisplayItemLore());
+            open();
+        }
+        else if (slot == 24)
+        {
+            r.setGiveDisplayItemName(!r.isGiveDisplayItemName());
             open();
         }
         else if (slot == 0)
