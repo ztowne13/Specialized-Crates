@@ -16,9 +16,10 @@ public class Reload extends SubCommand
     @Override
     public boolean run(SpecializedCrates cc, Commands cmds, String[] args)
     {
+        long start = System.currentTimeMillis();
         cmds.msg("&6&lINFO! &eReloading...");
         cc.reload();
-        cmds.msgSuccess("Reloaded the Specialized Crate plugin.");
+        cmds.msgSuccess("Reloaded the Specialized Crate plugin &7(" + (System.currentTimeMillis() - start) + "ms)&a.");
         return true;
     }
 }
