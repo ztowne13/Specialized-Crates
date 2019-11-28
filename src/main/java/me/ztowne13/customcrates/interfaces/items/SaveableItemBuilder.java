@@ -133,6 +133,18 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
             for (String line : fc.getStringList(prefix + ".lore"))
                 addLore(line);
 
+        // Glow
+
+        if (fc.contains(prefix + ".glow"))
+        {
+            String unparsedGlow = fc.getString(prefix + ".glow");
+            if (Utils.isBoolean(unparsedGlow))
+                setGlowing(Boolean.parseBoolean(unparsedGlow));
+            else if (improperGlow != null)
+                improperGlow
+                        .log(statusLogger, new String[]{"The '" + prefix + ".glow' value is not a proper true/false value"});
+        }
+
         // Enchantments
         convertOldEnchantType(fileHandler, prefix);
         if (fc.contains(prefix + ".enchantments"))
@@ -176,18 +188,6 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         if (fc.contains(prefix + ".nbt-tags"))
             for (String line : fc.getStringList(prefix + ".nbt-tags"))
                 addNBTTag(line);
-
-        // Glow
-
-        if (fc.contains(prefix + ".glow"))
-        {
-            String unparsedGlow = fc.getString(prefix + ".glow");
-            if (Utils.isBoolean(unparsedGlow))
-                setGlowing(Boolean.parseBoolean(unparsedGlow));
-            else if (improperGlow != null)
-                improperGlow
-                        .log(statusLogger, new String[]{"The '" + prefix + ".glow' value is not a proper true/false value"});
-        }
 
         // Item Flags
         if (fc.contains(prefix + ".item-flags"))

@@ -38,7 +38,9 @@ public class ItemBuilder implements EditableItem
         stack = fromStack.clone();
 
         for (Enchantment enchantment : stack.getEnchantments().keySet())
+        {
             addEnchantment(enchantment, stack.getEnchantmentLevel(enchantment));
+        }
 
         if (stack.hasItemMeta() && im() instanceof PotionMeta)
         {
