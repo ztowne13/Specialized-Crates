@@ -37,13 +37,13 @@ public class EnclosementAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand)
+    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
     {
-        if (canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
+        if (force || canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
         {
             EnclosementDataHolder edh = new EnclosementDataHolder(p, l, this);
             playSequence(edh, true);
-            playRequiredOpenActions(p, !requireKeyInHand);
+            playRequiredOpenActions(p, !requireKeyInHand, force);
             return true;
         }
 

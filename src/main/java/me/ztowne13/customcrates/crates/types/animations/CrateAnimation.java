@@ -39,11 +39,16 @@ public abstract class CrateAnimation
         this.fu = cc.getCrateconfigFile();
     }
 
-    public abstract boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand);
+    public abstract boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force);
 
     public abstract void loadValueFromConfig(StatusLogger sl);
 
     public abstract void finishUp(Player p);
+
+    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand)
+    {
+        return tick(p, l, cs, requireKeyInHand, false);
+    }
 
     public void finishUp(final Player p, long ticks)
     {
@@ -197,7 +202,7 @@ public abstract class CrateAnimation
         }
     }
 
-    public void playRequiredOpenActions(Player p, boolean fromInv)
+    public void playRequiredOpenActions(Player p, boolean fromInv, boolean force)
     {
         PlayerManager pm = PlayerManager.get(cc, p);
 
@@ -209,7 +214,7 @@ public abstract class CrateAnimation
 
         pm.openCrate(this.getCrates());
         //pm.setCanClose(false);
-        if (getCrates().getCs().isRequireKey())
+        if (getCrates().getCs().isRequireKey() && !force)
         {
             takeKeyFromPlayer(p, fromInv);
         }

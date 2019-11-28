@@ -53,6 +53,7 @@ public class TabCompleteListener implements TabCompleter
                     list.add("info");
                     list.add("!");
                     list.add("luckychest");
+                    list.add("forceopen");
                     list = Utils.onlyLeaveEntriesWithPref(list, args[0]);
                 }
                 else
@@ -98,6 +99,27 @@ public class TabCompleteListener implements TabCompleter
                         }
                         list = Utils.onlyLeaveEntriesWithPref(list, args[1]);
                     }
+                    else if (args[0].equalsIgnoreCase("forceopen"))
+                    {
+                        if(args.length == 2)
+                        {
+                            for (Crate crates : Crate.getLoadedCrates().values())
+                            {
+                                list.add(crates.getName());
+                            }
+                            list = Utils.onlyLeaveEntriesWithPref(list, args[1]);
+                        }
+                        if(args.length == 3)
+                        {
+                            list.add("all");
+                            for (Player p : Bukkit.getOnlinePlayers())
+                            {
+                                list.add(p.getName());
+                            }
+
+                            list = Utils.onlyLeaveEntriesWithPref(list, args[2]);
+                        }
+                    }
                     else if (args[0].equalsIgnoreCase(("listhistory")))
                     {
                         if (args.length == 2)
@@ -127,6 +149,9 @@ public class TabCompleteListener implements TabCompleter
 
             }
         }
+
+
+
         return list;
     }
 }
