@@ -19,7 +19,6 @@ import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -88,9 +87,12 @@ public class IGCCrateParticles extends IGCTierMenu
         }
         else if (slot == 8)
         {
-            new IGCListSelector(getCc(), getP(), this, "particle type", Arrays.asList(
-                    NMSUtils.Version.v1_9.isServerVersionOrEarlier() ? ParticleEffect.values() : Particle.values()),
-                    DynamicMaterial.NETHER_STAR, 1, null).open();
+            if(NMSUtils.Version.v1_9.isServerVersionOrEarlier())
+                new IGCListSelector(getCc(), getP(), this, "particle type", Arrays.asList(ParticleEffect.values()),
+                        DynamicMaterial.NETHER_STAR, 1, null).open();
+            else
+                new IGCListSelector(getCc(), getP(), this, "particle type", Arrays.asList(org.bukkit.Particle.values()),
+                        DynamicMaterial.NETHER_STAR, 1, null).open();
         }
         else if (getIb().getInv().getItem(slot) != null &&
                 getIb().getInv().getItem(slot).getType().equals(Material.NETHER_STAR))
