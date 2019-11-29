@@ -18,7 +18,6 @@ import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -65,8 +64,8 @@ public class IGCCrateParticle extends IGCTierMenu
         ItemBuilder colorEditor = new ItemBuilder(DynamicMaterial.LIME_DYE, 1);
         colorEditor.setDisplayName("&aEdit the color of the particle");
 
-        for(String s : colorableParticles)
-            if(s.equalsIgnoreCase(pd.getParticleName()))
+        for (String s : colorableParticles)
+            if (s.equalsIgnoreCase(pd.getParticleName()))
                 ib.setItem(20, colorEditor);
 
         if (pd.getParticleAnimationEffect() == null)
@@ -187,18 +186,16 @@ public class IGCCrateParticle extends IGCTierMenu
                 up();
                 break;
             case 10:
-//                new InputMenu(getCc(), getP(), "particle animation", pd.getParticleName(),
-//                        "Type 'NONE' to remove animations\nAvaialable animations: " +
-//                                Arrays.toString(PEAnimationType.values()), String.class, this, true);
                 new IGCListSelector(getCc(), getP(), this, "Particle Animation", Arrays.asList(PEAnimationType.values()),
                         DynamicMaterial.BEACON, 1, null).open();
                 break;
             case 11:
-//                new InputMenu(getCc(), getP(), "particle type", pd.getParticleName(),
-//                        "Avaialable particles: " + Arrays.toString(ParticleEffect.values()), String.class, this, true);
-                new IGCListSelector(getCc(), getP(), this, "Particle Type", Arrays.asList(
-                        NMSUtils.Version.v1_9.isServerVersionOrEarlier() ? ParticleEffect.values() : Particle.values()),
-                        DynamicMaterial.NETHER_STAR, 1, null).open();
+                if (NMSUtils.Version.v1_9.isServerVersionOrEarlier())
+                    new IGCListSelector(getCc(), getP(), this, "Particle Type", Arrays.asList(ParticleEffect.values()),
+                            DynamicMaterial.NETHER_STAR, 1, null).open();
+                else
+                    new IGCListSelector(getCc(), getP(), this, "Particle Type", Arrays.asList(org.bukkit.Particle.values()),
+                            DynamicMaterial.NETHER_STAR, 1, null).open();
                 break;
             case 12:
                 new InputMenu(getCc(), getP(), "x range", pd.getRangeX() + "",
@@ -222,8 +219,8 @@ public class IGCCrateParticle extends IGCTierMenu
                         "How many particles spawn every tick (1/20th of a second).", Integer.class, this);
                 break;
             case 20:
-                for(String s : colorableParticles)
-                    if(s.equalsIgnoreCase(pd.getParticleName()))
+                for (String s : colorableParticles)
+                    if (s.equalsIgnoreCase(pd.getParticleName()))
                         new IGCCrateParticleColor(getCc(), getP(), this, getCrates(), pd, tier).open();
                 break;
             case 21:
@@ -233,7 +230,7 @@ public class IGCCrateParticle extends IGCTierMenu
                 break;
             case 22:
                 if (pd.getParticleAnimationEffect() == null)
-                        new InputMenu(getCc(), getP(), "y center offset", pd.getCenterY() + "",
+                    new InputMenu(getCc(), getP(), "y center offset", pd.getCenterY() + "",
                             "Adjust the center of where the particles will spawn in the y direction.", Double.class, this);
                 break;
             case 23:
