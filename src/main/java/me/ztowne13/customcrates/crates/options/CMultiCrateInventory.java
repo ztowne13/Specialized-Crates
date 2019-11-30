@@ -223,6 +223,7 @@ public class CMultiCrateInventory extends CSetting
             }
         }
 
+        Messages.DEMO.msgSpecified(cc, p);
         ib.setP(p);
         return ib;
     }
@@ -396,6 +397,8 @@ public class CMultiCrateInventory extends CSetting
 
         if (crate.getCs().getCmci().getCrateSpots().keySet().contains(slot))
         {
+            Messages.DEMO.msgSpecified(cc, p);
+
             Crate clickedCrate = crate.getCs().getCmci().getCrateSpots().get(slot);
             if (clickType.equals(Boolean.valueOf(
                     cc.getSettings().getConfigValues().get("mc-reward-display-leftclick").toString().toUpperCase()) ?

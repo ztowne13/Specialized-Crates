@@ -38,6 +38,7 @@ public class AttemptCrateUseAction extends CrateAction
             {
                 if (location.getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR))
                 {
+                    Messages.DEMO.msgSpecified(cc, player);
 
                     if(!cc.getAntiFraudSQLHandler().isAuthenticated())
                     {

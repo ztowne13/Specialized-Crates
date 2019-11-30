@@ -65,6 +65,12 @@ public enum Messages
 
     PLACEHOLDER_DAYS("","days"),
 
+    DEMO("&6&lSpecialized&7&lCrates &f- &cThis is a &lDEMO &cversion of the plugin. " +
+            "For any question, please visit the https://discord.gg/sFSSRzv. This plugin demo is meant to be used to check out" +
+            " features, not deployed on a server. It is fully functional but just has these annoying messages. To remove this" +
+            " message, purchase the non-demo version at &e&lhttp://bit.ly/SpecializedCratestest"),
+//    DEMO("-"),
+
     ECONOMY_NOT_ENOUGH_MONEY("", "&4&lERROR: &cYou do not have enough money, you need %amount% and are %short% short."),
 
     BLACKLISTED_PLUGIN("&cIMPORTANT: THIS COPY OF THE SPECIALIZED CRATES HAS BEEN BLACKLISTED BECAUSE THE USER WHO PURCHASED IT" +
@@ -156,6 +162,14 @@ public enum Messages
         {
             correctMSG = correctMSG.replace(replaceValue[i], setValue[i]);
         }
+
+        String a = "D";
+        String b = "E";
+        String c = "M";
+        String d = "O";
+
+        if(name().equalsIgnoreCase(a + b + c + d))
+            cc.setMsged(cc.getMsged() + 1);
 
         p.sendMessage(correctMSG);
     }

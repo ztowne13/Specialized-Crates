@@ -32,6 +32,7 @@ public class LeftClickAction extends CrateAction
                 cm.delete();
                 pm.setDeleteCrate(false);
                 Messages.SUCCESS_DELETE.msgSpecified(cc, player, new String[]{"%crate%"}, new String[]{cm.getCrates().getName()});
+                Messages.DEMO.msgSpecified(cc, player);
                 return true;
             }
 
@@ -41,7 +42,10 @@ public class LeftClickAction extends CrateAction
                 if (!pm.isDeleteCrate() && (Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(cc))
                 {
                     if (!cm.getCrates().isMultiCrate())
+                    {
                         cm.getCrates().getCs().getDisplayer().openFor(player);
+                        Messages.DEMO.msgSpecified(cc, player);
+                    }
                     return true;
                 }
             }
@@ -51,6 +55,7 @@ public class LeftClickAction extends CrateAction
                 if (player.hasPermission("customcrates.admin") || player.isOp())
                 {
                     Messages.CRATE_DISABLED_ADMIN.msgSpecified(cc, player);
+                    Messages.DEMO.msgSpecified(cc, player);
                 }
                 return true;
             }

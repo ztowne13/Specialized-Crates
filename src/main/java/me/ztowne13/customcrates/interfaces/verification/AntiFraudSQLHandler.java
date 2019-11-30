@@ -51,22 +51,6 @@ public class AntiFraudSQLHandler extends Thread
     {
         try
         {
-            String values = "'" + id + "','" + AntiFraudPlaceholders.USER + "','" + AntiFraudPlaceholders.RESOURCE + "','" +
-                    AntiFraudPlaceholders.NONCE + "'";
-
-            URL updateURL = new URL("http://vps210053.vps.ovh.ca/specializedcrates_update.php?values=" + values);
-            URLConnection connection = updateURL.openConnection();
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(
-                            connection.getInputStream()));
-            String inputLine;
-
-            while ((inputLine = in.readLine()) != null)
-                specializedCrates.getDu().log("run() - updateURL: " + inputLine, getClass());
-            in.close();
-
-            updateURL.openStream();
-
             if(!authenticate("SERVERID", id.toString()))
                 authenticated = false;
 

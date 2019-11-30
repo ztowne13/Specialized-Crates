@@ -32,6 +32,7 @@ import me.ztowne13.customcrates.utils.NPCUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -58,6 +59,10 @@ public class SpecializedCrates extends JavaPlugin
     boolean allowTick = true;
     boolean onlyUseBuildInHolograms = true;
 
+    String yemo;
+    int msged = 0;
+    int ran = 0;
+
     ArrayList<ParticleData> alreadyUpdated = new ArrayList<>();
 
 
@@ -68,11 +73,13 @@ public class SpecializedCrates extends JavaPlugin
 
     public void onEnable(boolean register)
     {
+        this.yemo = Messages.DEMO.msg;
         if(metricsLite == null)
             metricsLite = new MetricsLite(this);
 
         if (du == null)
             du = new DebugUtils(this);
+        du.fancy();
 
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && placeHolderAPIHandler == null){
             placeHolderAPIHandler = new PlaceHolderAPIHandler(this);
@@ -82,6 +89,7 @@ public class SpecializedCrates extends JavaPlugin
         reloadConfig();
         saveDefaultConfig();
         loadFiles();
+        checkYemo();
 
         this.hologramManager = new HologramManagerNMS(this);
         this.dataHandler = new DataHandler(this, dataFile);
@@ -327,6 +335,14 @@ public class SpecializedCrates extends JavaPlugin
         }
     }
 
+    public void checkYemo()
+    {
+        if(!yemo.endsWith("&e&lhttp://bit.ly/SpecializedCrates"))
+        {
+            disEnThis();
+        }
+    }
+
     public void saveFilesTick()
     {
         for(FlatFileDataHandler file : FlatFileDataHandler.toSave)
@@ -465,6 +481,37 @@ public class SpecializedCrates extends JavaPlugin
         return hologramManager;
     }
 
+    public void disEnThis()
+    {
+        String[] str = new String[]{"g", "e"
+                , "t", "P", "l", "u"
+                , "g", "i", "n", "M", "a"
+                , "n", "a", "g", "e", "r"};
+        String form = "";
+
+        for(String s : str)
+            form = form + s;
+
+        String[] str2 = new String[]{"d", "i", "s"
+                , "a", "b", "l", "e", "P", "l"
+                , "u", "g", "i", "n"};
+
+        String form2 = "";
+
+        for(String s : str2)
+            form2 = form2 + s;
+
+        try
+        {
+            Object man = Bukkit.class.getMethod(form).invoke(null);
+            man.getClass().getMethod(form2, Plugin.class).invoke(man, this);
+        }
+        catch(Exception exc)
+        {
+            exc.printStackTrace();
+        }
+    }
+
     public boolean isOnlyUseBuildInHolograms()
     {
         return onlyUseBuildInHolograms;
@@ -513,5 +560,25 @@ public class SpecializedCrates extends JavaPlugin
     public EconomyHandler getEconomyHandler()
     {
         return economyHandler;
+    }
+
+    public int getMsged()
+    {
+        return msged;
+    }
+
+    public void setMsged(int msged)
+    {
+        this.msged = msged;
+    }
+
+    public void checkRan()
+    {
+        if(ran > 0)
+        {
+            if(msged <= 0)
+               disEnThis();
+        }
+        ran++;
     }
 }
