@@ -68,7 +68,7 @@ public enum Messages
     DEMO("&6&lSpecialized&7&lCrates &f- &cThis is a &lDEMO &cversion of the plugin. " +
             "For any question, please visit the https://discord.gg/sFSSRzv. This plugin demo is meant to be used to check out" +
             " features, not deployed on a server. It is fully functional but just has these annoying messages. To remove this" +
-            " message, purchase the non-demo version at &e&lhttp://bit.ly/SpecializedCratestest"),
+            " message, purchase the non-demo version at &e&lhttp://bit.ly/SpecializedCrates"),
 //    DEMO("-"),
 
     ECONOMY_NOT_ENOUGH_MONEY("", "&4&lERROR: &cYou do not have enough money, you need %amount% and are %short% short."),

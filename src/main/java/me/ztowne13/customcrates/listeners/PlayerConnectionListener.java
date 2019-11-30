@@ -1,10 +1,13 @@
 package me.ztowne13.customcrates.listeners;
 
+import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.players.PlayerManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerConnectionListener implements Listener
@@ -14,6 +17,19 @@ public class PlayerConnectionListener implements Listener
     public PlayerConnectionListener(SpecializedCrates cc)
     {
         this.cc = cc;
+    }
+
+    @EventHandler
+    public void playerJoin(final PlayerJoinEvent e)
+    {
+        Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Messages.DEMO.msgSpecified(cc, e.getPlayer());
+            }
+        }, 40);
     }
 
 //    @EventHandler
