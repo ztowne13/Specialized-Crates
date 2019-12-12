@@ -17,6 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -74,6 +75,9 @@ public class InventoryActionListener implements Listener
 
         if (pm.isInCrate() || pm.isInRewardMenu())
         {
+            if(e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT))
+                e.setCancelled(true);
+
             cc.getDu().log("onInventoryClick - In crate or reward menu (" + pm.isInCrate() + " : " + pm.isInRewardMenu() +
                     ")", getClass());
             if (!(e.getClickedInventory() == null || e.getWhoClicked().getInventory() == null))
