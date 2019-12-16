@@ -28,7 +28,10 @@ public class NMSUtils
         v1_11,
         v1_12,
         v1_13,
-        v1_14;
+        v1_14,
+        v1_15,
+        v1_16,
+        v1_17;
 
         public boolean isServerVersionOrEarlier()
         {
