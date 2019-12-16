@@ -219,6 +219,7 @@ public class SpecializedCrates extends JavaPlugin
         rl(new ChatListener(this));
         rl(new HologramInteractListener(this));
         rl(new PluginEnableListener(this));
+        rl(new DamageListener(this));
 
         if (NPCUtils.isCitizensInstalled())
         {
