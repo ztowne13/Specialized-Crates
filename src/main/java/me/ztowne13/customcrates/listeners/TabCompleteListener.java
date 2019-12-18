@@ -2,6 +2,7 @@ package me.ztowne13.customcrates.listeners;
 
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
+import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -147,6 +148,23 @@ public class TabCompleteListener implements TabCompleter
                     }
                 }
 
+            }
+            else if(cN.equalsIgnoreCase("rewards"))
+            {
+                if(args.length >= 1)
+                {
+                    for (Crate crates : Crate.getLoadedCrates().values())
+                    {
+                        Player player = (Player) sender;
+                        CrateSettings cs = crates.getCs();
+
+                        if (player.hasPermission(cs.getPermission()) || cs.getPermission().equalsIgnoreCase("no permission"))
+                            if (!crates.isMultiCrate())
+                                list.add(crates.getName());
+                    }
+
+                    list = Utils.onlyLeaveEntriesWithPref(list, args[0]);
+                }
             }
         }
 

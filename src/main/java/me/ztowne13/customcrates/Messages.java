@@ -67,6 +67,12 @@ public enum Messages
 
     ECONOMY_NOT_ENOUGH_MONEY("", "&4&lERROR: &cYou do not have enough money, you need %amount% and are %short% short."),
 
+    COMMAND_REWARDS_USAGE("", "&4&lERROR: &cUsage: /rewards [crate name]"),
+
+    COMMAND_REWARDS_OPENING("", "&6&lINFO: &eOpening reward preview for %crate% crate."),
+
+    COMMAND_REWARDS_INVALID_CRATE("", "&4&lERROR: &c%crate% is not a valid crate."),
+
     BLACKLISTED_PLUGIN("&cIMPORTANT: THIS COPY OF THE SPECIALIZED CRATES HAS BEEN BLACKLISTED BECAUSE THE USER WHO PURCHASED IT" +
             " IS NOT THE ONLY PERSON USING IT, OR THIS PERSON HAS REFUNDED IT. IF YOU BELIEVE THIS IS AN ERROR, PLEASE RE-DOWNLOAD THE PLUGIN (NO" +
             " NEED TO REGENERATE CONFIG) AND TRY AGAIN. IF IT'S STILL NOT WORKING, PLEASE CONTACT ZTOWNE13."),
@@ -133,8 +139,7 @@ public enum Messages
                 cc.getMessageFile().get().set(nameFormatted(), defaultMsg);
                 cc.getMessageFile().save();
             }
-            return ChatUtils.toChatColor(
-                    "&eThis value isn't set, please tell the server operator to configure the " + name() + " value.");
+            return cachedMessages.get(this);
         }
     }
 

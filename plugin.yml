@@ -12,3 +12,5 @@ commands:
   keys:
     description: See how many virtual keys you have for your crates.
     aliases: [skeys,cratekey,cratekeys]
+  rewards:
+    description: Open a rewards menu for a crate
