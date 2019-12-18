@@ -14,7 +14,6 @@ import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCCratesMain;
-import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
@@ -110,21 +109,14 @@ public class IGCMenuCrates extends IGCMenu
     public void manageClick(int slot)
     {
         if (slot == 0)
-        {
             up();
-        }
         else if (slot == 8)
-        {
-            new InputMenu(getCc(), getP(), "crate name", "null", "Name the crate whatever you want.", String.class, this, true);
-        }
+            new IGCMenuCrateOrMulticrate(getCc(), getP(), this).open();
+            //new InputMenu(getCc(), getP(), "crate name", "null", "Name the crate whatever you want.", String.class, this, true);
         else if (slot == 9)
-        {
             new IGCMenuCrates(getCc(), getP(), getLastMenu(), page - 1).open();
-        }
         else if(slot == 18)
-        {
             new IGCMenuCrates(getCc(), getP(), getLastMenu(), page + 1).open();
-        }
         else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType() == Material.CHEST)
         {
             String name = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
