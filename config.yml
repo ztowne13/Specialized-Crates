@@ -17,7 +17,7 @@
 # How would you to store player statistics? Current options: FLATFILE, PLAYERFILES
 # FLATFILE: Every player's data is stored in one single file.
 # PLAYERFILES: Every player has their own file that stores their data.
-#     note: MYSQL is coming soon.
+# MYSQL: Use a database to store information. Use the MySQL.yml file to setup database info.
 store-data: FLATFILE
 
 # What plugin status messages would you like to be logged into console?
@@ -82,6 +82,10 @@ confirm-open: false
 # How long should the crate-opening confirmation take to cancel, in seconds?
 #   NOTE: Also works for the shift-click confirmation.
 confirm-timeout: 3
+
+# When a player's inventory is full and they're given a key, should they get
+#   a virtual key (true) instead of dropping it on the floor (false)?
+virtual-key-instead-of-drop: false
 
 #-------------------------------------------#
 #           Crate Action Settings           #

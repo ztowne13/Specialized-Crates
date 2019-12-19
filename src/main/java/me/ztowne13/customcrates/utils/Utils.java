@@ -306,11 +306,23 @@ public class Utils
 
     public static void addItemAndDropRest(final Player player, ItemStack stack)
     {
+        addItemAndDropRest(player, stack, true);
+    }
+
+    public static int addItemAndDropRest(final Player player, ItemStack stack, boolean doDrop)
+    {
         HashMap<Integer, ItemStack> list = player.getInventory().addItem(stack);
+        int count = 0;
+
         for(ItemStack toDrop : list.values())
         {
-            player.getWorld().dropItemNaturally(player.getLocation(), toDrop);
+            if(doDrop)
+                player.getWorld().dropItemNaturally(player.getLocation(), toDrop);
+
+            count += toDrop.getAmount();
         }
+
+        return count;
     }
 
     public static String[] ConvertSecondToHHMMString(int secondtTime)
