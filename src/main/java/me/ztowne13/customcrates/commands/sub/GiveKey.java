@@ -1,6 +1,8 @@
 package me.ztowne13.customcrates.commands.sub;
 
 import me.ztowne13.customcrates.DataHandler;
+import me.ztowne13.customcrates.Messages;
+import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
 import me.ztowne13.customcrates.crates.Crate;
