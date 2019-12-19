@@ -59,7 +59,7 @@ public class IGCCrateSound extends IGCTierMenu
         switch (slot)
         {
             case 8:
-                cs.getCs().getSounds().get("DEFAULT").remove(sd);
+                cs.getCs().getSounds().get(tier).remove(sd);
             case 9:
                 up();
                 break;

@@ -1,7 +1,6 @@
 package me.ztowne13.customcrates.commands.sub;
 
 import me.ztowne13.customcrates.DataHandler;
-import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
 import me.ztowne13.customcrates.crates.Crate;
@@ -53,9 +52,16 @@ public class GiveKey extends SubCommand
                 {
                     Player p = (Player) cmds.getCmdSender();
                     cmds.msgSuccess("Given key for crate: " + args[1]);
-                    Utils.addItemAndDropRest(p, toAdd);
+
+                    Boolean toNotDrop = (Boolean) SettingsValues.VIRTUAL_KEY_INSTEAD_OF_DROP.getValue(cc);
+                    int count = Utils.addItemAndDropRest(p, toAdd, !toNotDrop);
                     Messages.DEMO.msgSpecified(cc, p);
 
+                    if(toNotDrop)
+                    {
+                        PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
+                        pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + count);
+                    }
                 }
                 return true;
             }
@@ -135,7 +141,12 @@ public class GiveKey extends SubCommand
             }
             else
             {
-                Utils.addItemAndDropRest(toGive, toAdd);
+                Boolean toNotDrop = (Boolean) SettingsValues.VIRTUAL_KEY_INSTEAD_OF_DROP.getValue(cc);
+                int count = Utils.addItemAndDropRest(toGive, toAdd, !toNotDrop);
+
+                if(toNotDrop)
+                    pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + count);
+
                 cmds.msgSuccess("Given physical key for crate: " + args[1]);
             }
             return true;

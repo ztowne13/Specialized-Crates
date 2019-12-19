@@ -193,9 +193,11 @@ public class IGCCratesEssentials extends IGCMenuCrate
             case 13:
                 cs.setRequireKey(!cs.isRequireKey());
                 open();
+                break;
             case 14:
                 new InputMenu(getCc(), getP(), "cost", cs.getCost() + "",
                         "How much the crate will cost to open. Set to 0 to have no cost.", Integer.class, this, true);
+                break;
         }
     }
 

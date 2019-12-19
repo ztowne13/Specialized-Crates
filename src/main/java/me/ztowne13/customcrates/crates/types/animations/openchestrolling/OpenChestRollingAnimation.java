@@ -46,14 +46,14 @@ public class OpenChestRollingAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand)
+    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
     {
         this.loc = l;
 
-        if (canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
+        if (force || canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
         {
             playAnimation(p, l, true);
-            playRequiredOpenActions(p, !requireKeyInHand);
+            playRequiredOpenActions(p, !requireKeyInHand, force);
             return true;
         }
 

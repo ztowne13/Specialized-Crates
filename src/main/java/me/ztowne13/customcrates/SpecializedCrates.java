@@ -2,6 +2,7 @@ package me.ztowne13.customcrates;
 
 import me.ztowne13.customcrates.commands.CommandCrate;
 import me.ztowne13.customcrates.commands.CommandKey;
+import me.ztowne13.customcrates.commands.CommandRewards;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
@@ -184,6 +185,8 @@ public class SpecializedCrates extends JavaPlugin
         getCommand("scrates").setExecutor(null);
         getCommand("scrates").setTabCompleter(null);
         getCommand("keys").setExecutor(null);
+        getCommand("rewards").setExecutor(null);
+        getCommand("rewards").setTabCompleter(null);
 
         setTick(0);
 
@@ -207,11 +210,16 @@ public class SpecializedCrates extends JavaPlugin
 
     public void registerCommands()
     {
+        TabCompleteListener tabCompleteListener = new TabCompleteListener(this);
+
         commandCrate = new CommandCrate(this);
         getCommand("scrates").setExecutor(commandCrate);
-        getCommand("scrates").setTabCompleter(new TabCompleteListener(this));
+        getCommand("scrates").setTabCompleter(tabCompleteListener);
 
         getCommand("keys").setExecutor(new CommandKey(this));
+
+        getCommand("rewards").setExecutor(new CommandRewards(this));
+        getCommand("rewards").setTabCompleter(tabCompleteListener);
     }
 
 
@@ -227,6 +235,7 @@ public class SpecializedCrates extends JavaPlugin
         rl(new ChatListener(this));
         rl(new HologramInteractListener(this));
         rl(new PluginEnableListener(this));
+        rl(new DamageListener(this));
 
         if (NPCUtils.isCitizensInstalled())
         {

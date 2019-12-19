@@ -57,14 +57,14 @@ public class DiscoverAnimation extends InventoryCrateAnimation
 
 
     @Override
-    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand)
+    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
     {
-        if (canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
+        if (force || canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
         {
             DiscoverDataHolder ddh = new DiscoverDataHolder(p, l, this);
             playSequence(ddh);
             playReopenTimer(ddh);
-            playRequiredOpenActions(p, !requireKeyInHand);
+            playRequiredOpenActions(p, !requireKeyInHand, force);
             return true;
         }
 

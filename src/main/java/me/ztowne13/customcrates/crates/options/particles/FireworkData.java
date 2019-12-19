@@ -177,6 +177,8 @@ public class FireworkData
     {
         final Firework fw = (Firework) l.getWorld().spawnEntity(l, EntityType.FIREWORK);
         FireworkMeta fm = fw.getFireworkMeta();
+        fw.setCustomName("scf");
+        fw.setCustomNameVisible(false);
         fm.addEffect(getEffect().build());
         fm.setPower(getPower());
         fw.setFireworkMeta(fm);

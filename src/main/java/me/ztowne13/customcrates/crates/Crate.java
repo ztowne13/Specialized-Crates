@@ -250,4 +250,9 @@ public class Crate
     {
         this.lastOpenedReward = lastOpenedReward;
     }
+
+    public String getDisplayName()
+    {
+        return getName();
+    }
 }

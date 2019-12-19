@@ -204,6 +204,14 @@ public enum SettingsValues
                     "amount."
             }),
 
+    VIRTUAL_KEY_INSTEAD_OF_DROP("virtual-key-instead-of-drop", Boolean.class, false, false,
+            new String[]{
+                    "A player will be given a",
+                    "virtual key instead of the key",
+                    "dropping on the floor when",
+                    "their inventory is full."
+            }),
+
     SHIFT_CLICK_OPEN_ALL("shift-click-open-all", Boolean.class, false, true,
             new String[]{
                     "Shift clicking on a crate will",
@@ -221,6 +229,7 @@ public enum SettingsValues
                     "to confirm opening with every",
                     "physical & virtual key."
             }),
+
     CONFIRM_OPEN("confirm-open", Boolean.class, false, false,
             new String[]{
                     "The user will have to click the",

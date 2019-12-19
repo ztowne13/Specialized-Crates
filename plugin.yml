@@ -1,6 +1,6 @@
 name: SpecializedCrates-Demo
 author: Ztowne13
-version: 2.10.0.2
+version: 2.11
 main: me.ztowne13.customcrates.SpecializedCrates
 api-version: 1.13
 description: A 100% customizable crate plugin for your server.
@@ -12,3 +12,5 @@ commands:
   keys:
     description: See how many virtual keys you have for your crates.
     aliases: [skeys,cratekey,cratekeys]
+  rewards:
+    description: Open a rewards menu for a crate

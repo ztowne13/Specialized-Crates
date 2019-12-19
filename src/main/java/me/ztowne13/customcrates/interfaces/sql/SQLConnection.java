@@ -86,7 +86,7 @@ public class SQLConnection
         }
         catch (Exception exc)
         {
-            exc.printStackTrace();
+
         }
 
         queries++;

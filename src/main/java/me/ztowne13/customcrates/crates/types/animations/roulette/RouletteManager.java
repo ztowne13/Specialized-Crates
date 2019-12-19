@@ -36,13 +36,13 @@ public class RouletteManager extends InventoryCrateAnimation
     }
 
     @Override
-    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand)
+    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
     {
-        if (canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
+        if (force || canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
         {
             RouletteDataHolder rdh = new RouletteDataHolder(p, l, this);
             playSequence(rdh);
-            playRequiredOpenActions(p, !requireKeyInHand);
+            playRequiredOpenActions(p, !requireKeyInHand, force);
             return true;
         }
 
