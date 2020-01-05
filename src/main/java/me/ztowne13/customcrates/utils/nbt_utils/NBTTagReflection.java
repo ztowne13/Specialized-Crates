@@ -113,8 +113,17 @@ public class NBTTagReflection
             else if((value.startsWith("'") && value.endsWith("'")) || (value.startsWith("\"") && value.endsWith("\"")))
             {
                 value = ChatUtils.stripQuotes(value);
-                tagCompound.getClass().getMethod("setString", String.class, String.class)
-                        .invoke(tagCompound, key, value);
+
+                if(value.equalsIgnoreCase("1b"))
+                {
+                    tagCompound.getClass().getMethod("setInt", String.class, int.class)
+                            .invoke(tagCompound, key, 1);
+                }
+                else
+                {
+                    tagCompound.getClass().getMethod("setString", String.class, String.class)
+                            .invoke(tagCompound, key, value);
+                }
             }
             else if(Utils.isInt(value))
             {
