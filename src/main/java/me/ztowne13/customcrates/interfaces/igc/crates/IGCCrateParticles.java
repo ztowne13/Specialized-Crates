@@ -18,6 +18,7 @@ import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -126,8 +127,19 @@ public class IGCCrateParticles extends IGCTierMenu
 
 				/*ParticleEffect pe = ParticleEffect.valueOf(input.toUpperCase());
 				pd = new ParticleData(pe);*/
+                Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        getP().closeInventory();
+                    }
+                }, 1);
+
                 new InputMenu(getCc(), getP(), "X offset", "null",
                         "How far the particles can spawn, in the X direction, from the crate.", Double.class, this);
+
+                return true;
             }
             catch (Exception exc)
             {
