@@ -78,7 +78,7 @@ public class IGCItemEditor extends IGCMenu
         for (String tag : editableItem.getNBTTags())
             nbtTags.addLore("&7- " + tag);
         nbtTags.addLore("").addAutomaticLore("&f", 30,
-                "Edit the NBT Tags of an item. These values are only for advanced item-editing and are nearly useless in MC v1.13+");
+                "Edit the NBT Tags of an item.");
 
         // Glow
         ItemBuilder glow =
