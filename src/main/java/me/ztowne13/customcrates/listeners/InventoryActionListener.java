@@ -75,7 +75,7 @@ public class InventoryActionListener implements Listener
 
         if (pm.isInCrate() || pm.isInRewardMenu())
         {
-            if(e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT))
+            if(e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT) || e.getClick().equals(ClickType.DOUBLE_CLICK))
                 e.setCancelled(true);
 
             cc.getDu().log("onInventoryClick - In crate or reward menu (" + pm.isInCrate() + " : " + pm.isInRewardMenu() +
