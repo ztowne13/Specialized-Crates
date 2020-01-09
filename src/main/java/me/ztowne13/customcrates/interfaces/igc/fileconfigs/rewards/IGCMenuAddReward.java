@@ -87,7 +87,8 @@ public class IGCMenuAddReward extends IGCMenu
             else
                 newR = new ItemBuilder(r.getDisplayBuilder().getStack()).setName("&a" + rName);
 
-            newR.setLore("").addLore("&7- Chance: &f" + r.getChance());
+            newR.setLore("").addLore("&7- Name: &f" + r.getDisplayBuilder().getDisplayName());
+            newR.addLore("&7- Chance: &f" + r.getChance());
             newR.addLore("&7- Give display item: &f" + r.isGiveDisplayItem());
             newR.addLore("&7- Give display item WITH lore: &f" + r.isGiveDisplayItemLore());
             newR.addLore("&7- Commands to run: &f" + r.getCommands().size());
