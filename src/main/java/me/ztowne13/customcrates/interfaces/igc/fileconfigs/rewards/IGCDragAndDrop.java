@@ -72,11 +72,17 @@ public class IGCDragAndDrop extends IGCMenu
                     r.setRarity("default");
                     r.setCommands((ArrayList<String>) cmds.clone());
 
+                    r.setGiveDisplayItem(true);
+                    r.setGiveDisplayItemLore(true);
+                    r.setNeedsMoreConfig(false);
+
                     if(!stack.getItemMeta().hasDisplayName())
                     {
                         ItemMeta meta = stack.getItemMeta();
                         meta.setDisplayName(rewardName);
                         stack.setItemMeta(meta);
+
+                        r.setGiveDisplayItemName(false);
                     }
 
                     ItemBuilder builderToSet = new ItemBuilder(stack);
@@ -88,13 +94,11 @@ public class IGCDragAndDrop extends IGCMenu
                         {
                             builderToSet.addLore(s.toString());
                         }
+
+                        r.setGiveDisplayItemLore(false);
                     }
 
                     r.setBuilder(builderToSet);
-
-                    r.setGiveDisplayItem(true);
-                    r.setGiveDisplayItemLore(true);
-                    r.setNeedsMoreConfig(false);
 
                     r.writeToFile();
                 }
