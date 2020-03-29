@@ -1,8 +1,8 @@
-package me.ztowne13.customcrates.utils.nbt_utils;
+package me.ztowne13.customcrates.interfaces.nbt;
 
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class NBTTagReflection
     {
         try
         {
-            return Class.forName("org.bukkit.craftbukkit." + NMSUtils.getVersionRaw() + ".inventory.CraftItemStack");
+            return Class.forName("org.bukkit.craftbukkit." + VersionUtils.getVersionRaw() + ".inventory.CraftItemStack");
         }
         catch (Exception exc)
         {
@@ -45,7 +45,7 @@ public class NBTTagReflection
     {
         try
         {
-            return Class.forName("net.minecraft.server." + NMSUtils.getVersionRaw() + ".NBTTagCompound").newInstance();
+            return Class.forName("net.minecraft.server." + VersionUtils.getVersionRaw() + ".NBTTagCompound").newInstance();
         }
         catch (Exception exc)
         {
@@ -94,10 +94,10 @@ public class NBTTagReflection
         {
             if(value.startsWith("{") && value.endsWith("}"))
             {
-                Class clazz = NMSUtils.getNmsClass("MojangsonParser");
+                Class clazz = VersionUtils.getNmsClass("MojangsonParser");
                 Object newComp = clazz.getMethod("parse", String.class).invoke(clazz, value);
 
-                tagCompound.getClass().getMethod("set", String.class, NMSUtils.getNmsClass("NBTBase"))
+                tagCompound.getClass().getMethod("set", String.class, VersionUtils.getNmsClass("NBTBase"))
                         .invoke(tagCompound, key, newComp);
 
 //                NBTTagCompound newComp = MojangsonParser.parse(value);
@@ -181,7 +181,8 @@ public class NBTTagReflection
 
         try
         {
-            Set<String> keys = (Set<String>) tagCompound.getClass().getMethod(NMSUtils.Version.v1_12.isServerVersionOrLater() ? "getKeys" : "c").invoke(tagCompound);
+            Set<String> keys = (Set<String>) tagCompound.getClass().getMethod(
+                    VersionUtils.Version.v1_12.isServerVersionOrLater() ? "getKeys" : "c").invoke(tagCompound);
 
             for (String key : keys)
             {

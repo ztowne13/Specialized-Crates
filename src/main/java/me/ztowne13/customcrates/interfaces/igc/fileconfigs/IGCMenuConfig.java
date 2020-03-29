@@ -12,8 +12,8 @@ import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -138,7 +138,7 @@ public class IGCMenuConfig extends IGCMenu
             ItemBuilder newBuilder = new ItemBuilder(inv.getItem(slot));
             SettingsValues sv = SettingsValues.getByPath(newBuilder.getName(true));
 
-            if (NMSUtils.Version.v1_12.isServerVersionOrEarlier())
+            if (VersionUtils.Version.v1_12.isServerVersionOrEarlier())
             {
                 newBuilder.getStack().setDurability((byte) (newBuilder.getStack().getDurability() == 5 ? 14 : 5));
             }

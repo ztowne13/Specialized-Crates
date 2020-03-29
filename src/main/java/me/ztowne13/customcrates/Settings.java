@@ -128,7 +128,7 @@ public class Settings
 
     public void loadInfo()
     {
-        Utils.addToInfoLog(cc, "Server version", NMSUtils.getServerVersion());
+        Utils.addToInfoLog(cc, "Server version", VersionUtils.getServerVersion());
         Utils.addToInfoLog(cc, "Citizens Installed",
                 (NPCUtils.isCitizensInstalled() ? "" : "&c") + Utils.isPLInstalled("Citizens") + "");
 

@@ -16,8 +16,8 @@ import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -88,7 +88,7 @@ public class IGCCrateParticles extends IGCTierMenu
         }
         else if (slot == 8)
         {
-            if(NMSUtils.Version.v1_9.isServerVersionOrEarlier())
+            if(VersionUtils.Version.v1_9.isServerVersionOrEarlier())
                 new IGCListSelector(getCc(), getP(), this, "particle type", Arrays.asList(ParticleEffect.values()),
                         DynamicMaterial.NETHER_STAR, 1, null).open();
             else
@@ -114,7 +114,7 @@ public class IGCCrateParticles extends IGCTierMenu
             {
                 String newName = UUID.randomUUID().getLeastSignificantBits() + "";
 
-                if (NMSUtils.Version.v1_7.isServerVersionOrLater() && NMSUtils.Version.v1_8.isServerVersionOrEarlier())
+                if (VersionUtils.Version.v1_7.isServerVersionOrLater() && VersionUtils.Version.v1_8.isServerVersionOrEarlier())
                 {
                     ParticleEffect pe = ParticleEffect.valueOf(input.toUpperCase());
                     pd = new NMSParticleEffect(pe, newName, false);

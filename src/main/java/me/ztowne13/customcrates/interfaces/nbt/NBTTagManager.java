@@ -1,4 +1,4 @@
-package me.ztowne13.customcrates.utils.nbt_utils;
+package me.ztowne13.customcrates.interfaces.nbt;
 
 import org.bukkit.inventory.ItemStack;
 

@@ -2,9 +2,9 @@ package me.ztowne13.customcrates.commands.sub;
 
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
+import me.ztowne13.customcrates.interfaces.nbt.NBTTagManager;
+import me.ztowne13.customcrates.interfaces.nbt.NBTTagReflection;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
-import me.ztowne13.customcrates.utils.nbt_utils.NBTTagReflection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
