@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.listeners;
 
+import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
@@ -11,16 +12,15 @@ import me.ztowne13.customcrates.crates.types.animations.menu.MenuAnimation;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCMultiCrateMain;
 import me.ztowne13.customcrates.interfaces.igc.crates.previeweditor.IGCCratePreviewEditor;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCDragAndDrop;
+import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import me.ztowne13.customcrates.utils.CrateUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.*;
 
 public class InventoryActionListener implements Listener
 {
@@ -124,6 +124,32 @@ public class InventoryActionListener implements Listener
             }
             pm.setWaitingForClose(null);
             p.closeInventory();
+        }
+    }
+
+    /**
+     * Handles anvil crafting - mainly to prevent key/crate renaming.
+     *
+     * @param e The event passed by the server
+     */
+    @EventHandler
+    public void onAnvilClick(InventoryClickEvent e)
+    {
+        if(e.getInventory().getType().equals(InventoryType.ANVIL))
+        {
+            if(e.getInventory().getItem(2) != null)
+            {
+                ItemBuilder builder = new ItemBuilder(e.getInventory().getItem(2));
+                if(builder.getDisplayName() != null)
+                {
+                    if(CrateUtils.searchByCrate(builder.get()) != null || CrateUtils.searchByKey(builder.get()) != null)
+                    {
+                        e.setCancelled(true);
+                        e.getWhoClicked().closeInventory();
+                        Messages.CANT_CRAFT_KEYS.msgSpecified(cc, (Player) e.getWhoClicked());
+                    }
+                }
+            }
         }
     }
 
