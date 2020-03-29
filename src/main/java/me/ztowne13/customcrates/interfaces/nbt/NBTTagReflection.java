@@ -182,7 +182,7 @@ public class NBTTagReflection
         try
         {
             Set<String> keys = (Set<String>) tagCompound.getClass().getMethod(
-                    VersionUtils.Version.v1_12.isServerVersionOrLater() ? "getKeys" : "c").invoke(tagCompound);
+                    VersionUtils.Version.v1_13.isServerVersionOrLater() ? "getKeys" : "c").invoke(tagCompound);
 
             for (String key : keys)
             {
@@ -218,7 +218,7 @@ public class NBTTagReflection
         }
         catch(Exception exc)
         {
-
+            //exc.printStackTrace();
         }
         return list;
     }
