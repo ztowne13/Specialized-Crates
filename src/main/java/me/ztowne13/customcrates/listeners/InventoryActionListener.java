@@ -48,7 +48,8 @@ public class InventoryActionListener implements Listener
         {
             if (e.getView().getTopInventory() != null)
             {
-                if (playerManager.getOpenMenu() instanceof IGCCratePreviewEditor && e.getRawSlots().equals(e.getInventorySlots()))
+                if (playerManager.getOpenMenu() instanceof IGCCratePreviewEditor &&
+                        e.getRawSlots().equals(e.getInventorySlots()))
                 {
                     try
                     {
@@ -75,42 +76,40 @@ public class InventoryActionListener implements Listener
 
         if (pm.isInCrate() || pm.isInRewardMenu())
         {
-            if(e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT) || e.getClick().equals(ClickType.DOUBLE_CLICK))
+            if (e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT) ||
+                    e.getClick().equals(ClickType.DOUBLE_CLICK))
                 e.setCancelled(true);
 
-            cc.getDu().log("onInventoryClick - In crate or reward menu (" + pm.isInCrate() + " : " + pm.isInRewardMenu() +
-                    ")", getClass());
-            if (!(e.getClickedInventory() == null || e.getWhoClicked().getInventory() == null))
+            if (isntPlayerInventory(e, pm))
             {
-                cc.getDu().log("onInventoryClick - Clicked inventory and clicker aren't null.");
-                if (!e.getClickedInventory().equals(e.getWhoClicked().getInventory()))
-                {
-                    cc.getDu().log("onInventoryClick - CANCELLED");
-                    e.setCancelled(true);
 
-                    cc.getDu().log("onInventoryClick - inRewardMenu: " + pm.isInRewardMenu() + " lastPage: " +
-                            pm.getLastPage());
-                    if (pm.isInRewardMenu() && pm.getLastPage() != null)
-                    {
-                        pm.getLastPage().handleInput(p, e.getSlot());
-                    }
+                cc.getDu().log("onInventoryClick - CANCELLED");
+                e.setCancelled(true);
+
+                cc.getDu().log("onInventoryClick - inRewardMenu: " + pm.isInRewardMenu() + " lastPage: " +
+                        pm.getLastPage());
+                if (pm.isInRewardMenu() && pm.getLastPage() != null)
+                {
+                    pm.getLastPage().handleInput(p, e.getSlot());
                 }
-            }
 
-            if (pm.isInCrate() && pm.getOpenCrate().isMultiCrate())
-            {
-                Crate crate = pm.getOpenCrate();
-                int slot = e.getSlot();
-
-                crate.getCs().getCmci().checkClick(pm, slot, e.getClick());
-            }
-            else if (pm.isInCrate())
-            {
-                if (pm.getOpenCrate().getCs().getCt().equals(CrateType.INV_DISCOVER) &&
-                        DiscoverDataHolder.getHolders().containsKey(p))
+                // Handle multicrate click
+                if (pm.isInCrate() && pm.getOpenCrate().isMultiCrate())
                 {
-                    ((DiscoverAnimation) pm.getOpenCrate().getCs().getCh())
-                            .handleClick(DiscoverDataHolder.getHolders().get(p), e.getSlot());
+                    Crate crate = pm.getOpenCrate();
+                    int slot = e.getSlot();
+
+                    crate.getCs().getCmci().checkClick(pm, slot, e.getClick());
+                }
+                // Handle discover animation click
+                else if (pm.isInCrate())
+                {
+                    if (pm.getOpenCrate().getCs().getCt().equals(CrateType.INV_DISCOVER) &&
+                            DiscoverDataHolder.getHolders().containsKey(p))
+                    {
+                        ((DiscoverAnimation) pm.getOpenCrate().getCs().getCh())
+                                .handleClick(DiscoverDataHolder.getHolders().get(p), e.getSlot());
+                    }
                 }
             }
         }
@@ -126,6 +125,18 @@ public class InventoryActionListener implements Listener
             pm.setWaitingForClose(null);
             p.closeInventory();
         }
+    }
+
+    /**
+     * Handles inventory clicks intended in the in-game config inventory editors.
+     *
+     * @param e The event passed by the server
+     */
+    @EventHandler
+    public void onIGCClick(InventoryClickEvent e)
+    {
+        Player p = (Player) e.getWhoClicked();
+        PlayerManager pm = PlayerManager.get(cc, p);
 
         if (pm.isInOpenMenu())
         {
@@ -190,7 +201,7 @@ public class InventoryActionListener implements Listener
                     }
                 }, 1);
             }
-            else if(pm.getOpenMenu() instanceof IGCCratePreviewEditor)
+            else if (pm.getOpenMenu() instanceof IGCCratePreviewEditor)
             {
                 ((IGCCratePreviewEditor) pm.getOpenMenu()).getCustomRewardDisplayer().saveAllPages();
                 Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
@@ -198,7 +209,7 @@ public class InventoryActionListener implements Listener
                     @Override
                     public void run()
                     {
-                        if(pm.getOpenMenu() instanceof IGCCratePreviewEditor)
+                        if (pm.getOpenMenu() instanceof IGCCratePreviewEditor)
                             pm.getOpenMenu().up();
                     }
                 }, 1);
@@ -263,4 +274,20 @@ public class InventoryActionListener implements Listener
             pm.setCanClose(false);
         }
     }
+
+    public boolean isntPlayerInventory(InventoryClickEvent e, PlayerManager pm)
+    {
+        cc.getDu().log("onInventoryClick - In crate or reward menu (" + pm.isInCrate() + " : " + pm.isInRewardMenu() +
+                ")", getClass());
+        if (!(e.getClickedInventory() == null || e.getWhoClicked().getInventory() == null))
+        {
+            cc.getDu().log("onInventoryClick - Clicked inventory and clicker aren't null.");
+            if (!e.getClickedInventory().equals(e.getWhoClicked().getInventory()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
+
