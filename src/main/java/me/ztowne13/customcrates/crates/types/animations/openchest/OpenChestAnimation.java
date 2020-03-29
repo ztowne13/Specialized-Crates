@@ -19,6 +19,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class OpenChestAnimation extends CrateAnimation
 {
@@ -31,7 +32,7 @@ public class OpenChestAnimation extends CrateAnimation
     long rewardHoloDelay;
 
     Location loc;
-    Reward reward;
+    HashMap<Player, Reward> rewardMap = new HashMap<Player, Reward>();
     PlacedCrate placedCrate;
 
     public OpenChestAnimation(Inventory inventory, Crate crate)
@@ -62,9 +63,10 @@ public class OpenChestAnimation extends CrateAnimation
 
     public void playAnimation(final Player p, final Location l)
     {
-        reward = getCrates().getCs().getCr().getRandomReward(p);
+        Reward reward = getCrates().getCs().getCr().getRandomReward(p);
         final ArrayList<String> rewards = new ArrayList<String>();
         rewards.add(reward.getDisplayName());
+        rewardMap.put(p, reward);
 
         Location upOne = l.clone();
         upOne.setY(upOne.getY() + 1);
@@ -115,12 +117,6 @@ public class OpenChestAnimation extends CrateAnimation
         }, openDuration);
     }
 
-//    public void changeChestState(Location loc, boolean open) {
-//        for (Player p : loc.getWorld().getPlayers()) {
-//            p.playNote(loc, (byte) 1, (byte) (open ? 1 : 0));
-//        }
-//    }
-
     @Override
     public void loadValueFromConfig(StatusLogger sl)
     {
@@ -153,12 +149,15 @@ public class OpenChestAnimation extends CrateAnimation
     @Override
     public void finishUp(Player p)
     {
+        Reward reward = rewardMap.get(p);
         ArrayList<Reward> rewards = new ArrayList<Reward>();
         rewards.add(reward);
 
         completeCrateRun(p, rewards, false, placedCrate);
         if(!earlyEffects)
             getCrates().tick(loc, CrateState.OPEN, p, rewards);
+
+        rewardMap.remove(p);
     }
 
     public static void removeAllItems()
