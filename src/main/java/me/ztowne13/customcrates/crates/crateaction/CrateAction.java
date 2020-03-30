@@ -149,11 +149,13 @@ public abstract class CrateAction
                 return false;
             }
             Messages.INVENTORY_TOO_FULL.msgSpecified(cc, player);
+            crates.getCs().getCh().playFailToOpen(player, false);
             return false;
         }
         else
         {
             Messages.NO_PERMISSION_CRATE.msgSpecified(cc, player);
+            crates.getCs().getCh().playFailToOpen(player, false);
         }
         return false;
     }
