@@ -14,7 +14,7 @@ import me.ztowne13.customcrates.crates.types.animations.openchest.OpenChestAnima
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.NMSUtils;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -148,7 +148,7 @@ public class CActions extends CSetting
             return;
 
         ActionEffect actionEffect =
-                NMSUtils.Version.v1_12.isServerVersionOrLater() ? new BukkitActionEffect(cc) : new NMSActionEffect(cc);
+                VersionUtils.Version.v1_12.isServerVersionOrLater() ? new BukkitActionEffect(cc) : new NMSActionEffect(cc);
         actionEffect.newTitle();
         boolean toRunTitle = false;
 
@@ -340,7 +340,7 @@ public class CActions extends CSetting
         {
             if (real != null)
             {
-                if (NMSUtils.Version.v1_13.isServerVersionOrLater())
+                if (VersionUtils.Version.v1_13.isServerVersionOrLater())
                     item.addPassenger(real);
                 else
                     item.setPassenger(real);

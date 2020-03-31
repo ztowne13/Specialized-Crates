@@ -182,7 +182,7 @@ public enum StatusLoggerEvent
 
     SETTINGS_CRATE_SUCCESS(true, "Settings", "Set up crate item.", "NONE"),
 
-    SETTINGS_CRATE_FAILURE_DISABLE(false, "Settings", "Failed to load the crate settings for the crate... disabling", "$?$"),
+    SETTINGS_CRATE_FAILURE_DISABLE(false, "Settings", "Failed to load the crate settings for the crate... disabling", "NONE"),
 
     SETTINGS_CRATE_FAILURE_INDIVIDUAL(false, "Settings", "Failed to place an instance of this crate. This message will not appear again.", "$?$"),
 
@@ -208,7 +208,7 @@ public enum StatusLoggerEvent
             "The 'key.require' value does not exist."),
 
     SETTINGS_KEY_FAILURE_DISABLE(false, "Settings", "Failed to load the key settings for the crate... disabling the crate",
-            "$?$"),
+            "NONE"),
 
     SETTINGS_KEY_FAILURE(false, "Settings", "Failed to load the key item.", "$?$"),
 

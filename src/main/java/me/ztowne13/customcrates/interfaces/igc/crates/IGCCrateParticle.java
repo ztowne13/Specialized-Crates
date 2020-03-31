@@ -15,8 +15,8 @@ import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -190,7 +190,7 @@ public class IGCCrateParticle extends IGCTierMenu
                         DynamicMaterial.BEACON, 1, null).open();
                 break;
             case 11:
-                if (NMSUtils.Version.v1_9.isServerVersionOrEarlier())
+                if (VersionUtils.Version.v1_9.isServerVersionOrEarlier())
                     new IGCListSelector(getCc(), getP(), this, "Particle Type", Arrays.asList(ParticleEffect.values()),
                             DynamicMaterial.NETHER_STAR, 1, null).open();
                 else

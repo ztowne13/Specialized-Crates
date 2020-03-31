@@ -31,3 +31,4 @@ economy-not-enough-money: '&4&lERROR: &cYou do not have enough money, you need %
 command-rewards-usage: '&4&lERROR: &cUsage: /rewards [crate name]'
 command-rewards-opening: '&6&lINFO: &eOpening reward preview for %crate% crate.'
 command-rewards-invalid-crate: '&4&lERROR: &c%crate% is not a valid crate.'
+cant-craft-keys: '&4&lERROR: &cYou are not allowed to craft keys.'

@@ -11,7 +11,7 @@ import me.ztowne13.customcrates.crates.options.particles.ParticleEffect;
 import me.ztowne13.customcrates.crates.options.particles.effects.PEAnimationType;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
-import me.ztowne13.customcrates.utils.NMSUtils;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -106,7 +106,7 @@ public class CParticles extends CSetting
                 {
                     ParticleData pd;
 
-                    if (NMSUtils.Version.v1_9.isServerVersionOrEarlier())
+                    if (VersionUtils.Version.v1_9.isServerVersionOrEarlier())
                     {
                         ParticleEffect pe = null;
                         try
@@ -174,7 +174,7 @@ public class CParticles extends CSetting
                     // Redstone info
                     try
                     {
-                        if(NMSUtils.Version.v1_13.isServerVersionOrLater() && particleTypeAS.equalsIgnoreCase("REDSTONE"))
+                        if(VersionUtils.Version.v1_13.isServerVersionOrLater() && particleTypeAS.equalsIgnoreCase("REDSTONE"))
                         {
                             pd.setColorEnabled(true);
                             float size = Float.parseFloat(redstoneSize);

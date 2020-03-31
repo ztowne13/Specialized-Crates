@@ -53,6 +53,7 @@ public abstract class CrateAction
         Crate crates = cm.getCrates();
         CrateSettings cs = crates.getCs();
         Location location = cm.getL();
+
         // Player has correct permissions
         if (player.hasPermission(cs.getPermission()) || cs.getPermission().equalsIgnoreCase("no permission"))
         {

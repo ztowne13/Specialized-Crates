@@ -337,23 +337,7 @@ public class Utils
         String minutes = args[2];
         String hours = args[1];
         String days = (Integer.parseInt(args[0]) - 1) + "";
-//        String timeFormatted =
-//                (days == 0 ? "" : days + " days, ") +
-//                        (hours == 0 ? "" : hours + " hours, ") +
-//                        (minutes == 0 ? "" : minutes + " minutes, ") +
-//                        (seconds + " seconds");
-//        return timeFormatted;
 
         return new String[]{days, hours, minutes, seconds};
     }
-
-	/*public static List<String> toUpperCase(Set l)
-	{
-		List<String> s = new ArrayList<>();
-		for(Object obj : l)
-		{
-			s.add(obj.toString().toUpperCase());
-		}
-		return s;
-	}*/
 }

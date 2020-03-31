@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.utils;
 
 import org.bukkit.Bukkit;
 
-public class NMSUtils
+public class VersionUtils
 {
     public static Class<?> getNmsClass(String nmsClassName) throws ClassNotFoundException
     {
@@ -37,7 +37,7 @@ public class NMSUtils
         {
             for (Version version : Version.values())
             {
-                if (NMSUtils.getServerVersion().contains(version.toString()))
+                if (VersionUtils.getServerVersion().contains(version.toString()))
                     return true;
                 if (this == version)
                     break;
@@ -54,7 +54,7 @@ public class NMSUtils
                 if (this == version && !found)
                     found = true;
 
-                if (found && NMSUtils.getServerVersion().contains(version.toString()))
+                if (found && VersionUtils.getServerVersion().contains(version.toString()))
                     return true;
             }
             return false;

@@ -2,9 +2,10 @@ package me.ztowne13.customcrates.commands.sub;
 
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
+import me.ztowne13.customcrates.interfaces.nbt.NBTTagManager;
+import me.ztowne13.customcrates.interfaces.nbt.NBTTagReflection;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
-import me.ztowne13.customcrates.utils.nbt_utils.NBTTagReflection;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -55,8 +56,11 @@ public class Debug extends SubCommand
                     }
 
                     cmds.msg("Enchants: ");
-                    for(Enchantment ench : im.getEnchants().keySet())
-                        cmds.msg("- " + ench.getKey().getKey() + " lvl " + im.getEnchants().get(ench));
+                    if(VersionUtils.Version.v1_13.isServerVersionOrLater())
+                    {
+                        for (Enchantment ench : im.getEnchants().keySet())
+                            cmds.msg("- " + ench.getKey().getKey() + " lvl " + im.getEnchants().get(ench));
+                    }
 
                     cmds.msg("Data: " + stack.getDurability());
                     cmds.msg("NBT Tags:");

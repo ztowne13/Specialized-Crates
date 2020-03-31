@@ -8,7 +8,7 @@ import me.ztowne13.customcrates.crates.options.actions.actionbar.ActionBarV1_9_1
 import me.ztowne13.customcrates.crates.options.actions.title.Title;
 import me.ztowne13.customcrates.crates.options.actions.title.TitleV1_11;
 import me.ztowne13.customcrates.crates.options.actions.title.TitleV1_7_8_9_10;
-import me.ztowne13.customcrates.utils.NMSUtils;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.entity.Player;
 
 /**
@@ -25,7 +25,7 @@ public class NMSActionEffect extends ActionEffect
 
     public ActionBar getActionBarExecutor()
     {
-        if (NMSUtils.Version.v1_8.isServerVersionOrEarlier())
+        if (VersionUtils.Version.v1_8.isServerVersionOrEarlier())
             return new ActionBarV1_7_8();
         else
             return new ActionBarV1_9_10_11();
@@ -33,7 +33,7 @@ public class NMSActionEffect extends ActionEffect
 
     public void newTitle()
     {
-        if (NMSUtils.Version.v1_10.isServerVersionOrEarlier())
+        if (VersionUtils.Version.v1_10.isServerVersionOrEarlier())
         {
             title = new TitleV1_7_8_9_10("", "",
                     (Integer.parseInt(SettingsValues.CA_FADE_IN.getValue(cc).toString())),

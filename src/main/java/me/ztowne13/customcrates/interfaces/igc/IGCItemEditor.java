@@ -4,10 +4,10 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.*;
+import me.ztowne13.customcrates.interfaces.nbt.NBTTagManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.NMSUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -180,7 +180,7 @@ public class IGCItemEditor extends IGCMenu
                 break;
             case 10:
                 ItemStack stack;
-                if (NMSUtils.Version.v1_9.isServerVersionOrLater())
+                if (VersionUtils.Version.v1_9.isServerVersionOrLater())
                     stack = getP().getInventory().getItemInMainHand();
                 else
                     stack = getP().getItemInHand();
@@ -311,7 +311,7 @@ public class IGCItemEditor extends IGCMenu
             {
                 DynamicMaterial dynamicMaterial = DynamicMaterial.fromString(input.toUpperCase());
                 editableItem.getStack().setType(dynamicMaterial.parseMaterial());
-                if (NMSUtils.Version.v1_12.isServerVersionOrEarlier())
+                if (VersionUtils.Version.v1_12.isServerVersionOrEarlier())
                     editableItem.getStack().setDurability(dynamicMaterial.parseItem().getDurability());
                 ChatUtils.msgSuccess(getP(), "Set the " + value + " to " + input);
                 return true;

@@ -1,9 +1,9 @@
 package me.ztowne13.customcrates.interfaces.items;
 
 import me.ztowne13.customcrates.interfaces.items.attributes.BukkitGlowEffect;
+import me.ztowne13.customcrates.interfaces.nbt.NBTTagManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.NMSUtils;
-import me.ztowne13.customcrates.utils.nbt_utils.NBTTagManager;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -85,7 +85,7 @@ public class ItemBuilder implements EditableItem
     {
         stack = m.parseItem();
         stack.setAmount(amnt);
-        if (m.preProgrammedNBTTag && NMSUtils.Version.v1_12.isServerVersionOrEarlier())
+        if (m.preProgrammedNBTTag && VersionUtils.Version.v1_12.isServerVersionOrEarlier())
             addNBTTag("EntityTag " + m.nbtTag);
     }
 
@@ -417,7 +417,7 @@ public class ItemBuilder implements EditableItem
             {
 
                 CompressedPotionEffect firstVal = getPotionEffects().get(0);
-                if (NMSUtils.Version.v1_9.isServerVersionOrLater())
+                if (VersionUtils.Version.v1_9.isServerVersionOrLater())
                 {
                     PotionType.valueOf(firstVal.getType().getName());
                     pm.setBasePotionData(new PotionData(PotionType.getByEffect(firstVal.getType())));

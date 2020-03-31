@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates.options.actions.actionbar;
 
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.NMSUtils;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -14,15 +14,15 @@ public class ActionBarV1_9_10_11 extends ActionBar
     {
         try
         {
-            Class c1 = Class.forName("org.bukkit.craftbukkit." + NMSUtils.getServerVersion() + ".entity.CraftPlayer");
+            Class c1 = Class.forName("org.bukkit.craftbukkit." + VersionUtils.getServerVersion() + ".entity.CraftPlayer");
             Object p = c1.cast(player);
 
-            Class c4 = NMSUtils.getNmsClass("PacketPlayOutChat");
-            Class c5 = NMSUtils.getNmsClass("Packet");
+            Class c4 = VersionUtils.getNmsClass("PacketPlayOutChat");
+            Class c5 = VersionUtils.getNmsClass("Packet");
 
-            Object o = NMSUtils.getNmsClass("ChatComponentText").getConstructor(new Class[]{String.class})
+            Object o = VersionUtils.getNmsClass("ChatComponentText").getConstructor(new Class[]{String.class})
                     .newInstance(new Object[]{msg});
-            Object ppoc = c4.getConstructor(new Class[]{NMSUtils.getNmsClass("IChatBaseComponent"), Byte.TYPE})
+            Object ppoc = c4.getConstructor(new Class[]{VersionUtils.getNmsClass("IChatBaseComponent"), Byte.TYPE})
                     .newInstance(new Object[]{o, (byte) 2});
 
             Method m1 = c1.getDeclaredMethod("getHandle", new Class[0]);

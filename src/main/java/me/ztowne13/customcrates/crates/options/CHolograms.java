@@ -85,6 +85,13 @@ public class CHolograms extends CSetting
             {
                 HoloAnimType hat = HoloAnimType.valueOf(fc.getString("hologram.animation.type").toUpperCase());
                 setHat(hat);
+
+                // If there is a holog
+                /*if(getLineCount() == 0 && hat != HoloAnimType.NONE)
+                {
+                    setLineCount(getLineCount() + 1);
+                    addLine("");
+                }*/
             }
             catch (Exception exc)
             {

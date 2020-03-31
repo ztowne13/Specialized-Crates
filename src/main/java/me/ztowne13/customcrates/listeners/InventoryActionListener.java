@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.listeners;
 
+import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
@@ -11,16 +12,15 @@ import me.ztowne13.customcrates.crates.types.animations.menu.MenuAnimation;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCMultiCrateMain;
 import me.ztowne13.customcrates.interfaces.igc.crates.previeweditor.IGCCratePreviewEditor;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCDragAndDrop;
+import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import me.ztowne13.customcrates.utils.CrateUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.*;
 
 public class InventoryActionListener implements Listener
 {
@@ -48,7 +48,8 @@ public class InventoryActionListener implements Listener
         {
             if (e.getView().getTopInventory() != null)
             {
-                if (playerManager.getOpenMenu() instanceof IGCCratePreviewEditor && e.getRawSlots().equals(e.getInventorySlots()))
+                if (playerManager.getOpenMenu() instanceof IGCCratePreviewEditor &&
+                        e.getRawSlots().equals(e.getInventorySlots()))
                 {
                     try
                     {
@@ -75,42 +76,40 @@ public class InventoryActionListener implements Listener
 
         if (pm.isInCrate() || pm.isInRewardMenu())
         {
-            if(e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT) || e.getClick().equals(ClickType.DOUBLE_CLICK))
+            if (e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT) ||
+                    e.getClick().equals(ClickType.DOUBLE_CLICK))
                 e.setCancelled(true);
 
-            cc.getDu().log("onInventoryClick - In crate or reward menu (" + pm.isInCrate() + " : " + pm.isInRewardMenu() +
-                    ")", getClass());
-            if (!(e.getClickedInventory() == null || e.getWhoClicked().getInventory() == null))
+            if (isntPlayerInventory(e, pm))
             {
-                cc.getDu().log("onInventoryClick - Clicked inventory and clicker aren't null.");
-                if (!e.getClickedInventory().equals(e.getWhoClicked().getInventory()))
-                {
-                    cc.getDu().log("onInventoryClick - CANCELLED");
-                    e.setCancelled(true);
 
-                    cc.getDu().log("onInventoryClick - inRewardMenu: " + pm.isInRewardMenu() + " lastPage: " +
-                            pm.getLastPage());
-                    if (pm.isInRewardMenu() && pm.getLastPage() != null)
-                    {
-                        pm.getLastPage().handleInput(p, e.getSlot());
-                    }
+                cc.getDu().log("onInventoryClick - CANCELLED");
+                e.setCancelled(true);
+
+                cc.getDu().log("onInventoryClick - inRewardMenu: " + pm.isInRewardMenu() + " lastPage: " +
+                        pm.getLastPage());
+                if (pm.isInRewardMenu() && pm.getLastPage() != null)
+                {
+                    pm.getLastPage().handleInput(p, e.getSlot());
                 }
-            }
 
-            if (pm.isInCrate() && pm.getOpenCrate().isMultiCrate())
-            {
-                Crate crate = pm.getOpenCrate();
-                int slot = e.getSlot();
-
-                crate.getCs().getCmci().checkClick(pm, slot, e.getClick());
-            }
-            else if (pm.isInCrate())
-            {
-                if (pm.getOpenCrate().getCs().getCt().equals(CrateType.INV_DISCOVER) &&
-                        DiscoverDataHolder.getHolders().containsKey(p))
+                // Handle multicrate click
+                if (pm.isInCrate() && pm.getOpenCrate().isMultiCrate())
                 {
-                    ((DiscoverAnimation) pm.getOpenCrate().getCs().getCh())
-                            .handleClick(DiscoverDataHolder.getHolders().get(p), e.getSlot());
+                    Crate crate = pm.getOpenCrate();
+                    int slot = e.getSlot();
+
+                    crate.getCs().getCmci().checkClick(pm, slot, e.getClick());
+                }
+                // Handle discover animation click
+                else if (pm.isInCrate())
+                {
+                    if (pm.getOpenCrate().getCs().getCt().equals(CrateType.INV_DISCOVER) &&
+                            DiscoverDataHolder.getHolders().containsKey(p))
+                    {
+                        ((DiscoverAnimation) pm.getOpenCrate().getCs().getCh())
+                                .handleClick(DiscoverDataHolder.getHolders().get(p), e.getSlot());
+                    }
                 }
             }
         }
@@ -126,6 +125,44 @@ public class InventoryActionListener implements Listener
             pm.setWaitingForClose(null);
             p.closeInventory();
         }
+    }
+
+    /**
+     * Handles anvil crafting - mainly to prevent key/crate renaming.
+     *
+     * @param e The event passed by the server
+     */
+    @EventHandler
+    public void onAnvilClick(InventoryClickEvent e)
+    {
+        if(e.getInventory().getType().equals(InventoryType.ANVIL))
+        {
+            if(e.getInventory().getItem(2) != null)
+            {
+                ItemBuilder builder = new ItemBuilder(e.getInventory().getItem(2));
+                if(builder.getDisplayName() != null)
+                {
+                    if(CrateUtils.searchByCrate(builder.get()) != null || CrateUtils.searchByKey(builder.get()) != null)
+                    {
+                        e.setCancelled(true);
+                        e.getWhoClicked().closeInventory();
+                        Messages.CANT_CRAFT_KEYS.msgSpecified(cc, (Player) e.getWhoClicked());
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Handles inventory clicks intended in the in-game config inventory editors.
+     *
+     * @param e The event passed by the server
+     */
+    @EventHandler
+    public void onIGCClick(InventoryClickEvent e)
+    {
+        Player p = (Player) e.getWhoClicked();
+        PlayerManager pm = PlayerManager.get(cc, p);
 
         if (pm.isInOpenMenu())
         {
@@ -190,7 +227,7 @@ public class InventoryActionListener implements Listener
                     }
                 }, 1);
             }
-            else if(pm.getOpenMenu() instanceof IGCCratePreviewEditor)
+            else if (pm.getOpenMenu() instanceof IGCCratePreviewEditor)
             {
                 ((IGCCratePreviewEditor) pm.getOpenMenu()).getCustomRewardDisplayer().saveAllPages();
                 Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
@@ -198,7 +235,7 @@ public class InventoryActionListener implements Listener
                     @Override
                     public void run()
                     {
-                        if(pm.getOpenMenu() instanceof IGCCratePreviewEditor)
+                        if (pm.getOpenMenu() instanceof IGCCratePreviewEditor)
                             pm.getOpenMenu().up();
                     }
                 }, 1);
@@ -263,4 +300,20 @@ public class InventoryActionListener implements Listener
             pm.setCanClose(false);
         }
     }
+
+    public boolean isntPlayerInventory(InventoryClickEvent e, PlayerManager pm)
+    {
+        cc.getDu().log("onInventoryClick - In crate or reward menu (" + pm.isInCrate() + " : " + pm.isInRewardMenu() +
+                ")", getClass());
+        if (!(e.getClickedInventory() == null || e.getWhoClicked().getInventory() == null))
+        {
+            cc.getDu().log("onInventoryClick - Clicked inventory and clicker aren't null.");
+            if (!e.getClickedInventory().equals(e.getWhoClicked().getInventory()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
+

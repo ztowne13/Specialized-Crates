@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates.options.actions.actionbar;
 
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.NMSUtils;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -14,18 +14,18 @@ public class ActionBarV1_7_8 extends ActionBar
     {
         try
         {
-            Class c1 = Class.forName("org.bukkit.craftbukkit." + NMSUtils.getServerVersion() + ".entity.CraftPlayer");
+            Class c1 = Class.forName("org.bukkit.craftbukkit." + VersionUtils.getServerVersion() + ".entity.CraftPlayer");
             Object p = c1.cast(player);
 
-            Class c4 = NMSUtils.getNmsClass("PacketPlayOutChat");
-            Class c5 = NMSUtils.getNmsClass("Packet");
+            Class c4 = VersionUtils.getNmsClass("PacketPlayOutChat");
+            Class c5 = VersionUtils.getNmsClass("Packet");
 
-            Method m3 = NMSUtils.getNmsClass("IChatBaseComponent$ChatSerializer")
+            Method m3 = VersionUtils.getNmsClass("IChatBaseComponent$ChatSerializer")
                     .getDeclaredMethod("a", new Class[]{String.class});
-            Object cbc = NMSUtils.getNmsClass("IChatBaseComponent")
-                    .cast(m3.invoke(NMSUtils.getNmsClass("IChatBaseComponent$ChatSerializer"),
+            Object cbc = VersionUtils.getNmsClass("IChatBaseComponent")
+                    .cast(m3.invoke(VersionUtils.getNmsClass("IChatBaseComponent$ChatSerializer"),
                             new Object[]{"{\"text\": \"" + msg + "\"}"}));
-            Object ppoc = c4.getConstructor(new Class[]{NMSUtils.getNmsClass("IChatBaseComponent"), Byte.TYPE})
+            Object ppoc = c4.getConstructor(new Class[]{VersionUtils.getNmsClass("IChatBaseComponent"), Byte.TYPE})
                     .newInstance(new Object[]{cbc, (byte) 2});
 
 
