@@ -87,6 +87,10 @@ confirm-timeout: 3
 #   a virtual key (true) instead of dropping it on the floor (false)?
 virtual-key-instead-of-drop: false
 
+# Every time the server or plugin is reloaded/restarted, should the crates always
+#   be replaced to make sure that they haven't been overridden by worldedit, etc.?
+keep-crate-block-consistent: true
+
 #-------------------------------------------#
 #           Crate Action Settings           #
 #-------------------------------------------#

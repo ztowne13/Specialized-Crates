@@ -242,6 +242,15 @@ public enum SettingsValues
                     "has to confirm opening a crate if",
                     "shift-click-confirm or",
                     "confirm-open is enabled."
+            }),
+
+    KEEP_CRATE_BLOCK_CONSISTENT("keep-crate-block-consistent", Boolean.class, false, true,
+            new String[]{
+                    "Every time the server is restarted/",
+                    "reloaded, all of the crates will be",
+                    "replaced to ensure no other blocks",
+                    "or plugin commands have overridden",
+                    "them."
             });
 
     String path;
