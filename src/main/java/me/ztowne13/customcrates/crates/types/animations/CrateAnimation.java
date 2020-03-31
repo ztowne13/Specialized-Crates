@@ -270,7 +270,7 @@ public abstract class CrateAnimation
             else
             {
                 ItemStack stack = p.getItemInHand();
-                if (stack.getType().equals(getCrates().getCs().getKey(1).getType()) && stack.getItemMeta().getDisplayName()
+                if (stack.getType().equals(getCrates().getCs().getKey(1).getType()) && stack.getItemMeta().hasDisplayName() && stack.getItemMeta().getDisplayName()
                         .equalsIgnoreCase(getCrates().getCs().getKey(1).getItemMeta().getDisplayName()))
                 {
                     if (p.getItemInHand().getAmount() == 1)
