@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.crates.types.display;
 
+import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
@@ -24,7 +25,11 @@ public class MaterialPlaceholder extends DynamicCratePlaceholder
             {
                 try
                 {
-                    cm.getL().getBlock().setType(m);
+                    if (((boolean) SettingsValues.KEEP_CRATE_BLOCK_CONSISTENT.getValue(cc)) == true ||
+                            cm.getL().getBlock().getType().equals(Material.AIR))
+                    {
+                        cm.getL().getBlock().setType(m);
+                    }
                 }
                 catch (Exception exc)
                 {
