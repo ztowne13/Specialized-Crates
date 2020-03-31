@@ -30,7 +30,6 @@ public class IGCMenuRewards extends IGCMenu
     @Override
     public void open()
     {
-
         int slots = 0;
 
         boolean newValues = false;

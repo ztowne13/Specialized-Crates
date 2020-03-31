@@ -36,6 +36,11 @@ public class DebugUtils
 
     public void log(String s, Class<?> clas, boolean dumpStack)
     {
+        log(s, clas, dumpStack, false);
+    }
+
+    public void log(String s, Class<?> clas, boolean dumpStack, boolean toChat)
+    {
         try
         {
             boolean debug = forceDebug || Boolean.valueOf(cc.getSettings().getConfigValues().get("debug").toString());
@@ -55,9 +60,16 @@ public class DebugUtils
             if (found)
             {
                 if (debug)
-                    Bukkit.getLogger().info("[DEBUG] " + msg);
+                {
+                    if (toChat)
+                        Bukkit.broadcastMessage("[DEBUG] " + msg);
+                    else
+                        Bukkit.getLogger().info("[DEBUG] " + msg);
+                }
                 if (dumpStack)
+                {
                     dumpStack();
+                }
             }
         }
         catch(Exception exc)

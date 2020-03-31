@@ -145,8 +145,11 @@ public class Settings
             }
         }
 
-        Utils.addToInfoLog(cc, "Crate loaded", enabled + " enabled &4/ &c" + disabled + " disabled");
-        Utils.addToInfoLog(cc, "Crate placed", PlacedCrate.getPlacedCrates().keySet().size() + "");
+        Utils.addToInfoLog(cc, "Crates loaded", enabled + " enabled &4/ &c" + disabled + " disabled");
+        Utils.addToInfoLog(cc, "Crates placed", PlacedCrate.getPlacedCrates().keySet().size() + "");
+
+        Utils.addToInfoLog(cc, "Plugin version", cc.getDescription().getVersion());
+
     }
 
     public void writeSettingsValues()
