@@ -132,6 +132,11 @@ public class ItemBuilder implements EditableItem
         return im().getDisplayName();
     }
 
+    public boolean hasDisplayName()
+    {
+        return getDisplayName() != null;
+    }
+
     public String getName(boolean strippedOfColor)
     {
         return strippedOfColor ? ChatUtils.removeColor(im().getDisplayName()) : im().getDisplayName();
@@ -465,8 +470,11 @@ public class ItemBuilder implements EditableItem
             loreEquals = false;
         }
 
+        // ISSUE
         boolean equal =
-                compare.getDisplayName().equals(getDisplayName())
+                !(!compare.hasDisplayName() && hasDisplayName())
+                && !(compare.hasDisplayName() && !hasDisplayName())
+                && ((!compare.hasDisplayName() && !hasDisplayName()) || (compare.getDisplayName().equals(getDisplayName())))
                 && loreEquals
                 && compare.getStack().getType().equals(getStack().getType())
                 && compare.getStack().getAmount() == getStack().getAmount();
