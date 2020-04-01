@@ -24,6 +24,8 @@ import java.util.UUID;
 
 public class ItemBuilder implements EditableItem
 {
+    public static String NO_NAME = "!?!noname!?!";
+
     ItemStack stack;
 
     boolean glowing = false;
@@ -110,7 +112,14 @@ public class ItemBuilder implements EditableItem
     public void setDisplayName(String name)
     {
         ItemMeta im = im();
-        im.setDisplayName(ChatUtils.toChatColor(name));
+        if(name.equalsIgnoreCase(NO_NAME))
+        {
+            im.setDisplayName(null);
+        }
+        else
+        {
+            im.setDisplayName(ChatUtils.toChatColor(name));
+        }
         setIm(im);
     }
 

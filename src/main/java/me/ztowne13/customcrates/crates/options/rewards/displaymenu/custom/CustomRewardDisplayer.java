@@ -120,7 +120,7 @@ public class CustomRewardDisplayer extends RewardDisplayer
             SaveableItemBuilder builder = getItems().get(symbol);
             String path = PREFIX + "." + symbol;
 
-            builder.saveItem(getFileHandler(), path);
+            builder.saveItem(getFileHandler(), path, true);
         }
     }
 

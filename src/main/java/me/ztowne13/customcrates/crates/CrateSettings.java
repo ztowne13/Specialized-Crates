@@ -132,11 +132,11 @@ public class CrateSettings
             fc.set("inventory-name", ChatUtils.fromChatColor(getCrateInventoryName()));
         }
 
-        getCrate().saveItem(getFu(), "crate");
+        getCrate().saveItem(getFu(), "crate", false);
 
         if (!getCrates().isMultiCrate())
         {
-            getKey().saveItem(getFu(), "key");
+            getKey().saveItem(getFu(), "key", false);
 
             fc.set("open.crate-animation", getCt().name());
         }

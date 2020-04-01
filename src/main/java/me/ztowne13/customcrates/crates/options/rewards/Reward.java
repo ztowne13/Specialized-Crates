@@ -199,7 +199,7 @@ public class Reward implements Comparable<Reward>
         fc.set(getPath("give-display-item.with-lore"), giveDisplayItemLore);
         fc.set(getPath("give-display-item.with-name"), giveDisplayItemName);
 
-        saveBuilder.saveItem(getCc().getRewardsFile(), getPath("display-item"));
+        saveBuilder.saveItem(getCc().getRewardsFile(), getPath("display-item"), false);
 
         fu.save();
     }
@@ -289,7 +289,7 @@ public class Reward implements Comparable<Reward>
             rewardConverter.loadFromConfig();
             rewardConverter.saveAllAsNull();
 
-            saveBuilder.saveItem(cc.getRewardsFile(), getPath("display-item"));
+            saveBuilder.saveItem(cc.getRewardsFile(), getPath("display-item"), false);
             cc.getRewardsFile().save();
         }
         else

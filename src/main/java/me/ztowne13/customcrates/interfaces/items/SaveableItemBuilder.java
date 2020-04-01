@@ -24,14 +24,22 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
     }
 
     @Override
-    public void saveItem(FileHandler fileHandler, String prefix)
+    public void saveItem(FileHandler fileHandler, String prefix, boolean allowUnnamedItems)
     {
         FileConfiguration fc = fileHandler.get();
         fc.set(prefix + ".material", DynamicMaterial.fromItemStack(getStack()).name());
-        fc.set(prefix + ".name", getDisplayNameStripped());
         fc.set(prefix + ".glow", isGlowing());
         fc.set(prefix + ".amount", getStack().getAmount());
         fc.set(prefix + ".player-head-name", getPlayerHeadName());
+
+        if(getDisplayName() == null && allowUnnamedItems)
+        {
+            fc.set(prefix + ".name", NO_NAME);
+        }
+        else
+        {
+            fc.set(prefix + ".name", getDisplayNameStripped());
+        }
 
         // Enchantments
         if (!getEnchantments().isEmpty())

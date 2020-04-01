@@ -6,7 +6,7 @@ import me.ztowne13.customcrates.utils.FileHandler;
 
 public interface SaveableItem extends EditableItem
 {
-    void saveItem(FileHandler fileHandler, String prefix);
+    void saveItem(FileHandler fileHandler, String prefix, boolean allowUnnamedItems);
 
     boolean loadItem(FileHandler fileHandler, String prefix, StatusLogger statusLogger, StatusLoggerEvent itemFailure,
                      StatusLoggerEvent improperEnchant, StatusLoggerEvent improperPotion,
