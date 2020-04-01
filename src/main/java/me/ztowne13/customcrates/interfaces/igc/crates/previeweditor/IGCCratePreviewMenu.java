@@ -110,65 +110,74 @@ public class IGCCratePreviewMenu extends IGCMenuCrate
                         DynamicMaterial.PAPER, 1, RewardDisplayType.descriptions()).open();
                 break;
             case 6:
-                if(isCustom)
-                {
-                    new IGCCratePreviewPageChooser(getCc(), getP(), getCrates(), this, 1).open();
-                    for (int i = 0; i < 30; i++)
-                        ChatUtils.msg(getP(), "");
-
-                    ChatUtils.msg(getP(), "&4&lHow to configure the CUSTOM preview menu.");
-                    ChatUtils.msg(getP(), "");
-                    ChatUtils.msg(getP(), "&6&lCreating the menu.");
-                    ChatUtils.msg(getP(),
-                            "&eIt's very similar to just drag and drop but not exactly the same. Click any blank space " +
-                                    "with nothing in hand to bring up a reward selector to add a reward to that spot. This is just a convenience" +
-                                    " so that if you edit a rewards chance, name, lore, etc. in the future it will automatically update. You can" +
-                                    " also add any normal items you want! To do this, hold an item in your hand and click or click and drag" +
-                                    " it into the slots. It does not get placed into the inventory, it simply sets the slot you clicked to that" +
-                                    " item. So if you only want one item at a slot, make sure the stack you're holding in your cursor" +
-                                    " is only 1 item, not a stack. To remove items OR rewards, just click them with a blank cursor and they'll disappear." +
-                                    " All of the items support any customizations that rewards do (names, lores, enchants, etc.)! Just make" +
-                                    " sure you customize the items before you put them in the inventory!");
-                    ChatUtils.msg(getP(), "&6&lMultiple page support");
-                    ChatUtils.msg(getP(),
-                            "&eIn this menu, click the 'paper' to add more pages to the preview menu. This is if " +
-                                    "you have more than 54 rewards or if you want to make it really fancy!");
-                    ChatUtils.msg(getP(), "&6&lForward / Backwards Buttons");
-                    ChatUtils.msg(getP(),
-                            "&eIf you only have one page, you can ignore all of this: these buttons are optional" +
-                                    ". To navigate between these pages, you can add forward and backwards buttons! FIRST," +
-                                    " make sure that you create the preview menu and add some item that will be the 'forward' and some item" +
-                                    " that will be the 'backwards' button (THIS MEANS DESIGN IT ALL FIRST). Then, on the previous menu," +
-                                    " click the arrow, and choose the item that will be the forward button and click the other arrow to " +
-                                    "choose the item that will be the backwards button. This assigns that specific item to be the forward" +
-                                    " or backward button - you can move it around wherever you want or have as many of them as you want!");
-                    ChatUtils.msg(getP(), "&c&l!! &6&lPLEASE READ THE MESSAGE ABOVE. &c&l!!");
-                    ChatUtils.msg(getP(), "&c&l!! &6&lPLEASE READ THE MESSAGE ABOVE. &c&l!!");
-                }
-                else
-                    ChatUtils.msgError(getP(), "The preview menu type is not CUSTOM.");
-                break;
             case 15:
-                if(isCustom)
-                {
-                    CustomRewardDisplayer cdr = (CustomRewardDisplayer) getCrates().getCs().getDisplayer();
-                    new IGCListSelector(getCc(), getP(), this, "Forward Button", new ArrayList<>(cdr.getItems().keySet()), DynamicMaterial.PAPER, 1,
-                            cdr.getDescriptors(), new ArrayList<ItemBuilder>(cdr.getItems().values())).open();
-                }
-                else
-                    ChatUtils.msgError(getP(), "The preview menu type is not CUSTOM.");
-                break;
             case 16:
                 if(isCustom)
                 {
-                    CustomRewardDisplayer cdr = (CustomRewardDisplayer) getCrates().getCs().getDisplayer();
+                    CustomRewardDisplayer cdr;
+                    try
+                    {
+                      cdr = (CustomRewardDisplayer) getCrates().getCs().getDisplayer();
+                    }
+                    catch(Exception exc)
+                    {
+                        ChatUtils.msgError(getP(), "Please SAVE and RELOAD before editing.");
+                        break;
+                    }
 
-                    new IGCListSelector(getCc(), getP(), this, "Backwards Button", new ArrayList<>(cdr.getItems().keySet()),
-                            DynamicMaterial.PAPER, 1,
-                            cdr.getDescriptors(), new ArrayList<ItemBuilder>(cdr.getItems().values())).open();
+                    if(slot == 6)
+                    {
+                        new IGCCratePreviewPageChooser(getCc(), getP(), getCrates(), this, 1).open();
+                        for (int i = 0; i < 30; i++)
+                            ChatUtils.msg(getP(), "");
+
+                        ChatUtils.msg(getP(), "&4&lHow to configure the CUSTOM preview menu.");
+                        ChatUtils.msg(getP(), "");
+                        ChatUtils.msg(getP(), "&6&lCreating the menu.");
+                        ChatUtils.msg(getP(),
+                                "&eIt's very similar to just drag and drop but not exactly the same. Click any blank space " +
+                                        "with nothing in hand to bring up a reward selector to add a reward to that spot. This is just a convenience" +
+                                        " so that if you edit a rewards chance, name, lore, etc. in the future it will automatically update. You can" +
+                                        " also add any normal items you want! To do this, hold an item in your hand and click or click and drag" +
+                                        " it into the slots. It does not get placed into the inventory, it simply sets the slot you clicked to that" +
+                                        " item. So if you only want one item at a slot, make sure the stack you're holding in your cursor" +
+                                        " is only 1 item, not a stack. To remove items OR rewards, just click them with a blank cursor and they'll disappear." +
+                                        " All of the items support any customizations that rewards do (names, lores, enchants, etc.)! Just make" +
+                                        " sure you customize the items before you put them in the inventory!");
+                        ChatUtils.msg(getP(), "&6&lMultiple page support");
+                        ChatUtils.msg(getP(),
+                                "&eIn this menu, click the 'paper' to add more pages to the preview menu. This is if " +
+                                        "you have more than 54 rewards or if you want to make it really fancy!");
+                        ChatUtils.msg(getP(), "&6&lForward / Backwards Buttons");
+                        ChatUtils.msg(getP(),
+                                "&eIf you only have one page, you can ignore all of this: these buttons are optional" +
+                                        ". To navigate between these pages, you can add forward and backwards buttons! FIRST," +
+                                        " make sure that you create the preview menu and add some item that will be the 'forward' and some item" +
+                                        " that will be the 'backwards' button (THIS MEANS DESIGN IT ALL FIRST). Then, on the previous menu," +
+                                        " click the arrow, and choose the item that will be the forward button and click the other arrow to " +
+                                        "choose the item that will be the backwards button. This assigns that specific item to be the forward" +
+                                        " or backward button - you can move it around wherever you want or have as many of them as you want!");
+                        ChatUtils.msg(getP(), "&c&l!! &6&lPLEASE READ THE MESSAGE ABOVE. &c&l!!");
+                        ChatUtils.msg(getP(), "&c&l!! &6&lPLEASE READ THE MESSAGE ABOVE. &c&l!!");
+                    }
+                    else if(slot == 15)
+                    {
+                        new IGCListSelector(getCc(), getP(), this, "Forward Button",
+                                new ArrayList<>(cdr.getItems().keySet()), DynamicMaterial.PAPER, 1,
+                                cdr.getDescriptors(), new ArrayList<ItemBuilder>(cdr.getItems().values())).open();
+                    }
+                    else if(slot == 16)
+                    {
+                        new IGCListSelector(getCc(), getP(), this, "Backwards Button", new ArrayList<>(cdr.getItems().keySet()),
+                                DynamicMaterial.PAPER, 1,
+                                cdr.getDescriptors(), new ArrayList<ItemBuilder>(cdr.getItems().values())).open();
+                    }
                 }
                 else
+                {
                     ChatUtils.msgError(getP(), "The preview menu type is not CUSTOM.");
+                }
+                break;
         }
     }
 
