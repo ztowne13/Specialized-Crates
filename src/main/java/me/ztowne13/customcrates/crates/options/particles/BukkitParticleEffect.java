@@ -93,8 +93,12 @@ public class BukkitParticleEffect extends ParticleData
     public void spawnParticle(Location centeredLoc, int amnt, double offX, double offY, double offZ, float speed)
     {
         if (particle.equals(Particle.REDSTONE))
+        {
             centeredLoc.getWorld().spawnParticle(particle, centeredLoc, amnt, offX, offY, offZ, speed, getDustOptions());
+        }
         else
+        {
             centeredLoc.getWorld().spawnParticle(particle, centeredLoc, amnt, offX, offY, offZ, speed);
+        }
     }
 }

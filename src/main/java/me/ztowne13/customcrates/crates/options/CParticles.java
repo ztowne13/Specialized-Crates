@@ -165,19 +165,52 @@ public class CParticles extends CSetting
                     try
                     {
                         pd.setColorRed(Integer.parseInt(colorRed));
+                    } catch (Exception exc) {
+                        pd.setColorRed(255);
+                    }
+
+                    try
+                    {
                         pd.setColorBlue(Integer.parseInt(colorBlue));
+                    } catch(Exception exc) {
+                        pd.setColorBlue(0);
+                    }
+
+                    try
+                    {
                         pd.setColorGreen(Integer.parseInt(colorGreen));
+                    } catch(Exception exc) {
+                        pd.setColorGreen(0);
+                    }
+
+                    try
+                    {
                         pd.setColorEnabled(Boolean.parseBoolean(colorEnabled));
-                        pd.setHasColor(true);
-                    } catch (Exception exc) {}
+                    } catch (Exception exc) {
+                        pd.setColorEnabled(false);
+                    }
+
+                    float size;
+
+                    try
+                    {
+                        size = Float.parseFloat(redstoneSize);
+
+                        if(size <= 0)
+                            size = 1;
+                    } catch(Exception exc)
+                    {
+                        size = 1;
+                    }
 
                     // Redstone info
                     try
                     {
                         if(VersionUtils.Version.v1_13.isServerVersionOrLater() && particleTypeAS.equalsIgnoreCase("REDSTONE"))
                         {
+                            pd.setHasColor(true);
                             pd.setColorEnabled(true);
-                            float size = Float.parseFloat(redstoneSize);
+
                             pd.setSize(size);
 
                             Color color = Color.fromBGR(pd.getColorBlue(), pd.getColorGreen(), pd.getColorRed());
@@ -185,7 +218,9 @@ public class CParticles extends CSetting
 
                             pd.setDustOptions(dustOptions);
                         }
-                    } catch (Exception exc) { }
+                    } catch (Exception exc) {
+                        exc.printStackTrace();
+                    }
 
                     try
                     {
