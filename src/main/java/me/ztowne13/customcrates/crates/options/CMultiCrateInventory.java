@@ -33,19 +33,6 @@ import java.util.HashMap;
  */
 public class CMultiCrateInventory extends CSetting
 {
-	/*
-	gui:
-	  rows:
-		- '#########'
-		- '#1##2##3#'
-		- '#########'
-	  objects:
-		'#': AIR;0
-		'1': BeginnerCrate
-	    '2': MiddleCrate
-	    '3': MasterCrate
-	*/
-
     static String availableSymbols = "abcdefghijklmnopqrstuvwxyz123456789 ";
 
     HashMap<Integer, Crate> crateSpots = new HashMap<>();
@@ -415,6 +402,7 @@ public class CMultiCrateInventory extends CSetting
                         {
                             if (clickedCrate.getCs().getCh().tick(p, pm.getLastOpenCrate(), CrateState.OPEN, false))
                             {
+                                new CrateCooldownEvent(clickedCrate, System.currentTimeMillis(), true).addTo(pm.getPdm());
                                 // Post Conditions
                                 if (pm.isUseVirtualCrate())
                                 {
