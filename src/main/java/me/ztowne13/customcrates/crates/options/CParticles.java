@@ -227,6 +227,16 @@ public class CParticles extends CSetting
                         PEAnimationType peAnimationType = PEAnimationType.valueOf(animationAS);
                         if (!peAnimationType.equals(peAnimationType.NONE))
                         {
+                            // This is to default the particle animation speed and particle count so it doesn't appear broken
+                            if(pd.getSpeed() < 3)
+                            {
+                                pd.setSpeed(20);
+                            }
+                            if(pd.getAmount() == 0)
+                            {
+                                pd.setAmount(1);
+                            }
+
                             pd.setParticleAnimationEffect(peAnimationType.getAnimationEffectInstance(cc, pd));
                             pd.setHasAnimation(true);
                         }
