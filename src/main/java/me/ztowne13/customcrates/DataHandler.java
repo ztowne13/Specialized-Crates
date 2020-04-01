@@ -48,7 +48,9 @@ public class DataHandler
                 {
                     QueuedGiveCommand queuedGiveCommand = new QueuedGiveCommand(cmd);
                     if(queuedGiveCommand.isStillExists())
+                    {
                         cmds.add(queuedGiveCommand);
+                    }
                 }
 
                 quedGiveCommands.put(uuid, cmds);
@@ -129,7 +131,14 @@ public class DataHandler
             this.amount = Integer.parseInt(args[3]);
             try
             {
-                this.crate = Crate.getCrate(cc, args[4]);
+                if(Crate.crateAlreadyExist(args[4]))
+                {
+                    this.crate = Crate.getCrate(cc, args[4], false);
+                }
+                else
+                {
+                    stillExists = false;
+                }
             }
             catch(Exception exc)
             {
