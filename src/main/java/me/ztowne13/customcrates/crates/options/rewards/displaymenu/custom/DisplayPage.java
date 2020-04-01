@@ -239,6 +239,10 @@ public class DisplayPage
         sc.getDu().log("handleInput() - nextPageItem: " + customRewardDisplayer.getNextPageItem(), getClass());
         sc.getDu().log("handleInput() - backpageitem: " + customRewardDisplayer.getPrevPageItem(), getClass());
 
+        // There's no item in the display at the spot.
+        if(symbolAt == null)
+            return;
+
         if (symbolAt.equalsIgnoreCase(customRewardDisplayer.getNextPageItem()))
         {
             if (customRewardDisplayer.getPages().containsKey(pageNum + 1))
