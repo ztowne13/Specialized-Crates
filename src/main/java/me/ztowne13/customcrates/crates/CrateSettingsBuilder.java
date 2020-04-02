@@ -337,8 +337,6 @@ public class CrateSettingsBuilder
                         break;
                 }
 
-                getSettings().getDisplayer().load();
-
                 StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_SUCCESS.log(getSl());
             }
             catch(Exception exc)
@@ -347,12 +345,18 @@ public class CrateSettingsBuilder
                 getSettings().setDisplayer(new SimpleRewardDisplayer(getSettings().getCrates()));
                 StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_INVALID.log(getSl(), new String[]{displayerString});
             }
+
+            getSettings().getDisplayer().load();
+
             return;
         }
 
         getSettings().setRewardDisplayType(RewardDisplayType.IN_ORDER);
         getSettings().setDisplayer(new SimpleRewardDisplayer(getSettings().getCrates()));
         StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_NONEXISTENT.log(getSl());
+
+        getSettings().getDisplayer().load();
+
     }
 
 
