@@ -244,6 +244,13 @@ public enum SettingsValues
                     "confirm-open is enabled."
             }),
 
+    REQUIRE_VIRTUAL_CRATE_AND_KEY("require-virtual-crate-and-key", Boolean.class, false, false,
+            new String[]{
+                    "In MultiCrates (inventory crate), ",
+                    "both a virtual key AND a virtual crate",
+                    "is required to open the crate."
+            }),
+
     KEEP_CRATE_BLOCK_CONSISTENT("keep-crate-block-consistent", Boolean.class, false, true,
             new String[]{
                     "Every time the server is restarted/",

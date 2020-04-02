@@ -384,13 +384,15 @@ public class CMultiCrateInventory extends CSetting
         if (crate.getCs().getCmci().getCrateSpots().keySet().contains(slot))
         {
             Crate clickedCrate = crate.getCs().getCmci().getCrateSpots().get(slot);
+
             if (clickType.equals(Boolean.valueOf(
                     cc.getSettings().getConfigValues().get("mc-reward-display-leftclick").toString().toUpperCase()) ?
                     ClickType.LEFT : ClickType.RIGHT) && (Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(cc))
             {
                 clickedCrate.getCs().getDisplayer().openFor(p);
             }
-            else if (pm.isUseVirtualCrate() ? pm.getPdm().getVCCrateData(clickedCrate).getCrates() > 0 : true)
+            else if (!((Boolean)SettingsValues.REQUIRE_VIRTUAL_CRATE_AND_KEY.getValue(cc))
+                    || pm.getPdm().getVCCrateData(clickedCrate).getCrates() > 0)
             {
                 if (!p.getGameMode().equals(GameMode.CREATIVE) ||
                         (Boolean) cc.getSettings().getConfigValues().get("open-creative"))

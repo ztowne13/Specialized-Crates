@@ -138,6 +138,10 @@ crates-command-name: '&b&lVirtual &7&lCrates'
 # If a player has both a virtual key and a physical key, should it prioritize the physical or virtual key?
 prioritize-physical-key: true
 
+# To open a crate in a MultiCrate, should a virtual key AND a virtual crate be required? An example
+#   for something like: virtual crates are earned through minigames, virtual keys are bought on buycraft.
+require-virtual-crate-and-key: false
+
 # Should multicrates show the virtual key count?
 virtual-crate-keycount: true
 
