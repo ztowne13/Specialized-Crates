@@ -24,6 +24,7 @@ public class SaintXHologram extends DynamicHologram
     public SaintXHologram(SpecializedCrates cc, PlacedCrate cm)
     {
         super(cc, cm);
+
         this.hm = JavaPlugin.getPlugin(HologramPlugin.class).getHologramManager();
     }
 
@@ -34,6 +35,7 @@ public class SaintXHologram extends DynamicHologram
         this.hologram = new Hologram(uuid.toString(), l);
         hologram.addLine(new TextLine(hologram, "THIS LINE SHOULD BE GETTING REMOVED"));
         hm.addActiveHologram(hologram);
+        this.hologram.spawn();
         teleport(l);
     }
 
