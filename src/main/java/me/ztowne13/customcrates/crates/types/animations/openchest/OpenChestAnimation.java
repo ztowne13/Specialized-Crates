@@ -112,9 +112,9 @@ public class OpenChestAnimation extends CrateAnimation
             public void run()
             {
                 new NMSChestState().playChestAction(l.getBlock(), false);
+                items.remove(item);
                 item.remove();
                 finishUp(p);
-                items.remove(item);
             }
         }, openDuration);
     }
