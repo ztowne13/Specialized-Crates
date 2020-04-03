@@ -6,8 +6,12 @@ import me.ztowne13.customcrates.crates.options.holograms.animations.HoloAnimType
 import me.ztowne13.customcrates.crates.options.holograms.animations.HoloAnimation;
 import org.bukkit.Location;
 
+import java.util.UUID;
+
 public abstract class DynamicHologram
 {
+    UUID uuid;
+
     SpecializedCrates cc;
     PlacedCrate cm;
 
@@ -17,6 +21,8 @@ public abstract class DynamicHologram
 
     public DynamicHologram(SpecializedCrates cc, PlacedCrate cm)
     {
+        this.uuid = UUID.randomUUID();
+
         this.cc = cc;
         this.cm = cm;
 
@@ -83,5 +89,10 @@ public abstract class DynamicHologram
     public void setDisplayingRewardHologram(boolean displayingRewardHologram)
     {
         this.displayingRewardHologram = displayingRewardHologram;
+    }
+
+    public UUID getUuid()
+    {
+        return uuid;
     }
 }

@@ -244,22 +244,22 @@ public class CActions extends CSetting
                     !((OpenChestAnimation) crates.getCs().getCh()).isEarlyRewardHologram())
             {
                 if (crates.getCs().getOt().isStatic() || crates.getCs().getCt().isSpecialDynamicHandling())
-                    playRewardCrate(p, rewardsAsDisplayname);
+                    playRewardHologram(p, rewardsAsDisplayname);
             }
         }
     }
 
-    public void playRewardCrate(Player p, ArrayList<String> rewards, double additionalYOffset)
+    public void playRewardHologram(Player p, ArrayList<String> rewards, double additionalYOffset)
     {
-        playRewardCrate(p, rewards, additionalYOffset, false, null, -1);
+        playRewardHologram(p, rewards, additionalYOffset, false, null, -1);
     }
 
-    public void playRewardCrate(Player p, ArrayList<String> rewards)
+    public void playRewardHologram(Player p, ArrayList<String> rewards)
     {
-        playRewardCrate(p, rewards, 0, false, null, -1);
+        playRewardHologram(p, rewards, 0, false, null, -1);
     }
 
-    public void playRewardCrate(Player p, ArrayList<String> rewards, double additionalYOffset, boolean attach, Item item,
+    public void playRewardHologram(Player p, ArrayList<String> rewards, double additionalYOffset, boolean attach, Item item,
                                 int openDuration)
     {
         if(rewards.isEmpty())
@@ -287,7 +287,6 @@ public class CActions extends CSetting
                 dynamicHologram.create(rewardLoc);
                 dynamicHologram.addLine(msg);
 
-
                 if (attach)
                 {
                     attachTo(item, msg);
@@ -303,8 +302,7 @@ public class CActions extends CSetting
                         final Location cloneY = placedCrate.getL().clone();
                         cloneY.setY(cloneY.getY() + .5);
 
-                        placedCrate.getCrates().getCs().getCholoCopy()
-                                .createHologram(placedCrate, cloneY, dynamicHologram);
+                        placedCrate.getCrates().getCs().getCholoCopy().createHologram(cloneY, dynamicHologram);
 
                         pm.setLastOpenedPlacedCrate(null);
                         dynamicHologram.setDisplayingRewardHologram(false);

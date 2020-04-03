@@ -232,7 +232,7 @@ public class CHolograms extends CSetting
         lines.remove(lineNum - 1);
     }
 
-    public DynamicHologram createHologram(PlacedCrate cm, Location l, DynamicHologram h)
+    public DynamicHologram createHologram(Location l, DynamicHologram h)
     {
         h.create(l);
 
@@ -259,7 +259,7 @@ public class CHolograms extends CSetting
 
     public DynamicHologram createHologram(PlacedCrate cm, Location l)
     {
-        return createHologram(cm, l, getLoadedInstance(cm));
+        return createHologram(l, getLoadedInstance(cm));
     }
 
     public int getLinesAmount()

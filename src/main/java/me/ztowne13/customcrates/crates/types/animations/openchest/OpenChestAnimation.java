@@ -32,8 +32,8 @@ public class OpenChestAnimation extends CrateAnimation
     long rewardHoloDelay;
 
     Location loc;
-    HashMap<Player, Reward> rewardMap = new HashMap<Player, Reward>();
-    PlacedCrate placedCrate;
+    HashMap<Player, Reward> rewardMap = new HashMap<>();
+    HashMap<Player, PlacedCrate> placedCrateMap = new HashMap<>();
 
     public OpenChestAnimation(Inventory inventory, Crate crate)
     {
@@ -49,8 +49,10 @@ public class OpenChestAnimation extends CrateAnimation
         {
             if(getCrates().getCs().getCt().isSpecialDynamicHandling() && !getCrates().getCs().getOt().isStatic())
             {
-                placedCrate = PlayerManager.get(cc, p).getLastOpenedPlacedCrate();
+                PlacedCrate placedCrate = PlayerManager.get(cc, p).getLastOpenedPlacedCrate();
                 placedCrate.setCratesEnabled(false);
+
+                placedCrateMap.put(p, placedCrate);
             }
             playAnimation(p, l);
             playRequiredOpenActions(p, !requireKeyInHand, force);
@@ -88,7 +90,7 @@ public class OpenChestAnimation extends CrateAnimation
 
         if(attachTo)
         {
-            crates.getCs().getCa().playRewardCrate(p, rewards, .6, true, item, openDuration);
+            crates.getCs().getCa().playRewardHologram(p, rewards, .6, true, item, openDuration);
         }
         else if (isEarlyRewardHologram())
         {
@@ -97,7 +99,7 @@ public class OpenChestAnimation extends CrateAnimation
                 @Override
                 public void run()
                 {
-                    crates.getCs().getCa().playRewardCrate(p, rewards, .6);
+                    crates.getCs().getCa().playRewardHologram(p, rewards, .6);
                 }
             }, rewardHoloDelay);
         }
@@ -150,14 +152,16 @@ public class OpenChestAnimation extends CrateAnimation
     public void finishUp(Player p)
     {
         Reward reward = rewardMap.get(p);
+        rewardMap.remove(p);
+        PlacedCrate placedCrate = placedCrateMap.get(p);
+        placedCrateMap.remove(p);
+
         ArrayList<Reward> rewards = new ArrayList<Reward>();
         rewards.add(reward);
 
         completeCrateRun(p, rewards, false, placedCrate);
         if(!earlyEffects)
             getCrates().tick(loc, CrateState.OPEN, p, rewards);
-
-        rewardMap.remove(p);
     }
 
     public static void removeAllItems()
