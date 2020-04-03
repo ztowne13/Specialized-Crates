@@ -302,7 +302,10 @@ public class CActions extends CSetting
                         final Location cloneY = placedCrate.getL().clone();
                         cloneY.setY(cloneY.getY() + .5);
 
-                        placedCrate.getCrates().getCs().getCholoCopy().createHologram(cloneY, dynamicHologram);
+                        if(placedCrate.getCrates().getCs().getOt().equals(ObtainType.STATIC))
+                        {
+                            placedCrate.getCrates().getCs().getCholoCopy().createHologram(cloneY, dynamicHologram);
+                        }
 
                         pm.setLastOpenedPlacedCrate(null);
                         dynamicHologram.setDisplayingRewardHologram(false);
