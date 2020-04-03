@@ -69,7 +69,6 @@ public class NBTTagReflection
 
     public static ItemStack applyTo(ItemStack item, String tag)
     {
-
         Object stack = getNMSItemStack(item);
         Object tagCompound = getNBTTagCompound(stack);
         if (tagCompound == null)
@@ -83,38 +82,29 @@ public class NBTTagReflection
         try
         {
             key = args[0];
-            value = args[1];
+            value = args[1].replaceAll(",Properties:\\{textures:\\[0:\\{Value:", ",Properties:{textures:[{Value:");
         }
-        catch(Exception exc)
+        catch (Exception exc)
         {
-            ChatUtils.log("Tag " + tag + " is not formatted 'TagType Tag' (without the quotes)");
+            ChatUtils.log("Tag " + tag +
+                    " is not formatted 'TagType Tag' (without the quotes). Try using the in-game config, it does NBT tags automatically!");
         }
 
         try
         {
-            if(value.startsWith("{") && value.endsWith("}"))
+            if (value.startsWith("{") && value.endsWith("}"))
             {
                 Class clazz = VersionUtils.getNmsClass("MojangsonParser");
                 Object newComp = clazz.getMethod("parse", String.class).invoke(clazz, value);
 
                 tagCompound.getClass().getMethod("set", String.class, VersionUtils.getNmsClass("NBTBase"))
                         .invoke(tagCompound, key, newComp);
-
-//                NBTTagCompound newComp = MojangsonParser.parse(value);
-//
-//                NBTTagCompound tagg = ((NBTTagCompound) tagCompound);
-//
-//                tagg.set(key, newComp);
-//                Bukkit.broadcastMessage("TAGCOMP: " + tagg);
-//
-//                net.minecraft.server.v1_14_R1.ItemStack st = CraftItemStack.asNMSCopy(item);
-//                st.setTag(tagg);
             }
-            else if((value.startsWith("'") && value.endsWith("'")) || (value.startsWith("\"") && value.endsWith("\"")))
+            else if ((value.startsWith("'") && value.endsWith("'")) || (value.startsWith("\"") && value.endsWith("\"")))
             {
                 value = ChatUtils.stripQuotes(value);
 
-                if(value.equalsIgnoreCase("1b"))
+                if (value.equalsIgnoreCase("1b"))
                 {
                     tagCompound.getClass().getMethod("setInt", String.class, int.class)
                             .invoke(tagCompound, key, 1);
@@ -125,12 +115,12 @@ public class NBTTagReflection
                             .invoke(tagCompound, key, value);
                 }
             }
-            else if(Utils.isInt(value))
+            else if (Utils.isInt(value))
             {
                 tagCompound.getClass().getMethod("setInt", String.class, int.class)
                         .invoke(tagCompound, key, Integer.parseInt(value));
             }
-            else if(Utils.isDouble(value))
+            else if (Utils.isDouble(value))
             {
                 tagCompound.getClass().getMethod("setDouble", String.class, double.class)
                         .invoke(tagCompound, key, Double.valueOf(value));
@@ -144,12 +134,13 @@ public class NBTTagReflection
         catch (Exception exc)
         {
             ChatUtils.log("Failed to get apply '" + key + " " + value + "' tag. Please check plugin is up to date.");
+            exc.printStackTrace();
         }
 
         try
         {
             stack.getClass().getMethod("setTag", tagCompound.getClass()).invoke(stack, tagCompound);
-            ItemStack toReturn =  (ItemStack) getCraftItemStack().getMethod("asBukkitCopy", stack.getClass())
+            ItemStack toReturn = (ItemStack) getCraftItemStack().getMethod("asBukkitCopy", stack.getClass())
                     .invoke(getCraftItemStack(), stack);
 
             return toReturn;
@@ -168,7 +159,7 @@ public class NBTTagReflection
             "Potion"
     };
 
-    private static String[] booleanTags = new String[] {
+    private static String[] booleanTags = new String[]{
             "Unbreakable"
     };
 
@@ -199,10 +190,10 @@ public class NBTTagReflection
                 if (!toSkip)
                 {
                     Object nbtBase;
-                    if(Arrays.asList(booleanTags).contains(key))
+                    if (Arrays.asList(booleanTags).contains(key))
                     {
                         nbtBase = tagCompound.getClass().getMethod("getBoolean", String.class).invoke(tagCompound, key);
-                        if((boolean) nbtBase)
+                        if ((boolean) nbtBase)
                             list.add(key + " " + 1);
                         else
                             list.add(key + " " + 0);
@@ -216,7 +207,7 @@ public class NBTTagReflection
                 }
             }
         }
-        catch(Exception exc)
+        catch (Exception exc)
         {
             //exc.printStackTrace();
         }
