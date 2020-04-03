@@ -31,6 +31,8 @@ import java.util.HashMap;
 
 public enum DynamicMaterial
 {
+    PLAYER_HEAD(3, "SKULL_ITEM", "SKULL"),
+
     ACACIA_BOAT(0, "BOAT_ACACIA"),
     ACACIA_BUTTON(0, "WOOD_BUTTON"),
     ACACIA_DOOR(0, "ACACIA_DOOR", "ACACIA_DOOR_ITEM"),
@@ -693,7 +695,6 @@ public enum DynamicMaterial
     PINK_WOOL(6, "WOOL"),
     PISTON(0, "PISTON_BASE"),
     PISTON_HEAD(0, "PISTON_EXTENSION"),
-    PLAYER_HEAD(3, "SKULL_ITEM", "SKULL"),
     PLAYER_WALL_HEAD(0, "SKULL_ITEM", "SKULL"),
     PODZOL(2, "DIRT"),
     POISONOUS_POTATO(0, "POISONOUS_POTATO"),

@@ -114,6 +114,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         else
         {
             String mat = fc.getString(prefix + ".material");
+
             try
             {
                 DynamicMaterial dynamicMaterial = DynamicMaterial.fromString(mat);
