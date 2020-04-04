@@ -353,7 +353,7 @@ public class CrateSettingsBuilder
 
         getSettings().setRewardDisplayType(RewardDisplayType.IN_ORDER);
         getSettings().setDisplayer(new SimpleRewardDisplayer(getSettings().getCrates()));
-        StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_NONEXISTENT.log(getSl());
+        //StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_NONEXISTENT.log(getSl());
 
         getSettings().getDisplayer().load();
 
