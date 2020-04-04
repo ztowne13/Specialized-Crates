@@ -26,19 +26,31 @@ public class NMSParticleEffect extends ParticleData
     {
         try
         {
+            Location centered;
+            int amnt = getAmount();
+            float offX, offY, offZ, speed;
+
+            if (isHasAnimation())
+            {
+                centered = LocationUtils.getLocationCentered(l);
+                offX = offY = offZ = 0;
+                speed = 0;
+            }
+            else
+            {
+                centered = LocationUtils.getLocationCentered(l).add(getCenterX(), getCenterY(), getCenterZ());
+                offX = getRangeX();
+                offY = getRangeY();
+                offZ = getRangeZ();
+                speed = getSpeed();
+            }
+
             Iterator iterator = Bukkit.getOnlinePlayers().iterator();
             while (iterator.hasNext())
             {
                 Player p = (Player) iterator.next();
-                if (isHasAnimation())
-                {
-                    particleEffect.sendToPlayer(p, LocationUtils.getLocationCentered(l), 0, 0, 0, 0, 1);
-                }
-                else
-                {
-                    particleEffect.sendToPlayer(p, LocationUtils.getLocationCentered(l), getRangeX(), getRangeY(), getRangeZ(),
-                            getSpeed(), getAmount());
-                }
+
+                particleEffect.sendToPlayer(p, centered, offX, offY, offZ, speed, amnt);
             }
         }
         catch (Exception e)
