@@ -42,26 +42,22 @@ public class InteractListener implements Listener
 
         cc.getDu().log("onInteract - (cancelled: " + e.isCancelled() + ")");
 
-        if (!e.isCancelled())
+        Player p = e.getPlayer();
+
+        // Handle crate left or right click
+        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_BLOCK))
         {
-            cc.getDu().log("onInteract - Isn't cancelled", this.getClass());
+            cc.getDu().log("onInteract - Click block", this.getClass());
 
-            Player p = e.getPlayer();
+            CrateAction action;
+            if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+                action = new AttemptKeyUseAction(cc, p, e.getClickedBlock().getLocation());
+            else
+                action = new LeftClickAction(cc, p, e.getClickedBlock().getLocation());
 
-            if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_BLOCK))
+            if (action.run())
             {
-                cc.getDu().log("onInteract - Click block", this.getClass());
-
-                CrateAction action;
-                if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
-                    action = new AttemptKeyUseAction(cc, p, e.getClickedBlock().getLocation());
-                else
-                    action = new LeftClickAction(cc, p, e.getClickedBlock().getLocation());
-
-                if (action.run())
-                {
-                    e.setCancelled(true);
-                }
+                e.setCancelled(true);
             }
         }
 

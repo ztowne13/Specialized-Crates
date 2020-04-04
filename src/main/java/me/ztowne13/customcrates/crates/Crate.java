@@ -3,7 +3,6 @@ package me.ztowne13.customcrates.crates;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -66,18 +65,14 @@ public class Crate
 
     public boolean crateMatchesBlock(Material blockType)
     {
-        Bukkit.broadcastMessage("Test");
         if (blockType.equals(getCs().getCrate(1).getType()))
         {
             return true;
         }
 
-        Bukkit.broadcastMessage("block namne: " + blockType.name());
-        Bukkit.broadcastMessage("other: " + getCs().getCrate(1).getType().name());
         if (blockType.name().equalsIgnoreCase("SKULL") &&
                 getCs().getCrate(1).getType().name().equalsIgnoreCase("SKULL_ITEM"))
         {
-            Bukkit.broadcastMessage("1");
             return true;
         }
 
