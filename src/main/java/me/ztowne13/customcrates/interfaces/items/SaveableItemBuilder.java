@@ -230,7 +230,14 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         // Player Head Name
 
         if (fc.contains(prefix + ".player-head-name"))
-            setPlayerHeadName(fc.getString(prefix + ".player-head-name"));
+        {
+            // If the head has the SkullOwner tag, it LIKELY doesn't need a player-head name. So, don't save the player-head
+            // name, otherwise it will overwrite the tag.
+            if(!hasNBTTag("SkullOwner"))
+            {
+                setPlayerHeadName(fc.getString(prefix + ".player-head-name"));
+            }
+        }
 
 
         return true;

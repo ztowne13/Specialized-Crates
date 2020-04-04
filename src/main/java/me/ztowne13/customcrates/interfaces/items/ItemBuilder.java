@@ -280,6 +280,18 @@ public class ItemBuilder implements EditableItem
         reapplyNBTTags();
     }
 
+    public boolean hasNBTTag(String tag)
+    {
+        for(String tagParsed : getNBTTags())
+        {
+            if(tagParsed.split(" ")[0].equalsIgnoreCase(tag))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void addItemFlag(ItemFlag flag)
     {

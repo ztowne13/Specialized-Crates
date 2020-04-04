@@ -3,7 +3,6 @@ package me.ztowne13.customcrates.interfaces.nbt;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import me.ztowne13.customcrates.utils.VersionUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -84,8 +83,6 @@ public class NBTTagReflection
         {
             key = args[0];
             value = args[1].replaceAll(",Properties:\\{textures:\\[0:\\{Value:", ",Properties:{textures:[{Value:");
-            Bukkit.broadcastMessage("args1: " + args[1].length());
-            Bukkit.broadcastMessage("val: " + value.length());
         }
         catch (Exception exc)
         {
