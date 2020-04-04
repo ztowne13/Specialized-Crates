@@ -11,6 +11,7 @@ import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -125,7 +126,7 @@ public class IGCCrateActions extends IGCTierMenu
         {
 //            new InputMenu(getCc(), getP(), "new action - type", "null", "Valid action types: " + actionTypes.toString(),
 //                    String.class, this, true);
-            new IGCListSelector(getCc(), getP(), this, "Actions", actionTypes, DynamicMaterial.PAPER, 1, null, true).open();
+            new IGCListSelector(getCc(), getP(), this, "Actions", actionTypes, DynamicMaterial.PAPER, 1, null).open();
         }
         else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType().equals(Material.BOOK))
         {
@@ -150,6 +151,15 @@ public class IGCCrateActions extends IGCTierMenu
                 actionType = input.toUpperCase();
                 new InputMenu(getCc(), getP(), "new action - message", "null", "What message would you like displayed?",
                         String.class, this, false);
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        getP().closeInventory();
+                    }
+                }, 1);
             }
             else
             {
