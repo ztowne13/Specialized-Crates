@@ -119,40 +119,43 @@ public class CommandCrate extends Commands implements CommandExecutor
 
     public void msgPage(int page)
     {
-        msg("  &7&l>  &6&lSC &e&lHelp Menu");
         msg("");
-        msg("&a&oPage &c" + page + " / 3");
         msg("");
-        if (page == 1)
-        {
-            msg("&7- &bHelp &a&l> &fOpen the help menu.");
-            msg("&7- &bGiveKey &a&l> &fGet the get for the specified crate.");
-            msg("&7- &bGiveCrate &a&l> &fGet the item for a specific crate.");
-            msg("&7- &bDeleteCrate &a&l> &fDelete a crate from the world.");
-            msg("&7- &f&oShift + left click in CREATIVE will also delete the crate.");
-            msg("&7- &bConfig &a&l> &fConfigure the plugin in game.");
-        }
-        else if (page == 2)
-        {
-            msg("&7- &bReload &a&l> &fReload all data from the config.yml.");
-            msg("&7- &bListHistory &a&l> &fList the crate history for an online player.");
-            msg("&7- &bListCrates &a&l> &fList all the valid crates.");
-            msg("&7- &bDelAllCrateType &a&l> &fDelete all existing crates of the type.");
-            msg("&7- &bInfo &a&l> &fGet all info for the plugin.");
-            msg("&7- &bluckychest &a&l> &fToggle whether or not you want luckychests to appear.");
-        }
-        else if (page == 3)
-        {
-            msg("&7- &b! &a&l> &fOpen the last crate config menu you were in.");
-            msg("&7- &berrors &a&l> &fSee all crate errors in game!");
-            msg("&7- &bedit &a&l> &fOpen up the in game config directly for a crate.");
-            msg("&7- &bvirtualcrates &a&l> &fOpen the virtual crates menu.");
-            msg("&7- &bforceopen &a&l> &fForce a player to open a crate.");
-        }
-        else
-        {
-            msgPage(1);
-        }
+        msg("");
+        msg("&6&lSpecialized &7&lCrates");
+        msg("");
+        msg("&6&l> &econfig");
+        msg("    &7Configure the plugin in game.");
+        msg("&6&l> &egivekey [crate] [player] [amnt] {-v, for virtual keys}");
+        msg("    &7Get the get for the specified crate.");
+        msg("&6&l> &egivecrate [crate] [player] [amnt] {-v, for virtual crates}");
+        msg("    &7Get the item for a specific crate.");
+        msg("&6&l> &edeletecrate");
+        msg("    &7Delete a crate from the world.");
+        msg("&6&l> &ereload");
+        msg("    &7Reload all data from the config.yml.");
+        msg("&6&l> &elistHistory [player] [amnt of entries]");
+        msg("    &7List the crate history for an online player.");
+        msg("&6&l> &elistCrates");
+        msg("    &7List all the valid crates.");
+        msg("&6&l> &edelAllCrateType [crate]");
+        msg("    &7Delete all existing crates of the type.");
+        msg("&6&l> &einfo");
+        msg("    &7Get all info for the plugin.");
+        msg("&6&l> &eluckychest");
+        msg("    &7Toggle whether or not you want luckychests to appear.");
+        msg("&6&l> &eerrors");
+        msg("    &7See all crate errors in game!");
+        msg("&6&l> &eedit [crate]");
+        msg("    &7Open up the in game config directly for a crate.");
+        msg("&6&l> &e!");
+        msg("    &7Open the last in-game config menu you were in.");
+        msg("&6&l> &evirtualcrates");
+        msg("    &7The menu displayed when a non-admins types /crates");
+        msg("&6&l> &eforceopen [crate] {[player], all}");
+        msg("    &7Force a player to open a crate.");
+        msg("");
+
     }
 
     public ArrayList<SubCommand> getSubCommands()
