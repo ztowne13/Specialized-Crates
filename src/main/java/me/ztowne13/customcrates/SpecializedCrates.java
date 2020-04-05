@@ -40,6 +40,10 @@ import java.util.ArrayList;
 
 public class SpecializedCrates extends JavaPlugin
 {
+    public static boolean ENABLE_CACHING = false;
+    public static boolean LOG_CACHED_INFO = false;
+    public static boolean OUTPUT_AVERAGE_TICK = false;
+
     FileHandler messageFile, rewardsFile, activecratesFile, crateconfigFile, dataFile, sqlFile;
     Settings settings;
     //UpdateChecker updateChecker;
@@ -351,13 +355,31 @@ public class SpecializedCrates extends JavaPlugin
         IndividualFileDataHandler.toSave.clear();
     }
 
+    public static double total = 0;
+    public static double count = 0;
+
     public void run()
     {
+        //setBr(Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Runnable()
         setBr(Bukkit.getScheduler().runTaskTimer(this, new Runnable()
         {
             public void run()
             {
-                tick();
+                if(OUTPUT_AVERAGE_TICK)
+                {
+                    double curTimeMillis = System.currentTimeMillis();
+                    tick();
+                    double dif = (System.currentTimeMillis() - curTimeMillis);
+                    total += dif;
+                    count++;
+                    double solved = total / count;
+
+                    ChatUtils.log("Average: " + solved);
+                }
+                else
+                {
+                    tick();
+                }
             }
 
         }, 0, 2));

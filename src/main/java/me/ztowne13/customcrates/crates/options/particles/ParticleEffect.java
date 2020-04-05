@@ -1,8 +1,12 @@
 package me.ztowne13.customcrates.crates.options.particles;
 
+import me.ztowne13.customcrates.SpecializedCrates;
+import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.ReflectionUtilities;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
+import java.util.HashMap;
 
 public enum ParticleEffect
 {
@@ -218,8 +222,19 @@ public enum ParticleEffect
         }
     }
 
+    private static HashMap<String, Enum<?>> cachedEnums = new HashMap<>();
     private static Enum<?> getEnum(String enumFullName)
     {
+        if(SpecializedCrates.LOG_CACHED_INFO)
+        {
+            ChatUtils.log("Cached enums: " + cachedEnums.size());
+        }
+
+        if(cachedEnums.containsKey(enumFullName))
+        {
+            return cachedEnums.get(enumFullName);
+        }
+
         String[] x = enumFullName.split("\\.(?=[^\\.]+$)");
         if (x.length == 2)
         {
@@ -228,7 +243,15 @@ public enum ParticleEffect
             try
             {
                 Class cl = Class.forName(enumClassName);
-                return Enum.valueOf(cl, enumName);
+
+                Enum<?> enumm =  Enum.valueOf(cl, enumName);
+
+                if(SpecializedCrates.ENABLE_CACHING)
+                {
+                    cachedEnums.put(enumFullName, enumm);
+                }
+
+                return enumm;
             }
             catch (ClassNotFoundException e)
             {

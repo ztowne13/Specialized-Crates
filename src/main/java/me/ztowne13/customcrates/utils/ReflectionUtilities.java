@@ -1,12 +1,22 @@
 package me.ztowne13.customcrates.utils;
 
+import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 
 public class ReflectionUtilities
 {
+    private static HashMap<Class<?>, HashMap<String, Method>> cachedMethods = new HashMap<>();
+    private static HashMap<Object, Object> cachedHandles = new HashMap<>();
+    private static HashMap<Class<?>, HashMap<String, Field>> cachedFields = new HashMap<>();
+    private static HashMap<String, Class<?>> cachedOBCClass = new HashMap<>();
+    private static HashMap<String, Class<?>> cachedNMSClass = new HashMap<>();
+
+
+
     public static void setValue(Object instance, String fieldName, Object value)
             throws Exception
     {
@@ -32,6 +42,16 @@ public class ReflectionUtilities
 
     public static Class<?> getNMSClass(String className)
     {
+        if(SpecializedCrates.LOG_CACHED_INFO)
+        {
+            ChatUtils.log("Cached NMS classes: " + cachedNMSClass.size());
+        }
+
+        if(cachedNMSClass.containsKey(className))
+        {
+            return cachedNMSClass.get(className);
+        }
+
         String fullName = "net.minecraft.server." + getVersion() + className;
         Class clazz = null;
         try
@@ -42,11 +62,24 @@ public class ReflectionUtilities
         {
             e.printStackTrace();
         }
+
+        cachedNMSClass.put(className, clazz);
+
         return clazz;
     }
 
     public static Class<?> getOBCClass(String className)
     {
+        if(SpecializedCrates.LOG_CACHED_INFO)
+        {
+            ChatUtils.log("Cached OBC classes: " + cachedOBCClass.size());
+        }
+
+        if(cachedOBCClass.containsKey(className))
+        {
+            return cachedOBCClass.get(className);
+        }
+
         String fullName = "org.bukkit.craftbukkit." + getVersion() + className;
         Class clazz = null;
         try
@@ -57,14 +90,30 @@ public class ReflectionUtilities
         {
             e.printStackTrace();
         }
+
+        cachedOBCClass.put(className, clazz);
+
         return clazz;
     }
 
     public static Object getHandle(Object obj)
     {
+        if(SpecializedCrates.LOG_CACHED_INFO)
+        {
+            ChatUtils.log("Cached handles: " + cachedHandles.size());
+        }
+
+        if(cachedHandles.containsKey(obj))
+        {
+            return cachedHandles.get(obj);
+        }
+
         try
         {
-            return getMethod(obj.getClass(), "getHandle", new Class[0]).invoke(obj);
+            Object returnObj =  getMethod(obj.getClass(), "getHandle", new Class[0]).invoke(obj);
+            cachedHandles.put(obj, returnObj);
+
+            return returnObj;
         }
         catch (Exception e)
         {
@@ -74,6 +123,37 @@ public class ReflectionUtilities
     }
 
     public static Field getField(Class<?> clazz, String name)
+    {
+        if(SpecializedCrates.LOG_CACHED_INFO)
+        {
+            ChatUtils.log("Cached fields: " + cachedFields.size());
+        }
+
+        if(!SpecializedCrates.ENABLE_CACHING)
+        {
+            return getFieldOriginal(clazz, name);
+        }
+
+        if(!cachedFields.containsKey(clazz))
+        {
+            cachedFields.put(clazz, new HashMap<String, Field>());
+        }
+
+        if(cachedFields.get(clazz).containsKey(name))
+        {
+            return cachedFields.get(clazz).get(name);
+        }
+        else
+        {
+            Field field = getFieldOriginal(clazz, name);
+
+            cachedFields.get(clazz).put(name, field);
+
+            return field;
+        }
+    }
+
+    public static Field getFieldOriginal(Class<?> clazz, String name)
     {
         try
         {
@@ -89,6 +169,37 @@ public class ReflectionUtilities
     }
 
     public static Method getMethod(Class<?> clazz, String name, Class<?>[] args)
+    {
+        if(SpecializedCrates.LOG_CACHED_INFO)
+        {
+            ChatUtils.log("Cached methods: " + cachedMethods.size());
+        }
+
+        if(!SpecializedCrates.ENABLE_CACHING)
+        {
+            return getMethodOriginal(clazz, name, args);
+        }
+
+        if(!cachedMethods.containsKey(clazz))
+        {
+            cachedMethods.put(clazz, new HashMap<String, Method>());
+        }
+
+        if(cachedMethods.get(clazz).containsKey(name))
+        {
+            return cachedMethods.get(clazz).get(name);
+        }
+        else
+        {
+            Method method = getMethodOriginal(clazz, name, args);
+
+            cachedMethods.get(clazz).put(name, method);
+
+            return method;
+        }
+    }
+
+    public static Method getMethodOriginal(Class<?> clazz, String name, Class<?>[] args)
     {
         for (Method m : clazz.getMethods())
         {
