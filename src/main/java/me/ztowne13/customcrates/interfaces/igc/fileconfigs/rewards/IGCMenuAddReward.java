@@ -135,7 +135,7 @@ public class IGCMenuAddReward extends IGCMenu
         else if (getIb().getInv().getItem(slot) != null)
         {
             String rName = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
-            if (crate.getCs().getCr().addReward(rName))
+            if (crate.getSettings().getRewards().addReward(rName))
             {
                 ChatUtils.msgSuccess(getP(), "Added " + rName);
                 open();
@@ -155,7 +155,7 @@ public class IGCMenuAddReward extends IGCMenu
 
     public HashMap<String, Reward> getUnusedRewards()
     {
-        CRewards cRewards = crate.getCs().getCr();
+        CRewards cRewards = crate.getSettings().getRewards();
 
         HashMap<String, Reward> rewards = (HashMap<String, Reward>) CRewards.getAllRewards().clone();
 

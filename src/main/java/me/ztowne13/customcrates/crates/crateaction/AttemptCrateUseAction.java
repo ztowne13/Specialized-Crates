@@ -51,7 +51,7 @@ public class AttemptCrateUseAction extends CrateAction
                     // is crate enabled
                     if (CrateUtils.isCrateUsable(crates))
                     {
-                        ObtainType ot = crates.getCs().getOt();
+                        ObtainType ot = crates.getSettings().getObtainType();
 
                         boolean b = true;
 
@@ -80,7 +80,7 @@ public class AttemptCrateUseAction extends CrateAction
                             }
                             else
                             {
-                                crates.getCs().getCh().playFailToOpen(player, false);
+                                crates.getSettings().getAnimation().playFailToOpen(player, false, true);
                                 Messages.DENY_CREATIVE_MODE.msgSpecified(cc, player);
                                 return true;
                             }

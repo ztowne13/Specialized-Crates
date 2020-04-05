@@ -44,7 +44,7 @@ public class GiveCrate extends SubCommand
             }
 
             Crate crate = Crate.getCrate(cc, args[1]);
-            ItemStack toAdd = crate.getCs().getCrate(amount);
+            ItemStack toAdd = crate.getSettings().getCrateItemHandler().getItem(amount);
 
             if (args.length < 3)
             {

@@ -81,13 +81,13 @@ public class IGCMenuCrateOrMulticrate extends IGCMenu
                 if (!input.contains(" "))
                 {
                     Crate newCrate = new Crate(getCc(), input, true, multicrate);
-                    CrateSettings cs = newCrate.getCs();
-                    cs.setOt(ObtainType.STATIC);
-                    cs.setDcp(new MaterialPlaceholder(getCc()));
+                    CrateSettings cs = newCrate.getSettings();
+                    cs.setObtainType(ObtainType.STATIC);
+                    cs.setPlaceholder(new MaterialPlaceholder(getCc()));
 
                     if(!multicrate)
                     {
-                        cs.setCt(CrateType.INV_ROULETTE);
+                        cs.setCrateType(CrateType.INV_ROULETTE);
                         cs.setRequireKey(true);
                         cs.setRewardDisplayType(RewardDisplayType.IN_ORDER);
                         cs.setDisplayer(new SimpleRewardDisplayer(newCrate));
@@ -96,14 +96,14 @@ public class IGCMenuCrateOrMulticrate extends IGCMenu
                     SaveableItemBuilder builder = new SaveableItemBuilder(DynamicMaterial.CHEST, 1);
                     builder.setDisplayName(input);
 
-                    cs.setCrate(builder);
+                    cs.getCrateItemHandler().setItem(builder);
 
                     newCrate.setEnabled(true);
                     newCrate.setCanBeEnabled(false);
 
                     if (!multicrate && !CRewards.getAllRewards().isEmpty())
                     {
-                        cs.getCr().addReward(CRewards.getAllRewards().values().iterator().next().getRewardName());
+                        cs.getRewards().addReward(CRewards.getAllRewards().values().iterator().next().getRewardName());
                     }
 
                     cs.saveAll();

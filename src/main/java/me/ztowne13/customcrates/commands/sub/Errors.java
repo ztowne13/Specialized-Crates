@@ -24,7 +24,7 @@ public class Errors extends SubCommand
             {
                 cmds.getCmdSender().sendMessage(ChatUtils.toChatColor("&4&l----------"));
                 cmds.getCmdSender().sendMessage(ChatUtils.toChatColor("&c" + crate.getName()));
-                crate.getCs().getSl().logAll(cmds.getCmdSender(), false);
+                crate.getSettings().getStatusLogger().logAll(cmds.getCmdSender(), false);
             }
         }
         else if (args.length > 1)
@@ -32,7 +32,7 @@ public class Errors extends SubCommand
             if (Crate.crateAlreadyExist(args[1]))
             {
                 cmds.msg("&4&lErrors:");
-                Crate.getCrate(cc, args[1]).getCs().getSl().logAll(cmds.getCmdSender(), true);
+                Crate.getCrate(cc, args[1]).getSettings().getStatusLogger().logAll(cmds.getCmdSender(), true);
             }
             else
             {

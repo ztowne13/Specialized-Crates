@@ -28,7 +28,7 @@ public class CrateSettingsBuilder
     {
         this.settings = settings;
         this.fc = settings.getFc();
-        this.cc = settings.getCrates().getCc();
+        this.cc = settings.getCrate().getCc();
     }
 
     public boolean hasV(String path)
@@ -41,7 +41,7 @@ public class CrateSettingsBuilder
         if (hasV("auto-close"))
         {
             getSettings().setAutoClose(Boolean.valueOf(getFc().getString("auto-close")));
-            StatusLoggerEvent.SETTINGS_AUTOCLOSE_SUCCESS.log(getSl());
+            StatusLoggerEvent.SETTINGS_AUTOCLOSE_SUCCESS.log(getStatusLogger());
             return;
         }
     }
@@ -53,10 +53,10 @@ public class CrateSettingsBuilder
             if (Utils.isDouble(fc.getString("hologram-offset")))
             {
                 getSettings().setHologramOffset(fc.getDouble("hologram-offset"));
-                StatusLoggerEvent.SETTINGS_HOLOGRAMOFFSET_SUCCESS.log(getSl());
+                StatusLoggerEvent.SETTINGS_HOLOGRAMOFFSET_SUCCESS.log(getStatusLogger());
                 return;
             }
-            StatusLoggerEvent.SETTINGS_HOLOGRAMOFFSET_FAILURE.log(getSl());
+            StatusLoggerEvent.SETTINGS_HOLOGRAMOFFSET_FAILURE.log(getStatusLogger());
         }
     }
 
@@ -68,7 +68,7 @@ public class CrateSettingsBuilder
         }
         else
         {
-            StatusLoggerEvent.SETTINGS_KEY_REQUIRE_NONEXISTENT.log(getSl());
+            StatusLoggerEvent.SETTINGS_KEY_REQUIRE_NONEXISTENT.log(getStatusLogger());
         }
     }
 
@@ -80,18 +80,18 @@ public class CrateSettingsBuilder
             try
             {
                 ObtainType ot = ObtainType.valueOf(getFc().getString("obtain-method").toUpperCase());
-                getSettings().setOt(ot);
-                StatusLoggerEvent.SETTINGS_OBTAINMETHOD_SUCCESS.log(getSl());
+                getSettings().setObtainType(ot);
+                StatusLoggerEvent.SETTINGS_OBTAINMETHOD_SUCCESS.log(getStatusLogger());
             }
             catch (Exception exc)
             {
                 StatusLoggerEvent.SETTINGS_OBTAINMETHOD_INVALID
-                        .log(getSl(), new String[]{getFc().getString("obtain-method")});
+                        .log(getStatusLogger(), new String[]{getFc().getString("obtain-method")});
             }
             return;
         }
 
-        StatusLoggerEvent.SETTINGS_OBTAINMETHOD_NONEXISTENT.log(getSl());
+        StatusLoggerEvent.SETTINGS_OBTAINMETHOD_NONEXISTENT.log(getStatusLogger());
     }
 
 	/*public void setupOverrideDefaults()
@@ -120,19 +120,19 @@ public class CrateSettingsBuilder
         {
             try
             {
-                getSettings().setCt(CrateType.valueOf(getFc().getString(("open.crate-animation"))));
-                StatusLoggerEvent.SETTINGS_ANIMATION_SUCCESS.log(getSl());
+                getSettings().setCrateType(CrateType.valueOf(getFc().getString(("open.crate-animation"))));
+                StatusLoggerEvent.SETTINGS_ANIMATION_SUCCESS.log(getStatusLogger());
             }
             catch (Exception exc)
             {
-                getSettings().setCt(CrateType.BLOCK_CRATEOPEN);
+                getSettings().setCrateType(CrateType.BLOCK_CRATEOPEN);
                 StatusLoggerEvent.SETTINGS_ANIMATION_INVALID
-                        .log(getSl(), new String[]{getFc().getString("open.crate-animation")});
+                        .log(getStatusLogger(), new String[]{getFc().getString("open.crate-animation")});
             }
             return;
         }
 
-        StatusLoggerEvent.SETTINGS_ANIMATION_NONEXISTENT.log(getSl());
+        StatusLoggerEvent.SETTINGS_ANIMATION_NONEXISTENT.log(getStatusLogger());
     }
 
     public void setupCooldowns()
@@ -142,11 +142,11 @@ public class CrateSettingsBuilder
             try
             {
                 getSettings().setCooldown(getFc().getInt("cooldown"));
-                StatusLoggerEvent.SETTINGS_COOLDOWN_SUCCESS.log(getSl());
+                StatusLoggerEvent.SETTINGS_COOLDOWN_SUCCESS.log(getStatusLogger());
             }
             catch (Exception exc)
             {
-                StatusLoggerEvent.SETTINGS_COOLDOWN_INVALID.log(getSl());
+                StatusLoggerEvent.SETTINGS_COOLDOWN_INVALID.log(getStatusLogger());
             }
             return;
         }
@@ -161,11 +161,11 @@ public class CrateSettingsBuilder
             try
             {
                 getSettings().setCost(getFc().getInt("cost"));
-                StatusLoggerEvent.SETTINGS_COST_SUCCESS.log(getSl());
+                StatusLoggerEvent.SETTINGS_COST_SUCCESS.log(getStatusLogger());
             }
             catch (Exception exc)
             {
-                StatusLoggerEvent.SETTINGS_COST_INVALID.log(getSl());
+                StatusLoggerEvent.SETTINGS_COST_INVALID.log(getStatusLogger());
             }
             return;
         }
@@ -184,68 +184,68 @@ public class CrateSettingsBuilder
                 try
                 {
                     cdt = CrateDisplayType.valueOf(getFc().getString("display.type").toUpperCase());
-                    StatusLoggerEvent.SETTINGS_DISPLAYTYPE_SUCCESS.log(getSl());
+                    StatusLoggerEvent.SETTINGS_DISPLAYTYPE_SUCCESS.log(getStatusLogger());
                 }
                 catch (Exception exc)
                 {
                     StatusLoggerEvent.SETTINGS_DISPLAYTYPE_INVALID
-                            .log(getSl(), new String[]{getFc().getString("display.type")});
+                            .log(getStatusLogger(), new String[]{getFc().getString("display.type")});
                 }
             }
 
             if (!NPCUtils.isCitizensInstalled() && !cdt.equals(CrateDisplayType.BLOCK))
             {
                 cdt = CrateDisplayType.BLOCK;
-                StatusLoggerEvent.SETTINGS_DISPLAYTYPE_FAIL_NOCITIZENS.log(getSl());
+                StatusLoggerEvent.SETTINGS_DISPLAYTYPE_FAIL_NOCITIZENS.log(getStatusLogger());
             }
 
-            getSettings().setCdt(cdt);
+            getSettings().setCrateDisplayType(cdt);
 
             if (cdt == CrateDisplayType.MOB)
             {
-                getSettings().setDcp(new MobPlaceholder(getCc()));
+                getSettings().setPlaceholder(new MobPlaceholder(getCc()));
                 if (hasV("display.creature"))
                 {
                     try
                     {
                         EntityTypes ent = EntityTypes.valueOf(getFc().getString("display.creature").toUpperCase());
-                        getSettings().getDcp().setType(ent.toString());
+                        getSettings().getPlaceholder().setType(ent.toString());
 
-                        StatusLoggerEvent.SETTINGS_DISPLAYTYPE_CREATURE_SUCCESS.log(getSl());
+                        StatusLoggerEvent.SETTINGS_DISPLAYTYPE_CREATURE_SUCCESS.log(getStatusLogger());
                         return;
                     }
                     catch (Exception exc)
                     {
                         exc.printStackTrace();
                         StatusLoggerEvent.SETTINGS_DISPLAYTYPE_CREATURETYPE_INVALID
-                                .log(getSl(), new String[]{getFc().getString("display.creature")});
+                                .log(getStatusLogger(), new String[]{getFc().getString("display.creature")});
                     }
                 }
                 else
                 {
-                    StatusLoggerEvent.SETTINGS_DISPLAYTYPE_CREATURETYPE_NONEXISTENT.log(getSl());
+                    StatusLoggerEvent.SETTINGS_DISPLAYTYPE_CREATURETYPE_NONEXISTENT.log(getStatusLogger());
                 }
             }
             else if (cdt == CrateDisplayType.NPC)
             {
-                getSettings().setDcp(new Citizens2NPCPlaceHolder(getCc()));
+                getSettings().setPlaceholder(new Citizens2NPCPlaceHolder(getCc()));
                 if (hasV("display.name"))
                 {
-                    getSettings().getDcp().setType(getFc().getString("display.name"));
+                    getSettings().getPlaceholder().setType(getFc().getString("display.name"));
 
-                    StatusLoggerEvent.SETTINGS_DISPLAYTYPE_DISPLAYNAME_SUCCESS.log(getSl());
+                    StatusLoggerEvent.SETTINGS_DISPLAYTYPE_DISPLAYNAME_SUCCESS.log(getStatusLogger());
                     return;
                 }
-                StatusLoggerEvent.SETTINGS_DISPLAYTYPE_DISPLAYNAME_NONEXISTENT.log(getSl());
+                StatusLoggerEvent.SETTINGS_DISPLAYTYPE_DISPLAYNAME_NONEXISTENT.log(getStatusLogger());
             }
 
-            getSettings().setDcp(new MaterialPlaceholder(getCc()));
+            getSettings().setPlaceholder(new MaterialPlaceholder(getCc()));
             return;
         }
 
-        StatusLoggerEvent.SETTINGS_DISPLAYTYPE_NONEXISTENT.log(getSl());
+        StatusLoggerEvent.SETTINGS_DISPLAYTYPE_NONEXISTENT.log(getStatusLogger());
         getFc().set("display.type", "block");
-        getSettings().getFu().save();
+        getSettings().getFileHandler().save();
         setupDisplay();
     }
 
@@ -257,15 +257,15 @@ public class CrateSettingsBuilder
             if (invName.length() < 33)
             {
                 getSettings().setCrateInventoryName(invName);
-                StatusLoggerEvent.SETTINGS_INVENTORYNAME_SUCCESS.log(getSl());
+                StatusLoggerEvent.SETTINGS_INVENTORYNAME_SUCCESS.log(getStatusLogger());
                 return;
             }
 
             getSettings().setCrateInventoryName(invName.substring(0, 33));
-            StatusLoggerEvent.SETTINGS_INVENTORYNAME_INVALID.log(getSl());
+            StatusLoggerEvent.SETTINGS_INVENTORYNAME_INVALID.log(getStatusLogger());
             return;
         }
-        StatusLoggerEvent.SETTINGS_INVENTORYNAME_NONEXISTENT.log(getSl());
+        StatusLoggerEvent.SETTINGS_INVENTORYNAME_NONEXISTENT.log(getStatusLogger());
     }
 
     public void setupPermission()
@@ -273,40 +273,11 @@ public class CrateSettingsBuilder
         if (hasV("permission"))
         {
             getSettings().setPermission(getFc().getString("permission"));
-            StatusLoggerEvent.SETTINGS_PERMISSION_SUCCESS.log(getSl());
+            StatusLoggerEvent.SETTINGS_PERMISSION_SUCCESS.log(getStatusLogger());
             return;
         }
 
         getSettings().setPermission("no permission");
-    }
-
-    public void setupCrate()
-    {
-        boolean result = getSettings().getCrate()
-                .loadItem(getSettings().getFu(), "crate", getSl(), StatusLoggerEvent.SETTINGS_CRATE_FAILURE,
-                        StatusLoggerEvent.SETTINGS_CRATE_ENCHANTMENT_ADD_FAILURE,
-                        StatusLoggerEvent.SETTINGS_CRATE_POTION_ADD_FAILURE, StatusLoggerEvent.SETTINGS_CRATE_GLOW_FAILURE,
-                        StatusLoggerEvent.SETTINGS_CRATE_AMOUNT_FAILURE, StatusLoggerEvent.SETTINGS_CRATE_FLAG_FAILURE);
-        if (!result)
-        {
-            StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(getSl());
-        }
-    }
-
-    public void setupKey()
-    {
-        //itemfail, improperenchamnt, improperpotion, improperglow
-        setupRequireKey();
-        boolean result = getSettings().getKey()
-                .loadItem(getSettings().getFu(), "key", getSl(), StatusLoggerEvent.SETTINGS_KEY_FAILURE,
-                        StatusLoggerEvent.SETTINGS_KEY_ENCHANTMENT_ADD_FAILURE,
-                        StatusLoggerEvent.SETTINGS_KEY_POTION_ADD_FAILURE, StatusLoggerEvent.SETTINGS_KEY_GLOW_FAILURE,
-                        StatusLoggerEvent.SETTINGS_KEY_AMOUNT_FAILURE, StatusLoggerEvent.SETTINGS_KEY_FLAG_FAILURE);
-
-        if (!result)
-        {
-            StatusLoggerEvent.SETTINGS_KEY_FAILURE_DISABLE.log(getSl());
-        }
     }
 
     public void setupDisplayer()
@@ -318,7 +289,7 @@ public class CrateSettingsBuilder
             try
             {
                 RewardDisplayType rewardDisplayType = RewardDisplayType.valueOf(displayerString);
-                Crate crate = getSettings().getCrates();
+                Crate crate = getSettings().getCrate();
                 getSettings().setRewardDisplayType(rewardDisplayType);
 
                 switch(rewardDisplayType)
@@ -337,13 +308,13 @@ public class CrateSettingsBuilder
                         break;
                 }
 
-                StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_SUCCESS.log(getSl());
+                StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_SUCCESS.log(getStatusLogger());
             }
             catch(Exception exc)
             {
                 getSettings().setRewardDisplayType(RewardDisplayType.IN_ORDER);
-                getSettings().setDisplayer(new SimpleRewardDisplayer(getSettings().getCrates()));
-                StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_INVALID.log(getSl(), new String[]{displayerString});
+                getSettings().setDisplayer(new SimpleRewardDisplayer(getSettings().getCrate()));
+                StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_INVALID.log(getStatusLogger(), new String[]{displayerString});
             }
 
             getSettings().getDisplayer().load();
@@ -352,7 +323,7 @@ public class CrateSettingsBuilder
         }
 
         getSettings().setRewardDisplayType(RewardDisplayType.IN_ORDER);
-        getSettings().setDisplayer(new SimpleRewardDisplayer(getSettings().getCrates()));
+        getSettings().setDisplayer(new SimpleRewardDisplayer(getSettings().getCrate()));
         //StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_NONEXISTENT.log(getSl());
 
         getSettings().getDisplayer().load();
@@ -360,9 +331,9 @@ public class CrateSettingsBuilder
     }
 
 
-    public StatusLogger getSl()
+    public StatusLogger getStatusLogger()
     {
-        return getSettings().getSl();
+        return getSettings().getStatusLogger();
     }
 
     public CrateSettings getSettings()

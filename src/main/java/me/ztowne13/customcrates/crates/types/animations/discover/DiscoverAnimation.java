@@ -57,7 +57,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation
 
 
     @Override
-    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
+    public boolean runAnimation(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
     {
         if (force || canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
         {
@@ -68,7 +68,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation
             return true;
         }
 
-        playFailToOpen(p);
+        playFailToOpen(p, true, true);
         return false;
     }
 
@@ -226,7 +226,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation
                 {
                     if (!ddh.getAlreadyDisplayedRewards().keySet().contains(slot))
                     {
-                        Reward newR = getCrates().getCs().getCr().getRandomReward(ddh.getP());
+                        Reward newR = getCrate().getSettings().getRewards().getRandomReward(ddh.getP());
                         if (uncoverSound != null)
                             uncoverSound.playTo(ddh.getP(), ddh.getL());
                         ddh.getAlreadyDisplayedRewards().put(slot, newR);
@@ -235,7 +235,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation
                         {
                             ddh.setCurrentSequence(4);
                             ddh.setCanCloseInventory(true);
-                            finishUp(ddh.getP(), 50);
+                            endAnimationAfter(ddh.getP(), 50);
                         }
                     }
                 }
@@ -246,7 +246,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation
     @Override
     public void loadValueFromConfig(StatusLogger sl)
     {
-        FileConfiguration fc = getFu().get();
+        FileConfiguration fc = getFileHandler().get();
 
         invName = fc.getString(prefix + "inv-name");
 
@@ -339,7 +339,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public void finishUp(Player p)
+    public void endAnimation(Player p)
     {
         DiscoverDataHolder ddh = DiscoverDataHolder.getHolders().get(p);
         ddh.setCompleted(true);
@@ -347,8 +347,8 @@ public class DiscoverAnimation extends InventoryCrateAnimation
         ArrayList<Reward> rewards = new ArrayList<>();
         rewards.addAll(ddh.getAlreadyDisplayedRewards().values());
 
-        completeCrateRun(p, rewards, false);
-        getCrates().tick(ddh.getL(), CrateState.OPEN, p, rewards);
+        completeCrateRun(p, rewards, false, null);
+        getCrate().tick(ddh.getL(), CrateState.OPEN, p, rewards);
         ddh.getHolders().remove(p);
     }
 

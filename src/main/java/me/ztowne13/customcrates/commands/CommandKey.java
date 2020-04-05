@@ -49,7 +49,7 @@ public class CommandKey extends Commands implements CommandExecutor
                 Crate crate = vcd.getCrate();
                 if (vcd.getKeys() > 0 || vcd.getCrates() > 0)
                 {
-                    msg("&b" + vcd.getCrate().getName() + " &f( " + crate.getCs().getCrateInventoryName() + "&f ) ");
+                    msg("&b" + vcd.getCrate().getName() + " &f( " + crate.getSettings().getCrateInventoryName() + "&f ) ");
                     msg(" &8- Crates: &7" + vcd.getCrates());
                     msg(" &8- Keys: &7" + vcd.getKeys());
                 }

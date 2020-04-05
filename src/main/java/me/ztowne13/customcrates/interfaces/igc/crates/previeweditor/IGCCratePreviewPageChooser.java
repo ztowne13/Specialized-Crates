@@ -28,7 +28,7 @@ public class IGCCratePreviewPageChooser extends IGCMenuCrate
     {
         super(specializedCrates, player, lastMenu, "&7&l> &6&lReward Preview Menu", crate);
 
-        this.displayer = (CustomRewardDisplayer) getCrates().getCs().getDisplayer();
+        this.displayer = (CustomRewardDisplayer) getCrates().getSettings().getDisplayer();
         this.page = page;
 
         values = new ArrayList<Integer>();
@@ -115,7 +115,7 @@ public class IGCCratePreviewPageChooser extends IGCMenuCrate
     {
         if (slot == 0)
         {
-            getCrates().getCs().getFu().save();
+            getCrates().getSettings().getFileHandler().save();
             ChatUtils.msgSuccess(getP(), "Saved!");
         }
         else if(slot == 9)

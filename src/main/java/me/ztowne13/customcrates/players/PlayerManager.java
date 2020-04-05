@@ -39,7 +39,6 @@ public class PlayerManager
     boolean inRewardMenu = false;
     DisplayPage lastPage;
 
-    boolean canClose = true;
     boolean deleteCrate = false;
     boolean useVirtualCrate = false;
     boolean confirming = false;
@@ -181,16 +180,6 @@ public class PlayerManager
     public void setInRewardMenu(boolean inRewardMenu)
     {
         this.inRewardMenu = inRewardMenu;
-    }
-
-    public boolean isCanClose()
-    {
-        return canClose;
-    }
-
-    public void setCanClose(boolean canClose)
-    {
-        this.canClose = canClose;
     }
 
     public Player getP()

@@ -36,7 +36,7 @@ public class RouletteManager extends InventoryCrateAnimation
     }
 
     @Override
-    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
+    public boolean runAnimation(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
     {
         if (force || canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
         {
@@ -46,7 +46,7 @@ public class RouletteManager extends InventoryCrateAnimation
             return true;
         }
 
-        playFailToOpen(p);
+        playFailToOpen(p, true, true);
         return false;
     }
 
@@ -54,7 +54,7 @@ public class RouletteManager extends InventoryCrateAnimation
     {
         if (!rdh.isCompleted())
         {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
+            Bukkit.getScheduler().scheduleSyncDelayedTask(getSc(), new Runnable()
             {
                 @Override
                 public void run()
@@ -69,7 +69,7 @@ public class RouletteManager extends InventoryCrateAnimation
 
                     if (rdh.getCurrentTicks() > rdh.getDisplayAmount())
                     {
-                        finishUp(rdh.getP(), 20);
+                        endAnimationAfter(rdh.getP(), 20);
                         return;
                     }
 
@@ -91,7 +91,7 @@ public class RouletteManager extends InventoryCrateAnimation
             {
                 if (updateItems)
                 {
-                    Reward r = getCrates().getCs().getCr().getRandomReward(rdh.getP());
+                    Reward r = getCrate().getSettings().getRewards().getRandomReward(rdh.getP());
                     rdh.setLastShownReward(r);
                     inv.setItem(i, r.getDisplayBuilder());
                 }
@@ -119,7 +119,7 @@ public class RouletteManager extends InventoryCrateAnimation
     }
 
     @Override
-    public void finishUp(Player p)
+    public void endAnimation(Player p)
     {
         RouletteDataHolder rdh = RouletteDataHolder.getHolders().get(p);
         rdh.setCompleted(true);
@@ -127,8 +127,8 @@ public class RouletteManager extends InventoryCrateAnimation
         ArrayList<Reward> rewards = new ArrayList<>();
         rewards.add(rdh.getLastShownReward());
 
-        completeCrateRun(p, rewards, false);
-        getCrates().tick(rdh.getL(), CrateState.OPEN, p, rewards);
+        completeCrateRun(p, rewards, false, null);
+        getCrate().tick(rdh.getL(), CrateState.OPEN, p, rewards);
         rdh.getHolders().remove(p);
     }
 
@@ -144,11 +144,11 @@ public class RouletteManager extends InventoryCrateAnimation
             }
             setInvName(s);
 
-            StatusLoggerEvent.ANIMATION_ROULETTE_INVENTORYNAME_SUCCESS.log(getSl(), new String[]{getInvName()});
+            StatusLoggerEvent.ANIMATION_ROULETTE_INVENTORYNAME_SUCCESS.log(getStatusLogger(), new String[]{getInvName()});
         }
         catch (Exception exc)
         {
-            StatusLoggerEvent.ANIMATION_ROULETTE_INVENTORYNAME_NONEXISTENT.log(getSl());
+            StatusLoggerEvent.ANIMATION_ROULETTE_INVENTORYNAME_NONEXISTENT.log(getStatusLogger());
             setInvName("Improperly configured");
         }
 
@@ -158,19 +158,19 @@ public class RouletteManager extends InventoryCrateAnimation
 
             SoundData sd = new SoundData(Sound.valueOf(args[0].toUpperCase()));
 
-            StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_SOUND_SUCCESS.log(getSl());
+            StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_SOUND_SUCCESS.log(getStatusLogger());
 
             if (args.length >= 2)
             {
                 if (Utils.isInt(args[1]))
                 {
                     sd.setVolume(Integer.parseInt(args[1]));
-                    StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_VOLUME_SUCCESS.log(getSl());
+                    StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_VOLUME_SUCCESS.log(getStatusLogger());
                 }
                 else
                 {
                     sd.setVolume(5);
-                    StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_VOLUME_INVALID.log(getSl(), new String[]{args[1]});
+                    StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_VOLUME_INVALID.log(getStatusLogger(), new String[]{args[1]});
                 }
 
                 if (args.length >= 3)
@@ -178,12 +178,12 @@ public class RouletteManager extends InventoryCrateAnimation
                     if (Utils.isInt(args[2]))
                     {
                         sd.setPitch(Integer.parseInt(args[2]));
-                        StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_PITCH_SUCCESS.log(getSl());
+                        StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_PITCH_SUCCESS.log(getStatusLogger());
                     }
                     else
                     {
                         sd.setPitch(5);
-                        StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_PITCH_INVALID.log(getSl(), new String[]{args[2]});
+                        StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_PITCH_INVALID.log(getStatusLogger(), new String[]{args[2]});
                     }
                 }
                 else
@@ -193,7 +193,7 @@ public class RouletteManager extends InventoryCrateAnimation
             }
             else
             {
-                StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_VOLUMEPITCH_FAILURE.log(getSl());
+                StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_VOLUMEPITCH_FAILURE.log(getStatusLogger());
                 sd.setVolume(5);
                 sd.setPitch(5);
             }
@@ -203,41 +203,41 @@ public class RouletteManager extends InventoryCrateAnimation
         catch (Exception exc)
         {
             //setTickSound(new SoundData(Sound.FALL_BIG));
-            StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_SOUND_FAILURE.log(getSl());
+            StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_SOUND_FAILURE.log(getStatusLogger());
         }
 
         try
         {
             double d = Double.valueOf(fu.get().getString("CrateType.Inventory.Roulette.final-crate-tick-length"));
             setFinalTickLength(d);
-            StatusLoggerEvent.ANIMATION_ROULETTE_FINALTICKLENGTH_SUCCESS.log(getSl());
+            StatusLoggerEvent.ANIMATION_ROULETTE_FINALTICKLENGTH_SUCCESS.log(getStatusLogger());
         }
         catch (Exception exc)
         {
             setFinalTickLength(7);
-            StatusLoggerEvent.ANIMATION_ROULETTE_FINALTICKLENGTH_INVALID.log(getSl());
+            StatusLoggerEvent.ANIMATION_ROULETTE_FINALTICKLENGTH_INVALID.log(getStatusLogger());
         }
 
         try
         {
             glassUpdateTicks = Integer.parseInt(fu.get().getString("CrateType.Inventory.Roulette.tile-update-ticks"));
-            StatusLoggerEvent.ANIMATION_ROULETTE_GLASSUPDATE_SUCCESS.log(getSl());
+            StatusLoggerEvent.ANIMATION_ROULETTE_GLASSUPDATE_SUCCESS.log(getStatusLogger());
         }
         catch (Exception exc)
         {
-            StatusLoggerEvent.ANIMATION_ROULETTE_GLASSUPDATE_INVALID.log(getSl());
+            StatusLoggerEvent.ANIMATION_ROULETTE_GLASSUPDATE_INVALID.log(getStatusLogger());
         }
 
         try
         {
             double d = Double.valueOf(fu.get().getString("CrateType.Inventory.Roulette.tick-speed-per-run"));
             setTickIncrease(d);
-            StatusLoggerEvent.ANIMATION_ROULETTE_TICKSPEED_SUCCESS.log(getSl());
+            StatusLoggerEvent.ANIMATION_ROULETTE_TICKSPEED_SUCCESS.log(getStatusLogger());
         }
         catch (Exception exc)
         {
             setTickIncrease(.4);
-            StatusLoggerEvent.ANIMATION_ROULETTE_TICKSPEED_INVALID.log(getSl());
+            StatusLoggerEvent.ANIMATION_ROULETTE_TICKSPEED_INVALID.log(getStatusLogger());
         }
 
         setItems(new ArrayList<ItemStack>());
@@ -255,21 +255,21 @@ public class RouletteManager extends InventoryCrateAnimation
                     }
                     catch (Exception exc)
                     {
-                        StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_NONEXISTENT.log(getSl(), new String[]{s});
+                        StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_NONEXISTENT.log(getStatusLogger(), new String[]{s});
                         continue;
                     }
                     getItems().add(new ItemBuilder(m, 1).get());
-                    StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_SUCCESS.log(getSl(), new String[]{s});
+                    StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_SUCCESS.log(getStatusLogger(), new String[]{s});
                 }
                 catch (Exception exc)
                 {
-                    StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_ITEM_INVALID.log(getSl(), new String[]{s});
+                    StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_ITEM_INVALID.log(getStatusLogger(), new String[]{s});
                 }
             }
         }
         catch (Exception exc)
         {
-            StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_NONEXISTENT.log(getSl());
+            StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_NONEXISTENT.log(getStatusLogger());
         }
     }
 

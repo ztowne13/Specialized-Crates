@@ -39,8 +39,8 @@ public class EnclosementDataHolder
         currentTicksIn = (((((ie.getInventoryRows() * 2) + 1) * 9) - 1) / 2) - ie.getRewardAmount();
 
         ib = new InventoryBuilder(p, ((ie.getInventoryRows()) * 9 * 2) + 9,
-                ie.getCrates().getCs().getCrateInventoryName() == null ? ie.getInvName() :
-                        ie.getCrates().getCs().getCrateInventoryName());
+                ie.getCrate().getSettings().getCrateInventoryName() == null ? ie.getInvName() :
+                        ie.getCrate().getSettings().getCrateInventoryName());
         ib.open();
         holders.put(p, this);
     }

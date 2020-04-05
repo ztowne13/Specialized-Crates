@@ -640,12 +640,12 @@ public enum StatusLoggerEvent
 
     public void log(Crate crate)
     {
-        log(crate.getCs().getSl(), new String[]{});
+        log(crate.getSettings().getStatusLogger(), new String[]{});
     }
 
     public void log(Crate crate, String[] args)
     {
-        log(crate.getCs().getSl(), args);
+        log(crate.getSettings().getStatusLogger(), args);
     }
 
     public void log(StatusLogger sl)

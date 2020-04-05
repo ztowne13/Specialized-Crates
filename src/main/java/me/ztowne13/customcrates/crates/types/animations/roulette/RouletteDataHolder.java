@@ -34,8 +34,8 @@ public class RouletteDataHolder
         displayAmount = ir.getRandomTickTime(ir.getFinalTickLength());
         currentTicks = 0;
         completed = false;
-        inv = new InventoryBuilder(p, 27, ir.getCrates().getCs().getCrateInventoryName() == null ? ir.getInvName() :
-                ir.getCrates().getCs().getCrateInventoryName());
+        inv = new InventoryBuilder(p, 27, ir.getCrate().getSettings().getCrateInventoryName() == null ? ir.getInvName() :
+                ir.getCrate().getSettings().getCrateInventoryName());
         holders.put(p, this);
     }
 

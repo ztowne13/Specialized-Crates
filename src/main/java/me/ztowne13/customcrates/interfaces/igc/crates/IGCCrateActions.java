@@ -50,11 +50,11 @@ public class IGCCrateActions extends IGCTierMenu
     {
 
         int count = 0;
-        if (cs.getCa().getActions().containsKey(tier))
+        if (cs.getActions().getActions().containsKey(tier))
         {
-            for (String actionType : cs.getCa().getActions().get(tier).keySet())
+            for (String actionType : cs.getActions().getActions().get(tier).keySet())
             {
-                count += cs.getCa().getActions().get(tier).get(actionType).size();
+                count += cs.getActions().getActions().get(tier).get(actionType).size();
             }
         }
 
@@ -77,11 +77,11 @@ public class IGCCrateActions extends IGCTierMenu
         ib.setItem(17, new ItemBuilder(Material.PAPER, 1, 0).setName("&aAdd a new action"));
 
         int i = 2;
-        if (cs.getCa().getActions().containsKey(tier))
+        if (cs.getActions().getActions().containsKey(tier))
         {
-            for (String actionType : cs.getCa().getActions().get(tier).keySet())
+            for (String actionType : cs.getActions().getActions().get(tier).keySet())
             {
-                for (String actionMSG : cs.getCa().getActions().get(tier).get(actionType))
+                for (String actionMSG : cs.getActions().getActions().get(tier).get(actionType))
                 {
                     if (i % 9 == 7)
                     {
@@ -133,7 +133,7 @@ public class IGCCrateActions extends IGCTierMenu
             if (deleteMode)
             {
                 ItemMeta im = getIb().getInv().getItem(slot).getItemMeta();
-                cs.getCa().removeEntry(ChatUtils.removeColor(im.getDisplayName()), im.getLore().get(0), tier);
+                cs.getActions().removeEntry(ChatUtils.removeColor(im.getDisplayName()), im.getLore().get(0), tier);
                 open();
             }
         }
@@ -168,7 +168,7 @@ public class IGCCrateActions extends IGCTierMenu
         }
         else if (value.equalsIgnoreCase("new action - message"))
         {
-            cs.getCa().addEntry(actionType, input, tier);
+            cs.getActions().addEntry(actionType, input, tier);
             ChatUtils.msgSuccess(getP(),
                     "Added a new action with action type '" + actionType + "' and message '" + input + "'");
             return true;

@@ -42,7 +42,7 @@ public class CParticles extends CSetting
         {
             if (csb.hasV("open.crate-tiers"))
             {
-                for (String id : getCrates().getCs().getFc().getConfigurationSection("open.crate-tiers").getKeys(false))
+                for (String id : getCrate().getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false))
                 {
                     if (csb.hasV("open.crate-tiers." + id + ".particles"))
                     {
@@ -72,7 +72,7 @@ public class CParticles extends CSetting
         ArrayList<ParticleData> plist =
                 getParticles().containsKey(s) ? getParticles().get(s) : new ArrayList<ParticleData>();
         plist.add(pd);
-        StatusLoggerEvent.PARTICLE_ADD_SUCCESS.log(getCrates(), new String[]{pd.getParticleName()});
+        StatusLoggerEvent.PARTICLE_ADD_SUCCESS.log(getCrate(), new String[]{pd.getParticleName()});
         getParticles().put(s, plist);
     }
 
@@ -115,7 +115,7 @@ public class CParticles extends CSetting
                         }
                         catch (Exception exc)
                         {
-                            StatusLoggerEvent.PARTICLE_INVALID.log(getCrates(), new String[]{parent, particleTypeAS});
+                            StatusLoggerEvent.PARTICLE_INVALID.log(getCrate(), new String[]{parent, particleTypeAS});
                             continue;
                         }
                         pd = new NMSParticleEffect(pe, parent, false);
@@ -128,7 +128,7 @@ public class CParticles extends CSetting
                         }
                         catch (Exception exc)
                         {
-                            StatusLoggerEvent.PARTICLE_INVALID.log(getCrates(), new String[]{parent, particleTypeAS});
+                            StatusLoggerEvent.PARTICLE_INVALID.log(getCrate(), new String[]{parent, particleTypeAS});
                             continue;
                         }
                     }
@@ -243,7 +243,7 @@ public class CParticles extends CSetting
                     }
                     catch (Exception exc)
                     {
-                        StatusLoggerEvent.PARTICLE_ANIMATION_INVALID.log(getCrates(), new String[]{animationAS});
+                        StatusLoggerEvent.PARTICLE_ANIMATION_INVALID.log(getCrate(), new String[]{animationAS});
                     }
 
                     addParticle(pd, id);
@@ -251,7 +251,7 @@ public class CParticles extends CSetting
                 catch (Exception exc)
                 {
                     exc.printStackTrace();
-                    StatusLoggerEvent.PARTICLE_STRING_INVALID.log(getCrates(), new String[]{parent});
+                    StatusLoggerEvent.PARTICLE_STRING_INVALID.log(getCrate(), new String[]{parent});
                 }
             }
         }

@@ -105,7 +105,7 @@ public class FireworkData
                 catch (Exception exc)
                 {
                     StatusLoggerEvent.FIREWORK_DATA_INVALIDCOLOR
-                            .log(getCs().getCrates(), new String[]{s, colorUnParsed, "color"});
+                            .log(getCs().getCrate(), new String[]{s, colorUnParsed, "color"});
                 }
             }
 
@@ -129,7 +129,7 @@ public class FireworkData
                 catch (Exception exc)
                 {
                     StatusLoggerEvent.FIREWORK_DATA_INVALIDCOLOR
-                            .log(getCs().getCrates(), new String[]{s, colorUnParsed, "fade"});
+                            .log(getCs().getCrate(), new String[]{s, colorUnParsed, "fade"});
                 }
             }
 
@@ -159,16 +159,16 @@ public class FireworkData
                 cause = args[5] + " is not a valid number / power.";
                 setPower(Integer.valueOf(args[5]));
 
-                StatusLoggerEvent.FIREWORK_DATA_SUCCESS.log(getCs().getCrates(), new String[]{s});
+                StatusLoggerEvent.FIREWORK_DATA_SUCCESS.log(getCs().getCrate(), new String[]{s});
             }
             catch (Exception exc)
             {
-                StatusLoggerEvent.FIREWORK_DATA_PARTIALSUCCESS.log(getCs().getCrates(), new String[]{s, cause});
+                StatusLoggerEvent.FIREWORK_DATA_PARTIALSUCCESS.log(getCs().getCrate(), new String[]{s, cause});
             }
         }
         catch (Exception exc)
         {
-            StatusLoggerEvent.FIREWORK_DATA_FAILURE.log(getCs().getCrates(), new String[]{s});
+            StatusLoggerEvent.FIREWORK_DATA_FAILURE.log(getCs().getCrate(), new String[]{s});
         }
 
     }

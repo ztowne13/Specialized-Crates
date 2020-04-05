@@ -179,7 +179,7 @@ public class IGCCrateParticle extends IGCTierMenu
         switch (slot)
         {
             case 8:
-                cs.getCp().deleteParticle(tier, pd);
+                cs.getParticles().deleteParticle(tier, pd);
                 up();
                 break;
             case 0:

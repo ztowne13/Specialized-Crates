@@ -35,7 +35,7 @@ public class BlockBreakListener implements Listener
             PlacedCrate cm = PlacedCrate.get(cc, l);
             Crate crates = cm.getCrates();
 
-            if (crates.getCs().getOt().isStatic())
+            if (crates.getSettings().getObtainType().isStatic())
             {
                 if (!p.hasPermission("customcrates.deletestatic"))
                 {
@@ -64,11 +64,11 @@ public class BlockBreakListener implements Listener
                         for (Crate crates : Crate.getLoadedCrates().values())
                         {
                             // Check if the crate is a lucky chest and if it is enabled
-                            if (CrateUtils.isCrateUsable(crates) && crates.getCs().clcExists() &&
-                                    crates.getCs().getOt().equals(ObtainType.LUCKYCHEST))
+                            if (CrateUtils.isCrateUsable(crates) && crates.getSettings().luckyChestSettingsExists() &&
+                                    crates.getSettings().getObtainType().equals(ObtainType.LUCKYCHEST))
                             {
                                 // Check if the lucky chesty should be placed at the location
-                                if (crates.getCs().getClc().checkRun(e.getBlock()))
+                                if (crates.getSettings().getLuckyChestSettings().checkRun(e.getBlock()))
                                 {
                                     if((!e.getBlock().hasMetadata("PLACED") || e.getBlock().getMetadata("PLACED") == null) || (Boolean) SettingsValues.LUCKYCHEST_ALLOW_PLACED_BLOCKS.getValue(cc))
                                     {

@@ -46,7 +46,7 @@ public class OpenChestRollingAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
+    public boolean runAnimation(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
     {
         this.loc = l;
 
@@ -73,7 +73,7 @@ public class OpenChestRollingAnimation extends InventoryCrateAnimation
             upOne.setX(upOne.getX() + .5);
             upOne.setZ(upOne.getZ() + .5);
 
-            lastReward = getCrates().getCs().getCr().getRandomReward(p);
+            lastReward = getCrate().getSettings().getRewards().getRandomReward(p);
 
             item = l.getWorld().dropItem(upOne, lastReward.getDisplayBuilder().getStack());
             item.setPickupDelay(100000);
@@ -83,7 +83,7 @@ public class OpenChestRollingAnimation extends InventoryCrateAnimation
 
         if (!isCompleted())
         {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
+            Bukkit.getScheduler().scheduleSyncDelayedTask(getSc(), new Runnable()
             {
                 @Override
                 public void run()
@@ -94,7 +94,7 @@ public class OpenChestRollingAnimation extends InventoryCrateAnimation
 
                     if (getTicks() >= getCurrentTicks() - 1.1)
                     {
-                        lastReward = getCrates().getCs().getCr().getRandomReward(p);
+                        lastReward = getCrate().getSettings().getRewards().getRandomReward(p);
                         item.setItemStack(lastReward.getDisplayBuilder().getStack());
 
                         setUpdates(getUpdates() + 1);
@@ -107,7 +107,7 @@ public class OpenChestRollingAnimation extends InventoryCrateAnimation
 
                         if (getCurrentTicks() > getFinalTickLength())
                         {
-                            finishUp(p, 40);
+                            endAnimationAfter(p, 40);
                             completed = true;
                             return;
                         }
@@ -159,17 +159,17 @@ public class OpenChestRollingAnimation extends InventoryCrateAnimation
     @Override
     public void loadValueFromConfig(StatusLogger sl)
     {
-        FileConfiguration fc = getFu().get();
+        FileConfiguration fc = getFileHandler().get();
     }
 
     @Override
-    public void finishUp(Player p)
+    public void endAnimation(Player p)
     {
         ArrayList<Reward> rewards = new ArrayList<Reward>();
         rewards.add(lastReward);
 
-        completeCrateRun(p, rewards, false);
-        getCrates().tick(loc, CrateState.OPEN, p, rewards);
+        completeCrateRun(p, rewards, false, null);
+        getCrate().tick(loc, CrateState.OPEN, p, rewards);
         item.remove();
         items.remove(item);
         new NMSChestState().playChestAction(playedLoc.getBlock(), false);

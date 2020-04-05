@@ -44,7 +44,7 @@ public class PlacedCrate
         getCc().getActivecratesFile().get().set(LocationUtils.locToString(getL()), null);
         getCc().getActivecratesFile().save();
         getCholo().getDh().delete();
-        getCrates().getCs().getDcp().remove(this);
+        getCrates().getSettings().getPlaceholder().remove(this);
         getPlacedCrates().remove(getL());
         deleted = true;
     }
@@ -67,7 +67,7 @@ public class PlacedCrate
             setupDisplay();
             setupHolo(crates);
 
-            getCrates().getCs().getDcp().fixHologram(this);
+            getCrates().getSettings().getPlaceholder().fixHologram(this);
 
             if (writeToFile)
             {
@@ -79,13 +79,13 @@ public class PlacedCrate
 
     public void setupDisplay()
     {
-        getCrates().getCs().getDcp().place(this);
+        getCrates().getSettings().getPlaceholder().place(this);
     }
 
 
     public void setupHolo(Crate crates)
     {
-        setCholo(crates.getCs().getCholoCopy().clone());
+        setCholo(crates.getSettings().getHologram().clone());
         Location dupeLoc = getL().clone();
         dupeLoc.setY(dupeLoc.getY() + .5);
         getCholo().setDh(getCholo().createHologram(this, dupeLoc));
@@ -95,12 +95,12 @@ public class PlacedCrate
     {
         if (isCratesEnabled())
         {
-            getCrates().tick(getL(), cs);
+            getCrates().tick(getL(), cs, null, null);
             //getCrates().getCs().getCh().tick(null, getL(), cs, !getCrates().isMultiCrate());
             getCholo().getDh().tick();
         }
 
-        if (crates.getCs().getOt().equals(ObtainType.LUCKYCHEST))
+        if (crates.getSettings().getObtainType().equals(ObtainType.LUCKYCHEST))
         {
             int num = (int) cc.getSettings().getConfigValues().get(SettingsValues.LUCKYCHEST_DESPAWN.getPath()) * 60;
             if (num > 0 && ((System.currentTimeMillis() - getPlacedTime()) / 1000) > num)

@@ -39,7 +39,7 @@ public class CActions extends CSetting
     {
         if (csb.hasV("open.actions"))
         {
-            List<String> list = getCrates().getCs().getFc().getStringList("open.actions");
+            List<String> list = getCrate().getSettings().getFc().getStringList("open.actions");
             for (String s : list)
             {
                 addEntryByString("DEFAULT", s);
@@ -48,11 +48,11 @@ public class CActions extends CSetting
 
         if (csb.hasV("open.crate-tiers"))
         {
-            for (String tier : getCrates().getCs().getFc().getConfigurationSection("open.crate-tiers").getKeys(false))
+            for (String tier : getCrate().getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false))
             {
                 if (csb.hasV("open.crate-tiers." + tier + ".actions"))
                 {
-                    List<String> list = getCrates().getCs().getFc().getStringList("open.crate-tiers." + tier + ".actions");
+                    List<String> list = getCrate().getSettings().getFc().getStringList("open.crate-tiers." + tier + ".actions");
                     for (String s : list)
                     {
                         addEntryByString(tier, s);
@@ -93,7 +93,7 @@ public class CActions extends CSetting
         list.add(action);
         map.put(type, list);
 
-        StatusLoggerEvent.ACTION_ADD.log(getCrates(), new String[]{action, tier});
+        StatusLoggerEvent.ACTION_ADD.log(getCrate(), new String[]{action, tier});
         getActions().put(tier, map);
     }
 
@@ -192,7 +192,7 @@ public class CActions extends CSetting
                         rewardsAsString = rewardsAsString.substring(1, rewardsAsString.length() - 1);
 
                         msg = ChatUtils.toChatColor(
-                                msg.replace("%player%", p.getName()).replace("%crate%", getCrates().getName())
+                                msg.replace("%player%", p.getName()).replace("%crate%", getCrate().getName())
                                         .replace("%reward%", rewardsAsString));
                         if (s.equalsIgnoreCase("MESSAGE"))
                         {
@@ -240,10 +240,10 @@ public class CActions extends CSetting
 
         if (!pre)
         {
-            if (!crates.getCs().getCt().equals(CrateType.BLOCK_CRATEOPEN) ||
-                    !((OpenChestAnimation) crates.getCs().getCh()).isEarlyRewardHologram())
+            if (!crates.getSettings().getCrateType().equals(CrateType.BLOCK_CRATEOPEN) ||
+                    !((OpenChestAnimation) crates.getSettings().getAnimation()).isEarlyRewardHologram())
             {
-                if (crates.getCs().getOt().isStatic() || crates.getCs().getCt().isSpecialDynamicHandling())
+                if (crates.getSettings().getObtainType().isStatic() || crates.getSettings().getCrateType().isSpecialDynamicHandling())
                     playRewardHologram(p, rewardsAsDisplayname);
             }
         }
@@ -269,7 +269,7 @@ public class CActions extends CSetting
         if (!(pm.getLastOpenedPlacedCrate() == null))
         {
             final PlacedCrate placedCrate = pm.getLastOpenedPlacedCrate();
-            String msg = placedCrate.getCrates().getCs().getCholoCopy().getRewardHologram();
+            String msg = placedCrate.getCrates().getSettings().getHologram().getRewardHologram();
             if (!msg.equalsIgnoreCase(""))
             {
 //                msg = ChatUtils.toChatColor(msg.replace("%reward%", rewards.toString().replace("[", "").replace("]", ""))).replace("%player%", p.getName()));
@@ -282,7 +282,7 @@ public class CActions extends CSetting
                 dynamicHologram.delete();
 
                 Location rewardLoc = placedCrate.getL().clone();
-                rewardLoc.setY(rewardLoc.getY() - .3 + getCrates().getCs().getCholoCopy().getRewardHoloYOffset() +
+                rewardLoc.setY(rewardLoc.getY() - .3 + getCrate().getSettings().getHologram().getRewardHoloYOffset() +
                         additionalYOffset);
                 dynamicHologram.create(rewardLoc);
                 dynamicHologram.addLine(msg);
@@ -302,9 +302,9 @@ public class CActions extends CSetting
                         final Location cloneY = placedCrate.getL().clone();
                         cloneY.setY(cloneY.getY() + .5);
 
-                        if(placedCrate.getCrates().getCs().getOt().equals(ObtainType.STATIC))
+                        if(placedCrate.getCrates().getSettings().getObtainType().equals(ObtainType.STATIC))
                         {
-                            placedCrate.getCrates().getCs().getCholoCopy().createHologram(cloneY, dynamicHologram);
+                            placedCrate.getCrates().getSettings().getHologram().createHologram(cloneY, dynamicHologram);
                         }
 
                         pm.setLastOpenedPlacedCrate(null);
@@ -316,7 +316,7 @@ public class CActions extends CSetting
                         }
 
                     }
-                }, attach ? openDuration : getCrates().getCs().getCholoCopy().getRewardHoloDuration());
+                }, attach ? openDuration : getCrate().getSettings().getHologram().getRewardHoloDuration());
 
             }
         }

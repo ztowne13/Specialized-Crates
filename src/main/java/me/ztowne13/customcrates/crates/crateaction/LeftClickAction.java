@@ -41,7 +41,7 @@ public class LeftClickAction extends CrateAction
                 if (!pm.isDeleteCrate() && (Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(cc))
                 {
                     if (!cm.getCrates().isMultiCrate())
-                        cm.getCrates().getCs().getDisplayer().openFor(player);
+                        cm.getCrates().getSettings().getDisplayer().openFor(player);
                     return true;
                 }
             }

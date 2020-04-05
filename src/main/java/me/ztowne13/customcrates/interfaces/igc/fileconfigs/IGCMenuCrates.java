@@ -95,8 +95,8 @@ public class IGCMenuCrates extends IGCMenu
                 Crate crate = Crate.getLoadedCrates().get(crateName);
                 ib.setItem(i, new ItemBuilder(Material.CHEST, 1, 0).setName((crate.isEnabled() ? "&a" : "&c") + crateName)
                         .setLore("&7Placed crates: &f" + crate.getPlacedCount()).addLore(
-                                "&7Errors: " + (crate.getCs().getSl().getFailures() == 0 ? "&f" : "&c") +
-                                        crate.getCs().getSl().getFailures()));
+                                "&7Errors: " + (crate.getSettings().getStatusLogger().getFailures() == 0 ? "&f" : "&c") +
+                                        crate.getSettings().getStatusLogger().getFailures()));
                 i++;
             }
         }
@@ -134,10 +134,10 @@ public class IGCMenuCrates extends IGCMenu
                 if (!input.contains(" "))
                 {
                     Crate newCrate = new Crate(getCc(), input, true);
-                    CrateSettings cs = newCrate.getCs();
-                    cs.setOt(ObtainType.STATIC);
-                    cs.setDcp(new MaterialPlaceholder(getCc()));
-                    cs.setCt(CrateType.INV_ROULETTE);
+                    CrateSettings cs = newCrate.getSettings();
+                    cs.setObtainType(ObtainType.STATIC);
+                    cs.setPlaceholder(new MaterialPlaceholder(getCc()));
+                    cs.setCrateType(CrateType.INV_ROULETTE);
                     cs.setRequireKey(true);
                     cs.setRewardDisplayType(RewardDisplayType.IN_ORDER);
                     cs.setDisplayer(new SimpleRewardDisplayer(newCrate));
@@ -145,14 +145,14 @@ public class IGCMenuCrates extends IGCMenu
                     SaveableItemBuilder builder = new SaveableItemBuilder(DynamicMaterial.CHEST, 1);
                     builder.setDisplayName(input);
 
-                    cs.setCrate(builder);
+                    cs.getCrateItemHandler().setItem(builder);
 
                     newCrate.setEnabled(true);
                     newCrate.setCanBeEnabled(false);
 
                     if (!CRewards.getAllRewards().isEmpty())
                     {
-                        cs.getCr().addReward(CRewards.getAllRewards().values().iterator().next().getRewardName());
+                        cs.getRewards().addReward(CRewards.getAllRewards().values().iterator().next().getRewardName());
                     }
 
                     cs.saveAll();

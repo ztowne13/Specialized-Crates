@@ -98,20 +98,20 @@ public class CRewards extends CSetting
         {
             int slot = 0;
 
-            setCrateRewards(new Reward[getCrates().getCs().getFc().getStringList("rewards").size()]);
+            setCrateRewards(new Reward[getCrate().getSettings().getFc().getStringList("rewards").size()]);
 
-            List<String> unparsedRewards = getCrates().getCs().getFc().getStringList("rewards");
+            List<String> unparsedRewards = getCrate().getSettings().getFc().getStringList("rewards");
 
             for (int i = 0; i < unparsedRewards.size(); i++)
             {
                 String s = unparsedRewards.get(i);
 
-                Reward reward = new Reward(getCrates().getCc(), this, s);
+                Reward reward = new Reward(getCrate().getCc(), this, s);
 
                 setReward(slot, reward);
 
                 getAllRewards().put(s, reward);
-                StatusLoggerEvent.REWARD_ADD_SUCCESS.log(getCrates(), new String[]{s});
+                StatusLoggerEvent.REWARD_ADD_SUCCESS.log(getCrate(), new String[]{s});
 
                 slot++;
             }
@@ -141,7 +141,7 @@ public class CRewards extends CSetting
             setCrateRewards(finalUpdate);
             return;
         }
-        StatusLoggerEvent.REWARD_NONEXISTENT.log(getCrates());
+        StatusLoggerEvent.REWARD_NONEXISTENT.log(getCrate());
     }
 
     public void setReward(Integer i, Reward reward)

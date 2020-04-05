@@ -213,7 +213,7 @@ public class Reward implements Comparable<Reward>
             {
                 if (!cs.isMultiCrate())
                 {
-                    for (Reward r : cs.getCs().getCr().getCrateRewards())
+                    for (Reward r : cs.getSettings().getRewards().getCrateRewards())
                     {
                         if (r.equals(this))
                         {
@@ -270,7 +270,7 @@ public class Reward implements Comparable<Reward>
             if (toLog)
             {
                 setChance(-1);
-                StatusLoggerEvent.REWARD_CHANCE_NONEXISTENT.log(getCr().getCrates(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_CHANCE_NONEXISTENT.log(getCr().getCrate(), new String[]{this.toString()});
             }
         }
     }
@@ -295,7 +295,7 @@ public class Reward implements Comparable<Reward>
         else
         {
             if(toLog)
-                saveBuilder.loadItem(getCc().getRewardsFile(), getRewardName() + ".display-item", getCr().getCrates().getCs().getSl(),
+                saveBuilder.loadItem(getCc().getRewardsFile(), getRewardName() + ".display-item", getCr().getCrate().getSettings().getStatusLogger(),
                         StatusLoggerEvent.REWARD_ITEM_FAILURE, StatusLoggerEvent.REWARD_ENCHANT_INVALID,
                         StatusLoggerEvent.REWARD_POTION_INVALID, StatusLoggerEvent.REWARD_GLOW_FAILURE,
                         StatusLoggerEvent.REWARD_AMOUNT_INVALID, StatusLoggerEvent.REWARD_FLAG_FAILURE);
@@ -331,7 +331,7 @@ public class Reward implements Comparable<Reward>
             //needsMoreConfig = true;
             if (toLog)
             {
-                StatusLoggerEvent.REWARD_RARITY_NONEXISTENT.log(getCr().getCrates(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_RARITY_NONEXISTENT.log(getCr().getCrate(), new String[]{this.toString()});
                 success = false;
             }
         }
@@ -372,7 +372,7 @@ public class Reward implements Comparable<Reward>
         {
             if (toLog)
             {
-                StatusLoggerEvent.REWARD_COMMAND_INVALID.log(getCr().getCrates(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_COMMAND_INVALID.log(getCr().getCrate(), new String[]{this.toString()});
                 success = false;
             }
         }

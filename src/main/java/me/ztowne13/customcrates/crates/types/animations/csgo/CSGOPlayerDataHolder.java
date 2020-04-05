@@ -11,41 +11,54 @@ import java.util.HashMap;
 /**
  * Created by ztowne13 on 3/6/16.
  */
-public class CSGODataHolder
+public class CSGOPlayerDataHolder
 {
-    static HashMap<Player, CSGODataHolder> holders = new HashMap<>();
+    public enum State
+    {
+        SCROLLING,
+
+        WAITING,
+
+        CLOSING,
+
+        ENDING,
+
+        COMPLETED;
+    }
+
+    static HashMap<Player, CSGOPlayerDataHolder> holders = new HashMap<>();
 
     Player p;
     Location l;
     BukkitRunnable br;
 
-    double displayAmount, currentTicks = 1.1, individualTicks = 0, totalTicks = 0, updates = 0;
+    double currentTicks = 1.1, individualTicks = 0, totalTicks = 0, updates = 0;
     int animatedCloseTicks = 0;
+    int waitingTicks = 0;
 
     Reward[] displayedRewards = new Reward[7];
 
-    boolean completed = false;
+    State currentState = State.SCROLLING;
 
     InventoryBuilder inv;
 
-    public CSGODataHolder(Player p, Location l, CSGOManager ic)
+    public CSGOPlayerDataHolder(Player p, Location l, CSGOAnimation ic)
     {
         this.p = p;
         this.l = l;
-        displayAmount = ic.getRandomTickTime(ic.getFinalTickLength());
-        inv = new InventoryBuilder(p, 27, ic.getCrates().getCs().getCrateInventoryName() == null ? ic.getInvName() :
-                ic.getCrates().getCs().getCrateInventoryName());
+        inv = new InventoryBuilder(p, 27, ic.getCrate().getSettings().getCrateInventoryName() == null ? ic.getInvName() :
+                ic.getCrate().getSettings().getCrateInventoryName());
         holders.put(p, this);
     }
 
-    public static HashMap<Player, CSGODataHolder> getHolders()
+    public static HashMap<Player, CSGOPlayerDataHolder> getHolders()
     {
         return holders;
     }
 
-    public static void setHolders(HashMap<Player, CSGODataHolder> holders)
+    public static void setHolders(HashMap<Player, CSGOPlayerDataHolder> holders)
     {
-        CSGODataHolder.holders = holders;
+        CSGOPlayerDataHolder.holders = holders;
     }
 
     public Player getP()
@@ -76,16 +89,6 @@ public class CSGODataHolder
     public void setBr(BukkitRunnable br)
     {
         this.br = br;
-    }
-
-    public double getDisplayAmount()
-    {
-        return displayAmount;
-    }
-
-    public void setDisplayAmount(double displayAmount)
-    {
-        this.displayAmount = displayAmount;
     }
 
     public double getCurrentTicks()
@@ -128,16 +131,6 @@ public class CSGODataHolder
         this.displayedRewards = displayedRewards;
     }
 
-    public boolean isCompleted()
-    {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed)
-    {
-        this.completed = completed;
-    }
-
     public InventoryBuilder getInv()
     {
         return inv;
@@ -166,5 +159,25 @@ public class CSGODataHolder
     public void setAnimatedCloseTicks(int animatedCloseTicks)
     {
         this.animatedCloseTicks = animatedCloseTicks;
+    }
+
+    public State getCurrentState()
+    {
+        return currentState;
+    }
+
+    public void setCurrentState(State currentState)
+    {
+        this.currentState = currentState;
+    }
+
+    public int getWaitingTicks()
+    {
+        return waitingTicks;
+    }
+
+    public void setWaitingTicks(int waitingTicks)
+    {
+        this.waitingTicks = waitingTicks;
     }
 }

@@ -50,7 +50,7 @@ public class CustomRewardDisplayer extends RewardDisplayer
     {
         loadDefaults();
 
-        FileHandler fileHandler = getCrates().getCs().getFu();
+        FileHandler fileHandler = getCrates().getSettings().getFileHandler();
         FileConfiguration fc = fileHandler.get();
 
         ConfigurationSection configSection;
@@ -63,7 +63,7 @@ public class CustomRewardDisplayer extends RewardDisplayer
             {
                 SaveableItemBuilder itemBuilder = new SaveableItemBuilder(DynamicMaterial.STONE, 1);
                 boolean successLoadItem =
-                        itemBuilder.loadItem(getCrates().getCs().getFu(), PREFIX + "." + key, getCrates().getCs().getSl(),
+                        itemBuilder.loadItem(getCrates().getSettings().getFileHandler(), PREFIX + "." + key, getCrates().getSettings().getStatusLogger(),
                                 StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_ITEM_FAILURE,
                                 StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_ENCHANTMENT_ADD_FAILURE,
                                 StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_POTION_ADD_FAILURE,

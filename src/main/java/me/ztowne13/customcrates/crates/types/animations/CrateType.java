@@ -101,7 +101,7 @@ public enum CrateType
             default:
                 ch = new AnimationKeyCrate(crates);
         }
-        crates.getCs().setCh(ch);
+        crates.getSettings().setAnimation(ch);
     }
 
     public int getUses()
@@ -111,7 +111,7 @@ public enum CrateType
         {
             if (!crate.isMultiCrate())
             {
-                if (crate.getCs().getCt().equals(this))
+                if (crate.getSettings().getCrateType().equals(this))
                 {
                     uses++;
                 }

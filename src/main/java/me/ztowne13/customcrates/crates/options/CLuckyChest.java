@@ -39,7 +39,7 @@ public class CLuckyChest extends CSetting
     public void loadFor(CrateSettingsBuilder csb, CrateState cs)
     {
         FileConfiguration fc = up().getFc();
-        StatusLogger sl = up().getSl();
+        StatusLogger sl = up().getStatusLogger();
 
         if (csb.hasV("lucky-chest"))
         {
@@ -54,14 +54,14 @@ public class CLuckyChest extends CSetting
                 }
                 catch (Exception exc)
                 {
-                    StatusLoggerEvent.LUCKYCHEST_CHANCE_MISFORMATTED.log(getCrates());
+                    StatusLoggerEvent.LUCKYCHEST_CHANCE_MISFORMATTED.log(getCrate());
                 }
             }
             else
             {
                 chance = 1;
                 outOfChance = 100;
-                StatusLoggerEvent.LUCKYCHEST_CHANCE_NONEXISTENT.log(getCrates());
+                StatusLoggerEvent.LUCKYCHEST_CHANCE_NONEXISTENT.log(getCrate());
             }
 
             if (csb.hasV("lucky-chest.is-block-list-whitelist"))
@@ -72,13 +72,13 @@ public class CLuckyChest extends CSetting
                 }
                 catch (Exception exc)
                 {
-                    StatusLoggerEvent.LUCKYCHEST_BLWL_INVALID.log(getCrates());
+                    StatusLoggerEvent.LUCKYCHEST_BLWL_INVALID.log(getCrate());
                 }
             }
             else
             {
                 setBLWL(true);
-                StatusLoggerEvent.LUCKYCHEST_BLWL_NONEXISTENT.log(getCrates());
+                StatusLoggerEvent.LUCKYCHEST_BLWL_NONEXISTENT.log(getCrate());
             }
 
             if (csb.hasV("lucky-chest.worlds"))
@@ -95,7 +95,7 @@ public class CLuckyChest extends CSetting
                     }
                     else
                     {
-                        StatusLoggerEvent.LUCKYCHEST_WORLD_INVALID.log(getCrates(), new String[]{s});
+                        StatusLoggerEvent.LUCKYCHEST_WORLD_INVALID.log(getCrate(), new String[]{s});
                     }
                 }
             }
@@ -113,23 +113,23 @@ public class CLuckyChest extends CSetting
                         }
                         catch (Exception exc)
                         {
-                            StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALIDBLOCK.log(getCrates(), new String[]{mat});
+                            StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALIDBLOCK.log(getCrate(), new String[]{mat});
                         }
                     }
                 }
                 catch (Exception exc)
                 {
-                    StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALID.log(getCrates());
+                    StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALID.log(getCrate());
                 }
             }
             else
             {
-                StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_NONEXISTENT.log(getCrates());
+                StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_NONEXISTENT.log(getCrate());
             }
         }
         else
         {
-            StatusLoggerEvent.LUCKYCHEST_NOVALUES.log(getCrates());
+            StatusLoggerEvent.LUCKYCHEST_NOVALUES.log(getCrate());
         }
     }
 

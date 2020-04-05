@@ -50,7 +50,7 @@ public class CMultiCrateInventory extends CSetting
     @Override
     public void loadFor(CrateSettingsBuilder csb, CrateState cs)
     {
-        FileConfiguration fc = getCrates().getCs().getFc();
+        FileConfiguration fc = getCrate().getSettings().getFc();
         if (csb.hasV("gui"))
         {
             try
@@ -84,13 +84,13 @@ public class CMultiCrateInventory extends CSetting
                     catch (Exception exc)
                     {
                         //exc.printStackTrace();
-                        StatusLoggerEvent.MULTICRATEINVENTORY_OBJECTS_INVALID.log(getCrates(), new String[]{s, cause});
+                        StatusLoggerEvent.MULTICRATEINVENTORY_OBJECTS_INVALID.log(getCrate(), new String[]{s, cause});
                     }
                 }
             }
             catch (Exception exc)
             {
-                StatusLoggerEvent.MULTICRATEINVENTORY_OBJECTS_MISCONFIGURED.log(getCrates());
+                StatusLoggerEvent.MULTICRATEINVENTORY_OBJECTS_MISCONFIGURED.log(getCrate());
             }
 
 
@@ -134,12 +134,12 @@ public class CMultiCrateInventory extends CSetting
             }
             catch (Exception exc)
             {
-                StatusLoggerEvent.MULTICRATEINVENTORY_ROW_MISCONFIGURED.log(getCrates());
+                StatusLoggerEvent.MULTICRATEINVENTORY_ROW_MISCONFIGURED.log(getCrate());
             }
 
             return;
         }
-        StatusLoggerEvent.MULTICRATEINVENTORY_NONEXISTENT.log(getCrates());
+        StatusLoggerEvent.MULTICRATEINVENTORY_NONEXISTENT.log(getCrate());
     }
 
     public InventoryBuilder getInventory(Player p, String invName, boolean toEdit)
@@ -188,7 +188,7 @@ public class CMultiCrateInventory extends CSetting
                 cc.getDu().log(crate.getName());
                 VirtualCrateData vcd = PlayerManager.get(cc, p).getPdm().getVCCrateData(crate);
                 cc.getDu().log(vcd.toString());
-                ItemBuilder crateIb = new ItemBuilder(crate.getCs().getCrate(1));
+                ItemBuilder crateIb = new ItemBuilder(crate.getSettings().getCrateItemHandler().getItem(1));
                 crateIb.addLore("");
 
                 if (cc.getSettings().getConfigValAsBoolean("virtual-crate-cratecount"))
@@ -381,15 +381,15 @@ public class CMultiCrateInventory extends CSetting
         Player p = pm.getP();
         Crate crate = pm.getOpenCrate();
 
-        if (crate.getCs().getCmci().getCrateSpots().keySet().contains(slot))
+        if (crate.getSettings().getMultiCrateSettings().getCrateSpots().keySet().contains(slot))
         {
-            Crate clickedCrate = crate.getCs().getCmci().getCrateSpots().get(slot);
+            Crate clickedCrate = crate.getSettings().getMultiCrateSettings().getCrateSpots().get(slot);
 
             if (clickType.equals(Boolean.valueOf(
                     cc.getSettings().getConfigValues().get("mc-reward-display-leftclick").toString().toUpperCase()) ?
                     ClickType.LEFT : ClickType.RIGHT) && (Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(cc))
             {
-                clickedCrate.getCs().getDisplayer().openFor(p);
+                clickedCrate.getSettings().getDisplayer().openFor(p);
             }
             else if (!((Boolean)SettingsValues.REQUIRE_VIRTUAL_CRATE_AND_KEY.getValue(cc))
                     || pm.getPdm().getVCCrateData(clickedCrate).getCrates() > 0)
@@ -400,9 +400,9 @@ public class CMultiCrateInventory extends CSetting
                     CrateCooldownEvent cce = pm.getPdm().getCrateCooldownEventByCrates(clickedCrate);
                     if (cce == null || cce.isCooldownOverAsBoolean())
                     {
-                        if(cc.getEconomyHandler().handleCheck(p, clickedCrate.getCs().getCost(), true))
+                        if(cc.getEconomyHandler().handleCheck(p, clickedCrate.getSettings().getCost(), true))
                         {
-                            if (clickedCrate.getCs().getCh().tick(p, pm.getLastOpenCrate(), CrateState.OPEN, false))
+                            if (clickedCrate.getSettings().getAnimation().runAnimation(p, pm.getLastOpenCrate(), CrateState.OPEN, false, false))
                             {
                                 new CrateCooldownEvent(clickedCrate, System.currentTimeMillis(), true).addTo(pm.getPdm());
                                 // Post Conditions
@@ -411,7 +411,7 @@ public class CMultiCrateInventory extends CSetting
                                     pm.getPdm().setVirtualCrateCrates(clickedCrate,
                                             pm.getPdm().getVCCrateData(clickedCrate).getCrates() - 1);
                                 }
-                                else if (!crates.getCs().getOt().equals(ObtainType.STATIC))
+                                else if (!crates.getSettings().getObtainType().equals(ObtainType.STATIC))
                                 {
                                     try
                                     {
@@ -427,12 +427,12 @@ public class CMultiCrateInventory extends CSetting
                             else
                             {
                                 invCheck(p, pm);
-                                cc.getEconomyHandler().failSoReturn(p, clickedCrate.getCs().getCost());
+                                cc.getEconomyHandler().failSoReturn(p, clickedCrate.getSettings().getCost());
                             }
                         }
                         else
                         {
-                            crate.getCs().getCh().playFailToOpen(p, false);
+                            crate.getSettings().getAnimation().playFailToOpen(p, false, true);
                             invCheck(p, pm);
                         }
                     }

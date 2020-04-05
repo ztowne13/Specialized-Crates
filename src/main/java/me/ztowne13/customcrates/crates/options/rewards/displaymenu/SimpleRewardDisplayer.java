@@ -24,7 +24,7 @@ public class SimpleRewardDisplayer extends RewardDisplayer
     @Override
     public InventoryBuilder createInventory(Player p)
     {
-        CRewards cr = getCrates().getCs().getCr();
+        CRewards cr = getCrates().getSettings().getRewards();
         int amount = cr.getCrateRewards().length;
         int rows = amount % 9 == 0 ? amount / 9 : (amount / 9) + 1;
         InventoryBuilder ib = new InventoryBuilder(p, rows * 9, getInvName());

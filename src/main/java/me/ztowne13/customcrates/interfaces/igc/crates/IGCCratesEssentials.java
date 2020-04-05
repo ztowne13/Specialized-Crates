@@ -48,21 +48,21 @@ public class IGCCratesEssentials extends IGCMenuCrate
                 .addAutomaticLore("&f", 30,
                         "The permissions that is required to open this crate. Great for monthly crates, donor crates."));
         ib.setItem(3, new ItemBuilder(Material.BUCKET, 1, 0).setName("&aSet the obtain-method").setLore("&7Current value: ")
-                .addLore("&7" + cs.getOt().name()).addLore("")
+                .addLore("&7" + cs.getObtainType().name()).addLore("")
                 .addAutomaticLore("&f", 30,
                         "STATIC: Crate stays in place forever. DYNAMIC: Crate disappears when used. LUCKYCHEST (Mine Crate): Find this crate while mining."));
         ib.setItem(4, new ItemBuilder(Material.PAPER, 1, 0).setName("&aSet the inventory-name").setLore("&7Current value: ")
                 .addLore("&7" + cs.getCrateInventoryName()).addLore("").addAutomaticLore("&f", 30,
                         "The name of the inventory for the animation, or name of the MultiCrate. If this value is set to 'none' the inventory name in the CrateConfig.YML for that animation will be used."));
         ib.setItem(6, new ItemBuilder(DynamicMaterial.BIRCH_BUTTON, 1).setName("&aSet the display.type")
-                .setLore("&7Current value: ").addLore("&7" + cs.getDcp()).addLore("")
+                .setLore("&7Current value: ").addLore("&7" + cs.getPlaceholder()).addLore("")
                 .addAutomaticLore("&f", 30, "How the crate will appear to players (block, npc, mob, etc.)"));
 
-        if (crates.getCs().getDcp().toString().equalsIgnoreCase("mob") ||
-                crates.getCs().getDcp().toString().equalsIgnoreCase("npc"))
+        if (crates.getSettings().getPlaceholder().toString().equalsIgnoreCase("mob") ||
+                crates.getSettings().getPlaceholder().toString().equalsIgnoreCase("npc"))
         {
-            ib.setItem(15, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aSet the " + cs.getDcp() + " type")
-                    .setLore("&7Current value: ").addLore("&7" + cs.getDcp().getType()).addLore("")
+            ib.setItem(15, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aSet the " + cs.getPlaceholder() + " type")
+                    .setLore("&7Current value: ").addLore("&7" + cs.getPlaceholder().getType()).addLore("")
                     .addAutomaticLore("&f", 30, "Set the type of mob it will be or playername for the NPC."));
         }
 
@@ -83,7 +83,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
                             .addAutomaticLore("&f", 30,
                                     "Click to open the item editor."));
             ib.setItem(5, new ItemBuilder(Material.ITEM_FRAME, 1, 0).setName("&aSet the crate animation")
-                    .setLore("&7Current Value: ").addLore("&7" + cs.getCt().name()).addLore("")
+                    .setLore("&7Current Value: ").addLore("&7" + cs.getCrateType().name()).addLore("")
                     .addAutomaticLore("&f", 30, "This is the animation that will play when the crate is opened."));
             ib.setItem(13,
                     new ItemBuilder(Material.SLIME_BALL, 1, 0).setName("&aSet require key").setLore("&7Current value: ")
@@ -92,7 +92,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
 
             ItemBuilder cost = new ItemBuilder(DynamicMaterial.DIAMOND, 1);
             cost.setDisplayName("&aEdit the cost.");
-            cost.addLore("&7Current Value:").addLore("&7" + crates.getCs().getCost());
+            cost.addLore("&7Current Value:").addLore("&7" + crates.getSettings().getCost());
             cost.addLore("").addAutomaticLore("&f", 30, "This is how much it costs to open the crate, " +
                     "regardless of whether or not require-key is set to true or false.");
             cost.addLore("").addAutomaticLore("&c", 30, "REQUIRES Vault");
@@ -156,15 +156,15 @@ public class IGCCratesEssentials extends IGCMenuCrate
                         Arrays.asList(new String[]{"", "Requires Citizens v2", "Requires Citizens v2"})).open();
                 break;
             case 15:
-                if (cs.getDcp().toString().equalsIgnoreCase("npc"))
+                if (cs.getPlaceholder().toString().equalsIgnoreCase("npc"))
                 {
                     new InputMenu(getCc(), getP(),
-                            "display." + (cs.getDcp().toString().equalsIgnoreCase("mob") ? "creature" : "name"),
-                            cs.getDcp().getType(), cs.getDcp().toString().equalsIgnoreCase("mob") ?
+                            "display." + (cs.getPlaceholder().toString().equalsIgnoreCase("mob") ? "creature" : "name"),
+                            cs.getPlaceholder().getType(), cs.getPlaceholder().toString().equalsIgnoreCase("mob") ?
                             "Available mob types: " + Arrays.toString(EntityTypes.values()) : "Use a player's name",
                             String.class, this, true);
                 }
-                else if (cs.getDcp().toString().equalsIgnoreCase("mob"))
+                else if (cs.getPlaceholder().toString().equalsIgnoreCase("mob"))
                 {
                     new IGCListSelector(getCc(), getP(), this, "Mob Type", Arrays.asList(EntityTypes.values()),
                             DynamicMaterial.PAPER, 1, null).open();
@@ -179,10 +179,10 @@ public class IGCCratesEssentials extends IGCMenuCrate
                 open();
                 break;
             case 8:
-                new IGCItemEditor(getCc(), getP(), this, crates.getCs().getCrate()).open();
+                new IGCItemEditor(getCc(), getP(), this, crates.getSettings().getCrateItemHandler().getItem()).open();
                 break;
             case 17:
-                new IGCItemEditor(getCc(), getP(), this, crates.getCs().getKey()).open();
+                new IGCItemEditor(getCc(), getP(), this, crates.getSettings().getKeyItemHandler().getItem()).open();
                 break;
             case 5:
 //                new InputMenu(getCc(), getP(), "animation", cs.getCt().name(),
@@ -209,7 +209,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
             try
             {
                 ObtainType ot = ObtainType.valueOf(input.toUpperCase());
-                cs.setOt(ot);
+                cs.setObtainType(ot);
                 ChatUtils.msgSuccess(getP(), "Set the obtain type to " + input);
                 return true;
             }
@@ -238,7 +238,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
             try
             {
                 CrateType ct = CrateType.valueOf(input.toUpperCase());
-                cs.setCt(ct);
+                cs.setCrateType(ct);
                 ChatUtils.msgSuccess(getP(), "Set the Animation Type to " + input);
                 return true;
             }
@@ -268,7 +268,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
             switch (input.toUpperCase())
             {
                 case "BLOCK":
-                    cs.setDcp(new MaterialPlaceholder(getCc()));
+                    cs.setPlaceholder(new MaterialPlaceholder(getCc()));
                     return true;
                 case "NPC":
                     if (!NPCUtils.isCitizensInstalled())
@@ -276,7 +276,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
                         ChatUtils.msgError(getP(), "Citizens is not installed!");
                         return false;
                     }
-                    cs.setDcp(new Citizens2NPCPlaceHolder(getCc()));
+                    cs.setPlaceholder(new Citizens2NPCPlaceHolder(getCc()));
                     ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                     manageClick(15);
                     break;
@@ -286,7 +286,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
                         ChatUtils.msgError(getP(), "Citizens is not installed!");
                         return false;
                     }
-                    cs.setDcp(new MobPlaceholder(getCc()));
+                    cs.setPlaceholder(new MobPlaceholder(getCc()));
                     ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                     manageClick(15);
                     break;
@@ -297,8 +297,8 @@ public class IGCCratesEssentials extends IGCMenuCrate
             if (input.equalsIgnoreCase("mob") || input.equalsIgnoreCase("npc"))
             {
                 getIb().setItem(15,
-                        new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aSet the " + cs.getDcp() + " type")
-                                .setLore("&7Current value: ").addLore("&7" + cs.getDcp().getType()));
+                        new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aSet the " + cs.getPlaceholder() + " type")
+                                .setLore("&7Current value: ").addLore("&7" + cs.getPlaceholder().getType()));
             }
         }
         else if (value.equalsIgnoreCase("Mob Type"))
@@ -306,7 +306,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
             try
             {
                 EntityTypes et = EntityTypes.valueOf(input.toUpperCase());
-                cs.getDcp().setType(et.name());
+                cs.getPlaceholder().setType(et.name());
                 ChatUtils.msgSuccess(getP(), "Set mob type to " + input);
                 return true;
             }
@@ -317,7 +317,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
         }
         else if (value.equalsIgnoreCase("display.name"))
         {
-            cs.getDcp().setType(input);
+            cs.getPlaceholder().setType(input);
             ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
             return true;
         }

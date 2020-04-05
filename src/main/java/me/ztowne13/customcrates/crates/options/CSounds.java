@@ -77,7 +77,7 @@ public class CSounds extends CSetting
                 }
                 catch (Exception exc)
                 {
-                    StatusLoggerEvent.SOUND_NONEXISTENT.log(getCrates(), new String[]{sound, args[0]});
+                    StatusLoggerEvent.SOUND_NONEXISTENT.log(getCrate(), new String[]{sound, args[0]});
                     continue;
                 }
 
@@ -92,11 +92,11 @@ public class CSounds extends CSetting
                 {
                     if (args.length > 0)
                     {
-                        StatusLoggerEvent.SOUND_PITCH_INVALID.log(getCrates(), new String[]{soundFormatted.name(), args[1]});
+                        StatusLoggerEvent.SOUND_PITCH_INVALID.log(getCrate(), new String[]{soundFormatted.name(), args[1]});
                     }
                     else
                     {
-                        StatusLoggerEvent.SOUND_PITCH_NONEXISTENT.log(getCrates(), new String[]{soundFormatted.name()});
+                        StatusLoggerEvent.SOUND_PITCH_NONEXISTENT.log(getCrate(), new String[]{soundFormatted.name()});
                     }
                     continue;
                 }
@@ -111,21 +111,21 @@ public class CSounds extends CSetting
                     if (args.length > 1)
                     {
                         StatusLoggerEvent.SOUND_VOLUME_INVALID
-                                .log(getCrates(), new String[]{soundFormatted.name(), args[2]});
+                                .log(getCrate(), new String[]{soundFormatted.name(), args[2]});
                     }
                     else
                     {
-                        StatusLoggerEvent.SOUND_VOLUME_NONEXISTENT.log(getCrates(), new String[]{soundFormatted.name()});
+                        StatusLoggerEvent.SOUND_VOLUME_NONEXISTENT.log(getCrate(), new String[]{soundFormatted.name()});
                     }
                     continue;
                 }
 
                 addSound(id, sd);
-                StatusLoggerEvent.SOUND_ADD_SUCCESS.log(getCrates(), new String[]{soundFormatted.name()});
+                StatusLoggerEvent.SOUND_ADD_SUCCESS.log(getCrate(), new String[]{soundFormatted.name()});
             }
             catch (Exception exc)
             {
-                StatusLoggerEvent.SOUND_ADD_IMPROPER_SETUP.log(getCrates(), new String[]{sound});
+                StatusLoggerEvent.SOUND_ADD_IMPROPER_SETUP.log(getCrate(), new String[]{sound});
                 exc.printStackTrace();
             }
         }

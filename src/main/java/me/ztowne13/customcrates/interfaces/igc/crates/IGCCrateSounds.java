@@ -33,17 +33,17 @@ public class IGCCrateSounds extends IGCTierMenu
     public void open()
     {
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4,
-                (crates.getCs().getCs().getSounds().containsKey(tier) ? crates.getCs().getCs().getSounds().get(tier).size() :
+                (crates.getSettings().getSounds().getSounds().containsKey(tier) ? crates.getSettings().getSounds().getSounds().get(tier).size() :
                         0) + 9));
 
         ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
         ib.setItem(8, new ItemBuilder(Material.PAPER, 1, 0).setName("&aCreate a new sound").setLore("&7Make sure you save")
                 .addLore("&7when you're done."));
 
-        if (crates.getCs().getCs().getSounds().containsKey(tier))
+        if (crates.getSettings().getSounds().getSounds().containsKey(tier))
         {
             int i = 2;
-            for (SoundData sd : crates.getCs().getCs().getSounds().get(tier))
+            for (SoundData sd : crates.getSettings().getSounds().getSounds().get(tier))
             {
                 if (i % 9 == 7)
                 {
@@ -121,7 +121,7 @@ public class IGCCrateSounds extends IGCTierMenu
             {
                 sd.setVolume(Integer.valueOf(input));
 
-                cs.getCs().addSound(tier, sd);
+                cs.getSounds().addSound(tier, sd);
 
                 getP().closeInventory();
                 new IGCCrateSound(getCc(), getP(), this, crates, sd, tier).open();

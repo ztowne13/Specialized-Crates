@@ -22,27 +22,27 @@ public class AnimationKeyCrate extends CrateAnimation
     }
 
     @Override
-    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
+    public boolean runAnimation(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
     {
         if (force || canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
         {
-            Reward r = getCrates().getCs().getCr().getRandomReward(p);
+            Reward r = getCrate().getSettings().getRewards().getRandomReward(p);
             r.runCommands(p);
 
             ArrayList<Reward> rewards = new ArrayList<Reward>();
             rewards.add(r);
 
-            getCrates().tick(l, cs, p, rewards);
+            getCrate().tick(l, cs, p, rewards);
 
             if(!force)
                 takeKeyFromPlayer(p, !requireKeyInHand);
 
-            new HistoryEvent(Utils.currentTimeParsed(), getCrates(), rewards, true)
-                    .addTo(PlayerManager.get(getCc(), p).getPdm());
+            new HistoryEvent(Utils.currentTimeParsed(), getCrate(), rewards, true)
+                    .addTo(PlayerManager.get(getSc(), p).getPdm());
             return true;
         }
 
-        playFailToOpen(p);
+        playFailToOpen(p, true, true);
         return false;
     }
 
@@ -53,7 +53,7 @@ public class AnimationKeyCrate extends CrateAnimation
     }
 
     @Override
-    public void finishUp(Player p)
+    public void endAnimation(Player p)
     {
 
     }

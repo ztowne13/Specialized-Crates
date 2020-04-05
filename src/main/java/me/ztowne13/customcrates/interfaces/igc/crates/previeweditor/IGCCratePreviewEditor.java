@@ -25,7 +25,7 @@ public class IGCCratePreviewEditor extends IGCMenuCrate
     {
         super(specializedCrates, player, lastMenu, INV_NAME, crate);
 
-        this.customRewardDisplayer = (CustomRewardDisplayer) getCrates().getCs().getDisplayer();
+        this.customRewardDisplayer = (CustomRewardDisplayer) getCrates().getSettings().getDisplayer();
         this.page = page;
     }
 
@@ -113,7 +113,7 @@ public class IGCCratePreviewEditor extends IGCMenuCrate
             {
                 Integer slot = Integer.parseInt(args[2]);
 
-                Reward reward = getCs().getCr().getByName(input);
+                Reward reward = getCs().getRewards().getByName(input);
 
                 int x = slot/9;
                 int y = slot%9;

@@ -37,7 +37,7 @@ public class EnclosementAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
+    public boolean runAnimation(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
     {
         if (force || canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
         {
@@ -47,7 +47,7 @@ public class EnclosementAnimation extends InventoryCrateAnimation
             return true;
         }
 
-        playFailToOpen(p);
+        playFailToOpen(p, true, true);
         return false;
     }
 
@@ -60,7 +60,7 @@ public class EnclosementAnimation extends InventoryCrateAnimation
 
         if (!edh.isCompleted())
         {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
+            Bukkit.getScheduler().scheduleSyncDelayedTask(getSc(), new Runnable()
             {
                 @Override
                 public void run()
@@ -83,7 +83,7 @@ public class EnclosementAnimation extends InventoryCrateAnimation
 
                     if (edh.getCurrentTicksIn() <= 0)
                     {
-                        finishUp(edh.getP(), 20);
+                        endAnimationAfter(edh.getP(), 20);
                         return;
                     }
 
@@ -109,7 +109,7 @@ public class EnclosementAnimation extends InventoryCrateAnimation
             if (i >= midPoint - edh.getCurrentTicksIn() - 1 - rewardAmount &&
                     i < midPoint + edh.getCurrentTicksIn() + rewardAmount)
             {
-                Reward r = getCrates().getCs().getCr().getRandomReward(edh.getP());
+                Reward r = getCrate().getSettings().getRewards().getRandomReward(edh.getP());
                 ib.setItem(i, r.getDisplayBuilder());
                 edh.getLastDisplayRewards().add(r);
             }
@@ -119,13 +119,13 @@ public class EnclosementAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public void finishUp(Player p)
+    public void endAnimation(Player p)
     {
         EnclosementDataHolder edh = EnclosementDataHolder.getHolders().get(p);
         edh.setCompleted(true);
 
-        completeCrateRun(p, edh.getLastDisplayRewards(), false);
-        getCrates().tick(edh.getL(), CrateState.OPEN, p, edh.getLastDisplayRewards());
+        completeCrateRun(p, edh.getLastDisplayRewards(), false, null);
+        getCrate().tick(edh.getL(), CrateState.OPEN, p, edh.getLastDisplayRewards());
 
         edh.getHolders().remove(p);
     }
@@ -137,21 +137,21 @@ public class EnclosementAnimation extends InventoryCrateAnimation
         try
         {
             setInvName(fc.getString(prefix + "inv-name").replace("%crate%", crates.getName()));
-            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVNAME_SUCCESS.log(getSl());
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVNAME_SUCCESS.log(getStatusLogger());
         }
         catch (Exception exc)
         {
-            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVNAME_INVALID.log(getSl());
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVNAME_INVALID.log(getStatusLogger());
         }
 
         try
         {
             setInventoryRows(Integer.parseInt(fc.getString(prefix + "inventory-rows")));
-            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVROWS_SUCCESS.log(getSl());
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVROWS_SUCCESS.log(getStatusLogger());
         }
         catch (Exception exc)
         {
-            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVROWS_INVALID.log(getSl());
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVROWS_INVALID.log(getStatusLogger());
         }
 
         String cause = "The 'fill-block' value is non-existent.";
@@ -163,11 +163,11 @@ public class EnclosementAnimation extends InventoryCrateAnimation
             DynamicMaterial m = DynamicMaterial.fromString(s);
 
             fillerItem = new ItemBuilder(m, 1).setName(" ").get();
-            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_SUCCESS.log(getSl());
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_SUCCESS.log(getStatusLogger());
         }
         catch (Exception exc)
         {
-            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID.log(getSl(), new String[]{cause});
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID.log(getStatusLogger(), new String[]{cause});
         }
 
         try
@@ -176,19 +176,19 @@ public class EnclosementAnimation extends InventoryCrateAnimation
 
             SoundData sd = new SoundData(Sound.valueOf(args[0].toUpperCase()));
 
-            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_SOUND_SUCCESS.log(getSl());
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_SOUND_SUCCESS.log(getStatusLogger());
 
             if (args.length >= 2)
             {
                 if (Utils.isInt(args[1]))
                 {
                     sd.setVolume(Integer.parseInt(args[1]));
-                    StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUME_SUCCESS.log(getSl());
+                    StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUME_SUCCESS.log(getStatusLogger());
                 }
                 else
                 {
                     sd.setVolume(5);
-                    StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUME_INVALID.log(getSl(), new String[]{args[1]});
+                    StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUME_INVALID.log(getStatusLogger(), new String[]{args[1]});
                 }
 
                 if (args.length >= 3)
@@ -196,12 +196,12 @@ public class EnclosementAnimation extends InventoryCrateAnimation
                     if (Utils.isInt(args[2]))
                     {
                         sd.setPitch(Integer.parseInt(args[2]));
-                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_SUCCESS.log(getSl());
+                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_SUCCESS.log(getStatusLogger());
                     }
                     else
                     {
                         sd.setPitch(5);
-                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_INVALID.log(getSl(), new String[]{args[2]});
+                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_INVALID.log(getStatusLogger(), new String[]{args[2]});
                     }
                 }
                 else
@@ -211,7 +211,7 @@ public class EnclosementAnimation extends InventoryCrateAnimation
             }
             else
             {
-                StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUMEPITCH_FAILURE.log(getSl());
+                StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUMEPITCH_FAILURE.log(getStatusLogger());
                 sd.setVolume(5);
                 sd.setPitch(5);
             }
@@ -221,17 +221,17 @@ public class EnclosementAnimation extends InventoryCrateAnimation
         catch (Exception exc)
         {
             //setTickSound(new SoundData(Sound.FALL_BIG));
-            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_SOUND_FAILURE.log(getSl());
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_SOUND_FAILURE.log(getStatusLogger());
         }
 
         try
         {
             updateSpeed = Integer.parseInt(fc.getString(prefix + "update-speed"));
-            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_UPDATESPEED_SUCCESS.log(getSl());
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_UPDATESPEED_SUCCESS.log(getStatusLogger());
         }
         catch (Exception exc)
         {
-            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_UPDATESPEED_INVALID.log(getSl());
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_UPDATESPEED_INVALID.log(getStatusLogger());
         }
 
         try
@@ -246,11 +246,11 @@ public class EnclosementAnimation extends InventoryCrateAnimation
 
             rewardAmount = rewardAmount == 0 ? 0 : rewardAmount / 2;
 
-            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_REWARDAMOUNT_SUCCESS.log(getSl());
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_REWARDAMOUNT_SUCCESS.log(getStatusLogger());
         }
         catch (Exception exc)
         {
-            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_REWARDAMOUNT_INVALID.log(getSl());
+            StatusLoggerEvent.ANIMATION_ENCLOSEMENT_REWARDAMOUNT_INVALID.log(getStatusLogger());
         }
     }
 

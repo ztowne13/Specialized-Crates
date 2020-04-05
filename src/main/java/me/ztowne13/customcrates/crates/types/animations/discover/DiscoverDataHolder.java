@@ -36,8 +36,8 @@ public class DiscoverDataHolder
 
         int difference = id.getMaxRewards() - id.getMinRewards();
         ib = new InventoryBuilder(p, id.getInvRows() * 9,
-                id.getCrates().getCs().getCrateInventoryName() == null ? id.getInvName() :
-                        id.getCrates().getCs().getCrateInventoryName());
+                id.getCrate().getSettings().getCrateInventoryName() == null ? id.getInvName() :
+                        id.getCrate().getSettings().getCrateInventoryName());
 
         remainingClicks = (difference == 0 ? 0 : new Random().nextInt(difference + 1)) + id.getMinRewards();
 

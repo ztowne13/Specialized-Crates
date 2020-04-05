@@ -30,8 +30,8 @@ public class MenuDataHolder
         this.l = l;
 
         inv = new InventoryBuilder(p, im.getInventoryRows() * 9,
-                im.getCrates().getCs().getCrateInventoryName() == null ? im.getInvName() :
-                        im.getCrates().getCs().getCrateInventoryName());
+                im.getCrate().getSettings().getCrateInventoryName() == null ? im.getInvName() :
+                        im.getCrate().getSettings().getCrateInventoryName());
         ;
         displayedRewards = new ArrayList<>();
         usedNumbers = new ArrayList<>();

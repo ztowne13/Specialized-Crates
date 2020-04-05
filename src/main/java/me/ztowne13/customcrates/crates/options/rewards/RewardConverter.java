@@ -50,7 +50,7 @@ public class RewardConverter
 
             if(m.equals(DynamicMaterial.AIR))
             {
-                StatusLoggerEvent.REWARD_ITEM_AIR.log(reward.getCr().getCrates(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_ITEM_AIR.log(reward.getCr().getCrate(), new String[]{this.toString()});
                 return false;
             }
 
@@ -72,7 +72,7 @@ public class RewardConverter
             reward.needsMoreConfig = true;
             if (reward.toLog)
             {
-                StatusLoggerEvent.REWARD_NAME_NONEXISTENT.log(reward.getCr().getCrates(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_NAME_NONEXISTENT.log(reward.getCr().getCrate(), new String[]{this.toString()});
                 success = false;
             }
         }
@@ -98,7 +98,7 @@ public class RewardConverter
             reward.needsMoreConfig = true;
             if (reward.toLog)
             {
-                StatusLoggerEvent.REWARD_ITEM_NONEXISTENT.log(reward.getCr().getCrates(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_ITEM_NONEXISTENT.log(reward.getCr().getCrate(), new String[]{this.toString()});
                 success = false;
             }
         }
@@ -157,7 +157,7 @@ public class RewardConverter
             }
             catch (Exception exc)
             {
-                StatusLoggerEvent.REWARD_AMOUNT_INVALID.log(reward.getCr().getCrates(), new String[]{reward.saveBuilder.getDisplayName()});
+                StatusLoggerEvent.REWARD_AMOUNT_INVALID.log(reward.getCr().getCrate(), new String[]{reward.saveBuilder.getDisplayName()});
             }
         }
 
@@ -186,7 +186,7 @@ public class RewardConverter
                 catch (Exception exc)
                 {
                     StatusLoggerEvent.REWARD_POTION_INVALID
-                            .log(reward.getCr().getCrates(), new String[]{reward.saveBuilder.getDisplayName(), unparsedPot});
+                            .log(reward.getCr().getCrate(), new String[]{reward.saveBuilder.getDisplayName(), unparsedPot});
                 }
             }
         }
@@ -220,7 +220,7 @@ public class RewardConverter
             catch (Exception exc)
             {
                 StatusLoggerEvent.REWARD_ENCHANT_INVALID
-                        .log(reward.getCr().getCrates(), new String[]{reward.saveBuilder.getDisplayName(), cause});
+                        .log(reward.getCr().getCrate(), new String[]{reward.saveBuilder.getDisplayName(), cause});
             }
         }
     }

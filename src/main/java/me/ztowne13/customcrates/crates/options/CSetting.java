@@ -24,16 +24,16 @@ public abstract class CSetting
 
     public FileHandler getFu()
     {
-        return getCrates().getCs().getFu();
+        return getCrate().getSettings().getFileHandler();
     }
 
 
     public CrateSettings up()
     {
-        return getCrates().getCs();
+        return getCrate().getSettings();
     }
 
-    public Crate getCrates()
+    public Crate getCrate()
     {
         return crates;
     }

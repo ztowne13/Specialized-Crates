@@ -36,12 +36,12 @@ public class CHolograms extends CSetting
 
     public void loadFor(CrateSettingsBuilder csb, CrateState cs)
     {
-        FileConfiguration fc = getCrates().getCs().getFc();
+        FileConfiguration fc = getCrate().getSettings().getFc();
 
         if (csb.hasV("hologram.reward-hologram"))
         {
             rewardHologram = fc.getString("hologram.reward-hologram");
-            StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM.log(getCrates(), new String[]{rewardHologram});
+            StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM.log(getCrate(), new String[]{rewardHologram});
         }
 
         if (csb.hasV("hologram.reward-hologram-duration"))
@@ -49,11 +49,11 @@ public class CHolograms extends CSetting
             try
             {
                 rewardHoloDuration = Integer.parseInt(fc.getString("hologram.reward-hologram-duration"));
-                StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_DURATION_SUCCESS.log(getCrates());
+                StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_DURATION_SUCCESS.log(getCrate());
             }
             catch (Exception exc)
             {
-                StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_DURATION_INVALID.log(getCrates());
+                StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_DURATION_INVALID.log(getCrate());
             }
         }
 
@@ -62,11 +62,11 @@ public class CHolograms extends CSetting
             try
             {
                 rewardHoloYOffset = Double.parseDouble(fc.getString("hologram.reward-hologram-yoffset"));
-                StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_YOFFSET_SUCCESS.log(getCrates());
+                StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_YOFFSET_SUCCESS.log(getCrate());
             }
             catch (Exception exc)
             {
-                StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_YOFFSET_INVALID.log(getCrates());
+                StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_YOFFSET_INVALID.log(getCrate());
             }
         }
 
@@ -97,12 +97,12 @@ public class CHolograms extends CSetting
             {
                 if (!csb.hasV("hologram.animation.type"))
                 {
-                    StatusLoggerEvent.HOLOGRAM_ANIMATION_TYPE_FAILURE_NONEXISTENT.log(getCrates());
+                    StatusLoggerEvent.HOLOGRAM_ANIMATION_TYPE_FAILURE_NONEXISTENT.log(getCrate());
                 }
                 else
                 {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_TYPE_FAILURE_INVALID
-                            .log(getCrates(), new String[]{fc.getString("hologram.animation.type")});
+                            .log(getCrate(), new String[]{fc.getString("hologram.animation.type")});
                 }
                 return;
             }
@@ -116,12 +116,12 @@ public class CHolograms extends CSetting
                 setSpeed(10);
                 if (!csb.hasV("hologram.animation.speed"))
                 {
-                    StatusLoggerEvent.HOLOGRAM_ANIMATION_SPEED_FAILURE_NONEXISTENT.log(getCrates());
+                    StatusLoggerEvent.HOLOGRAM_ANIMATION_SPEED_FAILURE_NONEXISTENT.log(getCrate());
                 }
                 else
                 {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_SPEED_FAILURE_INVALID
-                            .log(getCrates(), new String[]{fc.getString("hologram.animation.speed")});
+                            .log(getCrate(), new String[]{fc.getString("hologram.animation.speed")});
                 }
                 return;
             }
@@ -136,14 +136,14 @@ public class CHolograms extends CSetting
             catch (Exception exc)
             {
                 setHat(null);
-                StatusLoggerEvent.HOLOGRAM_ANIMATION_PREFIXES_DISABLED.log(getCrates());
+                StatusLoggerEvent.HOLOGRAM_ANIMATION_PREFIXES_DISABLED.log(getCrate());
                 if (!csb.hasV("hologram.animation.prefixes"))
                 {
-                    StatusLoggerEvent.HOLOGRAM_ANIMATION_PREFIXES_NONEXISTENT.log(getCrates());
+                    StatusLoggerEvent.HOLOGRAM_ANIMATION_PREFIXES_NONEXISTENT.log(getCrate());
                 }
                 else
                 {
-                    StatusLoggerEvent.HOLOGRAM_ANIMATION_PREFIXES_MISFORMATTED.log(getCrates());
+                    StatusLoggerEvent.HOLOGRAM_ANIMATION_PREFIXES_MISFORMATTED.log(getCrate());
                 }
 
                 return;
@@ -200,12 +200,12 @@ public class CHolograms extends CSetting
                 hologramOffset = 0;
             }
         }
-        return hologramOffset + getCrates().getCs().getHologramOffset();
+        return hologramOffset + getCrate().getSettings().getHologramOffset();
     }
 
     public CHolograms clone()
     {
-        CHolograms ch = new CHolograms(getCrates());
+        CHolograms ch = new CHolograms(getCrate());
         ch.setLineCount(getLineCount());
         ch.setLines(getLines());
         ch.setHat(getHat());
@@ -223,7 +223,7 @@ public class CHolograms extends CSetting
         catch (Exception exc)
         {
             StatusLoggerEvent.HOLOGRAM_ADDLINE_FAIL_TOMANY
-                    .log(getCrates(), new String[]{line, (getLines().size() + 1) + ""});
+                    .log(getCrate(), new String[]{line, (getLines().size() + 1) + ""});
         }
     }
 

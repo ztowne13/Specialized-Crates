@@ -1,15 +1,18 @@
 package me.ztowne13.customcrates.crates;
 
+import me.ztowne13.customcrates.DataHandler;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.utils.Utils;
+import me.ztowne13.customcrates.utils.CrateUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class Crate
 {
@@ -39,17 +42,11 @@ public class Crate
         this.isMultiCrate = isMultiCrate;
         this.cs = new CrateSettings(cc, this, newFile);
 
-        setEnabled(!getCs().getCsb().hasV("enabled") || cs.getFc().getBoolean("enabled"));
+        setEnabled(!getSettings().getSettingsBuilder().hasV("enabled") || cs.getFc().getBoolean("enabled"));
 
         getLoadedCrates().put(name, this);
 
-        getCs().loadAll();
-    }
-
-    @Deprecated
-    public void tick(Location l, CrateState cstate)
-    {
-        getCs().playAll(l, cstate);
+        getSettings().loadAll();
     }
 
     @Deprecated
@@ -60,23 +57,59 @@ public class Crate
 
     public void tick(Location l, PlacedCrate placedCrate, CrateState cstate, Player p, ArrayList<Reward> rewards)
     {
-        getCs().playAll(l, placedCrate, cstate, p, rewards);
+        getSettings().getParticles().runAll(l, cstate, rewards);
+        if (cstate.equals(CrateState.OPEN) && CrateUtils.isCrateUsable(this))
+        {
+            getSettings().getSounds().runAll(p, l, rewards);
+            getSettings().getFireworks().runAll(p, l, rewards);
+            if (rewards != null && !rewards.isEmpty())
+            {
+                getSettings().getActions().playAll(p, placedCrate, rewards, false);
+            }
+        }
     }
 
-    public boolean crateMatchesBlock(Material blockType)
+    public String deleteCrate()
     {
-        if (blockType.equals(getCs().getCrate(1).getType()))
+        deleteAllPlaced();
+
+        Path path = getSettings().getFileHandler().getDataFile().toPath();
+        try
         {
-            return true;
+            FileUtils.forceDelete(getSettings().getFileHandler().getDataFile());
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace();
+            return "File nonexistent, please try reloading or contacting the plugin author.";
         }
 
-        if (blockType.name().equalsIgnoreCase("SKULL") &&
-                getCs().getCrate(1).getType().name().equalsIgnoreCase("SKULL_ITEM"))
+        for(UUID id : cc.getDataHandler().getQuedGiveCommands().keySet())
         {
-            return true;
+            ArrayList<DataHandler.QueuedGiveCommand> cmds = cc.getDataHandler().getQuedGiveCommands().get(id);
+            for(DataHandler.QueuedGiveCommand cmd : cmds)
+            {
+                if(cmd.getCrate().equals(this))
+                {
+                    cmds.remove(cmd);
+                    cc.getDataHandler().getQuedGiveCommands().remove(id);
+                    cc.getDataHandler().getQuedGiveCommands().put(id, cmds);
+                }
+            }
         }
 
-            return false;
+        cc.getDataHandler().saveToFile();
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                cc.reload();
+
+            }
+        }, 20);
+        return path.toString();
     }
 
     public ArrayList<PlacedCrate> deleteAllPlaced()
@@ -90,7 +123,7 @@ public class Crate
             if (cm.getCrates().equals(this))
             {
                 deleted.add(cm);
-                cm.getCrates().getCs().getDcp().remove(cm);
+                cm.getCrates().getSettings().getPlaceholder().remove(cm);
                 cm.delete();
             }
         }
@@ -106,28 +139,6 @@ public class Crate
     public static Crate getCrate(SpecializedCrates cc, String name, boolean isMultiCrate)
     {
         return getLoadedCrates().containsKey(name) ? getLoadedCrates().get(name) : new Crate(cc, name, false, isMultiCrate);
-    }
-
-    public boolean crateMatchesToStack(ItemStack stack)
-    {
-        ItemStack crate = getCs().getCrate(1);
-        if (Utils.itemHasName(stack))
-        {
-            return crate.getType().equals(stack.getType()) &&
-                    crate.getItemMeta().getDisplayName().equals(stack.getItemMeta().getDisplayName());
-        }
-        return false;
-    }
-
-    public boolean keyMatchesToStack(ItemStack stack)
-    {
-        ItemStack crate = getCs().getKey(1);
-        if (Utils.itemHasName(stack))
-        {
-            return crate.getType().equals(stack.getType()) &&
-                    crate.getItemMeta().getDisplayName().equals(stack.getItemMeta().getDisplayName());
-        }
-        return false;
     }
 
     public static boolean crateAlreadyExist(String name)
@@ -183,12 +194,12 @@ public class Crate
         this.name = name;
     }
 
-    public CrateSettings getCs()
+    public CrateSettings getSettings()
     {
         return cs;
     }
 
-    public void setCs(CrateSettings cs)
+    public void setSettings(CrateSettings cs)
     {
         this.cs = cs;
     }

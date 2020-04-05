@@ -123,7 +123,7 @@ public class PlayerDataManager
                         ArrayList<Reward> rewards = new ArrayList<Reward>();
                         for (String s : split[2].replace("[", "").replace("]", "").split("%newReward% "))
                         {
-                            Reward r = crates.getCs().getCr().getByName(s);
+                            Reward r = crates.getSettings().getRewards().getByName(s);
 
                             if (rewards != null)
                             {

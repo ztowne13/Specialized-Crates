@@ -26,7 +26,7 @@ public class IGCCratePreviewMenu extends IGCMenuCrate
     {
         super(specializedCrates, player, lastMenu, "&7&l> &6&lReward Preview Menu", crate);
 
-        isCustom = getCrates().getCs().getRewardDisplayType().equals(RewardDisplayType.CUSTOM);
+        isCustom = getCrates().getSettings().getRewardDisplayType().equals(RewardDisplayType.CUSTOM);
     }
 
     @Override
@@ -36,12 +36,12 @@ public class IGCCratePreviewMenu extends IGCMenuCrate
 
         ItemBuilder nameEditor = new ItemBuilder(DynamicMaterial.PAPER, 1);
         nameEditor.setDisplayName("&aInventory Name");
-        nameEditor.addLore("&7Current Value:").addLore("&f" + getCrates().getCs().getDisplayer().getInvName());
+        nameEditor.addLore("&7Current Value:").addLore("&f" + getCrates().getSettings().getDisplayer().getInvName());
         nameEditor.addLore("").addAutomaticLore("&7", 30, "Edit the name of the reward preview menu.");
 
         ItemBuilder typeEditor = new ItemBuilder(DynamicMaterial.BEACON, 1);
         typeEditor.setDisplayName("&aPreview Menu Type");
-        typeEditor.addLore("&7Current Value:").addLore("&f" + getCrates().getCs().getRewardDisplayType().name());
+        typeEditor.addLore("&7Current Value:").addLore("&f" + getCrates().getSettings().getRewardDisplayType().name());
         typeEditor.addLore("").addAutomaticLore("&7", 30,
                 "Edit the type of display the reward preview menu will be: from sorted to completely custom made!");
 
@@ -97,11 +97,11 @@ public class IGCCratePreviewMenu extends IGCMenuCrate
                 up();
                 break;
             case 0:
-                getCrates().getCs().getFu().save();
+                getCrates().getSettings().getFileHandler().save();
                 ChatUtils.msgSuccess(getP(), "Saved!");
                 break;
             case 2:
-                new InputMenu(getCc(), getP(), "inventory name", getCrates().getCs().getDisplayer().getInvName(),
+                new InputMenu(getCc(), getP(), "inventory name", getCrates().getSettings().getDisplayer().getInvName(),
                         String.class,
                         this, false);
                 break;
@@ -117,7 +117,7 @@ public class IGCCratePreviewMenu extends IGCMenuCrate
                     CustomRewardDisplayer cdr;
                     try
                     {
-                      cdr = (CustomRewardDisplayer) getCrates().getCs().getDisplayer();
+                      cdr = (CustomRewardDisplayer) getCrates().getSettings().getDisplayer();
                     }
                     catch(Exception exc)
                     {
@@ -184,32 +184,32 @@ public class IGCCratePreviewMenu extends IGCMenuCrate
     @Override
     public boolean handleInput(String value, String input)
     {
-        FileConfiguration fc = getCs().getFu().get();
+        FileConfiguration fc = getCs().getFileHandler().get();
 
         if (value.equalsIgnoreCase("preview menu type"))
         {
             RewardDisplayType newType = RewardDisplayType.valueOf(input);
-            getCrates().getCs().setRewardDisplayType(newType);
-            getCrates().getCs().getFu().get().set("reward-display.type", input);
+            getCrates().getSettings().setRewardDisplayType(newType);
+            getCrates().getSettings().getFileHandler().get().set("reward-display.type", input);
             ChatUtils.msgSuccess(getP(), "PLEASE RELOAD NOW. Set the preview menu type to '" + input + "'.");
         }
         else if (value.equalsIgnoreCase("inventory name"))
         {
-            getCrates().getCs().getDisplayer().setName(input);
-            getCrates().getCs().getFu().get().set("reward-display.name", ChatUtils.fromChatColor(input));
+            getCrates().getSettings().getDisplayer().setName(input);
+            getCrates().getSettings().getFileHandler().get().set("reward-display.name", ChatUtils.fromChatColor(input));
             ChatUtils.msgSuccess(getP(), "Set the inventory name to '" + input + "'");
             return true;
         }
         else if(value.equalsIgnoreCase("Forward Button"))
         {
-            CustomRewardDisplayer cdr = (CustomRewardDisplayer) getCrates().getCs().getDisplayer();
+            CustomRewardDisplayer cdr = (CustomRewardDisplayer) getCrates().getSettings().getDisplayer();
             fc.set("reward-display.custom-display.nextpageitem", input);
             cdr.setNextPageItem(input);
             ChatUtils.msgSuccess(getP(), "Set the forward button to " + input);
         }
         else if(value.equalsIgnoreCase("Backwards Button"))
         {
-            CustomRewardDisplayer cdr = (CustomRewardDisplayer) getCrates().getCs().getDisplayer();
+            CustomRewardDisplayer cdr = (CustomRewardDisplayer) getCrates().getSettings().getDisplayer();
             fc.set("reward-display.custom-display.lastpageitem", input);
             cdr.setPrevPageItem(input);
             ChatUtils.msgSuccess(getP(), "Set the backwards button to " + input);

@@ -155,7 +155,7 @@ public class SpecializedCrates extends JavaPlugin
         {
             try
             {
-                crate.getCs().saveAll();
+                crate.getSettings().saveAll();
             }
             catch(Exception exc)
             {

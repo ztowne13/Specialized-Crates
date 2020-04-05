@@ -31,7 +31,7 @@ public class IGCCrateFireworks extends IGCTierMenu
     {
 
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4,
-                (crates.getCs().getCf().getFireworks().containsKey(tier) ? cs.getCf().getFireworks().get(tier).size() : 0)) +
+                (crates.getSettings().getFireworks().getFireworks().containsKey(tier) ? cs.getFireworks().getFireworks().get(tier).size() : 0)) +
                 9, 18);
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
@@ -42,10 +42,10 @@ public class IGCCrateFireworks extends IGCTierMenu
 
         updateDeleteModeItem();
 
-        if (cs.getCf().getFireworks().containsKey(tier))
+        if (cs.getFireworks().getFireworks().containsKey(tier))
         {
             int i = 2;
-            for (FireworkData fd : cs.getCf().getFireworks().get(tier))
+            for (FireworkData fd : cs.getFireworks().getFireworks().get(tier))
             {
                 if (i % 9 == 7)
                 {
@@ -88,7 +88,7 @@ public class IGCCrateFireworks extends IGCTierMenu
         {
             if (deleteMode)
             {
-                cs.getCf().removeFireworks(tier, cs.getCf().getByItemStack(tier, getIb().getInv().getItem(slot)));
+                cs.getFireworks().removeFireworks(tier, cs.getFireworks().getByItemStack(tier, getIb().getInv().getItem(slot)));
                 open();
             }
         }
@@ -106,7 +106,7 @@ public class IGCCrateFireworks extends IGCTierMenu
                 {
                     FireworkData fd = new FireworkData(getCc(), cs);
                     fd.loadFromFirework(getP().getItemInHand());
-                    cs.getCf().addFirework(tier, fd);
+                    cs.getFireworks().addFirework(tier, fd);
                     ChatUtils.msgSuccess(getP(),
                             "Added the firework you are holding to the crate. Please type 'add' to add another firework you are holding or 'done' to return to the menu.");
                     return true;

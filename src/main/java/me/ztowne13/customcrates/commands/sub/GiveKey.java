@@ -45,7 +45,7 @@ public class GiveKey extends SubCommand
             }
 
             Crate crate = Crate.getCrate(cc, args[1]);
-            ItemStack toAdd = crate.getCs().getKey(amount);
+            ItemStack toAdd = crate.getSettings().getKeyItemHandler().getItem(amount);
 
             if (args.length < 3)
             {

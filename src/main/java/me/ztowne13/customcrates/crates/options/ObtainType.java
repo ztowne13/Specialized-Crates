@@ -26,7 +26,7 @@ public enum ObtainType
 
     public static boolean getReqKey(Crate crates)
     {
-        return crates.getCs().isRequireKey();
+        return crates.getSettings().isRequireKey();
     }
 
     public boolean isStatic()

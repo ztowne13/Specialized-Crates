@@ -18,7 +18,7 @@ public abstract class RewardDisplayer
     public RewardDisplayer(Crate crates)
     {
         this.crates = crates;
-        this.fileHandler = crates.getCs().getFu();
+        this.fileHandler = crates.getSettings().getFileHandler();
     }
 
     public abstract void openFor(Player p);

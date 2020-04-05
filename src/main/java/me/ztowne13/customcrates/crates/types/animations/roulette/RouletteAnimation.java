@@ -20,7 +20,7 @@ public class RouletteAnimation extends RouletteManager
     }
 
     @Override
-    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
+    public boolean runAnimation(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
     {
         if (force || canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
         {
@@ -30,7 +30,7 @@ public class RouletteAnimation extends RouletteManager
             return true;
         }
 
-        playFailToOpen(p);
+        playFailToOpen(p, true, true);
         return false;
     }
 
@@ -38,7 +38,7 @@ public class RouletteAnimation extends RouletteManager
     {
         if (!rdh.isCompleted())
         {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
+            Bukkit.getScheduler().scheduleSyncDelayedTask(getSc(), new Runnable()
             {
                 @Override
                 public void run()
@@ -78,7 +78,7 @@ public class RouletteAnimation extends RouletteManager
                         //if (cdh.getCurrentTicks() > cdh.getDisplayAmount())
                         if (rdh.getCurrentTicks() > getFinalTickLength())
                         {
-                            finishUp(rdh.getP(), 50);
+                            endAnimationAfter(rdh.getP(), 50);
                             return;
                         }
 

@@ -35,7 +35,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
     {
 
         InventoryBuilder ib = createDefault(27);
-        CHolograms cholo = crates.getCs().getCholoCopy();
+        CHolograms cholo = crates.getSettings().getHologram();
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
@@ -139,7 +139,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
         }
         else if (slot == 2)
         {
-            new InputMenu(getCc(), getP(), "reward-hologram", crates.getCs().getCholoCopy().getRewardHologram(),
+            new InputMenu(getCc(), getP(), "reward-hologram", crates.getSettings().getHologram().getRewardHologram(),
                     "Type 'none' to remove the reward hologram. Use %reward% as a placeholder for the reward and " +
                             "%player% as a placeholder for the player name.",
                     String.class,
@@ -148,29 +148,29 @@ public class IGCCrateHolograms extends IGCMenuCrate
         else if (slot == 11)
         {
             new InputMenu(getCc(), getP(), "reward-hologram-duration",
-                    crates.getCs().getCholoCopy().getRewardHoloDuration() + "", Integer.class, this);
+                    crates.getSettings().getHologram().getRewardHoloDuration() + "", Integer.class, this);
         }
         else if (slot == 20)
         {
             new InputMenu(getCc(), getP(), "reward-hologram-yoffset",
-                    crates.getCs().getCholoCopy().getRewardHoloYOffset() + "", Double.class, this);
+                    crates.getSettings().getHologram().getRewardHoloYOffset() + "", Double.class, this);
         }
         else if (slot == 4)
         {
-            new IGCListEditor(getCc(), getP(), this, "Hologram Editor", "Line", cs.getCholoCopy().getLines(),
+            new IGCListEditor(getCc(), getP(), this, "Hologram Editor", "Line", cs.getHologram().getLines(),
                     DynamicMaterial.BOOK,
                     1).open();
         }
         else if (slot == 6)
         {
-            new IGCListEditor(getCc(), getP(), this, "Animation Editor", "Frame", cs.getCholoCopy().getPrefixes(),
+            new IGCListEditor(getCc(), getP(), this, "Animation Editor", "Frame", cs.getHologram().getPrefixes(),
                     DynamicMaterial.BOOK,
                     1).open();
         }
         else if (slot == 13)
         {
             new InputMenu(getCc(), getP(), "hologram-offset",
-                    crates.getCs().getHologramOffset() + "", Double.class, this);
+                    crates.getSettings().getHologramOffset() + "", Double.class, this);
         }
         else if (slot == 15)
         {
@@ -182,7 +182,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
         else if (slot == 24)
         {
             new InputMenu(getCc(), getP(), "hologram.animation.speed",
-                    crates.getCs().getCholoCopy().getSpeed() + "", Integer.class, this);
+                    crates.getSettings().getHologram().getSpeed() + "", Integer.class, this);
         }
     }
 
@@ -193,10 +193,10 @@ public class IGCCrateHolograms extends IGCMenuCrate
         {
             if (input.equalsIgnoreCase("none") || input.equalsIgnoreCase("off") || input.equalsIgnoreCase("null"))
             {
-                cs.getCholoCopy().setRewardHologram("");
+                cs.getHologram().setRewardHologram("");
                 return true;
             }
-            cs.getCholoCopy().setRewardHologram(ChatUtils.fromChatColor(input));
+            cs.getHologram().setRewardHologram(ChatUtils.fromChatColor(input));
             ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
             return true;
         }
@@ -205,7 +205,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
             if (Utils.isInt(input))
             {
                 int newDur = Integer.parseInt(input);
-                cs.getCholoCopy().setRewardHoloDuration(newDur);
+                cs.getHologram().setRewardHoloDuration(newDur);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
             }
@@ -219,7 +219,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
             if (Utils.isDouble(input))
             {
                 double newYOff = Double.parseDouble(input);
-                cs.getCholoCopy().setRewardHoloYOffset(newYOff);
+                cs.getHologram().setRewardHoloYOffset(newYOff);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
             }
@@ -247,7 +247,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
             try
             {
                 HoloAnimType newHoloAnim = HoloAnimType.valueOf(input.toUpperCase());
-                cs.getCholoCopy().setHat(newHoloAnim);
+                cs.getHologram().setHat(newHoloAnim);
                 ChatUtils.msgSuccess(getP(), "Set hologram.animation.type to " + input);
                 return true;
             }
@@ -261,7 +261,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
             if (Utils.isInt(input))
             {
                 int newSpeed = Integer.parseInt(input);
-                cs.getCholoCopy().setSpeed(newSpeed);
+                cs.getHologram().setSpeed(newSpeed);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
             }

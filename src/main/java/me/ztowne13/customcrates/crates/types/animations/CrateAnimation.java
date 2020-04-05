@@ -39,156 +39,54 @@ public abstract class CrateAnimation
         this.fu = cc.getCrateconfigFile();
     }
 
-    public abstract boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force);
+    public abstract boolean runAnimation(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force);
 
     public abstract void loadValueFromConfig(StatusLogger sl);
 
-    public abstract void finishUp(Player p);
+    public abstract void endAnimation(Player p);
 
-    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand)
+    public void endAnimationAfter(final Player p, long ticks)
     {
-        return tick(p, l, cs, requireKeyInHand, false);
-    }
-
-    public void finishUp(final Player p, long ticks)
-    {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
+        Bukkit.getScheduler().scheduleSyncDelayedTask(getSc(), new Runnable()
         {
             @Override
             public void run()
             {
-                finishUp(p);
+                endAnimation(p);
             }
         }, ticks);
     }
 
-    public boolean itemNotNull(Player p)
-    {
-        boolean b = false;
-        try
-        {
-            b = p.getItemInHand() != null;
-        }
-        catch (Exception exc)
-        {
-
-        }
-
-        return b;
-    }
-
     public boolean playerPassesKeyTest(Player p, boolean requireKeyInHand)
     {
-        CrateSettings settings = getCrates().getCs();
-        return !settings.isRequireKey() ||
-                (requireKeyInHand ? hasItemInHand(p, settings) : hasKeyInInventory(p, settings)) ||
-                PlayerManager.get(cc, p).getPdm().getVCCrateData(getCrates()).getKeys() > 0;
-    }
-
-    public boolean hasItemInHand(Player p, CrateSettings settings)
-    {
-        try
-        {
-            return p.getItemInHand().getType().equals(settings.getKey(1).getType()) &&
-                    p.getItemInHand().getItemMeta().getDisplayName()
-                            .equalsIgnoreCase(settings.getKey(1).getItemMeta().getDisplayName()) &&
-                    keysLoreMatches(p.getItemInHand(), settings);
-        }
-        catch (Exception exc)
+        if(p.getItemInHand() == null)
         {
             return false;
         }
-    }
 
-    public boolean hasKeyInInventory(Player p, CrateSettings settings)
-    {
-        for (ItemStack stack : p.getInventory().getContents())
-        {
-            try
-            {
-                if (stack.getType().equals(settings.getKey(1).getType()) && stack.getItemMeta().getDisplayName()
-                        .equalsIgnoreCase(settings.getKey(1).getItemMeta().getDisplayName()) &&
-                        keysLoreMatches(stack, settings))
-                {
-                    return true;
-                }
-            }
-            catch (Exception exc)
-            {
-
-            }
-        }
-        return false;
-    }
-
-    public boolean keysLoreMatches(ItemStack stack, CrateSettings settings)
-    {
-        if (!settings.getKey(1).hasItemMeta() || !settings.getKey(1).getItemMeta().hasLore())
-        {
-            return true;
-        }
-        if ((Boolean) SettingsValues.REQUIRE_KEY_LORE.getValue(getCc()) == true)
-        {
-            if (stack.hasItemMeta())
-            {
-                if (stack.getItemMeta().hasLore())
-                {
-                    for (int i = 0; i < settings.getKey(1).getItemMeta().getLore().size(); i++)
-                    {
-                        try
-                        {
-                            String stackLore = stack.getItemMeta().getLore().get(i);
-                            String keyLore = settings.getKey(1).getItemMeta().getLore().get(i);
-                            if (!stackLore.equalsIgnoreCase(keyLore))
-                            {
-                                return false;
-                            }
-                        }
-                        catch (Exception exc)
-                        {
-                            return false;
-                        }
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
-        return true;
+        CrateSettings settings = getCrate().getSettings();
+        return !settings.isRequireKey() ||
+                (requireKeyInHand ?
+                        crates.getSettings().getKeyItemHandler().keyMatchesToStack(p.getItemInHand(), true) :
+                        crates.getSettings().getKeyItemHandler().hasKeyInInventory(p)) ||
+                PlayerManager.get(cc, p).getPdm().getVCCrateData(getCrate()).getKeys() > 0;
     }
 
     public boolean canExecuteFor(CrateState current, CrateState cs, Player p, boolean requireKeyInHand)
     {
+        PlayerManager playerManager = PlayerManager.get(getSc(), p);
         boolean isOpenAction = current.equals(cs);
-        boolean hasPropperOpeningTools =
-                (itemNotNull(p) && playerPassesKeyTest(p, requireKeyInHand)) || !getCrates().getCs().isRequireKey();
-        boolean passesInventoryCheck =
-                !PlayerManager.get(cc, p).isInCrate() || PlayerManager.get(cc, p).getOpenCrate().isMultiCrate();
+        boolean hasPropperOpeningTools = playerPassesKeyTest(p, requireKeyInHand) || !getCrate().getSettings().isRequireKey();
+        boolean passesInventoryCheck = !playerManager.isInCrate() || playerManager.getOpenCrate().isMultiCrate();
 
         return isOpenAction && hasPropperOpeningTools && passesInventoryCheck;
-    }
-
-    public void playFailToOpen(Player p)
-    {
-        playFailToOpen(p, true);
-    }
-
-    public void playFailToOpen(Player p, boolean playMessage)
-    {
-        playFailToOpen(p, playMessage, true);
     }
 
     public void playFailToOpen(Player p, boolean playMessage, boolean failOpen)
     {
         if (!(p == null))
         {
-            if ((Boolean) SettingsValues.PUSHBACK.getValue(getCc()) && !getCrates().isMultiCrate())
+            if ((Boolean) SettingsValues.PUSHBACK.getValue(getSc()) && !getCrate().isMultiCrate())
             {
                 p.setVelocity(p.getLocation().getDirection().multiply(-1));
             }
@@ -206,20 +104,20 @@ public abstract class CrateAnimation
     {
         PlayerManager pm = PlayerManager.get(cc, p);
 
-        if (!(pm.getOpenCrate() == null) && pm.getOpenCrate().isMultiCrate() && !getCrates().getCs().getOt().equals(ObtainType.STATIC))
+        if (!(pm.getOpenCrate() == null) && pm.getOpenCrate().isMultiCrate() && !getCrate().getSettings().getObtainType().equals(ObtainType.STATIC))
         {
             PlacedCrate pc = PlacedCrate.get(cc, pm.getLastOpenCrate());
             pc.delete();
         }
 
-        pm.openCrate(this.getCrates());
-        //pm.setCanClose(false);
-        if (getCrates().getCs().isRequireKey() && !force)
+        pm.openCrate(this.getCrate());
+
+        if (getCrate().getSettings().isRequireKey() && !force)
         {
             takeKeyFromPlayer(p, fromInv);
         }
 
-        getCrates().getCs().getCa().playAll(p, true);
+        getCrate().getSettings().getActions().playAll(p, true);
     }
 
     public void takeKeyFromPlayer(Player p, boolean fromInv)
@@ -245,9 +143,10 @@ public abstract class CrateAnimation
                         if (!(p.getInventory().getItem(i) == null))
                         {
                             ItemStack stack = p.getInventory().getItem(i);
-                            if (stack.getType().equals(getCrates().getCs().getKey(1).getType()) &&
+                            if (stack.getType().equals(getCrate().getSettings().getKeyItemHandler().getItem(1).getType()) &&
                                     stack.getItemMeta().getDisplayName()
-                                            .equalsIgnoreCase(getCrates().getCs().getKey(1).getItemMeta().getDisplayName()))
+                                            .equalsIgnoreCase(
+                                                    getCrate().getSettings().getKeyItemHandler().getItem(1).getItemMeta().getDisplayName()))
                             {
                                 if (stack.getAmount() == 1)
                                 {
@@ -270,8 +169,8 @@ public abstract class CrateAnimation
             else
             {
                 ItemStack stack = p.getItemInHand();
-                if (stack.getType().equals(getCrates().getCs().getKey(1).getType()) && stack.getItemMeta().hasDisplayName() && stack.getItemMeta().getDisplayName()
-                        .equalsIgnoreCase(getCrates().getCs().getKey(1).getItemMeta().getDisplayName()))
+                if (stack.getType().equals(getCrate().getSettings().getKeyItemHandler().getItem(1).getType()) && stack.getItemMeta().hasDisplayName() && stack.getItemMeta().getDisplayName()
+                        .equalsIgnoreCase(getCrate().getSettings().getKeyItemHandler().getItem(1).getItemMeta().getDisplayName()))
                 {
                     if (p.getItemInHand().getAmount() == 1)
                     {
@@ -302,29 +201,21 @@ public abstract class CrateAnimation
     @Deprecated
     public void completeCrateRun(Player p)
     {
-        PlayerManager pm = PlayerManager.get(getCc(), p);
+        PlayerManager pm = PlayerManager.get(getSc(), p);
         pm.setInRewardMenu(false);
-        pm.setCanClose(true);
         pm.closeCrate();
-        new HistoryEvent(Utils.currentTimeParsed(), getCrates(), null, true).addTo(PlayerManager.get(cc, p).getPdm());
-    }
-
-    @Deprecated
-    public void completeCrateRun(Player p, ArrayList<Reward> rewards, boolean overrideAutoClose)
-    {
-        completeCrateRun(p, rewards, overrideAutoClose, null);
+        new HistoryEvent(Utils.currentTimeParsed(), getCrate(), null, true).addTo(PlayerManager.get(cc, p).getPdm());
     }
 
     public void completeCrateRun(Player p, ArrayList<Reward> rewards, boolean overrideAutoClose, final PlacedCrate placedCrate)
     {
-        PlayerManager pm = PlayerManager.get(getCc(), p);
+        PlayerManager pm = PlayerManager.get(getSc(), p);
         pm.setInRewardMenu(false);
-        pm.setCanClose(true);
 
-        new HistoryEvent(Utils.currentTimeParsed(), getCrates(), rewards, true)
-                .addTo(PlayerManager.get(getCc(), p).getPdm());
+        new HistoryEvent(Utils.currentTimeParsed(), getCrate(), rewards, true)
+                .addTo(PlayerManager.get(getSc(), p).getPdm());
 
-        if (!getCrates().getCs().isAutoClose() || overrideAutoClose)
+        if (!getCrate().getSettings().isAutoClose() || overrideAutoClose)
         {
             pm.setWaitingForClose(rewards);
             return;
@@ -339,9 +230,9 @@ public abstract class CrateAnimation
         p.closeInventory();
 
         // Handle the DYNAMIC crates
-        if(getCrates().getCs().getCt().isSpecialDynamicHandling() && !getCrates().getCs().getOt().isStatic())
+        if(getCrate().getSettings().getCrateType().isSpecialDynamicHandling() && !getCrate().getSettings().getObtainType().isStatic())
         {
-            if(getCrates().getCs().getCt().getCategory().equals(CrateType.Category.CHEST))
+            if(getCrate().getSettings().getCrateType().getCategory().equals(CrateType.Category.CHEST))
             {
                 Bukkit.getScheduler().runTaskLater(cc, new Runnable()
                 {
@@ -367,39 +258,33 @@ public abstract class CrateAnimation
         return basedOff + r.nextInt(3) - r.nextInt(3);
     }
 
-    public StatusLogger getSl()
+    public StatusLogger getStatusLogger()
     {
-        return crates.getCs().getSl();
+        return crates.getSettings().getStatusLogger();
     }
 
-    public Crate getCrates()
+    public Crate getCrate()
     {
         return crates;
     }
 
-    public void setCrates(Crate crates)
+    public void setCrate(Crate crates)
     {
         this.crates = crates;
     }
 
-    public SpecializedCrates getCc()
+    public SpecializedCrates getSc()
     {
         return cc;
     }
 
-    public void setCc(SpecializedCrates cc)
+    public void setSc(SpecializedCrates cc)
     {
         this.cc = cc;
     }
 
-    public FileHandler getFu()
+    public FileHandler getFileHandler()
     {
         return fu;
     }
-
-    public void setFu(FileHandler fu)
-    {
-        this.fu = fu;
-    }
-
 }

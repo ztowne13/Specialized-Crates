@@ -25,7 +25,7 @@ public class MenuAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
+    public boolean runAnimation(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
     {
         if (force || canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
         {
@@ -35,7 +35,7 @@ public class MenuAnimation extends InventoryCrateAnimation
             return true;
         }
 
-        playFailToOpen(p);
+        playFailToOpen(p, true, true);
         return false;
     }
 
@@ -50,7 +50,7 @@ public class MenuAnimation extends InventoryCrateAnimation
             int slot = Utils.getRandomNumberExcluding((getInventoryRows() * 9) - 1, mdh.getUsedNumbers());
             mdh.getUsedNumbers().add(slot);
 
-            Reward reward = getCrates().getCs().getCr().getRandomReward(mdh.getP());
+            Reward reward = getCrate().getSettings().getRewards().getRandomReward(mdh.getP());
             mdh.getDisplayedRewards().add(reward);
 
             mdh.getInv().setItem(slot, reward.getDisplayBuilder());
@@ -58,16 +58,16 @@ public class MenuAnimation extends InventoryCrateAnimation
 
         mdh.getInv().open();
 
-        finishUp(mdh.getP(), 50);
+        endAnimationAfter(mdh.getP(), 50);
     }
 
     @Override
-    public void finishUp(Player p)
+    public void endAnimation(Player p)
     {
         MenuDataHolder mdh = MenuDataHolder.getHolders().get(p);
 
-        completeCrateRun(p, mdh.getDisplayedRewards(), true);
-        getCrates().tick(mdh.getL(), CrateState.OPEN, p, mdh.getDisplayedRewards());
+        completeCrateRun(p, mdh.getDisplayedRewards(), true, null);
+        getCrate().tick(mdh.getL(), CrateState.OPEN, p, mdh.getDisplayedRewards());
         MenuDataHolder.getHolders().remove(p);
     }
 

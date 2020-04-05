@@ -35,16 +35,16 @@ public class IGCMineCrate extends IGCMenuCrate
         ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
 
         ib.setItem(11, new ItemBuilder(Material.FISHING_ROD, 1, 0).setName("&aChance").setLore("&7Current value: ")
-                .addLore("&7" + cs.getClc().getChance() + "/" + cs.getClc().getOutOfChance()).addLore("")
+                .addLore("&7" + cs.getLuckyChestSettings().getChance() + "/" + cs.getLuckyChestSettings().getOutOfChance()).addLore("")
                 .addAutomaticLore("&f", 30,
                         "These are the odds that a crate will appear while mining. Formatted 'number/number'."));
         ib.setItem(12, new ItemBuilder(DynamicMaterial.LIGHT_GRAY_DYE, 1).setName("&aWhitelist")
-                .addLore("&7Current value: ").addLore("&7" + cs.getClc().isBLWL() + "").addLore("")
+                .addLore("&7Current value: ").addLore("&7" + cs.getLuckyChestSettings().isBLWL() + "").addLore("")
                 .addAutomaticLore("&f", 30, "Set whether the block-list is a whitelist or not."));
         ItemBuilder bList =
                 new ItemBuilder(Material.STONE, 1, 0).setName("&aEdit the block-list").setLore("&7Current values: ");
 
-        for (Material m : cs.getClc().getWhiteList())
+        for (Material m : cs.getLuckyChestSettings().getWhiteList())
         {
             bList.addLore("&7" + m.name());
         }
@@ -53,7 +53,7 @@ public class IGCMineCrate extends IGCMenuCrate
 
         ItemBuilder wList =
                 new ItemBuilder(DynamicMaterial.PURPLE_DYE, 1).setName("&aEdit the worlds").setLore("&7Current values: ");
-        for (String w : cs.getClc().getWorldsRaw())
+        for (String w : cs.getLuckyChestSettings().getWorldsRaw())
         {
             wList.addLore("&7" + w);
         }
@@ -74,22 +74,22 @@ public class IGCMineCrate extends IGCMenuCrate
                 up();
                 break;
             case 11:
-                new InputMenu(getCc(), getP(), "chance", cs.getClc().getChance() + "/" + cs.getClc().getOutOfChance(),
+                new InputMenu(getCc(), getP(), "chance", cs.getLuckyChestSettings().getChance() + "/" + cs.getLuckyChestSettings().getOutOfChance(),
                         "Format it 'chance/out of what chance'.", String.class, this, true);
                 break;
             case 12:
-                new InputMenu(getCc(), getP(), "whitelist", cs.getClc().isBLWL() + "", Boolean.class, this);
+                new InputMenu(getCc(), getP(), "whitelist", cs.getLuckyChestSettings().isBLWL() + "", Boolean.class, this);
                 break;
             case 13:
-                new IGCListEditor(getCc(), getP(), this, "Block List", "Block", cs.getClc().getWhiteList(),
+                new IGCListEditor(getCc(), getP(), this, "Block List", "Block", cs.getLuckyChestSettings().getWhiteList(),
                         DynamicMaterial.STONE, 1, Material.class, "valueOf", "That is not a valid block name. Try STONE.").open();
                 break;
             case 14:
-                new IGCListEditor(getCc(), getP(), this, "Worlds List", "World", cs.getClc().getWorldsRaw(),
+                new IGCListEditor(getCc(), getP(), this, "Worlds List", "World", cs.getLuckyChestSettings().getWorldsRaw(),
                         DynamicMaterial.MAP, 1).open();
                 break;
             case 16:
-                new InputMenu(getCc(), getP(), "remove worlds", cs.getClc().getWorlds().toString(),
+                new InputMenu(getCc(), getP(), "remove worlds", cs.getLuckyChestSettings().getWorlds().toString(),
                         "Current valid worlds: " + Bukkit.getWorlds(), String.class, this, true);
                 break;
         }
@@ -107,8 +107,8 @@ public class IGCMineCrate extends IGCMenuCrate
                 {
                     if (Utils.isInt(split[1]))
                     {
-                        cs.getClc().setChance(Double.valueOf(split[0]));
-                        cs.getClc().setOutOfChance(Double.valueOf(split[1]));
+                        cs.getLuckyChestSettings().setChance(Double.valueOf(split[0]));
+                        cs.getLuckyChestSettings().setOutOfChance(Double.valueOf(split[1]));
                         ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                         return true;
                     }
@@ -132,7 +132,7 @@ public class IGCMineCrate extends IGCMenuCrate
             try
             {
                 Boolean b = Boolean.valueOf(input);
-                cs.getClc().setBLWL(b);
+                cs.getLuckyChestSettings().setBLWL(b);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
             }
@@ -160,9 +160,9 @@ public class IGCMineCrate extends IGCMenuCrate
             try
             {
                 Material m = DynamicMaterial.fromString(input.toUpperCase()).parseMaterial();
-                if (cs.getClc().getWhiteList().contains(m))
+                if (cs.getLuckyChestSettings().getWhiteList().contains(m))
                 {
-                    cs.getClc().getWhiteList().remove(m);
+                    cs.getLuckyChestSettings().getWhiteList().remove(m);
                     ChatUtils.msgSuccess(getP(), "Removed the " + input + " value from the whitelist / blacklist");
                     return true;
                 }
@@ -181,7 +181,7 @@ public class IGCMineCrate extends IGCMenuCrate
             try
             {
                 World w = Bukkit.getWorld(input);
-                cs.getClc().getWorlds().add(w);
+                cs.getLuckyChestSettings().getWorlds().add(w);
                 ChatUtils.msgSuccess(getP(), "Added " + input + " to the list of allowed worlds.");
                 return true;
             }
@@ -198,9 +198,9 @@ public class IGCMineCrate extends IGCMenuCrate
                 World w = Bukkit.getWorld(input);
                 if (w != null)
                 {
-                    if (cs.getClc().getWorlds().contains(w))
+                    if (cs.getLuckyChestSettings().getWorlds().contains(w))
                     {
-                        cs.getClc().getWorlds().remove(w);
+                        cs.getLuckyChestSettings().getWorlds().remove(w);
                         ChatUtils.msgSuccess(getP(), "Removed " + input + " from the list of allowed worlds.");
                         return true;
                     }
@@ -208,7 +208,7 @@ public class IGCMineCrate extends IGCMenuCrate
                     {
                         ChatUtils.msgError(getP(),
                                 input + " is not currently allowed in the worlds list to be remobed. Current worlds: " +
-                                        cs.getClc().getWorlds().toString());
+                                        cs.getLuckyChestSettings().getWorlds().toString());
                     }
                 }
                 else

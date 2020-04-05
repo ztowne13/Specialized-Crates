@@ -38,7 +38,7 @@ public class DisplayPage
         if(builders == null)
             buildFormat();
 
-        FileHandler fileHandler = customRewardDisplayer.getCrates().getCs().getFu();
+        FileHandler fileHandler = customRewardDisplayer.getCrates().getSettings().getFileHandler();
         FileConfiguration fc = fileHandler.get();
 
         ArrayList<String> format = new ArrayList<>();
@@ -100,7 +100,7 @@ public class DisplayPage
 
     public boolean load()
     {
-        FileHandler fileHandler = customRewardDisplayer.getCrates().getCs().getFu();
+        FileHandler fileHandler = customRewardDisplayer.getCrates().getSettings().getFileHandler();
         FileConfiguration fc = fileHandler.get();
 
         if (!fc.contains(PREFIX + "." + pageNum))
@@ -218,7 +218,7 @@ public class DisplayPage
                     }
                     else
                     {
-                        Reward reward = customRewardDisplayer.getCrates().getCs().getCr().getByName(symbol);
+                        Reward reward = customRewardDisplayer.getCrates().getSettings().getRewards().getByName(symbol);
                         if (reward != null)
                             rewards[x][y] = reward;
                     }

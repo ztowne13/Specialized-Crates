@@ -156,7 +156,7 @@ public class TabCompleteListener implements TabCompleter
                     for (Crate crates : Crate.getLoadedCrates().values())
                     {
                         Player player = (Player) sender;
-                        CrateSettings cs = crates.getCs();
+                        CrateSettings cs = crates.getSettings();
 
                         if (player.hasPermission(cs.getPermission()) || cs.getPermission().equalsIgnoreCase("no permission"))
                             if (!crates.isMultiCrate())

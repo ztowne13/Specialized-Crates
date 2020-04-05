@@ -35,7 +35,7 @@ public class IGCMultiCrateMain extends IGCMenuCrate
                         "Design the multicrate inventory in the inventory that opens. Put the actual crates in for the crates, and normal blocks for filler blocks."));
         ib.setItem(4,
                 new ItemBuilder(Material.BOOK, 1, 0).setName("&aEdit the amount of rows").setLore("&7Current value:")
-                        .addLore("&7" + (crates.getCs().getCmci().getInventory(getP(), "", false).getInv().getSize() / 9))
+                        .addLore("&7" + (crates.getSettings().getMultiCrateSettings().getInventory(getP(), "", false).getInv().getSize() / 9))
                         .addLore("")
                         .addAutomaticLore("&f", 30, "Set the size (in amount of rows) of the multicrate's inventory."));
         ib.setItem(6, new ItemBuilder(DynamicMaterial.RED_WOOL, 1).setName("&aClear the inventory")
@@ -54,17 +54,17 @@ public class IGCMultiCrateMain extends IGCMenuCrate
                 up();
                 break;
             case 2:
-                crates.getCs().getCmci().getInventory(getP(), "&c&lClose to save", true).open();
+                crates.getSettings().getMultiCrateSettings().getInventory(getP(), "&c&lClose to save", true).open();
                 ChatUtils.msgSuccess(getP(),
                         "Close the inventory to save, if you don't want to save, type /scrates reload and all changes will be lost.");
                 break;
             case 4:
                 new InputMenu(getCc(), getP(), "set rows",
-                        (crates.getCs().getCmci().getInventory(getP(), "", false).getInv().getSize() / 9) + "",
+                        (crates.getSettings().getMultiCrateSettings().getInventory(getP(), "", false).getInv().getSize() / 9) + "",
                         "Please use a number between 1 and 6", Integer.class, this);
                 break;
             case 6:
-                crates.getCs().getCmci().getInventory(getP(), "", false).getInv().clear();
+                crates.getSettings().getMultiCrateSettings().getInventory(getP(), "", false).getInv().clear();
                 ChatUtils.msgSuccess(getP(), "You have cleared the inventory.");
                 break;
         }
@@ -77,7 +77,7 @@ public class IGCMultiCrateMain extends IGCMenuCrate
         {
             if (Utils.isInt(input))
             {
-                InventoryBuilder oldIb = crates.getCs().getCmci().getInventory(getP(), "", false);
+                InventoryBuilder oldIb = crates.getSettings().getMultiCrateSettings().getInventory(getP(), "", false);
                 InventoryBuilder newIb = new InventoryBuilder(getP(), Integer.parseInt(input) * 9, oldIb.getName());
 
                 for (int i = 0; i < (oldIb.getInv().getSize() < newIb.getInv().getSize() ? oldIb.getInv().getSize() :
@@ -88,7 +88,7 @@ public class IGCMultiCrateMain extends IGCMenuCrate
                         newIb.setItem(i, oldIb.getInv().getItem(i));
                     }
                 }
-                crates.getCs().getCmci().setIb(newIb);
+                crates.getSettings().getMultiCrateSettings().setIb(newIb);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
             }

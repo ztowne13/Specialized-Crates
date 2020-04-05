@@ -18,7 +18,7 @@ public abstract class IGCMenuCrate extends IGCMenu
     {
         super(cc, p, lastMenu, invName);
         this.crates = crates;
-        this.cs = crates.getCs();
+        this.cs = crates.getSettings();
     }
 
     public Crate getCrates()

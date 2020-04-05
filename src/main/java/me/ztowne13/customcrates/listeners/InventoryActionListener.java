@@ -70,7 +70,6 @@ public class InventoryActionListener implements Listener
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e)
     {
-        cc.getDu().log("onInventoryClick - CALL", getClass());
         Player p = (Player) e.getWhoClicked();
         PlayerManager pm = PlayerManager.get(cc, p);
 
@@ -78,16 +77,15 @@ public class InventoryActionListener implements Listener
         {
             if (e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT) ||
                     e.getClick().equals(ClickType.DOUBLE_CLICK))
+            {
                 e.setCancelled(true);
+            }
 
             if (isntPlayerInventory(e, pm))
             {
 
-                cc.getDu().log("onInventoryClick - CANCELLED");
                 e.setCancelled(true);
 
-                cc.getDu().log("onInventoryClick - inRewardMenu: " + pm.isInRewardMenu() + " lastPage: " +
-                        pm.getLastPage());
                 if (pm.isInRewardMenu() && pm.getLastPage() != null)
                 {
                     pm.getLastPage().handleInput(p, e.getSlot());
@@ -99,15 +97,15 @@ public class InventoryActionListener implements Listener
                     Crate crate = pm.getOpenCrate();
                     int slot = e.getSlot();
 
-                    crate.getCs().getCmci().checkClick(pm, slot, e.getClick());
+                    crate.getSettings().getMultiCrateSettings().checkClick(pm, slot, e.getClick());
                 }
                 // Handle discover animation click
                 else if (pm.isInCrate())
                 {
-                    if (pm.getOpenCrate().getCs().getCt().equals(CrateType.INV_DISCOVER) &&
+                    if (pm.getOpenCrate().getSettings().getCrateType().equals(CrateType.INV_DISCOVER) &&
                             DiscoverDataHolder.getHolders().containsKey(p))
                     {
-                        ((DiscoverAnimation) pm.getOpenCrate().getCs().getCh())
+                        ((DiscoverAnimation) pm.getOpenCrate().getSettings().getAnimation())
                                 .handleClick(DiscoverDataHolder.getHolders().get(p), e.getSlot());
                     }
                 }
@@ -270,7 +268,7 @@ public class InventoryActionListener implements Listener
 
         if (pm.isInCrate() || pm.isInRewardMenu())
         {
-            CrateAnimation ch = pm.getOpenCrate().getCs().getCh();
+            CrateAnimation ch = pm.getOpenCrate().getSettings().getAnimation();
             if (ch instanceof MenuAnimation)
             {
                 ch.completeCrateRun(p);
@@ -283,22 +281,23 @@ public class InventoryActionListener implements Listener
         }
 
         // Prevents the player from opening the inventory
-        if (!pm.isCanClose())
+        /*if (!pm.isCanClose())
         {
             //e.getPlayer().openInventory(e.getView().getTopInventory());
-            pm.setCanClose(true);
+            InventoryBuilder builder = pm.getCanClose();
+            pm.setCanClose(null);
 
             try
             {
-                e.getPlayer().openInventory(e.getView().getTopInventory());
+                e.getPlayer().openInventory(builder.getInv());
             }
             catch (Exception exc)
             {
 
             }
 
-            pm.setCanClose(false);
-        }
+            pm.setCanClose(builder);
+        }*/
     }
 
     public boolean isntPlayerInventory(InventoryClickEvent e, PlayerManager pm)

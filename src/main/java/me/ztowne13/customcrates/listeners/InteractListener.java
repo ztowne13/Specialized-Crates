@@ -66,7 +66,7 @@ public class InteractListener implements Listener
         {
             for (Crate crate : Crate.getLoadedCrates().values())
             {
-                if (crate.keyMatchesToStack(e.getItem()))
+                if (crate.getSettings().getKeyItemHandler().keyMatchesToStack(e.getItem(), false))
                 {
                     e.setCancelled(true);
                 }

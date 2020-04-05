@@ -43,7 +43,7 @@ public class CommandRewards extends Commands implements CommandExecutor
                         {
                             if (!crate.isMultiCrate())
                             {
-                                crate.getCs().getDisplayer().openFor(player);
+                                crate.getSettings().getDisplayer().openFor(player);
                                 Messages.COMMAND_REWARDS_OPENING.msgSpecified(sc, player, new String[]{"%crate%"}, new String[]{crateName});
                                 return true;
                             }

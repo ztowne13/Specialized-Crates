@@ -145,7 +145,7 @@ public class IGCCratePreviewRewards extends IGCMenuCrate
 
     public List<Reward> getUnusedRewards()
     {
-        CRewards cRewards = crate.getCs().getCr();
+        CRewards cRewards = crate.getSettings().getRewards();
 
         List<Reward> rewardsL = Arrays.asList(cRewards.getCrateRewards());
         ArrayList<Reward> rewards = new ArrayList<>();

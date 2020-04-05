@@ -12,7 +12,7 @@ public class CrateUtils
         {
             if (isCrateUsable(crates))
             {
-                if (crates.keyMatchesToStack(stack))
+                if (crates.getSettings().getKeyItemHandler().keyMatchesToStack(stack, false))
                 {
                     return crates;
                 }
@@ -27,7 +27,7 @@ public class CrateUtils
         {
             if (isCrateUsable(crates))
             {
-                if (crates.crateMatchesToStack(stack))
+                if (crates.getSettings().getCrateItemHandler().crateMatchesToStack(stack))
                 {
                     return crates;
                 }

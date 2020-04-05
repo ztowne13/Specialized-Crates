@@ -41,13 +41,13 @@ public class OpenChestAnimation extends CrateAnimation
     }
 
     @Override
-    public boolean tick(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
+    public boolean runAnimation(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
     {
         this.loc = l;
 
         if (force || canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
         {
-            if(getCrates().getCs().getCt().isSpecialDynamicHandling() && !getCrates().getCs().getOt().isStatic())
+            if(getCrate().getSettings().getCrateType().isSpecialDynamicHandling() && !getCrate().getSettings().getObtainType().isStatic())
             {
                 PlacedCrate placedCrate = PlayerManager.get(cc, p).getLastOpenedPlacedCrate();
                 placedCrate.setCratesEnabled(false);
@@ -65,7 +65,7 @@ public class OpenChestAnimation extends CrateAnimation
 
     public void playAnimation(final Player p, final Location l)
     {
-        Reward reward = getCrates().getCs().getCr().getRandomReward(p);
+        Reward reward = getCrate().getSettings().getRewards().getRandomReward(p);
         final ArrayList<String> rewards = new ArrayList<String>();
         rewards.add(reward.getDisplayName());
         rewardMap.put(p, reward);
@@ -85,12 +85,12 @@ public class OpenChestAnimation extends CrateAnimation
 
         if(earlyEffects)
         {
-            getCrates().tick(loc, CrateState.OPEN, p, rewardsStr);
+            getCrate().tick(loc, CrateState.OPEN, p, rewardsStr);
         }
 
         if(attachTo)
         {
-            crates.getCs().getCa().playRewardHologram(p, rewards, .6, true, item, openDuration);
+            crates.getSettings().getActions().playRewardHologram(p, rewards, .6, true, item, openDuration);
         }
         else if (isEarlyRewardHologram())
         {
@@ -99,7 +99,7 @@ public class OpenChestAnimation extends CrateAnimation
                 @Override
                 public void run()
                 {
-                    crates.getCs().getCa().playRewardHologram(p, rewards, .6);
+                    crates.getSettings().getActions().playRewardHologram(p, rewards, .6);
                 }
             }, rewardHoloDelay);
         }
@@ -114,7 +114,7 @@ public class OpenChestAnimation extends CrateAnimation
                 new NMSChestState().playChestAction(l.getBlock(), false);
                 items.remove(item);
                 item.remove();
-                finishUp(p);
+                endAnimation(p);
             }
         }, openDuration);
     }
@@ -122,7 +122,7 @@ public class OpenChestAnimation extends CrateAnimation
     @Override
     public void loadValueFromConfig(StatusLogger sl)
     {
-        FileConfiguration fc = getFu().get();
+        FileConfiguration fc = getFileHandler().get();
 
         openDuration = FileUtils.loadInt(fc.getString(prefix + "chest-open-duration"), 80, sl,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_SUCCESS,
@@ -149,7 +149,7 @@ public class OpenChestAnimation extends CrateAnimation
     }
 
     @Override
-    public void finishUp(Player p)
+    public void endAnimation(Player p)
     {
         Reward reward = rewardMap.get(p);
         rewardMap.remove(p);
@@ -161,7 +161,7 @@ public class OpenChestAnimation extends CrateAnimation
 
         completeCrateRun(p, rewards, false, placedCrate);
         if(!earlyEffects)
-            getCrates().tick(loc, CrateState.OPEN, p, rewards);
+            getCrate().tick(loc, CrateState.OPEN, p, rewards);
     }
 
     public static void removeAllItems()

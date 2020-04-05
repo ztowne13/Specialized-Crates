@@ -69,6 +69,6 @@ public class ForceOpen extends SubCommand
 
     public void run(Crate crate, Player player)
     {
-        crate.getCs().getCh().tick(player, player.getLocation(), CrateState.OPEN, !crate.isMultiCrate(), true);
+        crate.getSettings().getAnimation().runAnimation(player, player.getLocation(), CrateState.OPEN, !crate.isMultiCrate(), true);
     }
 }

@@ -47,7 +47,7 @@ public class IGCCratesMain extends IGCMenuCrate
                 .addLore("&7placed."));
         ib.setItem(4, new ItemBuilder(Material.CHEST, 1, 0).setName("&a" + crates.getName()));
 
-        int errors = crates.getCs().getSl().getFailures();
+        int errors = crates.getSettings().getStatusLogger().getFailures();
         ib.setItem(5, new ItemBuilder(DynamicMaterial.REDSTONE_BLOCK, 1)
                 .setName(errors == 0 ? "&a This crate has no errors!" : "&c&lClick to view ERRORS")
                 .addLore("&7Errors: " + errors));
@@ -83,7 +83,7 @@ public class IGCCratesMain extends IGCMenuCrate
                     .setLore("&7Modify the multicrate inventory and").addLore("&7other values."));
         }
 
-        if (cs.getOt().equals(ObtainType.LUCKYCHEST))
+        if (cs.getObtainType().equals(ObtainType.LUCKYCHEST))
         {
             ib.setItem(crates.isMultiCrate() ? 35 : 44, new ItemBuilder(Material.ENDER_CHEST, 1, 0).setName("&aMine Chest")
                     .setLore("&7Config all values for the").addLore("&7mine chest."));
@@ -105,7 +105,7 @@ public class IGCCratesMain extends IGCMenuCrate
         {
             case 0:
                 if (!crates.isMultiCrate() &&
-                        (cs.getCr().getCrateRewards() == null || cs.getCr().getCrateRewards().length == 0))
+                        (cs.getRewards().getCrateRewards() == null || cs.getRewards().getCrateRewards().length == 0))
                 {
                     getIb().setItem(slot,
                             new ItemBuilder(getIb().getInv().getItem(slot)).setName("&cPlease add some rewards")
@@ -115,7 +115,7 @@ public class IGCCratesMain extends IGCMenuCrate
                 {
                     try
                     {
-                        crates.getCs().saveAll();
+                        crates.getSettings().saveAll();
                         ChatUtils.msgSuccess(getP(), "Saved the file!");
                     }
                     catch (Exception exc)
@@ -136,7 +136,7 @@ public class IGCCratesMain extends IGCMenuCrate
                 {
                     getP().closeInventory();
                     ChatUtils.msg(getP(), "&6&lNote: &eDeleting...");
-                    String path = crates.getCs().deleteCrate();
+                    String path = crates.deleteCrate();
                     ChatUtils.msgSuccess(getP(), "Successfully deleted file on path &e" + path);
                 }
                 break;
@@ -216,7 +216,7 @@ public class IGCCratesMain extends IGCMenuCrate
                 new IGCCratePreviewOrRewardMenu(getCc(), getP(), crates,this).open();
                 break;
             case 44:
-                if (cs.getOt().equals(ObtainType.LUCKYCHEST))
+                if (cs.getObtainType().equals(ObtainType.LUCKYCHEST))
                 {
                     new IGCMineCrate(getCc(), getP(), this, crates).open();
                 }
