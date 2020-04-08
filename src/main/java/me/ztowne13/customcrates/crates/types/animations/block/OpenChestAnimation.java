@@ -1,4 +1,4 @@
-package me.ztowne13.customcrates.crates.types.animations.block.openchest;
+package me.ztowne13.customcrates.crates.types.animations.block;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;

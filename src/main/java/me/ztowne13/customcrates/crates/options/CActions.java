@@ -10,7 +10,7 @@ import me.ztowne13.customcrates.crates.options.actions.NMSActionEffect;
 import me.ztowne13.customcrates.crates.options.holograms.DynamicHologram;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
-import me.ztowne13.customcrates.crates.types.animations.block.openchest.OpenChestAnimation;
+import me.ztowne13.customcrates.crates.types.animations.block.OpenChestAnimation;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;

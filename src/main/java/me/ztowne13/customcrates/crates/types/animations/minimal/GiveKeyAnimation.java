@@ -1,4 +1,4 @@
-package me.ztowne13.customcrates.crates.types.animations.keycrate;
+package me.ztowne13.customcrates.crates.types.animations.minimal;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;

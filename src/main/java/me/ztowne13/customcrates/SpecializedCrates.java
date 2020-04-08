@@ -10,7 +10,7 @@ import me.ztowne13.customcrates.crates.options.CHolograms;
 import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.crates.types.animations.block.openchest.OpenChestAnimation;
+import me.ztowne13.customcrates.crates.types.animations.block.OpenChestAnimation;
 import me.ztowne13.customcrates.interfaces.externalhooks.EconomyHandler;
 import me.ztowne13.customcrates.interfaces.externalhooks.MetricsLite;
 import me.ztowne13.customcrates.interfaces.externalhooks.PlaceHolderAPIHandler;

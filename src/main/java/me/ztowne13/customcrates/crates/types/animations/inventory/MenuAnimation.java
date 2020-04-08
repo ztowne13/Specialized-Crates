@@ -1,12 +1,10 @@
-package me.ztowne13.customcrates.crates.types.animations.inventory.menu;
+package me.ztowne13.customcrates.crates.types.animations.inventory;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.animations.AnimationDataHolder;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
-import me.ztowne13.customcrates.crates.types.animations.inventory.InventoryAnimationDataHolder;
-import me.ztowne13.customcrates.crates.types.animations.inventory.InventoryCrateAnimation;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;

@@ -1,19 +1,10 @@
 package me.ztowne13.customcrates.crates.types.animations;
 
 import me.ztowne13.customcrates.crates.Crate;
-import me.ztowne13.customcrates.crates.types.animations.block.openchest.OpenChestAnimation;
-import me.ztowne13.customcrates.crates.types.animations.inventory.csgo.CSGOAnimation;
-import me.ztowne13.customcrates.crates.types.animations.inventory.csgo.CSGOAnimationDataHolder;
-import me.ztowne13.customcrates.crates.types.animations.inventory.discover.DiscoverAnimation;
-import me.ztowne13.customcrates.crates.types.animations.inventory.discover.DiscoverAnimationDataHolder;
-import me.ztowne13.customcrates.crates.types.animations.inventory.enclosement.EncloseAnimation;
-import me.ztowne13.customcrates.crates.types.animations.inventory.enclosement.EncloseAnimationDataHolder;
-import me.ztowne13.customcrates.crates.types.animations.inventory.menu.MenuAnimation;
-import me.ztowne13.customcrates.crates.types.animations.inventory.menu.MenuAnimationDataHolder;
-import me.ztowne13.customcrates.crates.types.animations.inventory.roulette.RouletteAnimation;
-import me.ztowne13.customcrates.crates.types.animations.inventory.roulette.RouletteAnimationDataHolder;
-import me.ztowne13.customcrates.crates.types.animations.keycrate.GiveKeyAnimation;
-import me.ztowne13.customcrates.crates.types.animations.keycrate.GiveKeyAnimationDataHolder;
+import me.ztowne13.customcrates.crates.types.animations.block.OpenChestAnimation;
+import me.ztowne13.customcrates.crates.types.animations.inventory.*;
+import me.ztowne13.customcrates.crates.types.animations.minimal.GiveKeyAnimation;
+import me.ztowne13.customcrates.crates.types.animations.minimal.GiveKeyAnimationDataHolder;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
