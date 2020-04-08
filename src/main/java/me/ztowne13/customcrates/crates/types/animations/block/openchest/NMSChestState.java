@@ -1,4 +1,4 @@
-package me.ztowne13.customcrates.crates.types.animations.openchest;
+package me.ztowne13.customcrates.crates.types.animations.block.openchest;
 
 import me.ztowne13.customcrates.utils.ReflectionUtilities;
 import org.bukkit.Location;

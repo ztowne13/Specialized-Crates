@@ -36,6 +36,7 @@ public class AttemptKeyUseAction extends CrateAction
                 return false;
             }
 
+            // For SQL, to make sure the player data is loaded
             if(!pm.getPdm().isLoaded())
             {
                 Messages.LOADING_FROM_DATABASE.msgSpecified(cc, player);
@@ -46,6 +47,11 @@ public class AttemptKeyUseAction extends CrateAction
             Crate crates = cm.getCrates();
             if (crates.isMultiCrate())
             {
+                if(pm.isInCrate())
+                {
+                    return false;
+                }
+
                 crates.getSettings().getMultiCrateSettings()
                         .getInventory(player, crates.getSettings().getCrateInventoryName() == null ? crates.getName() :
                                 crates.getSettings().getCrateInventoryName(), true).open();

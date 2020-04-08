@@ -182,9 +182,11 @@ public enum StatusLoggerEvent
 
     SETTINGS_CRATE_SUCCESS(true, "Settings", "Set up crate item.", "NONE"),
 
-    SETTINGS_CRATE_FAILURE_DISABLE(false, "Settings", "Failed to load the crate settings for the crate... disabling", "NONE"),
+    SETTINGS_CRATE_FAILURE_DISABLE(false, "Settings", "Failed to load the crate settings for the crate... disabling",
+            "NONE"),
 
-    SETTINGS_CRATE_FAILURE_INDIVIDUAL(false, "Settings", "Failed to place an instance of this crate. This message will not appear again.", "$?$"),
+    SETTINGS_CRATE_FAILURE_INDIVIDUAL(false, "Settings",
+            "Failed to place an instance of this crate. This message will not appear again.", "$?$"),
 
     SETTINGS_CRATE_FAILURE(false, "Settings", "Failed to load the crate item.", "$?$"),
 
@@ -273,21 +275,27 @@ public enum StatusLoggerEvent
 
     SETTINGS_REWARD_DISPLAYER_SUCCESS(true, "Settings", "Loaded the 'reward-displayer' value", "NONE"),
 
-    SETTINGS_REWARD_DISPLAYER_NONEXISTENT(false, "Settings", "Failed to load the 'reward-displayer' value.", "It does not exist. You can IGNORE this error if you'd like. To get rid, set the reward preview menu type."),
+    SETTINGS_REWARD_DISPLAYER_NONEXISTENT(false, "Settings", "Failed to load the 'reward-displayer' value.",
+            "It does not exist. You can IGNORE this error if you'd like. To get rid, set the reward preview menu type."),
 
-    SETTINGS_REWARD_DISPLAYER_INVALID(false, "Settings", "Failed to load the 'reward-displayer' value.", "$?$ is not a valid reward display type."),
+    SETTINGS_REWARD_DISPLAYER_INVALID(false, "Settings", "Failed to load the 'reward-displayer' value.",
+            "$?$ is not a valid reward display type."),
 
     SETTINGS_REWARD_DISPLAYER_ITEM_FAILURE(false, "Settings", "Failed to load a reward preview menu item.", "$?$"),
 
-    SETTINGS_REWARD_DISPLAYER_ENCHANTMENT_ADD_FAILURE(false, "Settings", "Failed to load the a reward preview menu item enchantment.", "$?$"),
+    SETTINGS_REWARD_DISPLAYER_ENCHANTMENT_ADD_FAILURE(false, "Settings",
+            "Failed to load the a reward preview menu item enchantment.", "$?$"),
 
     SETTINGS_REWARD_DISPLAYER_POTION_ADD_FAILURE(false, "Settings", "Failed to load the a reward preview menu item.", "$?$"),
 
-    SETTINGS_REWARD_DISPLAYER_GLOW_FAILURE(false, "Settings", "Failed to load the reward preview menu item glow value.", "$?$"),
+    SETTINGS_REWARD_DISPLAYER_GLOW_FAILURE(false, "Settings", "Failed to load the reward preview menu item glow value.",
+            "$?$"),
 
-    SETTINGS_REWARD_DISPLAYER_AMOUNT_FAILURE(false, "Settings", "Failed to load the reward preview menu item amount value.", "$?$"),
+    SETTINGS_REWARD_DISPLAYER_AMOUNT_FAILURE(false, "Settings", "Failed to load the reward preview menu item amount value.",
+            "$?$"),
 
-    SETTINGS_REWARD_DISPLAYER_FLAG_FAILURE(false, "Settings", "Failed to load the reward preview menu item-flags value.", "$?$"),
+    SETTINGS_REWARD_DISPLAYER_FLAG_FAILURE(false, "Settings", "Failed to load the reward preview menu item-flags value.",
+            "$?$"),
 
     SETTINGS_AUTOCLOSE_SUCCESS(true, "Settings", "Loaded the 'auto-close' value", "NONE"),
 
@@ -296,11 +304,30 @@ public enum StatusLoggerEvent
     SETTINGS_HOLOGRAMOFFSET_FAILURE(false, "Settings", "The hologram-offset value failed to load",
             "The value is not a valid double (number)."),
 
-    ANIMATION_ENCLOSEMENT_INVNAME_SUCCESS(true, "Animation", "Successfully loaded the enclose animation animation inv-name.",
+    ANIMATION_VALUE_NONEXISTENT(false, "Animation", "Failed to load the $?$ value.", "The value does not exist"),
+
+    ANIMATION_MENU_INVNAME_SUCCESS(true, "Animation", "Successfully loaded the Menu animation animation inv-name.", "NONE"),
+
+    ANIMATION_MENU_MINIMUM_REWARDS_SUCCESS(true, "Animation",
+            "Successfully loaded the Menu animation animation minimum-rewards value.", "NONE"),
+
+    ANIMATION_MENU_MINIMUM_REWARDS_INVALID(false, "Animation",
+            "Failed to load the Menu animation animation minimum-rewards.", "It is not a valid integer"),
+
+    ANIMATION_MENU_MAXIMUM_REWARDS_SUCCESS(true, "Animation",
+            "Successfully loaded the Menu animation animation maximum-rewards.", "NONE"),
+
+    ANIMATION_MENU_MAXIMUM_REWARDS_INVALID(false, "Animation",
+            "Failed to load the Menu animation animation maximum-rewards value.", "It is not a valid integer"),
+
+    ANIMATION_MENU_INVENTORY_ROWS_SUCCESS(true, "Animation", "Successfully loaded the Menu animation inventory-rows value.",
             "NONE"),
 
-    ANIMATION_ENCLOSEMENT_INVNAME_INVALID(false, "Animation", "Failed to load the enclose animation inv-name value.",
-            "The inv-name value does not exist."),
+    ANIMATION_MENU_INVENTORY_ROWS_INVALID(false, "Animation",
+            "Failed to load the Menu animation animation inventory-rows value.", "It is not a valid integer"),
+
+    ANIMATION_ENCLOSEMENT_INVNAME_SUCCESS(true, "Animation", "Successfully loaded the enclose animation animation inv-name.",
+            "NONE"),
 
     ANIMATION_ENCLOSEMENT_INVROWS_SUCCESS(true, "Animation",
             "Successfully loaded the enclose animation animation inventory-rows.", ""),
@@ -310,6 +337,14 @@ public enum StatusLoggerEvent
 
     ANIMATION_ENCLOSEMENT_FILLBLOCK_SUCCESS(true, "Animation", "Successfully loaded the enclose animation fill-block value.",
             ""),
+
+    ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID_MATERIAL(false, "Animation",
+            "Failed to load the enclose animation fill-block value.",
+            "$?$ is an invalid material."),
+
+    ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID_BYTE(false, "Animation",
+            "Failed to load the enclose animation fill-block value.",
+            "$?$ is an invalid integer value."),
 
     ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID(false, "Animation", "Failed to load the enclose animation fill-block value.",
             "$?$"),
@@ -346,8 +381,23 @@ public enum StatusLoggerEvent
     ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_INVALID(false, "Animation", "Failed to load the enclose tick-sound PITCH.",
             "$?$ + is not a valid number."),
 
-    ANIMATION_DISCOVER_INVNAME_SUCCESS(true, "Animation", "Successfully loaded the discover animation animation inv-name.",
+    ANIMATION_DISCOVER_INVNAME_SUCCESS(true, "Animation", "Successfully loaded the discover animation inv-name.",
             "NONE"),
+
+    ANIMATION_DISCOVER_COVER_BLOCK_NAME_SUCCESS(true, "Animations",
+            "Successfully loaded the discover animation cover-block-name value.", "NONE"),
+
+    ANIMATION_DISCOVER_COVER_BLOCK_LORE_SUCCESS(true, "Animations",
+            "Successfully loaded the discover animation cover-block-lore value.", "NONE"),
+
+    ANIMATION_DISCOVER_REWARD_BLOCK_NAME_SUCCESS(true, "Animations",
+            "Successfully loaded the discover animation reward-block-name value.", "NONE"),
+
+    ANIMATION_DISCOVER_REWARD_BLOCK_UNBLOCK_NAME_SUCCESS(true, "Animations",
+            "Successfully loaded the discover animation reward-block-unblock-name value.", "NONE"),
+
+    ANIMATION_DISCOVER_REWARD_BLOCK_WAITING_NAME_SUCCESS(true, "Animations",
+            "Successfully loaded the discover animation reward-block-waiting-name value.", "NONE"),
 
     ANIMATION_DISCOVER_INVNAME_INVALID(false, "Animation", "Failed to load the discover animation inv-name value.",
             "The inv-name value does not exist."),
@@ -474,6 +524,8 @@ public enum StatusLoggerEvent
     ANIMATION_DISCOVER_UNCOVERSOUND_PITCH_INVALID(false, "Animation",
             "Failed to load the discover animation uncover-sound PITCH", "$?$ is not a valid number."),
 
+    ANIMATION_CSGO_INVNAME_SUCCESS(true, "Animation", "Successfully loaded the CSGO animation inv-name value.", "NONE"),
+
     ANIMATION_CSGO_TICKSOUND_SOUND_SUCCESS(true, "Animation", "Loaded the CSGO animation tick-sound SOUND.", "NONE"),
 
     ANIMATION_CSGO_TICKSOUND_SOUND_FAILURE(false, "Animation", "Failed to load the CSGO tick-sound.",
@@ -499,6 +551,12 @@ public enum StatusLoggerEvent
 
     ANIMATION_CSGO_IDBLOCK_NONEXISTENT(false, "Animation", "Failed to load the CSGO identifier-block value.",
             "The identifier-block value does not exist."),
+
+    ANIMATION_CSGO_IDBLOCK_INVALID_MATERIAL(false, "Animation", "Failed to load the CSGO identifier-block value.",
+            "$?$ is not a valid material."),
+
+    ANIMATION_CSGO_IDBLOCK_INVALID_BYTE(false, "Animation", "Failed to load the CSGO identifier-block value.",
+            "$?$ is not a valid integer."),
 
     ANIMATION_CSGO_FINALTICKLENGTH_SUCCESS(true, "Animation", "Loaded the CSGO final-crate-tick-length value.", "NONE"),
 
@@ -531,11 +589,8 @@ public enum StatusLoggerEvent
     ANIMATION_CSGO_FILLERBLOCK_NONEXISTENT(false, "Animation", "Failed to load the CSGO filler-blocks.",
             "The filler-blocks value does not exist."),
 
-    ANIMATION_ROULETTE_INVENTORYNAME_SUCCESS(true, "Animation", "Loaded the roulette animation default inventory name: $?$",
+    ANIMATION_ROULETTE_INVNAME_SUCCESS(true, "Animation", "Successfully loaded the Roulette animation inv-name value.",
             "NONE"),
-
-    ANIMATION_ROULETTE_INVENTORYNAME_NONEXISTENT(false, "Animation", "Failed to load the roulette animation inventory name.",
-            "The 'inv-name' value is either missing or the value is misformatted."),
 
     ANIMATION_ROULETTE_TICKSOUND_SOUND_SUCCESS(true, "Animation", "Loaded the Roulette animation tick-sound SOUND.", "NONE"),
 

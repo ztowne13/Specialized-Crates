@@ -28,10 +28,6 @@ public class InventoryBuilder
         this.minimumSlots = minimumSlots;
         this.p = p;
 
-//        if(slots < 27)
-//            minimumSlots = 27;
-//        else if (slots > 27)
-//            minimumSlots = 27 * 2;
         setInv(Bukkit.createInventory(p, max(minimumSlots, slots), ChatColor.translateAlternateColorCodes('&', invName)));
     }
 
@@ -39,6 +35,11 @@ public class InventoryBuilder
     {
         for(int i = 0; i < inv.getSize(); i++)
             setItem(i, new ItemBuilder(DynamicMaterial.AIR , 1));
+    }
+
+    public int getSize()
+    {
+        return getInv().getSize();
     }
 
     public String getName()

@@ -76,7 +76,7 @@ public abstract class CrateAction
                             {
                                 if(cc.getEconomyHandler().handleCheck(player, crates.getSettings().getCost(), true))
                                 {
-                                    Reward reward = cs.getRewards().getRandomReward(player);
+                                    Reward reward = cs.getRewards().getRandomReward();
                                     ArrayList<Reward> rewards = new ArrayList<>();
                                     rewards.add(reward);
                                     reward.runCommands(player);
@@ -117,7 +117,7 @@ public abstract class CrateAction
                         {
                             if(cc.getEconomyHandler().handleCheck(player, cs.getCost(), true))
                             {
-                                if (cs.getAnimation().runAnimation(player, location, CrateState.OPEN, !crates.isMultiCrate(), false))
+                                if (cs.getAnimation().startAnimation(player, location, CrateState.OPEN, !crates.isMultiCrate(), false))
                                 {
                                     // Crate isn't static but it ALSO isn't special handling (i.e. the BLOCK_ CrateTypes)
                                     if (!cs.getObtainType().equals(ObtainType.STATIC) && !cs.getCrateType().isSpecialDynamicHandling())

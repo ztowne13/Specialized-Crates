@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.types.animations.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
@@ -24,7 +24,7 @@ public class IGCAnimMenu extends IGCAnimation
 {
     public IGCAnimMenu(SpecializedCrates cc, Player p, IGCMenu lastMenu)
     {
-        super(cc, p, lastMenu, "&7&l> &6&lMenu Animation", CrateType.INV_MENU);
+        super(cc, p, lastMenu, "&7&l> &6&lMenu Animation", CrateAnimationType.INV_MENU);
     }
 
     @Override

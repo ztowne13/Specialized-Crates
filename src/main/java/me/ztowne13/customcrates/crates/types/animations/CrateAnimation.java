@@ -9,11 +9,11 @@ import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.events.HistoryEvent;
-import me.ztowne13.customcrates.utils.FileHandler;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -26,35 +26,112 @@ import java.util.Random;
 
 public abstract class CrateAnimation
 {
+    public static long BASE_SPEED = 1;
+
     protected SpecializedCrates cc;
-    protected Crate crates;
+
+    protected Crate crate;
     protected FileHandler fu;
     protected String prefix;
+    CrateAnimationType animationType;
 
-    public CrateAnimation(String prefix, Crate crates)
+    public CrateAnimation(Crate crate, CrateAnimationType animationType)
     {
-        this.prefix = prefix;
-        this.crates = crates;
-        this.cc = crates.getCc();
+        this.animationType = animationType;
+        this.prefix = animationType.getPrefixDotted();
+        this.crate = crate;
+        this.cc = crate.getCc();
         this.fu = cc.getCrateconfigFile();
     }
 
-    public abstract boolean runAnimation(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force);
+    /**
+     * This is the function that is called every tick to update and redraw the animation.
+     *
+     * @param dataHolder The data holder that stores the player's animation runtime information.
+     * @param update Whether or not this is an update tick
+     */
+    public abstract void tickAnimation(AnimationDataHolder dataHolder, boolean update);
 
-    public abstract void loadValueFromConfig(StatusLogger sl);
+    /**
+     * This function is what is called when the state of the function is set to COMPLETED
+     *
+     * @param dataHolder The data holder that stores the player's animation runtime information.
+     */
+    public abstract void endAnimation(AnimationDataHolder dataHolder);
 
-    public abstract void endAnimation(Player p);
+    /**
+     * This function is responsible for loading and animation-based config values.
+     *
+     * @param sl The status logger to log any errors or successes to.
+     */
+    public abstract void loadDataValues(StatusLogger sl);
 
-    public void endAnimationAfter(final Player p, long ticks)
+    /**
+     * This function is responsible for calculating any tick updates. It is intended for
+     * the animations that slow down, speed up, etc - information is changing every tick.
+     *
+     * @param dataHolder The data holder that stores the player's animation runtime information.
+     * @return This value indicates whether or not a main or quintessential update needs to happen,
+     *         opposed to just the default BASE_SPEED tick updates.
+     */
+    public abstract boolean updateTicks(AnimationDataHolder dataHolder);
+
+    /**
+     * This function checks if there needs to be a state changed, and executes that state change if so.
+     *
+     * @param dataHolder The data holder that stores the player's animation runtime information.
+     * @param update The result of the updateTicks() function, indicating whether a main update needs to
+     *               happen
+     */
+    public abstract void checkStateChange(AnimationDataHolder dataHolder, boolean update);
+
+    /**
+     * This function is meant to handle any clicks in the inventory during the animation
+     *
+     * @param slot The slot that was clicked in the inventory
+     */
+    public void onClick(AnimationDataHolder dataHolder, int slot) {}
+
+    public boolean startAnimation(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
     {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(getSc(), new Runnable()
+        if (force || canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
         {
-            @Override
-            public void run()
+            AnimationDataHolder dataHolder = getAnimationType().newDataHolderInstance(p, l, this);
+            runAnimation(dataHolder);
+            playRequiredOpenActions(p, !requireKeyInHand, force);
+            PlayerManager.get(getSc(), p).setCurrentAnimation(dataHolder);
+            return true;
+        }
+
+        playFailToOpen(p, true, true);
+        return false;
+    }
+
+    public void runAnimation(final AnimationDataHolder dataHolder)
+    {
+        if (!dataHolder.getCurrentState().equals(AnimationDataHolder.State.COMPLETED))
+        {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(getSc(), new Runnable()
             {
-                endAnimation(p);
-            }
-        }, ticks);
+                @Override
+                public void run()
+                {
+                    dataHolder.setIndividualTicks(dataHolder.getIndividualTicks() + (int) BASE_SPEED);
+                    dataHolder.setTotalTicks(dataHolder.getTotalTicks() + (int) BASE_SPEED);
+
+                    boolean update = updateTicks(dataHolder);
+
+                    checkStateChange(dataHolder, update);
+                    tickAnimation(dataHolder, update);
+
+                    runAnimation(dataHolder);
+                }
+            }, BASE_SPEED);
+        }
+        else
+        {
+            endAnimation(dataHolder);
+        }
     }
 
     public boolean playerPassesKeyTest(Player p, boolean requireKeyInHand)
@@ -67,8 +144,8 @@ public abstract class CrateAnimation
         CrateSettings settings = getCrate().getSettings();
         return !settings.isRequireKey() ||
                 (requireKeyInHand ?
-                        crates.getSettings().getKeyItemHandler().keyMatchesToStack(p.getItemInHand(), true) :
-                        crates.getSettings().getKeyItemHandler().hasKeyInInventory(p)) ||
+                        crate.getSettings().getKeyItemHandler().keyMatchesToStack(p.getItemInHand(), true) :
+                        crate.getSettings().getKeyItemHandler().hasKeyInInventory(p)) ||
                 PlayerManager.get(cc, p).getPdm().getVCCrateData(getCrate()).getKeys() > 0;
     }
 
@@ -93,7 +170,7 @@ public abstract class CrateAnimation
             if (playMessage)
             {
                 if(failOpen)
-                    Messages.FAIL_OPEN.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crates.getDisplayName()});
+                    Messages.FAIL_OPEN.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
                 else
                     Messages.ALREADY_OPENING_CRATE.msgSpecified(cc, p);
             }
@@ -143,10 +220,7 @@ public abstract class CrateAnimation
                         if (!(p.getInventory().getItem(i) == null))
                         {
                             ItemStack stack = p.getInventory().getItem(i);
-                            if (stack.getType().equals(getCrate().getSettings().getKeyItemHandler().getItem(1).getType()) &&
-                                    stack.getItemMeta().getDisplayName()
-                                            .equalsIgnoreCase(
-                                                    getCrate().getSettings().getKeyItemHandler().getItem(1).getItemMeta().getDisplayName()))
+                            if (getCrate().getSettings().getKeyItemHandler().keyMatchesToStack(stack, true))
                             {
                                 if (stack.getAmount() == 1)
                                 {
@@ -169,8 +243,7 @@ public abstract class CrateAnimation
             else
             {
                 ItemStack stack = p.getItemInHand();
-                if (stack.getType().equals(getCrate().getSettings().getKeyItemHandler().getItem(1).getType()) && stack.getItemMeta().hasDisplayName() && stack.getItemMeta().getDisplayName()
-                        .equalsIgnoreCase(getCrate().getSettings().getKeyItemHandler().getItem(1).getItemMeta().getDisplayName()))
+                if (getCrate().getSettings().getKeyItemHandler().keyMatchesToStack(stack, true))
                 {
                     if (p.getItemInHand().getAmount() == 1)
                     {
@@ -189,28 +262,20 @@ public abstract class CrateAnimation
         else
         {
             PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
-            if (pdm.getVCCrateData(crates).getKeys() > 0)
+            if (pdm.getVCCrateData(crate).getKeys() > 0)
             {
-                pdm.setVirtualCrateKeys(crates, pdm.getVCCrateData(crates).getKeys() - 1);
+                pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() - 1);
                 return true;
             }
         }
         return false;
     }
 
-    @Deprecated
-    public void completeCrateRun(Player p)
-    {
-        PlayerManager pm = PlayerManager.get(getSc(), p);
-        pm.setInRewardMenu(false);
-        pm.closeCrate();
-        new HistoryEvent(Utils.currentTimeParsed(), getCrate(), null, true).addTo(PlayerManager.get(cc, p).getPdm());
-    }
-
     public void completeCrateRun(Player p, ArrayList<Reward> rewards, boolean overrideAutoClose, final PlacedCrate placedCrate)
     {
         PlayerManager pm = PlayerManager.get(getSc(), p);
         pm.setInRewardMenu(false);
+        pm.setCurrentAnimation(null);
 
         new HistoryEvent(Utils.currentTimeParsed(), getCrate(), rewards, true)
                 .addTo(PlayerManager.get(getSc(), p).getPdm());
@@ -232,7 +297,7 @@ public abstract class CrateAnimation
         // Handle the DYNAMIC crates
         if(getCrate().getSettings().getCrateType().isSpecialDynamicHandling() && !getCrate().getSettings().getObtainType().isStatic())
         {
-            if(getCrate().getSettings().getCrateType().getCategory().equals(CrateType.Category.CHEST))
+            if(getCrate().getSettings().getCrateType().getCategory().equals(CrateAnimationType.Category.CHEST))
             {
                 Bukkit.getScheduler().runTaskLater(cc, new Runnable()
                 {
@@ -260,17 +325,12 @@ public abstract class CrateAnimation
 
     public StatusLogger getStatusLogger()
     {
-        return crates.getSettings().getStatusLogger();
+        return crate.getSettings().getStatusLogger();
     }
 
     public Crate getCrate()
     {
-        return crates;
-    }
-
-    public void setCrate(Crate crates)
-    {
-        this.crates = crates;
+        return crate;
     }
 
     public SpecializedCrates getSc()
@@ -278,13 +338,13 @@ public abstract class CrateAnimation
         return cc;
     }
 
-    public void setSc(SpecializedCrates cc)
-    {
-        this.cc = cc;
-    }
-
     public FileHandler getFileHandler()
     {
         return fu;
+    }
+
+    public CrateAnimationType getAnimationType()
+    {
+        return animationType;
     }
 }

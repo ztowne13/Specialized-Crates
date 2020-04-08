@@ -2,8 +2,8 @@ package me.ztowne13.customcrates.interfaces.verification;
 
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
+import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.FileHandler;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

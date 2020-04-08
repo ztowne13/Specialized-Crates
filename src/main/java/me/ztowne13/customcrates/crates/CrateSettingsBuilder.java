@@ -6,7 +6,7 @@ import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplay
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SimpleRewardDisplayer;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SortedRewardDisplayer;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.custom.CustomRewardDisplayer;
-import me.ztowne13.customcrates.crates.types.animations.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.crates.types.display.CrateDisplayType;
 import me.ztowne13.customcrates.crates.types.display.EntityTypes;
 import me.ztowne13.customcrates.crates.types.display.MaterialPlaceholder;
@@ -120,12 +120,12 @@ public class CrateSettingsBuilder
         {
             try
             {
-                getSettings().setCrateType(CrateType.valueOf(getFc().getString(("open.crate-animation"))));
+                getSettings().setCrateType(CrateAnimationType.valueOf(getFc().getString(("open.crate-animation"))));
                 StatusLoggerEvent.SETTINGS_ANIMATION_SUCCESS.log(getStatusLogger());
             }
             catch (Exception exc)
             {
-                getSettings().setCrateType(CrateType.BLOCK_CRATEOPEN);
+                getSettings().setCrateType(CrateAnimationType.BLOCK_CRATEOPEN);
                 StatusLoggerEvent.SETTINGS_ANIMATION_INVALID
                         .log(getStatusLogger(), new String[]{getFc().getString("open.crate-animation")});
             }

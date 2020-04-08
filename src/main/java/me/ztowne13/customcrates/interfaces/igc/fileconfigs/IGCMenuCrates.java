@@ -7,7 +7,7 @@ import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayType;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SimpleRewardDisplayer;
-import me.ztowne13.customcrates.crates.types.animations.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.crates.types.display.MaterialPlaceholder;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
@@ -137,7 +137,7 @@ public class IGCMenuCrates extends IGCMenu
                     CrateSettings cs = newCrate.getSettings();
                     cs.setObtainType(ObtainType.STATIC);
                     cs.setPlaceholder(new MaterialPlaceholder(getCc()));
-                    cs.setCrateType(CrateType.INV_ROULETTE);
+                    cs.setCrateType(CrateAnimationType.INV_ROULETTE);
                     cs.setRequireKey(true);
                     cs.setRewardDisplayType(RewardDisplayType.IN_ORDER);
                     cs.setDisplayer(new SimpleRewardDisplayer(newCrate));

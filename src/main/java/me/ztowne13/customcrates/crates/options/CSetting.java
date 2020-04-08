@@ -5,7 +5,7 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
-import me.ztowne13.customcrates.utils.FileHandler;
+import me.ztowne13.customcrates.interfaces.files.FileHandler;
 
 public abstract class CSetting
 {

@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.types.animations.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
@@ -20,7 +20,7 @@ public class IGCAnimDiscover extends IGCAnimation
 {
     public IGCAnimDiscover(SpecializedCrates cc, Player p, IGCMenu lastMenu)
     {
-        super(cc, p, lastMenu, "&7&l> &6&lDiscover Animation", CrateType.INV_DISCOVER);
+        super(cc, p, lastMenu, "&7&l> &6&lDiscover Animation", CrateAnimationType.INV_DISCOVER);
     }
 
     @Override

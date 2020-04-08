@@ -3,7 +3,7 @@ package me.ztowne13.customcrates.interfaces.igc.crates;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.ObtainType;
-import me.ztowne13.customcrates.crates.types.animations.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.crates.types.display.EntityTypes;
 import me.ztowne13.customcrates.crates.types.display.MaterialPlaceholder;
 import me.ztowne13.customcrates.crates.types.display.npcs.Citizens2NPCPlaceHolder;
@@ -187,7 +187,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
             case 5:
 //                new InputMenu(getCc(), getP(), "animation", cs.getCt().name(),
 //                        "Available animations: " + Arrays.toString(CrateType.values()), String.class, this, true);
-                new IGCListSelector(getCc(), getP(), this, "Animation Type", Arrays.asList(CrateType.values()),
+                new IGCListSelector(getCc(), getP(), this, "Animation Type", Arrays.asList(CrateAnimationType.values()),
                         DynamicMaterial.PAPER, 1, null).open();
                 break;
             case 13:
@@ -237,7 +237,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
         {
             try
             {
-                CrateType ct = CrateType.valueOf(input.toUpperCase());
+                CrateAnimationType ct = CrateAnimationType.valueOf(input.toUpperCase());
                 cs.setCrateType(ct);
                 ChatUtils.msgSuccess(getP(), "Set the Animation Type to " + input);
                 return true;
@@ -245,7 +245,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
             catch (Exception exc)
             {
                 ChatUtils.msgError(getP(),
-                        input + " is not valid in the list of crate animations: " + Arrays.toString(CrateType.values()));
+                        input + " is not valid in the list of crate animations: " + Arrays.toString(CrateAnimationType.values()));
             }
         }
         else if (value.equalsIgnoreCase("inventory-name"))

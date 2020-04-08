@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates;
 
+import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.FileHandler;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;

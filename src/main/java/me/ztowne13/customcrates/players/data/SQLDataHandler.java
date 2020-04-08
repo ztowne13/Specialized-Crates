@@ -1,10 +1,10 @@
 package me.ztowne13.customcrates.players.data;
 
 import me.ztowne13.customcrates.SpecializedCrates;
+import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.sql.SQL;
 import me.ztowne13.customcrates.interfaces.sql.SQLQueryThread;
 import me.ztowne13.customcrates.players.PlayerManager;
-import me.ztowne13.customcrates.utils.FileHandler;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class SQLDataHandler extends DataHandler

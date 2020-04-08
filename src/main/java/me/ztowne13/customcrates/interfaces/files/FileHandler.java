@@ -1,6 +1,7 @@
-package me.ztowne13.customcrates.utils;
+package me.ztowne13.customcrates.interfaces.files;
 
 import me.ztowne13.customcrates.SpecializedCrates;
+import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -27,6 +28,7 @@ public class FileHandler
     boolean properLoad = false;
     boolean newFile;
 
+    FileDataLoader fileDataLoader;
     private FileConfiguration data = null;
     private File dataFile = null;
 
@@ -40,6 +42,8 @@ public class FileHandler
         this.saveWithCustomSave = saveWithCustomSave;
         this.newFile = newFile;
 
+        this.fileDataLoader = new FileDataLoader(this);
+
         map.put(name, this);
     }
 
@@ -49,6 +53,8 @@ public class FileHandler
         this.canBeEdited = canBeEdited;
         this.cc = cc;
         this.saveWithCustomSave = saveWithCustomSave;
+
+        this.fileDataLoader = new FileDataLoader(this);
 
         map.put(name, this);
     }
@@ -427,5 +433,10 @@ public class FileHandler
     public void setSaveWithCustomSave(boolean saveWithCustomSave)
     {
         this.saveWithCustomSave = saveWithCustomSave;
+    }
+
+    public FileDataLoader getFileDataLoader()
+    {
+        return fileDataLoader;
     }
 }

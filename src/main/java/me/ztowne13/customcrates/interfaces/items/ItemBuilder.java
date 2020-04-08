@@ -78,6 +78,11 @@ public class ItemBuilder implements EditableItem
         create(DynamicMaterial.fromString(m.name() + ";" + byt), amnt);
     }
 
+    public ItemBuilder(DynamicMaterial material)
+    {
+        create(material, 1);
+    }
+
     public ItemBuilder(DynamicMaterial m, int amnt)
     {
         create(m, amnt);

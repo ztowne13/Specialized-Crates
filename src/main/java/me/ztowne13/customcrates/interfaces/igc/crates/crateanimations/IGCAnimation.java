@@ -1,9 +1,9 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.types.animations.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
+import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
-import me.ztowne13.customcrates.utils.FileHandler;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -14,12 +14,12 @@ public abstract class IGCAnimation extends IGCMenu
 {
     FileHandler fu;
     FileConfiguration fc;
-    CrateType crateType;
+    CrateAnimationType crateAnimationType;
 
-    public IGCAnimation(SpecializedCrates cc, Player p, IGCMenu lastMenu, String inventoryName, CrateType crateType)
+    public IGCAnimation(SpecializedCrates cc, Player p, IGCMenu lastMenu, String inventoryName, CrateAnimationType crateAnimationType)
     {
         super(cc, p, lastMenu, inventoryName);
-        this.crateType = crateType;
+        this.crateAnimationType = crateAnimationType;
         this.fu = cc.getCrateconfigFile();
         this.fc = fu.get();
     }
@@ -31,6 +31,6 @@ public abstract class IGCAnimation extends IGCMenu
 
     public String getPath(String value)
     {
-        return crateType.getPrefix() + "." + value;
+        return crateAnimationType.getPrefix() + "." + value;
     }
 }

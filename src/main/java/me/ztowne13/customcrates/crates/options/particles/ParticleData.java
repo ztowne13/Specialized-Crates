@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.crates.options.particles;
 
 import me.ztowne13.customcrates.crates.options.particles.effects.PEAnimationType;
 import me.ztowne13.customcrates.crates.options.particles.effects.ParticleAnimationEffect;
-import me.ztowne13.customcrates.utils.FileHandler;
+import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.configuration.file.FileConfiguration;

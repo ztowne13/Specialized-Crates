@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.types.animations.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
@@ -27,7 +27,7 @@ public class IGCAnimOpenChest extends IGCAnimation
 {
     public IGCAnimOpenChest(SpecializedCrates cc, Player p, IGCMenu lastMenu)
     {
-        super(cc, p, lastMenu, "&7&l> &6&lOpenChest Animation", CrateType.BLOCK_CRATEOPEN);
+        super(cc, p, lastMenu, "&7&l> &6&lOpenChest Animation", CrateAnimationType.BLOCK_CRATEOPEN);
     }
 
     @Override

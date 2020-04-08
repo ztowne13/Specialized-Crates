@@ -121,18 +121,8 @@ public class CrateCooldownEvent extends DataEvent
         return cooldownTime;
     }
 
-    public void setCooldownTime(long cooldownTime)
-    {
-        this.cooldownTime = cooldownTime;
-    }
-
     public boolean isStart()
     {
         return start;
-    }
-
-    public void setStart(boolean start)
-    {
-        this.start = start;
     }
 }

@@ -2,6 +2,7 @@ package me.ztowne13.customcrates;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
+import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.utils.*;
 import org.bukkit.Location;
 

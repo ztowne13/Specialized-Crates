@@ -5,7 +5,7 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.CRewards;
-import me.ztowne13.customcrates.crates.types.animations.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.*;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCMenuRewards;
@@ -42,7 +42,7 @@ public class IGCMenuMain extends IGCMenu
 
         paper.setDisplayName("&aCrateConfig.YML");
         paper.setLore("").addLore("&6&lEdit crate animations").addLore("")
-                .addLore("&7Amount of animations: &f" + CrateType.values().length);
+                .addLore("&7Amount of animations: &f" + CrateAnimationType.values().length);
         ib.setItem(12, paper);
 
         paper.setDisplayName("&aRewards.YML");

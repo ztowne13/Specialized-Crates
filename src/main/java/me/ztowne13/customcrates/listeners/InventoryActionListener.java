@@ -4,11 +4,6 @@ import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
-import me.ztowne13.customcrates.crates.types.animations.CrateAnimation;
-import me.ztowne13.customcrates.crates.types.animations.CrateType;
-import me.ztowne13.customcrates.crates.types.animations.discover.DiscoverAnimation;
-import me.ztowne13.customcrates.crates.types.animations.discover.DiscoverDataHolder;
-import me.ztowne13.customcrates.crates.types.animations.menu.MenuAnimation;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCMultiCrateMain;
 import me.ztowne13.customcrates.interfaces.igc.crates.previeweditor.IGCCratePreviewEditor;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCDragAndDrop;
@@ -20,7 +15,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryType;
 
 public class InventoryActionListener implements Listener
 {
@@ -73,18 +71,14 @@ public class InventoryActionListener implements Listener
         Player p = (Player) e.getWhoClicked();
         PlayerManager pm = PlayerManager.get(cc, p);
 
+        int slot = e.getSlot();
+
         if (pm.isInCrate() || pm.isInRewardMenu())
         {
-            if (e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT) ||
-                    e.getClick().equals(ClickType.DOUBLE_CLICK))
-            {
-                e.setCancelled(true);
-            }
+            e.setCancelled(true);
 
             if (isntPlayerInventory(e, pm))
             {
-
-                e.setCancelled(true);
 
                 if (pm.isInRewardMenu() && pm.getLastPage() != null)
                 {
@@ -95,19 +89,12 @@ public class InventoryActionListener implements Listener
                 if (pm.isInCrate() && pm.getOpenCrate().isMultiCrate())
                 {
                     Crate crate = pm.getOpenCrate();
-                    int slot = e.getSlot();
-
                     crate.getSettings().getMultiCrateSettings().checkClick(pm, slot, e.getClick());
                 }
                 // Handle discover animation click
                 else if (pm.isInCrate())
                 {
-                    if (pm.getOpenCrate().getSettings().getCrateType().equals(CrateType.INV_DISCOVER) &&
-                            DiscoverDataHolder.getHolders().containsKey(p))
-                    {
-                        ((DiscoverAnimation) pm.getOpenCrate().getSettings().getAnimation())
-                                .handleClick(DiscoverDataHolder.getHolders().get(p), e.getSlot());
-                    }
+                    pm.getOpenCrate().getSettings().getAnimation().onClick(pm.getCurrentAnimation(), slot);
                 }
             }
         }
@@ -268,36 +255,11 @@ public class InventoryActionListener implements Listener
 
         if (pm.isInCrate() || pm.isInRewardMenu())
         {
-            CrateAnimation ch = pm.getOpenCrate().getSettings().getAnimation();
-            if (ch instanceof MenuAnimation)
-            {
-                ch.completeCrateRun(p);
-                return;
-            }
-            else if (pm.getOpenCrate().isMultiCrate())
+            if (pm.getOpenCrate().isMultiCrate())
             {
                 pm.closeCrate();
             }
         }
-
-        // Prevents the player from opening the inventory
-        /*if (!pm.isCanClose())
-        {
-            //e.getPlayer().openInventory(e.getView().getTopInventory());
-            InventoryBuilder builder = pm.getCanClose();
-            pm.setCanClose(null);
-
-            try
-            {
-                e.getPlayer().openInventory(builder.getInv());
-            }
-            catch (Exception exc)
-            {
-
-            }
-
-            pm.setCanClose(builder);
-        }*/
     }
 
     public boolean isntPlayerInventory(InventoryClickEvent e, PlayerManager pm)

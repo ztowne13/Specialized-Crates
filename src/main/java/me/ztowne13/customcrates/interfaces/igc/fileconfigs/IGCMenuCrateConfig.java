@@ -1,15 +1,15 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.types.animations.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
+import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.crates.crateanimations.*;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.FileHandler;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -43,22 +43,22 @@ public class IGCMenuCrateConfig extends IGCMenu
 
         ib.setItem(11,
                 new ItemBuilder(Material.PAPER, 1, 0).setName("&aCSGO Animation").setLore("&7Animation name: &fINV_CSGO")
-                        .addLore("").addLore("&7Used by crates: &f" + CrateType.INV_CSGO.getUses()));
+                        .addLore("").addLore("&7Used by crates: &f" + CrateAnimationType.INV_CSGO.getUses()));
         ib.setItem(12, new ItemBuilder(Material.PAPER, 1, 0).setName("&aRoulette Animation")
                 .setLore("&7Animation name: &fINV_ROULETTE").addLore("")
-                .addLore("&7Used by crates: &f" + CrateType.INV_ROULETTE.getUses()));
+                .addLore("&7Used by crates: &f" + CrateAnimationType.INV_ROULETTE.getUses()));
         ib.setItem(13,
                 new ItemBuilder(Material.PAPER, 1, 0).setName("&aMenu Animation").setLore("&7Animation name: &fINV_MENU")
-                        .addLore("").addLore("&7Used by crates: &f" + CrateType.INV_MENU.getUses()));
+                        .addLore("").addLore("&7Used by crates: &f" + CrateAnimationType.INV_MENU.getUses()));
         ib.setItem(14, new ItemBuilder(Material.PAPER, 1, 0).setName("&aEnclose Animation")
                 .setLore("&7Animation name: &fINV_ENCLOSE").addLore("")
-                .addLore("&7Used by crates: &f" + CrateType.INV_ENCLOSE.getUses()));
+                .addLore("&7Used by crates: &f" + CrateAnimationType.INV_ENCLOSE.getUses()));
         ib.setItem(15, new ItemBuilder(Material.PAPER, 1, 0).setName("&aDiscover Animation")
                 .setLore("&7Animation name: &fINV_DISCOVER").addLore("")
-                .addLore("&7Used by crates: &f" + CrateType.INV_DISCOVER.getUses()));
+                .addLore("&7Used by crates: &f" + CrateAnimationType.INV_DISCOVER.getUses()));
         ib.setItem(16, new ItemBuilder(Material.PAPER, 1, 0).setName("&aOpen Chest Animation")
                 .setLore("&7Animation name: &fBLOCK_CRATEOPEN").addLore("")
-                .addLore("&7Used by crates: &f" + CrateType.BLOCK_CRATEOPEN.getUses()));
+                .addLore("&7Used by crates: &f" + CrateAnimationType.BLOCK_CRATEOPEN.getUses()));
 
         ib.open();
         putInMenu();

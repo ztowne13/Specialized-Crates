@@ -149,7 +149,7 @@ public class CRewards extends CSetting
         getCrateRewards()[i] = reward;
     }
 
-    public Reward getRandomReward(Player p)
+    public Reward getRandomReward()
     {
         double totalOdds = getTotalOdds();
 

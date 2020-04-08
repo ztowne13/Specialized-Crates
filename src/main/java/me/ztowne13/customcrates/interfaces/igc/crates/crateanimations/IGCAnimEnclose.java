@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.types.animations.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
@@ -26,7 +26,7 @@ public class IGCAnimEnclose extends IGCAnimation
 {
     public IGCAnimEnclose(SpecializedCrates cc, Player p, IGCMenu lastMenu)
     {
-        super(cc, p, lastMenu, "&7&l> &6&lEnclose Animation", CrateType.INV_ENCLOSE);
+        super(cc, p, lastMenu, "&7&l> &6&lEnclose Animation", CrateAnimationType.INV_ENCLOSE);
     }
 
     @Override

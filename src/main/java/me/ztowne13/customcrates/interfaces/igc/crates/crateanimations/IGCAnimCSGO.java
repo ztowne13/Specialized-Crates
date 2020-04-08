@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.types.animations.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
@@ -41,7 +41,7 @@ public class IGCAnimCSGO extends IGCAnimation
 {
     public IGCAnimCSGO(SpecializedCrates cc, Player p, IGCMenu lastMenu)
     {
-        super(cc, p, lastMenu, "&7&l> &6&lCSGO Animation", CrateType.INV_CSGO);
+        super(cc, p, lastMenu, "&7&l> &6&lCSGO Animation", CrateAnimationType.INV_CSGO);
     }
 
     @Override
@@ -141,8 +141,8 @@ public class IGCAnimCSGO extends IGCAnimation
                 break;
             case 15:
                 new InputMenu(getCc(), getP(), "remove filler-blocks", "Existing filler-blocks: " +
-                        (fc.contains(crateType.getPrefix() + ".filler-blocks") ?
-                                fc.getStringList(crateType.getPrefix() + ".filler-blocks") : "none"), String.class, this, true);
+                        (fc.contains(crateAnimationType.getPrefix() + ".filler-blocks") ?
+                                fc.getStringList(crateAnimationType.getPrefix() + ".filler-blocks") : "none"), String.class, this, true);
                 break;
         }
     }

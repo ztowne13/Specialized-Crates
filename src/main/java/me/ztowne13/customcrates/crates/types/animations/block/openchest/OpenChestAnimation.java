@@ -1,21 +1,20 @@
-package me.ztowne13.customcrates.crates.types.animations.openchest;
+package me.ztowne13.customcrates.crates.types.animations.block.openchest;
 
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.crates.types.animations.AnimationDataHolder;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimation;
-import me.ztowne13.customcrates.crates.types.animations.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
-import me.ztowne13.customcrates.utils.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -35,13 +34,37 @@ public class OpenChestAnimation extends CrateAnimation
     HashMap<Player, Reward> rewardMap = new HashMap<>();
     HashMap<Player, PlacedCrate> placedCrateMap = new HashMap<>();
 
-    public OpenChestAnimation(Inventory inventory, Crate crate)
+    public OpenChestAnimation(Crate crate)
     {
-        super(CrateType.BLOCK_CRATEOPEN.getPrefixDotted(), crate);
+        super(crate, CrateAnimationType.BLOCK_CRATEOPEN);
     }
 
     @Override
-    public boolean runAnimation(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
+    public void tickAnimation(AnimationDataHolder dataHolder, boolean update)
+    {
+
+    }
+
+    @Override
+    public void endAnimation(AnimationDataHolder dataHolder)
+    {
+
+    }
+
+    @Override
+    public boolean updateTicks(AnimationDataHolder dataHolder)
+    {
+        return false;
+    }
+
+    @Override
+    public void checkStateChange(AnimationDataHolder dataHolder, boolean update)
+    {
+
+    }
+
+    @Override
+    public boolean startAnimation(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
     {
         this.loc = l;
 
@@ -65,7 +88,7 @@ public class OpenChestAnimation extends CrateAnimation
 
     public void playAnimation(final Player p, final Location l)
     {
-        Reward reward = getCrate().getSettings().getRewards().getRandomReward(p);
+        Reward reward = getCrate().getSettings().getRewards().getRandomReward();
         final ArrayList<String> rewards = new ArrayList<String>();
         rewards.add(reward.getDisplayName());
         rewardMap.put(p, reward);
@@ -90,7 +113,7 @@ public class OpenChestAnimation extends CrateAnimation
 
         if(attachTo)
         {
-            crates.getSettings().getActions().playRewardHologram(p, rewards, .6, true, item, openDuration);
+            crate.getSettings().getActions().playRewardHologram(p, rewards, .6, true, item, openDuration);
         }
         else if (isEarlyRewardHologram())
         {
@@ -99,7 +122,7 @@ public class OpenChestAnimation extends CrateAnimation
                 @Override
                 public void run()
                 {
-                    crates.getSettings().getActions().playRewardHologram(p, rewards, .6);
+                    crate.getSettings().getActions().playRewardHologram(p, rewards, .6);
                 }
             }, rewardHoloDelay);
         }
@@ -120,27 +143,32 @@ public class OpenChestAnimation extends CrateAnimation
     }
 
     @Override
-    public void loadValueFromConfig(StatusLogger sl)
+    public void loadDataValues(StatusLogger sl)
     {
         FileConfiguration fc = getFileHandler().get();
 
-        openDuration = FileUtils.loadInt(fc.getString(prefix + "chest-open-duration"), 80, sl,
+        openDuration = fu.getFileDataLoader().loadInt(prefix + "chest-open-duration", 80, sl,
+                StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_INVALID);
 
-        earlyRewardHologram = FileUtils.loadBoolean(fc.getString(prefix + "early-reward-hologram"), true, sl,
+        earlyRewardHologram = fu.getFileDataLoader().loadBoolean(prefix + "early-reward-hologram", true, sl,
+                StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_REWARD_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_REWARD_INVALID);
 
-        rewardHoloDelay = FileUtils.loadLong(fc.getString(prefix + "reward-hologram-delay"), 0, sl,
+        rewardHoloDelay = fu.getFileDataLoader().loadLong(prefix + "reward-hologram-delay", 0, sl,
+                StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_REWARD_HOLO_DELAY_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_REWARD_HOLO_DELAY_INVALID);
 
-        attachTo = FileUtils.loadBoolean(fc.getString(prefix + "reward-holo-attach-to-item"), true, sl,
+        attachTo = fu.getFileDataLoader().loadBoolean(prefix + "reward-holo-attach-to-item", true, sl,
+                StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_ATTACH_TO_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_ATTACH_TO_INVALID);
 
-        earlyEffects = FileUtils.loadBoolean(fc.getString(prefix + "early-open-actions"), false, sl,
+        earlyEffects = fu.getFileDataLoader().loadBoolean(prefix + "early-open-actions", false, sl,
+                StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_OPEN_ACTIONS_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_OPEN_ACTIONS_INVALID);
 
@@ -148,7 +176,6 @@ public class OpenChestAnimation extends CrateAnimation
             earlyRewardHologram = true;
     }
 
-    @Override
     public void endAnimation(Player p)
     {
         Reward reward = rewardMap.get(p);

@@ -6,13 +6,13 @@ import me.ztowne13.customcrates.crates.options.*;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayType;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayer;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimation;
-import me.ztowne13.customcrates.crates.types.animations.CrateType;
+import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.crates.types.display.CrateDisplayType;
 import me.ztowne13.customcrates.crates.types.display.DynamicCratePlaceholder;
+import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
-import me.ztowne13.customcrates.utils.FileHandler;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class CrateSettings
@@ -29,7 +29,7 @@ public class CrateSettings
     boolean requireKey, tiersOverrideDefaults = true, autoClose = true;
 
     ObtainType ot;
-    CrateType ct;
+    CrateAnimationType ct;
     int cooldown = 0;
     int cost = -1;
     double hologramOffset = 0;
@@ -200,7 +200,7 @@ public class CrateSettings
                 getFireworks().loadFor(getSettingsBuilder(), CrateState.OPEN);
 
                 getCrate().getSettings().getCrateType().setupFor(crates);
-                getAnimation().loadValueFromConfig(getStatusLogger());
+                getAnimation().loadDataValues(getStatusLogger());
             }
             else
             {
@@ -316,12 +316,12 @@ public class CrateSettings
         this.ot = ot;
     }
 
-    public CrateType getCrateType()
+    public CrateAnimationType getCrateType()
     {
         return ct;
     }
 
-    public void setCrateType(CrateType ct)
+    public void setCrateType(CrateAnimationType ct)
     {
         this.ct = ct;
     }
