@@ -12,6 +12,7 @@ public class CSGOAnimationDataHolder extends InventoryAnimationDataHolder
     double currentTicks = 1.1;
     double updates = 0;
     int animatedCloseTicks = 0;
+    boolean updateAnimatedClose = false;
 
     Reward[] displayedRewards = new Reward[7];
 
@@ -53,5 +54,15 @@ public class CSGOAnimationDataHolder extends InventoryAnimationDataHolder
     public Reward[] getDisplayedRewards()
     {
         return displayedRewards;
+    }
+
+    public boolean isUpdateAnimatedClose()
+    {
+        return updateAnimatedClose;
+    }
+
+    public void setUpdateAnimatedClose(boolean updateAnimatedClose)
+    {
+        this.updateAnimatedClose = updateAnimatedClose;
     }
 }

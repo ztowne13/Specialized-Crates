@@ -68,7 +68,7 @@ public class MenuAnimation extends InventoryCrateAnimation
                 dataHolder.setCurrentState(AnimationDataHolder.State.ENDING);
                 break;
             case ENDING:
-                if (dataHolder.getWaitingTicks() == 50)
+                if (dataHolder.getWaitingTicks() == 100)
                 {
                     dataHolder.setCurrentState(AnimationDataHolder.State.COMPLETED);
                 }

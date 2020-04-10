@@ -12,7 +12,6 @@ import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
@@ -57,11 +56,12 @@ public class CSGOAnimation extends InventoryCrateAnimation
                 drawRewards(cdh, 0);
                 break;
             case CLOSING:
-                if (cdh.getTotalTicks() % getCloseSpeed() == 0)
-                {
-                    drawFillers(cdh, glassUpdateTicks);
-                }
             case ENDING:
+                if(cdh.isUpdateAnimatedClose())
+                {
+                    cdh.setUpdateAnimatedClose(false);
+                    drawFillers(cdh, 1);
+                }
                 drawRewards(cdh, cdh.getAnimatedCloseTicks());
                 break;
             case COMPLETED:
@@ -90,7 +90,7 @@ public class CSGOAnimation extends InventoryCrateAnimation
                 }
                 break;
             case CLOSING:
-                if (cdh.getAnimatedCloseTicks() == 4)
+                if (cdh.getAnimatedCloseTicks() == 3)
                 {
                     cdh.setWaitingTicks(0);
                     cdh.setCurrentState(AnimationDataHolder.State.ENDING);
@@ -128,10 +128,9 @@ public class CSGOAnimation extends InventoryCrateAnimation
                 }
                 break;
             case CLOSING:
-                Bukkit.broadcastMessage("Closing");
                 if (cdh.getTotalTicks() % getCloseSpeed() == 0)
                 {
-                    Bukkit.broadcastMessage("updating");
+                    cdh.setUpdateAnimatedClose(true);
                     cdh.setAnimatedCloseTicks(cdh.getAnimatedCloseTicks() + 1);
                 }
                 break;
@@ -160,15 +159,6 @@ public class CSGOAnimation extends InventoryCrateAnimation
         cdh.getDisplayedRewards()[cdh.getDisplayedRewards().length - 1] = r;
     }
 
-    @Override
-    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh)
-    {
-        InventoryBuilder inv = cdh.getInventoryBuilder();
-
-        inv.setItem(4, getIdentifierBlock());
-        inv.setItem(22, getIdentifierBlock());
-    }
-
     public void drawRewards(CSGOAnimationDataHolder cdh, int sideIndent)
     {
         InventoryBuilder inv = cdh.getInventoryBuilder();
@@ -181,6 +171,16 @@ public class CSGOAnimation extends InventoryCrateAnimation
                 inv.setItem(i + 10, r.getDisplayBuilder());
             }
         }
+
+    }
+
+    @Override
+    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh)
+    {
+        InventoryBuilder inv = cdh.getInventoryBuilder();
+
+        inv.setItem(4, getIdentifierBlock());
+        inv.setItem(22, getIdentifierBlock());
     }
 
     @Override
