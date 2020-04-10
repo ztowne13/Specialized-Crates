@@ -79,7 +79,13 @@ public class MenuAnimation extends InventoryCrateAnimation
     {
         Random r = new Random();
 
-        int amountOfRewards = r.nextInt(getMaxRewards() - getMinRewards()) + getMinRewards();
+        int random = 0;
+        if(getMaxRewards() > getMinRewards())
+        {
+            random  = r.nextInt(getMaxRewards() - getMinRewards());
+        }
+
+        int amountOfRewards = random + getMinRewards();
 
         for (int i = 0; i < amountOfRewards; i++)
         {
