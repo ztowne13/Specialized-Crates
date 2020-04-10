@@ -1,6 +1,5 @@
 package me.ztowne13.customcrates.crates.types.animations;
 
-import me.ztowne13.customcrates.crates.Crate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -10,43 +9,19 @@ public abstract class AnimationDataHolder
 {
     public enum State
     {
-        PLAYING(true, false),
+        PLAYING,
 
-        WAITING(true, false),
+        WAITING,
 
-        CLOSING(true, false),
+        CLOSING,
 
-        ENDING(true, true),
+        ENDING,
 
-        CHOOSING(false, false),
+        SHUFFLING,
 
-        WAITING_NOCLOSE(false, false),
+        UNCOVERING,
 
-        SHUFFLING(false, false),
-
-        UNCOVERING(false, false),
-
-        COMPLETED(true, true);
-
-        boolean forceCanFastTrack;
-        boolean canFastTrack;
-
-        State(boolean canFastTrack, boolean forceCanFastTrack)
-        {
-            this.canFastTrack = canFastTrack;
-            this.forceCanFastTrack = forceCanFastTrack;
-        }
-
-        /**
-         * This is the logic to see if the the animation is waiting to be closed, or can be fast-tracked.
-         *
-         * @param crate The crate to check whether or not fast-trak is enabled.
-         * @return Whether nor not, given the current crate settings and crate state, the animation can be finished.
-         */
-        public boolean isCanFastTrack(Crate crate)
-        {
-            return (canFastTrack && crate.getSettings().isCanFastTrack()) || forceCanFastTrack;
-        }
+        COMPLETED;
     }
 
     Player player;
@@ -54,6 +29,7 @@ public abstract class AnimationDataHolder
     CrateAnimation crateAnimation;
 
     boolean fastTrack = false;
+    boolean fastTrackWaitTick = false;
 
     int totalTicks = 0;
     int individualTicks = 0;
@@ -72,9 +48,16 @@ public abstract class AnimationDataHolder
         clickedKeys = new ArrayList<>();
     }
 
-    public void setFastTrack(boolean fastTrack, boolean early)
+    public void setFastTrack(boolean fastTrack, boolean force)
     {
-        this.fastTrack = fastTrack;
+        if(force)
+        {
+            this.fastTrack = fastTrack;
+        }
+        else
+        {
+            fastTrackWaitTick = true;
+        }
 
     }
 
@@ -141,5 +124,10 @@ public abstract class AnimationDataHolder
     public boolean isFastTrack()
     {
         return fastTrack;
+    }
+
+    public boolean isFastTrackWaitTick()
+    {
+        return fastTrackWaitTick;
     }
 }

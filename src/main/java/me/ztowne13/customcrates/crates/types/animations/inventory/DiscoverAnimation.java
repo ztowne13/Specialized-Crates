@@ -55,12 +55,12 @@ public class DiscoverAnimation extends InventoryCrateAnimation
 
         switch (dadh.getCurrentState())
         {
-            case CHOOSING:
+            case PLAYING:
                 drawFillers(dadh, 1);
                 updateUncoverTiles(dadh);
                 drawUncoverTiles(dadh);
                 break;
-            case WAITING_NOCLOSE:
+            case WAITING:
                 drawFillers(dadh, 1);
                 drawUncoverTiles(dadh);
                 break;
@@ -99,7 +99,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation
 
         switch(dadh.getCurrentState())
         {
-            case WAITING_NOCLOSE:
+            case WAITING:
             case ENDING:
                 dadh.setWaitingTicks(dataHolder.getWaitingTicks() + 1);
                 break;
@@ -118,15 +118,12 @@ public class DiscoverAnimation extends InventoryCrateAnimation
         switch(dadh.getCurrentState())
         {
             case PLAYING:
-                dadh.setCurrentState(AnimationDataHolder.State.CHOOSING);
-                break;
-            case CHOOSING:
                 if (dadh.getRemainingClicks() <= 0)
                 {
-                    dadh.setCurrentState(AnimationDataHolder.State.WAITING_NOCLOSE);
+                    dadh.setCurrentState(AnimationDataHolder.State.WAITING);
                 }
                 break;
-            case WAITING_NOCLOSE:
+            case WAITING:
                 if(dadh.getWaitingTicks() == 20)
                 {
                     dadh.setWaitingTicks(0);
@@ -185,7 +182,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation
     {
         for(int slot : dadh.getClickedSlots())
         {
-            if (!dadh.getAlreadyChosenSlots().contains(slot))
+            if (!dadh.getAlreadyChosenSlots().contains(slot) && dadh.getRemainingClicks() != 0)
             {
                 dadh.getAlreadyChosenSlots().add(slot);
                 dadh.setRemainingClicks(dadh.getRemainingClicks() - 1);

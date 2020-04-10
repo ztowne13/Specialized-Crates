@@ -63,7 +63,7 @@ public abstract class InventoryCrateAnimation extends CrateAnimation
 
         if(type.equals(KeyType.ESC))
         {
-            if(dataHolder.getCurrentState().isCanFastTrack(dataHolder.getCrateAnimation().getCrate()))
+            if(crate.getSettings().isCanFastTrack())
             {
                 dataHolder.setFastTrack(true, false);
             }
@@ -74,10 +74,13 @@ public abstract class InventoryCrateAnimation extends CrateAnimation
     public void tickAnimation(AnimationDataHolder dataHolder, boolean update)
     {
         InventoryAnimationDataHolder inventoryDataHolder = (InventoryAnimationDataHolder) dataHolder;
+
         tickInventory(inventoryDataHolder, update);
 
         drawIdentifierBlocks(inventoryDataHolder);
         drawInventory(inventoryDataHolder);
+
+        tickFastTrack(inventoryDataHolder);
     }
 
     public void drawInventory(InventoryAnimationDataHolder dataHolder)
@@ -120,6 +123,22 @@ public abstract class InventoryCrateAnimation extends CrateAnimation
         {
             dataHolder.getPlayer().playSound(dataHolder.getLocation(), getTickSound().getSound(), getTickSound().getVolume(),
                     getTickSound().getPitch());
+        }
+    }
+
+    public void tickFastTrack(InventoryAnimationDataHolder dataHolder)
+    {
+        if(dataHolder.isFastTrack())
+        {
+            for (int i = 0; i < dataHolder.getInventoryBuilder().getSize(); i++)
+            {
+                handleClick(dataHolder, i);
+            }
+        }
+
+        if(dataHolder.isFastTrackWaitTick())
+        {
+            dataHolder.setFastTrack(true, true);
         }
     }
 
