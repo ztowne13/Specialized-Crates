@@ -97,7 +97,7 @@ public class IGCCrateRewards extends IGCMenuCrate
                     i += 4;
                 }
 
-                ib.setItem(i, new ItemBuilder(r.getDisplayBuilder().getStack()).setName("&a" + r.getRewardName())
+                ib.setItem(i, new ItemBuilder(r.getDisplayBuilder()).setName("&a" + r.getRewardName())
                         .setLore("&7- " + r.getDisplayName()).addLore("&7- " + r.getChance())
                         .addLore("&7- " + r.getRarity()));
                 i++;

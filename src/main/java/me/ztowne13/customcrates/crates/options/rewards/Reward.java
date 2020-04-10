@@ -51,7 +51,7 @@ public class Reward implements Comparable<Reward>
         setRewardName(rewardName);
         saveBuilder = new SaveableItemBuilder(DynamicMaterial.STONE, 1);
         saveBuilder.setDisplayName(rewardName);
-        displayBuilder = new ItemBuilder(saveBuilder.getStack());
+        displayBuilder = new ItemBuilder(saveBuilder);
         giveDisplayItem = true;
         this.r = new Random();
     }
@@ -83,7 +83,7 @@ public class Reward implements Comparable<Reward>
     {
         if(isGiveDisplayItem())
         {
-            ItemBuilder stack = new ItemBuilder(displayBuilder.get());
+            ItemBuilder stack = new ItemBuilder(displayBuilder);
 
             try
             {
@@ -309,7 +309,7 @@ public class Reward implements Comparable<Reward>
         if (getRarity() == null)
             rarity = "default";
 
-        displayBuilder = new ItemBuilder(saveBuilder.getStack());
+        displayBuilder = new ItemBuilder(saveBuilder);
         displayBuilder.setDisplayName(applyVariablesTo(saveBuilder.getDisplayName()));
 
         displayBuilder.clearLore();
@@ -563,7 +563,7 @@ public class Reward implements Comparable<Reward>
 
     public void setBuilder(ItemBuilder setBuilder)
     {
-        this.saveBuilder = new SaveableItemBuilder(setBuilder.get());
-        this.displayBuilder = new ItemBuilder(setBuilder.get());
+        this.saveBuilder = new SaveableItemBuilder(setBuilder);
+        this.displayBuilder = new ItemBuilder(setBuilder);
     }
 }

@@ -35,6 +35,13 @@ public class ItemBuilder implements EditableItem
     List<String> lore;
     List<ItemFlag> flags = null;
 
+    public ItemBuilder(EditableItem builder)
+    {
+        this(builder.getStack());
+
+        setGlowing(builder.isGlowing());
+    }
+
     public ItemBuilder(ItemStack fromStack)
     {
         stack = fromStack.clone();

@@ -2,6 +2,8 @@ package me.ztowne13.customcrates.commands.sub;
 
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
+import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
+import me.ztowne13.customcrates.interfaces.items.attributes.BukkitGlowEffect;
 import me.ztowne13.customcrates.interfaces.nbt.NBTTagManager;
 import me.ztowne13.customcrates.interfaces.nbt.NBTTagReflection;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -31,7 +33,7 @@ public class Debug extends SubCommand
             {
                 if(args.length == 1)
                 {
-                    ChatUtils.msgInfo(player, "Commands: iteminfo[-,tostring,nolore], applytag[{tag id}]");
+                    ChatUtils.msgInfo(player, "Commands: iteminfo[-,tostring,nolore], applytag[{tag id}], glow[-, asbuilder]");
                     return true;
                 }
 
@@ -76,6 +78,25 @@ public class Debug extends SubCommand
 
                     player.setItemInHand(NBTTagReflection.applyTo(player.getItemInHand(), combined));
                     cmds.msgSuccess("Added tag '" + combined + "'");
+                }
+                else if(args[1].equalsIgnoreCase("glow"))
+                {
+                    if(args.length > 2)
+                    {
+                        if(args[2].equalsIgnoreCase("asbuilder"))
+                        {
+                            ItemBuilder builder = new ItemBuilder(player.getItemInHand());
+                            builder.setGlowing(true);
+                            ItemBuilder dupedBuilder = new ItemBuilder(builder);
+                            player.setItemInHand(dupedBuilder.get());
+                            cmds.msg("Added glow effect via itembuilder");
+                        }
+                    }
+                    else
+                    {
+                        new BukkitGlowEffect(player.getItemInHand()).apply();
+                        cmds.msg("Added glow effect");
+                    }
                 }
             }
             else

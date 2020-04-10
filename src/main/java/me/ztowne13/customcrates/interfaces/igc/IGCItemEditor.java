@@ -131,7 +131,7 @@ public class IGCItemEditor extends IGCMenu
         amount.addLore("").addAutomaticLore("&f", 30, "Edit the amount of in the stack of items.");
 
         // Edit item
-        ItemBuilder item = new ItemBuilder(editableItem.getStack());
+        ItemBuilder item = new ItemBuilder(editableItem);
         item.clearLore();
         item.setDisplayName("&aEdit the item material");
         item.addLore("&7Current value:").addLore("&7" + editableItemDM.name());
@@ -139,7 +139,7 @@ public class IGCItemEditor extends IGCMenu
                 "Edit ONLY the material of this item, none of the other values will be changed.");
 
         // Edit everything
-        ItemBuilder everything = new ItemBuilder(editableItem.getStack());
+        ItemBuilder everything = new ItemBuilder(editableItem);
         everything.clearLore();
         everything.setDisplayName("&aEdit EVERYTHING");
         everything.addLore("").addAutomaticLore("&f", 30, "Edit EVERYTHING AT ONCE. This will update all of these " +
