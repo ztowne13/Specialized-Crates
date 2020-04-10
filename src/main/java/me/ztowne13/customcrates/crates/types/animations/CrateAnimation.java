@@ -123,6 +123,8 @@ public abstract class CrateAnimation
 
     public void runAnimation(final AnimationDataHolder dataHolder)
     {
+        long startTime = System.currentTimeMillis();
+
         dataHolder.setIndividualTicks(dataHolder.getIndividualTicks() + (int) BASE_SPEED);
         dataHolder.setTotalTicks(dataHolder.getTotalTicks() + (int) BASE_SPEED);
 
@@ -132,6 +134,8 @@ public abstract class CrateAnimation
         tickAnimation(dataHolder, update);
 
         dataHolder.getClickedKeys().clear();
+
+        dataHolder.updateTickTime(startTime);
     }
 
     public void finishAnimation(Player p, ArrayList<Reward> rewards, boolean overrideAutoClose,

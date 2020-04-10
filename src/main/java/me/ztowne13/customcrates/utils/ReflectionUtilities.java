@@ -1,6 +1,5 @@
 package me.ztowne13.customcrates.utils;
 
-import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
@@ -42,7 +41,7 @@ public class ReflectionUtilities
 
     public static Class<?> getNMSClass(String className)
     {
-        if(SpecializedCrates.LOG_CACHED_INFO)
+        if(DebugUtils.LOG_CACHED_INFO)
         {
             ChatUtils.log("Cached NMS classes: " + cachedNMSClass.size());
         }
@@ -70,7 +69,7 @@ public class ReflectionUtilities
 
     public static Class<?> getOBCClass(String className)
     {
-        if(SpecializedCrates.LOG_CACHED_INFO)
+        if(DebugUtils.LOG_CACHED_INFO)
         {
             ChatUtils.log("Cached OBC classes: " + cachedOBCClass.size());
         }
@@ -98,7 +97,7 @@ public class ReflectionUtilities
 
     public static Object getHandle(Object obj)
     {
-        if(SpecializedCrates.LOG_CACHED_INFO)
+        if(DebugUtils.LOG_CACHED_INFO)
         {
             ChatUtils.log("Cached handles: " + cachedHandles.size());
         }
@@ -124,12 +123,12 @@ public class ReflectionUtilities
 
     public static Field getField(Class<?> clazz, String name)
     {
-        if(SpecializedCrates.LOG_CACHED_INFO)
+        if(DebugUtils.LOG_CACHED_INFO)
         {
             ChatUtils.log("Cached fields: " + cachedFields.size());
         }
 
-        if(!SpecializedCrates.ENABLE_CACHING)
+        if(!DebugUtils.ENABLE_CACHING)
         {
             return getFieldOriginal(clazz, name);
         }
@@ -170,12 +169,12 @@ public class ReflectionUtilities
 
     public static Method getMethod(Class<?> clazz, String name, Class<?>[] args)
     {
-        if(SpecializedCrates.LOG_CACHED_INFO)
+        if(DebugUtils.LOG_CACHED_INFO)
         {
             ChatUtils.log("Cached methods: " + cachedMethods.size());
         }
 
-        if(!SpecializedCrates.ENABLE_CACHING)
+        if(!DebugUtils.ENABLE_CACHING)
         {
             return getMethodOriginal(clazz, name, args);
         }

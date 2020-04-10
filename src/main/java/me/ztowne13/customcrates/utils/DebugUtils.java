@@ -5,6 +5,12 @@ import org.bukkit.Bukkit;
 
 public class DebugUtils
 {
+    public static boolean ENABLE_CACHING = false;
+    public static boolean LOG_CACHED_INFO = false;
+    public static boolean OUTPUT_AVERAGE_TICK = false;
+
+    public static boolean OUTPUT_AVERAGE_ANIMATION_TICK = true;
+
     SpecializedCrates cc;
     boolean forceDebug = false;
 

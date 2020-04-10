@@ -39,9 +39,6 @@ import java.util.ArrayList;
 
 public class SpecializedCrates extends JavaPlugin
 {
-    public static boolean ENABLE_CACHING = false;
-    public static boolean LOG_CACHED_INFO = false;
-    public static boolean OUTPUT_AVERAGE_TICK = false;
 
     FileHandler messageFile, rewardsFile, activecratesFile, crateconfigFile, dataFile, sqlFile;
     Settings settings;
@@ -363,7 +360,7 @@ public class SpecializedCrates extends JavaPlugin
         {
             public void run()
             {
-                if(OUTPUT_AVERAGE_TICK)
+                if(DebugUtils.OUTPUT_AVERAGE_TICK)
                 {
                     double curTimeMillis = System.currentTimeMillis();
                     tick();

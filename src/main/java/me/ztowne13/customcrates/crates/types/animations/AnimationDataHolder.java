@@ -1,5 +1,7 @@
 package me.ztowne13.customcrates.crates.types.animations;
 
+import me.ztowne13.customcrates.utils.ChatUtils;
+import me.ztowne13.customcrates.utils.DebugUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -31,6 +33,7 @@ public abstract class AnimationDataHolder
     boolean fastTrack = false;
     boolean fastTrackWaitTick = false;
 
+    long totalTickTime;
     int totalTicks = 0;
     int individualTicks = 0;
     int waitingTicks = 0;
@@ -50,7 +53,7 @@ public abstract class AnimationDataHolder
 
     public void setFastTrack(boolean fastTrack, boolean force)
     {
-        if(force)
+        if (force)
         {
             this.fastTrack = fastTrack;
         }
@@ -59,6 +62,17 @@ public abstract class AnimationDataHolder
             fastTrackWaitTick = true;
         }
 
+    }
+
+    public void updateTickTime(long startTime)
+    {
+        long curTime = System.currentTimeMillis();
+        long add = curTime - startTime;
+
+        totalTickTime += add;
+        if (DebugUtils.OUTPUT_AVERAGE_ANIMATION_TICK)
+            ChatUtils.log("Average animation tick (totalTime = " + totalTickTime + ", ticks = " + totalTicks + "): " +
+                    ((double) totalTickTime / ((double) totalTicks)));
     }
 
     public int getTotalTicks()

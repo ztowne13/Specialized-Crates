@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates.options.particles;
 
-import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import me.ztowne13.customcrates.utils.DebugUtils;
 import me.ztowne13.customcrates.utils.ReflectionUtilities;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -225,7 +225,7 @@ public enum ParticleEffect
     private static HashMap<String, Enum<?>> cachedEnums = new HashMap<>();
     private static Enum<?> getEnum(String enumFullName)
     {
-        if(SpecializedCrates.LOG_CACHED_INFO)
+        if(DebugUtils.LOG_CACHED_INFO)
         {
             ChatUtils.log("Cached enums: " + cachedEnums.size());
         }
@@ -246,7 +246,7 @@ public enum ParticleEffect
 
                 Enum<?> enumm =  Enum.valueOf(cl, enumName);
 
-                if(SpecializedCrates.ENABLE_CACHING)
+                if(DebugUtils.ENABLE_CACHING)
                 {
                     cachedEnums.put(enumFullName, enumm);
                 }
