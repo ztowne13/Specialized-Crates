@@ -53,25 +53,29 @@ public class DiscoverAnimation extends InventoryCrateAnimation
     {
         DiscoverAnimationDataHolder dadh = (DiscoverAnimationDataHolder) dataHolder;
 
-        drawFillers(dadh, 1);
         switch (dadh.getCurrentState())
         {
             case CHOOSING:
+                drawFillers(dadh, 1);
                 updateUncoverTiles(dadh);
                 drawUncoverTiles(dadh);
                 break;
             case WAITING_NOCLOSE:
+                drawFillers(dadh, 1);
                 drawUncoverTiles(dadh);
                 break;
             case SHUFFLING:
+                drawFillers(dadh, 1);
                 updateShufflingTiles(dadh);
                 drawShufflingTiles(dadh);
                 break;
             case UNCOVERING:
+                drawFillers(dadh, 1);
                 updateWinningTiles(dadh);
                 drawWinningTiles(dadh);
                 break;
             case ENDING:
+                drawFillers(dadh, 1);
                 drawWinningTiles(dadh);
         }
     }

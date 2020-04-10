@@ -74,10 +74,8 @@ public abstract class AnimationDataHolder
 
     public void setFastTrack(boolean fastTrack, boolean early)
     {
-        if(!early || getCrateAnimation().getCrate().getSettings().getCrateType().isCanFastTrackOnReload())
-        {
-            this.fastTrack = fastTrack;
-        }
+        this.fastTrack = fastTrack;
+
     }
 
     public int getTotalTicks()
