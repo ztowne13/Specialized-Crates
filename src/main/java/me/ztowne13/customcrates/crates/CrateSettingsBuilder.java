@@ -173,6 +173,25 @@ public class CrateSettingsBuilder
         getFc().set("cost", -1);
     }
 
+    public void setupAllowSkipAnimation()
+    {
+        if (hasV("allow-skip-animation"))
+        {
+            try
+            {
+                getSettings().setCanFastTrack(getFc().getBoolean("allow-skip-animation"));
+                StatusLoggerEvent.SETTINGS_FASTTRACK_SUCCESS.log(getStatusLogger());
+            }
+            catch (Exception exc)
+            {
+                StatusLoggerEvent.SETTINGS_FASTTRACK_INVALID.log(getStatusLogger());
+            }
+            return;
+        }
+
+        getFc().set("allow-skip-animation", false);
+    }
+
     public void setupDisplay()
     {
         if (hasV("display"))

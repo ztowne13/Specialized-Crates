@@ -403,7 +403,7 @@ public class CMultiCrateInventory extends CSetting
                         if(cc.getEconomyHandler().handleCheck(p, clickedCrate.getSettings().getCost(), true))
                         {
                             p.closeInventory();
-                            if (clickedCrate.getSettings().getAnimation().startAnimation(p, pm.getLastOpenCrate(), CrateState.OPEN, false, false))
+                            if (clickedCrate.getSettings().getAnimation().startAnimation(p, pm.getLastOpenCrate(), false, false))
                             {
                                 new CrateCooldownEvent(clickedCrate, System.currentTimeMillis(), true).addTo(pm.getPdm());
                                 // Post Conditions

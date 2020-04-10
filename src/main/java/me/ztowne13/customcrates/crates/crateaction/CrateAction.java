@@ -72,7 +72,7 @@ public abstract class CrateAction
                     {
                         if(pm.isConfirming() || !((Boolean) SettingsValues.SHIFT_CLICK_CONFIRM.getValue(cc)))
                         {
-                            if (cs.getAnimation().canExecuteFor(CrateState.OPEN, CrateState.OPEN, player, !crates.isMultiCrate()))
+                            if (cs.getAnimation().canExecuteFor(player, !crates.isMultiCrate()))
                             {
                                 if(cc.getEconomyHandler().handleCheck(player, crates.getSettings().getCost(), true))
                                 {
@@ -81,7 +81,7 @@ public abstract class CrateAction
                                     rewards.add(reward);
                                     reward.runCommands(player);
 
-                                    cs.getAnimation().takeKeyFromPlayer(player, false);
+                                    cs.getKeyItemHandler().takeKeyFromPlayer(player, false);
                                     new HistoryEvent(Utils.currentTimeParsed(), crates, rewards, true)
                                             .addTo(PlayerManager.get(cc, player).getPdm());
                                     useCrate(pm, cm, true, true);
@@ -117,7 +117,7 @@ public abstract class CrateAction
                         {
                             if(cc.getEconomyHandler().handleCheck(player, cs.getCost(), true))
                             {
-                                if (cs.getAnimation().startAnimation(player, location, CrateState.OPEN, !crates.isMultiCrate(), false))
+                                if (cs.getAnimation().startAnimation(player, location, !crates.isMultiCrate(), false))
                                 {
                                     // Crate isn't static but it ALSO isn't special handling (i.e. the BLOCK_ CrateTypes)
                                     if (!cs.getObtainType().equals(ObtainType.STATIC) && !cs.getCrateType().isSpecialDynamicHandling())

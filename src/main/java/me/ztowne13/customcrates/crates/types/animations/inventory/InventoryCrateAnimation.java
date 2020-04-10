@@ -47,12 +47,26 @@ public abstract class InventoryCrateAnimation extends CrateAnimation
 
 
     @Override
-    public void onClick(AnimationDataHolder dataHolder, int slot)
+    public void handleClick(AnimationDataHolder dataHolder, int slot)
     {
         InventoryAnimationDataHolder inventoryAnimationDataHolder = (InventoryAnimationDataHolder) dataHolder;
         if(!inventoryAnimationDataHolder.getClickedSlots().contains(slot))
         {
             inventoryAnimationDataHolder.getClickedSlots().add(slot);
+        }
+    }
+
+    @Override
+    public void handleKeyPress(AnimationDataHolder dataHolder, KeyType type)
+    {
+        super.handleKeyPress(dataHolder, type);
+
+        if(type.equals(KeyType.ESC))
+        {
+            if(dataHolder.getCurrentState().isCanFastTrack(dataHolder.getCrateAnimation().getCrate()))
+            {
+                dataHolder.setFastTrack(true, false);
+            }
         }
     }
 
@@ -68,7 +82,7 @@ public abstract class InventoryCrateAnimation extends CrateAnimation
 
     public void drawInventory(InventoryAnimationDataHolder dataHolder)
     {
-        if (dataHolder.getTotalTicks() % REDRAW_TICKS != 0)
+        if (dataHolder.getTotalTicks() % REDRAW_TICKS != 0 || dataHolder.isFastTrack())
             return;
 
         InventoryBuilder builder = dataHolder.getInventoryBuilder();

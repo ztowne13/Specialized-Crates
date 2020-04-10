@@ -3,7 +3,8 @@ package me.ztowne13.customcrates.listeners;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
-import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.crates.types.animations.AnimationDataHolder;
+import me.ztowne13.customcrates.crates.types.animations.CrateAnimation;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCMultiCrateMain;
 import me.ztowne13.customcrates.interfaces.igc.crates.previeweditor.IGCCratePreviewEditor;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCDragAndDrop;
@@ -94,12 +95,12 @@ public class InventoryActionListener implements Listener
                 // Handle discover animation click
                 else if (pm.isInCrate())
                 {
-                    pm.getOpenCrate().getSettings().getAnimation().onClick(pm.getCurrentAnimation(), slot);
+                    pm.getOpenCrate().getSettings().getAnimation().handleClick(pm.getCurrentAnimation(), slot);
                 }
             }
         }
 
-        if (pm.isWaitingForClose())
+        /*if (pm.isWaitingForClose())
         {
             e.setCancelled(true);
             pm.closeCrate();
@@ -109,7 +110,7 @@ public class InventoryActionListener implements Listener
             }
             pm.setWaitingForClose(null);
             p.closeInventory();
-        }
+        }*/
     }
 
     /**
@@ -170,6 +171,20 @@ public class InventoryActionListener implements Listener
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onCrateAnimationESCKey(InventoryCloseEvent e)
+    {
+        Player player = (Player) e.getPlayer();
+        PlayerManager pm = PlayerManager.get(cc, player);
+
+        if(pm.isInCrateAnimation())
+        {
+            AnimationDataHolder dataHolder = pm.getCurrentAnimation();
+            dataHolder.getCrateAnimation().handleKeyPress(dataHolder, CrateAnimation.KeyType.ESC);
+        }
+
     }
 
     @EventHandler
@@ -242,7 +257,7 @@ public class InventoryActionListener implements Listener
             }
         }
 
-        if (pm.isWaitingForClose())
+        /*if (pm.isWaitingForClose())
         {
             pm.closeCrate();
             for (Reward r : pm.getWaitingForClose())
@@ -250,7 +265,7 @@ public class InventoryActionListener implements Listener
                 r.runCommands(p);
             }
             pm.setWaitingForClose(null);
-        }
+        }*/
 
 
         if (pm.isInCrate() || pm.isInRewardMenu())

@@ -388,7 +388,13 @@ public class SpecializedCrates extends JavaPlugin
         for (Player p : Bukkit.getOnlinePlayers())
         {
             PlayerManager pm = PlayerManager.get(this, p);
-            if (pm.isWaitingForClose())
+
+            if(pm.isInCrateAnimation())
+            {
+                pm.getCurrentAnimation().setFastTrack(true, true);
+            }
+
+            /*if (pm.isWaitingForClose())
             {
                 pm.closeCrate();
 
@@ -399,7 +405,7 @@ public class SpecializedCrates extends JavaPlugin
 
                 pm.setWaitingForClose(null);
                 p.closeInventory();
-            }
+            }*/
         }
     }
 

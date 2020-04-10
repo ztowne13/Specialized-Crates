@@ -10,29 +10,31 @@ import org.bukkit.entity.Player;
 
 public enum CrateAnimationType
 {
-    INV_ROULETTE( "Roulette", Category.INVENTORY),
+    INV_ROULETTE( "Roulette", Category.INVENTORY, true),
 
-    INV_MENU("Menu", Category.INVENTORY),
+    INV_MENU("Menu", Category.INVENTORY, true),
 
-    INV_CSGO("CSGO", Category.INVENTORY),
+    INV_CSGO("CSGO", Category.INVENTORY, true),
 
-    INV_ENCLOSE("Enclose", Category.INVENTORY),
+    INV_ENCLOSE("Enclose", Category.INVENTORY, true),
 
-    INV_DISCOVER("Discover", Category.INVENTORY),
+    INV_DISCOVER("Discover", Category.INVENTORY, false),
 
-    BLOCK_CRATEOPEN("OpenChest", Category.CHEST),
+    BLOCK_CRATEOPEN("OpenChest", Category.CHEST, true),
 
     //BLOCK_CRATEOPEN_ROLLING("CrateType.Block.OpenChestRolling", Category.CHEST),
 
-    GIVE_KEY("", Category.NONE);
+    GIVE_KEY("", Category.NONE, true);
 
     String prefix;
     Category category;
+    boolean canFastTrackOnReload;
 
-    CrateAnimationType(String prefix, Category category)
+    CrateAnimationType(String prefix, Category category, boolean canFastTrackOnReload)
     {
         this.prefix = prefix;
         this.category = category;
+        this.canFastTrackOnReload = canFastTrackOnReload;
     }
 
     public void setupFor(Crate crates)
@@ -157,5 +159,10 @@ public enum CrateAnimationType
     public boolean isSpecialDynamicHandling()
     {
         return category.isSpecialDynamicHandling();
+    }
+
+    public boolean isCanFastTrackOnReload()
+    {
+        return canFastTrackOnReload;
     }
 }

@@ -56,11 +56,11 @@ public class DiscoverAnimation extends InventoryCrateAnimation
         drawFillers(dadh, 1);
         switch (dadh.getCurrentState())
         {
-            case PLAYING:
+            case CHOOSING:
                 updateUncoverTiles(dadh);
                 drawUncoverTiles(dadh);
                 break;
-            case WAITING:
+            case WAITING_NOCLOSE:
                 drawUncoverTiles(dadh);
                 break;
             case SHUFFLING:
@@ -95,12 +95,12 @@ public class DiscoverAnimation extends InventoryCrateAnimation
 
         switch(dadh.getCurrentState())
         {
-            case WAITING:
+            case WAITING_NOCLOSE:
             case ENDING:
                 dadh.setWaitingTicks(dataHolder.getWaitingTicks() + 1);
                 break;
             case SHUFFLING:
-                dadh.setShuffleTicks(dadh.getShuffleTicks() + (int)BASE_SPEED);
+                dadh.setShuffleTicks(dadh.getShuffleTicks() + (int) BASE_SPEED);
         }
 
         return false;
@@ -114,12 +114,15 @@ public class DiscoverAnimation extends InventoryCrateAnimation
         switch(dadh.getCurrentState())
         {
             case PLAYING:
+                dadh.setCurrentState(AnimationDataHolder.State.CHOOSING);
+                break;
+            case CHOOSING:
                 if (dadh.getRemainingClicks() <= 0)
                 {
-                    dadh.setCurrentState(AnimationDataHolder.State.WAITING);
+                    dadh.setCurrentState(AnimationDataHolder.State.WAITING_NOCLOSE);
                 }
                 break;
-            case WAITING:
+            case WAITING_NOCLOSE:
                 if(dadh.getWaitingTicks() == 20)
                 {
                     dadh.setWaitingTicks(0);
@@ -267,7 +270,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation
         ArrayList<Reward> rewards = new ArrayList<>();
         rewards.addAll(dadh.getAlreadyDisplayedRewards().values());
 
-        completeCrateRun(player, rewards, false, null);
+        finishAnimation(player, rewards, false, null);
         getCrate().tick(dadh.getLocation(), CrateState.OPEN, player, rewards);
     }
 
@@ -347,6 +350,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation
                         StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_DURABILITY_INVALID,
                         StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_INVALID,
                         StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_SUCCESS);
+        rewardBlock.setDisplayName("");
 
         coverBlockName = fu.getFileDataLoader()
                 .loadString(prefix + "cover-block-name", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,

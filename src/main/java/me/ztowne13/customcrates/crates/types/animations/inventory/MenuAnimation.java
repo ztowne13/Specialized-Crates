@@ -99,7 +99,7 @@ public class MenuAnimation extends InventoryCrateAnimation
         MenuAnimationDataHolder mdh = (MenuAnimationDataHolder) dataHolder;
         Player player = mdh.getPlayer();
 
-        completeCrateRun(player, mdh.getDisplayedRewards(), true, null);
+        finishAnimation(player, mdh.getDisplayedRewards(), true, null);
         getCrate().tick(mdh.getLocation(), CrateState.OPEN, player, mdh.getDisplayedRewards());
     }
 

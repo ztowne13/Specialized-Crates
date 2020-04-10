@@ -238,6 +238,11 @@ public enum StatusLoggerEvent
     SETTINGS_COST_INVALID(false, "Settings", "Failed to load the 'cost' value.",
             "It is not of a valid integer (number) type."),
 
+    SETTINGS_FASTTRACK_SUCCESS(true, "Settings", "Loaded the 'allow-skip-animation' value", "NONE"),
+
+    SETTINGS_FASTTRACK_INVALID(false, "Settings", "Failed to load the 'allow-skip-animation' value.",
+            "It is not of a valid integer (number) type."),
+
     SETTINGS_DISPLAYTYPE_SUCCESS(true, "Settings", "Loaded the 'display.type' crate value.", "NONE"),
 
     SETTINGS_DISPLAYTYPE_NONEXISTENT(false, "Settings",

@@ -138,7 +138,7 @@ public class EncloseAnimation extends InventoryCrateAnimation
     {
         EncloseAnimationDataHolder edh = (EncloseAnimationDataHolder) dataHolder;
 
-        completeCrateRun(edh.getPlayer(), edh.getLastDisplayRewards(), false, null);
+        finishAnimation(edh.getPlayer(), edh.getLastDisplayRewards(), false, null);
         getCrate().tick(edh.getLocation(), CrateState.OPEN, edh.getPlayer(), edh.getLastDisplayRewards());
     }
 
@@ -168,6 +168,7 @@ public class EncloseAnimation extends InventoryCrateAnimation
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID_BYTE,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_SUCCESS,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID);
+        fillerItem.setDisplayName("&f");
 
         tickSound = fu.getFileDataLoader()
                 .loadSound(prefix + "tick-sound", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,

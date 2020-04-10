@@ -3,11 +3,14 @@ package me.ztowne13.customcrates.crates.options;
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
+import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
+import me.ztowne13.customcrates.players.PlayerDataManager;
+import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +34,8 @@ public class KeyItemHandler extends CSetting
         //itemfail, improperenchamnt, improperpotion, improperglow
         csb.setupRequireKey();
         boolean result = keyItem.
-                loadItem(getCrate().getSettings().getFileHandler(), "key", csb.getStatusLogger(), StatusLoggerEvent.SETTINGS_KEY_FAILURE,
+                loadItem(getCrate().getSettings().getFileHandler(), "key", csb.getStatusLogger(),
+                        StatusLoggerEvent.SETTINGS_KEY_FAILURE,
                         StatusLoggerEvent.SETTINGS_KEY_ENCHANTMENT_ADD_FAILURE,
                         StatusLoggerEvent.SETTINGS_KEY_POTION_ADD_FAILURE, StatusLoggerEvent.SETTINGS_KEY_GLOW_FAILURE,
                         StatusLoggerEvent.SETTINGS_KEY_AMOUNT_FAILURE, StatusLoggerEvent.SETTINGS_KEY_FLAG_FAILURE);
@@ -77,7 +81,7 @@ public class KeyItemHandler extends CSetting
     {
         for (ItemStack stack : player.getInventory().getContents())
         {
-            if(keyMatchesToStack(stack, true))
+            if (keyMatchesToStack(stack, true))
             {
                 return true;
             }
@@ -125,6 +129,93 @@ public class KeyItemHandler extends CSetting
             }
         }
         return true;
+    }
+
+    public boolean playerPassesKeyTest(Player player, boolean requireKeyInHand)
+    {
+        if (player.getItemInHand() == null)
+        {
+            return false;
+        }
+
+        CrateSettings settings = getCrate().getSettings();
+        return !settings.isRequireKey() ||
+                (requireKeyInHand ? keyMatchesToStack(player.getItemInHand(), true) : hasKeyInInventory(player)) ||
+                PlayerManager.get(cc, player).getPdm().getVCCrateData(getCrate()).getKeys() > 0;
+    }
+
+    public void takeKeyFromPlayer(Player p, boolean fromInv)
+    {
+        boolean prioritzePhysical = (boolean) cc.getSettings().getConfigValues().get("prioritize-physical-key");
+        if (!takeKeyFromPlayer(p, fromInv, prioritzePhysical))
+        {
+            takeKeyFromPlayer(p, fromInv, !prioritzePhysical);
+        }
+    }
+
+    public boolean takeKeyFromPlayer(Player p, boolean fromInv, boolean checkPhysical)
+    {
+
+        if (checkPhysical)
+        {
+            if (fromInv)
+            {
+                for (int i = 0; i < 36; i++)
+                {
+                    try
+                    {
+                        if (!(p.getInventory().getItem(i) == null))
+                        {
+                            ItemStack stack = p.getInventory().getItem(i);
+                            if (getCrate().getSettings().getKeyItemHandler().keyMatchesToStack(stack, true))
+                            {
+                                if (stack.getAmount() == 1)
+                                {
+                                    p.getInventory().setItem(i, null);
+                                }
+                                else
+                                {
+                                    stack.setAmount(stack.getAmount() - 1);
+                                }
+                                return true;
+                            }
+                        }
+                    }
+                    catch (Exception exc)
+                    {
+                        exc.printStackTrace();
+                    }
+                }
+            }
+            else
+            {
+                ItemStack stack = p.getItemInHand();
+                if (getCrate().getSettings().getKeyItemHandler().keyMatchesToStack(stack, true))
+                {
+                    if (p.getItemInHand().getAmount() == 1)
+                    {
+                        p.setItemInHand(null);
+                    }
+                    else
+                    {
+                        ItemStack st = p.getItemInHand();
+                        st.setAmount(st.getAmount() - 1);
+                        p.setItemInHand(st);
+                    }
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
+            if (pdm.getVCCrateData(getCrate()).getKeys() > 0)
+            {
+                pdm.setVirtualCrateKeys(getCrate(), pdm.getVCCrateData(getCrate()).getKeys() - 1);
+                return true;
+            }
+        }
+        return false;
     }
 
     public SaveableItemBuilder getItem()

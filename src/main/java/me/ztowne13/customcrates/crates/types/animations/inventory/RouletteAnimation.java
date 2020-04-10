@@ -131,7 +131,7 @@ public class RouletteAnimation extends InventoryCrateAnimation
         ArrayList<Reward> rewards = new ArrayList<>();
         rewards.add(rdh.getLastShownReward());
 
-        completeCrateRun(player, rewards, false, null);
+        finishAnimation(player, rewards, false, null);
         getCrate().tick(rdh.getLocation(), CrateState.OPEN, player, rewards);
     }
 

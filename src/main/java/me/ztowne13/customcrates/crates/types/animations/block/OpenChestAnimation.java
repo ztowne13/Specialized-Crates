@@ -64,11 +64,11 @@ public class OpenChestAnimation extends CrateAnimation
     }
 
     @Override
-    public boolean startAnimation(Player p, Location l, CrateState cs, boolean requireKeyInHand, boolean force)
+    public boolean startAnimation(Player p, Location l, boolean requireKeyInHand, boolean force)
     {
         this.loc = l;
 
-        if (force || canExecuteFor(cs, CrateState.OPEN, p, requireKeyInHand))
+        if (force || canExecuteFor(p, requireKeyInHand))
         {
             if(getCrate().getSettings().getCrateType().isSpecialDynamicHandling() && !getCrate().getSettings().getObtainType().isStatic())
             {
@@ -186,7 +186,7 @@ public class OpenChestAnimation extends CrateAnimation
         ArrayList<Reward> rewards = new ArrayList<Reward>();
         rewards.add(reward);
 
-        completeCrateRun(p, rewards, false, placedCrate);
+        finishAnimation(p, rewards, false, placedCrate);
         if(!earlyEffects)
             getCrate().tick(loc, CrateState.OPEN, p, rewards);
     }

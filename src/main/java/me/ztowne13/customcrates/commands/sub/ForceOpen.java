@@ -3,7 +3,6 @@ package me.ztowne13.customcrates.commands.sub;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
 import me.ztowne13.customcrates.crates.Crate;
-import me.ztowne13.customcrates.crates.CrateState;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -69,6 +68,6 @@ public class ForceOpen extends SubCommand
 
     public void run(Crate crate, Player player)
     {
-        crate.getSettings().getAnimation().startAnimation(player, player.getLocation(), CrateState.OPEN, !crate.isMultiCrate(), true);
+        crate.getSettings().getAnimation().startAnimation(player, player.getLocation(), !crate.isMultiCrate(), true);
     }
 }

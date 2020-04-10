@@ -34,7 +34,7 @@ public class GiveKeyAnimation extends CrateAnimation
         ArrayList<Reward> rewards = new ArrayList<>();
         rewards.add(r);
 
-        completeCrateRun(player, rewards, false, null);
+        finishAnimation(player, rewards, false, null);
         getCrate().tick(dataHolder.getLocation(), CrateState.OPEN, player, rewards);
     }
 

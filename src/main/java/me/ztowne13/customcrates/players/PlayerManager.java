@@ -4,7 +4,6 @@ import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
-import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.custom.DisplayPage;
 import me.ztowne13.customcrates.crates.types.animations.AnimationDataHolder;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
@@ -16,7 +15,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -31,7 +29,6 @@ public class PlayerManager
     DataHandler dh;
     PlayerDataManager pdm;
 
-    //CrateAnimation openCrate = null;
     PlacedCrate lastOpenedPlacedCrate = null;
     Crate openCrate = null;
     Location lastOpenCrate = null;
@@ -45,8 +42,6 @@ public class PlayerManager
     boolean useVirtualCrate = false;
     boolean confirming = false;
     BukkitTask confirmingTask = null;
-
-    ArrayList<Reward> waitingForClose = null;
 
     long cmdCooldown = 0;
     String lastCooldown = "NONE";
@@ -158,9 +153,9 @@ public class PlayerManager
         this.deleteCrate = b;
     }
 
-    public void openCrate(Crate ch)
+    public void openCrate(Crate crate)
     {
-        openCrate = ch;
+        openCrate = crate;
     }
 
     public void closeCrate()
@@ -207,26 +202,6 @@ public class PlayerManager
     public DataHandler getDh()
     {
         return dh;
-    }
-
-    public void setDh(DataHandler dh)
-    {
-        this.dh = dh;
-    }
-
-    public boolean isWaitingForClose()
-    {
-        return waitingForClose != null;
-    }
-
-    public void setWaitingForClose(ArrayList<Reward> waitingForClose)
-    {
-        this.waitingForClose = waitingForClose;
-    }
-
-    public ArrayList<Reward> getWaitingForClose()
-    {
-        return waitingForClose;
     }
 
     public PlayerDataManager getPdm()
@@ -293,11 +268,6 @@ public class PlayerManager
         return lastOpenMenu;
     }
 
-    public void setLastOpenMenu(IGCMenu lastOpenMenu)
-    {
-        this.lastOpenMenu = lastOpenMenu;
-    }
-
     public Location getLastOpenCrate()
     {
         return lastOpenCrate;
@@ -306,11 +276,6 @@ public class PlayerManager
     public void setLastOpenCrate(Location lastOpenCrate)
     {
         this.lastOpenCrate = lastOpenCrate;
-    }
-
-    public void setOpenCrate(Crate openCrate)
-    {
-        this.openCrate = openCrate;
     }
 
     public boolean isUseVirtualCrate()
@@ -346,6 +311,11 @@ public class PlayerManager
     public AnimationDataHolder getCurrentAnimation()
     {
         return currentAnimation;
+    }
+
+    public boolean isInCrateAnimation()
+    {
+        return currentAnimation != null;
     }
 
     public void setCurrentAnimation(AnimationDataHolder currentAnimation)

@@ -26,10 +26,9 @@ public class CrateSettings
     FileHandler fu;
     CrateSettingsBuilder csb;
 
-    boolean requireKey, tiersOverrideDefaults = true, autoClose = true;
+    boolean requireKey, tiersOverrideDefaults = true;
 
     ObtainType ot;
-    CrateAnimationType ct;
     int cooldown = 0;
     int cost = -1;
     double hologramOffset = 0;
@@ -43,6 +42,10 @@ public class CrateSettings
     RewardDisplayType rewardDisplayType;
 
     CrateAnimation ch;
+    CrateAnimationType ct;
+    boolean canFastTrack = false;
+    boolean autoClose = true;
+
     CHolograms choloCopy;
     CParticles cp;
     CSounds cs;
@@ -106,6 +109,7 @@ public class CrateSettings
         fc.set("auto-close", isAutoClose());
         fc.set("key.require", isRequireKey());
         fc.set("cost", getCost());
+        fc.set("allow-skip-animation", isCanFastTrack());
 
         fc.set("permission", getPermission().equalsIgnoreCase("no permission") ? null : getPermission());
 
@@ -164,6 +168,7 @@ public class CrateSettings
             getSettingsBuilder().setupHologramOffset();
             getSettingsBuilder().setupDisplayer();
             getSettingsBuilder().setupCost();
+            getSettingsBuilder().setupAllowSkipAnimation();
 
             // Base Settings for non-MultiCrates
             if (!getCrate().isMultiCrate())
@@ -549,5 +554,15 @@ public class CrateSettings
     public void setCost(int cost)
     {
         this.cost = cost;
+    }
+
+    public boolean isCanFastTrack()
+    {
+        return canFastTrack;
+    }
+
+    public void setCanFastTrack(boolean canFastTrack)
+    {
+        this.canFastTrack = canFastTrack;
     }
 }

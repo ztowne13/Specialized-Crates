@@ -197,7 +197,7 @@ public class CSGOAnimation extends InventoryCrateAnimation
         ArrayList<Reward> rewards = new ArrayList<>();
         rewards.add(cdh.getDisplayedRewards()[cdh.getDisplayedRewards().length / 2]);
 
-        completeCrateRun(dataHolder.getPlayer(), rewards, false, null);
+        finishAnimation(dataHolder.getPlayer(), rewards, false, null);
         getCrate().tick(cdh.getLocation(), CrateState.OPEN, dataHolder.getPlayer(), rewards);
     }
 
