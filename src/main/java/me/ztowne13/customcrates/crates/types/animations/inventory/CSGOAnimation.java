@@ -12,6 +12,7 @@ import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
@@ -126,15 +127,15 @@ public class CSGOAnimation extends InventoryCrateAnimation
                     return true;
                 }
                 break;
-            case WAITING:
-                cdh.setWaitingTicks(cdh.getWaitingTicks() + 1);
-                break;
             case CLOSING:
+                Bukkit.broadcastMessage("Closing");
                 if (cdh.getTotalTicks() % getCloseSpeed() == 0)
                 {
+                    Bukkit.broadcastMessage("updating");
                     cdh.setAnimatedCloseTicks(cdh.getAnimatedCloseTicks() + 1);
                 }
                 break;
+            case WAITING:
             case ENDING:
                 cdh.setWaitingTicks(cdh.getWaitingTicks() + 1);
         }
