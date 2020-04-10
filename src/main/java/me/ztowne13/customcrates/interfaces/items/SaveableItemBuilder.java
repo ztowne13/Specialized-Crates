@@ -13,6 +13,11 @@ import java.util.ArrayList;
 
 public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
 {
+    public SaveableItemBuilder(ItemBuilder builder)
+    {
+        super(builder);
+    }
+
     public SaveableItemBuilder(ItemStack fromStack)
     {
         super(fromStack);
