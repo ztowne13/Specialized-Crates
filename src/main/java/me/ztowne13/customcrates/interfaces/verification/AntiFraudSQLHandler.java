@@ -86,42 +86,51 @@ public class AntiFraudSQLHandler extends Thread
         }
         catch (Exception exc)
         {
-            exc.printStackTrace();
+            ChatUtils.log("Failed to connect to the SpecializedCrates authentication DB. Authenticating anyways.");
+            //exc.printStackTrace();
         }
 
     }
 
     public boolean authenticate(String type, String toMatch) throws Exception
     {
-        URL idsURL = new URL("http://vps210053.vps.ovh.ca/specializedcrates_service.php?type='" + type + "'");
-        URLConnection connection = idsURL.openConnection();
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(
-                        connection.getInputStream()));
-
-        String inputLine;
-
-        while ((inputLine = in.readLine()) != null)
+        try
         {
-            specializedCrates.getDu().log("run() - idsURL: " + inputLine, getClass());
-            Object obj = new JSONParser().parse(inputLine);
-            JSONArray jsonArray = (JSONArray) obj;
+            URL idsURL = new URL("http://vps210053.vps.ovh.ca/specializedcrates_service.php?type='" + type + "'");
+            URLConnection connection = idsURL.openConnection();
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(
+                            connection.getInputStream()));
 
-            for (int i = 0; i < jsonArray.size(); i++)
+            String inputLine;
+
+            while ((inputLine = in.readLine()) != null)
             {
-                JSONObject jobj = (JSONObject) jsonArray.get(i);
-                String toCompareVal = jobj.get("value").toString();
+                specializedCrates.getDu().log("run() - idsURL: " + inputLine, getClass());
+                Object obj = new JSONParser().parse(inputLine);
+                JSONArray jsonArray = (JSONArray) obj;
 
-                if(toCompareVal.equals(toMatch))
-                    return false;
+                for (int i = 0; i < jsonArray.size(); i++)
+                {
+                    JSONObject jobj = (JSONObject) jsonArray.get(i);
+                    String toCompareVal = jobj.get("value").toString();
 
-                specializedCrates.getDu()
-                        .log("authenticate() - i: " + i + ", val: " + jsonArray.get(i) + ", val2: " + jobj.get("value"), getClass());
+                    if (toCompareVal.equals(toMatch))
+                        return false;
+
+                    specializedCrates.getDu()
+                            .log("authenticate() - i: " + i + ", val: " + jsonArray.get(i) + ", val2: " + jobj.get("value"),
+                                    getClass());
+                }
             }
-        }
-        in.close();
+            in.close();
 
-        idsURL.openStream();
+            idsURL.openStream();
+        }
+        catch(Exception exc)
+        {
+            ChatUtils.log("Failed to authenticate via the Specialized Crates authentication DB. Authenticating anyways.");
+        }
 
         return true;
     }
