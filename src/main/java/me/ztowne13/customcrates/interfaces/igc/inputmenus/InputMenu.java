@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.interfaces.igc.inputmenus;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
  */
 public class InputMenu
 {
+    public static
     SpecializedCrates cc;
     Player p;
     IGCMenu inputMenu;
@@ -89,18 +91,28 @@ public class InputMenu
 
         if (s.equalsIgnoreCase("exit"))
         {
-            igcm.open();
-            igcm.setInputMenu(null);
+            reopenLater(igcm);
             return;
         }
         else
         {
             if (inputMenu.handleInput(value, s))
             {
+                reopenLater(igcm);
+            }
+        }
+    }
+
+    public void reopenLater(final IGCMenu igcm)
+    {
+        Bukkit.getScheduler().runTaskLater(getCc(), new Runnable() {
+            @Override
+            public void run()
+            {
                 igcm.open();
                 igcm.setInputMenu(null);
             }
-        }
+        }, 1);
     }
 
     public SpecializedCrates getCc()
