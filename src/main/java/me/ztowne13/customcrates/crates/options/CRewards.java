@@ -29,7 +29,7 @@ public class CRewards extends CSetting
     {
         for (Reward r : getCrateRewards())
         {
-            if (r.getDisplayName().equals(s) || r.getRewardName().equals(s))
+            if (r.getDisplayName(false).equals(s) || r.getRewardName().equals(s))
                 return r;
         }
         return null;

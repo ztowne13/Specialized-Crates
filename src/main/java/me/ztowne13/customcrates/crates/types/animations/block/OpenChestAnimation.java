@@ -90,7 +90,7 @@ public class OpenChestAnimation extends CrateAnimation
     {
         Reward reward = getCrate().getSettings().getRewards().getRandomReward();
         final ArrayList<String> rewards = new ArrayList<String>();
-        rewards.add(reward.getDisplayName());
+        rewards.add(reward.getDisplayName(true));
         rewardMap.put(p, reward);
 
         Location upOne = l.clone();

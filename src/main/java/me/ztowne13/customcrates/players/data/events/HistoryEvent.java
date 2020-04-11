@@ -52,7 +52,7 @@ public class HistoryEvent extends DataEvent
                         getCurrentTime() == he.getCurrentTime();
         for (int i = 0; i < getRewards().size(); i++)
         {
-            if (!getRewards().get(i).getDisplayName().equalsIgnoreCase(he.getRewards().get(i).getDisplayName()))
+            if (!getRewards().get(i).getDisplayName(false).equalsIgnoreCase(he.getRewards().get(i).getDisplayName(false)))
             {
                 matches = false;
                 break;

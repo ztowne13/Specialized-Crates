@@ -130,11 +130,6 @@ public class CActions extends CSetting
         playAll(p, new ArrayList<Reward>(), pre);
     }
 
-    public void playAll(Player p, PlacedCrate placedCrate, boolean pre)
-    {
-        playAll(p, placedCrate, new ArrayList<Reward>(), pre);
-    }
-
     public void playAll(Player p, ArrayList<Reward> rewards, boolean pre)
     {
         playAll(p, null, rewards, pre);
@@ -155,7 +150,7 @@ public class CActions extends CSetting
         ArrayList<String> rewardsAsDisplayname = new ArrayList<>();
         for (Reward r : rewards)
         {
-            rewardsAsDisplayname.add(r.getDisplayName());
+            rewardsAsDisplayname.add(r.getDisplayName(true));
         }
 
         for (String tier : getActions().keySet())
