@@ -4,6 +4,7 @@ import me.ztowne13.customcrates.interfaces.items.attributes.BukkitGlowEffect;
 import me.ztowne13.customcrates.interfaces.nbt.NBTTagManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.VersionUtils;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -71,7 +72,7 @@ public class ItemBuilder implements EditableItem
                 addLore(line);
         }
 
-        if(stack.hasItemMeta() && stack.getItemMeta().getItemFlags() != null)
+        if (stack.hasItemMeta() && stack.getItemMeta().getItemFlags() != null)
         {
             for (ItemFlag flag : stack.getItemMeta().getItemFlags())
                 addItemFlag(flag);
@@ -124,7 +125,7 @@ public class ItemBuilder implements EditableItem
     public void setDisplayName(String name)
     {
         ItemMeta im = im();
-        if(name.equalsIgnoreCase(NO_NAME))
+        if (name == null)
         {
             im.setDisplayName(null);
         }
@@ -142,20 +143,26 @@ public class ItemBuilder implements EditableItem
         setIm(im);
     }
 
-    public String getDisplayNameStripped()
+    public String getDisplayNameFromChatColor(boolean useMaterialWhenNull)
     {
-        return ChatUtils.fromChatColor(getDisplayName());
+        return ChatUtils.fromChatColor(getDisplayName(useMaterialWhenNull));
     }
 
     @Override
-    public String getDisplayName()
+    public String getDisplayName(boolean useMaterialWhenNull)
     {
+        if (useMaterialWhenNull)
+        {
+            return hasDisplayName() ? im().getDisplayName() :
+                    WordUtils.capitalizeFully(get().getType().name().replaceAll("_", " "));
+        }
+
         return im().getDisplayName();
     }
 
     public boolean hasDisplayName()
     {
-        return getDisplayName() != null;
+        return getDisplayName(false) != null;
     }
 
     public String getName(boolean strippedOfColor)
@@ -294,9 +301,9 @@ public class ItemBuilder implements EditableItem
 
     public boolean hasNBTTag(String tag)
     {
-        for(String tagParsed : getNBTTags())
+        for (String tagParsed : getNBTTags())
         {
-            if(tagParsed.split(" ")[0].equalsIgnoreCase(tag))
+            if (tagParsed.split(" ")[0].equalsIgnoreCase(tag))
             {
                 return true;
             }
@@ -324,7 +331,7 @@ public class ItemBuilder implements EditableItem
     {
         if (DynamicMaterial.fromItemStack(getStack()).equals(DynamicMaterial.PLAYER_HEAD))
         {
-            if(Character.isLetterOrDigit(name.charAt(0)))
+            if (Character.isLetterOrDigit(name.charAt(0)))
             {
                 SkullMeta skullMeta = (SkullMeta) im();
                 try
@@ -333,7 +340,7 @@ public class ItemBuilder implements EditableItem
                     OfflinePlayer op = Bukkit.getOfflinePlayer(uuid);
                     skullMeta.setOwningPlayer(op);
                 }
-                catch(Exception exc)
+                catch (Exception exc)
                 {
                     skullMeta.setOwner(name);
 
@@ -393,7 +400,7 @@ public class ItemBuilder implements EditableItem
     @Override
     public List<ItemFlag> getItemFlags()
     {
-        if(flags == null)
+        if (flags == null)
             flags = new ArrayList<>();
 
         return flags;
@@ -407,7 +414,7 @@ public class ItemBuilder implements EditableItem
 
         im.getItemFlags().clear();
 
-        for(ItemFlag flag : getItemFlags())
+        for (ItemFlag flag : getItemFlags())
             im.addItemFlags(flag);
 
         stack.setItemMeta(im);
@@ -448,7 +455,8 @@ public class ItemBuilder implements EditableItem
         boolean first = true;
 
         if (stack.getItemMeta() instanceof PotionMeta)
-        { PotionMeta pm = (PotionMeta) im();
+        {
+            PotionMeta pm = (PotionMeta) im();
             pm.clearCustomEffects();
 
             if (!getPotionEffects().isEmpty())
@@ -487,14 +495,14 @@ public class ItemBuilder implements EditableItem
 
         boolean loreEquals = true;
 
-        if(compare == null)
+        if (compare == null)
             return false;
 
-        if(getLore().size() == compare.getLore().size())
+        if (getLore().size() == compare.getLore().size())
         {
-            for(int i = 0; i < getLore().size(); i++)
+            for (int i = 0; i < getLore().size(); i++)
             {
-                if(!getLore().get(i).equals(compare.getLore().get(i)))
+                if (!getLore().get(i).equals(compare.getLore().get(i)))
                     loreEquals = false;
             }
         }
@@ -503,14 +511,14 @@ public class ItemBuilder implements EditableItem
             loreEquals = false;
         }
 
-        // ISSUE
         boolean equal =
                 !(!compare.hasDisplayName() && hasDisplayName())
-                && !(compare.hasDisplayName() && !hasDisplayName())
-                && ((!compare.hasDisplayName() && !hasDisplayName()) || (compare.getDisplayName().equals(getDisplayName())))
-                && loreEquals
-                && compare.getStack().getType().equals(getStack().getType())
-                && compare.getStack().getAmount() == getStack().getAmount();
+                        && !(compare.hasDisplayName() && !hasDisplayName())
+                        && ((!compare.hasDisplayName() && !hasDisplayName()) ||
+                        (compare.getDisplayName(false).equals(getDisplayName(false))))
+                        && loreEquals
+                        && compare.getStack().getType().equals(getStack().getType())
+                        && compare.getStack().getAmount() == getStack().getAmount();
 
         return equal;
     }

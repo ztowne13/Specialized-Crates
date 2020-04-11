@@ -13,7 +13,7 @@ public interface EditableItem
 
     void setDisplayName(String displayName);
 
-    String getDisplayName();
+    String getDisplayName(boolean useMaterialWhenNull);
 
     void setPlayerHeadName(String name);
 

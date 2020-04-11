@@ -141,7 +141,7 @@ public class CustomRewardDisplayer extends RewardDisplayer
 
         for(SaveableItemBuilder item : getItems().values())
         {
-            descriptors.add("&fItem Name: " + item.getDisplayName());
+            descriptors.add("&fItem Name: " + item.getDisplayName(true));
         }
 
         return descriptors;

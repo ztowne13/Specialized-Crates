@@ -103,14 +103,14 @@ public class RewardConverter
             }
         }
 
-        if (reward.saveBuilder.getDisplayName() == null)
+        if (!reward.saveBuilder.hasDisplayName())
             reward.saveBuilder.setDisplayName(reward.rewardName);
 
         if (reward.getRarity() == null)
             reward.rarity = "default";
 
         reward.displayBuilder = new ItemBuilder(reward.saveBuilder.getStack());
-        reward.displayBuilder.setDisplayName(reward.applyVariablesTo(reward.saveBuilder.getDisplayName()));
+        reward.displayBuilder.setDisplayName(reward.applyVariablesTo(reward.saveBuilder.getDisplayName(false)));
 
         reward.displayBuilder.clearLore();
         for(String loreLine : reward.saveBuilder.getLore())
@@ -157,7 +157,7 @@ public class RewardConverter
             }
             catch (Exception exc)
             {
-                StatusLoggerEvent.REWARD_AMOUNT_INVALID.log(reward.getCr().getCrate(), new String[]{reward.saveBuilder.getDisplayName()});
+                StatusLoggerEvent.REWARD_AMOUNT_INVALID.log(reward.getCr().getCrate(), new String[]{reward.saveBuilder.getDisplayName(true)});
             }
         }
 
@@ -186,7 +186,7 @@ public class RewardConverter
                 catch (Exception exc)
                 {
                     StatusLoggerEvent.REWARD_POTION_INVALID
-                            .log(reward.getCr().getCrate(), new String[]{reward.saveBuilder.getDisplayName(), unparsedPot});
+                            .log(reward.getCr().getCrate(), new String[]{reward.saveBuilder.getDisplayName(true), unparsedPot});
                 }
             }
         }
@@ -220,7 +220,7 @@ public class RewardConverter
             catch (Exception exc)
             {
                 StatusLoggerEvent.REWARD_ENCHANT_INVALID
-                        .log(reward.getCr().getCrate(), new String[]{reward.saveBuilder.getDisplayName(), cause});
+                        .log(reward.getCr().getCrate(), new String[]{reward.saveBuilder.getDisplayName(true), cause});
             }
         }
     }

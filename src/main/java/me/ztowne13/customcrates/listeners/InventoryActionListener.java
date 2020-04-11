@@ -126,7 +126,7 @@ public class InventoryActionListener implements Listener
             if(e.getInventory().getItem(2) != null)
             {
                 ItemBuilder builder = new ItemBuilder(e.getInventory().getItem(2));
-                if(builder.getDisplayName() != null)
+                if(builder.hasDisplayName())
                 {
                     if(CrateUtils.searchByCrate(builder.get()) != null || CrateUtils.searchByKey(builder.get()) != null)
                     {

@@ -238,7 +238,7 @@ public class Reward implements Comparable<Reward>
     public String applyVariablesTo(String s)
     {
         return ChatUtils.toChatColor(s.replace("%rewardname%", getRewardName()).
-                replace("%displayname%", saveBuilder.getDisplayName()).
+                replace("%displayname%", saveBuilder.getDisplayName(true)).
                 replace("%writtenchance%", getChance() + "").
                 replace("%rarity%", rarity)).
                 replace("%chance%", getFormattedChance());
@@ -310,7 +310,10 @@ public class Reward implements Comparable<Reward>
             rarity = "default";
 
         displayBuilder = new ItemBuilder(saveBuilder);
-        displayBuilder.setDisplayName(applyVariablesTo(saveBuilder.getDisplayName()));
+        if(displayBuilder.hasDisplayName())
+        {
+            displayBuilder.setDisplayName(applyVariablesTo(saveBuilder.getDisplayName(true)));
+        }
 
         displayBuilder.clearLore();
         for(String loreLine : saveBuilder.getLore())
@@ -391,14 +394,14 @@ public class Reward implements Comparable<Reward>
 
     public String getDisplayName()
     {
-        if (displayBuilder == null || displayBuilder.getDisplayName() == null)
+        if (displayBuilder == null || !displayBuilder.hasDisplayName())
             return rewardName;
-        return displayBuilder.getDisplayName();
+        return displayBuilder.getDisplayName(false);
     }
 
     public void checkIsNeedMoreConfig()
     {
-        needsMoreConfig = !(chance != -1 && saveBuilder.getDisplayName() != null && rarity != null && saveBuilder != null);
+        needsMoreConfig = !(chance != -1 && /*saveBuilder.getDisplayName(false) != null &&*/ rarity != null && saveBuilder != null);
     }
 
     public boolean equals(Reward r)

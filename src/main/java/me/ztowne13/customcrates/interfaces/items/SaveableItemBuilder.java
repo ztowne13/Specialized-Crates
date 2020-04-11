@@ -37,13 +37,13 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         fc.set(prefix + ".amount", getStack().getAmount());
         fc.set(prefix + ".player-head-name", getPlayerHeadName());
 
-        if(getDisplayName() == null && allowUnnamedItems)
+        if(!hasDisplayName())
         {
-            fc.set(prefix + ".name", NO_NAME);
+            fc.set(prefix + ".name", null);
         }
         else
         {
-            fc.set(prefix + ".name", getDisplayNameStripped());
+            fc.set(prefix + ".name", getDisplayNameFromChatColor(false));
         }
 
         // Enchantments
@@ -136,9 +136,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         // Name
         if (!fc.contains(prefix + ".name"))
         {
-            if (itemFailure != null)
-                itemFailure.log(statusLogger, new String[]{"The '" + prefix + ".name' value does not exist."});
-            return false;
+            setDisplayName(null);
         }
         setDisplayName(fc.getString(prefix + ".name"));
 

@@ -59,7 +59,7 @@ public class IGCItemEditor extends IGCMenu
         // Display name
         ItemBuilder displayName = new ItemBuilder(DynamicMaterial.PAPER, 1);
         displayName.setDisplayName("&aEdit the display name");
-        displayName.addLore("&7Current value:").addLore("&7" + editableItem.getDisplayName());
+        displayName.addLore("&7Current value:").addLore("&7" + editableItem.getDisplayName(false));
         displayName.addLore("").addAutomaticLore("&f", 30, "Set the display name of the display item.");
 
         // Enchantments
@@ -246,7 +246,7 @@ public class IGCItemEditor extends IGCMenu
                         DynamicMaterial.fromItemStack(editableItem.getStack()).toString(), Material.class, this);
                 break;
             case 13:
-                new InputMenu(getCc(), getP(), "displayname", editableItem.getDisplayName(), String.class, this);
+                new InputMenu(getCc(), getP(), "displayname", editableItem.getDisplayName(false), String.class, this);
                 break;
             case 14:
                 new IGCListEditor(getCc(), getP(), this, "Lore", "Line", editableItem.getLore(), DynamicMaterial.PAPER, 1)
