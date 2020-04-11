@@ -35,7 +35,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
     public void open()
     {
 
-        InventoryBuilder ib = createDefault(18);
+        InventoryBuilder ib = createDefault(27);
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
@@ -66,26 +66,20 @@ public class IGCCratesEssentials extends IGCMenuCrate
                     .addAutomaticLore("&f", 30, "Set the type of mob it will be or playername for the NPC."));
         }
 
-        ib.setItem(12,
-                new ItemBuilder(DynamicMaterial.BIRCH_FENCE_GATE, 1).setName("&aSet auto-close").setLore("&7Current value: ")
-                        .addLore("&7" + cs.isAutoClose()).addLore("").addAutomaticLore("&f", 30,
-                        "If the crate is in an inventory, should it automatically close when it is done?"));
         ib.setItem(11,
                 new ItemBuilder(DynamicMaterial.SNOWBALL, 1).setName("&aSet the cooldown").setLore("&7Current value: ")
                         .addLore("&7" + cs.getCooldown()).addLore("").addAutomaticLore("&f", 30,
                         "The duration of time, in seconds, between when a player can open the crate. Set to -1 to have no cooldown."));
         ib.setItem(8, new ItemBuilder(DynamicMaterial.CHEST, 1).setName("&a&lEdit the crate item.").addLore("")
-                .addAutomaticLore("&f", 30, "Click to open the item editor."));
+                .addAutomaticLore("&f", 30, "Click to open the crate item editor."));
         if (!crates.isMultiCrate())
         {
             ib.setItem(17,
                     new ItemBuilder(DynamicMaterial.TRIPWIRE_HOOK, 1).setName("&a&lEdit the crate key.").addLore("")
                             .addAutomaticLore("&f", 30,
-                                    "Click to open the item editor."));
-            ib.setItem(5, new ItemBuilder(Material.ITEM_FRAME, 1, 0).setName("&aSet the crate animation")
-                    .setLore("&7Current Value: ").addLore("&7" + cs.getCrateType().name()).addLore("")
-                    .addAutomaticLore("&f", 30, "This is the animation that will play when the crate is opened."));
-            ib.setItem(13,
+                                    "Click to open the key item editor."));
+
+            ib.setItem(12,
                     new ItemBuilder(Material.SLIME_BALL, 1, 0).setName("&aSet require key").setLore("&7Current value: ")
                             .addLore("&7" + cs.isRequireKey()).addLore("").addAutomaticLore("&f", 30,
                             "Does the crate require a key? Best for keyless weekly/monthly crates or DYNAMIC crates that can be placed to open without a key. Or if minecrates can be opened without needing a key."));
@@ -96,7 +90,12 @@ public class IGCCratesEssentials extends IGCMenuCrate
             cost.addLore("").addAutomaticLore("&f", 30, "This is how much it costs to open the crate, " +
                     "regardless of whether or not require-key is set to true or false.");
             cost.addLore("").addAutomaticLore("&c", 30, "REQUIRES Vault");
-            ib.setItem(14, cost);
+            ib.setItem(5, cost);
+
+            ItemBuilder animations = new ItemBuilder(DynamicMaterial.ITEM_FRAME, 1);
+            animations.setDisplayName("&aEdit Animation Preferences");
+            animations.addAutomaticLore("&f", 30, "Edit the animation type, auto-close, and allow-skip-animation values.");
+            ib.setItem(26, animations);
         }
 
         getIb().open();
@@ -174,27 +173,20 @@ public class IGCCratesEssentials extends IGCMenuCrate
                 new InputMenu(getCc(), getP(), "cooldown", cs.getCooldown() + "", "Time is measured in seconds.",
                         Integer.class, this);
                 break;
-            case 12:
-                cs.setAutoClose(!cs.isAutoClose());
-                open();
-                break;
             case 8:
                 new IGCItemEditor(getCc(), getP(), this, crates.getSettings().getCrateItemHandler().getItem()).open();
                 break;
             case 17:
                 new IGCItemEditor(getCc(), getP(), this, crates.getSettings().getKeyItemHandler().getItem()).open();
                 break;
-            case 5:
-//                new InputMenu(getCc(), getP(), "animation", cs.getCt().name(),
-//                        "Available animations: " + Arrays.toString(CrateType.values()), String.class, this, true);
-                new IGCListSelector(getCc(), getP(), this, "Animation Type", Arrays.asList(CrateAnimationType.values()),
-                        DynamicMaterial.PAPER, 1, null).open();
-                break;
-            case 13:
+            case 12:
                 cs.setRequireKey(!cs.isRequireKey());
                 open();
                 break;
-            case 14:
+            case 26:
+                new IGCCrateAnimation(getCc(), getP(), this, getCrates()).open();
+                break;
+            case 5:
                 new InputMenu(getCc(), getP(), "cost", cs.getCost() + "",
                         "How much the crate will cost to open. Set to 0 to have no cost.", Integer.class, this, true);
                 break;
