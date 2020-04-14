@@ -9,6 +9,7 @@ import me.ztowne13.customcrates.utils.NPCUtils;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.util.HashMap;
@@ -27,20 +28,27 @@ public class MobPlaceholder extends DynamicCratePlaceholder
         super(cc);
     }
 
-    public void place(PlacedCrate cm)
+    public void place(final PlacedCrate cm)
     {
-        LocationUtils.removeDubBlocks(cm.getL());
+        Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                LocationUtils.removeDubBlocks(cm.getL());
 
-        NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
-        NPC npc = npcRegistry.createNPC(ent.getEt(), "Specialized Crate - Crate");
+                NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
+                NPC npc = npcRegistry.createNPC(ent.getEt(), "Specialized Crate - Crate");
 
-        npc.addTrait(new IdentifierTrait());
+                npc.addTrait(new IdentifierTrait());
 
-        NPCUtils.applyDefaultInfo(npc);
+                NPCUtils.applyDefaultInfo(npc);
 
-        npc.spawn(LocationUtils.getLocationCentered(cm.getL()));
+                npc.spawn(LocationUtils.getLocationCentered(cm.getL()));
 
-        getMobs().put(cm, npc);
+                getMobs().put(cm, npc);
+            }
+        }, 20);
 
     }
 

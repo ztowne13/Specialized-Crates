@@ -54,7 +54,7 @@ public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
 
                 getNpcs().put(cm, npc);
             }
-        }, 60);
+        }, 20);
 
     }
 
