@@ -106,7 +106,7 @@ public abstract class InventoryCrateAnimation extends CrateAnimation
 
     public void drawFillers(InventoryAnimationDataHolder dataHolder, int glassUpdateTicks)
     {
-        if (dataHolder.getTotalTicks() % glassUpdateTicks != 0)
+        if (dataHolder.getTotalTicks() % glassUpdateTicks != 0 || dataHolder.isFastTrack())
             return;
 
         InventoryBuilder inv = dataHolder.getInventoryBuilder();
@@ -119,7 +119,7 @@ public abstract class InventoryCrateAnimation extends CrateAnimation
 
     public void playSound(InventoryAnimationDataHolder dataHolder)
     {
-        if (getTickSound() != null)
+        if (getTickSound() != null && !dataHolder.isFastTrack())
         {
             dataHolder.getPlayer().playSound(dataHolder.getLocation(), getTickSound().getSound(), getTickSound().getVolume(),
                     getTickSound().getPitch());

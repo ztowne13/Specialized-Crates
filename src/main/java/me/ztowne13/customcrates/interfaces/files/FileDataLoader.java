@@ -99,7 +99,7 @@ public class FileDataLoader
         if (!fileHandler.get().contains(path))
         {
             pathDoesntExist.log(statusLogger, new String[]{path});
-            return new SoundData(Sound.values()[0]);
+            return new SoundData(Sound.values()[0], 0);
         }
 
         String value = fileHandler.get().getString(path);
@@ -158,7 +158,7 @@ public class FileDataLoader
             soundFailure.log(statusLogger);
         }
 
-        return new SoundData(Sound.values()[0]);
+        return new SoundData(Sound.values()[0], 0);
     }
 
     public int loadInt(String path, int defValue, StatusLogger statusLogger, StatusLoggerEvent pathDoesntExist,

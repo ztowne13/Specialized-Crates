@@ -15,6 +15,12 @@ public class SoundData
         setSound(sound);
     }
 
+    public SoundData(Sound sound, int volume)
+    {
+        setSound(sound);
+        this.volume = 0;
+    }
+
     public void playTo(Player p, Location l)
     {
         p.playSound(l, getSound(), getVolume(), getPitch());
