@@ -32,7 +32,7 @@ public class IGCCrateAnimation extends IGCMenuCrate
 
         InventoryBuilder ib = createDefault(27);
 
-        ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
+        ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
         ib.setItem(13,
                 new ItemBuilder(DynamicMaterial.BIRCH_FENCE_GATE, 1).setName("&aSet auto-close").setLore("&7Current value: ")
@@ -61,7 +61,7 @@ public class IGCCrateAnimation extends IGCMenuCrate
     {
         switch (slot)
         {
-            case 9:
+            case 0:
                 up();
                 break;
             case 13:
