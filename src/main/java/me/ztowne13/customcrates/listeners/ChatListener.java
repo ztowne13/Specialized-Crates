@@ -5,6 +5,7 @@ import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,20 +25,27 @@ public class ChatListener implements Listener
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onChat(AsyncPlayerChatEvent e)
+    public void onChat(final AsyncPlayerChatEvent e)
     {
-        Player p = e.getPlayer();
+        final Player p = e.getPlayer();
         if(p.hasPermission("customcrates.admin"))
         {
             PlayerManager pm = PlayerManager.get(cc, p);
             if (pm.isInOpenMenu())
             {
-                IGCMenu menu = pm.getOpenMenu();
+                final IGCMenu menu = pm.getOpenMenu();
                 if (menu.isInInputMenu())
                 {
-                    InputMenu im = menu.getInputMenu();
-                    im.runFor(menu, e.getMessage());
-                    p.sendMessage(ChatUtils.toChatColor(" &7&l> &f" + e.getMessage()));
+                    Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            InputMenu im = menu.getInputMenu();
+                            im.runFor(menu, e.getMessage());
+                            p.sendMessage(ChatUtils.toChatColor(" &7&l> &f" + e.getMessage()));
+                        }
+                    }, 1);
 
                     e.getRecipients().clear();
                     e.setCancelled(true);
