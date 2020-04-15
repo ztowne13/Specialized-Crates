@@ -132,9 +132,12 @@ public class CrateSettings
 
     public void loadAll()
     {
+        cc.getDu().log("loadAll() - CALL");
         // Crate Loging
         String toLog = SettingsValues.LOG_SUCCESSES.getValue(getCrate().getCc()).toString();
+        cc.getDu().log("loadAll() - Preparing to load notice.");
         loadNotice(toLog);
+        cc.getDu().log("loadAll() - Loaded notice.");
 
         setParticles(new CParticles(getCrate()));
         setHologram(new CHolograms(getCrate()));

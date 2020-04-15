@@ -36,14 +36,16 @@ public class ChatListener implements Listener
                 final IGCMenu menu = pm.getOpenMenu();
                 if (menu.isInInputMenu())
                 {
+                    final String msg = e.getMessage();
+                    final InputMenu im = menu.getInputMenu();
+
                     Bukkit.getScheduler().runTaskLater(cc, new Runnable()
                     {
                         @Override
                         public void run()
                         {
-                            InputMenu im = menu.getInputMenu();
-                            im.runFor(menu, e.getMessage());
-                            p.sendMessage(ChatUtils.toChatColor(" &7&l> &f" + e.getMessage()));
+                            im.runFor(menu, msg);
+                            p.sendMessage(ChatUtils.toChatColor(" &7&l> &f" + msg));
                         }
                     }, 1);
 

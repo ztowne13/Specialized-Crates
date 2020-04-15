@@ -39,13 +39,17 @@ public class Settings
 
     public void loadCrates(boolean multiCrate)
     {
+        cc.getDu().log("loadCrates - CALL", getClass());
         File folder = new File(getCc().getDataFolder().getPath() + "/Crates");
         File[] listOfFiles = folder.listFiles();
 
+        cc.getDu().log("loadCrates - Beginning loop", getClass());
         for (int i = 0; i < listOfFiles.length; i++)
         {
+            cc.getDu().log("loadCrates - Looping " + i, getClass());
             if (listOfFiles[i].isFile())
             {
+                cc.getDu().log("loadCrates - Is file " + i, getClass());
                 File f = listOfFiles[i];
 
                 if (f.getName().contains(";") || f.getName().contains(","))
@@ -55,15 +59,20 @@ public class Settings
                     continue;
                 }
 
+                cc.getDu().log("loadCrates - Attempting load", getClass());
                 if (f.getName().endsWith(".crate") && !multiCrate)
                 {
+                    cc.getDu().log("loadCrates - Loading " + f.getName() + " is .crate", getClass());
                     String crateName = f.getName().replace(".crate", "");
                     Crate.getCrate(getCc(), crateName);
+                    cc.getDu().log("loadCrates - Done", getClass());
                 }
                 else if (f.getName().endsWith(".multicrate") && multiCrate)
                 {
+                    cc.getDu().log("loadCrates - Loading " + f.getName() + " is .multicrate", getClass());
                     String crateName = f.getName().replace(".multicrate", "");
                     Crate.getCrate(getCc(), crateName, true);
+                    cc.getDu().log("loadCrates - Done", getClass());
                 }
             }
         }

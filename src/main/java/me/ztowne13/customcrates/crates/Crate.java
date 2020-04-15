@@ -36,6 +36,7 @@ public class Crate
 
     public Crate(SpecializedCrates cc, String name, boolean newFile, boolean isMultiCrate)
     {
+        cc.getDu().log("Crate() - new", getClass());
         this.cc = cc;
         this.name = name;
 

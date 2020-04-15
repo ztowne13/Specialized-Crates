@@ -16,7 +16,8 @@ public class DebugUtils
 
     String[] sort = new String[]
             {
-                    "",
+                    "me.ztowne13.customcrates.Settings",
+                    "me.ztowne13.customcrates.crates",
             };
 
     public DebugUtils(SpecializedCrates cc)
