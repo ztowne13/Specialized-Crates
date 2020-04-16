@@ -175,7 +175,7 @@ public class IGCCratePreviewMenu extends IGCMenuCrate
                 }
                 else
                 {
-                    ChatUtils.msgError(getP(), "The preview menu type is not CUSTOM.");
+                    ChatUtils.msgError(getP(), "The preview menu type is not CUSTOM. If you just changed it, you need to save and reload the plugin.");
                 }
                 break;
         }

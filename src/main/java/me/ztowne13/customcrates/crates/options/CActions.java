@@ -106,6 +106,13 @@ public class CActions extends CSetting
     {
         String[] split = toAdd.split(",");
         String type = split[0].replace(" ", "").replace(",", "");
+
+        if (split.length == 1)
+        {
+            addEntry(type, "", crateTier);
+            return;
+        }
+
         String action = "";
 
         boolean b = false;
