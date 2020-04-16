@@ -156,7 +156,8 @@ public class NBTTagReflection
             "display",
             "Enchantments",
             "HideFlags",
-            "Potion"
+            "Potion",
+            "StoredEnchantments"
     };
 
     private static String[] booleanTags = new String[]{

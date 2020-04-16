@@ -12,12 +12,11 @@ public class DebugUtils
     public static boolean OUTPUT_AVERAGE_ANIMATION_TICK = false;
 
     SpecializedCrates cc;
-    boolean forceDebug = false;
+    boolean forceDebug = true;
 
     String[] sort = new String[]
             {
-                    "me.ztowne13.customcrates.Settings",
-                    "me.ztowne13.customcrates.crates",
+                    "noinfo"
             };
 
     public DebugUtils(SpecializedCrates cc)

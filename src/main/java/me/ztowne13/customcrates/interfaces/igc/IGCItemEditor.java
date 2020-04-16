@@ -4,18 +4,13 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.*;
-import me.ztowne13.customcrates.interfaces.nbt.NBTTagManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -188,52 +183,7 @@ public class IGCItemEditor extends IGCMenu
                 if (stack != null && !stack.getType().equals(Material.AIR))
                 {
                     editableItem.setStack(stack);
-
-                    editableItem.getEnchantments().clear();
-                    for (Enchantment enchantment : stack.getEnchantments().keySet())
-                    {
-                        editableItem.getEnchantments()
-                                .add(new CompressedEnchantment(enchantment, stack.getEnchantmentLevel(enchantment)));
-                    }
-
-                    editableItem.getNBTTags().clear();
-                    for (String tags : NBTTagManager.getFrom(stack))
-                    {
-                        editableItem.getNBTTags().add(tags);
-                    }
-
-                    if (stack.hasItemMeta())
-                    {
-                        editableItem.getLore().clear();
-                        if (stack.getItemMeta().hasLore())
-                        {
-                            for (String line : stack.getItemMeta().getLore())
-                            {
-                                editableItem.getLore().add(line);
-                            }
-                        }
-
-                        editableItem.getPotionEffects().clear();
-                        if (stack.getItemMeta() instanceof PotionMeta)
-                        {
-                            PotionMeta pm = (PotionMeta) stack.getItemMeta();
-
-                            PotionData pd = pm.getBasePotionData();
-                            editableItem.getPotionEffects()
-                                    .add(new CompressedPotionEffect(pd.getType().getEffectType(), pd.isExtended() ? 1 : 0,
-                                            pd.isUpgraded() ? 1 : 0));
-
-                            for (PotionEffect pe : pm.getCustomEffects())
-                            {
-                                editableItem.getPotionEffects()
-                                        .add(new CompressedPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier()));
-                            }
-                        }
-
-                        editableItem.setDisplayName(
-                                stack.getItemMeta().hasDisplayName() ? stack.getItemMeta().getDisplayName() :
-                                        stack.getType().toString());
-                    }
+                    editableItem.updateFromItem();
                     open();
                 }
                 else

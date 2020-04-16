@@ -49,4 +49,9 @@ public interface EditableItem
     void addItemFlag(ItemFlag flag);
 
     void removeItemFlag(ItemFlag flag);
+
+    /**
+     * Clears all the currently set values and updates them based on the current itemstack.
+     */
+    void updateFromItem();
 }

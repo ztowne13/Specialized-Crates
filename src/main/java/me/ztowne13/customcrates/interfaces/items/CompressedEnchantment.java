@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.interfaces.items;
 
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 public class CompressedEnchantment
 {
@@ -14,9 +14,18 @@ public class CompressedEnchantment
         this.level = level;
     }
 
-    public void applyTo(ItemStack stack)
+    public void applyTo(ItemBuilder itemBuilder)
     {
-        stack.addUnsafeEnchantment(enchantment, level);
+        if(itemBuilder.im() instanceof EnchantmentStorageMeta)
+        {
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemBuilder.im();
+            meta.addStoredEnchant(enchantment, level, true);
+
+            itemBuilder.setIm(meta);
+            return;
+        }
+
+        itemBuilder.get().addUnsafeEnchantment(enchantment, level);
     }
 
     @Override

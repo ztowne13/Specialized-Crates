@@ -242,7 +242,6 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
             }
         }
 
-
         return true;
     }
 

@@ -11,6 +11,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -21,6 +22,7 @@ import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class ItemBuilder implements EditableItem
@@ -46,38 +48,7 @@ public class ItemBuilder implements EditableItem
     public ItemBuilder(ItemStack fromStack)
     {
         stack = fromStack.clone();
-
-        for (Enchantment enchantment : stack.getEnchantments().keySet())
-        {
-            addEnchantment(enchantment, stack.getEnchantmentLevel(enchantment));
-        }
-
-        if (stack.hasItemMeta() && im() instanceof PotionMeta)
-        {
-            PotionMeta pm = (PotionMeta) im();
-            for (PotionEffect pe : pm.getCustomEffects())
-            {
-                addPotionEffect(new CompressedPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier()));
-            }
-        }
-
-        for (String tags : NBTTagManager.getFrom(stack))
-        {
-            addNBTTag(tags);
-        }
-
-        if (stack.hasItemMeta() && stack.getItemMeta().hasLore())
-        {
-            for (String line : stack.getItemMeta().getLore())
-                addLore(line);
-        }
-
-        if (stack.hasItemMeta() && stack.getItemMeta().getItemFlags() != null)
-        {
-            for (ItemFlag flag : stack.getItemMeta().getItemFlags())
-                addItemFlag(flag);
-        }
-
+        updateFromItem();
     }
 
     @Deprecated
@@ -94,6 +65,62 @@ public class ItemBuilder implements EditableItem
     public ItemBuilder(DynamicMaterial m, int amnt)
     {
         create(m, amnt);
+    }
+
+    public void updateFromItem()
+    {
+        getEnchantments().clear();
+        getNBTTags().clear();
+        getLore().clear();
+        getPotionEffects().clear();
+        getItemFlags().clear();
+
+        // Enchantments
+        Map<Enchantment, Integer> enchants;
+        if(im() instanceof EnchantmentStorageMeta)
+        {
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) im();
+            enchants = meta.getStoredEnchants();
+        }
+        else
+        {
+            enchants = stack.getEnchantments();
+        }
+        for (Enchantment enchantment : enchants.keySet())
+        {
+            addEnchantment(enchantment, enchants.get(enchantment));
+        }
+
+        // Potion Effects
+        if (stack.hasItemMeta() && im() instanceof PotionMeta)
+        {
+            PotionMeta pm = (PotionMeta) im();
+
+            for (PotionEffect pe : pm.getCustomEffects())
+            {
+                addPotionEffect(new CompressedPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier()));
+            }
+        }
+
+        // NBT Tags
+        for (String tags : NBTTagManager.getFrom(stack))
+        {
+            addNBTTag(tags);
+        }
+
+        // Lore
+        if (stack.hasItemMeta() && stack.getItemMeta().hasLore())
+        {
+            for (String line : stack.getItemMeta().getLore())
+                addLore(line);
+        }
+
+        // Item Flags
+        if (stack.hasItemMeta() && stack.getItemMeta().getItemFlags() != null)
+        {
+            for (ItemFlag flag : stack.getItemMeta().getItemFlags())
+                addItemFlag(flag);
+        }
     }
 
     public void create(DynamicMaterial m, int amnt)
@@ -437,7 +464,9 @@ public class ItemBuilder implements EditableItem
             im().removeEnchant(enchantment);
 
         for (CompressedEnchantment compressedEnchantment : getEnchantments())
-            compressedEnchantment.applyTo(stack);
+        {
+            compressedEnchantment.applyTo(this);
+        }
     }
 
     @Override
