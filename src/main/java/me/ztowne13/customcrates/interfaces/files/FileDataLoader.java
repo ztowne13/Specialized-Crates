@@ -73,7 +73,7 @@ public class FileDataLoader
                 }
             }
             success.log(statusLogger, new String[]{value});
-            DynamicMaterial dynMat = DynamicMaterial.fromString(m.name() + ";" + byt);
+            DynamicMaterial dynMat = DynamicMaterial.fromString(value);
             return new ItemBuilder(dynMat, 1);
         }
         catch (Exception exc)
