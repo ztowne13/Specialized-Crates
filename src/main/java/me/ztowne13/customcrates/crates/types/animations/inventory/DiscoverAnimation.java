@@ -345,7 +345,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation
                         StatusLoggerEvent.ANIMATION_DISCOVER_UNCOVERSOUND_PITCH_INVALID);
 
         rewardBlock = fu.getFileDataLoader()
-                .loadItem("reward-block", new ItemBuilder(DynamicMaterial.GREEN_STAINED_GLASS_PANE), sl,
+                .loadItem(prefix + "reward-block", new ItemBuilder(DynamicMaterial.GREEN_STAINED_GLASS_PANE), sl,
                         StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_MATERIAL_INVALID,
                         StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_DURABILITY_INVALID,

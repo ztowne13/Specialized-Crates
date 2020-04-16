@@ -166,8 +166,8 @@ public class EncloseAnimation extends InventoryCrateAnimation
                         getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID_MATERIAL,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID_BYTE,
-                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_SUCCESS,
-                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID);
+                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID,
+                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_SUCCESS);
         fillerItem.setDisplayName("&f");
 
         tickSound = fu.getFileDataLoader()
@@ -177,8 +177,8 @@ public class EncloseAnimation extends InventoryCrateAnimation
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUME_SUCCESS,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUME_INVALID,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_VOLUMEPITCH_FAILURE,
-                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_INVALID,
-                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_SUCCESS);
+                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_SUCCESS,
+                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_INVALID);
 
         updateSpeed = fu.getFileDataLoader()
                 .loadInt(prefix + "update-speed", 2, getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,

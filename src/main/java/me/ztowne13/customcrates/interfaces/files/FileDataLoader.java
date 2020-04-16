@@ -38,7 +38,6 @@ public class FileDataLoader
                               StatusLoggerEvent invalidByte,
                               StatusLoggerEvent invalid, StatusLoggerEvent success)
     {
-
         if (!fileHandler.get().contains(path))
         {
             pathDoesntExist.log(statusLogger, new String[]{path});
@@ -60,6 +59,7 @@ public class FileDataLoader
                 invalidMaterial.log(statusLogger, new String[]{args[0]});
                 return defValue;
             }
+
             short byt = 0;
             if (value.contains(";"))
             {
@@ -72,18 +72,14 @@ public class FileDataLoader
                     invalidByte.log(statusLogger, new String[]{args[1]});
                 }
             }
-
             success.log(statusLogger, new String[]{value});
-
             DynamicMaterial dynMat = DynamicMaterial.fromString(m.name() + ";" + byt);
-
             return new ItemBuilder(dynMat, 1);
         }
         catch (Exception exc)
         {
             invalid.log(statusLogger, new String[]{value});
         }
-
         return defValue;
     }
 
