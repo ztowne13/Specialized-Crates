@@ -1,6 +1,8 @@
 package me.ztowne13.customcrates.interfaces.items;
 
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
+import me.ztowne13.customcrates.interfaces.items.attributes.CompressedEnchantment;
+import me.ztowne13.customcrates.interfaces.items.attributes.RGBColor;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -93,6 +95,14 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         }
         else
             fc.set(prefix + ".item-flags", null);
+
+        // Leather armour color
+        if(isColorable() && getColor() != null)
+        {
+            fc.set(prefix + ".color.red", getColor().getR());
+            fc.set(prefix + ".color.green", getColor().getG());
+            fc.set(prefix + ".color.blue", getColor().getB());
+        }
 
     }
 
@@ -240,6 +250,34 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
             {
                 setPlayerHeadName(fc.getString(prefix + ".player-head-name"));
             }
+        }
+
+        // Leather armour color
+
+        if(fc.contains(prefix + ".color") && isColorable())
+        {
+            int red = 0;
+            int green = 0;
+            int blue = 0;
+
+            String unparsedRed = fc.getString(prefix + ".color.red");
+            String unparsedGreen = fc.getString(prefix + ".color.green");
+            String unparsedBlue  = fc.getString(prefix + ".color.blue");
+
+            if(Utils.isInt(unparsedRed))
+            {
+                red = Integer.parseInt(unparsedRed);
+            }
+            if(Utils.isInt(unparsedGreen))
+            {
+                green = Integer.parseInt(unparsedGreen);
+            }
+            if(Utils.isInt(unparsedBlue))
+            {
+                blue = Integer.parseInt(unparsedBlue);
+            }
+
+            setColor(new RGBColor(red, green, blue));
         }
 
         return true;

@@ -1,5 +1,7 @@
 package me.ztowne13.customcrates.interfaces.items;
 
+import me.ztowne13.customcrates.interfaces.items.attributes.CompressedEnchantment;
+import me.ztowne13.customcrates.interfaces.items.attributes.RGBColor;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,8 +21,21 @@ public interface EditableItem
 
     String getPlayerHeadName();
 
+    /**
+     * These functions are handled outside of the ItemStack
+     **/
 
-    // Handled outside of the ItemStack
+    void reapplyColor();
+
+    void reapplyNBTTags();
+
+    void reapplyPotionEffects();
+
+    void reapplyEnchantments();
+
+    void reapplyItemFlags();
+
+    void reapplyLore();
 
     boolean isGlowing();
 
@@ -28,23 +43,19 @@ public interface EditableItem
 
     List<String> getNBTTags();
 
-    void reapplyNBTTags();
-
     List<CompressedEnchantment> getEnchantments();
-
-    void reapplyEnchantments();
 
     List<CompressedPotionEffect> getPotionEffects();
 
-    void reapplyPotionEffects();
-
     List<String> getLore();
-
-    void reapplyLore();
 
     List<ItemFlag> getItemFlags();
 
-    void reapplyItemFlags();
+    RGBColor getColor();
+
+    boolean isColorable();
+
+    void setColor(RGBColor color);
 
     void addItemFlag(ItemFlag flag);
 

@@ -10,10 +10,10 @@ import me.ztowne13.customcrates.crates.types.display.npcs.Citizens2NPCPlaceHolde
 import me.ztowne13.customcrates.crates.types.display.npcs.MobPlaceholder;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
-import me.ztowne13.customcrates.interfaces.igc.IGCItemEditor;
 import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
+import me.ztowne13.customcrates.interfaces.igc.items.IGCItemEditor;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;

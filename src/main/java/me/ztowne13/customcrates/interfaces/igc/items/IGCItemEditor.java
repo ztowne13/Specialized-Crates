@@ -1,9 +1,17 @@
-package me.ztowne13.customcrates.interfaces.igc;
+package me.ztowne13.customcrates.interfaces.igc.items;
 
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
+import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
+import me.ztowne13.customcrates.interfaces.igc.IGCListEditor;
+import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
+import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.*;
+import me.ztowne13.customcrates.interfaces.items.CompressedPotionEffect;
+import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
+import me.ztowne13.customcrates.interfaces.items.EditableItem;
+import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
+import me.ztowne13.customcrates.interfaces.items.attributes.CompressedEnchantment;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import me.ztowne13.customcrates.utils.VersionUtils;
@@ -149,6 +157,21 @@ public class IGCItemEditor extends IGCMenu
         attributes.addLore("").addAutomaticLore("&c", 30, "Note: If glow is set to true, HIDE_ENCHANTS will ALWAYS" +
                 " be true unless glow: false.");
 
+        // Edit color
+        ItemBuilder color = new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1);
+        if(item.isColorable())
+        {
+            color.setDisplayName("&aEdit the armour Color");
+            color.addLore("&7Current Value:").addLore("&7" + item.getColor().getR() + ", " + item.getColor().getG() + ", " + item.getColor().getB());
+            color.addLore("").addAutomaticLore("&f", 30, "Edit the red, green, and blue values of the colored armour.");
+        }
+        else
+        {
+            color.setDisplayName("&cEdit the armour Color");
+            color.addLore("").addLore("&cThis item is not colorable.");
+
+        }
+
         ib.setItem(10, everything);
         ib.setItem(11, item);
         ib.setItem(13, displayName);
@@ -160,6 +183,7 @@ public class IGCItemEditor extends IGCMenu
         ib.setItem(24, potion);
         ib.setItem(25, attributes);
         ib.setItem(31, playerHead);
+        ib.setItem(32, color);
 
         ib.open();
         putInMenu();
@@ -249,6 +273,15 @@ public class IGCItemEditor extends IGCMenu
                 else
                     ChatUtils.msgError(getP(), "The current item is not a player head or skull.");
                 break;
+            case 32:
+                if(editableItem.isColorable())
+                {
+                    new IGCColoredArmour(getCc(), getP(), this, editableItem).open();
+                }
+                else
+                {
+                    ChatUtils.msgError(getP(), "The current item is not a colorable piece of armor");
+                }
         }
     }
 

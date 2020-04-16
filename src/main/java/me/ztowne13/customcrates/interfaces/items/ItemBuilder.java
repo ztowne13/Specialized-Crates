@@ -1,20 +1,20 @@
 package me.ztowne13.customcrates.interfaces.items;
 
 import me.ztowne13.customcrates.interfaces.items.attributes.BukkitGlowEffect;
+import me.ztowne13.customcrates.interfaces.items.attributes.CompressedEnchantment;
+import me.ztowne13.customcrates.interfaces.items.attributes.RGBColor;
 import me.ztowne13.customcrates.interfaces.nbt.NBTTagManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.VersionUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
@@ -32,6 +32,7 @@ public class ItemBuilder implements EditableItem
     ItemStack stack;
 
     boolean glowing = false;
+    RGBColor rgbColor;
     List<CompressedEnchantment> enchantments = null;
     List<CompressedPotionEffect> potionEffects = null;
     List<String> nbtTags = null;
@@ -67,17 +68,33 @@ public class ItemBuilder implements EditableItem
         create(m, amnt);
     }
 
-    public void updateFromItem()
+    public void reapplyAll()
+    {
+        reapplyColor();
+        reapplyItemFlags();
+        reapplyLore();
+        reapplyEnchantments();
+        reapplyNBTTags();
+        reapplyPotionEffects();
+    }
+
+    public void reset()
     {
         getEnchantments().clear();
         getNBTTags().clear();
         getLore().clear();
         getPotionEffects().clear();
         getItemFlags().clear();
+        rgbColor = null;
+    }
+
+    public void updateFromItem()
+    {
+        reset();
 
         // Enchantments
         Map<Enchantment, Integer> enchants;
-        if(im() instanceof EnchantmentStorageMeta)
+        if (im() instanceof EnchantmentStorageMeta)
         {
             EnchantmentStorageMeta meta = (EnchantmentStorageMeta) im();
             enchants = meta.getStoredEnchants();
@@ -120,6 +137,15 @@ public class ItemBuilder implements EditableItem
         {
             for (ItemFlag flag : stack.getItemMeta().getItemFlags())
                 addItemFlag(flag);
+        }
+
+        // Coloured Armor
+        if (im() instanceof LeatherArmorMeta)
+        {
+            LeatherArmorMeta meta = (LeatherArmorMeta) im();
+            RGBColor newColor =
+                    new RGBColor(meta.getColor().getRed(), meta.getColor().getGreen(), meta.getColor().getBlue());
+            setColor(newColor);
         }
     }
 
@@ -515,6 +541,45 @@ public class ItemBuilder implements EditableItem
                 first = false;
             }
         }
+    }
+
+    @Override
+    public void setColor(RGBColor rgbColor)
+    {
+        this.rgbColor = rgbColor;
+        reapplyColor();
+    }
+
+    @Override
+    public void reapplyColor()
+    {
+        if (isColorable() && getColor() != null)
+        {
+            LeatherArmorMeta meta = (LeatherArmorMeta) im();
+            meta.setColor(Color.fromRGB(getColor().getR(), getColor().getG(), getColor().getB()));
+            setIm(meta);
+        }
+    }
+
+    @Override
+    public RGBColor getColor()
+    {
+        if (isColorable())
+        {
+            if(rgbColor == null)
+            {
+                RGBColor rgbColor = new RGBColor(160, 101, 64);
+                setColor(rgbColor);
+            }
+            return rgbColor;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isColorable()
+    {
+        return im() instanceof LeatherArmorMeta;
     }
 
     @Override

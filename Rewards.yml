@@ -181,7 +181,7 @@ SpecialDirt2:
       - '&7Get Special Dirt if you win this!'
 MyHead:
   chance: 1.0
-  rarity: '1'
+  rarity: default
   give-display-item:
     value: true
     with-lore: false
@@ -194,3 +194,33 @@ MyHead:
     lore:
       - '&7-'
       - '&eChance: &6%writtenchance%%'
+SuperCoolEnchantBook:
+  chance: 1.0
+  rarity: default
+  give-display-item:
+    value: true
+    with-lore: false
+  display-item:
+    material: ENCHANTED_BOOK
+    amount: 1
+    name: '&bFancy Enchantment Book'
+    enchantments:
+      - THORNS;3
+    lore:
+      - '&7-'
+      - '&eChance: &6%writtenchance%%'
+ColoredChestplate:
+  chance: 1.0
+  rarity: default
+  give-display-item:
+    value: false
+    with-lore: false
+    with-name: true
+  display-item:
+    material: LEATHER_CHESTPLATE
+    glow: false
+    amount: 1
+    color:
+      blue: 51
+      red: 255
+      green: 201

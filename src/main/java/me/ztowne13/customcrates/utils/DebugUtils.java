@@ -12,7 +12,7 @@ public class DebugUtils
     public static boolean OUTPUT_AVERAGE_ANIMATION_TICK = false;
 
     SpecializedCrates cc;
-    boolean forceDebug = true;
+    boolean forceDebug = false;
 
     String[] sort = new String[]
             {

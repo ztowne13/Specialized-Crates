@@ -1,5 +1,6 @@
-package me.ztowne13.customcrates.interfaces.items;
+package me.ztowne13.customcrates.interfaces.items.attributes;
 
+import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
