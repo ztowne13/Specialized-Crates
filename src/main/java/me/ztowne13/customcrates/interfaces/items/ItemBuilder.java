@@ -113,6 +113,17 @@ public class ItemBuilder implements EditableItem
         {
             PotionMeta pm = (PotionMeta) im();
 
+            if (VersionUtils.Version.v1_9.isServerVersionOrLater())
+            {
+                PotionData baseData = pm.getBasePotionData();
+                if(baseData.getType().getEffectType() != null)
+                {
+                    addPotionEffect(
+                            new CompressedPotionEffect(baseData.getType().getEffectType(), baseData.isExtended() ? 1 : 0,
+                                    baseData.isUpgraded() ? 1 : 0));
+                }
+            }
+
             for (PotionEffect pe : pm.getCustomEffects())
             {
                 addPotionEffect(new CompressedPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier()));
@@ -520,8 +531,10 @@ public class ItemBuilder implements EditableItem
                 CompressedPotionEffect firstVal = getPotionEffects().get(0);
                 if (VersionUtils.Version.v1_9.isServerVersionOrLater())
                 {
-                    PotionType.valueOf(firstVal.getType().getName());
-                    pm.setBasePotionData(new PotionData(PotionType.getByEffect(firstVal.getType())));
+                    PotionData potionData =
+                            new PotionData(PotionType.getByEffect(firstVal.getType()), firstVal.getDuration() == 1,
+                                    firstVal.getAmplifier() == 1);
+                    pm.setBasePotionData(potionData);
                 }
                 else
                 {
@@ -566,7 +579,7 @@ public class ItemBuilder implements EditableItem
     {
         if (isColorable())
         {
-            if(rgbColor == null)
+            if (rgbColor == null)
             {
                 RGBColor rgbColor = new RGBColor(160, 101, 64);
                 setColor(rgbColor);
