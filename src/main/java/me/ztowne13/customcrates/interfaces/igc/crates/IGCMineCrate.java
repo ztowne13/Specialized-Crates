@@ -78,7 +78,8 @@ public class IGCMineCrate extends IGCMenuCrate
                         "Format it 'chance/out of what chance'.", String.class, this, true);
                 break;
             case 12:
-                new InputMenu(getCc(), getP(), "whitelist", cs.getLuckyChestSettings().isBLWL() + "", Boolean.class, this);
+                cs.getLuckyChestSettings().setBLWL(!cs.getLuckyChestSettings().isBLWL());
+                open();
                 break;
             case 13:
                 new IGCListEditor(getCc(), getP(), this, "Block List", "Block", cs.getLuckyChestSettings().getWhiteList(),
@@ -127,34 +128,6 @@ public class IGCMineCrate extends IGCMenuCrate
                 ChatUtils.msgError(getP(), input + " is not formatted 'number/number' or 'chance/out of chance'");
             }
         }
-        else if (value.equalsIgnoreCase("whitelist"))
-        {
-            try
-            {
-                Boolean b = Boolean.valueOf(input);
-                cs.getLuckyChestSettings().setBLWL(b);
-                ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
-                return true;
-            }
-            catch (Exception exc)
-            {
-                ChatUtils.msgError(getP(), input + " is not a valid true/false value.");
-            }
-        }
-//        else if (value.equalsIgnoreCase("add block-list"))
-//        {
-//            try
-//            {
-//                Material m = DynamicMaterial.fromString(input.toUpperCase()).parseMaterial();
-//                cs.getClc().getWhiteList().add(m);
-//                ChatUtils.msgSuccess(getP(), "Added " + input + " to the whitelist / blacklist.");
-//                return true;
-//            }
-//            catch (Exception exc)
-//            {
-//                ChatUtils.msgError(getP(), input + " is not a valid material.");
-//            }
-//        }
         else if (value.equalsIgnoreCase("remove block-list"))
         {
             try

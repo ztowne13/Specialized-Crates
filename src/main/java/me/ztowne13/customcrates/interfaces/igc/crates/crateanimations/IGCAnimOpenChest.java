@@ -84,8 +84,8 @@ public class IGCAnimOpenChest extends IGCAnimation
                         "How long the chest will appear to be open for, in ticks (20 ticks per sec).", Integer.class, this);
                 break;
             case 4:
-                new InputMenu(getCc(), getP(), "early-reward-hologram", getString("early-reward-hologram"),
-                        "Should the reward hologram play early for added effect (true/false).", Boolean.class, this);
+                fc.set(getPath("early-reward-hologram"), !fc.getBoolean(getPath("early-reward-hologram")));
+                open();
                 break;
             case 5:
                 new InputMenu(getCc(), getP(), "reward-hologram-delay", getString("reward-hologram-delay"),
@@ -93,14 +93,12 @@ public class IGCAnimOpenChest extends IGCAnimation
                         Integer.class, this);
                 break;
             case 6:
-                new InputMenu(getCc(), getP(), "reward-holo-attach-to-item", getString("reward-holo-attach-to-item"),
-                        "Attach the reward hologram to the item that appears?",
-                        Boolean.class, this);
+                fc.set(getPath("reward-holo-attach-to-item"), !fc.getBoolean(getPath("reward-holo-attach-to-item")));
+                open();
                 break;
             case 7:
-                new InputMenu(getCc(), getP(), "early-open-actions", getString("early-open-actions"),
-                        "Play the fireworks, sound, actions, and particles right when the crate is opened, not after it closes.",
-                        Boolean.class, this);
+                fc.set(getPath("early-open-actions"), !fc.getBoolean(getPath("early-open-actions")));
+                open();
                 break;
         }
     }
