@@ -9,10 +9,11 @@ import java.util.HashMap;
 public class ReflectionUtilities
 {
     private static HashMap<Class<?>, HashMap<String, Method>> cachedMethods = new HashMap<>();
-    private static HashMap<Object, Object> cachedHandles = new HashMap<>();
+    public static HashMap<Object, Object> cachedHandles = new HashMap<>();
     private static HashMap<Class<?>, HashMap<String, Field>> cachedFields = new HashMap<>();
     private static HashMap<String, Class<?>> cachedOBCClass = new HashMap<>();
     private static HashMap<String, Class<?>> cachedNMSClass = new HashMap<>();
+    private static String cachedVersion = "";
 
 
 
@@ -34,9 +35,12 @@ public class ReflectionUtilities
 
     public static String getVersion()
     {
-        String name = Bukkit.getServer().getClass().getPackage().getName();
-        String version = name.substring(name.lastIndexOf('.') + 1) + ".";
-        return version;
+        if(cachedVersion == "")
+        {
+            String name = Bukkit.getServer().getClass().getPackage().getName();
+            cachedVersion = name.substring(name.lastIndexOf('.') + 1) + ".";
+        }
+        return cachedVersion;
     }
 
     public static Class<?> getNMSClass(String className)
@@ -46,9 +50,10 @@ public class ReflectionUtilities
             ChatUtils.log("Cached NMS classes: " + cachedNMSClass.size());
         }
 
-        if(cachedNMSClass.containsKey(className))
+        Class<?> val = cachedNMSClass.get(className);
+        if(val != null)
         {
-            return cachedNMSClass.get(className);
+            return  val;
         }
 
         String fullName = "net.minecraft.server." + getVersion() + className;
@@ -74,9 +79,10 @@ public class ReflectionUtilities
             ChatUtils.log("Cached OBC classes: " + cachedOBCClass.size());
         }
 
-        if(cachedOBCClass.containsKey(className))
+        Class<?> val = cachedOBCClass.get(className);
+        if(val != null)
         {
-            return cachedOBCClass.get(className);
+            return val;
         }
 
         String fullName = "org.bukkit.craftbukkit." + getVersion() + className;
@@ -102,9 +108,10 @@ public class ReflectionUtilities
             ChatUtils.log("Cached handles: " + cachedHandles.size());
         }
 
-        if(cachedHandles.containsKey(obj))
+        Object val = cachedHandles.get(obj);
+        if(val != null)
         {
-            return cachedHandles.get(obj);
+            return val;
         }
 
         try
@@ -133,14 +140,18 @@ public class ReflectionUtilities
             return getFieldOriginal(clazz, name);
         }
 
-        if(!cachedFields.containsKey(clazz))
+        HashMap<String, Field> val = cachedFields.get(clazz);
+        if(val == null)
         {
-            cachedFields.put(clazz, new HashMap<String, Field>());
+            HashMap<String, Field> blank = new HashMap<String, Field>();
+            cachedFields.put(clazz, blank);
+            val = blank;
         }
 
-        if(cachedFields.get(clazz).containsKey(name))
+        Field val2 = val.get(name);
+        if(val2 != null)
         {
-            return cachedFields.get(clazz).get(name);
+            return val2;
         }
         else
         {

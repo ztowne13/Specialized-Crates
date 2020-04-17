@@ -6,6 +6,7 @@ import me.ztowne13.customcrates.utils.ReflectionUtilities;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 public enum ParticleEffect
@@ -139,11 +140,13 @@ public enum ParticleEffect
 
     MOB_APPEARANCE;
 
-    private String particleName;
-    private String enumValue;
-    private static Class<?> nmsPacketPlayOutParticle = ReflectionUtilities.getNMSClass("PacketPlayOutWorldParticles");
-    private static Class<?> nmsEnumParticle;
-    private static int particleRange = 25;
+    public String particleName;
+    public String enumValue;
+    public static Class<?> nmsPacketPlayOutParticle = ReflectionUtilities.getNMSClass("PacketPlayOutWorldParticles");
+    public static Class<?> nmsEnumParticle;
+    public static int particleRange = 25;
+
+    public static Constructor<?> cachedConstructor = null;
 
     ParticleEffect(String particleName, String enumValue)
     {
@@ -175,6 +178,13 @@ public enum ParticleEffect
         }
         if (!ReflectionUtilities.getVersion().contains("v1_7"))
         {
+
+            if(ReflectionUtilities.getVersion().contains("v1_8_R3"))
+            {
+                ParticleEffect188.sendToPlayer(this, player,location, offsetX, offsetY, offsetZ, speed, count);
+                return;
+            }
+
             try
             {
                 if (nmsEnumParticle == null)
@@ -182,14 +192,17 @@ public enum ParticleEffect
                     nmsEnumParticle = ReflectionUtilities.getNMSClass("EnumParticle");
                 }
 
-                Object packet = nmsPacketPlayOutParticle.getConstructor(
-                        new Class[]{nmsEnumParticle, Boolean.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE,
-                                Float.TYPE, Float.TYPE, Float.TYPE, Integer.TYPE, int[].class})
-                        .newInstance(getEnum(nmsEnumParticle.getName() + "." +
-                                        (this.enumValue != null ? this.enumValue : name().toUpperCase())), Boolean.valueOf(true),
-                                Float.valueOf((float) location.getX()), Float.valueOf((float) location.getY()),
-                                Float.valueOf((float) location.getZ()), Float.valueOf(offsetX), Float.valueOf(offsetY),
-                                Float.valueOf(offsetZ), Float.valueOf(speed), Integer.valueOf(count), new int[0]);
+                if(cachedConstructor == null)
+                {
+                    cachedConstructor = nmsPacketPlayOutParticle.getConstructor(
+                            nmsEnumParticle, Boolean.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE,
+                            Float.TYPE, Float.TYPE, Float.TYPE, Integer.TYPE, int[].class);
+                }
+
+                Object packet = cachedConstructor.newInstance(getEnum(nmsEnumParticle.getName() + "." +
+                                        (this.enumValue != null ? this.enumValue : name())), true,
+                                (float) location.getX(), (float) location.getY(), (float) location.getZ(), offsetX, offsetY,
+                                offsetZ, speed, count, new int[0]);
                 Object handle = ReflectionUtilities.getHandle(player);
                 Object connection = ReflectionUtilities.getField(handle.getClass(), "playerConnection").get(handle);
                 ReflectionUtilities.getMethod(connection.getClass(), "sendPacket", new Class[0]).invoke(connection, packet);
@@ -199,40 +212,21 @@ public enum ParticleEffect
                 throw new IllegalArgumentException("Unable to send Particle " + name() + ". (Version 1.8 / 1.9)");
             }
         }
-        else
-        {
-            try
-            {
-                if (this.particleName == null) throw new Exception();
-                Object packet = nmsPacketPlayOutParticle.getConstructor(
-                        new Class[]{String.class, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE,
-                                Float.TYPE, Integer.TYPE})
-                        .newInstance(this.particleName, Float.valueOf((float) location.getX()),
-                                Float.valueOf((float) location.getY()), Float.valueOf((float) location.getZ()),
-                                Float.valueOf(offsetX), Float.valueOf(offsetY), Float.valueOf(offsetZ), Float.valueOf(speed),
-                                Integer.valueOf(count));
-                Object handle = ReflectionUtilities.getHandle(player);
-                Object connection = ReflectionUtilities.getField(handle.getClass(), "playerConnection").get(handle);
-                ReflectionUtilities.getMethod(connection.getClass(), "sendPacket", new Class[0]).invoke(connection, packet);
-            }
-            catch (Exception e)
-            {
-                throw new IllegalArgumentException("Unable to send Particle " + name() + ". (Invalid Server Version: 1.7)");
-            }
-        }
     }
 
     private static HashMap<String, Enum<?>> cachedEnums = new HashMap<>();
+
     private static Enum<?> getEnum(String enumFullName)
     {
-        if(DebugUtils.LOG_CACHED_INFO)
+        if (DebugUtils.LOG_CACHED_INFO)
         {
             ChatUtils.log("Cached enums: " + cachedEnums.size());
         }
 
-        if(cachedEnums.containsKey(enumFullName))
+        Enum<?> val = cachedEnums.get(enumFullName);
+        if(val != null)
         {
-            return cachedEnums.get(enumFullName);
+            return val;
         }
 
         String[] x = enumFullName.split("\\.(?=[^\\.]+$)");
@@ -244,9 +238,9 @@ public enum ParticleEffect
             {
                 Class cl = Class.forName(enumClassName);
 
-                Enum<?> enumm =  Enum.valueOf(cl, enumName);
+                Enum<?> enumm = Enum.valueOf(cl, enumName);
 
-                if(DebugUtils.ENABLE_CACHING)
+                if (DebugUtils.ENABLE_CACHING)
                 {
                     cachedEnums.put(enumFullName, enumm);
                 }
@@ -261,7 +255,7 @@ public enum ParticleEffect
         return null;
     }
 
-    private static boolean isPlayerInRange(Player p, Location center)
+    public static boolean isPlayerInRange(Player p, Location center)
     {
         double distance = 0.0D;
         if (center.getWorld().equals(p.getWorld()))

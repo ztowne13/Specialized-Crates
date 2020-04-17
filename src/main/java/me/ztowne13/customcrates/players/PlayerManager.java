@@ -9,6 +9,7 @@ import me.ztowne13.customcrates.crates.types.animations.AnimationDataHolder;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.players.data.*;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import me.ztowne13.customcrates.utils.ReflectionUtilities;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -61,6 +62,11 @@ public class PlayerManager
     public void remove()
     {
         getpManagers().remove(getP().getUniqueId());
+
+        if(ReflectionUtilities.cachedHandles.containsKey(getP()))
+        {
+            ReflectionUtilities.cachedHandles.remove(getP());
+        }
     }
 
     public DataHandler getSpecifiedDataHandler()
