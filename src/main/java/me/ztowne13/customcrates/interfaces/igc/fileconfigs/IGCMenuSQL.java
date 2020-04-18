@@ -57,13 +57,16 @@ public class IGCMenuSQL extends IGCMenu
         {
             case 18:
                 up();
+                ChatUtils.msgInfo(getP(), "Remember to change the store-data value in the config.yml if you want to enable SQL for storage.");
                 break;
             case 0:
                 getCc().getSqlFile().save();
+                ChatUtils.msgInfo(getP(), "Remember to change the store-data value in the config.yml if you want to enable SQL for storage.");
                 ChatUtils.msgSuccess(getP(), "SQL.YML saved! PLEASE RELOAD OR RESTART SERVER FOR CHANGES TO TAKE EFFECT.");
                 break;
             case 9:
                 reload();
+                ChatUtils.msgInfo(getP(), "Remember to change the store-data value in the config.yml if you want to enable SQL for storage.");
                 break;
             case 11:
                 new InputMenu(getCc(), getP(), "database.name", getCc().getSqlFile().get().getString("database.name"),

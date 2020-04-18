@@ -36,7 +36,7 @@ public class SQLConnection
         try
         {
             Connection c = connection =
-                    DriverManager.getConnection("jdbc:mysql://" + this.dbIP + "/" + this.db, this.user, this.pass);
+                    DriverManager.getConnection("jdbc:mysql://" + this.dbIP + "/" + this.db + "?autoReconnect=true&useSSL=false", this.user, this.pass);
             if(log)
                 ChatUtils.log("[SpecializedCrates] Connection to the SQL database was completed successfuly.");
             return c;

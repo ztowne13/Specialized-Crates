@@ -8,7 +8,8 @@ public enum SettingsValues
     STORE_DATA("store-data", String.class, false, "FLATFILE",
             new String[]{
                     "Set how would you like to store",
-                    " player data."
+                    "player data. Options: FLATFILE,",
+                    "MYSQL, or PLAYERFILES."
             }),
 
     LOG_SUCCESSES("log-successes", String.class, false, "FAILURES",
