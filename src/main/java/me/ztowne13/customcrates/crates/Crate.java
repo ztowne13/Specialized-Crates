@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.crates;
 import me.ztowne13.customcrates.DataHandler;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import org.bukkit.Bukkit;
@@ -70,13 +71,58 @@ public class Crate
         }
     }
 
+    public boolean rename(String newName)
+    {
+
+        if (newName.contains("."))
+        {
+            newName = newName.split(".")[0];
+        }
+
+        if(FileHandler.getMap().containsKey(newName + ".crate") |
+                FileHandler.getMap().containsKey(newName + ".multicrate"))
+        {
+            return false;
+        }
+
+        FileHandler newFile =
+                new FileHandler(getCc(), newName + (isMultiCrate() ? ".multicrate" : ".crate"),
+                        "/Crates", true, true, true);
+        newFile.reload();
+
+        try
+        {
+            getSettings().getFileHandler().copy(newFile);
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace();
+            return false;
+        }
+
+        HashMap<Location, PlacedCrate> placed = new HashMap<>(PlacedCrate.getPlacedCrates());
+
+        for (Location l : placed.keySet())
+        {
+            PlacedCrate cm = placed.get(l);
+            if (cm.getCrates().equals(this))
+            {
+                cm.rename(newName);
+                PlacedCrate.getPlacedCrates().remove(l);
+            }
+        }
+
+        deleteCrate();
+        return true;
+    }
+
     public String deleteCrate()
     {
         deleteAllPlaced();
 
         Path path = getSettings().getFileHandler().getDataFile().toPath();
 
-        if(getSettings().getFileHandler().getDataFile().delete())
+        if (getSettings().getFileHandler().getDataFile().delete())
         {
             ChatUtils.log("Successfully deleted file " + path);
         }
@@ -85,12 +131,12 @@ public class Crate
             return "File nonexistent, please try reloading or contacting the plugin author.";
         }
 
-        for(UUID id : cc.getDataHandler().getQuedGiveCommands().keySet())
+        for (UUID id : cc.getDataHandler().getQuedGiveCommands().keySet())
         {
             ArrayList<DataHandler.QueuedGiveCommand> cmds = cc.getDataHandler().getQuedGiveCommands().get(id);
-            for(DataHandler.QueuedGiveCommand cmd : cmds)
+            for (DataHandler.QueuedGiveCommand cmd : cmds)
             {
-                if(cmd.getCrate().equals(this))
+                if (cmd.getCrate().equals(this))
                 {
                     cmds.remove(cmd);
                     cc.getDataHandler().getQuedGiveCommands().remove(id);

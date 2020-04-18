@@ -7,6 +7,7 @@ import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.crates.previeweditor.IGCCratePreviewOrRewardMenu;
+import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -15,6 +16,8 @@ import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by ztowne13 on 3/26/16.
@@ -23,7 +26,7 @@ public class IGCCratesMain extends IGCMenuCrate
 {
     public IGCCratesMain(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates)
     {
-        super(cc, p, lastMenu, "&7&l> &6&lCrate Main", crates);
+        super(cc, p, lastMenu, "&7&l> &6&l" + crates.getName(), crates);
     }
 
     @Override
@@ -39,13 +42,20 @@ public class IGCCratesMain extends IGCMenuCrate
                 .setLore("&cThis action CANNOT be undone.").addLore("&e&oNote: This does not delete rewards").addLore("")
                 .addLore("&7This will delete the entire").addLore("&7file for this crate and will")
                 .addLore("&7erase all data for it."));
-        //ib.setItem(5, new ItemBuilder(Material.BOOK_AND_QUILL, 1, 0).setName("&aRename this crate").setLore("&cNOTE: &7This will remove all").addLore("&7placed crates of this type."));
+
+        ItemBuilder rename = new ItemBuilder(DynamicMaterial.WRITABLE_BOOK, 1);
+        rename.setName("&aRename this crate");
+        rename.addLore("&7Current Value:").addLore("&7" + getCrates().getName());
+        rename.addLore("").addAutomaticLore("&f", 30,
+                "This WILL reload the plugin when finished, please make sure all changes are saved.");
+
+        ib.setItem(4, rename);
 
         ib.setItem(8, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&aDelete all placed instances")
                 .setLore("&7Click this runs the command:").addLore("&7/ccrates delallcratetype " + crates.getName())
                 .addLore("").addLore("&7It deletes all crates").addLore("&7of this type that have been")
                 .addLore("&7placed."));
-        ib.setItem(4, new ItemBuilder(Material.CHEST, 1, 0).setName("&a" + crates.getName()));
+        //ib.setItem(4, new ItemBuilder(Material.CHEST, 1, 0).setName("&a" + crates.getName()));
 
         int errors = crates.getSettings().getStatusLogger().getFailures();
         ib.setItem(5, new ItemBuilder(DynamicMaterial.REDSTONE_BLOCK, 1)
@@ -140,10 +150,11 @@ public class IGCCratesMain extends IGCMenuCrate
                     ChatUtils.msgSuccess(getP(), "Successfully deleted file on path &e" + path);
                 }
                 break;
+            case 4:
+                new InputMenu(getCc(), getP(), "Crate name", crates.getName(), "Do not use ANY spaces or special characters",
+                        String.class, this, true);
+                break;
             case 5:
-//                new InputMenu(getCc(), getP(), "Crate name", crates.getName(), "Do not use ANY spaces or special characters",
-//                        String.class, this);
-//                break;
                 getP().closeInventory();
                 getP().performCommand("scrates errors " + crates.getName());
                 break;
@@ -213,7 +224,7 @@ public class IGCCratesMain extends IGCMenuCrate
                     return;
                 }
             case 40:
-                new IGCCratePreviewOrRewardMenu(getCc(), getP(), crates,this).open();
+                new IGCCratePreviewOrRewardMenu(getCc(), getP(), crates, this).open();
                 break;
             case 44:
                 if (cs.getObtainType().equals(ObtainType.LUCKYCHEST))
@@ -227,15 +238,25 @@ public class IGCCratesMain extends IGCMenuCrate
     @Override
     public boolean handleInput(String value, String input)
     {
-		/*if(value.equalsIgnoreCase("crate name"))
+		if(value.equalsIgnoreCase("crate name"))
 		{
-			if(StringUtils.isAlphanumeric(input))
+            String regex = "^[a-zA-Z0-9]+$";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(input);
+			if(matcher.matches())
 			{
-				//crates.getCs().rename(getP(), input, crates.isMultiCrate() ? ".multicrate" : ".crate");
-				return false;
+			    if(crates.rename(input))
+                {
+                    ChatUtils.msgSuccess(getP(), "Successfully renamed " + crates.getName() + " to " + input);
+                    ChatUtils.msgInfo(getP(), "Reloading the plugin to let changes take effect.");
+                    return false;
+                }
+                ChatUtils.msgError(getP(), "Failed to rename the crate. This likely because the crate name " + input + " already exists. Please try a different name.");
+                return false;
 			}
 			ChatUtils.msgError(getP(), input + " is not alphanumeric (no spaces and only letters)");
-		}*/
+			return false;
+		}
         return false;
     }
 }

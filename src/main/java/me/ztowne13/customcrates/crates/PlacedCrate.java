@@ -56,6 +56,12 @@ public class PlacedCrate
         getCc().getActivecratesFile().save();
     }
 
+    public void rename(String newCrateName)
+    {
+        getCc().getActivecratesFile().get().set(LocationUtils.locToString(getL()) + ".crate", newCrateName);
+        getCc().getActivecratesFile().save();
+    }
+
     public void setup(Crate crates, boolean writeToFile)
     {
         this.crates = crates;

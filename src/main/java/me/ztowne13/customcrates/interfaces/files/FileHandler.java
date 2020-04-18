@@ -221,6 +221,8 @@ public class FileHandler
         cc.getDu().log("save() - Time to complete: " + (System.currentTimeMillis() - curTime), getClass());
     }
 
+
+
     private void saveByByte()
     {
         cc.getDu().log("saveByByte() - CALL", getClass(), true);
@@ -295,6 +297,23 @@ public class FileHandler
         {
             e.printStackTrace();
         }
+    }
+
+    public void copy(FileHandler dest) throws IOException
+    {
+        InputStream is;
+        OutputStream os;
+
+        is = new FileInputStream(getDataFile());
+        os = new FileOutputStream(dest.getDataFile());
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = is.read(buffer)) > 0) {
+            os.write(buffer, 0, length);
+        }
+
+        is.close();
+        os.close();
     }
 
     public FileConfiguration get()
