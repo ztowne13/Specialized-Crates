@@ -3,10 +3,10 @@ package me.ztowne13.customcrates.crates;
 import me.ztowne13.customcrates.DataHandler;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
+import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
 
 import java.nio.file.Path;
@@ -75,13 +75,13 @@ public class Crate
         deleteAllPlaced();
 
         Path path = getSettings().getFileHandler().getDataFile().toPath();
-        try
+
+        if(getSettings().getFileHandler().getDataFile().delete())
         {
-            FileUtils.forceDelete(getSettings().getFileHandler().getDataFile());
+            ChatUtils.log("Successfully deleted file " + path);
         }
-        catch (Exception exc)
+        else
         {
-            exc.printStackTrace();
             return "File nonexistent, please try reloading or contacting the plugin author.";
         }
 
