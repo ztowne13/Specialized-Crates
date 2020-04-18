@@ -75,6 +75,7 @@ public class AttemptKeyUseAction extends CrateAction
                     {
                         Messages.CRATE_DISABLED_ADMIN.msgSpecified(cc, player);
                     }
+                    Messages.DEMO.msgSpecified(cc, player);
                     return true;
                 }
             }
@@ -82,6 +83,7 @@ public class AttemptKeyUseAction extends CrateAction
             {
                 crates.getSettings().getAnimation().playFailToOpen(player, false, true);
                 Messages.DENY_CREATIVE_MODE.msgSpecified(cc, player);
+                Messages.DEMO.msgSpecified(cc, player);
                 return true;
             }
         }

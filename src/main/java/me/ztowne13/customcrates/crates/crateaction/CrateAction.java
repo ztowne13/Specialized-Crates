@@ -49,11 +49,15 @@ public abstract class CrateAction
     public boolean useCrate(PlayerManager pm, PlacedCrate cm, boolean skipAnimation, boolean hasSkipped)
     {
         Player player = pm.getP();
+
+        Messages.DEMO.msgSpecified(cc, player);
+
         PlayerDataManager pdm = pm.getPdm();
         Crate crates = cm.getCrates();
         CrateSettings cs = crates.getSettings();
         Location location = cm.getL();
 
+        cc.checkYemo();
         // Player has correct permissions
         if (player.hasPermission(cs.getPermission()) || cs.getPermission().equalsIgnoreCase("no permission"))
         {
@@ -65,7 +69,7 @@ public abstract class CrateAction
                 if (cce == null || cce.isCooldownOverAsBoolean())
                 {
                     pm.setLastOpenedPlacedCrate(cm);
-
+                    cc.checkRan();
                     // SHIFT-CLICK OPEN
                     // If the animation needs to be skipped (shift click). Also required to be a static crate
                     if (skipAnimation && cs.getObtainType().equals(ObtainType.STATIC))

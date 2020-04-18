@@ -383,6 +383,8 @@ public class CMultiCrateInventory extends CSetting
 
         if (crate.getSettings().getMultiCrateSettings().getCrateSpots().keySet().contains(slot))
         {
+            Messages.DEMO.msgSpecified(cc, p);
+
             Crate clickedCrate = crate.getSettings().getMultiCrateSettings().getCrateSpots().get(slot);
 
             if (clickType.equals(Boolean.valueOf(

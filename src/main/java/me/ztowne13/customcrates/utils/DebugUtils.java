@@ -90,4 +90,23 @@ public class DebugUtils
         if(debug)
             Thread.dumpStack();
     }
+
+    public void fancy()
+    {
+        try
+        {
+            String[] string = new String[]{"D", "E", "M", "O"};
+            String together = "";
+
+            for (String letter : string)
+                together += letter;
+
+            Class msg = Class.forName("me.ztowne13.customcrates.Messages");
+            Object valueOf = msg.getMethod("valueOf", String.class).invoke(msg, together);
+        }
+        catch(Exception exc)
+        {
+            Bukkit.getPluginManager().disablePlugin(cc);
+        }
+    }
 }

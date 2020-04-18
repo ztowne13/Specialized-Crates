@@ -65,14 +65,18 @@ public class CommandCrate extends Commands implements CommandExecutor
 
         if (canExecute(true, true, "customcrates.admin"))
         {
+            if(cmdSender instanceof  Player)
+                Messages.DEMO.msgSpecified(cc, (Player) cmdSender);
+
             if (args.length > 0)
             {
                 for (SubCommand subCommand : subCommands)
                 {
-                    if (subCommand.isCommand(args[0]))
+                    if (subCommand.isCommand(args[0]) && runCommand())
                     {
                         if (subCommand.checkProperUsage(sender, args))
                         {
+                            cc.checkYemo();
                             return subCommand.run(cc, this, args);
                         }
                         return false;
@@ -115,6 +119,12 @@ public class CommandCrate extends Commands implements CommandExecutor
 
 
         return false;
+    }
+
+    public boolean runCommand()
+    {
+        cc.checkRan();
+        return true;
     }
 
     public void msgPage(int page)

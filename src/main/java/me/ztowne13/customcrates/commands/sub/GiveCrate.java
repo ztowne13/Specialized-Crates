@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.commands.sub;
 
 import me.ztowne13.customcrates.DataHandler;
+import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
 import me.ztowne13.customcrates.crates.Crate;
@@ -53,6 +54,7 @@ public class GiveCrate extends SubCommand
                     Player p = (Player) cmds.getCmdSender();
                     cmds.msgSuccess("Given crate for crate: " + args[1]);
                     Utils.addItemAndDropRest(p, toAdd);
+                    Messages.DEMO.msgSpecified(cc, p);
                 }
                 return true;
             }
@@ -68,6 +70,7 @@ public class GiveCrate extends SubCommand
                     {
                         PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
                         pdm.setVirtualCrateCrates(crate, pdm.getVCCrateData(crate).getCrates() + amount);
+                        Messages.DEMO.msgSpecified(cc, p);
                     }
                     cmds.msgSuccess("Given a virtual crate for " + args[1] + " to every online player.");
                     return true;
@@ -123,6 +126,8 @@ public class GiveCrate extends SubCommand
 
             Player toGive = op == null ? op2 : op;
             PlayerDataManager pdm = PlayerManager.get(cc, toGive).getPdm();
+            Messages.DEMO.msgSpecified(cc, toGive);
+
             if (isVirtual)
             {
                 pdm.setVirtualCrateCrates(crate, pdm.getVCCrateData(crate).getCrates() + amount);
