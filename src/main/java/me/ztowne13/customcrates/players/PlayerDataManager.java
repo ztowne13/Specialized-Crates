@@ -231,20 +231,6 @@ public class PlayerDataManager
         he.getCrates().setLastOpenedReward(rewards.substring(1, rewards.length() - 1));
     }
 
-    public void removeHistory(HistoryEvent he, String history)
-    {
-        setHistory(history);
-        for (HistoryEvent he2 : getHistoryEvents())
-        {
-            if (he.matches(he2))
-            {
-                getHistoryEvents().remove(he2);
-                getDh().write("history", getHistory());
-                break;
-            }
-        }
-    }
-
     public void setVirtualCrateCrates(Crate crate, int crates)
     {
         VirtualCrateData vCD = getVCCrateData(crate);
@@ -262,12 +248,6 @@ public class PlayerDataManager
         setVirtualCrates(addStringToList(vCD.toString(), temp));
         getDh().write("virtual-crates", getVirtualCrates());
     }
-
-    public void updateHistory()
-    {
-
-    }
-
 
     public VirtualCrateData getVCCrateData(Crate crate)
     {
@@ -368,19 +348,9 @@ public class PlayerDataManager
         return historyEvents;
     }
 
-    public void setHistoryEvents(ArrayList<HistoryEvent> historyEvents)
-    {
-        this.historyEvents = historyEvents;
-    }
-
     public ArrayList<CrateCooldownEvent> getCrateCooldownEvents()
     {
         return crateCooldownEvents;
-    }
-
-    public void setCrateCooldownEvents(ArrayList<CrateCooldownEvent> crateCooldownEvents)
-    {
-        this.crateCooldownEvents = crateCooldownEvents;
     }
 
     public PlayerManager getPm()
