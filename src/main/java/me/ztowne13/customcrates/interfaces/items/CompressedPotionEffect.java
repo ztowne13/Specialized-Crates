@@ -1,7 +1,9 @@
 package me.ztowne13.customcrates.interfaces.items;
 
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -14,12 +16,21 @@ public class CompressedPotionEffect extends PotionEffect
 
     ItemStack applyTo(ItemStack stack)
     {
-        if(stack.getItemMeta() instanceof PotionMeta)
+        if(VersionUtils.Version.v1_9.isServerVersionOrLater())
         {
-            PotionMeta potionMeta = (PotionMeta) stack.getItemMeta();
+            if (stack.getItemMeta() instanceof PotionMeta)
+            {
+                PotionMeta potionMeta = (PotionMeta) stack.getItemMeta();
 
-            potionMeta.addCustomEffect(this, true);
-            stack.setItemMeta(potionMeta);
+                potionMeta.addCustomEffect(this, true);
+                stack.setItemMeta(potionMeta);
+            }
+        }
+        else
+        {
+            Potion pot = Potion.fromItemStack(stack);
+            pot.getEffects().add(this);
+            pot.apply(stack);
         }
 
         return stack;

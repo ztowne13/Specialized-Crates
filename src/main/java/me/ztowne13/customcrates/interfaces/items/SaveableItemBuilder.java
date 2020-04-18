@@ -199,6 +199,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
                 }
                 catch (Exception exc)
                 {
+                    exc.printStackTrace();
                     if (improperPotion != null)
                         improperPotion.log(statusLogger, new String[]{unparsedPotion +
                                 " is not formatted potiontype;duration;amplifier or either the potion is not a valid potion type or the duration/amplifier is not a number."});

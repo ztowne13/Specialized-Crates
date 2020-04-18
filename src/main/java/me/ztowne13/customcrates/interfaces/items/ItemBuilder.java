@@ -122,11 +122,31 @@ public class ItemBuilder implements EditableItem
                             new CompressedPotionEffect(baseData.getType().getEffectType(), baseData.isExtended() ? 1 : 0,
                                     baseData.isUpgraded() ? 1 : 0));
                 }
-            }
 
-            for (PotionEffect pe : pm.getCustomEffects())
+                for (PotionEffect pe : pm.getCustomEffects())
+                {
+                    addPotionEffect(new CompressedPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier()));
+                }
+            }
+            else
             {
-                addPotionEffect(new CompressedPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier()));
+                Potion pot = Potion.fromItemStack(stack);
+                if(pot != null && pot.getType() != null)
+                {
+                    addPotionEffect(new CompressedPotionEffect(pot.getType().getEffectType(), 1, 1));
+
+                    ArrayList<CompressedPotionEffect> toAdd = new ArrayList<>();
+
+                    for (PotionEffect pe : pot.getEffects())
+                    {
+                        toAdd.add(new CompressedPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier()));
+                    }
+
+                    for(CompressedPotionEffect effect : toAdd)
+                    {
+                        addPotionEffect(effect);
+                    }
+                }
             }
         }
 
@@ -538,7 +558,7 @@ public class ItemBuilder implements EditableItem
                 }
                 else
                 {
-                    Potion pot = new Potion(PotionType.getByEffect(firstVal.getType()), firstVal.getAmplifier(),
+                    Potion pot = new Potion(PotionType.getByEffect(firstVal.getType()), firstVal.getAmplifier() == 0 ? 1 : 2,
                             stack.getType().equals(DynamicMaterial.SPLASH_POTION.parseMaterial()));
                     pot.apply(stack);
                     first = false;

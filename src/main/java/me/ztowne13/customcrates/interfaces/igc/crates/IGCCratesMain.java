@@ -59,7 +59,7 @@ public class IGCCratesMain extends IGCMenuCrate
 
         int errors = crates.getSettings().getStatusLogger().getFailures();
         ib.setItem(5, new ItemBuilder(DynamicMaterial.REDSTONE_BLOCK, 1)
-                .setName(errors == 0 ? "&a This crate has no errors!" : "&c&lClick to view ERRORS")
+                .setName(errors == 0 ? "&aThis crate has no errors!" : "&c&lClick to view ERRORS")
                 .addLore("&7Errors: " + errors));
 
         ib.setItem(10, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aThe &lEssentials")
