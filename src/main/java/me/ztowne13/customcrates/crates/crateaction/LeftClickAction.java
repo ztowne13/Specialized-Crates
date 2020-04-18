@@ -44,7 +44,7 @@ public class LeftClickAction extends CrateAction
                     if (!cm.getCrates().isMultiCrate())
                         cm.getCrates().getSettings().getDisplayer().openFor(player);
                     {
-                        cm.getCrates().getCs().getDisplayer().openFor(player);
+                        cm.getCrates().getSettings().getDisplayer().openFor(player);
                         Messages.DEMO.msgSpecified(cc, player);
                     }
                     return true;
