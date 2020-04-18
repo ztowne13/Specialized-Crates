@@ -551,9 +551,11 @@ public class ItemBuilder implements EditableItem
                 CompressedPotionEffect firstVal = getPotionEffects().get(0);
                 if (VersionUtils.Version.v1_9.isServerVersionOrLater())
                 {
+                    boolean isOld = (firstVal.getAmplifier() == 1 && firstVal.getDuration() == 1);
+
                     PotionData potionData =
-                            new PotionData(PotionType.getByEffect(firstVal.getType()), firstVal.getDuration() == 1,
-                                    firstVal.getAmplifier() == 1);
+                            new PotionData(PotionType.getByEffect(firstVal.getType()), firstVal.getDuration() == 1 && !isOld,
+                                    firstVal.getAmplifier() == 1 && !isOld);
                     pm.setBasePotionData(potionData);
                 }
                 else
