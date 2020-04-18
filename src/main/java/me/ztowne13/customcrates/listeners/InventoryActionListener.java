@@ -250,7 +250,7 @@ public class InventoryActionListener implements Listener
                     {
                         if (!pm.isInOpenMenu())
                         {
-                            ChatUtils.msg(p, "&9&lNOTE: &bType &f'/sc !' &bto reopen to your last open config menu!");
+                            ChatUtils.msg(p, "&9&lNOTE: &bType &f'/scrates !' &bto reopen to your last config menu!");
                         }
                     }
                 }, 1);
