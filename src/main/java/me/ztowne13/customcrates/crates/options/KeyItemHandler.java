@@ -65,7 +65,7 @@ public class KeyItemHandler extends CSetting
     public boolean keyMatchesToStack(ItemStack stack, boolean checkLore)
     {
         ItemStack crate = getItem(1);
-        if (Utils.itemHasName(stack))
+        if (stack != null && Utils.itemHasName(stack))
         {
             boolean matchesNormal = crate.getType().equals(stack.getType()) &&
                     crate.getItemMeta().getDisplayName().equals(stack.getItemMeta().getDisplayName());

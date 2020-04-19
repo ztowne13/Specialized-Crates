@@ -20,7 +20,7 @@ public class Utils
 
     public static boolean itemHasName(ItemStack stack)
     {
-        return stack.hasItemMeta() && stack.getItemMeta().hasDisplayName();
+        return stack.getItemMeta() != null && stack.getItemMeta().getDisplayName() != null;
     }
 
     public static String getStringFromColor(Color c)
