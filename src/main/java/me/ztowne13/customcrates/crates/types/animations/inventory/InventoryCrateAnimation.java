@@ -12,6 +12,7 @@ import org.bukkit.event.inventory.InventoryType;
 public abstract class InventoryCrateAnimation extends CrateAnimation
 {
     static int REDRAW_TICKS = 1;
+    static boolean FORCE_CLOSE = true;
 
     protected SoundData tickSound = null;
     protected String invName = "";
@@ -87,6 +88,9 @@ public abstract class InventoryCrateAnimation extends CrateAnimation
     {
         if (dataHolder.getTotalTicks() % REDRAW_TICKS != 0 || dataHolder.isFastTrack())
             return;
+
+        if(FORCE_CLOSE)
+            dataHolder.getPlayer().closeInventory();
 
         InventoryBuilder builder = dataHolder.getInventoryBuilder();
 
