@@ -27,8 +27,6 @@ import java.util.UUID;
 
 public class ItemBuilder implements EditableItem
 {
-    public static String NO_NAME = "!?!noname!?!";
-
     ItemStack stack;
 
     boolean glowing = false;
@@ -41,9 +39,9 @@ public class ItemBuilder implements EditableItem
 
     public ItemBuilder(EditableItem builder)
     {
-        this(builder.getStack());
-
-        setGlowing(builder.isGlowing());
+        glowing = builder.isGlowing();
+        stack = builder.getStack().clone();
+        updateFromItem();
     }
 
     public ItemBuilder(ItemStack fromStack)
@@ -88,8 +86,12 @@ public class ItemBuilder implements EditableItem
         rgbColor = null;
     }
 
+    public static int count;
+
     public void updateFromItem()
     {
+        count++;
+        ChatUtils.log("Updating from item, " + count);
         reset();
 
         // Enchantments
@@ -520,12 +522,8 @@ public class ItemBuilder implements EditableItem
         for (Enchantment enchantment : stack.getEnchantments().keySet())
             im().removeEnchant(enchantment);
 
-        System.out.println("Enchants size: " + getEnchantments().size());
-
         for (CompressedEnchantment compressedEnchantment : getEnchantments())
         {
-            System.out.println("Enchant: " + compressedEnchantment.getEnchantment().toString());
-
             compressedEnchantment.applyTo(this);
         }
     }

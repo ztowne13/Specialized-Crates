@@ -39,7 +39,6 @@ public class IGCItemEditor extends IGCMenu
     @Override
     public void open()
     {
-
         editableItem.reapplyLore();
         editableItem.reapplyEnchantments();
         editableItem.reapplyPotionEffects();
