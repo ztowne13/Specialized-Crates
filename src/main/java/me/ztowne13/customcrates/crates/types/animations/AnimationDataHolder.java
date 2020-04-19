@@ -66,12 +66,13 @@ public abstract class AnimationDataHolder
 
     public void updateTickTime(long startTime)
     {
-        long curTime = System.currentTimeMillis();
+        long curTime = System.nanoTime();
         long add = curTime - startTime;
 
         totalTickTime += add;
+
         if (DebugUtils.OUTPUT_AVERAGE_ANIMATION_TICK)
-            ChatUtils.log("Average animation tick (totalTime = " + totalTickTime + ", ticks = " + totalTicks + "): " +
+            ChatUtils.log("Average animation tick in nanoseconds (totalTime = " + totalTickTime + ", ticks = " + totalTicks + "): " +
                     ((double) totalTickTime / ((double) totalTicks)));
     }
 

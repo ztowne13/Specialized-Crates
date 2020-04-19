@@ -1,6 +1,5 @@
 package me.ztowne13.customcrates.crates.types.animations.inventory;
 
-import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.crates.types.animations.AnimationDataHolder;
@@ -22,8 +21,6 @@ public abstract class InventoryCrateAnimation extends CrateAnimation
     public InventoryCrateAnimation(Crate crate, CrateAnimationType crateAnimationType)
     {
         super(crate, crateAnimationType);
-
-        FORCE_CLOSE = ((Boolean) SettingsValues.FORCE_CLOSE_ON_ANIMATION_UPDATE.getValue(getSc()));
     }
 
 

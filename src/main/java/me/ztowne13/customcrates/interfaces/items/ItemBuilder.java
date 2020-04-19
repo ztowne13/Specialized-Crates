@@ -86,12 +86,8 @@ public class ItemBuilder implements EditableItem
         rgbColor = null;
     }
 
-    public static int count;
-
     public void updateFromItem()
     {
-        count++;
-        ChatUtils.log("Updating from item, " + count);
         reset();
 
         // Enchantments

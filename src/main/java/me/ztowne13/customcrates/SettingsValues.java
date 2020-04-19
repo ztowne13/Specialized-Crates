@@ -259,12 +259,6 @@ public enum SettingsValues
                     "replaced to ensure no other blocks",
                     "or plugin commands have overridden",
                     "them."
-            }),
-
-    FORCE_CLOSE_ON_ANIMATION_UPDATE("force-close-on-animation-update", Boolean.class, false, false,
-            new String[]{
-                    "This is mainly for debug purposes, you",
-                    "should probably just ignore it."
             });
 
     String path;

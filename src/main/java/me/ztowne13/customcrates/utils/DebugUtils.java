@@ -16,15 +16,13 @@ public class DebugUtils
 
     String[] sort = new String[]
             {
-                    "me.ztowne13.customcrates.listeners.InteractListener"
+                    ""
             };
 
     public DebugUtils(SpecializedCrates cc)
     {
         this.cc = cc;
     }
-
-    public boolean beta = false;
 
     public void log(String s)
     {

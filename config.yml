@@ -91,10 +91,6 @@ virtual-key-instead-of-drop: false
 #   be replaced to make sure that they haven't been overridden by worldedit, etc.?
 keep-crate-block-consistent: true
 
-# This is mainly for debug purposes, but you may be asked to have it enabled. Its
-#   purpose is to close the inventory before each animation update.
-force-close-on-animation-update: false
-
 #-------------------------------------------#
 #           Crate Action Settings           #
 #-------------------------------------------#
