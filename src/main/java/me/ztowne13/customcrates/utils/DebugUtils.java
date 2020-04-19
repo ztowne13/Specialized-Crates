@@ -16,7 +16,7 @@ public class DebugUtils
 
     String[] sort = new String[]
             {
-                    "noinfo"
+                    "me.ztowne13.customcrates.listeners.InteractListener"
             };
 
     public DebugUtils(SpecializedCrates cc)

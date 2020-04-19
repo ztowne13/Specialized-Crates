@@ -520,8 +520,12 @@ public class ItemBuilder implements EditableItem
         for (Enchantment enchantment : stack.getEnchantments().keySet())
             im().removeEnchant(enchantment);
 
+        System.out.println("Enchants size: " + getEnchantments().size());
+
         for (CompressedEnchantment compressedEnchantment : getEnchantments())
         {
+            System.out.println("Enchant: " + compressedEnchantment.getEnchantment().toString());
+
             compressedEnchantment.applyTo(this);
         }
     }

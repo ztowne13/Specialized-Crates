@@ -40,7 +40,7 @@ public class InteractListener implements Listener
             cc.getDu().log("onInteract - Failed to handle equipment slot check", getClass());
         }
 
-        cc.getDu().log("onInteract - (cancelled: " + e.isCancelled() + ")");
+        cc.getDu().log("onInteract - (cancelled: " + e.isCancelled() + ")", getClass());
 
         Player p = e.getPlayer();
 
@@ -51,12 +51,18 @@ public class InteractListener implements Listener
 
             CrateAction action;
             if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+            {
                 action = new AttemptKeyUseAction(cc, p, e.getClickedBlock().getLocation());
+                cc.getDu().log("onInteract - is right click block", getClass());
+            }
             else
+            {
                 action = new LeftClickAction(cc, p, e.getClickedBlock().getLocation());
+            }
 
             if (action.run())
             {
+                cc.getDu().log("onInteract - Cancelling", getClass());
                 e.setCancelled(true);
             }
         }
