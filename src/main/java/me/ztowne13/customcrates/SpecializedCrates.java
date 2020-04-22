@@ -75,7 +75,7 @@ public class SpecializedCrates extends JavaPlugin
         if (du == null)
             du = new DebugUtils(this);
 
-        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && placeHolderAPIHandler == null){
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && !isUsingPlaceholderAPI()){
             placeHolderAPIHandler = new PlaceHolderAPIHandler(this);
             placeHolderAPIHandler.register();
         }
@@ -545,5 +545,9 @@ public class SpecializedCrates extends JavaPlugin
     public EconomyHandler getEconomyHandler()
     {
         return economyHandler;
+    }
+
+    public boolean isUsingPlaceholderAPI() {
+        return placeHolderAPIHandler != null;
     }
 }

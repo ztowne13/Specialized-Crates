@@ -1,5 +1,7 @@
 package me.ztowne13.customcrates.utils;
 
+import me.ztowne13.customcrates.SpecializedCrates;
+import me.ztowne13.customcrates.interfaces.externalhooks.PlaceHolderAPIHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -32,6 +34,16 @@ public class ChatUtils
     public static void logFailLoad(String crate, String failLoad, String failLoadValue)
     {
         ChatUtils.log(new String[]{"Failed to load " + failLoad + " for crate " + crate + ": " + failLoadValue});
+    }
+
+    public static String formatAndColor(SpecializedCrates specializedCrates, Player player, String str)
+    {
+        if(specializedCrates.isUsingPlaceholderAPI())
+        {
+            str = PlaceHolderAPIHandler.setPlaceHolders(player, str);
+        }
+
+        return toChatColor(str);
     }
 
     public static String toChatColor(String s)

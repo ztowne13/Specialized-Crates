@@ -192,4 +192,9 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
         }
         return null;
     }
+
+    public static String setPlaceHolders(Player player, String message)
+    {
+        return PlaceHolderAPIHandler.setPlaceHolders(player, message);
+    }
 }
