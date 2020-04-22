@@ -83,6 +83,7 @@ public class KeyItemHandler extends CSetting
         {
             if (keyMatchesToStack(stack, true))
             {
+                cc.getDu().log("hasKeyInInventory() - return true", getClass());
                 return true;
             }
         }
@@ -139,9 +140,12 @@ public class KeyItemHandler extends CSetting
         }
 
         CrateSettings settings = getCrate().getSettings();
-        return !settings.isRequireKey() ||
+        boolean passesKeyTest = !settings.isRequireKey() ||
                 (requireKeyInHand ? keyMatchesToStack(player.getItemInHand(), true) : hasKeyInInventory(player)) ||
                 PlayerManager.get(cc, player).getPdm().getVCCrateData(getCrate()).getKeys() > 0;
+
+        cc.getDu().log("playerPasseysKeyTest() - return " + passesKeyTest);
+        return passesKeyTest;
     }
 
     public void takeKeyFromPlayer(Player p, boolean fromInv)
@@ -155,7 +159,6 @@ public class KeyItemHandler extends CSetting
 
     public boolean takeKeyFromPlayer(Player p, boolean fromInv, boolean checkPhysical)
     {
-
         if (checkPhysical)
         {
             if (fromInv)

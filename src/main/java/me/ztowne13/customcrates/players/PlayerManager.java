@@ -30,6 +30,8 @@ public class PlayerManager
     DataHandler dh;
     PlayerDataManager pdm;
 
+    long lastClickedCrateTime = 0;
+
     PlacedCrate lastOpenedPlacedCrate = null;
     Crate openCrate = null;
     Location lastOpenCrate = null;
@@ -327,5 +329,15 @@ public class PlayerManager
     public void setCurrentAnimation(AnimationDataHolder currentAnimation)
     {
         this.currentAnimation = currentAnimation;
+    }
+
+    public long getLastClickedCrateTime()
+    {
+        return lastClickedCrateTime;
+    }
+
+    public void setLastClickedCrateTime(long lastClickedCrateTime)
+    {
+        this.lastClickedCrateTime = lastClickedCrateTime;
     }
 }

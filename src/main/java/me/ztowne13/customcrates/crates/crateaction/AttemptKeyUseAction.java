@@ -36,6 +36,13 @@ public class AttemptKeyUseAction extends CrateAction
                 return false;
             }
 
+            long curTime = System.currentTimeMillis();
+            if(curTime - pm.getLastClickedCrateTime() < 500)
+            {
+                return true;
+            }
+            pm.setLastClickedCrateTime(System.currentTimeMillis());
+
             // For SQL, to make sure the player data is loaded
             if(!pm.getPdm().isLoaded())
             {
@@ -49,7 +56,7 @@ public class AttemptKeyUseAction extends CrateAction
             {
                 if(pm.isInCrate())
                 {
-                    return false;
+                    return true;
                 }
 
                 crates.getSettings().getMultiCrateSettings()
