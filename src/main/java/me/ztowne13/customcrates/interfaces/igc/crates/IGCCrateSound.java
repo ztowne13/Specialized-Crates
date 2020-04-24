@@ -48,6 +48,12 @@ public class IGCCrateSound extends IGCTierMenu
                 .addLore("&7" + sd.getVolume()).addLore("")
                 .addAutomaticLore("&f", 30, "This is the volume that the sound will play at. 5 is a good 'normal' volume."));
 
+        ItemBuilder testSound = new ItemBuilder(DynamicMaterial.MUSIC_DISC_13);
+        testSound.setDisplayName("&aPreview the sound");
+        testSound.addLore("")
+                .addAutomaticLore("&f", 30, "Clicking this will play exactly what the sound is like when it is used!");
+        ib.setItem(26, testSound);
+
 
         ib.open();
         putInMenu();
@@ -65,7 +71,8 @@ public class IGCCrateSound extends IGCTierMenu
                 break;
             case 11:
                 new InputMenu(getCc(), getP(), "sound type", sd.getSound().name(),
-                        "Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/", String.class, this, true);
+                        "Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/", String.class, this,
+                        true);
                 break;
             case 13:
                 new InputMenu(getCc(), getP(), "sound pitch", sd.getSound().name(), "Change the pitch of the sound.",
@@ -74,6 +81,9 @@ public class IGCCrateSound extends IGCTierMenu
             case 15:
                 new InputMenu(getCc(), getP(), "sound volume", sd.getSound().name(), "Change the volume of the sound.",
                         Integer.class, this);
+                break;
+            case 26:
+                sd.playTo(getP(), getP().getLocation());
                 break;
         }
     }
