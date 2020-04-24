@@ -58,7 +58,8 @@ public class IGCMenuMessages extends IGCMenu
 //                            (properMsg.length() > msgLoreLength ? "..." : "")));
 
             ib.setItem(i, new ItemBuilder(DynamicMaterial.BOOK, 1).setName("&a" + msg.toString().toLowerCase())
-                    .addAutomaticLore(30, properMsg));
+                    .addAutomaticLore(30, properMsg).addLore("").addLore("")
+                    .addAutomaticLore("&f", 30, "Set to 'none' to remove the message."));
             i++;
         }
 

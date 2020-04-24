@@ -1,3 +1,5 @@
+# Set a message to 'none' to have it display nothing
+
 no-permissions: '&4&lERROR! &cYou do not have the correct permission: %permission%'
 fail-open: '&4&lERROR! &cYou do not have the proper key for the %crate%!'
 already-opening-crate: '&4&lERROR! &cYou are already opening a crate, you must wait until it is done!'
@@ -32,3 +34,5 @@ command-rewards-usage: '&4&lERROR: &cUsage: /rewards [crate name]'
 command-rewards-opening: '&6&lINFO: &eOpening reward preview for %crate% crate.'
 command-rewards-invalid-crate: '&4&lERROR: &c%crate% is not a valid crate.'
 cant-craft-keys: '&4&lERROR: &cYou are not allowed to craft keys.'
+received-key: '&2&lSUCCESS! &aYou just received a %crate% key!'
+received-virtual-key: '&2&lSUCCESS! &aYou just received a virtual %crate% key!'

@@ -75,6 +75,10 @@ public enum Messages
 
     CANT_CRAFT_KEYS("", "&4&lERROR: &cYou are not allowed to craft keys."),
 
+    RECEIVED_KEY("", "&2&lSUCCESS! &aYou just received a %crate% key!"),
+
+    RECEIVED_VIRTUAL_KEY("", "&2&lSUCCESS! &aYou just received a virtual %crate% key!"),
+
     BLACKLISTED_PLUGIN("&cIMPORTANT: THIS COPY OF THE SPECIALIZED CRATES HAS BEEN BLACKLISTED BECAUSE THE USER WHO PURCHASED IT" +
             " IS NOT THE ONLY PERSON USING IT, OR THIS PERSON HAS REFUNDED IT. IF YOU BELIEVE THIS IS AN ERROR, PLEASE RE-DOWNLOAD THE PLUGIN (NO" +
             " NEED TO REGENERATE CONFIG) AND TRY AGAIN. IF IT'S STILL NOT WORKING, PLEASE CONTACT ZTOWNE13."),
@@ -158,6 +162,11 @@ public enum Messages
     public void msgSpecified(SpecializedCrates cc, Player p, String[] replaceValue, String[] setValue)
     {
         String correctMSG = getPropperMsg(cc);
+        if(correctMSG.equalsIgnoreCase("none")
+                || correctMSG.equalsIgnoreCase("")
+                || correctMSG.equalsIgnoreCase("&f")) {
+            return;
+        }
 
         for (int i = 0; i < replaceValue.length; i++)
         {

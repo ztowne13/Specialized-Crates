@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.commands.sub;
 
 import me.ztowne13.customcrates.DataHandler;
+import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
@@ -56,11 +57,13 @@ public class GiveKey extends SubCommand
 
                     Boolean toNotDrop = (Boolean) SettingsValues.VIRTUAL_KEY_INSTEAD_OF_DROP.getValue(cc);
                     int count = Utils.addItemAndDropRest(p, toAdd, !toNotDrop);
+                    Messages.RECEIVED_KEY.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
 
                     if(toNotDrop)
                     {
                         PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
                         pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + count);
+                        Messages.RECEIVED_VIRTUAL_KEY.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
                     }
                 }
                 return true;
@@ -77,11 +80,16 @@ public class GiveKey extends SubCommand
                     {
                         PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
                         pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + amount);
+                        Messages.RECEIVED_VIRTUAL_KEY.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
                     }
                     cmds.msgSuccess("Given a virtual key for " + args[1] + " to every online player.");
                     return true;
                 }
                 Utils.giveAllItem(toAdd);
+                for(Player p : Bukkit.getOnlinePlayers())
+                {
+                    Messages.RECEIVED_KEY.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
+                }
                 cmds.msgSuccess("Given a physical key for " + args[1] + " to every online player.");
                 return true;
             }
@@ -136,14 +144,19 @@ public class GiveKey extends SubCommand
             {
                 pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + amount);
                 cmds.msgSuccess("Given virtual key for crate: " + args[1]);
+                Messages.RECEIVED_VIRTUAL_KEY.msgSpecified(cc, toGive, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
             }
             else
             {
                 Boolean toNotDrop = (Boolean) SettingsValues.VIRTUAL_KEY_INSTEAD_OF_DROP.getValue(cc);
                 int count = Utils.addItemAndDropRest(toGive, toAdd, !toNotDrop);
+                Messages.RECEIVED_KEY.msgSpecified(cc, toGive, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
 
                 if(toNotDrop)
+                {
                     pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + count);
+                    Messages.RECEIVED_VIRTUAL_KEY.msgSpecified(cc, toGive, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
+                }
 
                 cmds.msgSuccess("Given physical key for crate: " + args[1]);
             }
