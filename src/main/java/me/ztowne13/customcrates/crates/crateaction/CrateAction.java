@@ -84,6 +84,7 @@ public abstract class CrateAction
                                     cs.getKeyItemHandler().takeKeyFromPlayer(player, false);
                                     new HistoryEvent(Utils.currentTimeParsed(), crates, rewards, true)
                                             .addTo(PlayerManager.get(cc, player).getPdm());
+                                    new CrateCooldownEvent(crates, System.currentTimeMillis(), true).addTo(pdm);
                                     useCrate(pm, cm, true, true);
 
                                     if (!hasSkipped)
