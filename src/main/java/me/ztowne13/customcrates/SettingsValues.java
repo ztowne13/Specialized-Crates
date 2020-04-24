@@ -259,6 +259,17 @@ public enum SettingsValues
                     "replaced to ensure no other blocks",
                     "or plugin commands have overridden",
                     "them."
+            }),
+
+    KEY_ALLOW_LEFT_CLICK_INTERACTION("key-allow-left-click-interaction", Boolean.class, false, false,
+            new String[]{
+                    "When a player left clicks with a key,",
+                    "the event won't be cancelled. The only",
+                    "reason this would be set to true is if",
+                    "keys need to interact with other plugins",
+                    "like a sell-shop plugin where, to set up",
+                    "the shop, a sign needs to be left-clicked",
+                    "with a key."
             });
 
     String path;

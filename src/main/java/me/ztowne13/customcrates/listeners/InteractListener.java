@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.listeners;
 
+import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.crateaction.AttemptKeyUseAction;
@@ -59,7 +60,10 @@ public class InteractListener implements Listener
             {
                 if (crate.getSettings().getKeyItemHandler().keyMatchesToStack(e.getItem(), false))
                 {
-                    e.setCancelled(true);
+                    if(!((Boolean)SettingsValues.KEY_ALLOW_LEFT_CLICK_INTERACTION.getValue(cc) && e.getAction().equals(Action.LEFT_CLICK_BLOCK)))
+                    {
+                        e.setCancelled(true);
+                    }
                 }
             }
         }
