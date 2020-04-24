@@ -53,7 +53,9 @@ public class IGCCrateFireworks extends IGCTierMenu
                 }
 
                 ib.setItem(i, new ItemBuilder(DynamicMaterial.FIREWORK_ROCKET.parseMaterial(), 1, 0)
-                        .setName("&aColors: &7" + fd.getColors()).setLore("&aFade Colors: &7" + fd.getFadeColors())
+                        .setName("&6&lFirework ID: &e" + fd.getId())
+                        .addAutomaticLore("&7", 31, "&aColors: &7" + fd.getColors())
+                        .addAutomaticLore("&7", 31, "&aFade Colors: &7" + fd.getFadeColors())
                         .addLore("&aPower: &7" + fd.getPower()).addLore("&aFlicker: &7" + fd.isFlicker())
                         .addLore("&aTrail: &7" + fd.isTrail()).addLore("&aType: &7" + fd.getFeType().name())
                         .addLore(fd.getId()));
@@ -105,7 +107,13 @@ public class IGCCrateFireworks extends IGCTierMenu
                         getP().getItemInHand().getType().equals(DynamicMaterial.FIREWORK_ROCKET.parseMaterial()))
                 {
                     FireworkData fd = new FireworkData(getCc(), cs);
-                    fd.loadFromFirework(getP().getItemInHand());
+                    boolean result = fd.loadFromFirework(getP().getItemInHand());
+                    if(!result)
+                    {
+                        ChatUtils.msgError(getP(), "You cannot add a firework with no colors.");
+                        return false;
+                    }
+
                     cs.getFireworks().addFirework(tier, fd);
                     ChatUtils.msgSuccess(getP(),
                             "Added the firework you are holding to the crate. Please type 'add' to add another firework you are holding or 'done' to return to the menu.");

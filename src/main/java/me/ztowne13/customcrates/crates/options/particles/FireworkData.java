@@ -41,7 +41,7 @@ public class FireworkData
         this.id = UUID.randomUUID().toString().substring(0, 8);
     }
 
-    public void loadFromFirework(ItemStack stack)
+    public boolean loadFromFirework(ItemStack stack)
     {
         FireworkMeta fm = (FireworkMeta) stack.getItemMeta();
         setEffect(FireworkEffect.builder());
@@ -73,7 +73,13 @@ public class FireworkData
             effect.with(feType);
         }
 
+        if(colors.size() == 0)
+        {
+            return false;
+        }
+
         unLoaded = asString();
+        return true;
     }
 
     public void load(String s)
@@ -85,8 +91,14 @@ public class FireworkData
 
         try
         {
-            for (String colorUnParsed : args[0].split(FileSettings.splitter2))
+            String[] splitArgs0 = args[0].split(FileSettings.splitter2);
+            for (String colorUnParsed : splitArgs0)
             {
+                if(colorUnParsed.equalsIgnoreCase(""))
+                {
+                    continue;
+                }
+
                 try
                 {
                     if (Utils.getColorFromString(colorUnParsed) != null)
@@ -111,6 +123,11 @@ public class FireworkData
 
             for (String colorUnParsed : args[1].split(";"))
             {
+                if(colorUnParsed.equalsIgnoreCase(""))
+                {
+                    continue;
+                }
+
                 try
                 {
                     if (Utils.getColorFromString(colorUnParsed) != null)
@@ -204,6 +221,10 @@ public class FireworkData
             serializedFw = color + ";";
         }
 
+        if(getColors().size() == 0)
+        {
+            serializedFw += ";";
+        }
         serializedFw = serializedFw.substring(0, serializedFw.length() - 1) + ", ";
 
         for (String color : getFadeColors())
@@ -211,8 +232,17 @@ public class FireworkData
             serializedFw = color + ";";
         }
 
-        serializedFw = serializedFw.substring(0, serializedFw.length() - 1) + ", " + isTrail() + ", " + isFlicker() + ", " +
-                getFeType().name() + ", " + getPower();
+        if(getFadeColors().size() == 0)
+        {
+            serializedFw += ";";
+        }
+
+        serializedFw = serializedFw.substring(0, serializedFw.length() - 1);
+        serializedFw += ", " + isTrail();
+        serializedFw += ", " + isFlicker();
+        serializedFw += ", " + getFeType().name();
+        serializedFw += ", " + getPower();
+
         return serializedFw;
     }
 
