@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by ztowne13 on 6/14/16.
@@ -189,17 +190,40 @@ public class CMultiCrateInventory extends CSetting
                 VirtualCrateData vcd = PlayerManager.get(cc, p).getPdm().getVCCrateData(crate);
                 cc.getDu().log(vcd.toString());
                 ItemBuilder crateIb = new ItemBuilder(crate.getSettings().getCrateItemHandler().getItem(1));
-                crateIb.addLore("");
 
                 if (cc.getSettings().getConfigValAsBoolean("virtual-crate-cratecount"))
                 {
-                    crateIb.addLore(cc.getSettings().getConfigValues().get("virtual-crate-lore").toString()
-                            .replaceAll("%crates%", vcd.getCrates() + ""));
+                    String toAddLore = (String) SettingsValues.VIRTUAL_CRATE_LORE.getValue(cc);
+                    if(!toAddLore.equalsIgnoreCase("") && !toAddLore.equalsIgnoreCase("none"))
+                    {
+                        crateIb.addLore("");
+                        crateIb.addLore(toAddLore);
+                    }
+//                    crateIb.addLore(cc.getSettings().getConfigValues().get("virtual-crate-lore").toString()
+//                            .replaceAll("%crates%", vcd.getCrates() + ""));
                 }
                 if (cc.getSettings().getConfigValAsBoolean("virtual-crate-keycount"))
                 {
-                    crateIb.addLore(cc.getSettings().getConfigValues().get("virtual-key-lore").toString()
-                            .replaceAll("%keys%", vcd.getKeys() + ""));
+                    String toAddLore = (String) SettingsValues.VIRTUAL_KEY_LORE.getValue(cc);
+                    if(!toAddLore.equalsIgnoreCase("") && !toAddLore.equalsIgnoreCase("none"))
+                    {
+                        crateIb.addLore("");
+                        crateIb.addLore(toAddLore);
+                    }
+//                    crateIb.addLore(cc.getSettings().getConfigValues().get("virtual-key-lore").toString()
+//                            .replaceAll("%keys%", vcd.getKeys() + ""));
+                }
+
+                List<String> lore = new ArrayList<String>(crateIb.getLore());
+                crateIb.clearLore();
+
+                for(int loreLineNum = 0; loreLineNum < lore.size(); loreLineNum++)
+                {
+                    String line = lore.get(loreLineNum);
+                    line = line.replaceAll("%keys%", vcd.getKeys() + "");
+                    line = line.replaceAll("%crates%", vcd.getCrates() + "");
+
+                    crateIb.addLore(line);
                 }
 
                 ib.setItem(i, crateIb);
