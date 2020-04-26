@@ -2,22 +2,43 @@ package me.ztowne13.customcrates.utils;
 
 import org.bukkit.Bukkit;
 
+import java.util.HashMap;
+
 public class VersionUtils
 {
+    static HashMap<String, Class<?>> cachedNMSClasses = new HashMap<>();
     public static Class<?> getNmsClass(String nmsClassName) throws ClassNotFoundException
     {
-        return Class.forName("net.minecraft.server." + getVersionRaw() + "." + nmsClassName);
+        Class<?> result = cachedNMSClasses.get(nmsClassName);
+        if(result == null)
+        {
+            Class<?> clazz = Class.forName("net.minecraft.server." + getVersionRaw() + "." + nmsClassName);
+            cachedNMSClasses.put(nmsClassName, clazz);
+            return clazz;
+        }
+
+        return result;
     }
 
+    static String cachedVersionRaw = "";
     public static String getVersionRaw()
     {
-        return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+        if(cachedVersionRaw == "")
+        {
+            cachedVersionRaw = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+        }
+        return cachedVersionRaw;
     }
 
-        public static String getServerVersion()
+    static String cachedServerVersion = "";
+    public static String getServerVersion()
+    {
+        if(cachedServerVersion == "")
         {
-            return Bukkit.getServer().getClass().getPackage().getName().substring(23);
+            cachedServerVersion = Bukkit.getServer().getClass().getPackage().getName().substring(23);
         }
+        return cachedServerVersion;
+    }
 
     public enum Version
     {

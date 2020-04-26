@@ -3,7 +3,6 @@ package me.ztowne13.customcrates.crates.types.display;
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import org.bukkit.Material;
 
@@ -22,9 +21,6 @@ public class MaterialPlaceholder extends DynamicCratePlaceholder
         Material m = cm.getCrates().getSettings().getCrateItemHandler().getItem(1).getType();
         if (cm.getCrates().isEnabled())
         {
-            DynamicMaterial crateMat = DynamicMaterial.fromItemStack(cm.getCrates().getSettings().getCrateItemHandler().getItem(1));
-            DynamicMaterial blockMat = DynamicMaterial.fromString(cm.getL().getBlock().getType().toString());
-
             if(!cm.getCrates().getSettings().getCrateItemHandler().crateMatchesBlock(cm.getL().getBlock().getType()))
             {
                 try

@@ -40,7 +40,7 @@ public class ItemBuilder implements EditableItem
     public ItemBuilder(EditableItem builder)
     {
         glowing = builder.isGlowing();
-        stack = builder.getStack().clone();
+        stack = new ItemStack(builder.getStack());
         updateFromItem();
     }
 
@@ -129,6 +129,10 @@ public class ItemBuilder implements EditableItem
             else
             {
                 Potion pot = Potion.fromItemStack(stack);
+                Potion toClearPot = Potion.fromItemStack(stack);
+                toClearPot.getEffects().clear();
+                toClearPot.apply(stack);
+
                 if(pot != null && pot.getType() != null)
                 {
                     addPotionEffect(new CompressedPotionEffect(pot.getType().getEffectType(), 1, 1));
