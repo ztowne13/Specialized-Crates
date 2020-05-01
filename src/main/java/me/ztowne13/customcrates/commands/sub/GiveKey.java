@@ -63,7 +63,11 @@ public class GiveKey extends SubCommand
                     {
                         PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
                         pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + count);
-                        Messages.RECEIVED_VIRTUAL_KEY.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
+                        if(count != 0)
+                        {
+                            Messages.RECEIVED_VIRTUAL_KEY
+                                    .msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
+                        }
                     }
                 }
                 return true;
@@ -155,7 +159,11 @@ public class GiveKey extends SubCommand
                 if(toNotDrop)
                 {
                     pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + count);
-                    Messages.RECEIVED_VIRTUAL_KEY.msgSpecified(cc, toGive, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
+                    if(count != 0)
+                    {
+                        Messages.RECEIVED_VIRTUAL_KEY
+                                .msgSpecified(cc, toGive, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
+                    }
                 }
 
                 cmds.msgSuccess("Given physical key for crate: " + args[1]);
