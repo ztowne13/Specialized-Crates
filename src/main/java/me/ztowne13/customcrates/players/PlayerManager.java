@@ -61,9 +61,21 @@ public class PlayerManager
         getpManagers().put(p.getUniqueId(), this);
     }
 
-    public void remove()
+    public void remove(int delay)
     {
-        getpManagers().remove(getP().getUniqueId());
+        if(isInCrateAnimation())
+        {
+            getCurrentAnimation().setFastTrack(true, true);
+        }
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                getpManagers().remove(getP().getUniqueId());
+            }
+        }, delay);
 
         if(ReflectionUtilities.cachedHandles.containsKey(getP()))
         {

@@ -239,4 +239,13 @@ public class ReflectionUtilities
         }
         return equal;
     }
+
+    public static void clearLoaded()
+    {
+        cachedMethods.clear();
+        cachedHandles.clear();
+        cachedNMSClass.clear();
+        cachedOBCClass.clear();
+        cachedFields.clear();
+    }
 }
