@@ -129,9 +129,19 @@ public class ItemBuilder implements EditableItem
             else
             {
                 Potion pot = Potion.fromItemStack(stack);
-                Potion toClearPot = Potion.fromItemStack(stack);
-                toClearPot.getEffects().clear();
-                toClearPot.apply(stack);
+//                Potion clearPot = new Potion(PotionType.WATER);
+//                clearPot.apply(stack);
+
+                try
+                {
+                    Potion toClearPot = Potion.fromItemStack(stack);
+                    toClearPot.getEffects().clear();
+                    toClearPot.apply(stack);
+                }
+                catch(Exception exc)
+                {
+
+                }
 
                 if(pot != null && pot.getType() != null)
                 {
