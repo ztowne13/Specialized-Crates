@@ -59,6 +59,7 @@ public class SpecializedCrates extends JavaPlugin
     int tick = 0;
     boolean allowTick = true;
     boolean onlyUseBuildInHolograms = true;
+    boolean hasAttemptedReload = false;
 
     ArrayList<ParticleData> alreadyUpdated = new ArrayList<>();
 
@@ -116,6 +117,29 @@ public class SpecializedCrates extends JavaPlugin
         allowTick = true;
 
         antiFraudSQLHandler = new AntiFraudSQLHandler(this);
+
+        // Check to see if the plugin needs a reload to find the hologram plugin
+        if(!hasAttemptedReload)
+        {
+            Bukkit.getScheduler().runTaskLater(this, new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    if(getSettings().getInfoToLog().containsKey("Hologram Plugin") &&
+                        getSettings().getInfoToLog().get("Hologram Plugin").equalsIgnoreCase("None"))
+                    {
+                        hasAttemptedReload = true;
+                        ChatUtils
+                                .log("&e[SpecializedCrates] No hologram plugin was found. In the off-chance that this is because the hologram plugin" +
+                                        " opted to ignore the softdepend and loaded after SpecializedCrates, the plugin is reloading once to " +
+                                        "try again.");
+                        reload();
+                    }
+                }
+            }, 1);
+        }
+
     }
 
     public void onDisable()
@@ -357,7 +381,6 @@ public class SpecializedCrates extends JavaPlugin
 
     public void run()
     {
-        //setBr(Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Runnable()
         setBr(Bukkit.getScheduler().runTaskTimer(this, new Runnable()
         {
             public void run()
@@ -392,19 +415,6 @@ public class SpecializedCrates extends JavaPlugin
             {
                 pm.getCurrentAnimation().setFastTrack(true, true);
             }
-
-            /*if (pm.isWaitingForClose())
-            {
-                pm.closeCrate();
-
-                for (Reward r : pm.getWaitingForClose())
-                {
-                    r.runCommands(p);
-                }
-
-                pm.setWaitingForClose(null);
-                p.closeInventory();
-            }*/
         }
     }
 
@@ -551,5 +561,10 @@ public class SpecializedCrates extends JavaPlugin
 
     public boolean isUsingPlaceholderAPI() {
         return placeHolderAPIHandler != null;
+    }
+
+    public boolean isHasAttemptedReload()
+    {
+        return hasAttemptedReload;
     }
 }
