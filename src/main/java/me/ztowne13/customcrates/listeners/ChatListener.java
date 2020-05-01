@@ -64,7 +64,8 @@ public class ChatListener implements Listener
 
         if (player.hasPermission("customcrates.admin"))
         {
-            if (cc.getSettings().getInfoToLog().get("Hologram Plugin").equalsIgnoreCase("CMI"))
+            if (cc.getSettings().getInfoToLog().containsKey("Hologram Plugin") &&
+                    cc.getSettings().getInfoToLog().get("Hologram Plugin").equalsIgnoreCase("CMI"))
             {
                 String[] split = event.getMessage().split(" ");
                 if (split.length >= 2)
