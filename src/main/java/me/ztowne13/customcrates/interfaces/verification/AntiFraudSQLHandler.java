@@ -86,8 +86,12 @@ public class AntiFraudSQLHandler extends Thread
         }
         catch (Exception exc)
         {
-            ChatUtils.log("Failed to connect to the SpecializedCrates authentication DB. Authenticating anyways.");
-            //exc.printStackTrace();
+            if(!alreadyLogged)
+            {
+                ChatUtils
+                        .log("Failed to authenticate via the Specialized Crates authentication DB. Authenticating anyways.");
+                alreadyLogged = true;
+            }            //exc.printStackTrace();
         }
 
     }

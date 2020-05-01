@@ -1102,10 +1102,10 @@ public enum DynamicMaterial
 
             if(split.length > 1)
             {
-                xmat = requestXMaterial(keyMat, (byte) Integer.parseInt(split[1]));
-                if(xmat != null)
+                DynamicMaterial newxmat = requestXMaterial(keyMat, (byte) Integer.parseInt(split[1]));
+                if(newxmat != null)
                 {
-                    return xmat;
+                    return newxmat;
                 }
             }
 

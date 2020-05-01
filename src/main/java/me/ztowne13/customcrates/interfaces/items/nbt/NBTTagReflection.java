@@ -1,4 +1,4 @@
-package me.ztowne13.customcrates.interfaces.nbt;
+package me.ztowne13.customcrates.interfaces.items.nbt;
 
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
@@ -155,6 +155,7 @@ public class NBTTagReflection
     private static String[] excludedTags = new String[]{
             "display",
             "Enchantments",
+            "ench",
             "HideFlags",
             "Potion",
             "StoredEnchantments"

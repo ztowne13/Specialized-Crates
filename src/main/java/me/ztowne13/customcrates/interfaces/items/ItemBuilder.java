@@ -3,7 +3,7 @@ package me.ztowne13.customcrates.interfaces.items;
 import me.ztowne13.customcrates.interfaces.items.attributes.BukkitGlowEffect;
 import me.ztowne13.customcrates.interfaces.items.attributes.CompressedEnchantment;
 import me.ztowne13.customcrates.interfaces.items.attributes.RGBColor;
-import me.ztowne13.customcrates.interfaces.nbt.NBTTagManager;
+import me.ztowne13.customcrates.interfaces.items.nbt.NBTTagManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.VersionUtils;
 import org.apache.commons.lang.WordUtils;
