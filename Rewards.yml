@@ -89,7 +89,7 @@ SuperGoldenApple:
     value: true
     with-lore: false
   display-item:
-    material: GOLDEN_APPLE
+    material: ENCHANTED_GOLDEN_APPLE
     glow: false
     amount: 1
     name: '&cSuper Golden Apple'
