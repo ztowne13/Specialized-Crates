@@ -29,6 +29,7 @@ import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.DebugUtils;
 import me.ztowne13.customcrates.utils.NPCUtils;
+import me.ztowne13.customcrates.utils.ReflectionUtilities;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -185,6 +186,7 @@ public class SpecializedCrates extends JavaPlugin
         PlacedCrate.clearLoaded();
         PlayerManager.clearLoaded();
         Crate.clearLoaded();
+        ReflectionUtilities.clearLoaded();
         stopRun();
 
         setBr(null);
