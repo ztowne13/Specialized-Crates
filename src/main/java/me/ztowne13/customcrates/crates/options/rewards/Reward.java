@@ -396,7 +396,13 @@ public class Reward implements Comparable<Reward>
     {
         if (!useMaterialIfNull && (displayBuilder == null || !displayBuilder.hasDisplayName()))
             return rewardName;
-        return displayBuilder.getDisplayName(true);
+        String displayName = displayBuilder.getDisplayName(true);
+        if(displayName.equalsIgnoreCase(""))
+        {
+            displayBuilder.setDisplayName(null);
+            return displayBuilder.getDisplayName(true);
+        }
+        return displayName;
     }
 
     public void checkIsNeedMoreConfig()
