@@ -228,6 +228,23 @@ public class Reward implements Comparable<Reward>
         }
         else
         {
+            for (Crate crate : Crate.getLoadedCrates().values())
+            {
+                if (!crate.isMultiCrate())
+                {
+                    for (Reward r : crate.getSettings().getRewards().getCrateRewards())
+                    {
+                        if (r.equals(this))
+                        {
+                            crate.getSettings().getRewards().removeReward(r.getRewardName());
+                            crate.getSettings().getRewards().saveToFile();
+                            crate.getSettings().getFileHandler().save();
+                            break;
+                        }
+                    }
+                }
+            }
+
             getCc().getRewardsFile().get().set(getRewardName(), null);
             getCc().getRewardsFile().save();
             CRewards.getAllRewards().remove(getRewardName());
