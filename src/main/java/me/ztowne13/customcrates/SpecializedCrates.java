@@ -57,6 +57,7 @@ public class SpecializedCrates extends JavaPlugin
     boolean allowTick = true;
     boolean onlyUseBuildInHolograms = true;
     boolean hasAttemptedReload = false;
+    boolean particlesEnabled = true;
 
     ArrayList<ParticleData> alreadyUpdated = new ArrayList<>();
 
@@ -571,5 +572,15 @@ public class SpecializedCrates extends JavaPlugin
     public boolean isHasAttemptedReload()
     {
         return hasAttemptedReload;
+    }
+
+    public boolean isParticlesEnabled()
+    {
+        return particlesEnabled;
+    }
+
+    public void setParticlesEnabled(boolean particlesEnabled)
+    {
+        this.particlesEnabled = particlesEnabled;
     }
 }

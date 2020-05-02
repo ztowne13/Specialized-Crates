@@ -55,6 +55,7 @@ public class TabCompleteListener implements TabCompleter
                     list.add("!");
                     list.add("luckychest");
                     list.add("forceopen");
+                    list.add("toggleparticles");
                     list = Utils.onlyLeaveEntriesWithPref(list, args[0]);
                 }
                 else

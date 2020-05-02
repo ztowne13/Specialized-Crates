@@ -346,6 +346,11 @@ public class Utils
     public static int cachedParticleDistance = -1;
     public static boolean isPlayerInRange(SpecializedCrates sc, Player p, Location center)
     {
+        if(!sc.isParticlesEnabled())
+        {
+            return false;
+        }
+
         if(cachedParticleDistance == -1)
         {
             cachedParticleDistance = (int) SettingsValues.PARTICLE_VIEW_DISTANCE.getValue(sc);

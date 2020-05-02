@@ -29,8 +29,7 @@ public class CommandCrate extends Commands implements CommandExecutor
 
         vcSubCommand = new VirtualCrates();
 
-        subCommands = new ArrayList<>(Arrays.asList(new SubCommand[]{
-                new Config(),
+        subCommands = new ArrayList<>(Arrays.asList(new Config(),
                 new DelAllCrateType(),
                 new DeleteCrate(),
                 new GiveCrate(),
@@ -45,8 +44,8 @@ public class CommandCrate extends Commands implements CommandExecutor
                 new Edit(),
                 new Debug(),
                 new ForceOpen(),
-                vcSubCommand
-        }));
+                new ToggleParticles(),
+                vcSubCommand));
     }
 
     @Override
@@ -154,6 +153,8 @@ public class CommandCrate extends Commands implements CommandExecutor
         msg("    &7The menu displayed when a non-admins types /crates");
         msg("&6&l> &eforceopen [crate] {[player], all}");
         msg("    &7Force a player to open a crate.");
+        msg("&6&l> &etoggleparticles");
+        msg("    &7Temporarily disable all particle effects.");
         msg("");
 
     }
