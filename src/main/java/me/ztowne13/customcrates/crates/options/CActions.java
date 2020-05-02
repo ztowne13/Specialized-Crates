@@ -52,7 +52,8 @@ public class CActions extends CSetting
             {
                 if (csb.hasV("open.crate-tiers." + tier + ".actions"))
                 {
-                    List<String> list = getCrate().getSettings().getFc().getStringList("open.crate-tiers." + tier + ".actions");
+                    List<String> list =
+                            getCrate().getSettings().getFc().getStringList("open.crate-tiers." + tier + ".actions");
                     for (String s : list)
                     {
                         addEntryByString(tier, s);
@@ -146,7 +147,7 @@ public class CActions extends CSetting
     {
         cc.getDu().log("playAll() - CALL (pre: " + pre + ")", getClass());
 
-        if(rewards.isEmpty() && !pre)
+        if (rewards.isEmpty() && !pre)
             return;
 
         ActionEffect actionEffect =
@@ -193,9 +194,12 @@ public class CActions extends CSetting
                         String rewardsAsString = rewardsAsDisplayname.toString();
                         rewardsAsString = rewardsAsString.substring(1, rewardsAsString.length() - 1);
 
-                        msg = ChatUtils.toChatColor(
-                                msg.replace("%player%", p.getName()).replace("%crate%", getCrate().getName())
-                                        .replace("%reward%", rewardsAsString));
+                        msg = msg.replace("%player%", p.getName()).replace("%name%", p.getName());
+                        msg = msg.replace("%displayname%", p.getDisplayName()).replace("%nickname%", p.getDisplayName())
+                                .replace("%nick%", p.getDisplayName());
+                        msg = msg.replace("%crate%", getCrate().getName()).replace("%cratename%", getCrate().getName());
+                        msg = msg.replace("%reward%", rewardsAsString).replace("%rewards%", rewardsAsString);
+                        msg = ChatUtils.toChatColor(msg);
                         if (s.equalsIgnoreCase("MESSAGE"))
                         {
                             p.sendMessage(msg);
@@ -245,7 +249,8 @@ public class CActions extends CSetting
             if (!crates.getSettings().getCrateType().equals(CrateAnimationType.BLOCK_CRATEOPEN) ||
                     !((OpenChestAnimation) crates.getSettings().getAnimation()).isEarlyRewardHologram())
             {
-                if (crates.getSettings().getObtainType().isStatic() || crates.getSettings().getCrateType().isSpecialDynamicHandling())
+                if (crates.getSettings().getObtainType().isStatic() ||
+                        crates.getSettings().getCrateType().isSpecialDynamicHandling())
                     playRewardHologram(p, rewardsAsDisplayname);
             }
         }
@@ -262,9 +267,9 @@ public class CActions extends CSetting
     }
 
     public void playRewardHologram(Player p, ArrayList<String> rewards, double additionalYOffset, boolean attach, Item item,
-                                int openDuration)
+                                   int openDuration)
     {
-        if(rewards.isEmpty())
+        if (rewards.isEmpty())
             return;
 
         final PlayerManager pm = PlayerManager.get(cc, p);
@@ -276,7 +281,14 @@ public class CActions extends CSetting
             {
 //                msg = ChatUtils.toChatColor(msg.replace("%reward%", rewards.toString().replace("[", "").replace("]", ""))).replace("%player%", p.getName()));
 
-                msg = ChatUtils.toChatColor(msg.replace("%reward%", rewards.toString().substring(1, rewards.toString().length() - 1)).replace("%player%", p.getName()));
+                String rewardsAsString = rewards.toString().substring(1, rewards.toString().length() - 1);
+                msg = msg.replace("%player%", p.getName()).replace("%name%", p.getName());
+                msg = msg.replace("%displayname%", p.getDisplayName()).replace("%nickname%", p.getDisplayName())
+                        .replace("%nick%", p.getDisplayName());
+                msg = msg.replace("%crate%", getCrate().getName()).replace("%cratename%", getCrate().getName());
+                msg = msg.replace("%reward%", rewardsAsString).replace("%rewards%", rewardsAsString);
+
+                msg = ChatUtils.toChatColor(msg);
 
 
                 final DynamicHologram dynamicHologram = placedCrate.getCholo().getDh();
@@ -304,7 +316,7 @@ public class CActions extends CSetting
                         final Location cloneY = placedCrate.getL().clone();
                         cloneY.setY(cloneY.getY() + .5);
 
-                        if(placedCrate.getCrates().getSettings().getObtainType().equals(ObtainType.STATIC))
+                        if (placedCrate.getCrates().getSettings().getObtainType().equals(ObtainType.STATIC))
                         {
                             placedCrate.getCrates().getSettings().getHologram().createHologram(cloneY, dynamicHologram);
                         }
