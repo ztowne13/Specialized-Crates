@@ -151,8 +151,8 @@ public class IGCCratesEssentials extends IGCMenuCrate
 //                        "Available display types: block, mob, npc",
 //                        String.class, this, true);
                 new IGCListSelector(getCc(), getP(), this, "Display Type",
-                        Arrays.asList(new String[]{"BLOCK", "MOB", "NPC"}), DynamicMaterial.PAPER, 1,
-                        Arrays.asList(new String[]{"", "Requires Citizens v2", "Requires Citizens v2"})).open();
+                        Arrays.asList("BLOCK", "MOB", "NPC"), DynamicMaterial.PAPER, 1,
+                        Arrays.asList("", "Requires Citizens v2", "Requires Citizens v2")).open();
                 break;
             case 15:
                 if (cs.getPlaceholder().toString().equalsIgnoreCase("npc"))
@@ -160,12 +160,12 @@ public class IGCCratesEssentials extends IGCMenuCrate
                     new InputMenu(getCc(), getP(),
                             "display." + (cs.getPlaceholder().toString().equalsIgnoreCase("mob") ? "creature" : "name"),
                             cs.getPlaceholder().getType(), cs.getPlaceholder().toString().equalsIgnoreCase("mob") ?
-                            "Available mob types: " + Arrays.toString(EntityTypes.values()) : "Use a player's name",
+                            "Available mob types: " + EntityTypes.enumValues().toString() : "Use a player's name",
                             String.class, this, true);
                 }
                 else if (cs.getPlaceholder().toString().equalsIgnoreCase("mob"))
                 {
-                    new IGCListSelector(getCc(), getP(), this, "Mob Type", Arrays.asList(EntityTypes.values()),
+                    new IGCListSelector(getCc(), getP(), this, "Mob Type", EntityTypes.enumValues(),
                             DynamicMaterial.PAPER, 1, null).open();
                 }
                 break;
@@ -297,14 +297,14 @@ public class IGCCratesEssentials extends IGCMenuCrate
         {
             try
             {
-                EntityTypes et = EntityTypes.valueOf(input.toUpperCase());
+                EntityTypes et = EntityTypes.getEnum(input.toUpperCase());
                 cs.getPlaceholder().setType(et.name());
                 ChatUtils.msgSuccess(getP(), "Set mob type to " + input);
                 return true;
             }
             catch (Exception exc)
             {
-                ChatUtils.msgError(getP(), input + " is not a valid entity type: " + Arrays.toString(EntityTypes.values()));
+                ChatUtils.msgError(getP(), input + " is not a valid entity type: " + EntityTypes.enumValues().toString());
             }
         }
         else if (value.equalsIgnoreCase("display.name"))

@@ -44,7 +44,7 @@ public class MobPlaceholder extends DynamicCratePlaceholder
 
                 NPCUtils.applyDefaultInfo(npc);
 
-                npc.spawn(LocationUtils.getLocationCentered(cm.getL()));
+                npc.spawn(LocationUtils.getLocationCentered(cm.getL()).add(0, -1 , 0));
 
                 getMobs().put(cm, npc);
             }
@@ -64,7 +64,7 @@ public class MobPlaceholder extends DynamicCratePlaceholder
 
     public void setType(Object obj)
     {
-        setEnt(EntityTypes.valueOf(obj.toString()));
+        setEnt(EntityTypes.getEnum(obj.toString()));
     }
 
     public String getType()
