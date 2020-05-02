@@ -40,8 +40,24 @@ public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
                 LocationUtils.removeDubBlocks(cm.getL());
 
                 NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
-                final NPC npc = npcRegistry.createNPC(EntityType.PLAYER, "");
-                npc.addTrait(new IdentifierTrait());
+                NPC npc;
+
+                if(NPCUtils.npcExists(cm))
+                {
+                    npc = NPCUtils.getNpcForCrate(cm);
+                    if(npc.getEntity().getType().equals(EntityType.PLAYER))
+                    {
+                        getNpcs().put(cm, npc);
+                        return;
+                    }
+                    else
+                    {
+                        npc.destroy();
+                    }
+                }
+
+                npc = npcRegistry.createNPC(EntityType.PLAYER, "");
+                //npc.addTrait(new IdentifierTrait());
 
                 npc.data().setPersistent(NPC.PLAYER_SKIN_UUID_METADATA, name);
                 //npc.data().setPersistent(NPC.PLAYER_SKIN_USE_LATEST, false);

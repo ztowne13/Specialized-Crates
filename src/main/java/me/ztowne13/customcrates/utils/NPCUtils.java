@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.utils;
 
 import me.ztowne13.customcrates.SpecializedCrates;
+import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.types.display.npcs.Citizens2NPCPlaceHolder;
 import me.ztowne13.customcrates.crates.types.display.npcs.IdentifierTrait;
 import me.ztowne13.customcrates.crates.types.display.npcs.MobPlaceholder;
@@ -10,6 +11,7 @@ import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.api.trait.TraitInfo;
 import net.citizensnpcs.trait.LookClose;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 
 import java.util.Iterator;
 
@@ -19,9 +21,13 @@ import java.util.Iterator;
 public class NPCUtils
 {
     static boolean failedLoad = false;
+    static boolean disabledMobReload = true;
 
     public static void checkUncheckMobs(boolean b)
     {
+        if (disabledMobReload)
+            return;
+
         if (isCitizensInstalled())
         {
             for (NPCRegistry npcr : CitizensAPI.getNPCRegistries())
@@ -74,6 +80,45 @@ public class NPCUtils
                 NPCUtils.checkUncheckMobs(bVal);
             }
         }, l);
+    }
+
+    public static NPC getNpcForCrate(PlacedCrate placedCrate)
+    {
+        if (isCitizensInstalled())
+        {
+            for (NPCRegistry npcr : CitizensAPI.getNPCRegistries())
+            {
+                Iterator<NPC> npcs = npcr.iterator();
+
+                for (Object obj : Utils.iteratorToList(npcs))
+                {
+                    NPC npc = (NPC) obj;
+
+                    if(!npc.isSpawned() || !npc.getName().equalsIgnoreCase("Specialized Crate - Crate"))
+                        continue;
+
+                    //if (npc.hasTrait(IdentifierTrait.class) && npc.getTrait(IdentifierTrait.class).isCrate())
+                    {
+                        Location storedLoc = npc.getStoredLocation();
+                        Location crateLoc = LocationUtils.getLocationCentered(placedCrate.getL());
+                        if (Math.abs(storedLoc.getX() - crateLoc.getX()) < .3 &&
+                                Math.abs(storedLoc.getY() - crateLoc.getY()) < 2 &&
+                                        Math.abs(storedLoc.getZ() - crateLoc.getZ()) < .3 &&
+                                                storedLoc.getWorld() == crateLoc.getWorld())
+                        {
+                            return npc;
+                        }
+                    }
+
+                }
+            }
+        }
+        return null;
+    }
+
+    public static boolean npcExists(PlacedCrate placedCrate)
+    {
+        return getNpcForCrate(placedCrate) != null;
     }
 
     public static void applyDefaultInfo(NPC npc)
