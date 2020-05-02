@@ -140,6 +140,13 @@ public class SpecializedCrates extends JavaPlugin
             }, 1);
         }
 
+        if(Bukkit.getServer().getSpawnRadius() != 0)
+        {
+            ChatUtils.log("&4WARNING: &cThe value 'spawn-protection' is set to " + Bukkit.getServer().getSpawnRadius() +
+                    " in the server.properties file. This WILL cause issues with SpecializedCrates - any crates near spawn will " +
+                    "only be openable for OP players. Please go to your server.properties file in the main directory of your server" +
+                    " and change spawn-protection: 0.");
+        }
     }
 
     public void onDisable()
