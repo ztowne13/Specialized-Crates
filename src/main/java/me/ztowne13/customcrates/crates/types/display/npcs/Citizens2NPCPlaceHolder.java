@@ -56,7 +56,7 @@ public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
                     }
                 }
 
-                npc = npcRegistry.createNPC(EntityType.PLAYER, "");
+                npc = npcRegistry.createNPC(EntityType.PLAYER, "Specialized Crate - Crate");
                 //npc.addTrait(new IdentifierTrait());
 
                 npc.data().setPersistent(NPC.PLAYER_SKIN_UUID_METADATA, name);
