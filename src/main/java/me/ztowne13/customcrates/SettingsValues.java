@@ -270,6 +270,12 @@ public enum SettingsValues
                     "like a sell-shop plugin where, to set up",
                     "the shop, a sign needs to be left-clicked",
                     "with a key."
+            }),
+
+    PARTICLE_VIEW_DISTANCE("particle-view-distance", Integer.class, false, 25,
+            new String[]{
+                    "The distance, in blocks, away that players",
+                    "can be and still see crate particles"
             });
 
     String path;

@@ -99,6 +99,9 @@ confirm-timeout: 3
 #   be replaced to make sure that they haven't been overridden by worldedit, etc.?
 keep-crate-block-consistent: true
 
+# How many blocks away should players be able to see particles?
+particle-view-distance: 25
+
 #-------------------------------------------#
 #           Crate Action Settings           #
 #-------------------------------------------#

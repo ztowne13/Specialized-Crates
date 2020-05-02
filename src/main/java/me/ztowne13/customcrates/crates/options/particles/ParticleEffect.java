@@ -1,8 +1,10 @@
 package me.ztowne13.customcrates.crates.options.particles;
 
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.DebugUtils;
 import me.ztowne13.customcrates.utils.ReflectionUtilities;
+import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -169,10 +171,10 @@ public enum ParticleEffect
         return this.particleName;
     }
 
-    public void sendToPlayer(Player player, Location location, float offsetX, float offsetY, float offsetZ, float speed,
+    public void sendToPlayer(SpecializedCrates sc, Player player, Location location, float offsetX, float offsetY, float offsetZ, float speed,
                              int count) throws Exception
     {
-        if (!isPlayerInRange(player, location))
+        if (!Utils.isPlayerInRange(sc, player, location))
         {
             return;
         }
@@ -181,7 +183,7 @@ public enum ParticleEffect
 
             if(ReflectionUtilities.getVersion().contains("v1_8_R3"))
             {
-                ParticleEffect188.sendToPlayer(this, player,location, offsetX, offsetY, offsetZ, speed, count);
+                ParticleEffect188.sendToPlayer(sc,this, player,location, offsetX, offsetY, offsetZ, speed, count);
                 return;
             }
 
@@ -253,18 +255,5 @@ public enum ParticleEffect
             }
         }
         return null;
-    }
-
-    public static boolean isPlayerInRange(Player p, Location center)
-    {
-        double distance = 0.0D;
-        if (center.getWorld().equals(p.getWorld()))
-        {
-            if ((distance = center.distance(p.getLocation())) > 1.7976931348623157E+308D) return false;
-            {
-                return distance < particleRange;
-            }
-        }
-        return false;
     }
 }
