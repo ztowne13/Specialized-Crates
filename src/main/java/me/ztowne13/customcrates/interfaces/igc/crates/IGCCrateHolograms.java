@@ -142,7 +142,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
         {
             new InputMenu(getCc(), getP(), "reward-hologram", crates.getSettings().getHologram().getRewardHologram(),
                     "Type 'none' to remove the reward hologram. Use %reward% as a placeholder for the reward and " +
-                            "%player% as a placeholder for the player name.",
+                            "%player% as a placeholder for the player name or %nickname% for the player nickname.",
                     String.class,
                     this);
         }
