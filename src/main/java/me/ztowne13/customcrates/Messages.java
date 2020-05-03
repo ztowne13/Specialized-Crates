@@ -75,9 +75,9 @@ public enum Messages
 
     CANT_CRAFT_KEYS("", "&4&lERROR: &cYou are not allowed to craft keys."),
 
-    RECEIVED_KEY("", "&2&lSUCCESS! &aYou just received a %crate% key!"),
+    RECEIVED_KEY("", "&2&lSUCCESS! &aYou just received %amount% %crate% key(s)!"),
 
-    RECEIVED_VIRTUAL_KEY("", "&2&lSUCCESS! &aYou just received a virtual %crate% key!"),
+    RECEIVED_VIRTUAL_KEY("", "&2&lSUCCESS! &aYou just received %amount% virtual %crate% key(s)!"),
 
     BLACKLISTED_PLUGIN("&cIMPORTANT: THIS COPY OF THE SPECIALIZED CRATES HAS BEEN BLACKLISTED BECAUSE THE USER WHO PURCHASED IT" +
             " IS NOT THE ONLY PERSON USING IT, OR THIS PERSON HAS REFUNDED IT. IF YOU BELIEVE THIS IS AN ERROR, PLEASE RE-DOWNLOAD THE PLUGIN (NO" +

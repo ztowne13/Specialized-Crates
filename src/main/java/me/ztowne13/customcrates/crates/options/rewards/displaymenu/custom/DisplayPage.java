@@ -205,7 +205,7 @@ public class DisplayPage
                     pm.setLastPage(thisPage);
                     pm.setInRewardMenu(true);
                 }
-            }, 1);
+            }, 2);
         }
 
         return ib;

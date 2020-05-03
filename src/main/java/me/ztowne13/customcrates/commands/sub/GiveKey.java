@@ -58,7 +58,6 @@ public class GiveKey extends SubCommand
 
                     Boolean toNotDrop = (Boolean) SettingsValues.VIRTUAL_KEY_INSTEAD_OF_DROP.getValue(cc);
                     int count = Utils.addItemAndDropRest(p, toAdd, !toNotDrop);
-                    Messages.RECEIVED_KEY.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
 
                     if(toNotDrop)
                     {
@@ -67,8 +66,13 @@ public class GiveKey extends SubCommand
                         if(count != 0)
                         {
                             Messages.RECEIVED_VIRTUAL_KEY
-                                    .msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
+                                    .msgSpecified(cc, p, new String[]{"%crate%", "%amount%"}, new String[]{crate.getDisplayName(), "" + count});
                         }
+                        Messages.RECEIVED_KEY.msgSpecified(cc, p, new String[]{"%crate%", "%amount%"}, new String[]{crate.getDisplayName(), "" + (amount-count) });
+                    }
+                    else
+                    {
+                        Messages.RECEIVED_KEY.msgSpecified(cc, p, new String[]{"%crate%", "%amount%"}, new String[]{crate.getDisplayName(), "" + amount});
                     }
                 }
                 return true;
@@ -85,7 +89,7 @@ public class GiveKey extends SubCommand
                     {
                         PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
                         pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + amount);
-                        Messages.RECEIVED_VIRTUAL_KEY.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
+                        Messages.RECEIVED_VIRTUAL_KEY.msgSpecified(cc, p, new String[]{"%crate%", "%amount%"}, new String[]{crate.getDisplayName(), "" + amount});
                     }
                     cmds.msgSuccess("Given a virtual key for " + args[1] + " to every online player.");
                     return true;
@@ -93,7 +97,7 @@ public class GiveKey extends SubCommand
                 Utils.giveAllItem(toAdd);
                 for(Player p : Bukkit.getOnlinePlayers())
                 {
-                    Messages.RECEIVED_KEY.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
+                    Messages.RECEIVED_KEY.msgSpecified(cc, p, new String[]{"%crate%", "%amount%"}, new String[]{crate.getDisplayName(), "" + amount});
                 }
                 cmds.msgSuccess("Given a physical key for " + args[1] + " to every online player.");
                 return true;
@@ -149,13 +153,12 @@ public class GiveKey extends SubCommand
             {
                 pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + amount);
                 cmds.msgSuccess("Given virtual key for crate: " + args[1]);
-                Messages.RECEIVED_VIRTUAL_KEY.msgSpecified(cc, toGive, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
+                Messages.RECEIVED_VIRTUAL_KEY.msgSpecified(cc, toGive, new String[]{"%crate%", "%amount%"}, new String[]{crate.getDisplayName(), "" + amount});
             }
             else
             {
                 Boolean toNotDrop = (Boolean) SettingsValues.VIRTUAL_KEY_INSTEAD_OF_DROP.getValue(cc);
                 int count = Utils.addItemAndDropRest(toGive, toAdd, !toNotDrop);
-                Messages.RECEIVED_KEY.msgSpecified(cc, toGive, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
 
                 if(toNotDrop)
                 {
@@ -163,8 +166,14 @@ public class GiveKey extends SubCommand
                     if(count != 0)
                     {
                         Messages.RECEIVED_VIRTUAL_KEY
-                                .msgSpecified(cc, toGive, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
+                                .msgSpecified(cc, toGive, new String[]{"%crate%", "%amount%"}, new String[]{crate.getDisplayName(), "" + count});
                     }
+
+                    Messages.RECEIVED_KEY.msgSpecified(cc, toGive, new String[]{"%crate%", "%amount%"}, new String[]{crate.getDisplayName(), "" + (amount-count) });
+                }
+                else
+                {
+                    Messages.RECEIVED_KEY.msgSpecified(cc, toGive, new String[]{"%crate%", "%amount%"}, new String[]{crate.getDisplayName(), "" + amount});
                 }
 
                 cmds.msgSuccess("Given physical key for crate: " + args[1]);
