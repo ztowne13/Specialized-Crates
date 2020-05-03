@@ -15,7 +15,7 @@ public class SimpleRewardDisplayer extends RewardDisplayer
     }
 
     @Override
-    public void openFor(Player p)
+    public void open(Player p)
     {
         p.openInventory(createInventory(p).getInv());
         PlayerManager.get(getCrates().getCc(), p).setInRewardMenu(true);

@@ -89,6 +89,7 @@ public class CrateSettings
             getSounds().saveToFile();
             getActions().saveToFile();
             getFireworks().saveToFile();
+            getDisplayer().saveToFile();;
         }
         else
         {
