@@ -58,6 +58,10 @@ public class IGCListEditor extends IGCMenu
 
         slots = InventoryUtils.getRowsFor(2, slots) + 9;
 
+        if(header.length() > 18)
+        {
+            header = header.substring(0, 18);
+        }
         setInventoryName("&7&l> &6&l" + header + " PG" + page);
         InventoryBuilder ib = createDefault(slots, 18);
 
