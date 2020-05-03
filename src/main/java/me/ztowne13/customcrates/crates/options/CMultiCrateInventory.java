@@ -409,6 +409,11 @@ public class CMultiCrateInventory extends CSetting
         {
             Crate clickedCrate = crate.getSettings().getMultiCrateSettings().getCrateSpots().get(slot);
 
+            if(clickType != ClickType.LEFT && clickType != ClickType.RIGHT)
+            {
+                return;
+            }
+
             if (clickType.equals(Boolean.valueOf(
                     cc.getSettings().getConfigValues().get("mc-reward-display-leftclick").toString().toUpperCase()) ?
                     ClickType.LEFT : ClickType.RIGHT) && (Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(cc))

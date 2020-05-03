@@ -92,6 +92,7 @@ public class InventoryActionListener implements Listener
                 {
                     Crate crate = pm.getOpenCrate();
                     crate.getSettings().getMultiCrateSettings().checkClick(pm, slot, e.getClick());
+                    e.setCancelled(true);
                 }
                 // Handle discover animation click
                 else if (pm.isInCrate())
@@ -151,7 +152,7 @@ public class InventoryActionListener implements Listener
         Player p = (Player) e.getWhoClicked();
         PlayerManager pm = PlayerManager.get(cc, p);
 
-        if (pm.isInOpenMenu())
+        if (p.hasPermission("customcrates.admin") && pm.isInOpenMenu())
         {
             if (!(e.getClickedInventory() == null || e.getView().getTopInventory() == null))
             {
