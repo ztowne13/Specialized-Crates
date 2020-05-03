@@ -87,7 +87,7 @@ public class IGCMenuConfig extends IGCMenu
                 ItemBuilder newBuilder = new ItemBuilder(((boolean) map.get(sv) ? green : red));
                 //.setName("&a" + sv).setLore("&e&oCurrent value: " + map.get(sv)).addLore("");
                 newBuilder.setDisplayName("&a" + settingsValue.getEasyName());
-                newBuilder.addLore("&e" + settingsValue.getPath()).addLore("");
+                newBuilder.addLore("").addLore("&e" + settingsValue.getPath());
                 newBuilder.addLore("&f&oCurrent value: &f" + map.get(sv));
                 newBuilder.addLore("");
                 for (String lore : settingsValue.getDescriptor())
@@ -104,7 +104,7 @@ public class IGCMenuConfig extends IGCMenu
                 ItemBuilder newBuilder =
                         new ItemBuilder(!isCollection ? DynamicMaterial.ORANGE_WOOL : DynamicMaterial.LIGHT_GRAY_WOOL, 1);
                 newBuilder.setDisplayName("&a" + settingsValue.getEasyName());
-                newBuilder.addLore("&e" + settingsValue.getPath()).addLore("");
+                newBuilder.addLore("").addLore("&e" + settingsValue.getPath());
                 if (isCollection)
                 {
                     newBuilder.addLore("&f&oCurrent value: &f");
