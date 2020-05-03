@@ -40,6 +40,8 @@ public class PlayerManager
 
     boolean inRewardMenu = false;
     DisplayPage lastPage;
+    // This is to allow the anti-dupe inventory reopen/close feature but prevent it when opening the next page of an inv
+    long nextPageInventoryCloseGrace = 0;
 
     boolean deleteCrate = false;
     boolean useVirtualCrate = false;
@@ -351,5 +353,15 @@ public class PlayerManager
     public void setLastClickedCrateTime(long lastClickedCrateTime)
     {
         this.lastClickedCrateTime = lastClickedCrateTime;
+    }
+
+    public long getNextPageInventoryCloseGrace()
+    {
+        return nextPageInventoryCloseGrace;
+    }
+
+    public void setNextPageInventoryCloseGrace(long nextPageInventoryCloseGrace)
+    {
+        this.nextPageInventoryCloseGrace = nextPageInventoryCloseGrace;
     }
 }

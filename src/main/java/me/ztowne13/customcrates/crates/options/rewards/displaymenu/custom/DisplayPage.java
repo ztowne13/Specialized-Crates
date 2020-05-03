@@ -8,8 +8,10 @@ import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,7 +153,7 @@ public class DisplayPage
         return buildInventoryBuilder(player, forceMaxSlots, "", null, true);
     }
 
-    public InventoryBuilder buildInventoryBuilder(Player player, boolean forceMaxSlots, String invNameOverride, InventoryBuilder builder, boolean open)
+    public InventoryBuilder buildInventoryBuilder(final Player player, boolean forceMaxSlots, String invNameOverride, InventoryBuilder builder, boolean open)
     {
         InventoryBuilder ib;
 
@@ -189,11 +191,21 @@ public class DisplayPage
 
         if(builder == null && open)
         {
-            ib.open();
+            final PlayerManager pm = PlayerManager.get(customRewardDisplayer.getCrates().getCc(), player);
+            pm.setNextPageInventoryCloseGrace(pm.getCc().getTotalTicks() + 2);
 
-            PlayerManager pm = PlayerManager.get(customRewardDisplayer.getCrates().getCc(), player);
-            pm.setLastPage(this);
-            pm.setInRewardMenu(true);
+            final Inventory inv = ib.getInv();
+            final DisplayPage thisPage = this;
+            Bukkit.getScheduler().runTaskLater(pm.getCc(), new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    player.openInventory(inv);
+                    pm.setLastPage(thisPage);
+                    pm.setInRewardMenu(true);
+                }
+            }, 1);
         }
 
         return ib;

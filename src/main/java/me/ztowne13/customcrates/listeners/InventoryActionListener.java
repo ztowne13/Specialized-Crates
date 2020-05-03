@@ -20,6 +20,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 
 public class InventoryActionListener implements Listener
 {
@@ -70,7 +71,7 @@ public class InventoryActionListener implements Listener
     public void onInventoryClick(InventoryClickEvent e)
     {
         Player p = (Player) e.getWhoClicked();
-        PlayerManager pm = PlayerManager.get(cc, p);
+         PlayerManager pm = PlayerManager.get(cc, p);
 
         int slot = e.getSlot();
 
@@ -193,7 +194,7 @@ public class InventoryActionListener implements Listener
         final Player p = (Player) e.getPlayer();
         final PlayerManager pm = PlayerManager.get(cc, p);
 
-        pm.setInRewardMenu(false);
+//        pm.setInRewardMenu(false);
         pm.setLastPage(null);
 
         if (pm.isInOpenMenu() && !pm.getOpenMenu().isInInputMenu())
@@ -257,20 +258,33 @@ public class InventoryActionListener implements Listener
             }
         }
 
-        /*if (pm.isWaitingForClose())
+        if(pm.isInRewardMenu())
         {
-            pm.closeCrate();
-            for (Reward r : pm.getWaitingForClose())
+            if(pm.getNextPageInventoryCloseGrace() <= cc.getTotalTicks())
             {
-                r.runCommands(p);
+                pm.setInRewardMenu(false);
+                final Inventory inv = e.getInventory();
+                Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        if(inv.getType().equals(InventoryType.CRAFTING))
+                        {
+                            return;
+                        }
+
+                        p.openInventory(inv);
+                        p.closeInventory();
+                    }
+                }, 1);
             }
-            pm.setWaitingForClose(null);
-        }*/
+        }
 
 
         if (pm.isInCrate() || pm.isInRewardMenu())
         {
-            if (pm.getOpenCrate().isMultiCrate())
+            if (pm.getOpenCrate() != null && pm.getOpenCrate().isMultiCrate())
             {
                 pm.closeCrate();
             }

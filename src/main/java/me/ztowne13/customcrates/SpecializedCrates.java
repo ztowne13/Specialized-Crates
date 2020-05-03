@@ -54,6 +54,7 @@ public class SpecializedCrates extends JavaPlugin
     DebugUtils du = null;
 
     int tick = 0;
+    int totalTicks = 0;
     boolean allowTick = true;
     boolean onlyUseBuildInHolograms = true;
     boolean hasAttemptedReload = false;
@@ -345,6 +346,7 @@ public class SpecializedCrates extends JavaPlugin
 
             getAlreadyUpdated().clear();
 
+            setTotalTicks(getTotalTicks() + 1);
             setTick(getTick() + 1);
 
             if (getTick() == 10)
@@ -582,5 +584,15 @@ public class SpecializedCrates extends JavaPlugin
     public void setParticlesEnabled(boolean particlesEnabled)
     {
         this.particlesEnabled = particlesEnabled;
+    }
+
+    public int getTotalTicks()
+    {
+        return totalTicks;
+    }
+
+    public void setTotalTicks(int totalTicks)
+    {
+        this.totalTicks = totalTicks;
     }
 }
