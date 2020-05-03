@@ -14,7 +14,7 @@ public class ListHistory extends SubCommand
 {
     public ListHistory()
     {
-        super("listhistory", 3, "Usage: /SCrates listHistory (Player) (Amount of shown entries)");
+        super("listhistory", 3, "Usage: /SCrates listHistory (Player) (Amount of shown entries)", new String[]{"lhistory", "history"});
     }
 
     @Override

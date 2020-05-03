@@ -19,7 +19,7 @@ public class Edit extends SubCommand
 {
     public Edit()
     {
-        super("edit", 1, "");
+        super("edit", 1, "", new String[]{"e"});
     }
 
     @Override

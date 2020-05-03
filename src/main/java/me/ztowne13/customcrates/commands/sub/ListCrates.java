@@ -11,7 +11,7 @@ public class ListCrates extends SubCommand
 {
     public ListCrates()
     {
-        super("listcrates", 1, "");
+        super("listcrates", 1, "", new String[]{"crates", "lcrates", "listcrate"});
     }
 
     @Override

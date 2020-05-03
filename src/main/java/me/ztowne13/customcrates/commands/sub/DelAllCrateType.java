@@ -11,7 +11,7 @@ public class DelAllCrateType extends SubCommand
 {
     public DelAllCrateType()
     {
-        super("delallcratetype", 2, "Usage: /SCrates DelAllCrateType (Crate)");
+        super("delallcratetype", 2, "Usage: /SCrates DelAllCrateType (Crate)", new String[]{"dellallcrate", "deleteallcrates", "deleteallcratetype"});
     }
 
     @Override

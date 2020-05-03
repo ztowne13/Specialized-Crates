@@ -10,7 +10,7 @@ public class Info extends SubCommand
 {
     public Info()
     {
-        super("info", 1, "");
+        super("info", 1, "", new String[]{"about", "inf", "details"});
     }
 
     @Override

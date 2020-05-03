@@ -7,7 +7,7 @@ public class ToggleParticles extends SubCommand
 {
     public ToggleParticles()
     {
-        super("toggleparticles", 0, "");
+        super("toggleparticles", 0, "", new String[]{"particles", "togleparticles", "toggleparticle", "tparticles"});
     }
 
     @Override

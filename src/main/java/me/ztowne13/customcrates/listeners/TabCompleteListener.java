@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.listeners;
 
 import me.ztowne13.customcrates.SpecializedCrates;
+import me.ztowne13.customcrates.commands.sub.SubCommand;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.utils.Utils;
@@ -60,6 +61,11 @@ public class TabCompleteListener implements TabCompleter
                 }
                 else
                 {
+                    if(SubCommand.getMappedAliases().containsKey(args[0]))
+                    {
+                        args[0] = SubCommand.getMappedAliases().get(args[0]);
+                    }
+
                     if (args[0].equalsIgnoreCase("givekey") || args[0].equalsIgnoreCase("givecrate") ||
                             args[0].equalsIgnoreCase("delallcratetype"))
                     {

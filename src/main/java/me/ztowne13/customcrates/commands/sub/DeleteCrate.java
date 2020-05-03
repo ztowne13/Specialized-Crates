@@ -13,7 +13,7 @@ public class DeleteCrate extends SubCommand
 {
     public DeleteCrate()
     {
-        super("deletecrate", 1, "");
+        super("deletecrate", 1, "", new  String[]{"delcrate"});
     }
 
     @Override

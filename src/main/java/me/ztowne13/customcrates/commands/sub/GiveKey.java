@@ -23,7 +23,8 @@ public class GiveKey extends SubCommand
 {
     public GiveKey()
     {
-        super("givekey", 2, "Usage: /SCrates GiveKey (Crate) (Player/ALL) [Amount] [-v : for a virtual crate]");
+        super("givekey", 2, "Usage: /SCrates GiveKey (Crate) (Player/ALL) [Amount] [-v : for a virtual crate]",
+                new String[]{"gkey", "gk", "key"});
     }
 
     @Override

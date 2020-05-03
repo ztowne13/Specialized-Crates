@@ -21,7 +21,8 @@ public class GiveCrate extends SubCommand
 {
     public GiveCrate()
     {
-        super("givecrate", 2, "Usage: /SCrates GiveCrate (Crate) (Player/ALL) [Amount] [-v : for a virtual crate]");
+        super("givecrate", 2, "Usage: /SCrates GiveCrate (Crate) (Player/ALL) [Amount] [-v : for a virtual crate]",
+                new String[]{"gcrate", "gc", "crategive", "crate"});
     }
 
     @Override
@@ -62,9 +63,9 @@ public class GiveCrate extends SubCommand
 
             if (args[2].equalsIgnoreCase("ALL"))
             {
-                if(isVirtual)
+                if (isVirtual)
                 {
-                    for(Player p : Bukkit.getOnlinePlayers())
+                    for (Player p : Bukkit.getOnlinePlayers())
                     {
                         PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
                         pdm.setVirtualCrateCrates(crate, pdm.getVCCrateData(crate).getCrates() + amount);
@@ -113,7 +114,7 @@ public class GiveCrate extends SubCommand
 
                     dataHandler.addQueuedGiveCommand(queuedGiveCommand);
                 }
-                catch(Exception exc)
+                catch (Exception exc)
                 {
                     exc.printStackTrace();
                     cmds.msgError("FAILED to add the give command! The player and/or UUID do not exist.");
