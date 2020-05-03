@@ -120,7 +120,7 @@ public class ChatUtils
         ArrayList<String> newList = new ArrayList<String>();
         for (Object s : list)
         {
-            newList.add(fromChatColor(s.toString()));
+            newList.add(ChatColor.stripColor(s.toString()));
         }
         return newList;
     }

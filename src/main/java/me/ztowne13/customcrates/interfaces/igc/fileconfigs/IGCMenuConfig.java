@@ -16,7 +16,6 @@ import me.ztowne13.customcrates.utils.Utils;
 import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -81,13 +80,17 @@ public class IGCMenuConfig extends IGCMenu
                 i += 2;
             }
 
+            SettingsValues settingsValue = SettingsValues.getByPath(sv);
 
             if (map.get(sv) instanceof Boolean)
             {
-                ItemBuilder newBuilder =
-                        ((boolean) map.get(sv) ? green : red).setName("&a" + sv).setLore("&e&oCurrent value: " + map.get(sv))
-                                .addLore("");
-                for (String lore : SettingsValues.getByPath(sv).getDescriptor())
+                ItemBuilder newBuilder = new ItemBuilder(((boolean) map.get(sv) ? green : red));
+                //.setName("&a" + sv).setLore("&e&oCurrent value: " + map.get(sv)).addLore("");
+                newBuilder.setDisplayName("&a" + settingsValue.getEasyName());
+                newBuilder.addLore("&e" + settingsValue.getPath()).addLore("");
+                newBuilder.addLore("&f&oCurrent value: &f" + map.get(sv));
+                newBuilder.addLore("");
+                for (String lore : settingsValue.getDescriptor())
                 {
                     newBuilder.addLore("&7" + lore);
                 }
@@ -99,18 +102,19 @@ public class IGCMenuConfig extends IGCMenu
                 boolean isCollection = map.get(sv) instanceof Collection;
 
                 ItemBuilder newBuilder =
-                        new ItemBuilder(!isCollection ? DynamicMaterial.ORANGE_WOOL : DynamicMaterial.LIGHT_GRAY_WOOL, 1)
-                                .setName("&a" + sv);
+                        new ItemBuilder(!isCollection ? DynamicMaterial.ORANGE_WOOL : DynamicMaterial.LIGHT_GRAY_WOOL, 1);
+                newBuilder.setDisplayName("&a" + settingsValue.getEasyName());
+                newBuilder.addLore("&e" + settingsValue.getPath()).addLore("");
                 if (isCollection)
                 {
-                    newBuilder.setLore("&e&oCurrent value: ");
+                    newBuilder.addLore("&f&oCurrent value: &f");
                     List<String> objects = (List<String>) map.get(sv);
                     for (String obj : objects)
                         newBuilder.addLore(obj);
                 }
                 else
                 {
-                    newBuilder.setLore("&e&oCurrent value: " + map.get(sv));
+                    newBuilder.addLore("&f&oCurrent value: &f" + map.get(sv));
                 }
 
                 newBuilder.addLore("");
@@ -133,40 +137,38 @@ public class IGCMenuConfig extends IGCMenu
     public void manageClick(int slot)
     {
         Inventory inv = getIb().getInv();
+        ItemBuilder item = new ItemBuilder(inv.getItem(slot));
         if (slotsWithBoolean.contains(slot))
         {
-            ItemBuilder newBuilder = new ItemBuilder(inv.getItem(slot));
-            SettingsValues sv = SettingsValues.getByPath(newBuilder.getName(true));
+            SettingsValues sv = SettingsValues.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(0));
 
             if (VersionUtils.Version.v1_12.isServerVersionOrEarlier())
             {
-                newBuilder.getStack().setDurability((byte) (newBuilder.getStack().getDurability() == 5 ? 14 : 5));
+                item.getStack().setDurability((byte) (item.getStack().getDurability() == 5 ? 14 : 5));
             }
             else
             {
-                if (DynamicMaterial.RED_WOOL.isSameMaterial(newBuilder.getStack()))
-                    newBuilder.getStack().setType(DynamicMaterial.LIME_WOOL.parseMaterial());
+                if (DynamicMaterial.RED_WOOL.isSameMaterial(item.getStack()))
+                    item.getStack().setType(DynamicMaterial.LIME_WOOL.parseMaterial());
                 else
-                    newBuilder.getStack().setType(DynamicMaterial.RED_WOOL.parseMaterial());
+                    item.getStack().setType(DynamicMaterial.RED_WOOL.parseMaterial());
             }
 
-            getIb().setItem(slot, newBuilder);
+            getIb().setItem(slot, item);
 
-            getCc().getSettings().getConfigValues().put(sv.getPath(), newBuilder.getStack().getDurability() == 5 ||
-                    DynamicMaterial.LIME_WOOL.isSameMaterial(newBuilder.getStack()));
+            getCc().getSettings().getConfigValues().put(sv.getPath(), item.getStack().getDurability() == 5 ||
+                    DynamicMaterial.LIME_WOOL.isSameMaterial(item.getStack()));
             open();
         }
         else if (DynamicMaterial.ORANGE_WOOL.isSameMaterial(inv.getItem(slot)))
         {
-            ItemStack item = inv.getItem(slot);
-            SettingsValues sv = SettingsValues.getByPath(new ItemBuilder(item).getName(true));
+            SettingsValues sv = SettingsValues.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(0));
 
             new InputMenu(getCc(), getP(), sv.getPath(), sv.getValue(getCc()).toString(), sv.getObj(), this, !sv.isWithColor());
         }
         else if (DynamicMaterial.LIGHT_GRAY_WOOL.isSameMaterial(inv.getItem(slot)))
         {
-            ItemStack item = inv.getItem(slot);
-            SettingsValues sv = SettingsValues.getByPath(new ItemBuilder(item).getName(true));
+            SettingsValues sv = SettingsValues.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(0));
             new IGCListEditor(getCc(), getP(), this, "inv-reward-item-lore", "Line", (List<String>) sv.getValue(getCc()),
                     DynamicMaterial.BOOK, 1).open();
         }

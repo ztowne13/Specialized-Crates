@@ -58,6 +58,10 @@ virtual-key-instead-of-drop: false
 #   support compatibility with sell-shop plugins that need the key to be interactable.
 key-allow-left-click-interaction: false
 
+# When a player left clicks with a key in hand, it opens up the reward preview menu
+#   for that specific crate.
+left-click-key-preview: false
+
 #------------------------------------#
 #           Crate Settings           #
 #------------------------------------#
