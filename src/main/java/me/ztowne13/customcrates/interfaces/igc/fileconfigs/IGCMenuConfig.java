@@ -140,7 +140,7 @@ public class IGCMenuConfig extends IGCMenu
         ItemBuilder item = new ItemBuilder(inv.getItem(slot));
         if (slotsWithBoolean.contains(slot))
         {
-            SettingsValues sv = SettingsValues.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(0));
+            SettingsValues sv = SettingsValues.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(1));
 
             if (VersionUtils.Version.v1_12.isServerVersionOrEarlier())
             {
@@ -162,13 +162,13 @@ public class IGCMenuConfig extends IGCMenu
         }
         else if (DynamicMaterial.ORANGE_WOOL.isSameMaterial(inv.getItem(slot)))
         {
-            SettingsValues sv = SettingsValues.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(0));
+            SettingsValues sv = SettingsValues.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(1));
 
             new InputMenu(getCc(), getP(), sv.getPath(), sv.getValue(getCc()).toString(), sv.getObj(), this, !sv.isWithColor());
         }
         else if (DynamicMaterial.LIGHT_GRAY_WOOL.isSameMaterial(inv.getItem(slot)))
         {
-            SettingsValues sv = SettingsValues.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(0));
+            SettingsValues sv = SettingsValues.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(1));
             new IGCListEditor(getCc(), getP(), this, "inv-reward-item-lore", "Line", (List<String>) sv.getValue(getCc()),
                     DynamicMaterial.BOOK, 1).open();
         }

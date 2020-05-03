@@ -6,6 +6,7 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.crateaction.AttemptKeyUseAction;
 import me.ztowne13.customcrates.crates.crateaction.CrateAction;
 import me.ztowne13.customcrates.crates.crateaction.LeftClickAction;
+import me.ztowne13.customcrates.utils.CrateUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -69,5 +70,20 @@ public class InteractListener implements Listener
         }
     }
 
-
+    @EventHandler
+    public void onKeyPreviewMenu(PlayerInteractEvent event)
+    {
+        Action action = event.getAction();
+        if(action.equals(Action.LEFT_CLICK_BLOCK) || action.equals(Action.LEFT_CLICK_AIR))
+        {
+            if((Boolean)SettingsValues.LEFT_CLICK_KEY_PREVIEW.getValue(cc))
+            {
+                Crate crate = CrateUtils.searchByKey(event.getItem());
+                if(crate != null)
+                {
+                    crate.getSettings().getDisplayer().openFor(event.getPlayer());
+                }
+            }
+        }
+    }
 }
