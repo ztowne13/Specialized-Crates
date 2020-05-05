@@ -10,6 +10,7 @@ import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
 import me.ztowne13.customcrates.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -107,6 +108,7 @@ public class AttemptCrateUseAction extends CrateAction
                 }
                 else
                 {
+                    Bukkit.broadcastMessage("Hewll");
                     Messages.DENIED_PLACE_LOCATION.msgSpecified(cc, player);
                     return true;
                 }

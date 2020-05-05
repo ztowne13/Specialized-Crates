@@ -47,7 +47,8 @@ public class InteractListener implements Listener
                 action = new LeftClickAction(cc, p, e.getClickedBlock().getLocation());
             }
 
-            if (action.run())
+            boolean result = action.run();
+            if (result)
             {
                 cc.getDu().log("onInteract - Cancelling", getClass());
                 e.setCancelled(true);
