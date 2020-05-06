@@ -231,7 +231,9 @@ public abstract class CrateAnimation
             if (playMessage)
             {
                 if (failOpen)
-                    Messages.FAIL_OPEN.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
+                    Messages.FAIL_OPEN.msgSpecified(cc, p, new String[]{"%crate%", "%key%"},
+                            new String[]{crate.getDisplayName(),
+                                    crate.getSettings().getKeyItemHandler().getItem().getDisplayName(false)});
                 else
                     Messages.ALREADY_OPENING_CRATE.msgSpecified(cc, p);
             }

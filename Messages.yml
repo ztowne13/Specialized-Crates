@@ -1,7 +1,7 @@
 # Set a message to 'none' to have it display nothing
 
 no-permissions: '&4&lERROR! &cYou do not have the correct permission: %permission%'
-fail-open: '&4&lERROR! &cYou do not have the proper key for the %crate%!'
+fail-open: '&4&lERROR! &cYou need the %key% &cto open the %crate% crate!'
 already-opening-crate: '&4&lERROR! &cYou are already opening a crate, you must wait until it is done!'
 inventory-too-full: '&4&lERROR! &cYour inventory is too full.'
 placed-crate: '&2&lSUCCESS! &aYou have placed the %crate% crate!'
