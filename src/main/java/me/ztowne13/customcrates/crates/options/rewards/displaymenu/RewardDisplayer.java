@@ -77,7 +77,7 @@ public abstract class RewardDisplayer
 
     public void saveToFile()
     {
-        getFileHandler().get().set("reward-display.type", getCrates().getSettings().getCrateDisplayType().name());
+        getFileHandler().get().set("reward-display.type", getCrates().getSettings().getRewardDisplayType().name());
         getFileHandler().get().set("reward-display.name", name);
         getFileHandler().get().set("reward-display.require-permission", requirePermForPreview);
     }
