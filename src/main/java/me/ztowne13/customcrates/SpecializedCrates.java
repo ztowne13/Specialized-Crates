@@ -207,8 +207,16 @@ public class SpecializedCrates extends JavaPlugin
         getCommand("scrates").setExecutor(null);
         getCommand("scrates").setTabCompleter(null);
         getCommand("keys").setExecutor(null);
-        getCommand("rewards").setExecutor(null);
-        getCommand("rewards").setTabCompleter(null);
+
+        try
+        {
+            getCommand("rewards").setExecutor(null);
+            getCommand("rewards").setTabCompleter(null);
+        }
+        catch(Exception exc)
+        {
+
+        }
 
         setTick(0);
 
