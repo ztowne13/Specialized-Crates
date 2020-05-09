@@ -24,6 +24,7 @@ public class CLuckyChest extends CSetting
 
     double chance, outOfChance;
     boolean isBLWL;
+    boolean requirePermission = true;
     ArrayList<Material> whiteList = new ArrayList<>();
     ArrayList<World> worlds = new ArrayList<World>();
 
@@ -81,6 +82,23 @@ public class CLuckyChest extends CSetting
                 StatusLoggerEvent.LUCKYCHEST_BLWL_NONEXISTENT.log(getCrate());
             }
 
+            if (csb.hasV("lucky-chest.require-permission"))
+            {
+                try
+                {
+                    requirePermission = fc.getBoolean("lucky-chest.require-permission");
+                }
+                catch (Exception exc)
+                {
+                    StatusLoggerEvent.LUCKYCHEST_REQUIRE_PERMISSION_INVALID.log(getCrate());
+                }
+            }
+            else
+            {
+                requirePermission = true;
+                StatusLoggerEvent.LUCKYCHEST_REQUIRE_PERMISSION_NONEXISTENT.log(getCrate());
+            }
+
             if (csb.hasV("lucky-chest.worlds"))
             {
                 worldsRaw = fc.getStringList("lucky-chest.worlds");
@@ -136,6 +154,7 @@ public class CLuckyChest extends CSetting
     public void saveToFile()
     {
         getFu().get().set("lucky-chest.chance", ((int) chance) + "/" + ((int) outOfChance));
+        getFu().get().set("lucky-chest.require-permission", isRequirePermission());
         if (!whiteList.isEmpty())
         {
             getFu().get().set("lucky-chest.is-block-list-whitelist", isBLWL);
@@ -254,6 +273,16 @@ public class CLuckyChest extends CSetting
     public void setWorldsRaw(List<String> worldsRaw)
     {
         this.worldsRaw = worldsRaw;
+    }
+
+    public boolean isRequirePermission()
+    {
+        return requirePermission;
+    }
+
+    public void setRequirePermission(boolean requirePermission)
+    {
+        this.requirePermission = requirePermission;
     }
 }
 
