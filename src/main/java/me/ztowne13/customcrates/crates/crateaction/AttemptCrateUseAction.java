@@ -19,15 +19,18 @@ import org.bukkit.entity.Player;
 
 public class AttemptCrateUseAction extends CrateAction
 {
-    public AttemptCrateUseAction(SpecializedCrates cc, Player player, Location location)
+    boolean isBlockPlace;
+
+    public AttemptCrateUseAction(SpecializedCrates cc, Player player, Location location, boolean isBlockPlace)
     {
         super(cc, player, location);
+        this.isBlockPlace = isBlockPlace;
     }
 
     @Override
     public boolean run()
     {
-        PlayerManager pm = PlayerManager.get(cc, player);
+        final PlayerManager pm = PlayerManager.get(cc, player);
         final PlayerDataManager pdm = pm.getPdm();
 
         // Has an item in hand
@@ -59,7 +62,7 @@ public class AttemptCrateUseAction extends CrateAction
                         // The crate is a static crate
                         if (ot.equals(ObtainType.STATIC))
                         {
-                            if (player.hasPermission("customcrates.place.bypass"))
+                            if (player.hasPermission("customcrates.place.bypass") || player.hasPermission("customcrates.admin"))
                             {
                                 Messages.BYPASS_BREAK_RESTRICTIONS.msgSpecified(cc, player);
                                 b = false;
@@ -67,6 +70,7 @@ public class AttemptCrateUseAction extends CrateAction
                             else
                             {
                                 Messages.DENIED_USE_CRATE.msgSpecified(cc, player);
+                                return true;
                             }
                         }
 
@@ -77,7 +81,20 @@ public class AttemptCrateUseAction extends CrateAction
                             if (!player.getGameMode().equals(GameMode.CREATIVE) || (Boolean) cc.getSettings().getConfigValues()
                                     .get("place-creative"))
                             {
-                                createCrateAt(crates, location);
+                                final PlacedCrate placedCrate =
+                                        createCrateAt(crates, location);
+                                // For DYNAMIC crates that don't require a key, open immediately.
+                                if(crates.getSettings().getObtainType().equals(ObtainType.DYNAMIC) && !crates.getSettings().isRequireKey())
+                                {
+                                    Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+                                    {
+                                        @Override
+                                        public void run()
+                                        {
+                                            useCrate(pm, placedCrate, false);
+                                        }
+                                    }, 1);
+                                }
                             }
                             else
                             {
@@ -108,7 +125,6 @@ public class AttemptCrateUseAction extends CrateAction
                 }
                 else
                 {
-                    Bukkit.broadcastMessage("Hewll");
                     Messages.DENIED_PLACE_LOCATION.msgSpecified(cc, player);
                     return true;
                 }

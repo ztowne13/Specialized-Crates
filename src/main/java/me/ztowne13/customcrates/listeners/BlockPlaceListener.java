@@ -36,7 +36,7 @@ public class BlockPlaceListener implements Listener
             }
             else
             {
-                if(new AttemptCrateUseAction(cc, p, l).run())
+                if(new AttemptCrateUseAction(cc, p, l, true).run())
                 {
                     e.setCancelled(true);
                 }

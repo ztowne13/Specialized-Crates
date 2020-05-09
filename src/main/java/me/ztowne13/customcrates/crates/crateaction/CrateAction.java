@@ -181,11 +181,12 @@ public abstract class CrateAction
         return b;
     }
 
-
-    public void createCrateAt(Crate crates, Location l)
+    public PlacedCrate createCrateAt(Crate crates, Location l)
     {
         PlacedCrate cm = PlacedCrate.get(cc, l);
         cm.setup(crates, true);
+
+        return cm;
     }
 
     public static boolean isInventoryTooEmpty(SpecializedCrates cc, Player p)

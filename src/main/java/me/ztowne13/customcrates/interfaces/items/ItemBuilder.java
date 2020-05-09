@@ -258,7 +258,7 @@ public class ItemBuilder implements EditableItem
 
     public boolean hasDisplayName()
     {
-        return getDisplayName(false) != null;
+        return getDisplayName(false) != null && !getDisplayName(false).equalsIgnoreCase("");
     }
 
     public String getName(boolean strippedOfColor)
