@@ -79,7 +79,7 @@ public abstract class CrateAction
                                     Reward reward = cs.getRewards().getRandomReward();
                                     ArrayList<Reward> rewards = new ArrayList<>();
                                     rewards.add(reward);
-                                    reward.runCommands(player);
+                                    reward.giveRewardToPlayer(player);
 
                                     cs.getKeyItemHandler().takeKeyFromPlayer(player, false);
                                     new HistoryEvent(Utils.currentTimeParsed(), crates, rewards, true)

@@ -43,6 +43,7 @@ public class PlayerManager
     // This is to allow the anti-dupe inventory reopen/close feature but prevent it when opening the next page of an inv
     long nextPageInventoryCloseGrace = 0;
 
+
     boolean deleteCrate = false;
     boolean useVirtualCrate = false;
     boolean confirming = false;

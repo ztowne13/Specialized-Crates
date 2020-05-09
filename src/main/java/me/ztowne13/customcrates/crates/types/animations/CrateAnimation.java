@@ -150,7 +150,7 @@ public abstract class CrateAnimation
 
         for (Reward r : rewards)
         {
-            r.runCommands(p);
+            r.giveRewardToPlayer(p);
         }
 
         pm.closeCrate();

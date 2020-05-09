@@ -400,7 +400,7 @@ public class CMultiCrateInventory extends CSetting
         return "TOMANYSYMBOLS";
     }
 
-    public void checkClick(PlayerManager pm, int slot, ClickType clickType)
+    public void checkClick(final PlayerManager pm, int slot, ClickType clickType)
     {
         Player p = pm.getP();
         Crate crate = pm.getOpenCrate();
@@ -419,6 +419,16 @@ public class CMultiCrateInventory extends CSetting
                     ClickType.LEFT : ClickType.RIGHT) && (Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(cc))
             {
                 clickedCrate.getSettings().getDisplayer().openFor(p);
+                // Set last open crate back to multicrate so that closing the reward previewer reopens the multicrate
+                final Crate cachedMulticrate = this.crates;
+                Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        pm.openCrate(cachedMulticrate);
+                    }
+                }, 2);
             }
             else if (!((Boolean)SettingsValues.REQUIRE_VIRTUAL_CRATE_AND_KEY.getValue(cc))
                     || pm.getPdm().getVCCrateData(clickedCrate).getCrates() > 0)
@@ -482,6 +492,17 @@ public class CMultiCrateInventory extends CSetting
                 Messages.INSUFFICIENT_VIRTUAL_CRATES.msgSpecified(pm.getCc(), p);
             }
         }
+    }
+
+    public void openFor(Player player, PlacedCrate cm)
+    {
+        PlayerManager pm = PlayerManager.get(cc, player);
+        crates.getSettings().getMultiCrateSettings()
+                .getInventory(player, crates.getSettings().getCrateInventoryName() == null ? crates.getName() :
+                        crates.getSettings().getCrateInventoryName(), true).open();
+        pm.setLastOpenCrate(cm.getL());
+        pm.setLastOpenedPlacedCrate(cm);
+        pm.openCrate(crates);
     }
 
     public void invCheck(Player p, PlayerManager pm)

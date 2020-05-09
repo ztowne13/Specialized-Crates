@@ -79,7 +79,7 @@ public class Reward implements Comparable<Reward>
         chance = -1;
     }
 
-    public void runCommands(Player p)
+    public void giveRewardToPlayer(Player p)
     {
         if(isGiveDisplayItem())
         {
