@@ -42,8 +42,8 @@ public class Reward implements Comparable<Reward>
     int totalUses;
     boolean needsMoreConfig;
 
-    String fallbackRewardName;
-    String fallbackPermission;
+    String fallbackRewardName = "";
+    String fallbackPermission = "";
 
     boolean toLog;
 
