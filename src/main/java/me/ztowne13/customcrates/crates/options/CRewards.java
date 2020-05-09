@@ -19,7 +19,6 @@ public class CRewards extends CSetting
     public static HashMap<String, Reward> allRewards = new HashMap<String, Reward>();
 
     Reward[] crateRewards;
-    Reward fallbackReward;
 
     public CRewards(Crate crates)
     {

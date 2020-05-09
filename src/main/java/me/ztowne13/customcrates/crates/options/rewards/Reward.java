@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.crates.options.rewards;
 
+import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.CRewards;
@@ -41,6 +42,9 @@ public class Reward implements Comparable<Reward>
     int totalUses;
     boolean needsMoreConfig;
 
+    String fallbackRewardName;
+    String fallbackPermission;
+
     boolean toLog;
 
     public Reward(SpecializedCrates cc, String rewardName)
@@ -68,7 +72,7 @@ public class Reward implements Comparable<Reward>
     @Override
     public int compareTo(Reward otherReward)
     {
-        return (int) (getChance()*1000 - otherReward.getChance()*1000);
+        return (int) (getChance() * 1000 - otherReward.getChance() * 1000);
     }
 
     public void init()
@@ -81,7 +85,38 @@ public class Reward implements Comparable<Reward>
 
     public void giveRewardToPlayer(Player p)
     {
-        if(isGiveDisplayItem())
+        // Fallback reward
+        if (!fallbackRewardName.equalsIgnoreCase("") && !fallbackPermission.equalsIgnoreCase("") &&
+                p.hasPermission(fallbackPermission))
+        {
+            if (!p.hasPermission("customcrates.admin"))
+            {
+                Reward fallbackReward = CRewards.getAllRewards().get(fallbackRewardName);
+                if (fallbackReward == null)
+                {
+                    ChatUtils.msgError(p, "The reward " + rewardName + " has the fallback reward " + fallbackRewardName +
+                            ", but that reward does not exist. This message is not configurable. If you would like there to be no reward" +
+                            " as a fallback reward, please set the fallback reward to a new reward that has no commands and does not give" +
+                            " the player any items. A reward must have a fallback reward IF it has a fallback permission.");
+                }
+                else
+                {
+                    fallbackReward.giveRewardToPlayer(p);
+                    Messages.GIVEN_FALLBACK_REWARD.msgSpecified(cc, p, new String[]{"%reward%", "%fallbackreward%"},
+                            new String[]{getDisplayBuilder().getDisplayName(true),
+                                    fallbackReward.getDisplayBuilder().getDisplayName(true)});
+                }
+
+                return;
+            }
+            else
+            {
+                ChatUtils.msgInfo(p, "Normally, you would have won the fallback reward " + rewardName +
+                        " instead, but since you have the customcrates.admin permission, you've bypassed that.");
+            }
+        }
+
+        if (isGiveDisplayItem())
         {
             ItemBuilder stack = new ItemBuilder(displayBuilder);
 
@@ -94,9 +129,11 @@ public class Reward implements Comparable<Reward>
                     stack.setIm(im);
                 }
             }
-            catch(Exception exc) { }
+            catch (Exception exc)
+            {
+            }
 
-            if(!isGiveDisplayItemName())
+            if (!isGiveDisplayItemName())
             {
                 stack.removeDisplayName();
             }
@@ -198,6 +235,13 @@ public class Reward implements Comparable<Reward>
         fc.set(getPath("give-display-item.value"), giveDisplayItem);
         fc.set(getPath("give-display-item.with-lore"), giveDisplayItemLore);
         fc.set(getPath("give-display-item.with-name"), giveDisplayItemName);
+        fc.set(getPath("fallback-reward.reward-name"), fallbackRewardName);
+        fc.set(getPath("fallback-reward.permission"), fallbackPermission);
+
+        if (fallbackPermission.equalsIgnoreCase(""))
+        {
+            fc.set(getPath("fallback-reward"), null);
+        }
 
         saveBuilder.saveItem(getCc().getRewardsFile(), getPath("display-item"), false);
 
@@ -299,7 +343,7 @@ public class Reward implements Comparable<Reward>
         boolean success = true;
         needsMoreConfig = false;
 
-        if(fc.contains(getPath("item")))
+        if (fc.contains(getPath("item")))
         {
             ChatUtils.log("Converting " + getRewardName() + " to new reward format.");
             RewardConverter rewardConverter = new RewardConverter(this);
@@ -311,8 +355,9 @@ public class Reward implements Comparable<Reward>
         }
         else
         {
-            if(toLog)
-                saveBuilder.loadItem(getCc().getRewardsFile(), getRewardName() + ".display-item", getCr().getCrate().getSettings().getStatusLogger(),
+            if (toLog)
+                saveBuilder.loadItem(getCc().getRewardsFile(), getRewardName() + ".display-item",
+                        getCr().getCrate().getSettings().getStatusLogger(),
                         StatusLoggerEvent.REWARD_ITEM_FAILURE, StatusLoggerEvent.REWARD_ENCHANT_INVALID,
                         StatusLoggerEvent.REWARD_POTION_INVALID, StatusLoggerEvent.REWARD_GLOW_FAILURE,
                         StatusLoggerEvent.REWARD_AMOUNT_INVALID, StatusLoggerEvent.REWARD_FLAG_FAILURE);
@@ -320,20 +365,20 @@ public class Reward implements Comparable<Reward>
                 saveBuilder.loadItem(getCc().getRewardsFile(), getRewardName() + ".display-item");
         }
 
-        if(!loadNonItemValsFromConfig())
+        if (!loadNonItemValsFromConfig())
             success = false;
 
         if (getRarity() == null)
             rarity = "default";
 
         displayBuilder = new ItemBuilder(saveBuilder);
-        if(displayBuilder.hasDisplayName())
+        if (displayBuilder.hasDisplayName())
         {
             displayBuilder.setDisplayName(applyVariablesTo(saveBuilder.getDisplayName(true)));
         }
 
         displayBuilder.clearLore();
-        for(String loreLine : saveBuilder.getLore())
+        for (String loreLine : saveBuilder.getLore())
             displayBuilder.addLore(applyVariablesTo(loreLine));
 
         return success;
@@ -360,7 +405,7 @@ public class Reward implements Comparable<Reward>
         {
             setGiveDisplayItem(getFc().getBoolean(getPath("give-display-item.value")));
         }
-        catch(Exception exc)
+        catch (Exception exc)
         {
             setGiveDisplayItem(false);
         }
@@ -369,17 +414,17 @@ public class Reward implements Comparable<Reward>
         {
             setGiveDisplayItemLore(getFc().getBoolean(getPath("give-display-item.with-lore")));
         }
-        catch(Exception exc)
+        catch (Exception exc)
         {
             setGiveDisplayItemLore(true);
         }
 
         try
         {
-            if(getFc().contains(getPath("give-display-item.with-name")))
+            if (getFc().contains(getPath("give-display-item.with-name")))
                 setGiveDisplayItemName(getFc().getBoolean(getPath("give-display-item.with-name")));
         }
-        catch(Exception exc)
+        catch (Exception exc)
         {
             setGiveDisplayItemName(true);
         }
@@ -395,6 +440,24 @@ public class Reward implements Comparable<Reward>
                 StatusLoggerEvent.REWARD_COMMAND_INVALID.log(getCr().getCrate(), new String[]{this.toString()});
                 success = false;
             }
+        }
+
+        if (getFc().contains(getPath("fallback-reward.reward-name")))
+        {
+            fallbackRewardName = getFc().getString(getPath("fallback-reward.reward-name"));
+        }
+        else
+        {
+            fallbackRewardName = "";
+        }
+
+        if (getFc().contains(getPath("fallback-reward.permission")))
+        {
+            fallbackPermission = getFc().getString(getPath("fallback-reward.permission"));
+        }
+        else
+        {
+            fallbackPermission = "";
         }
 
         try
@@ -417,7 +480,7 @@ public class Reward implements Comparable<Reward>
         }
 
         String displayName = displayBuilder.getDisplayName(true);
-        if(displayName.equalsIgnoreCase(""))
+        if (displayName.equalsIgnoreCase(""))
         {
             displayBuilder.setDisplayName(null);
             return displayBuilder.getDisplayName(true);
@@ -427,7 +490,8 @@ public class Reward implements Comparable<Reward>
 
     public void checkIsNeedMoreConfig()
     {
-        needsMoreConfig = !(chance != -1 && /*saveBuilder.getDisplayName(false) != null &&*/ rarity != null && saveBuilder != null);
+        needsMoreConfig =
+                !(chance != -1 && /*saveBuilder.getDisplayName(false) != null &&*/ rarity != null && saveBuilder != null);
     }
 
     public boolean equals(Reward r)
@@ -594,5 +658,25 @@ public class Reward implements Comparable<Reward>
     {
         this.saveBuilder = new SaveableItemBuilder(setBuilder);
         this.displayBuilder = new ItemBuilder(setBuilder);
+    }
+
+    public String getFallbackRewardName()
+    {
+        return fallbackRewardName;
+    }
+
+    public void setFallbackRewardName(String fallbackRewardName)
+    {
+        this.fallbackRewardName = fallbackRewardName;
+    }
+
+    public String getFallbackPermission()
+    {
+        return fallbackPermission;
+    }
+
+    public void setFallbackPermission(String fallbackPermission)
+    {
+        this.fallbackPermission = fallbackPermission;
     }
 }
