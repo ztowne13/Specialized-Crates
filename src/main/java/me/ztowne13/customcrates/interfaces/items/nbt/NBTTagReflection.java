@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.interfaces.items.nbt;
 
 import me.ztowne13.customcrates.utils.ChatUtils;
+import me.ztowne13.customcrates.utils.ReflectionUtilities;
 import me.ztowne13.customcrates.utils.Utils;
 import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.inventory.ItemStack;
@@ -92,7 +93,22 @@ public class NBTTagReflection
 
         try
         {
-            if (value.startsWith("{") && value.endsWith("}"))
+            if (value.startsWith("[") && value.endsWith("]"))
+            {
+                try
+                {
+                    Class clazz = VersionUtils.getNmsClass("MojangsonParser");
+                    Object comp = clazz.getMethod("parse", String.class).invoke(clazz, "{" + key + ":" + value + "}");
+                    Object nbtBase = ReflectionUtilities.getMethod(comp.getClass(), "get", new Class[]{String.class}).invoke(comp, key);
+
+                    tagCompound.getClass().getMethod("set", String.class, VersionUtils.getNmsClass("NBTBase"))
+                            .invoke(tagCompound, key, nbtBase);
+                }
+                catch(Exception exc) {
+                    exc.printStackTrace();
+                }
+            }
+            else if (value.startsWith("{") && value.endsWith("}"))
             {
                 Class clazz = VersionUtils.getNmsClass("MojangsonParser");
                 Object newComp = clazz.getMethod("parse", String.class).invoke(clazz, value);
@@ -100,6 +116,7 @@ public class NBTTagReflection
                 tagCompound.getClass().getMethod("set", String.class, VersionUtils.getNmsClass("NBTBase"))
                         .invoke(tagCompound, key, newComp);
             }
+
             else if ((value.startsWith("'") && value.endsWith("'")) || (value.startsWith("\"") && value.endsWith("\"")))
             {
                 value = ChatUtils.stripQuotes(value);
