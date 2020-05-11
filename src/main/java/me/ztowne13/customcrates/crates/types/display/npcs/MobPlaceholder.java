@@ -30,7 +30,7 @@ public class MobPlaceholder extends DynamicCratePlaceholder
 
     public void place(final PlacedCrate cm)
     {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
+        Bukkit.getScheduler().runTaskLater(getCc(), new Runnable()
         {
             @Override
             public void run()
@@ -38,13 +38,30 @@ public class MobPlaceholder extends DynamicCratePlaceholder
                 LocationUtils.removeDubBlocks(cm.getL());
 
                 NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
-                NPC npc = npcRegistry.createNPC(ent.getEt(), "Specialized Crate - Crate");
+                NPC npc;
 
-                npc.addTrait(new IdentifierTrait());
+                if(NPCUtils.npcExists(cm))
+                {
+                    npc = NPCUtils.getNpcForCrate(cm);
+
+                    if(npc.getEntity().getType().equals(getEnt().getEt()))
+                    {
+                        getMobs().put(cm, npc);
+                        return;
+                    }
+                    else
+                    {
+                        npc.destroy();
+                    }
+                }
+
+                npc = npcRegistry.createNPC(ent.getEt(), "Specialized Crate - Crate");
+
+                //npc.addTrait(new IdentifierTrait());
 
                 NPCUtils.applyDefaultInfo(npc);
 
-                npc.spawn(LocationUtils.getLocationCentered(cm.getL()));
+                npc.spawn(LocationUtils.getLocationCentered(cm.getL()).add(0, -1, 0));
 
                 getMobs().put(cm, npc);
             }
@@ -64,7 +81,7 @@ public class MobPlaceholder extends DynamicCratePlaceholder
 
     public void setType(Object obj)
     {
-        setEnt(EntityTypes.valueOf(obj.toString()));
+        setEnt(EntityTypes.getEnum(obj.toString()));
     }
 
     public String getType()

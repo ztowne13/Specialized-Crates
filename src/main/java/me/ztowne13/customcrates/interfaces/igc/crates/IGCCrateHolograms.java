@@ -64,7 +64,8 @@ public class IGCCrateHolograms extends IGCMenuCrate
         rewardHoloYOffset
                 .addAutomaticLore("&f", 30, "This is the amount up or down from the crate the REWARD-hologram will appear.");
         rewardHoloYOffset.addLore("")
-                .addAutomaticLore("&e", 30, "&6&lNOTE: &eTHIS IS FOR THE REWARD HOLOGRAM, NOT THE NORMAL HOLOGRAM.");
+                .addAutomaticLore("&e", 30,
+                        "&6&lNOTE: &eTHIS IS FOR THE REWARD HOLOGRAM, NOT THE NORMAL/ANIMATED HOLOGRAM.");
         ib.setItem(20, rewardHoloYOffset);
 
         //Hologram Lines
@@ -76,8 +77,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
             hologramLines.addLore(line);
         }
         hologramLines.addLore("").addAutomaticLore("&f", 30,
-                "Edit the crate hologram. You DO NOT need to edit this value if using a hologram animation.").addLore("")
-                .addAutomaticLore("&e", 30, "Edit the hologram-offset value in the 'defaults' section.");
+                "Edit the crate hologram. You DO NOT need to edit this value if using a hologram animation.");
         ib.setItem(4, hologramLines);
 
         // Green block
@@ -98,8 +98,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
         animatedHolo.addAutomaticLore("&f", 30,
                 "Each frame will play, one after the other every (whatever speed you set) ticks.")
                 .addLore("").addAutomaticLore("&f", 30,
-                "If there are going to be a lot of frames, editing this in the config file may be quicker.").addLore("")
-                .addAutomaticLore("&e", 30, "Edit the hologram-offset value in the 'defaults' section.");
+                "If there are going to be a lot of frames, editing this in the config file may be quicker.");
         ib.setItem(6, animatedHolo);
 
         // Animated hologram type
@@ -124,6 +123,8 @@ public class IGCCrateHolograms extends IGCMenuCrate
         hologramOffset.addLore("&7Current value:").addLore("&7" + cs.getHologramOffset());
         hologramOffset.addLore("").addAutomaticLore("&f", 30,
                 "This is the amount up or down from the crate that the NORMAL hologram will appear.");
+        hologramOffset.addLore("").addAutomaticLore("&e", 30,
+                "This affects the normal AND animated hologram (whichever you're using), but NOT the reward hologram");
         ib.setItem(13, hologramOffset);
 
         ib.open();
@@ -141,7 +142,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
         {
             new InputMenu(getCc(), getP(), "reward-hologram", crates.getSettings().getHologram().getRewardHologram(),
                     "Type 'none' to remove the reward hologram. Use %reward% as a placeholder for the reward and " +
-                            "%player% as a placeholder for the player name.",
+                            "%player% as a placeholder for the player name or %nickname% for the player nickname.",
                     String.class,
                     this);
         }

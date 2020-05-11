@@ -5,19 +5,33 @@ import me.ztowne13.customcrates.commands.Commands;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.command.CommandSender;
 
+import java.util.HashMap;
+
 /**
  * Created by ztowne13 on 6/23/16.
  */
 public abstract class SubCommand
 {
+    static HashMap<String,String> mappedAliases = new HashMap<>();
+    String[] aliases;
     int minimumArgs;
     String commandTitle, usageMessage;
 
     public SubCommand(String commandTitle, int minimumArgs, String usageMessage)
     {
+        this(commandTitle, minimumArgs, usageMessage, new String[]{});
+    }
+
+    public SubCommand(String commandTitle, int minimumArgs, String usageMessage, String[] aliases)
+    {
         this.minimumArgs = minimumArgs;
         this.commandTitle = commandTitle;
         this.usageMessage = usageMessage;
+        this.aliases = aliases;
+        for(String alias : aliases)
+        {
+            mappedAliases.put(alias, commandTitle);
+        }
     }
 
     public abstract boolean run(SpecializedCrates cc, Commands cmds, String[] args);
@@ -35,6 +49,22 @@ public abstract class SubCommand
 
     public boolean isCommand(String s)
     {
-        return commandTitle.equalsIgnoreCase(s);
+        if(commandTitle.equalsIgnoreCase(s))
+        {
+            return true;
+        }
+        for(String alias : aliases)
+        {
+            if(alias.equalsIgnoreCase(s))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static HashMap<String, String> getMappedAliases()
+    {
+        return mappedAliases;
     }
 }

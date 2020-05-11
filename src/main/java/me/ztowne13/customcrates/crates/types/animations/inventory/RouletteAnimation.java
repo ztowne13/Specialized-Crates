@@ -11,7 +11,6 @@ import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,7 +22,7 @@ public class RouletteAnimation extends InventoryCrateAnimation
 {
     protected double finalTickLength, tickIncrease;
     protected int glassUpdateTicks = 2;
-    protected ArrayList<ItemStack> items;
+    protected ArrayList<ItemBuilder> items;
 
     public RouletteAnimation(Crate crate)
     {
@@ -119,7 +118,7 @@ public class RouletteAnimation extends InventoryCrateAnimation
     public ItemBuilder getFiller()
     {
         Random r = new Random();
-        return new ItemBuilder(getItems().get(r.nextInt(getItems().size()))).setName("");
+        return getItems().get(r.nextInt(getItems().size()));
     }
 
     @Override
@@ -168,7 +167,7 @@ public class RouletteAnimation extends InventoryCrateAnimation
                         StatusLoggerEvent.ANIMATION_ROULETTE_TICKSPEED_INVALID);
 
 
-        setItems(new ArrayList<ItemStack>());
+        setItems(new ArrayList<ItemBuilder>());
 
         try
         {
@@ -187,7 +186,7 @@ public class RouletteAnimation extends InventoryCrateAnimation
                                 .log(getStatusLogger(), new String[]{s});
                         continue;
                     }
-                    getItems().add(new ItemBuilder(m, 1).get());
+                    getItems().add(new ItemBuilder(m, 1).setName("&f"));
                     StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_SUCCESS
                             .log(getStatusLogger(), new String[]{s});
                 }
@@ -203,12 +202,12 @@ public class RouletteAnimation extends InventoryCrateAnimation
         }
     }
 
-    public ArrayList<ItemStack> getItems()
+    public ArrayList<ItemBuilder> getItems()
     {
         return items;
     }
 
-    public void setItems(ArrayList<ItemStack> items)
+    public void setItems(ArrayList<ItemBuilder> items)
     {
         this.items = items;
     }

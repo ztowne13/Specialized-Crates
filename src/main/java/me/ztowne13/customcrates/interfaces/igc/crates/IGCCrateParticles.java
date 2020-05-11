@@ -117,11 +117,11 @@ public class IGCCrateParticles extends IGCTierMenu
                 if (VersionUtils.Version.v1_7.isServerVersionOrLater() && VersionUtils.Version.v1_8.isServerVersionOrEarlier())
                 {
                     ParticleEffect pe = ParticleEffect.valueOf(input.toUpperCase());
-                    pd = new NMSParticleEffect(pe, newName, false);
+                    pd = new NMSParticleEffect(getCc(), pe, newName, false);
                 }
                 else
                 {
-                    pd = new BukkitParticleEffect(input.toUpperCase(), newName, false);
+                    pd = new BukkitParticleEffect(getCc(), input.toUpperCase(), newName, false);
                 }
 
 

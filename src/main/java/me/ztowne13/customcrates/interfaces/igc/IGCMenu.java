@@ -43,7 +43,7 @@ public abstract class IGCMenu
 
     public InventoryBuilder createDefault(int slots)
     {
-        ib = new InventoryBuilder(p, slots, inventoryName);
+        ib = new InventoryBuilder(p, slots > 54 ? 54 : slots, inventoryName);
         return ib;
     }
 

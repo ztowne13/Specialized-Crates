@@ -227,7 +227,7 @@ public class CrateSettingsBuilder
                 {
                     try
                     {
-                        EntityTypes ent = EntityTypes.valueOf(getFc().getString("display.creature").toUpperCase());
+                        EntityTypes ent = EntityTypes.getEnum(getFc().getString("display.creature").toUpperCase());
                         getSettings().getPlaceholder().setType(ent.toString());
 
                         StatusLoggerEvent.SETTINGS_DISPLAYTYPE_CREATURE_SUCCESS.log(getStatusLogger());

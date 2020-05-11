@@ -1,5 +1,7 @@
 package me.ztowne13.customcrates.crates.options.particles;
 
+import me.ztowne13.customcrates.SpecializedCrates;
+import me.ztowne13.customcrates.utils.Utils;
 import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
 import org.bukkit.Location;
@@ -8,11 +10,11 @@ import org.bukkit.entity.Player;
 
 public class ParticleEffect188
 {
-    public static void sendToPlayer(ParticleEffect effect, Player player, Location location, float offsetX, float offsetY,
+    public static void sendToPlayer(SpecializedCrates sc, ParticleEffect effect, Player player, Location location, float offsetX, float offsetY,
                                     float offsetZ, float speed,
                                     int count) throws Exception
     {
-        if (!ParticleEffect.isPlayerInRange(player, location))
+        if (!Utils.isPlayerInRange(sc, player, location))
         {
             return;
         }

@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.crates.options.particles;
 
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.particles.effects.PEAnimationType;
 import me.ztowne13.customcrates.crates.options.particles.effects.ParticleAnimationEffect;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
@@ -9,6 +10,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public abstract class ParticleData
 {
+    SpecializedCrates sc;
+
     String name;
     float rangeX, rangeY, rangeZ;
     float centerX, centerY, centerZ;
@@ -23,8 +26,9 @@ public abstract class ParticleData
 
     ParticleAnimationEffect particleAnimationEffect;
 
-    public ParticleData(String name, boolean hasAnimation)
+    public ParticleData(SpecializedCrates sc, String name, boolean hasAnimation)
     {
+        this.sc = sc;
         this.name = name;
         this.hasAnimation = hasAnimation;
 

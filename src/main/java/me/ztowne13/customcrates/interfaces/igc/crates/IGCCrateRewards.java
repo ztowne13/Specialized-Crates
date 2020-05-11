@@ -32,10 +32,10 @@ public class IGCCrateRewards extends IGCMenuCrate
     @Override
     public void open()
     {
-
         setInventoryName("&7&l> &6&lReward PG" + page);
 
         int slots = 0;
+
         if (!(cs.getRewards().getCrateRewards() == null))
         {
             if (cs.getRewards().getCrateRewards().length - ((page - 1) * 30) > 30)
@@ -57,7 +57,6 @@ public class IGCCrateRewards extends IGCMenuCrate
         }
 
         InventoryBuilder ib = createDefault(slots);
-
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
         if (!deleteMode)
@@ -115,7 +114,6 @@ public class IGCCrateRewards extends IGCMenuCrate
             }
 
         }
-
         ib.open();
         putInMenu();
     }

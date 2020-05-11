@@ -16,15 +16,13 @@ public class DebugUtils
 
     String[] sort = new String[]
             {
-                    "noinfo"
+                    ""
             };
 
     public DebugUtils(SpecializedCrates cc)
     {
         this.cc = cc;
     }
-
-    public boolean beta = false;
 
     public void log(String s)
     {

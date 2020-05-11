@@ -36,7 +36,7 @@ public class CrateSettings
     KeyItemHandler keyItemHandler;
     CrateItemHandler crateItemHandler;
 
-    CrateDisplayType cdt;
+    CrateDisplayType cdt = CrateDisplayType.BLOCK;
     DynamicCratePlaceholder dcp;
     RewardDisplayer displayer;
     RewardDisplayType rewardDisplayType;
@@ -89,6 +89,7 @@ public class CrateSettings
             getSounds().saveToFile();
             getActions().saveToFile();
             getFireworks().saveToFile();
+            getDisplayer().saveToFile();;
         }
         else
         {

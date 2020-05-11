@@ -13,7 +13,6 @@ import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -27,7 +26,7 @@ public class CSGOAnimation extends InventoryCrateAnimation
     protected int glassUpdateTicks = 2, closeSpeed = -1;
 
     protected ItemBuilder identifierBlock = null;
-    protected ArrayList<ItemStack> fillerBlocks = new ArrayList<>();
+    protected ArrayList<ItemBuilder> fillerBlocks = new ArrayList<>();
 
     public CSGOAnimation(Crate crate)
     {
@@ -187,7 +186,7 @@ public class CSGOAnimation extends InventoryCrateAnimation
     public ItemBuilder getFiller()
     {
         Random r = new Random();
-        return new ItemBuilder(getFillerBlocks().get(r.nextInt(getFillerBlocks().size()))).setName("");
+        return getFillerBlocks().get(r.nextInt(getFillerBlocks().size()));
     }
 
     @Override
@@ -229,6 +228,7 @@ public class CSGOAnimation extends InventoryCrateAnimation
                         StatusLoggerEvent.ANIMATION_CSGO_IDBLOCK_INVALID_BYTE,
                         StatusLoggerEvent.ANIMATION_CSGO_IDBLOCK_INVALID,
                         StatusLoggerEvent.ANIMATION_CSGO_IDBLOCK_SUCCESS);
+        identifierBlock.setName("&f");
 
         finalTickLength = fu.getFileDataLoader()
                 .loadDouble(prefix + "final-crate-tick-length", 7, getStatusLogger(),
@@ -268,7 +268,7 @@ public class CSGOAnimation extends InventoryCrateAnimation
                         continue;
                     }
                     int byt = unParsed.contains(";") ? Byte.valueOf(args[1]) : 0;
-                    getFillerBlocks().add(new ItemBuilder(m, 1).get());
+                    getFillerBlocks().add(new ItemBuilder(m, 1).setName("&f"));
 
                     StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_MATERIAL_SUCCESS
                             .log(getStatusLogger(), new String[]{unParsed});
@@ -320,7 +320,7 @@ public class CSGOAnimation extends InventoryCrateAnimation
         return identifierBlock;
     }
 
-    public ArrayList<ItemStack> getFillerBlocks()
+    public ArrayList<ItemBuilder> getFillerBlocks()
     {
         return fillerBlocks;
     }

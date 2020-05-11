@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
  */
 public class IGCMenuReward extends IGCMenu
 {
-    Reward r;
+    Reward reward;
     boolean unsavedChanges = false;
 
     public IGCMenuReward(SpecializedCrates cc, Player p, IGCMenu lastMenu, String rName)
@@ -29,14 +29,14 @@ public class IGCMenuReward extends IGCMenu
 
         if (CRewards.getAllRewards().keySet().contains(rName))
         {
-            r = CRewards.getAllRewards().get(rName);
+            reward = CRewards.getAllRewards().get(rName);
         }
         else
         {
-            r = new Reward(getCc(), rName);
-            r.loadFromConfig();
-            r.loadChance();
-            CRewards.allRewards.put(rName, r);
+            reward = new Reward(getCc(), rName);
+            reward.loadFromConfig();
+            reward.loadChance();
+            CRewards.allRewards.put(rName, reward);
         }
     }
 
@@ -44,16 +44,16 @@ public class IGCMenuReward extends IGCMenu
     public void open()
     {
 
-        InventoryBuilder ib = createDefault(36);
+        InventoryBuilder ib = createDefault(45);
 
         getIb().setItem(0, IGCDefaultItems.SAVE_BUTTON.getIb().setName("&aSave the reward to file")
                 .setLore("&7Save your current changes"));
-        getIb().setItem(27, IGCDefaultItems.EXIT_BUTTON.getIb());
+        getIb().setItem(36, IGCDefaultItems.EXIT_BUTTON.getIb());
 
-        ib.setItem(4, new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1).setName("&a" + r.getRewardName()).addLore("")
+        ib.setItem(4, new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1).setName("&a" + reward.getRewardName()).addLore("")
                 .addAutomaticLore("&e", 40,
-                        "The 'displayname' is the &6&ldisplay &6&lname &6&levery &6&lplayer &6&lsees &eNOT the reward's " +
-                                "name - that is only an identifier to add rewards to crates. To edit it, please do so in the " +
+                        "The &6&ldisplay &6&lname &6&levery &6&lplayer &6&lsees &e is not NOT the reward name " +
+                                "- that is only an identifier to add rewards to crates. To edit the actual reward display name, please do so in the " +
                                 "display-item editor."));
         ib.setItem(8,
                 new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&cDelete this reward")
@@ -61,13 +61,13 @@ public class IGCMenuReward extends IGCMenu
 
         //Commands
         ItemBuilder commands =
-                new ItemBuilder(r.getCommands() == null || r.getCommands().isEmpty() ? DynamicMaterial.RED_DYE :
+                new ItemBuilder(reward.getCommands() == null || reward.getCommands().isEmpty() ? DynamicMaterial.RED_DYE :
                         DynamicMaterial.COMMAND_BLOCK, 1)
                         .setName("&aEdit the commands")
                         .setLore("&7Current value: ");
-        if (r.getCommands() != null && !r.getCommands().isEmpty())
+        if (reward.getCommands() != null && !reward.getCommands().isEmpty())
         {
-            for (String cmds : r.getCommands())
+            for (String cmds : reward.getCommands())
             {
                 commands.addLore("&7" + cmds);
             }
@@ -78,64 +78,73 @@ public class IGCMenuReward extends IGCMenu
         }
         commands.addLore("").addAutomaticLore("&f", 30,
                 "Use %player% as a placeholder for the player's name. Use %amountX-Y% for a random number between X and Y. Ex: %amount1000-10000%");
-        ib.setItem(13, commands);
+        ib.setItem(22, commands);
 
         // Display item
-        ib.setItem(11,
-                (r == null || r.getDisplayBuilder() == null ? new ItemBuilder(DynamicMaterial.RED_DYE, 1) :
-                        new ItemBuilder(r.getDisplayBuilder().getStack())).clearLore().setName("&aEdit the display item.")
-                        .clearLore()
-                        .addAutomaticLore("&f", 40,
-                                "Edit the display item, including the 'displayname' which is the name &edisplayed &eto &eplayers&f. " +
-                                        "That value is different from the name used to create the reward - that value cannot be edited " +
-                                        "and that is only an identifier to add rewards to crates."));
+        ItemBuilder displayItem = new ItemBuilder(reward.getDisplayBuilder().getStack());
+        displayItem.clearLore();
+        displayItem.setDisplayName("&aEdit the display item");
+        displayItem.addLore("");
+        displayItem.addAutomaticLore("&f", 40,
+                "Edit things like the &edisplay &ename&f, lore, enchantments, potion effects, etc.");
+        ib.setItem(11, displayItem);
 
         // Chance
-        ib.setItem(14,
+        ib.setItem(23,
                 new ItemBuilder(
-                        r.getChance() == null || r.getChance() == 0 ? DynamicMaterial.RED_DYE : DynamicMaterial.FISHING_ROD,
+                        reward.getChance() == null || reward.getChance() == 0 ? DynamicMaterial.RED_DYE :
+                                DynamicMaterial.FISHING_ROD,
                         1)
                         .setName("&aEdit the chance").setLore("&7Current value: ")
-                        .addLore("&7" + getName(r.getChance() == 0 ? null : (r.getChance() + ""))).addLore("")
+                        .addLore("&7" + getName(reward.getChance() == 0 ? null : (reward.getChance() + ""))).addLore("")
                         .addAutomaticLore("&f", 30, "This is the actual chance of the lore."));
 
         // Rarity Level (Tier)
-        ib.setItem(15,
+        ib.setItem(24,
                 new ItemBuilder(DynamicMaterial.DIAMOND_BLOCK, 1)
                         .setName("&aEdit the rarity level")
                         .setLore("&7Current value: ")
-                        .addLore("&7" + getName(r.getRarity())).addLore("").addAutomaticLore("&f", 30,
+                        .addLore("&7" + getName(reward.getRarity())).addLore("").addAutomaticLore("&f", 30,
                         "This is the 'tier' of the reward. If you aren't using tiers, ignore this."));
 
         // Give display item
         ItemBuilder giveDisplayItem = new ItemBuilder(DynamicMaterial.ITEM_FRAME, 1);
         giveDisplayItem.setDisplayName("&aGive the Display Item");
         giveDisplayItem.addLore("&7Current value: ");
-        giveDisplayItem.addLore("&7" + r.isGiveDisplayItem());
+        giveDisplayItem.addLore("&7" + reward.isGiveDisplayItem());
         giveDisplayItem.addLore("");
         giveDisplayItem.addAutomaticLore("&f", 30,
                 "In addition to running the commands, should the player be given the display item when this reward is won?");
-        ib.setItem(22, giveDisplayItem);
+        ib.setItem(31, giveDisplayItem);
 
         // Give display item lore
         ItemBuilder giveDisplayItemLore = new ItemBuilder(DynamicMaterial.PAPER, 1);
         giveDisplayItemLore.setDisplayName("&aGive the Display Item with Lore");
         giveDisplayItemLore.addLore("&7Current value: ");
-        giveDisplayItemLore.addLore("&7" + r.isGiveDisplayItemLore());
+        giveDisplayItemLore.addLore("&7" + reward.isGiveDisplayItemLore());
         giveDisplayItemLore.addLore("");
         giveDisplayItemLore.addAutomaticLore("&f", 30,
                 "IF the display item is being given to the player, should it include it's display-item lore?");
-        ib.setItem(23, giveDisplayItemLore);
+        ib.setItem(32, giveDisplayItemLore);
 
+        // Give display item name
         ItemBuilder giveDisplayItemName = new ItemBuilder(DynamicMaterial.BOOK, 1);
         giveDisplayItemName.setDisplayName("&aGive the Display Item with its Name");
         giveDisplayItemName.addLore("&7Current value: ");
-        giveDisplayItemName.addLore("&7" + r.isGiveDisplayItemName());
+        giveDisplayItemName.addLore("&7" + reward.isGiveDisplayItemName());
         giveDisplayItemName.addLore("");
         giveDisplayItemName.addAutomaticLore("&f", 30,
                 "IF the display item is being given to the player, should it include it's display-item name? or should the name be removed?");
-        ib.setItem(24, giveDisplayItemName);
+        ib.setItem(33, giveDisplayItemName);
 
+        // Fallback reward
+        ItemBuilder fallbackReward = new ItemBuilder(DynamicMaterial.DIAMOND);
+        fallbackReward.setDisplayName("&aFallback Reward Settings");
+        fallbackReward.addLore("");
+        fallbackReward.addAutomaticLore("&f", 30, "Specify the fallback reward permission and" +
+                " the name of the fallback reward itself. A fallback reward is given IF a player has the correct permission. This is to" +
+                " help prevent players from winning duplicate ranks, etc.");
+        ib.setItem(29, fallbackReward);
 
         getIb().open();
         putInMenu();
@@ -144,18 +153,12 @@ public class IGCMenuReward extends IGCMenu
     @Override
     public void manageClick(int slot)
     {
-		/*if(slot == 4)
-		{
-			setInputMenu(new InputMenu(getCc(), getP(), "rewardname", r.getRewardName(), String.class, this));
-			getInputMenu().initMsg();
-		}
-		else */
         if (slot == 8)
         {
             String n = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
             if (n.equalsIgnoreCase("Confirm deletion"))
             {
-                r.delete(true);
+                reward.delete(true);
                 up();
             }
             else
@@ -165,7 +168,7 @@ public class IGCMenuReward extends IGCMenu
                     ItemBuilder builder = new ItemBuilder(getIb().getInv().getItem(slot)).setName("&cConfirm deletion")
                             .setLore("&7Crates that use this reward:");
                     boolean none = true;
-                    for (String s : r.delete(false).replace("[", "").replace("]", "").split(", "))
+                    for (String s : reward.delete(false).replace("[", "").replace("]", "").split(", "))
                     {
                         none = false;
                         builder.addLore("&7" + s);
@@ -182,65 +185,59 @@ public class IGCMenuReward extends IGCMenu
                 }
             }
         }
-//        if (slot == 11)
-//        {
-//            new InputMenu(getCc(), getP(), "displayname", r.getDisplayName(), String.class, this);
-//        }
-//        else if (slot == 11)
-//        {
-//            getP().closeInventory();
-//            new IGCListEditor(getCc(), getP(), this, "Lore Editor", "Line", r.getCustomLore(), DynamicMaterial.BOOK, 1)
-//                    .open();
-//        }
-        else if (slot == 13)
+        else if (slot == 22)
         {
-            new IGCListEditor(getCc(), getP(), this, "Commands Editor", "Command", r.getCommands(),
+            new IGCListEditor(getCc(), getP(), this, "Commands Editor", "Command", reward.getCommands(),
                     DynamicMaterial.COMMAND_BLOCK, 1).open();
         }
         else if (slot == 11)
         {
-            new IGCItemEditor(getCc(), getP(), this, r.getSaveBuilder()).open();
-        }
-        else if (slot == 14)
-        {
-            new InputMenu(getCc(), getP(), "chance", r.getChance().toString(), Double.class, this);
-        }
-        else if (slot == 15)
-        {
-            new InputMenu(getCc(), getP(), "rarity", r.getRarity(), String.class, this);
-        }
-        else if (slot == 22)
-        {
-            r.setGiveDisplayItem(!r.isGiveDisplayItem());
-            open();
+            new IGCItemEditor(getCc(), getP(), this, reward.getSaveBuilder()).open();
         }
         else if (slot == 23)
         {
-            r.setGiveDisplayItemLore(!r.isGiveDisplayItemLore());
-            open();
+            new InputMenu(getCc(), getP(), "chance", reward.getChance().toString(), Double.class, this);
         }
         else if (slot == 24)
         {
-            r.setGiveDisplayItemName(!r.isGiveDisplayItemName());
+            new InputMenu(getCc(), getP(), "rarity", reward.getRarity(), String.class, this);
+        }
+        else if (slot == 31)
+        {
+            reward.setGiveDisplayItem(!reward.isGiveDisplayItem());
             open();
+        }
+        else if (slot == 32)
+        {
+            reward.setGiveDisplayItemLore(!reward.isGiveDisplayItemLore());
+            open();
+        }
+        else if (slot == 33)
+        {
+            reward.setGiveDisplayItemName(!reward.isGiveDisplayItemName());
+            open();
+        }
+        else if (slot == 29)
+        {
+            new IGCMenuFallbackReward(getCc(), getP(), this, reward).open();
         }
         else if (slot == 0)
         {
             ItemBuilder b = new ItemBuilder(getIb().getInv().getItem(slot));
             b.setName("&4&lERROR! &cPlease configure the");
-            if (r.getRewardName() == null)
+            if (reward.getRewardName() == null)
             {
                 b.setLore("&creward name.");
             }
-            else if (r.getSaveBuilder() == null)
+            else if (reward.getSaveBuilder() == null)
             {
                 b.setLore("&creward item.");
             }
-            else if (r.getChance() == null || r.getChance() == 0)
+            else if (reward.getChance() == null || reward.getChance() == 0)
             {
                 b.setLore("&cchance.");
             }
-            else if (r.getRarity() == null)
+            else if (reward.getRarity() == null)
             {
                 b.setLore("&crarity.");
             }
@@ -248,13 +245,13 @@ public class IGCMenuReward extends IGCMenu
             {
                 b.setName("&2SUCCESS");
                 b.setLore("&7Please reload the plugin for").addLore("&7these changes to take effect.");
-                r.writeToFile();
+                reward.writeToFile();
             }
             getIb().setItem(slot, b);
             unsavedChanges = false;
             return;
         }
-        else if (slot == 27)
+        else if (slot == 36)
         {
             if (!unsavedChanges || ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName())
                     .equalsIgnoreCase("Are you sure?"))
@@ -287,7 +284,7 @@ public class IGCMenuReward extends IGCMenu
             {
                 if (value.equalsIgnoreCase("chance"))
                 {
-                    r.setChance(Integer.parseInt(input));
+                    reward.setChance(Integer.parseInt(input));
                     ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 }
             }
@@ -303,7 +300,7 @@ public class IGCMenuReward extends IGCMenu
             {
                 if (value.equalsIgnoreCase("chance"))
                 {
-                    r.setChance(Double.parseDouble(input));
+                    reward.setChance(Double.parseDouble(input));
                     ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 }
             }
@@ -328,16 +325,16 @@ public class IGCMenuReward extends IGCMenu
 			}*/
             if (value.equalsIgnoreCase("addcommand"))
             {
-                r.getCommands().add(input.replace("/", ""));
+                reward.getCommands().add(input.replace("/", ""));
                 ChatUtils.msgSuccess(getP(), "Added '" + input + "' to the reward commands.");
             }
             else if (value.equalsIgnoreCase("removecommand"))
             {
-                for (String s : r.getCommands())
+                for (String s : reward.getCommands())
                 {
                     if (s.equalsIgnoreCase(input))
                     {
-                        r.getCommands().remove(s);
+                        reward.getCommands().remove(s);
                         ChatUtils.msgSuccess(getP(), "Removed '" + input + "' from the reward commands.");
                         return true;
                     }
@@ -347,12 +344,12 @@ public class IGCMenuReward extends IGCMenu
             }
             else if (value.equalsIgnoreCase("rarity"))
             {
-                r.setRarity(input);
+                reward.setRarity(input);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
             }
             else if (value.equalsIgnoreCase("head-player-name"))
             {
-                r.getSaveBuilder().setPlayerHeadName(input);
+                reward.getSaveBuilder().setPlayerHeadName(input);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
             }
         }
@@ -361,7 +358,7 @@ public class IGCMenuReward extends IGCMenu
 
     public String getName(String val)
     {
-        return r == null || val == null ? "&cSet this value." : val;
+        return reward == null || val == null ? "&cSet this value." : val;
     }
 
 }

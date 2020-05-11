@@ -13,7 +13,7 @@ public class ForceOpen extends SubCommand
 {
     public ForceOpen()
     {
-        super("forceopen", 3, "Usage: /scrates forceopen [crate] {[player], all}");
+        super("forceopen", 3, "Usage: /scrates forceopen [crate] {[player], all}", new String[]{"force", "fopen"});
     }
 
     @Override

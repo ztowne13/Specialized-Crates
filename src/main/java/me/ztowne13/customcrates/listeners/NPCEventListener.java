@@ -30,12 +30,10 @@ public class NPCEventListener implements Listener
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = false)
     public void onNPCClickLeft(NPCLeftClickEvent e)
     {
         Player p = e.getClicker();
         new LeftClickAction(cc, p, e.getNPC().getStoredLocation()).run();
-
     }
-
 }

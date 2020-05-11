@@ -30,6 +30,8 @@ public class PlayerManager
     DataHandler dh;
     PlayerDataManager pdm;
 
+    long lastClickedCrateTime = 0;
+
     PlacedCrate lastOpenedPlacedCrate = null;
     Crate openCrate = null;
     Location lastOpenCrate = null;
@@ -38,6 +40,9 @@ public class PlayerManager
 
     boolean inRewardMenu = false;
     DisplayPage lastPage;
+    // This is to allow the anti-dupe inventory reopen/close feature but prevent it when opening the next page of an inv
+    long nextPageInventoryCloseGrace = 0;
+
 
     boolean deleteCrate = false;
     boolean useVirtualCrate = false;
@@ -59,9 +64,21 @@ public class PlayerManager
         getpManagers().put(p.getUniqueId(), this);
     }
 
-    public void remove()
+    public void remove(int delay)
     {
-        getpManagers().remove(getP().getUniqueId());
+        if(isInCrateAnimation())
+        {
+            getCurrentAnimation().setFastTrack(true, true);
+        }
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                getpManagers().remove(getP().getUniqueId());
+            }
+        }, delay);
 
         if(ReflectionUtilities.cachedHandles.containsKey(getP()))
         {
@@ -327,5 +344,25 @@ public class PlayerManager
     public void setCurrentAnimation(AnimationDataHolder currentAnimation)
     {
         this.currentAnimation = currentAnimation;
+    }
+
+    public long getLastClickedCrateTime()
+    {
+        return lastClickedCrateTime;
+    }
+
+    public void setLastClickedCrateTime(long lastClickedCrateTime)
+    {
+        this.lastClickedCrateTime = lastClickedCrateTime;
+    }
+
+    public long getNextPageInventoryCloseGrace()
+    {
+        return nextPageInventoryCloseGrace;
+    }
+
+    public void setNextPageInventoryCloseGrace(long nextPageInventoryCloseGrace)
+    {
+        this.nextPageInventoryCloseGrace = nextPageInventoryCloseGrace;
     }
 }

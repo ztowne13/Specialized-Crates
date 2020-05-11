@@ -60,6 +60,8 @@ public class LeftClickAction extends CrateAction
                 }
                 return true;
             }
+
+            return true;
         }
 
         return false;

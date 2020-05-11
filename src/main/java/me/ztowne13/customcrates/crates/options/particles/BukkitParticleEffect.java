@@ -1,8 +1,12 @@
 package me.ztowne13.customcrates.crates.options.particles;
 
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.utils.LocationUtils;
+import me.ztowne13.customcrates.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.entity.Player;
 
 import java.util.Random;
 
@@ -14,14 +18,14 @@ public class BukkitParticleEffect extends ParticleData
     Particle particle;
     Random random;
 
-    public BukkitParticleEffect(String particleName, String name, boolean hasAnimation)
+    public BukkitParticleEffect(SpecializedCrates sc, String particleName, String name, boolean hasAnimation)
     {
-        this(Particle.valueOf(particleName.toUpperCase()), name, hasAnimation);
+        this(sc, Particle.valueOf(particleName.toUpperCase()), name, hasAnimation);
     }
 
-    public BukkitParticleEffect(Particle particle, String name, boolean hasAnimation)
+    public BukkitParticleEffect(SpecializedCrates sc, Particle particle, String name, boolean hasAnimation)
     {
-        super(name, hasAnimation);
+        super(sc, name, hasAnimation);
         this.particle = particle;
         random = new Random();
     }
@@ -92,13 +96,20 @@ public class BukkitParticleEffect extends ParticleData
 
     public void spawnParticle(Location centeredLoc, int amnt, double offX, double offY, double offZ, float speed)
     {
-        if (particle.equals(Particle.REDSTONE))
+
+        for(Player player : Bukkit.getOnlinePlayers())
         {
-            centeredLoc.getWorld().spawnParticle(particle, centeredLoc, amnt, offX, offY, offZ, speed, getDustOptions());
-        }
-        else
-        {
-            centeredLoc.getWorld().spawnParticle(particle, centeredLoc, amnt, offX, offY, offZ, speed);
+            if(Utils.isPlayerInRange(sc, player, centeredLoc))
+            {
+                if (particle.equals(Particle.REDSTONE))
+                {
+                    player.spawnParticle(particle, centeredLoc, amnt, offX, offY, offZ, speed, getDustOptions());
+                }
+                else
+                {
+                    player.spawnParticle(particle, centeredLoc, amnt, offX, offY, offZ, speed);
+                }
+            }
         }
     }
 }

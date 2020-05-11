@@ -15,7 +15,6 @@ Diamond:
       - '&eChance: &6%writtenchance%%'
 Dirt:
   chance: 20
-  rarity: common
   give-display-item:
     value: true
     with-lore: false
@@ -89,7 +88,7 @@ SuperGoldenApple:
     value: true
     with-lore: false
   display-item:
-    material: GOLDEN_APPLE
+    material: ENCHANTED_GOLDEN_APPLE
     glow: false
     amount: 1
     name: '&cSuper Golden Apple'
@@ -98,7 +97,6 @@ SuperGoldenApple:
       - '&eChance: &6%writtenchance%%'
 GoldenApple:
   chance: 10
-  rarity: legendary
   give-display-item:
     value: true
     with-lore: false
@@ -114,7 +112,6 @@ Grass:
   commands:
     - give {name} minecraft:grass
   chance: 20
-  rarity: common
   give-display-item:
     value: true
     lore: false
@@ -130,7 +127,6 @@ SpecialDirt:
   commands:
     - give {name} minecraft:dirt 1
   chance: 15
-  rarity: uncommon
   give-display-item:
     value: true
     with-lore: false
@@ -181,7 +177,6 @@ SpecialDirt2:
       - '&7Get Special Dirt if you win this!'
 MyHead:
   chance: 1.0
-  rarity: default
   give-display-item:
     value: true
     with-lore: false
@@ -196,7 +191,6 @@ MyHead:
       - '&eChance: &6%writtenchance%%'
 SuperCoolEnchantBook:
   chance: 1.0
-  rarity: default
   give-display-item:
     value: true
     with-lore: false
@@ -211,7 +205,6 @@ SuperCoolEnchantBook:
       - '&eChance: &6%writtenchance%%'
 ColoredChestplate:
   chance: 1.0
-  rarity: default
   give-display-item:
     value: false
     with-lore: false
@@ -224,3 +217,43 @@ ColoredChestplate:
       blue: 51
       red: 255
       green: 201
+RewardFallbackExample:
+  chance: 10.0
+  give-display-item:
+    value: false
+  commands:
+    - pex user set %player% VIPRank
+  fallback-reward:
+    reward-name: FallbackExample
+    permission: rewards.fallbackexample
+  display-item:
+    material: BOOK_AND_QUILL
+    amount: 1
+    name: '&bRankup Book (Fallback Reward Example)'
+    glow: true
+    lore:
+      - ''
+      - '&fThis reward has a fallback'
+      - '&freward. If the player has the'
+      - '&fpermission rewards.fallbackexample'
+      - '&fand they win this item, they will'
+      - '&fwin the FallbackExample reward instead of'
+      - '&fthis reward.'
+FallbackExample:
+  chance: 10.0
+  give-display-item:
+    value: false
+  commands:
+    - eco give %player% 10000
+  display-item:
+    material: BOOK_AND_QUILL
+    amount: 1
+    name: '&a$10k (Fallback Reward Example)'
+    lore:
+      - ''
+      - '&fThis reward is a fallback'
+      - '&freward. If the player has the'
+      - '&fpermission rewards.fallbackexample'
+      - '&fand they win the RewardFallbackExample'
+      - '&freward, they will receive this reward'
+      - '&finstead of that reward.'

@@ -1,17 +1,18 @@
 package me.ztowne13.customcrates.listeners;
 
+import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.crateaction.AttemptKeyUseAction;
 import me.ztowne13.customcrates.crates.crateaction.CrateAction;
 import me.ztowne13.customcrates.crates.crateaction.LeftClickAction;
+import me.ztowne13.customcrates.utils.CrateUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 
 public class InteractListener implements Listener
 {
@@ -26,23 +27,14 @@ public class InteractListener implements Listener
     public void onInteract(PlayerInteractEvent e)
     {
         cc.getDu().log("onInteract - CALL", this.getClass());
-
-        try
-        {
-            if (!e.getHand().equals(EquipmentSlot.HAND) && !(e.getPlayer().isSneaking() && e.getHand().equals(EquipmentSlot.OFF_HAND)))
-            {
-                cc.getDu().log("onInteract - Equipment slot isn't hand. It's " + e.getHand().name(), this.getClass());
-                return;
-            }
-        }
-        catch (Throwable exc)
-        {
-            cc.getDu().log("onInteract - Failed to handle equipment slot check", getClass());
-        }
-
-        cc.getDu().log("onInteract - (cancelled: " + e.isCancelled() + ")");
+        cc.getDu().log("onInteract - (cancelled: " + e.isCancelled() + ")", getClass());
 
         Player p = e.getPlayer();
+
+        if(!e.isCancelled())
+        {
+
+        }
 
         // Handle crate left or right click
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_BLOCK))
@@ -51,12 +43,19 @@ public class InteractListener implements Listener
 
             CrateAction action;
             if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
-                action = new AttemptKeyUseAction(cc, p, e.getClickedBlock().getLocation());
-            else
-                action = new LeftClickAction(cc, p, e.getClickedBlock().getLocation());
-
-            if (action.run())
             {
+                action = new AttemptKeyUseAction(cc, p, e.getClickedBlock().getLocation());
+                cc.getDu().log("onInteract - is right click block", getClass());
+            }
+            else
+            {
+                action = new LeftClickAction(cc, p, e.getClickedBlock().getLocation());
+            }
+
+            boolean result = action.run();
+            if (result)
+            {
+                cc.getDu().log("onInteract - Cancelling", getClass());
                 e.setCancelled(true);
             }
         }
@@ -68,11 +67,29 @@ public class InteractListener implements Listener
             {
                 if (crate.getSettings().getKeyItemHandler().keyMatchesToStack(e.getItem(), false))
                 {
-                    e.setCancelled(true);
+                    if(!((Boolean)SettingsValues.KEY_ALLOW_LEFT_CLICK_INTERACTION.getValue(cc) && e.getAction().equals(Action.LEFT_CLICK_BLOCK)))
+                    {
+                        e.setCancelled(true);
+                    }
                 }
             }
         }
     }
 
-
+    @EventHandler
+    public void onKeyPreviewMenu(PlayerInteractEvent event)
+    {
+        Action action = event.getAction();
+        if(action.equals(Action.LEFT_CLICK_BLOCK) || action.equals(Action.LEFT_CLICK_AIR))
+        {
+            if((Boolean)SettingsValues.LEFT_CLICK_KEY_PREVIEW.getValue(cc))
+            {
+                Crate crate = CrateUtils.searchByKey(event.getItem());
+                if(crate != null)
+                {
+                    crate.getSettings().getDisplayer().openFor(event.getPlayer());
+                }
+            }
+        }
+    }
 }

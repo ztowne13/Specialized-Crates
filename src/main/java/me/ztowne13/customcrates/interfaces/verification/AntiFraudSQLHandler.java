@@ -15,10 +15,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.UUID;
 
-
 public class AntiFraudSQLHandler extends Thread
 {
     boolean authenticated = true;
+    boolean alreadyLogged = false;
 
     SpecializedCrates specializedCrates;
 
@@ -86,8 +86,12 @@ public class AntiFraudSQLHandler extends Thread
         }
         catch (Exception exc)
         {
-            ChatUtils.log("Failed to connect to the SpecializedCrates authentication DB. Authenticating anyways.");
-            //exc.printStackTrace();
+            if(!alreadyLogged)
+            {
+                ChatUtils
+                        .log("Failed to authenticate via the Specialized Crates authentication DB. Authenticating anyways.");
+                alreadyLogged = true;
+            }            //exc.printStackTrace();
         }
 
     }
@@ -129,7 +133,12 @@ public class AntiFraudSQLHandler extends Thread
         }
         catch(Exception exc)
         {
-            ChatUtils.log("Failed to authenticate via the Specialized Crates authentication DB. Authenticating anyways.");
+            if(!alreadyLogged)
+            {
+                ChatUtils
+                        .log("Failed to authenticate via the Specialized Crates authentication DB. Authenticating anyways.");
+                alreadyLogged = true;
+            }
         }
 
         return true;

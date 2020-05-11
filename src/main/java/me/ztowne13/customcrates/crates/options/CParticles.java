@@ -118,13 +118,13 @@ public class CParticles extends CSetting
                             StatusLoggerEvent.PARTICLE_INVALID.log(getCrate(), new String[]{parent, particleTypeAS});
                             continue;
                         }
-                        pd = new NMSParticleEffect(pe, parent, false);
+                        pd = new NMSParticleEffect(getCc(), pe, parent, false);
                     }
                     else
                     {
                         try
                         {
-                            pd = new BukkitParticleEffect(particleTypeAS, parent, false);
+                            pd = new BukkitParticleEffect(getCc(), particleTypeAS, parent, false);
                         }
                         catch (Exception exc)
                         {

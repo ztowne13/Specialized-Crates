@@ -3,7 +3,7 @@ package me.ztowne13.customcrates.interfaces.items;
 import me.ztowne13.customcrates.interfaces.items.attributes.BukkitGlowEffect;
 import me.ztowne13.customcrates.interfaces.items.attributes.CompressedEnchantment;
 import me.ztowne13.customcrates.interfaces.items.attributes.RGBColor;
-import me.ztowne13.customcrates.interfaces.nbt.NBTTagManager;
+import me.ztowne13.customcrates.interfaces.items.nbt.NBTTagManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.VersionUtils;
 import org.apache.commons.lang.WordUtils;
@@ -27,8 +27,6 @@ import java.util.UUID;
 
 public class ItemBuilder implements EditableItem
 {
-    public static String NO_NAME = "!?!noname!?!";
-
     ItemStack stack;
 
     boolean glowing = false;
@@ -41,9 +39,9 @@ public class ItemBuilder implements EditableItem
 
     public ItemBuilder(EditableItem builder)
     {
-        this(builder.getStack());
-
-        setGlowing(builder.isGlowing());
+        glowing = builder.isGlowing();
+        stack = new ItemStack(builder.getStack());
+        updateFromItem();
     }
 
     public ItemBuilder(ItemStack fromStack)
@@ -131,6 +129,20 @@ public class ItemBuilder implements EditableItem
             else
             {
                 Potion pot = Potion.fromItemStack(stack);
+//                Potion clearPot = new Potion(PotionType.WATER);
+//                clearPot.apply(stack);
+
+                try
+                {
+                    Potion toClearPot = Potion.fromItemStack(stack);
+                    toClearPot.getEffects().clear();
+                    toClearPot.apply(stack);
+                }
+                catch(Exception exc)
+                {
+
+                }
+
                 if(pot != null && pot.getType() != null)
                 {
                     addPotionEffect(new CompressedPotionEffect(pot.getType().getEffectType(), 1, 1));
@@ -246,7 +258,7 @@ public class ItemBuilder implements EditableItem
 
     public boolean hasDisplayName()
     {
-        return getDisplayName(false) != null;
+        return getDisplayName(false) != null && !getDisplayName(false).equalsIgnoreCase("");
     }
 
     public String getName(boolean strippedOfColor)

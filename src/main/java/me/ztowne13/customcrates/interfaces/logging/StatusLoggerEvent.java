@@ -69,8 +69,14 @@ public enum StatusLoggerEvent
     LUCKYCHEST_BLWL_INVALID(false, "Lucky Chest", "Failed to load the 'is-block-list-whitelist' setting.",
             "Not specified as 'true' or 'false'"),
 
+    LUCKYCHEST_REQUIRE_PERMISSION_INVALID(false, "Lucky Chest", "Failed to load the 'require-permission' setting.",
+            "Not specified as 'true' or 'false'"),
+
     LUCKYCHEST_BLWL_NONEXISTENT(false, "Lucky Chest",
-            "The lucky chest 'is-block-list-whitelist' variable doesn't and has assumed to be 'true'.", "NONE"),
+            "The lucky chest 'is-block-list-whitelist' variable doesn't exist and has defaulted to 'true'.", "NONE"),
+
+    LUCKYCHEST_REQUIRE_PERMISSION_NONEXISTENT(false, "Lucky Chest",
+            "The lucky chest 'require-permission' value doesn't exist and has defaulted to 'true'.", "NONE"),
 
     LUCKYCHEST_WORLD_INVALID(false, "Lucky Chest", "$?$ is not a valid world for the lucky chests to spawn in.", "NONE"),
 

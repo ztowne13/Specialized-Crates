@@ -123,7 +123,7 @@ public abstract class CrateAnimation
 
     public void runAnimation(final AnimationDataHolder dataHolder)
     {
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
 
         dataHolder.setIndividualTicks(dataHolder.getIndividualTicks() + (int) BASE_SPEED);
         dataHolder.setTotalTicks(dataHolder.getTotalTicks() + (int) BASE_SPEED);
@@ -150,7 +150,7 @@ public abstract class CrateAnimation
 
         for (Reward r : rewards)
         {
-            r.runCommands(p);
+            r.giveRewardToPlayer(p);
         }
 
         pm.closeCrate();
@@ -231,7 +231,9 @@ public abstract class CrateAnimation
             if (playMessage)
             {
                 if (failOpen)
-                    Messages.FAIL_OPEN.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crate.getDisplayName()});
+                    Messages.FAIL_OPEN.msgSpecified(cc, p, new String[]{"%crate%", "%key%"},
+                            new String[]{crate.getDisplayName(),
+                                    crate.getSettings().getKeyItemHandler().getItem().getDisplayName(false)});
                 else
                     Messages.ALREADY_OPENING_CRATE.msgSpecified(cc, p);
             }

@@ -35,7 +35,8 @@ public class IGCMineCrate extends IGCMenuCrate
         ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
 
         ib.setItem(11, new ItemBuilder(Material.FISHING_ROD, 1, 0).setName("&aChance").setLore("&7Current value: ")
-                .addLore("&7" + cs.getLuckyChestSettings().getChance() + "/" + cs.getLuckyChestSettings().getOutOfChance()).addLore("")
+                .addLore("&7" + cs.getLuckyChestSettings().getChance() + "/" + cs.getLuckyChestSettings().getOutOfChance())
+                .addLore("")
                 .addAutomaticLore("&f", 30,
                         "These are the odds that a crate will appear while mining. Formatted 'number/number'."));
         ib.setItem(12, new ItemBuilder(DynamicMaterial.LIGHT_GRAY_DYE, 1).setName("&aWhitelist")
@@ -61,6 +62,14 @@ public class IGCMineCrate extends IGCMenuCrate
                 "These are the worlds where mine crates can be found. Remove all the worlds for ALL worlds to be allowed.");
         ib.setItem(14, wList);
 
+        ItemBuilder requirePermission = new ItemBuilder(DynamicMaterial.BOOK);
+        requirePermission.setDisplayName("&aRequire Permission to Find");
+        requirePermission.addLore("&7Current Value:")
+                .addLore("&7" + crates.getSettings().getLuckyChestSettings().isRequirePermission());
+        requirePermission.addLore("").addAutomaticLore("&f", 30,
+                "Set whether or not the crate's permission is required for the player to find the crate.");
+        ib.setItem(15, requirePermission);
+
         ib.open();
         putInMenu();
     }
@@ -74,7 +83,8 @@ public class IGCMineCrate extends IGCMenuCrate
                 up();
                 break;
             case 11:
-                new InputMenu(getCc(), getP(), "chance", cs.getLuckyChestSettings().getChance() + "/" + cs.getLuckyChestSettings().getOutOfChance(),
+                new InputMenu(getCc(), getP(), "chance",
+                        cs.getLuckyChestSettings().getChance() + "/" + cs.getLuckyChestSettings().getOutOfChance(),
                         "Format it 'chance/out of what chance'.", String.class, this, true);
                 break;
             case 12:
@@ -83,11 +93,16 @@ public class IGCMineCrate extends IGCMenuCrate
                 break;
             case 13:
                 new IGCListEditor(getCc(), getP(), this, "Block List", "Block", cs.getLuckyChestSettings().getWhiteList(),
-                        DynamicMaterial.STONE, 1, Material.class, "valueOf", "That is not a valid block name. Try STONE.").open();
+                        DynamicMaterial.STONE, 1, Material.class, "valueOf", "That is not a valid block name. Try STONE.")
+                        .open();
                 break;
             case 14:
                 new IGCListEditor(getCc(), getP(), this, "Worlds List", "World", cs.getLuckyChestSettings().getWorldsRaw(),
                         DynamicMaterial.MAP, 1).open();
+                break;
+            case 15:
+                cs.getLuckyChestSettings().setRequirePermission(!cs.getLuckyChestSettings().isRequirePermission());
+                open();
                 break;
             case 16:
                 new InputMenu(getCc(), getP(), "remove worlds", cs.getLuckyChestSettings().getWorlds().toString(),

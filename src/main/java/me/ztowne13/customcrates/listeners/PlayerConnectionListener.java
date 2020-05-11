@@ -55,7 +55,7 @@ public class PlayerConnectionListener implements Listener
     public void onQuit(PlayerQuitEvent e)
     {
         Player p = e.getPlayer();
-        PlayerManager.get(cc, p).remove();
+        PlayerManager.get(cc, p).remove(20);
     }
 
 }

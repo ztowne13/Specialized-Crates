@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by ztowne13 on 6/14/16.
@@ -189,17 +190,40 @@ public class CMultiCrateInventory extends CSetting
                 VirtualCrateData vcd = PlayerManager.get(cc, p).getPdm().getVCCrateData(crate);
                 cc.getDu().log(vcd.toString());
                 ItemBuilder crateIb = new ItemBuilder(crate.getSettings().getCrateItemHandler().getItem(1));
-                crateIb.addLore("");
 
                 if (cc.getSettings().getConfigValAsBoolean("virtual-crate-cratecount"))
                 {
-                    crateIb.addLore(cc.getSettings().getConfigValues().get("virtual-crate-lore").toString()
-                            .replaceAll("%crates%", vcd.getCrates() + ""));
+                    String toAddLore = (String) SettingsValues.VIRTUAL_CRATE_LORE.getValue(cc);
+                    if(!toAddLore.equalsIgnoreCase("") && !toAddLore.equalsIgnoreCase("none"))
+                    {
+                        crateIb.addLore("");
+                        crateIb.addLore(toAddLore);
+                    }
+//                    crateIb.addLore(cc.getSettings().getConfigValues().get("virtual-crate-lore").toString()
+//                            .replaceAll("%crates%", vcd.getCrates() + ""));
                 }
                 if (cc.getSettings().getConfigValAsBoolean("virtual-crate-keycount"))
                 {
-                    crateIb.addLore(cc.getSettings().getConfigValues().get("virtual-key-lore").toString()
-                            .replaceAll("%keys%", vcd.getKeys() + ""));
+                    String toAddLore = (String) SettingsValues.VIRTUAL_KEY_LORE.getValue(cc);
+                    if(!toAddLore.equalsIgnoreCase("") && !toAddLore.equalsIgnoreCase("none"))
+                    {
+                        crateIb.addLore("");
+                        crateIb.addLore(toAddLore);
+                    }
+//                    crateIb.addLore(cc.getSettings().getConfigValues().get("virtual-key-lore").toString()
+//                            .replaceAll("%keys%", vcd.getKeys() + ""));
+                }
+
+                List<String> lore = new ArrayList<String>(crateIb.getLore());
+                crateIb.clearLore();
+
+                for(int loreLineNum = 0; loreLineNum < lore.size(); loreLineNum++)
+                {
+                    String line = lore.get(loreLineNum);
+                    line = line.replaceAll("%keys%", vcd.getKeys() + "");
+                    line = line.replaceAll("%crates%", vcd.getCrates() + "");
+
+                    crateIb.addLore(line);
                 }
 
                 ib.setItem(i, crateIb);
@@ -376,7 +400,7 @@ public class CMultiCrateInventory extends CSetting
         return "TOMANYSYMBOLS";
     }
 
-    public void checkClick(PlayerManager pm, int slot, ClickType clickType)
+    public void checkClick(final PlayerManager pm, int slot, ClickType clickType)
     {
         Player p = pm.getP();
         Crate crate = pm.getOpenCrate();
@@ -387,11 +411,26 @@ public class CMultiCrateInventory extends CSetting
 
             Crate clickedCrate = crate.getSettings().getMultiCrateSettings().getCrateSpots().get(slot);
 
+            if(clickType != ClickType.LEFT && clickType != ClickType.RIGHT)
+            {
+                return;
+            }
+
             if (clickType.equals(Boolean.valueOf(
                     cc.getSettings().getConfigValues().get("mc-reward-display-leftclick").toString().toUpperCase()) ?
                     ClickType.LEFT : ClickType.RIGHT) && (Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(cc))
             {
                 clickedCrate.getSettings().getDisplayer().openFor(p);
+                // Set last open crate back to multicrate so that closing the reward previewer reopens the multicrate
+                final Crate cachedMulticrate = this.crates;
+                Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        pm.openCrate(cachedMulticrate);
+                    }
+                }, 2);
             }
             else if (!((Boolean)SettingsValues.REQUIRE_VIRTUAL_CRATE_AND_KEY.getValue(cc))
                     || pm.getPdm().getVCCrateData(clickedCrate).getCrates() > 0)
@@ -455,6 +494,17 @@ public class CMultiCrateInventory extends CSetting
                 Messages.INSUFFICIENT_VIRTUAL_CRATES.msgSpecified(pm.getCc(), p);
             }
         }
+    }
+
+    public void openFor(Player player, PlacedCrate cm)
+    {
+        PlayerManager pm = PlayerManager.get(cc, player);
+        crates.getSettings().getMultiCrateSettings()
+                .getInventory(player, crates.getSettings().getCrateInventoryName() == null ? crates.getName() :
+                        crates.getSettings().getCrateInventoryName(), true).open();
+        pm.setLastOpenCrate(cm.getL());
+        pm.setLastOpenedPlacedCrate(cm);
+        pm.openCrate(crates);
     }
 
     public void invCheck(Player p, PlayerManager pm)

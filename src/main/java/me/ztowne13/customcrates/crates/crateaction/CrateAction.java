@@ -83,11 +83,12 @@ public abstract class CrateAction
                                     Reward reward = cs.getRewards().getRandomReward();
                                     ArrayList<Reward> rewards = new ArrayList<>();
                                     rewards.add(reward);
-                                    reward.runCommands(player);
+                                    reward.giveRewardToPlayer(player);
 
                                     cs.getKeyItemHandler().takeKeyFromPlayer(player, false);
                                     new HistoryEvent(Utils.currentTimeParsed(), crates, rewards, true)
                                             .addTo(PlayerManager.get(cc, player).getPdm());
+                                    new CrateCooldownEvent(crates, System.currentTimeMillis(), true).addTo(pdm);
                                     useCrate(pm, cm, true, true);
 
                                     if (!hasSkipped)
@@ -184,11 +185,12 @@ public abstract class CrateAction
         return b;
     }
 
-
-    public void createCrateAt(Crate crates, Location l)
+    public PlacedCrate createCrateAt(Crate crates, Location l)
     {
         PlacedCrate cm = PlacedCrate.get(cc, l);
         cm.setup(crates, true);
+
+        return cm;
     }
 
     public static boolean isInventoryTooEmpty(SpecializedCrates cc, Player p)

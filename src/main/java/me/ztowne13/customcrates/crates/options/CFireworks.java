@@ -53,25 +53,25 @@ public class CFireworks extends CSetting
                 ArrayList<String> toSetList = new ArrayList<>();
                 for (FireworkData fd : fireworks.get(tier))
                 {
-                    String serializedFw = "";
-                    for (String color : fd.getColors())
-                    {
-                        serializedFw += color + ";";
-                    }
-
-                    serializedFw = serializedFw.substring(0, serializedFw.length() - 1) + ", ";
-
-                    for (String color : fd.getFadeColors())
-                    {
-                        serializedFw += color + ";";
-                    }
-
-                    serializedFw = serializedFw.substring(0, serializedFw.length() - 1);
-                    serializedFw += ", " + fd.isTrail();
-                    serializedFw += ", " + fd.isFlicker();
-                    serializedFw += ", " + fd.getFeType().name();
-                    serializedFw += ", " + fd.getPower();
-                    toSetList.add(serializedFw);
+//                    String serializedFw = "";
+//                    for (String color : fd.getColors())
+//                    {
+//                        serializedFw += color + ";";
+//                    }
+//
+//                    serializedFw = serializedFw.substring(0, serializedFw.length() - 1) + ", ";
+//
+//                    for (String color : fd.getFadeColors())
+//                    {
+//                        serializedFw += color + ";";
+//                    }
+//
+//                    serializedFw = serializedFw.substring(0, serializedFw.length() - 1);
+//                    serializedFw += ", " + fd.isTrail();
+//                    serializedFw += ", " + fd.isFlicker();
+//                    serializedFw += ", " + fd.getFeType().name();
+//                    serializedFw += ", " + fd.getPower();
+                    toSetList.add(fd.toString());
                 }
 
                 String path = "open." + (tier.equalsIgnoreCase("OPEN") ? "" : "crate-tiers." + tier + ".") + ".fireworks";

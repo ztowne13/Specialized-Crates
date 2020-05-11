@@ -34,6 +34,35 @@ notify-updates: true
 debug: false
 
 #------------------------------------#
+#            Key Settings            #
+#------------------------------------#
+
+# Should the lore for a key be required to match the crate's key to work?
+require-key-lore: true
+
+# Should shift clicking allow the user to open a crate with every key the
+#   player is holding?
+#  NOTE: Skipping the animation by using every key at once only gives 1 rewards per
+#    key, regardless of the animation type.
+shift-click-open-all: true
+
+# Should the player have to shift click the crate again to confirm opening
+#   it with every key / virtual key?
+shift-click-confirm: true
+
+# When a player's inventory is full and they're given a key, should they get
+#   a virtual key (true) instead of dropping it on the floor (false)?
+virtual-key-instead-of-drop: false
+
+# When a player left clicks with a key, it won't be cancelled - this is mainly to
+#   support compatibility with sell-shop plugins that need the key to be interactable.
+key-allow-left-click-interaction: false
+
+# When a player left clicks with a key in hand, it opens up the reward preview menu
+#   for that specific crate.
+left-click-key-preview: false
+
+#------------------------------------#
 #           Crate Settings           #
 #------------------------------------#
 
@@ -60,21 +89,8 @@ hologram-offset: 0
 # Should the break effect be played when a crate is placed / created?
 place-effect: true
 
-# Should the lore for a key be required to match the crate's key to work?
-require-key-lore: true
-
 # Should the crates automatically close when their animations is done playing?
 auto-close: true
-
-# Should shift clicking allow the user to open a crate with every key the
-#   player is holding?
-#  NOTE: Skipping the animation by using every key at once only gives 1 rewards per
-#    key, regardless of the animation type.
-shift-click-open-all: true
-
-# Should the player have to shift click the crate again to confirm opening
-#   it with every key / virtual key?
-shift-click-confirm: true
 
 # Should the player have to confirm to open the crate or not?
 confirm-open: false
@@ -83,13 +99,12 @@ confirm-open: false
 #   NOTE: Also works for the shift-click confirmation.
 confirm-timeout: 3
 
-# When a player's inventory is full and they're given a key, should they get
-#   a virtual key (true) instead of dropping it on the floor (false)?
-virtual-key-instead-of-drop: false
-
 # Every time the server or plugin is reloaded/restarted, should the crates always
 #   be replaced to make sure that they haven't been overridden by worldedit, etc.?
 keep-crate-block-consistent: true
+
+# How many blocks away should players be able to see particles?
+particle-view-distance: 25
 
 #-------------------------------------------#
 #           Crate Action Settings           #
@@ -155,8 +170,6 @@ virtual-crate-cratecount: true
 # > %crates% - Amount of virtual crates
 virtual-crate-lore: '&cCrates: &f(&7%crates%&f)'
 virtual-key-lore: '&cKeys: &f(&7%keys%&f)'
-
-
 
 #-------------------------------------------------------#
 #       Rewards Display Inventory + Display Items       #

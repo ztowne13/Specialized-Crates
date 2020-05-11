@@ -3,27 +3,42 @@ obtain-method: STATIC
 inventory-name: '&5&l> &dMaster Crate &5&l<'
 reward-display:
   type: CUSTOM
-  name: 'test'
+  name: '&6&lCUSTOM &eReward Preview Menu'
   custom-display:
-    nextpageitem: 1
-    lastpageitem: 2
+    nextpageitem: '1'
+    lastpageitem: '3'
     pages:
-      1:
-        - 'DiamondSword'
+      '1':
+      - 0,0,0,0,0,0,0,0,0
+      - 0,DiamondSword,Diamond,Speed,Jump,SuperGoldenApple,GoldenApple,,0
+      - 0,,,,,,,,0
+      - 0,0,0,0,0,0,0,0,1
+      '2':
+      - 2,2,2,2,2,2,2,2,2
+      - 2,Grass,Dirt,SpecialDirt2,SpecialDirt,,,,2
+      - 2,,,,,,,,2
+      - 3,2,2,2,2,2,2,2,2
     items:
-      1:
-        name: 'Dirt'
-        item: DIRT;0
-        lore:
-          - '&5This is a &a&lcustom lore!'
-          - '&c&oMake me unique to the default lore'
-          - '&c&oThat you can set in the config.yml'
-        glow: true
-        chance: 20
-        rarity: common
-        give-display-item:
-          value: true
-          with-lore: false
+      '0':
+        material: GREEN_STAINED_GLASS_PANE
+        glow: false
+        amount: 1
+        name: '&6&lCUSTOM &eReward Preview Type'
+      '1':
+        material: ARROW
+        glow: false
+        amount: 1
+        name: '&b&lNext &bPage'
+      '2':
+        material: BLUE_STAINED_GLASS_PANE
+        glow: false
+        amount: 1
+        name: '&1&lCUSTOM &bReward Preview Menu'
+      '3':
+        material: ARROW
+        glow: false
+        amount: 1
+        name: '&b&lPrevious &bPage'
 display:
   type: block
 

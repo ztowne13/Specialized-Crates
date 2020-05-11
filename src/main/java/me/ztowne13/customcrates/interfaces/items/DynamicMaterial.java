@@ -1099,6 +1099,16 @@ public enum DynamicMaterial
         try
         {
             xmat = DynamicMaterial.valueOf(keyMat);
+
+            if(split.length > 1)
+            {
+                DynamicMaterial newxmat = requestXMaterial(keyMat, (byte) Integer.parseInt(split[1]));
+                if(newxmat != null)
+                {
+                    return newxmat;
+                }
+            }
+
             return xmat;
         }
         catch (IllegalArgumentException e)
@@ -1162,13 +1172,13 @@ public enum DynamicMaterial
     public Material parseMaterialRecur(int idx)
     {
         Material mat = null;
-        if(idx == -1)
+        if (idx == -1)
         {
             mat = Material.matchMaterial(toString());
         }
         else
         {
-            if(m.length == idx)
+            if (m.length == idx)
                 return null;
 
             mat = Material.matchMaterial(m[idx]);

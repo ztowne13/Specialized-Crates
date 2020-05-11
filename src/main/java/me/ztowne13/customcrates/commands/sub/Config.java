@@ -13,7 +13,7 @@ public class Config extends SubCommand
 {
     public Config()
     {
-        super("config", 1, "");
+        super("config", 1, "", new String[]{"conf", "c", "configure", "igc", "configuration", "yml"});
     }
 
     @Override

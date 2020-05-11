@@ -149,7 +149,7 @@ public class IGCCrateActions extends IGCTierMenu
             if (actionTypes.contains(input.toUpperCase()))
             {
                 actionType = input.toUpperCase();
-                new InputMenu(getCc(), getP(), "new action - message", "null", "What message would you like displayed?",
+                new InputMenu(getCc(), getP(), "new action - message", "null", "Placeholders: %name%, %nickname%, %rewards%, %crate%",
                         String.class, this, false);
 
                 Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()

@@ -26,9 +26,7 @@ import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.FlatFileDataHandler;
 import me.ztowne13.customcrates.players.data.IndividualFileDataHandler;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
-import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.DebugUtils;
-import me.ztowne13.customcrates.utils.NPCUtils;
+import me.ztowne13.customcrates.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -57,8 +55,11 @@ public class SpecializedCrates extends JavaPlugin
     DebugUtils du = null;
 
     int tick = 0;
+    int totalTicks = 0;
     boolean allowTick = true;
     boolean onlyUseBuildInHolograms = true;
+    boolean hasAttemptedReload = false;
+    boolean particlesEnabled = true;
 
     String yemo;
     int msged = 0;
@@ -82,7 +83,7 @@ public class SpecializedCrates extends JavaPlugin
             du = new DebugUtils(this);
         du.fancy();
 
-        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && placeHolderAPIHandler == null){
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && !isUsingPlaceholderAPI()){
             placeHolderAPIHandler = new PlaceHolderAPIHandler(this);
             placeHolderAPIHandler.register();
         }
@@ -123,6 +124,36 @@ public class SpecializedCrates extends JavaPlugin
         allowTick = true;
 
         antiFraudSQLHandler = new AntiFraudSQLHandler(this);
+
+        // Check to see if the plugin needs a reload to find the hologram plugin
+        if(!hasAttemptedReload)
+        {
+            Bukkit.getScheduler().runTaskLater(this, new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    if(getSettings().getInfoToLog().containsKey("Hologram Plugin") &&
+                        getSettings().getInfoToLog().get("Hologram Plugin").equalsIgnoreCase("None"))
+                    {
+                        hasAttemptedReload = true;
+                        ChatUtils
+                                .log("&e[SpecializedCrates] No hologram plugin was found. In the off-chance that this is because the hologram plugin" +
+                                        " opted to ignore the softdepend and loaded after SpecializedCrates, the plugin is reloading once to " +
+                                        "try again.");
+                        reload();
+                    }
+                }
+            }, 1);
+        }
+
+        if(Bukkit.getServer().getSpawnRadius() != 0)
+        {
+            ChatUtils.log("&4WARNING: &cThe value 'spawn-protection' is set to " + Bukkit.getServer().getSpawnRadius() +
+                    " in the server.properties file. This WILL cause issues with SpecializedCrates - any crates near spawn will " +
+                    "only be openable for OP players. Please go to your server.properties file in the main directory of your server" +
+                    " and change spawn-protection: 0.");
+        }
     }
 
     public void onDisable()
@@ -184,8 +215,16 @@ public class SpecializedCrates extends JavaPlugin
         getCommand("scrates").setExecutor(null);
         getCommand("scrates").setTabCompleter(null);
         getCommand("keys").setExecutor(null);
-        getCommand("rewards").setExecutor(null);
-        getCommand("rewards").setTabCompleter(null);
+
+        try
+        {
+            getCommand("rewards").setExecutor(null);
+            getCommand("rewards").setTabCompleter(null);
+        }
+        catch(Exception exc)
+        {
+
+        }
 
         setTick(0);
 
@@ -193,6 +232,8 @@ public class SpecializedCrates extends JavaPlugin
         PlacedCrate.clearLoaded();
         PlayerManager.clearLoaded();
         Crate.clearLoaded();
+        ReflectionUtilities.clearLoaded();
+        Utils.cachedParticleDistance = -1;
         stopRun();
 
         setBr(null);
@@ -321,6 +362,7 @@ public class SpecializedCrates extends JavaPlugin
 
             getAlreadyUpdated().clear();
 
+            setTotalTicks(getTotalTicks() + 1);
             setTick(getTick() + 1);
 
             if (getTick() == 10)
@@ -371,7 +413,6 @@ public class SpecializedCrates extends JavaPlugin
 
     public void run()
     {
-        //setBr(Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Runnable()
         setBr(Bukkit.getScheduler().runTaskTimer(this, new Runnable()
         {
             public void run()
@@ -406,19 +447,6 @@ public class SpecializedCrates extends JavaPlugin
             {
                 pm.getCurrentAnimation().setFastTrack(true, true);
             }
-
-            /*if (pm.isWaitingForClose())
-            {
-                pm.closeCrate();
-
-                for (Reward r : pm.getWaitingForClose())
-                {
-                    r.runCommands(p);
-                }
-
-                pm.setWaitingForClose(null);
-                p.closeInventory();
-            }*/
         }
     }
 
@@ -612,5 +640,34 @@ public class SpecializedCrates extends JavaPlugin
                disEnThis();
         }
         ran++;
+    }
+
+    public boolean isUsingPlaceholderAPI() {
+        return placeHolderAPIHandler != null;
+    }
+
+    public boolean isHasAttemptedReload()
+    {
+        return hasAttemptedReload;
+    }
+
+    public boolean isParticlesEnabled()
+    {
+        return particlesEnabled;
+    }
+
+    public void setParticlesEnabled(boolean particlesEnabled)
+    {
+        this.particlesEnabled = particlesEnabled;
+    }
+
+    public int getTotalTicks()
+    {
+        return totalTicks;
+    }
+
+    public void setTotalTicks(int totalTicks)
+    {
+        this.totalTicks = totalTicks;
     }
 }

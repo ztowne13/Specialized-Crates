@@ -28,6 +28,8 @@ public class HolographicDisplaysHologram extends DynamicHologram
             setH(HologramsAPI.createHologram(getCc(), l));
             teleport(l);
         }
+
+        h.setAllowPlaceholders(true);
     }
 
     @Override

@@ -1,8 +1,10 @@
 package me.ztowne13.customcrates.utils;
 
+import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -20,7 +22,7 @@ public class Utils
 
     public static boolean itemHasName(ItemStack stack)
     {
-        return stack.hasItemMeta() && stack.getItemMeta().hasDisplayName();
+        return stack.getItemMeta() != null && stack.getItemMeta().getDisplayName() != null;
     }
 
     public static String getStringFromColor(Color c)
@@ -339,5 +341,29 @@ public class Utils
         String days = (Integer.parseInt(args[0]) - 1) + "";
 
         return new String[]{days, hours, minutes, seconds};
+    }
+
+    public static int cachedParticleDistance = -1;
+    public static boolean isPlayerInRange(SpecializedCrates sc, Player p, Location center)
+    {
+        if(!sc.isParticlesEnabled())
+        {
+            return false;
+        }
+
+        if(cachedParticleDistance == -1)
+        {
+            cachedParticleDistance = (int) SettingsValues.PARTICLE_VIEW_DISTANCE.getValue(sc);
+        }
+
+        double distance = 0.0D;
+        if (center.getWorld().equals(p.getWorld()))
+        {
+            if ((distance = center.distance(p.getLocation())) > 1.7976931348623157E+308D) return false;
+            {
+                return distance < cachedParticleDistance;
+            }
+        }
+        return false;
     }
 }

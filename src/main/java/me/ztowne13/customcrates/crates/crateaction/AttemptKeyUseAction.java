@@ -36,6 +36,13 @@ public class AttemptKeyUseAction extends CrateAction
                 return false;
             }
 
+            long curTime = System.currentTimeMillis();
+            if(curTime - pm.getLastClickedCrateTime() < 500)
+            {
+                return true;
+            }
+            pm.setLastClickedCrateTime(System.currentTimeMillis());
+
             // For SQL, to make sure the player data is loaded
             if(!pm.getPdm().isLoaded())
             {
@@ -49,15 +56,16 @@ public class AttemptKeyUseAction extends CrateAction
             {
                 if(pm.isInCrate())
                 {
-                    return false;
+                    return true;
                 }
 
-                crates.getSettings().getMultiCrateSettings()
-                        .getInventory(player, crates.getSettings().getCrateInventoryName() == null ? crates.getName() :
-                                crates.getSettings().getCrateInventoryName(), true).open();
-                pm.setLastOpenCrate(location);
-                pm.setLastOpenedPlacedCrate(cm);
-                pm.openCrate(crates);
+                crates.getSettings().getMultiCrateSettings().openFor(player, cm);
+//                crates.getSettings().getMultiCrateSettings()
+//                        .getInventory(player, crates.getSettings().getCrateInventoryName() == null ? crates.getName() :
+//                                crates.getSettings().getCrateInventoryName(), true).open();
+//                pm.setLastOpenCrate(location);
+//                pm.setLastOpenedPlacedCrate(cm);
+//                pm.openCrate(crates);
                 return true;
             }
             else if (!player.getGameMode().equals(GameMode.CREATIVE) ||

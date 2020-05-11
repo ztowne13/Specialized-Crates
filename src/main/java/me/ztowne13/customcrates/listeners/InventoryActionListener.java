@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.listeners;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
+import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.types.animations.AnimationDataHolder;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimation;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCMultiCrateMain;
@@ -20,6 +21,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 
 public class InventoryActionListener implements Listener
 {
@@ -91,6 +93,7 @@ public class InventoryActionListener implements Listener
                 {
                     Crate crate = pm.getOpenCrate();
                     crate.getSettings().getMultiCrateSettings().checkClick(pm, slot, e.getClick());
+                    e.setCancelled(true);
                 }
                 // Handle discover animation click
                 else if (pm.isInCrate())
@@ -121,14 +124,14 @@ public class InventoryActionListener implements Listener
     @EventHandler
     public void onAnvilClick(InventoryClickEvent e)
     {
-        if(e.getInventory().getType().equals(InventoryType.ANVIL))
+        if (e.getInventory().getType().equals(InventoryType.ANVIL))
         {
-            if(e.getInventory().getItem(2) != null)
+            if (e.getInventory().getItem(2) != null)
             {
                 ItemBuilder builder = new ItemBuilder(e.getInventory().getItem(2));
-                if(builder.hasDisplayName())
+                if (builder.hasDisplayName())
                 {
-                    if(CrateUtils.searchByCrate(builder.get()) != null || CrateUtils.searchByKey(builder.get()) != null)
+                    if (CrateUtils.searchByCrate(builder.get()) != null || CrateUtils.searchByKey(builder.get()) != null)
                     {
                         e.setCancelled(true);
                         e.getWhoClicked().closeInventory();
@@ -150,7 +153,7 @@ public class InventoryActionListener implements Listener
         Player p = (Player) e.getWhoClicked();
         PlayerManager pm = PlayerManager.get(cc, p);
 
-        if (pm.isInOpenMenu())
+        if (p.hasPermission("customcrates.admin") && pm.isInOpenMenu())
         {
             if (!(e.getClickedInventory() == null || e.getView().getTopInventory() == null))
             {
@@ -179,7 +182,7 @@ public class InventoryActionListener implements Listener
         Player player = (Player) e.getPlayer();
         PlayerManager pm = PlayerManager.get(cc, player);
 
-        if(pm.isInCrateAnimation())
+        if (pm.isInCrateAnimation())
         {
             AnimationDataHolder dataHolder = pm.getCurrentAnimation();
             dataHolder.getCrateAnimation().handleKeyPress(dataHolder, CrateAnimation.KeyType.ESC);
@@ -193,7 +196,6 @@ public class InventoryActionListener implements Listener
         final Player p = (Player) e.getPlayer();
         final PlayerManager pm = PlayerManager.get(cc, p);
 
-        pm.setInRewardMenu(false);
         pm.setLastPage(null);
 
         if (pm.isInOpenMenu() && !pm.getOpenMenu().isInInputMenu())
@@ -257,24 +259,70 @@ public class InventoryActionListener implements Listener
             }
         }
 
-        /*if (pm.isWaitingForClose())
+        // Close the multicrate
+        if (pm.isInCrate() && !pm.isInRewardMenu())
         {
-            pm.closeCrate();
-            for (Reward r : pm.getWaitingForClose())
-            {
-                r.runCommands(p);
-            }
-            pm.setWaitingForClose(null);
-        }*/
-
-
-        if (pm.isInCrate() || pm.isInRewardMenu())
-        {
-            if (pm.getOpenCrate().isMultiCrate())
+            if (pm.getOpenCrate() != null && pm.getOpenCrate().isMultiCrate())
             {
                 pm.closeCrate();
+                preventDupeReopen(p, e.getInventory(), true);
             }
         }
+
+        // Handle closing an inventory while the reward preview menu is open
+        if (pm.isInRewardMenu())
+        {
+            final Crate cachedOpenCrate = pm.getOpenCrate();
+            final PlacedCrate cachedLastOpenedPlacedCrate = pm.getLastOpenedPlacedCrate();
+            if (pm.getNextPageInventoryCloseGrace() <= cc.getTotalTicks())
+            {
+                // This is to reopen a multicrate if the reward preview menu was closed
+                if (pm.isInCrate() && pm.getOpenCrate().isMultiCrate())
+                {
+                    pm.setInRewardMenu(false);
+                    Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            cachedOpenCrate.getSettings().getMultiCrateSettings().openFor(p, cachedLastOpenedPlacedCrate);
+                        }
+                    }, 1);
+                }
+                // This is to prevent duplication in the reward menu - it reopens the inventory very briefly and re-closes it.
+                else
+                {
+                    pm.setInRewardMenu(false);
+                    preventDupeReopen(p, e.getInventory(), false);
+                }
+            }
+        }
+    }
+
+    public void preventDupeReopen(final Player player, final Inventory inventory, final boolean checkInRewardMenu)
+    {
+        Bukkit.getScheduler().runTaskLater(cc, new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if(checkInRewardMenu)
+                {
+                    if(PlayerManager.get(cc, player).isInRewardMenu())
+                    {
+                        return;
+                    }
+                }
+
+                if (inventory.getType().equals(InventoryType.CRAFTING))
+                {
+                    return;
+                }
+
+                player.openInventory(inventory);
+                player.closeInventory();
+            }
+        }, 1);
     }
 
     public boolean isntPlayerInventory(InventoryClickEvent e, PlayerManager pm)

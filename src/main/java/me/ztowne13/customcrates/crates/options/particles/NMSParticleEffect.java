@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.crates.options.particles;
 
+import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Bukkit;
@@ -15,9 +16,9 @@ public class NMSParticleEffect extends ParticleData
 {
     ParticleEffect particleEffect;
 
-    public NMSParticleEffect(ParticleEffect particleEffect, String name, boolean hasAnimation)
+    public NMSParticleEffect(SpecializedCrates sc, ParticleEffect particleEffect, String name, boolean hasAnimation)
     {
-        super(name, hasAnimation);
+        super(sc, name, hasAnimation);
         this.particleEffect = particleEffect;
     }
 
@@ -50,7 +51,7 @@ public class NMSParticleEffect extends ParticleData
             {
                 Player p = (Player) iterator.next();
 
-                particleEffect.sendToPlayer(p, centered, offX, offY, offZ, speed, amnt);
+                particleEffect.sendToPlayer(sc, p, centered, offX, offY, offZ, speed, amnt);
             }
         }
         catch (Exception e)

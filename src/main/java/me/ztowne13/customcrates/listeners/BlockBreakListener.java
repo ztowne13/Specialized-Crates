@@ -49,6 +49,7 @@ public class BlockBreakListener implements Listener
             cm.delete();
             Messages.BROKEN_CRATE.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crates.getName()});
         }
+        // LUCKY CHEST / MINE CRATES
         else
         {
             // Event isn't already cancelled
@@ -70,13 +71,21 @@ public class BlockBreakListener implements Listener
                                 // Check if the lucky chesty should be placed at the location
                                 if (crates.getSettings().getLuckyChestSettings().checkRun(e.getBlock()))
                                 {
-                                    if((!e.getBlock().hasMetadata("PLACED") || e.getBlock().getMetadata("PLACED") == null) || (Boolean) SettingsValues.LUCKYCHEST_ALLOW_PLACED_BLOCKS.getValue(cc))
+                                    // Check if this block is a placed block or not and whether or not that's okay
+                                    if ((!e.getBlock().hasMetadata("PLACED") ||
+                                            e.getBlock().getMetadata("PLACED") == null) ||
+                                            (Boolean) SettingsValues.LUCKYCHEST_ALLOW_PLACED_BLOCKS.getValue(cc))
                                     {
-                                        PlacedCrate cm = PlacedCrate.get(cc, e.getBlock().getLocation());
-                                        cm.setup(crates, true);
-                                        Messages.FOUND_LUCKY_CHEST.msgSpecified(cc, p);
-                                        e.setCancelled(true);
-                                        break;
+                                        // Check to make sure the player has the permission or doesn't need the permission
+                                        if (!crates.getSettings().getLuckyChestSettings().isRequirePermission() ||
+                                                e.getPlayer().hasPermission(crates.getSettings().getPermission()))
+                                        {
+                                            PlacedCrate cm = PlacedCrate.get(cc, e.getBlock().getLocation());
+                                            cm.setup(crates, true);
+                                            Messages.FOUND_LUCKY_CHEST.msgSpecified(cc, p);
+                                            e.setCancelled(true);
+                                            break;
+                                        }
                                     }
                                 }
                             }
