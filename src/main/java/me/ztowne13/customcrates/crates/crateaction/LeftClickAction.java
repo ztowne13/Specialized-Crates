@@ -31,7 +31,7 @@ public class LeftClickAction extends CrateAction
             {
                 cm.delete();
                 pm.setDeleteCrate(false);
-                Messages.SUCCESS_DELETE.msgSpecified(cc, player, new String[]{"%crate%"}, new String[]{cm.getCrates().getDisplayName()});
+                Messages.SUCCESS_DELETE.msgSpecified(cc, player, new String[]{"%crate%"}, new String[]{cm.getCrates().getName()});
                 return true;
             }
 
