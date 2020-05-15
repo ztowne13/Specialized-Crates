@@ -16,6 +16,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -311,11 +312,38 @@ public class Reward implements Comparable<Reward>
         {
             double ch = getChance() / cr.getTotalOdds();
             ch = ch * 100;
+
+            // If a chance is really small, this is so it doesn't show as 0.
+            if(ch < 1)
+            {
+                String chanceAsDub = new BigDecimal(ch).toPlainString() + "";
+                String littleNumberFormat = "#.";
+                boolean foundDot = false;
+                for(int i = 0; i < chanceAsDub.length(); i++)
+                {
+                    char val = chanceAsDub.charAt(i);
+
+                    if(foundDot)
+                    {
+                        littleNumberFormat += "#";
+                        if(val != '0') {
+                            break;
+                        }
+                    }
+
+                    if(val == '.')
+                    {
+                        foundDot = true;
+                    }
+                }
+                return new DecimalFormat(littleNumberFormat + "#").format(ch);
+            }
+
             return new DecimalFormat("#.##").format(ch);
         }
         else
         {
-            return -1 + "";
+            return "-1";
         }
     }
 
