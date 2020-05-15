@@ -106,6 +106,10 @@ keep-crate-block-consistent: true
 # How many blocks away should players be able to see particles?
 particle-view-distance: 25
 
+# Should any %crate% placeholders use the crate item's display name instead of
+#  of the crate name?
+use-crate-name-for-display: true
+
 #-------------------------------------------#
 #           Crate Action Settings           #
 #-------------------------------------------#

@@ -48,7 +48,7 @@ public abstract class RewardDisplayer
         if (name == null)
             return ChatUtils.toChatColor(
                     getCrates().getCc().getSettings().getConfigValues().get("inv-reward-display-name").toString()
-                            .replace("%crate%", getCrates().getName()));
+                            .replace("%crate%", getCrates().getDisplayName()));
         else
             return ChatUtils.toChatColor(name);
     }

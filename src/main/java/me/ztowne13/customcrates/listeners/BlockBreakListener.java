@@ -41,13 +41,13 @@ public class BlockBreakListener implements Listener
                 {
                     e.setCancelled(true);
                     Messages.FAILED_BREAK_CRATE.msgSpecified(cc, p, new String[]{"%crate%", "%reason%"},
-                            new String[]{crates.getName(), "static"});
+                            new String[]{crates.getDisplayName(), "static"});
                 }
                 return;
             }
 
             cm.delete();
-            Messages.BROKEN_CRATE.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crates.getName()});
+            Messages.BROKEN_CRATE.msgSpecified(cc, p, new String[]{"%crate%"}, new String[]{crates.getDisplayName()});
         }
         // LUCKY CHEST / MINE CRATES
         else

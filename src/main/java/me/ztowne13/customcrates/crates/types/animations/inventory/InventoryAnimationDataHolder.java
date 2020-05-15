@@ -44,7 +44,7 @@ public abstract class InventoryAnimationDataHolder extends AnimationDataHolder
             inventoryName = getCrateAnimation().getCrate().getSettings().getCrateInventoryName();
         }
 
-        inventoryName.replaceAll("%crate%", crateAnimation.getCrate().getName());
+        inventoryName.replaceAll("%crate%", crateAnimation.getCrate().getDisplayName());
 
         if(inventoryName.length() > 31)
         {

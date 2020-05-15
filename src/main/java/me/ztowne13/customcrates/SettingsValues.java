@@ -308,6 +308,13 @@ public enum SettingsValues
                     "When a player left-clicks with a key",
                     "it opens that specific crate's reward",
                     "preview menu."
+            }),
+
+    USE_CRATE_NAME_FOR_DISPLAY("use-crate-name-for-display", Boolean.class, false, false, "Use Crate Item Name",
+            new String[]{
+                    "Anywhere there is a %crate% placeholder",
+                    "the crate item's display name will be used",
+                    "instead of just the crate's name."
             });
 
     String easyName;

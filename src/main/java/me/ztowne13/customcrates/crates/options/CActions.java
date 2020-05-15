@@ -197,7 +197,7 @@ public class CActions extends CSetting
                         msg = msg.replace("%player%", p.getName()).replace("%name%", p.getName());
                         msg = msg.replace("%displayname%", p.getDisplayName()).replace("%nickname%", p.getDisplayName())
                                 .replace("%nick%", p.getDisplayName());
-                        msg = msg.replace("%crate%", getCrate().getName()).replace("%cratename%", getCrate().getName());
+                        msg = msg.replace("%crate%", getCrate().getName()).replace("%cratename%", getCrate().getDisplayName());
                         msg = msg.replace("%reward%", rewardsAsString).replace("%rewards%", rewardsAsString);
                         msg = ChatUtils.toChatColor(msg);
                         if (s.equalsIgnoreCase("MESSAGE"))
@@ -285,7 +285,7 @@ public class CActions extends CSetting
                 msg = msg.replace("%player%", p.getName()).replace("%name%", p.getName());
                 msg = msg.replace("%displayname%", p.getDisplayName()).replace("%nickname%", p.getDisplayName())
                         .replace("%nick%", p.getDisplayName());
-                msg = msg.replace("%crate%", getCrate().getName()).replace("%cratename%", getCrate().getName());
+                msg = msg.replace("%crate%", getCrate().getName()).replace("%cratename%", getCrate().getDisplayName());
                 msg = msg.replace("%reward%", rewardsAsString).replace("%rewards%", rewardsAsString);
 
                 msg = ChatUtils.toChatColor(msg);

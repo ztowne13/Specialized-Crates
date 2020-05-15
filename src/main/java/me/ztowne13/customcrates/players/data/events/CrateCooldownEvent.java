@@ -43,7 +43,7 @@ public class CrateCooldownEvent extends DataEvent
 
                 Messages.COOLDOWN_START.msgSpecified(cc, pdm.getDh().getPm().getP(),
                         new String[]{"%crate%", "%days%", "%hours%", "%minutes%", "%seconds%"},
-                        new String[]{getCrates().getName(), values[0], values[1], values[2], values[3]});
+                        new String[]{getCrates().getDisplayName(), values[0], values[1], values[2], values[3]});
             }
 
             pdm.addCrateCooldowns(this, pdm.addStringToList(getFormatted(), pdm.getCrateCooldowns()));
@@ -75,7 +75,7 @@ public class CrateCooldownEvent extends DataEvent
         String[] values = Utils.ConvertSecondToHHMMString(seconds);
         Messages.COOLDOWN_END.msgSpecified(getCc(), pdm.getDh().getPm().getP(),
                 new String[]{"%crate%", "%days%", "%hours%", "%minutes%", "%seconds%"},
-                new String[]{getCrates().getName(), values[0], values[1], values[2], values[3]});
+                new String[]{getCrates().getDisplayName(), values[0], values[1], values[2], values[3]});
         pdm.removeCrateCooldowns(this, pdm.removeStringFromList(getFormatted(), pdm.getCrateCooldowns()));
     }
 
@@ -90,7 +90,7 @@ public class CrateCooldownEvent extends DataEvent
         crates.getSettings().getAnimation().playFailToOpen(pdm.getPm().getP(), false, true);
         int seconds = Math.round(isCooldownOver());
         String[] values = Utils.ConvertSecondToHHMMString(seconds);
-        pdm.getPm().getP().sendMessage(Messages.CRATE_ON_COOLDOWN.getFromConf(cc).replace("%crate%", crates.getName())
+        pdm.getPm().getP().sendMessage(Messages.CRATE_ON_COOLDOWN.getFromConf(cc).replace("%crate%", crates.getDisplayName())
                 .replace("%days%", values[0]).replace("%hours%", values[1]).replace("%minutes%", values[2])
                 .replace("%seconds%", values[3]));
 
