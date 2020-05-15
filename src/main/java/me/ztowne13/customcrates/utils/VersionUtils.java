@@ -44,6 +44,7 @@ public class VersionUtils
     {
         v1_7,
         v1_8,
+        v1_8_R3,
         v1_9,
         v1_10,
         v1_11,

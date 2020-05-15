@@ -70,11 +70,15 @@ public class SpecializedCrates extends JavaPlugin
 
     public void onEnable(boolean register)
     {
-        if(metricsLite == null)
+        if(metricsLite == null && VersionUtils.Version.v1_8_R3.isServerVersionOrLater())
+        {
             metricsLite = new MetricsLite(this);
 
+        }
         if (du == null)
+        {
             du = new DebugUtils(this);
+        }
 
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && !isUsingPlaceholderAPI()){
             placeHolderAPIHandler = new PlaceHolderAPIHandler(this);
@@ -116,6 +120,8 @@ public class SpecializedCrates extends JavaPlugin
         allowTick = true;
 
         antiFraudSQLHandler = new AntiFraudSQLHandler(this);
+
+        getSettings().getInfoToLog().put("Metrics", metricsLite == null ? "&cdisabled" : "&aenabled");
 
         // Check to see if the plugin needs a reload to find the hologram plugin
         if(!hasAttemptedReload)
