@@ -9,6 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class InventoryBuilder
 {
@@ -28,7 +29,7 @@ public class InventoryBuilder
         this.minimumSlots = minimumSlots;
         this.p = p;
 
-        setInv(Bukkit.createInventory(p, max(minimumSlots, slots), ChatColor.translateAlternateColorCodes('&', invName)));
+        setInv(Bukkit.createInventory(p, min(54, max(minimumSlots, slots)), ChatColor.translateAlternateColorCodes('&', invName)));
     }
 
     public void clear()
