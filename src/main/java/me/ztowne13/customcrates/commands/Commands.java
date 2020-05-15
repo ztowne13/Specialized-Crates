@@ -34,7 +34,8 @@ public abstract class Commands
         }
         else
         {
-            ChatUtils.log(ChatUtils.removeColor(s));
+//            ChatUtils.log(ChatUtils.removeColor(s));
+            ChatUtils.log(s);
         }
     }
 
