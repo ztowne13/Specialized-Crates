@@ -1,9 +1,6 @@
 package me.ztowne13.customcrates.crates.options;
 
-import me.ztowne13.customcrates.crates.Crate;
-import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
-import me.ztowne13.customcrates.crates.CrateState;
-import me.ztowne13.customcrates.crates.PlacedCrate;
+import me.ztowne13.customcrates.crates.*;
 import me.ztowne13.customcrates.crates.options.holograms.*;
 import me.ztowne13.customcrates.crates.options.holograms.animations.HoloAnimType;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
@@ -236,9 +233,15 @@ public class CHolograms extends CSetting
     {
         h.create(l);
 
+        CrateSettings settings = getCrate().getSettings();
+        // This is a dynamic hologram and doesn't need them created when placed
+        if(settings.getObtainType().equals(ObtainType.DYNAMIC) && !settings.isRequireKey())
+        {
+            return h;
+        }
+
         if (!lines.isEmpty())
         {
-
             for (String s : getLines())
             {
                 try
