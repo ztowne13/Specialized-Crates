@@ -254,15 +254,15 @@ public class Reward implements Comparable<Reward>
         if (!forSure)
         {
             ArrayList<String> cratesThatUse = new ArrayList<>();
-            for (Crate cs : Crate.getLoadedCrates().values())
+            for (Crate crate : Crate.getLoadedCrates().values())
             {
-                if (!cs.isMultiCrate())
+                if (!crate.isMultiCrate() && crate.isLoadedProperly())
                 {
-                    for (Reward r : cs.getSettings().getRewards().getCrateRewards())
+                    for (Reward r : crate.getSettings().getRewards().getCrateRewards())
                     {
                         if (r.equals(this))
                         {
-                            cratesThatUse.add(cs.getName());
+                            cratesThatUse.add(crate.getName());
                             break;
                         }
                     }
@@ -275,7 +275,7 @@ public class Reward implements Comparable<Reward>
         {
             for (Crate crate : Crate.getLoadedCrates().values())
             {
-                if (!crate.isMultiCrate())
+                if (!crate.isMultiCrate() && crate.isLoadedProperly())
                 {
                     for (Reward r : crate.getSettings().getRewards().getCrateRewards())
                     {

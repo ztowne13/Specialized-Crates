@@ -27,7 +27,12 @@ public class Crate
     String lastOpenedName = "Nobody";
     String lastOpenedReward = "Nothing";
 
-    boolean enabled = true, canBeEnabled = true, isMultiCrate, isUsedForCratesCommand = false;
+
+    boolean enabled = true,
+            canBeEnabled = true,
+            isMultiCrate,
+            isUsedForCratesCommand = false,
+            loadedProperly = false;
 
     CrateSettings cs;
 
@@ -50,6 +55,7 @@ public class Crate
         getLoadedCrates().put(name, this);
 
         getSettings().loadAll();
+        loadedProperly = true;
     }
 
     @Deprecated
@@ -189,7 +195,7 @@ public class Crate
         return getLoadedCrates().containsKey(name) ? getLoadedCrates().get(name) : new Crate(cc, name, false, isMultiCrate);
     }
 
-    public static boolean crateAlreadyExist(String name)
+    public static boolean existsNotCaseSensitive(String name)
     {
         for (String crates : getLoadedCrates().keySet())
         {
@@ -335,5 +341,10 @@ public class Crate
             }
         }
         return getName();
+    }
+
+    public boolean isLoadedProperly()
+    {
+        return loadedProperly;
     }
 }
