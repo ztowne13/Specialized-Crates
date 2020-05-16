@@ -77,9 +77,9 @@ public class IGCMenuRewards extends IGCMenu
         int displayedRewards = 0;
 
         for (Reward r : CRewards.getAllRewardsSorted(getCc(), (CRewards.RewardSortType)getButtons()[0].getValue()).values())
-//        for (String rName : getCc().getRewardsFile().get().getKeys(false))
         {
             String rName = r.getRewardName();
+
             if (toSkip > skipped || displayedRewards >= 28)
             {
                 skipped++;
@@ -90,10 +90,6 @@ public class IGCMenuRewards extends IGCMenu
             {
                 i += 2;
             }
-
-//            Reward r;
-//
-//            r = CRewards.getAllRewards().get(rName);
 
             r.checkIsNeedMoreConfig();
             ItemBuilder newR;
