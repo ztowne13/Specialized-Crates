@@ -1100,7 +1100,7 @@ public enum DynamicMaterial
         {
             xmat = DynamicMaterial.valueOf(keyMat);
 
-            if(split.length > 1)
+            if(split.length > 1 && !split[1].equalsIgnoreCase("0"))
             {
                 DynamicMaterial newxmat = requestXMaterial(keyMat, (byte) Integer.parseInt(split[1]));
                 if(newxmat != null)
