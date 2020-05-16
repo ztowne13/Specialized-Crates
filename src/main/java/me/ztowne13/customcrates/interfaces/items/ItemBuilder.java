@@ -66,16 +66,6 @@ public class ItemBuilder implements EditableItem
         create(m, amnt);
     }
 
-    public void reapplyAll()
-    {
-        reapplyColor();
-        reapplyItemFlags();
-        reapplyLore();
-        reapplyEnchantments();
-        reapplyNBTTags();
-        reapplyPotionEffects();
-    }
-
     public void reset()
     {
         getEnchantments().clear();
@@ -275,35 +265,10 @@ public class ItemBuilder implements EditableItem
 
     public ItemBuilder addAutomaticLore(String lineColor, int charLength, String lore)
     {
-        String[] split = lore.split(" ");
-        int lineSize = 0;
-        String currentLine = "";
-
-        for (String word : split)
-        {
-            int wordLength = word.length();
-            if (lineSize + wordLength <= charLength)
-            {
-                lineSize += wordLength + 1;
-                currentLine += word + " ";
-            }
-            else
-            {
-                addLore(lineColor + currentLine.substring(0, currentLine.length() - 1));
-                currentLine = word + " ";
-                lineSize = wordLength;
-
-
-            }
-        }
-
-        if (lineSize != 0)
-            addLore(lineColor + currentLine.substring(0, currentLine.length() - 1));
-
-        return this;
+        return addAutomaticLore(lineColor, charLength, false, lore);
     }
 
-    public ItemBuilder addAutomaticLore(int charLength, String lore)
+    public ItemBuilder addAutomaticLore(String lineColor, int charLength, boolean maintainColor, String lore)
     {
         String[] split = lore.split(" ");
         int lineSize = 0;
@@ -320,17 +285,25 @@ public class ItemBuilder implements EditableItem
             }
             else
             {
-                String line = ChatUtils.lastChatColor(lastLine) + currentLine.substring(0, currentLine.length() - 1);
+                if(maintainColor)
+                {
+                    lineColor = ChatUtils.lastChatColor(lastLine);
+                }
+                String line = lineColor + currentLine.substring(0, currentLine.length() - 1);
                 addLore(line);
                 currentLine = word + " ";
                 lineSize = wordLength;
                 lastLine = line;
 
+
             }
         }
-
+        if(maintainColor)
+        {
+            lineColor = ChatUtils.lastChatColor(lastLine);
+        }
         if (lineSize != 0)
-            addLore(ChatUtils.lastChatColor(lastLine) + currentLine.substring(0, currentLine.length() - 1));
+            addLore(lineColor + currentLine.substring(0, currentLine.length() - 1));
 
         return this;
     }
