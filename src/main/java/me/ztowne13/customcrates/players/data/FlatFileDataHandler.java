@@ -18,7 +18,7 @@ public class FlatFileDataHandler extends DataHandler
         super(pm);
         cc.getDu().log("Loading flat file data handler for " + pm.getP().getName());
         this.fu = new FileHandler(getCc(), "PlayerData.db", false, false);
-        this.fc = getFu().get();
+        this.fc = getFileHandler().get();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class FlatFileDataHandler extends DataHandler
         return getUuid() + "." + value;
     }
 
-    public FileHandler getFu()
+    public FileHandler getFileHandler()
     {
         return fu;
     }

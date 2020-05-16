@@ -3,7 +3,6 @@ package me.ztowne13.customcrates.interfaces.items;
 import me.ztowne13.customcrates.interfaces.items.attributes.BukkitGlowEffect;
 import me.ztowne13.customcrates.interfaces.items.attributes.CompressedEnchantment;
 import me.ztowne13.customcrates.interfaces.items.attributes.RGBColor;
-import me.ztowne13.customcrates.interfaces.items.nbt.NBTTagManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.VersionUtils;
 import org.apache.commons.lang.WordUtils;
@@ -80,6 +79,8 @@ public class ItemBuilder implements EditableItem
     {
         reset();
 
+        List<String> cachedTags = NBTTagBuilder.getFrom(stack, false);
+
         // Enchantments
         Map<Enchantment, Integer> enchants;
         if (im() instanceof EnchantmentStorageMeta)
@@ -119,8 +120,6 @@ public class ItemBuilder implements EditableItem
             else
             {
                 Potion pot = Potion.fromItemStack(stack);
-//                Potion clearPot = new Potion(PotionType.WATER);
-//                clearPot.apply(stack);
 
                 try
                 {
@@ -153,7 +152,7 @@ public class ItemBuilder implements EditableItem
         }
 
         // NBT Tags
-        for (String tags : NBTTagManager.getFrom(stack))
+        for (String tags : cachedTags)
         {
             addNBTTag(tags);
         }
@@ -464,7 +463,7 @@ public class ItemBuilder implements EditableItem
     {
         for (String tag : getNBTTags())
         {
-            stack = NBTTagManager.applyTo(stack, tag);
+            stack = NBTTagBuilder.applyTo(stack, tag);
         }
     }
 

@@ -1,4 +1,4 @@
-package me.ztowne13.customcrates.interfaces.items.nbt;
+package me.ztowne13.customcrates.interfaces.items;
 
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.ReflectionUtilities;
@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * Created by ztowne13 on 6/11/16.
  */
-public class NBTTagReflection
+public class NBTTagBuilder
 {
     public static Class getCraftItemStack()
     {
@@ -180,9 +180,10 @@ public class NBTTagReflection
 
     private static String[] booleanTags = new String[]{
             "Unbreakable"
+
     };
 
-    public static List<String> getFrom(ItemStack item)
+    public static List<String> getFrom(ItemStack item, boolean ignoreExcluded)
     {
         List<String> list = new ArrayList<>();
 
@@ -206,7 +207,7 @@ public class NBTTagReflection
                     }
                 }
 
-                if (!toSkip)
+                if (!toSkip || ignoreExcluded)
                 {
                     Object nbtBase;
                     if (Arrays.asList(booleanTags).contains(key))

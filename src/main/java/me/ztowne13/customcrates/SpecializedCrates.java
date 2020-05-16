@@ -387,13 +387,13 @@ public class SpecializedCrates extends JavaPlugin
     {
         for(FlatFileDataHandler file : FlatFileDataHandler.toSave)
         {
-            file.getFu().save();
+            file.getFileHandler().save();
         }
         FlatFileDataHandler.toSave.clear();
 
         for(IndividualFileDataHandler file : IndividualFileDataHandler.toSave)
         {
-            file.getFu().save();
+            file.getFileHandler().save();
         }
         IndividualFileDataHandler.toSave.clear();
     }

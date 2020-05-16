@@ -19,7 +19,7 @@ public class IndividualFileDataHandler extends DataHandler
         cc.getDu().log("Loading individual file data handler for " + pm.getP().getName());
         this.fu = new FileHandler(pm.getCc(), pm.getP().getUniqueId().toString() + ".stats", "/PlayerStats/", false, false,
                 false);
-        this.fc = getFu().get();
+        this.fc = getFileHandler().get();
         cc.getDu().log(fu.getDataFile().getAbsolutePath());
     }
 
@@ -56,7 +56,7 @@ public class IndividualFileDataHandler extends DataHandler
         return true;
     }
 
-    public FileHandler getFu()
+    public FileHandler getFileHandler()
     {
         return fu;
     }

@@ -3,9 +3,8 @@ package me.ztowne13.customcrates.commands.sub;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
+import me.ztowne13.customcrates.interfaces.items.NBTTagBuilder;
 import me.ztowne13.customcrates.interfaces.items.attributes.BukkitGlowEffect;
-import me.ztowne13.customcrates.interfaces.items.nbt.NBTTagManager;
-import me.ztowne13.customcrates.interfaces.items.nbt.NBTTagReflection;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.enchantments.Enchantment;
@@ -33,12 +32,24 @@ public class Debug extends SubCommand
             {
                 if(args.length == 1)
                 {
-                    ChatUtils.msgInfo(player, "Commands: iteminfo[-,tostring,nolore], applytag[{tag id}], glow[-, asbuilder]");
+                    ChatUtils.msgInfo(player, "Commands: iteminfo[tostring,-{-nolore,-ignoreexcluded}], applytag[{tag id}], glow[-, asbuilder]");
                     return true;
                 }
 
                 if (args[1].equalsIgnoreCase("iteminfo"))
                 {
+                    boolean noLoreArg = false,
+                            ignoreExcludedArg = false;
+
+                    for(int i = 0; i < args.length; i++)
+                    {
+                        if(args[i].equalsIgnoreCase("-nolore")) {
+                            noLoreArg = true;
+                        } else if(args[i].equalsIgnoreCase("-ignoreexcluded")) {
+                            ignoreExcludedArg = true;
+                        }
+                    }
+
                     ItemStack stack = player.getItemInHand();
                     ItemMeta im = stack.getItemMeta();
 
@@ -50,7 +61,7 @@ public class Debug extends SubCommand
 
                     cmds.msg("Type: " + stack.getType().name());
 
-                    if(!(args.length == 3 && args[2].equalsIgnoreCase("nolore")))
+                    if(!noLoreArg)
                     {
                         cmds.msg("Lore:");
                         for (String s : im.getLore())
@@ -66,7 +77,7 @@ public class Debug extends SubCommand
 
                     cmds.msg("Data: " + stack.getDurability());
                     cmds.msg("NBT Tags:");
-                    for(String s : NBTTagManager.getFrom(stack))
+                    for(String s : NBTTagBuilder.getFrom(stack, ignoreExcludedArg))
                         cmds.msg("- " + s);
 
                 }
@@ -76,7 +87,7 @@ public class Debug extends SubCommand
                     String id = args[3];
                     String combined = tag + " " + id;
 
-                    player.setItemInHand(NBTTagReflection.applyTo(player.getItemInHand(), combined));
+                    player.setItemInHand(NBTTagBuilder.applyTo(player.getItemInHand(), combined));
                     cmds.msgSuccess("Added tag '" + combined + "'");
                 }
                 else if(args[1].equalsIgnoreCase("glow"))
