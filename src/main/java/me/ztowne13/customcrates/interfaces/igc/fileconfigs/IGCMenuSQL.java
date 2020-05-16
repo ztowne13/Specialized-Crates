@@ -23,7 +23,7 @@ public class IGCMenuSQL extends IGCMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         FileHandler fu = getCc().getSqlFile();
@@ -51,7 +51,7 @@ public class IGCMenuSQL extends IGCMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         switch (slot)
         {

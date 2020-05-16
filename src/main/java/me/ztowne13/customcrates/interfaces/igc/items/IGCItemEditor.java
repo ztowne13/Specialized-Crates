@@ -37,7 +37,7 @@ public class IGCItemEditor extends IGCMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
         editableItem.reapplyLore();
         editableItem.reapplyEnchantments();
@@ -189,7 +189,7 @@ public class IGCItemEditor extends IGCMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         switch (slot)
         {

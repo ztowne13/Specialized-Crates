@@ -30,7 +30,7 @@ public class IGCCrateRewards extends IGCMenuCrate
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
         setInventoryName("&7&l> &6&lReward PG" + page);
 
@@ -119,7 +119,7 @@ public class IGCCrateRewards extends IGCMenuCrate
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         if (getIb().getInv().getItem(slot) == null)
             return;
@@ -153,11 +153,6 @@ public class IGCCrateRewards extends IGCMenuCrate
                         .setLore("&7This will stop you from").addLore("&7removing rewards"));
             }
         }
-//        else if (slot == 17)
-//        {
-//            new InputMenu(getCc(), getP(), "add reward", "null",
-//                    "Addable rewards: " + getCc().getRewardsFile().get().getKeys(false).toString(), String.class, this, true);
-//        }
         else if(slot == 17)
         {
             new IGCMenuAddReward(getCc(), getP(), this, crates, 1).open();

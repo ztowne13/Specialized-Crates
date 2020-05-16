@@ -26,7 +26,7 @@ public class IGCDragAndDrop extends IGCMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         InventoryBuilder ib = createDefault(54);
@@ -40,7 +40,7 @@ public class IGCDragAndDrop extends IGCMenu
     }
 
     @Override // For this menu it has been repurposed to be used as the "save" function
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         if(slot == 53)
         {

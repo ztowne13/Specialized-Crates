@@ -73,7 +73,7 @@ public class Reward implements Comparable<Reward>
     @Override
     public int compareTo(Reward otherReward)
     {
-        return (int) (getChance() * 1000 - otherReward.getChance() * 1000);
+        return (int) (getChance() * 10000 - otherReward.getChance() * 10000);
     }
 
     public void init()

@@ -2,6 +2,8 @@ package me.ztowne13.customcrates.interfaces.igc;
 
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
+import me.ztowne13.customcrates.interfaces.igc.buttons.IGCButton;
+import me.ztowne13.customcrates.interfaces.igc.buttons.IGCButtonType;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -21,19 +23,65 @@ public abstract class IGCMenu
     IGCMenu lastMenu;
     InputMenu inputMenu;
 
+    IGCButton[] buttons;
+    int[] buttonSpots;
+
     public IGCMenu(SpecializedCrates cc, Player p, IGCMenu lastMenu, String inventoryName)
+    {
+        this(cc, p, lastMenu, inventoryName, new IGCButtonType[]{}, new int[]{});
+    }
+
+
+    public IGCMenu(SpecializedCrates cc, Player p, IGCMenu lastMenu, String inventoryName, IGCButtonType[] buttonTypes, int[] buttonSpots)
     {
         this.cc = cc;
         this.p = p;
         this.inventoryName = inventoryName.length() >= 32 ? inventoryName.substring(0, 31) : inventoryName;
         this.lastMenu = lastMenu;
+        this.buttonSpots = buttonSpots;
+        this.buttons = new IGCButton[buttonTypes.length];
+        for (int i = 0; i < buttonTypes.length; i++)
+        {
+            this.buttons[i] = buttonTypes[i].createInstance();
+        }
     }
 
-    public abstract void open();
+    public abstract void openMenu();
 
-    public abstract void manageClick(int slot);
+    public abstract void handleClick(int slot);
 
     public abstract boolean handleInput(String value, String input);
+
+    public void open()
+    {
+        openMenu();
+
+        for(int i = 0; i < buttonSpots.length; i++)
+        {
+            int buttonSpot = buttonSpots[i];
+            IGCButton button = buttons[i];
+            getIb().setItem(buttonSpot, button.getButtonItem());
+        }
+    }
+
+    public void manageClick(int slot)
+    {
+        for(int i = 0; i < buttonSpots.length; i++)
+        {
+            int buttonSpot = buttonSpots[i];
+            IGCButton button = buttons[i];
+            if(buttonSpot == slot)
+            {
+                if(button.handleClick())
+                {
+                    open();
+                }
+                return;
+            }
+        }
+
+        handleClick(slot);
+    }
 
     public void putInMenu()
     {
@@ -146,5 +194,10 @@ public abstract class IGCMenu
     public void setcVal(String cVal)
     {
         this.cVal = cVal;
+    }
+
+    public IGCButton[] getButtons()
+    {
+        return buttons;
     }
 }

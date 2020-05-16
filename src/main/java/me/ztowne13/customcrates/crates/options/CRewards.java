@@ -9,10 +9,7 @@ import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class CRewards extends CSetting
 {
@@ -240,8 +237,83 @@ public class CRewards extends CSetting
         return allRewards;
     }
 
-    public static void setAllRewards(HashMap<String, Reward> allRewards)
+    public static HashMap<String, Reward> getAllRewardsSorted(SpecializedCrates specializedCrates, RewardSortType rewardSortType)
     {
-        CRewards.allRewards = allRewards;
+        LinkedHashMap<String, Reward> sortedRewards = new LinkedHashMap<>();
+        switch(rewardSortType)
+        {
+            case CREATED_ORDER:
+                for(String rewardName : specializedCrates.getRewardsFile().get().getKeys(false))
+                {
+                    Reward reward = getAllRewards().get(rewardName);
+                    if(reward != null)
+                    {
+                        sortedRewards.put(rewardName, reward);
+                    }
+                }
+                return sortedRewards;
+            case ALPHABETICAL:
+                ArrayList<String> keys = new ArrayList<>(getAllRewards().keySet());
+                Collections.sort(keys, String.CASE_INSENSITIVE_ORDER);
+                for(String key : keys)
+                {
+                    sortedRewards.put(key, getAllRewards().get(key));
+                }
+                return sortedRewards;
+            case CHANCE:
+                ArrayList<Reward> rewards = new ArrayList<>(getAllRewards().values());
+                Collections.sort(rewards);
+                for(Reward reward : rewards)
+                {
+                    sortedRewards.put(reward.getRewardName(), reward);
+                }
+                return sortedRewards;
+        }
+
+        return null;
+    }
+
+    public enum RewardSortType
+    {
+        CREATED_ORDER("Created Order", "ALPHABETICAL",
+                new String[]{
+                        "The order in which the",
+                        "rewards were created."
+                }),
+        ALPHABETICAL("Alphabetical Order", "CHANCE",
+                new String[]{
+                        "In order, from A-Z"
+                }),
+        CHANCE("Reward Chance Order", "CREATED_ORDER",
+                new String[]{
+                        "In order from the lowest",
+                        "to highest chance"
+                });
+
+        String niceName;
+        String[] niceDescription;
+        String next;
+
+        RewardSortType(String niceName, String next, String[] niceDescription)
+        {
+            this.niceName = niceName;
+            this.niceDescription = niceDescription;
+            this.next = next;
+        }
+
+        public RewardSortType getNext()
+        {
+            return valueOf(next);
+        }
+
+        public String getNiceName()
+        {
+            return niceName;
+        }
+
+        public String[] getNiceDescription()
+        {
+            return niceDescription;
+        }
     }
 }

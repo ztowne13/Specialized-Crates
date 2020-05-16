@@ -46,7 +46,7 @@ public class IGCListEditor extends IGCMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         int slots;
@@ -119,7 +119,7 @@ public class IGCListEditor extends IGCMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         if (slot == 0)
         {

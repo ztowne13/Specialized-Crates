@@ -39,7 +39,7 @@ public class IGCCrateParticles extends IGCTierMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4,
@@ -80,7 +80,7 @@ public class IGCCrateParticles extends IGCTierMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         if (slot == 9)
         {

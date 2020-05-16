@@ -26,7 +26,7 @@ public class IGCMenuMain extends IGCMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
         InventoryBuilder ib = createDefault(36);
         ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb().setName("&aSave every file/crate"));
@@ -80,7 +80,7 @@ public class IGCMenuMain extends IGCMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         switch (slot)
         {

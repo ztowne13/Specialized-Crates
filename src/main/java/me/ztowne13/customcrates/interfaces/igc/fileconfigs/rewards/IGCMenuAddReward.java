@@ -8,6 +8,7 @@ import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
+import me.ztowne13.customcrates.interfaces.igc.buttons.IGCButtonType;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -24,20 +25,25 @@ public class IGCMenuAddReward extends IGCMenu
 
     public IGCMenuAddReward(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crate, int page)
     {
-        super(cc, p, lastMenu, "&7&l> &6&lRewards PG" + page);
+        super(cc, p, lastMenu, "&7&l> &6&lRewards PG" + page,
+                new IGCButtonType[]{
+                        IGCButtonType.REWARD_FILTER
+                },
+                new int[]{
+                        8
+                });
         this.page = page;
         this.crate = crate;
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
-
         int slots = 0;
 
         CRewards.loadAll(getCc(), getP());
 
-        HashMap<String, Reward> rewards = getUnusedRewards();
+        HashMap<String, Reward> rewards = getUnusedRewards((CRewards.RewardSortType)getButtons()[0].getValue());
 
         if (rewards.size() - ((page - 1) * 28) >= 28)
         {
@@ -116,7 +122,7 @@ public class IGCMenuAddReward extends IGCMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
         {
@@ -153,11 +159,11 @@ public class IGCMenuAddReward extends IGCMenu
         return false;
     }
 
-    public HashMap<String, Reward> getUnusedRewards()
+    public HashMap<String, Reward> getUnusedRewards(CRewards.RewardSortType sortType)
     {
         CRewards cRewards = crate.getSettings().getRewards();
 
-        HashMap<String, Reward> rewards = (HashMap<String, Reward>) CRewards.getAllRewards().clone();
+        HashMap<String, Reward> rewards = (HashMap<String, Reward>) CRewards.getAllRewardsSorted(getCc(), sortType);
 
         for(Reward reward : cRewards.getCrateRewards())
         {

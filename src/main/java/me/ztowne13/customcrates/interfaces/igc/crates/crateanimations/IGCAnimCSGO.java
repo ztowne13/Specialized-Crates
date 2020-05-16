@@ -45,7 +45,7 @@ public class IGCAnimCSGO extends IGCAnimation
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         InventoryBuilder ib = createDefault(18);
@@ -99,7 +99,7 @@ public class IGCAnimCSGO extends IGCAnimation
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         switch (slot)
         {

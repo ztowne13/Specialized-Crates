@@ -31,7 +31,7 @@ public class IGCAnimOpenChest extends IGCAnimation
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         InventoryBuilder ib = createDefault(9);
@@ -72,7 +72,7 @@ public class IGCAnimOpenChest extends IGCAnimation
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         switch (slot)
         {

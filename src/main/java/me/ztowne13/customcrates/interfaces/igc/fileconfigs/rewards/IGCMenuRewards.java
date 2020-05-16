@@ -7,6 +7,7 @@ import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
+import me.ztowne13.customcrates.interfaces.igc.buttons.IGCButtonType;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
@@ -23,12 +24,18 @@ public class IGCMenuRewards extends IGCMenu
 
     public IGCMenuRewards(SpecializedCrates cc, Player p, IGCMenu lastMenu, int page)
     {
-        super(cc, p, lastMenu, "&7&l> &6&lRewards.YML PG" + page);
+        super(cc, p, lastMenu, "&7&l> &6&lRewards.YML PG" + page,
+                new IGCButtonType[]{
+                        IGCButtonType.REWARD_FILTER
+                },
+                new int[]{
+                        8
+                });
         this.page = page;
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
         int slots = 0;
 
@@ -69,8 +76,10 @@ public class IGCMenuRewards extends IGCMenu
         int skipped = 0;
         int displayedRewards = 0;
 
-        for (String rName : getCc().getRewardsFile().get().getKeys(false))
+        for (Reward r : CRewards.getAllRewardsSorted(getCc(), (CRewards.RewardSortType)getButtons()[0].getValue()).values())
+//        for (String rName : getCc().getRewardsFile().get().getKeys(false))
         {
+            String rName = r.getRewardName();
             if (toSkip > skipped || displayedRewards >= 28)
             {
                 skipped++;
@@ -82,9 +91,9 @@ public class IGCMenuRewards extends IGCMenu
                 i += 2;
             }
 
-            Reward r;
-
-            r = CRewards.getAllRewards().get(rName);
+//            Reward r;
+//
+//            r = CRewards.getAllRewards().get(rName);
 
             r.checkIsNeedMoreConfig();
             ItemBuilder newR;
@@ -123,7 +132,7 @@ public class IGCMenuRewards extends IGCMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         if (slot == 0)
         {

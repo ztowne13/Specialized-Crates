@@ -38,7 +38,7 @@ public class IGCCratePreviewPageChooser extends IGCMenuCrate
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         int slots;
@@ -111,7 +111,7 @@ public class IGCCratePreviewPageChooser extends IGCMenuCrate
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         if (slot == 0)
         {

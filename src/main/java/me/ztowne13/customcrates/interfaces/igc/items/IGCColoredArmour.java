@@ -23,7 +23,7 @@ public class IGCColoredArmour extends IGCMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         InventoryBuilder ib = createDefault(27);
@@ -51,7 +51,7 @@ public class IGCColoredArmour extends IGCMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         switch (slot)
         {

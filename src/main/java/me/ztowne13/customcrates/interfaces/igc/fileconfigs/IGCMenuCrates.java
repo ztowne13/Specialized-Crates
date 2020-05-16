@@ -44,7 +44,7 @@ public class IGCMenuCrates extends IGCMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
         int values = Crate.getLoadedCrates().keySet().size();
         int inThisInv = values - ((page - 1) * 30);
@@ -106,7 +106,7 @@ public class IGCMenuCrates extends IGCMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         if (slot == 0)
             up();

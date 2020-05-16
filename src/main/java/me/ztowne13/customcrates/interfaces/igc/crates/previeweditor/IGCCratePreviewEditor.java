@@ -30,7 +30,7 @@ public class IGCCratePreviewEditor extends IGCMenuCrate
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
         InventoryBuilder ib = page.buildInventoryBuilder(getP(), true, "&c&lClose to leave and Save", null, false);
 
@@ -40,7 +40,7 @@ public class IGCCratePreviewEditor extends IGCMenuCrate
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         manageClick(slot, false, null);
     }

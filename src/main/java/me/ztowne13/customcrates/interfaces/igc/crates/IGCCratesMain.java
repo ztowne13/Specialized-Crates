@@ -30,7 +30,7 @@ public class IGCCratesMain extends IGCMenuCrate
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         InventoryBuilder ib = createDefault(crates.isMultiCrate() ? 27 : 45);
@@ -104,7 +104,7 @@ public class IGCCratesMain extends IGCMenuCrate
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         if (crates.isMultiCrate() && (slot == 28 || slot == 34 || slot == 40))
         {

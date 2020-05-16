@@ -41,7 +41,7 @@ public class IGCMenuConfig extends IGCMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         HashMap<String, Object> map = getCc().getSettings().getConfigValues();
@@ -134,7 +134,7 @@ public class IGCMenuConfig extends IGCMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         Inventory inv = getIb().getInv();
         ItemBuilder item = new ItemBuilder(inv.getItem(slot));

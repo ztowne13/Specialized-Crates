@@ -30,7 +30,7 @@ public class IGCAnimEnclose extends IGCAnimation
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         InventoryBuilder ib = createDefault(18);
@@ -65,7 +65,7 @@ public class IGCAnimEnclose extends IGCAnimation
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         switch (slot)
         {

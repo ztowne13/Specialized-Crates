@@ -30,7 +30,7 @@ public class IGCCrateSounds extends IGCTierMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4,
                 (crates.getSettings().getSounds().getSounds().containsKey(tier) ? crates.getSettings().getSounds().getSounds().get(tier).size() :
@@ -62,7 +62,7 @@ public class IGCCrateSounds extends IGCTierMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         if (slot == 9)
         {

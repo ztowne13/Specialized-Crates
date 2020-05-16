@@ -30,7 +30,7 @@ public class IGCMenuCrateOrMulticrate extends IGCMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
         InventoryBuilder ib = createDefault(9);
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
@@ -53,7 +53,7 @@ public class IGCMenuCrateOrMulticrate extends IGCMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         if (slot == 0)
             up();

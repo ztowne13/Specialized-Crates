@@ -25,7 +25,7 @@ public class IGCMenuFallbackReward extends IGCMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         InventoryBuilder ib = createDefault(9);
@@ -58,7 +58,7 @@ public class IGCMenuFallbackReward extends IGCMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         switch (slot)
         {

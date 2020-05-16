@@ -31,7 +31,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         InventoryBuilder ib = createDefault(27);
@@ -132,7 +132,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         if (slot == 0)
         {

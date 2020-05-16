@@ -29,7 +29,7 @@ public class IGCMenuCrateConfig extends IGCMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         FileHandler fu = getCc().getCrateconfigFile();
@@ -65,7 +65,7 @@ public class IGCMenuCrateConfig extends IGCMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         switch (slot)
         {

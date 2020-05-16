@@ -46,7 +46,7 @@ public class IGCCrateActions extends IGCTierMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         int count = 0;
@@ -99,7 +99,7 @@ public class IGCCrateActions extends IGCTierMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         if (slot == 0)
         {

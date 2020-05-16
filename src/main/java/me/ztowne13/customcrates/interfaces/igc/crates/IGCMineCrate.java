@@ -27,7 +27,7 @@ public class IGCMineCrate extends IGCMenuCrate
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         InventoryBuilder ib = createDefault(27);
@@ -75,7 +75,7 @@ public class IGCMineCrate extends IGCMenuCrate
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         switch (slot)
         {

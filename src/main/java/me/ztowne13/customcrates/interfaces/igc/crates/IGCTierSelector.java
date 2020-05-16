@@ -35,7 +35,7 @@ public class IGCTierSelector extends IGCMenuCrate
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
         if (tiers.size() == 1)
         {
@@ -69,7 +69,7 @@ public class IGCTierSelector extends IGCMenuCrate
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         if (slot == 9)
         {

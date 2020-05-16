@@ -19,7 +19,7 @@ public class IGCCratePreviewOrRewardMenu extends IGCMenuCrate
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
         InventoryBuilder ib = createDefault(9);
 
@@ -42,7 +42,7 @@ public class IGCCratePreviewOrRewardMenu extends IGCMenuCrate
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         switch(slot)
         {

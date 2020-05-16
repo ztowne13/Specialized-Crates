@@ -23,7 +23,7 @@ public class IGCCrateParticleColor extends IGCTierMenu
     }
 
     @Override
-    public void open()
+    public void openMenu()
     {
 
         InventoryBuilder ib = createDefault(27);
@@ -66,7 +66,7 @@ public class IGCCrateParticleColor extends IGCTierMenu
     }
 
     @Override
-    public void manageClick(int slot)
+    public void handleClick(int slot)
     {
         switch (slot)
         {
