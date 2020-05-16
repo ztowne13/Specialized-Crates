@@ -80,7 +80,7 @@ public class CActions extends CSetting
                     }
                 }
 
-                getFu().get().set(path, toSetList);
+                getFileHandler().get().set(path, toSetList);
             }
         }
     }

@@ -161,7 +161,7 @@ public class CHolograms extends CSetting
 
             }
         }
-        getFu().get().set("hologram.lines", lines);
+        getFileHandler().get().set("hologram.lines", lines);
 
         for (int i = 0; i < prefixes.size(); i++)
         {
@@ -174,13 +174,13 @@ public class CHolograms extends CSetting
 
             }
         }
-        getFu().get().set("hologram.animation.prefixes", prefixes);
-        getFu().get().set("hologram.animation.type", getHat().name());
-        getFu().get().set("hologram.animation.speed", getSpeed());
+        getFileHandler().get().set("hologram.animation.prefixes", prefixes);
+        getFileHandler().get().set("hologram.animation.type", getHat().name());
+        getFileHandler().get().set("hologram.animation.speed", getSpeed());
 
-        getFu().get().set("hologram.reward-hologram", getRewardHologram());
-        getFu().get().set("hologram.reward-hologram-duration", getRewardHoloDuration());
-        getFu().get().set("hologram.reward-hologram-yoffset", getRewardHoloYOffset());
+        getFileHandler().get().set("hologram.reward-hologram", getRewardHologram());
+        getFileHandler().get().set("hologram.reward-hologram-duration", getRewardHoloDuration());
+        getFileHandler().get().set("hologram.reward-hologram-yoffset", getRewardHoloYOffset());
     }
 
     public double getHologramOffset()
@@ -189,7 +189,7 @@ public class CHolograms extends CSetting
         {
             try
             {
-                hologramOffset = Double.valueOf(getCc().getSettings().getConfigValues().get("hologram-offset").toString());
+                hologramOffset = Double.valueOf(getSc().getSettings().getConfigValues().get("hologram-offset").toString());
             }
             catch (Exception exc)
             {
@@ -283,28 +283,28 @@ public class CHolograms extends CSetting
 //        }
         if (Utils.isPLInstalled("HolographicDisplays"))
         {
-            Utils.addToInfoLog(getCc(), "Hologram Plugin", "HolographicDisplays");
-            return new HolographicDisplaysHologram(getCc(), cm);
+            Utils.addToInfoLog(getSc(), "Hologram Plugin", "HolographicDisplays");
+            return new HolographicDisplaysHologram(getSc(), cm);
         }
         else if (Utils.isPLInstalled("IndividualHolograms"))
         {
-            Utils.addToInfoLog(getCc(), "Hologram Plugin", "Individual Holograms");
-            return new IndividualHologramsHologram(getCc(), cm);
+            Utils.addToInfoLog(getSc(), "Hologram Plugin", "Individual Holograms");
+            return new IndividualHologramsHologram(getSc(), cm);
         }
         else if (Utils.isPLInstalled("Holograms"))
         {
-            Utils.addToInfoLog(getCc(), "Hologram Plugin", "Holograms");
-            return new SaintXHologram(getCc(), cm);
+            Utils.addToInfoLog(getSc(), "Hologram Plugin", "Holograms");
+            return new SaintXHologram(getSc(), cm);
         }
         else if (Utils.isPLInstalled("CMI"))
         {
-            Utils.addToInfoLog(getCc(), "Hologram Plugin", "CMI");
-            return new CMIHologram(getCc(), cm);
+            Utils.addToInfoLog(getSc(), "Hologram Plugin", "CMI");
+            return new CMIHologram(getSc(), cm);
         }
 
 
-        Utils.addToInfoLog(getCc(), "Hologram Plugin", "None");
-        return new NoHologram(getCc(), cm);
+        Utils.addToInfoLog(getSc(), "Hologram Plugin", "None");
+        return new NoHologram(getSc(), cm);
     }
 
     public static void deleteAll()

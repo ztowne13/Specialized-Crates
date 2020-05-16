@@ -131,7 +131,7 @@ public class DataHandler
             this.amount = Integer.parseInt(args[3]);
             try
             {
-                if(Crate.crateAlreadyExist(args[4]))
+                if(Crate.existsNotCaseSensitive(args[4]))
                 {
                     this.crate = Crate.getCrate(cc, args[4], false);
                 }

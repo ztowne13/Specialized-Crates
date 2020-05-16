@@ -58,13 +58,13 @@ public class CParticles extends CSetting
         if (!particles.isEmpty())
             for (String tier : particles.keySet())
                 for (ParticleData pd : particles.get(tier))
-                    pd.save(getFu(), getPath(tier));
+                    pd.save(getFileHandler(), getPath(tier));
     }
 
     public void deleteParticle(String tier, ParticleData pd)
     {
         getParticles().get(tier).remove(pd);
-        getFu().get().set(getPath(tier) + "." + pd.getName(), null);
+        getFileHandler().get().set(getPath(tier) + "." + pd.getName(), null);
     }
 
     public void addParticle(ParticleData pd, String s)
@@ -78,15 +78,15 @@ public class CParticles extends CSetting
 
     public void parseAndAddParticles(String id, String path)
     {
-        SettingsConverter.convertParticles(getFu(), path);
+        SettingsConverter.convertParticles(getFileHandler(), path);
 
-        FileConfiguration fc = getFu().get();
+        FileConfiguration fc = getFileHandler().get();
 
         try
         {
-            for (String parent : getFu().get().getConfigurationSection(path).getValues(false).keySet())
+            for (String parent : getFileHandler().get().getConfigurationSection(path).getValues(false).keySet())
             {
-                String particleTypeAS = getFu().get().getString(path + "." + parent + ".type");
+                String particleTypeAS = getFileHandler().get().getString(path + "." + parent + ".type");
                 String rangeXAS = fc.getString(path + "." + parent + ".range-x");
                 String rangeYAS = fc.getString(path + "." + parent + ".range-y");
                 String rangeZAS = fc.getString(path + "." + parent + ".range-z");
@@ -118,13 +118,13 @@ public class CParticles extends CSetting
                             StatusLoggerEvent.PARTICLE_INVALID.log(getCrate(), new String[]{parent, particleTypeAS});
                             continue;
                         }
-                        pd = new NMSParticleEffect(getCc(), pe, parent, false);
+                        pd = new NMSParticleEffect(getSc(), pe, parent, false);
                     }
                     else
                     {
                         try
                         {
-                            pd = new BukkitParticleEffect(getCc(), particleTypeAS, parent, false);
+                            pd = new BukkitParticleEffect(getSc(), particleTypeAS, parent, false);
                         }
                         catch (Exception exc)
                         {
@@ -293,7 +293,7 @@ public class CParticles extends CSetting
                 continue;
             }
 
-            if ((id.equalsIgnoreCase(cs.name().toUpperCase()) && (!up().isTiersOverrideDefaults() || rewards.isEmpty() ||
+            if ((id.equalsIgnoreCase(cs.name().toUpperCase()) && (!getSettings().isTiersOverrideDefaults() || rewards.isEmpty() ||
                     !getParticles().keySet().contains(rewards.get(0).getRarity().toUpperCase()))) ||
                     (!rewards.isEmpty() && rewards.get(0).getRarity().equalsIgnoreCase(id)))
             {

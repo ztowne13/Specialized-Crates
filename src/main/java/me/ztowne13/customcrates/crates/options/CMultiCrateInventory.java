@@ -9,13 +9,13 @@ import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
+import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.VirtualCrateData;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
-import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -23,7 +23,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,8 +36,8 @@ public class CMultiCrateInventory extends CSetting
     static String availableSymbols = "abcdefghijklmnopqrstuvwxyz123456789 ";
 
     HashMap<Integer, Crate> crateSpots = new HashMap<>();
-    HashMap<Integer, ItemStack> items = new HashMap<>();
-    HashMap<String, ItemStack> materialsWithID = new HashMap<>();
+    HashMap<Integer, ItemBuilder> items = new HashMap<>();
+    HashMap<String, SaveableItemBuilder> materialsWithID = new HashMap<>();
     HashMap<String, Crate> cratesWithID = new HashMap<>();
 
     InventoryBuilder ib;
@@ -62,29 +61,29 @@ public class CMultiCrateInventory extends CSetting
                     String cause = "The crate name is invalid";
                     try
                     {
-                        String[] args = fc.getString("gui.objects." + s).split(";");
-                        if (Crate.crateAlreadyExist(args[0]))
+                        String value = fc.getString("gui.objects." + s);
+                        if (Crate.existsNotCaseSensitive(value))
                         {
                             cause = "The crate name to set the object to is invalid";
-                            cratesWithID.put(s, Crate.getCrate(cc, args[0]));
+                            cratesWithID.put(s, Crate.getCrate(cc, value));
                         }
                         else
                         {
-                            cause = args[0] + " is not a valid Material";
-                            Material m = DynamicMaterial.fromString(args[0].toUpperCase()).parseMaterial();
-                            int byt = 0;
-
-                            if (Utils.isInt(args[1]))
-                            {
-                                byt = Integer.parseInt(args[1]);
-                            }
-
-                            materialsWithID.put(s, new ItemStack(m, 1, (short) byt));
+                            SaveableItemBuilder item = new SaveableItemBuilder(DynamicMaterial.STONE, 1);
+                            item.setDisplayName("&cThis item was configured improperly");
+                            item.loadItem(getFileHandler(), "gui.objects." + s, csb.getStatusLogger(),
+                                    StatusLoggerEvent.MULTICRATE_ITEM_FAILURE,
+                                    StatusLoggerEvent.MULTICRATE_ENCHANTMENT_ADD_FAILURE,
+                                    StatusLoggerEvent.MULTICRATE_POTION_ADD_FAILURE,
+                                    StatusLoggerEvent.MULTICRATE_GLOW_FAILURE,
+                                    StatusLoggerEvent.MULTICRATE_AMOUNT_FAILURE,
+                                    StatusLoggerEvent.MULTICRATE_FLAG_FAILURE);
+                            materialsWithID.put(s, item);
                         }
                     }
                     catch (Exception exc)
                     {
-                        //exc.printStackTrace();
+//                        exc.printStackTrace();
                         StatusLoggerEvent.MULTICRATEINVENTORY_OBJECTS_INVALID.log(getCrate(), new String[]{s, cause});
                     }
                 }
@@ -143,6 +142,159 @@ public class CMultiCrateInventory extends CSetting
         StatusLoggerEvent.MULTICRATEINVENTORY_NONEXISTENT.log(getCrate());
     }
 
+    @Override
+    public void saveToFile()
+    {
+        if (ib == null || ib.getInv() == null)
+            return;
+
+        Inventory inv = ib.getInv();
+
+        // It looks like this updates the arrays that have the items in them
+        for (int i = 0; i < inv.getSize(); i++)
+        {
+            SaveableItemBuilder stack;
+            if (inv.getItem(i) == null)
+            {
+                stack = new SaveableItemBuilder(DynamicMaterial.AIR, 1);
+            }
+            else
+            {
+                stack = new SaveableItemBuilder(inv.getItem(i));
+            }
+
+            // If the item is not a crate
+            if (CrateUtils.searchByCrate(stack.get()) == null)
+            {
+                boolean itemDoesntAlreadyExist = true;
+                for (ItemBuilder alreadyExistingItem : materialsWithID.values())
+                {
+                    if (alreadyExistingItem.equals(stack))
+                    {
+                        itemDoesntAlreadyExist = false;
+                        break;
+                    }
+                }
+
+                if (itemDoesntAlreadyExist)
+                {
+                    materialsWithID.put(getNextSymbol(), stack);
+                }
+            }
+            // The item is a crate
+            else
+            {
+                Crate crate = CrateUtils.searchByCrate(stack.get());
+                boolean createDoesntAlreadyExist = true;
+                for (Crate alreadyExistingCrate : cratesWithID.values())
+                {
+                    if (alreadyExistingCrate.equals(crate))
+                    {
+                        createDoesntAlreadyExist = false;
+                        break;
+                    }
+                }
+
+                if (createDoesntAlreadyExist)
+                {
+                    cratesWithID.put(getNextSymbol(), crate);
+                }
+            }
+        }
+
+        ArrayList<String> lines = new ArrayList<>();
+        String line = "";
+
+        for (int i = 0; i < inv.getSize(); i++)
+        {
+            ItemBuilder stack;
+            if (inv.getItem(i) == null)
+            {
+                stack = new ItemBuilder(DynamicMaterial.AIR);
+            }
+            else
+            {
+                stack = new ItemBuilder(inv.getItem(i));
+            }
+
+            // The item isn't a crate
+            if (CrateUtils.searchByCrate(stack.get()) == null)
+            {
+
+                for (String s : materialsWithID.keySet())
+                {
+                    if (s.equalsIgnoreCase(""))
+                    {
+                        s = "-";
+                    }
+                    try
+                    {
+                        SaveableItemBuilder s2 = materialsWithID.get(s);
+                        if (s2.equals(stack))
+                        {
+                            line = line + s;
+                            s2.saveItem(getFileHandler(), "gui.objects." + s, true);
+//                            getFu().get().set("gui.objects." + s, s2.getType() + ";" + s2.getDurability());
+                            break;
+                        }
+                    }
+                    catch (Exception exc)
+                    {
+                        for (Player p : Bukkit.getOnlinePlayers())
+                        {
+                            if (p.isOp())
+                            {
+                                ChatUtils.msgError(p,
+                                        "Failed to save multicrate " + getCrate().getName() + " with value " + s);
+                            }
+                        }
+                        exc.printStackTrace();
+                    }
+                }
+            }
+            else
+            {
+                Crate cs = CrateUtils.searchByCrate(stack.get());
+                for (String s : cratesWithID.keySet())
+                {
+                    try
+                    {
+                        if (s.equalsIgnoreCase(""))
+                        {
+                            s = "-";
+                        }
+                        Crate crate = cratesWithID.get(s);
+                        if (crate.equals(cs))
+                        {
+                            line = line + s;
+                            getFileHandler().get().set("gui.objects." + s, crate.getName());
+                            break;
+                        }
+                    }
+                    catch (Exception exc)
+                    {
+                        for (Player p : Bukkit.getOnlinePlayers())
+                        {
+                            if (p.isOp())
+                            {
+                                ChatUtils.msgError(p, "Failed to save multicrate " + crates.getName() + " with value " + s);
+                            }
+                        }
+                        exc.printStackTrace();
+                    }
+                }
+            }
+
+            if (line.length() == 9)
+            {
+                lines.add(line);
+                line = "";
+            }
+        }
+
+        getFileHandler().get().set("gui.rows", lines);
+    }
+
     public InventoryBuilder getInventory(Player p, String invName, boolean toEdit)
     {
         if (ib == null)
@@ -194,30 +346,26 @@ public class CMultiCrateInventory extends CSetting
                 if (cc.getSettings().getConfigValAsBoolean("virtual-crate-cratecount"))
                 {
                     String toAddLore = (String) SettingsValues.VIRTUAL_CRATE_LORE.getValue(cc);
-                    if(!toAddLore.equalsIgnoreCase("") && !toAddLore.equalsIgnoreCase("none"))
+                    if (!toAddLore.equalsIgnoreCase("") && !toAddLore.equalsIgnoreCase("none"))
                     {
                         crateIb.addLore("");
                         crateIb.addLore(toAddLore);
                     }
-//                    crateIb.addLore(cc.getSettings().getConfigValues().get("virtual-crate-lore").toString()
-//                            .replaceAll("%crates%", vcd.getCrates() + ""));
                 }
                 if (cc.getSettings().getConfigValAsBoolean("virtual-crate-keycount"))
                 {
                     String toAddLore = (String) SettingsValues.VIRTUAL_KEY_LORE.getValue(cc);
-                    if(!toAddLore.equalsIgnoreCase("") && !toAddLore.equalsIgnoreCase("none"))
+                    if (!toAddLore.equalsIgnoreCase("") && !toAddLore.equalsIgnoreCase("none"))
                     {
                         crateIb.addLore("");
                         crateIb.addLore(toAddLore);
                     }
-//                    crateIb.addLore(cc.getSettings().getConfigValues().get("virtual-key-lore").toString()
-//                            .replaceAll("%keys%", vcd.getKeys() + ""));
                 }
 
                 List<String> lore = new ArrayList<String>(crateIb.getLore());
                 crateIb.clearLore();
 
-                for(int loreLineNum = 0; loreLineNum < lore.size(); loreLineNum++)
+                for (int loreLineNum = 0; loreLineNum < lore.size(); loreLineNum++)
                 {
                     String line = lore.get(loreLineNum);
                     line = line.replaceAll("%keys%", vcd.getKeys() + "");
@@ -236,153 +384,6 @@ public class CMultiCrateInventory extends CSetting
 
         ib.setP(p);
         return ib;
-    }
-
-    @Override
-    public void saveToFile()
-    {
-        if(ib == null || ib.getInv() == null)
-            return;
-
-        Inventory inv = ib.getInv();
-
-        for (int i = 0; i < inv.getSize(); i++)
-        {
-            ItemStack stack;
-            if (inv.getItem(i) == null)
-            {
-                stack = new ItemStack(Material.AIR);
-            }
-            else
-            {
-                stack = inv.getItem(i);
-            }
-            if (CrateUtils.searchByCrate(stack) == null)
-            {
-                boolean b = true;
-                for (ItemStack alreadyExisting : materialsWithID.values())
-                {
-                    if (alreadyExisting.getType() == stack.getType() &&
-                            alreadyExisting.getDurability() == stack.getDurability())
-                    {
-                        b = false;
-                        break;
-                    }
-                }
-
-                if (b)
-                {
-                    materialsWithID.put(getNextSymbol(), stack);
-                }
-            }
-            else
-            {
-                Crate crate = CrateUtils.searchByCrate(stack);
-                boolean b = true;
-                for (Crate alreadyExisting : cratesWithID.values())
-                {
-                    if (alreadyExisting.equals(crate))
-                    {
-                        b = false;
-                        break;
-                    }
-                }
-
-                if (b)
-                {
-                    cratesWithID.put(getNextSymbol(), crate);
-                }
-            }
-        }
-
-        ArrayList<String> lines = new ArrayList<>();
-        String line = "";
-
-        for (int i = 0; i < inv.getSize(); i++)
-        {
-            ItemStack stack;
-            if (inv.getItem(i) == null)
-            {
-                stack = new ItemStack(Material.AIR);
-            }
-            else
-            {
-                stack = inv.getItem(i);
-            }
-
-            if (CrateUtils.searchByCrate(stack) == null)
-            {
-                for (String s : materialsWithID.keySet())
-                {
-                    if (s.equalsIgnoreCase(""))
-                    {
-                        s = "-";
-                    }
-                    try
-                    {
-                        ItemStack s2 = materialsWithID.get(s);
-                        if (s2.getType() == stack.getType() && s2.getDurability() == stack.getDurability())
-                        {
-                            line = line + s;
-                            getFu().get().set("gui.objects." + s, s2.getType() + ";" + s2.getDurability());
-                            break;
-                        }
-                    }
-                    catch (Exception exc)
-                    {
-                        for (Player p : Bukkit.getOnlinePlayers())
-                        {
-                            if (p.isOp())
-                            {
-                                ChatUtils.msgError(p,
-                                        "Failed to save multicrate " + stack.getType().name() + " with value " + s);
-                            }
-                        }
-                        exc.printStackTrace();
-                    }
-                }
-            }
-            else
-            {
-                Crate cs = CrateUtils.searchByCrate(stack);
-                for (String s : cratesWithID.keySet())
-                {
-                    try
-                    {
-                        if (s.equalsIgnoreCase(""))
-                        {
-                            s = "-";
-                        }
-                        Crate crate = cratesWithID.get(s);
-                        if (crate.equals(cs))
-                        {
-                            line = line + s;
-                            getFu().get().set("gui.objects." + s, crate.getName());
-                            break;
-                        }
-                    }
-                    catch (Exception exc)
-                    {
-                        for (Player p : Bukkit.getOnlinePlayers())
-                        {
-                            if (p.isOp())
-                            {
-                                ChatUtils.msgError(p, "Failed to save multicrate " + crates.getName() + " with value " + s);
-                            }
-                        }
-                        exc.printStackTrace();
-                    }
-                }
-            }
-
-            if (line.length() == 9)
-            {
-                lines.add(line);
-                line = "";
-            }
-        }
-
-        getFu().get().set("gui.rows", lines);
     }
 
     public String getNextSymbol()
@@ -409,13 +410,13 @@ public class CMultiCrateInventory extends CSetting
         {
             Crate clickedCrate = crate.getSettings().getMultiCrateSettings().getCrateSpots().get(slot);
 
-            if(clickType != ClickType.LEFT && clickType != ClickType.RIGHT)
+            if (clickType != ClickType.LEFT && clickType != ClickType.RIGHT)
             {
                 return;
             }
 
-            if (clickType.equals(Boolean.valueOf(
-                    cc.getSettings().getConfigValues().get("mc-reward-display-leftclick").toString().toUpperCase()) ?
+            if (clickType.equals(Boolean
+                    .parseBoolean(SettingsValues.MC_REWARD_DISPLAY_LEFTCLICK.getValue(getSc()).toString().toUpperCase()) ?
                     ClickType.LEFT : ClickType.RIGHT) && (Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(cc))
             {
                 clickedCrate.getSettings().getDisplayer().openFor(p);
@@ -430,7 +431,7 @@ public class CMultiCrateInventory extends CSetting
                     }
                 }, 2);
             }
-            else if (!((Boolean)SettingsValues.REQUIRE_VIRTUAL_CRATE_AND_KEY.getValue(cc))
+            else if (!((Boolean) SettingsValues.REQUIRE_VIRTUAL_CRATE_AND_KEY.getValue(cc))
                     || pm.getPdm().getVCCrateData(clickedCrate).getCrates() > 0)
             {
                 if (!p.getGameMode().equals(GameMode.CREATIVE) ||
@@ -439,10 +440,11 @@ public class CMultiCrateInventory extends CSetting
                     CrateCooldownEvent cce = pm.getPdm().getCrateCooldownEventByCrates(clickedCrate);
                     if (cce == null || cce.isCooldownOverAsBoolean())
                     {
-                        if(cc.getEconomyHandler().handleCheck(p, clickedCrate.getSettings().getCost(), true))
+                        if (cc.getEconomyHandler().handleCheck(p, clickedCrate.getSettings().getCost(), true))
                         {
                             p.closeInventory();
-                            if (clickedCrate.getSettings().getAnimation().startAnimation(p, pm.getLastOpenCrate(), false, false))
+                            if (clickedCrate.getSettings().getAnimation()
+                                    .startAnimation(p, pm.getLastOpenCrate(), false, false))
                             {
                                 new CrateCooldownEvent(clickedCrate, System.currentTimeMillis(), true).addTo(pm.getPdm());
                                 // Post Conditions
@@ -518,19 +520,9 @@ public class CMultiCrateInventory extends CSetting
         return crateSpots;
     }
 
-    public void setCrateSpots(HashMap<Integer, Crate> crateSpots)
-    {
-        this.crateSpots = crateSpots;
-    }
-
-    public HashMap<Integer, ItemStack> getItems()
+    public HashMap<Integer, ItemBuilder> getItems()
     {
         return items;
-    }
-
-    public void setItems(HashMap<Integer, ItemStack> items)
-    {
-        this.items = items;
     }
 
     public InventoryBuilder getIb()

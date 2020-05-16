@@ -76,7 +76,7 @@ public class IGCMenuCrateOrMulticrate extends IGCMenu
     {
         if (value.equalsIgnoreCase("crate name"))
         {
-            if (!Crate.crateAlreadyExist(input))
+            if (!Crate.existsNotCaseSensitive(input))
             {
                 if (!input.contains(" "))
                 {

@@ -34,11 +34,11 @@ public class CFireworks extends CSetting
         }
         if (csb.hasV("open.crate-tiers"))
         {
-            for (String id : up().getFc().getConfigurationSection("open.crate-tiers").getKeys(false))
+            for (String id : getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false))
             {
                 if (csb.hasV("open.crate-tiers." + id + ".fireworks"))
                 {
-                    addFireworks(id, up().getFc().getStringList("open.crate-tiers." + id + ".fireworks"));
+                    addFireworks(id, getSettings().getFc().getStringList("open.crate-tiers." + id + ".fireworks"));
                 }
             }
         }
@@ -75,7 +75,7 @@ public class CFireworks extends CSetting
                 }
 
                 String path = "open." + (tier.equalsIgnoreCase("OPEN") ? "" : "crate-tiers." + tier + ".") + ".fireworks";
-                getFu().get().set(path, toSetList);
+                getFileHandler().get().set(path, toSetList);
             }
         }
     }
@@ -84,7 +84,7 @@ public class CFireworks extends CSetting
     {
         for (String firework : list)
         {
-            FireworkData fd = new FireworkData(cc, up());
+            FireworkData fd = new FireworkData(cc, getSettings());
             fd.load(firework);
             addFirework(id, fd);
         }
@@ -134,7 +134,7 @@ public class CFireworks extends CSetting
     {
         for (String tier : getFireworks().keySet())
         {
-            if ((tier.equalsIgnoreCase("OPEN") && (!up().isTiersOverrideDefaults() || rewards.isEmpty() ||
+            if ((tier.equalsIgnoreCase("OPEN") && (!getSettings().isTiersOverrideDefaults() || rewards.isEmpty() ||
                     !getFireworks().containsKey(rewards.get(0).getRarity().toUpperCase()))) ||
                     (!rewards.isEmpty() && rewards.get(0).getRarity().equalsIgnoreCase(tier)))
             {

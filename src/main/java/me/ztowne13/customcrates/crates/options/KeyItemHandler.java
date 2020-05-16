@@ -96,7 +96,7 @@ public class KeyItemHandler extends CSetting
         {
             return true;
         }
-        if ((Boolean) SettingsValues.REQUIRE_KEY_LORE.getValue(getCc()))
+        if ((Boolean) SettingsValues.REQUIRE_KEY_LORE.getValue(getSc()))
         {
             if (stack.hasItemMeta())
             {

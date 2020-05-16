@@ -22,13 +22,13 @@ public abstract class CSetting
 
     public abstract void saveToFile();
 
-    public FileHandler getFu()
+    public FileHandler getFileHandler()
     {
         return getCrate().getSettings().getFileHandler();
     }
 
 
-    public CrateSettings up()
+    public CrateSettings getSettings()
     {
         return getCrate().getSettings();
     }
@@ -43,13 +43,8 @@ public abstract class CSetting
         this.crates = crates;
     }
 
-    public SpecializedCrates getCc()
+    public SpecializedCrates getSc()
     {
         return cc;
-    }
-
-    public void setCc(SpecializedCrates cc)
-    {
-        this.cc = cc;
     }
 }

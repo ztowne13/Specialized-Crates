@@ -39,8 +39,8 @@ public class CLuckyChest extends CSetting
     @Override
     public void loadFor(CrateSettingsBuilder csb, CrateState cs)
     {
-        FileConfiguration fc = up().getFc();
-        StatusLogger sl = up().getStatusLogger();
+        FileConfiguration fc = getSettings().getFc();
+        StatusLogger sl = getSettings().getStatusLogger();
 
         if (csb.hasV("lucky-chest"))
         {
@@ -153,30 +153,30 @@ public class CLuckyChest extends CSetting
 
     public void saveToFile()
     {
-        getFu().get().set("lucky-chest.chance", ((int) chance) + "/" + ((int) outOfChance));
-        getFu().get().set("lucky-chest.require-permission", isRequirePermission());
+        getFileHandler().get().set("lucky-chest.chance", ((int) chance) + "/" + ((int) outOfChance));
+        getFileHandler().get().set("lucky-chest.require-permission", isRequirePermission());
         if (!whiteList.isEmpty())
         {
-            getFu().get().set("lucky-chest.is-block-list-whitelist", isBLWL);
+            getFileHandler().get().set("lucky-chest.is-block-list-whitelist", isBLWL);
 
             ArrayList<String> whiteListRaw = new ArrayList<>();
             for(Material mat : getWhiteList())
                 whiteListRaw.add(mat.name());
 
-            getFu().get().set("lucky-chest.block-list", whiteListRaw);
+            getFileHandler().get().set("lucky-chest.block-list", whiteListRaw);
         }
         else
         {
-            getFu().get().set("lucky-chest.is-block-list-whitelist", null);
-            getFu().get().set("lucky-chest.block-list", null);
+            getFileHandler().get().set("lucky-chest.is-block-list-whitelist", null);
+            getFileHandler().get().set("lucky-chest.block-list", null);
         }
         if (!worldsRaw.isEmpty())
         {
-            getFu().get().set("lucky-chest.worlds", worldsRaw);
+            getFileHandler().get().set("lucky-chest.worlds", worldsRaw);
         }
         else
         {
-            getFu().get().set("lucky-chest.worlds", null);
+            getFileHandler().get().set("lucky-chest.worlds", null);
         }
     }
 

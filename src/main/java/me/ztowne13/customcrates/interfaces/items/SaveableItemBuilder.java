@@ -7,6 +7,7 @@ import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -119,6 +120,8 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
     {
         FileConfiguration fc = fileHandler.get();
 
+        convertOldConfigurations(fileHandler, prefix);
+
         // material
         if (!fc.contains(prefix + ".material"))
         {
@@ -134,6 +137,11 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
             {
                 DynamicMaterial dynamicMaterial = DynamicMaterial.fromString(mat);
                 setStack(dynamicMaterial.parseItem());
+
+                if(dynamicMaterial.equals(DynamicMaterial.AIR))
+                {
+                    return true;
+                }
             }
             catch (Exception exc)
             {
@@ -168,7 +176,6 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         }
 
         // Enchantments
-        convertOldEnchantType(fileHandler, prefix);
         if (fc.contains(prefix + ".enchantments"))
         {
             for (String unparsedEnchant : fc.getStringList(prefix + ".enchantments"))
@@ -282,6 +289,48 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         }
 
         return true;
+    }
+
+    public void convertOldConfigurations(FileHandler fileHandler, String prefix)
+    {
+        convertOldEnchantType(fileHandler, prefix);
+        convertOldItemType(fileHandler, prefix);
+    }
+
+    public void convertOldItemType(FileHandler fileHandler, String prefix)
+    {
+        FileConfiguration fc = fileHandler.get();
+
+        if(fc.contains(prefix))
+        {
+            if (!(fc.get(prefix) instanceof MemorySection))
+            {
+                ChatUtils.log("Converting old item format to new item format...");
+
+                try
+                {
+                    String original = fc.getString(prefix);
+                    String[] args = original.split(";");
+
+                    String materialName = args[0].toUpperCase();
+                    String byteName = args.length > 1 ? args[1] : "0";
+
+                    DynamicMaterial m = DynamicMaterial.fromString(materialName + ";" + byteName);
+
+                    SaveableItemBuilder newItem = new SaveableItemBuilder(m, 1);
+                    newItem.saveItem(fileHandler, prefix, true);
+                    ChatUtils.log("Successfully converted " + original);
+                    fileHandler.save();
+                }
+                catch(Exception exc)
+                {
+                    exc.printStackTrace();
+                    ChatUtils.log("Failed to convert " + fc.getString(prefix) + ", it is likely not a proper material.");
+                    return;
+                }
+            }
+        }
+
     }
 
     public void convertOldEnchantType(FileHandler fileHandler, String prefix)

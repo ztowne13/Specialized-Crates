@@ -29,7 +29,7 @@ public class Errors extends SubCommand
         }
         else if (args.length > 1)
         {
-            if (Crate.crateAlreadyExist(args[1]))
+            if (Crate.existsNotCaseSensitive(args[1]))
             {
                 cmds.msg("&4&lErrors:");
                 Crate.getCrate(cc, args[1]).getSettings().getStatusLogger().logAll(cmds.getCmdSender(), true);

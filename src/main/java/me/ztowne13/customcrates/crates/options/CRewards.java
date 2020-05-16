@@ -39,7 +39,7 @@ public class CRewards extends CSetting
         {
             displayNameRewards[i] = crateRewards[i].getRewardName();
         }
-        getFu().get().set("rewards", Arrays.asList(displayNameRewards));
+        getFileHandler().get().set("rewards", Arrays.asList(displayNameRewards));
     }
 
     public void removeReward(String name)

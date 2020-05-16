@@ -48,7 +48,7 @@ public class Edit extends SubCommand
             }
             else
             {
-                if (Crate.crateAlreadyExist(args[1]))
+                if (Crate.existsNotCaseSensitive(args[1]))
                 {
                     Crate crate = Crate.getCrate(cc, args[1]);
                     new IGCCratesMain(cc, p, null, crate).open();

@@ -32,11 +32,11 @@ public class CSounds extends CSetting
         }
         if (csb.hasV("open.crate-tiers"))
         {
-            for (String id : up().getFc().getConfigurationSection("open.crate-tiers").getKeys(false))
+            for (String id : getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false))
             {
                 if (csb.hasV("open.crate-tiers." + id + ".sounds"))
                 {
-                    addSoundsFromList(id.toUpperCase(), up().getFc().getStringList("open.crate-tiers." + id + ".sounds"));
+                    addSoundsFromList(id.toUpperCase(), getSettings().getFc().getStringList("open.crate-tiers." + id + ".sounds"));
                 }
             }
         }
@@ -56,7 +56,7 @@ public class CSounds extends CSetting
                 }
 
                 String path = "open." + (tier.equalsIgnoreCase("OPEN") ? "" : "crate-tiers." + tier) + "sounds";
-                getFu().get().set(path, listToSet);
+                getFileHandler().get().set(path, listToSet);
             }
         }
     }
@@ -151,7 +151,7 @@ public class CSounds extends CSetting
     {
         for (String tier : getSounds().keySet())
         {
-            if ((tier.equalsIgnoreCase("OPEN") && (!up().isTiersOverrideDefaults() || rewards.isEmpty() ||
+            if ((tier.equalsIgnoreCase("OPEN") && (!getSettings().isTiersOverrideDefaults() || rewards.isEmpty() ||
                     !getSounds().containsKey(rewards.get(0).getRarity().toUpperCase()))) ||
                     (!rewards.isEmpty() && rewards.get(0).getRarity().equalsIgnoreCase(tier)))
             {

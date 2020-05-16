@@ -134,17 +134,17 @@ public enum StatusLoggerEvent
 
     REWARD_AMOUNT_INVALID(false, "Rewards", "Failed to load amount for reward $?$", "It is not a valid number."),
 
-    REWARD_ITEM_FAILURE(false, "Settings", "Failed to load a reward menu item.", "$?$"),
+    REWARD_ITEM_FAILURE(false, "Rewards", "Failed to load a reward menu item.", "$?$"),
 
-    REWARD_ENCHANTMENT_ADD_FAILURE(false, "Settings", "Failed to load the a rewar item enchantment.", "$?$"),
+    REWARD_ENCHANTMENT_ADD_FAILURE(false, "Rewards", "Failed to load the a rewar item enchantment.", "$?$"),
 
-    REWARD_POTION_ADD_FAILURE(false, "Settings", "Failed to load the a reward item.", "$?$"),
+    REWARD_POTION_ADD_FAILURE(false, "Rewards", "Failed to load the a reward item.", "$?$"),
 
-    REWARD_GLOW_FAILURE(false, "Settings", "Failed to load the reward item glow value.", "$?$"),
+    REWARD_GLOW_FAILURE(false, "Rewards", "Failed to load the reward item glow value.", "$?$"),
 
-    REWARD_AMOUNT_FAILURE(false, "Settings", "Failed to load the reward item amount value.", "$?$"),
+    REWARD_AMOUNT_FAILURE(false, "Rewards", "Failed to load the reward item amount value.", "$?$"),
 
-    REWARD_FLAG_FAILURE(false, "Settings", "Failed to load the reward item-flags value.", "$?$"),
+    REWARD_FLAG_FAILURE(false, "Rewards", "Failed to load the reward item-flags value.", "$?$"),
 
     SOUND_NONEXISTENT(false, "Sounds", "The sound value: $?$ is improperly setup.", "Sound '$?$' is invalid."),
 
@@ -171,6 +171,18 @@ public enum StatusLoggerEvent
 
     MULTICRATEINVENTORY_NONEXISTENT(false, "MultiCrate Inventory", "Both the 'gui.row' and 'gui.objects' value are missing",
             "The values are nonexistent"),
+
+    MULTICRATE_ITEM_FAILURE(false, "MultiCrate Inventory", "Failed to load a multi crate menu item.", "$?$"),
+
+    MULTICRATE_ENCHANTMENT_ADD_FAILURE(false, "MultiCrate Inventory", "Failed to load the  multicrate item's enchantment.", "$?$"),
+
+    MULTICRATE_POTION_ADD_FAILURE(false, "MultiCrate Inventory", "Failed to load the multicrate item's potion.", "$?$"),
+
+    MULTICRATE_GLOW_FAILURE(false, "Rewards", "Failed to load the multicrate item's glow value.", "$?$"),
+
+    MULTICRATE_AMOUNT_FAILURE(false, "Rewards", "Failed to load the multicrate item's amount value.", "$?$"),
+
+    MULTICRATE_FLAG_FAILURE(false, "Rewards", "Failed to load the multicrate item's item-flags value.", "$?$"),
 
     SETTINGS_CRATE_LORE_ADDLINE_SUCCESS(true, "Settings", "Added line to the crate's lore: $?$", "NONE"),
 
