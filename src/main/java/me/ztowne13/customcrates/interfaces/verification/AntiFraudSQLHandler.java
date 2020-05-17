@@ -4,6 +4,7 @@ import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.utils.ChatUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -27,6 +28,18 @@ public class AntiFraudSQLHandler extends Thread
     public AntiFraudSQLHandler(SpecializedCrates specializedCrates)
     {
         this.specializedCrates = specializedCrates;
+
+        if(Bukkit.getPluginManager().getPlugin("SpecializedCrates").getDescription().getVersion().contains("BETA"))
+        {
+            AntiFraudPlaceholders.NONCE = AntiFraudPlaceholders.NONCE_BETA;
+            AntiFraudPlaceholders.USER = AntiFraudPlaceholders.USER_BETA;
+            AntiFraudPlaceholders.RESOURCE = AntiFraudPlaceholders.RESOURCE_BETA;
+            specializedCrates.getSettings().getInfoToLog().put("Beta Version", "&atrue");
+        }
+        else
+        {
+            specializedCrates.getSettings().getInfoToLog().put("Beta Version", "&cfalse");
+        }
 
         FileHandler data = specializedCrates.getDataFile();
         FileConfiguration fc = data.get();
