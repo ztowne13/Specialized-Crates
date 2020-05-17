@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.crates.types.animations;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
+import me.ztowne13.customcrates.api.CrateOpenEvent;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.crates.PlacedCrate;
@@ -152,6 +153,10 @@ public abstract class CrateAnimation
         {
             r.giveRewardToPlayer(p);
         }
+
+
+        CrateOpenEvent crateOpenEvent = new CrateOpenEvent(p, rewards, crate);
+        Bukkit.getPluginManager().callEvent(crateOpenEvent);
 
         pm.closeCrate();
         p.closeInventory();

@@ -3,6 +3,7 @@ package me.ztowne13.customcrates.crates.crateaction;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SettingsValues;
 import me.ztowne13.customcrates.SpecializedCrates;
+import me.ztowne13.customcrates.api.CrateOpenEvent;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.crates.CrateState;
@@ -14,6 +15,7 @@ import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.players.data.events.HistoryEvent;
 import me.ztowne13.customcrates.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -50,7 +52,7 @@ public abstract class CrateAction
     {
         Player player = pm.getP();
         PlayerDataManager pdm = pm.getPdm();
-        Crate crates = cm.getCrates();
+        Crate crates = cm.getCrate();
         CrateSettings cs = crates.getSettings();
         Location location = cm.getL();
 
@@ -80,6 +82,9 @@ public abstract class CrateAction
                                     ArrayList<Reward> rewards = new ArrayList<>();
                                     rewards.add(reward);
                                     reward.giveRewardToPlayer(player);
+
+                                    CrateOpenEvent crateOpenEvent = new CrateOpenEvent(player, rewards, crates);
+                                    Bukkit.getPluginManager().callEvent(crateOpenEvent);
 
                                     cs.getKeyItemHandler().takeKeyFromPlayer(player, false);
                                     new HistoryEvent(Utils.currentTimeParsed(), crates, rewards, true)
