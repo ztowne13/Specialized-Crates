@@ -31,7 +31,7 @@ public class InventoryBuilder
         this.p = p;
 
         String title = ChatColor.translateAlternateColorCodes('&', invName);
-        if(VersionUtils.Version.v1_12.isServerVersionOrEarlier() && title.length() > 32)
+        if(VersionUtils.Version.v1_12.isServerVersionOrEarlier() && title.length() > 31)
         {
             title = title.substring(0, 32);
         }
