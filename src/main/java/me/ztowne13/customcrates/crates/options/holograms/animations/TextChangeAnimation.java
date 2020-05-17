@@ -21,10 +21,10 @@ public class TextChangeAnimation extends HoloAnimation
     public void tick()
     {
         // One line is needed to be replaced, if it doesn't exist: add it.
-        if(dh.getCm().getCholo().getLineCount() == 0)
+        if(dh.getCm().getHologram().getLineCount() == 0)
         {
-            dh.getCm().getCholo().setLineCount(dh.getCm().getCholo().getLineCount() + 1);
-            dh.getCm().getCholo().addLine("");
+            dh.getCm().getHologram().setLineCount(dh.getCm().getHologram().getLineCount() + 1);
+            dh.getCm().getHologram().addLine("");
         }
 
         setIntTicks(getIntTicks() + 1);

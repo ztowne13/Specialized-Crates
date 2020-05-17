@@ -25,7 +25,7 @@ public class CMIHologram extends DynamicHologram
 
         if (!getCm().isDeleted())
         {
-            l.setY(l.getY() + getCm().getCholo().getHologramOffset() - 1);
+            l.setY(l.getY() + getCm().getHologram().getHologramOffset() - 1);
             l = LocationUtils.getLocationCentered(l);
 
             this.l = l;
@@ -72,7 +72,7 @@ public class CMIHologram extends DynamicHologram
     @Override
     public void teleport(Location l)
     {
-        l.setY(l.getY() + getCm().getCholo().getHologramOffset());
+        l.setY(l.getY() + getCm().getHologram().getHologramOffset());
         cmiHologram.setLoc(LocationUtils.getLocationCentered(l));
         cmiHologram.refresh();
     }

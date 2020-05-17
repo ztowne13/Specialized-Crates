@@ -48,7 +48,7 @@ public class IndividualHologramsHologram extends DynamicHologram
 
     public void teleport(Location l)
     {
-        l.setY(l.getY() + getDefaultYOffSet() + getCm().getCholo().getHologramOffset());
+        l.setY(l.getY() + getDefaultYOffSet() + getCm().getHologram().getHologramOffset());
         HologramManager.moveHologram(getUuid().toString(), LocationUtils.getLocationCentered(l));
     }
 

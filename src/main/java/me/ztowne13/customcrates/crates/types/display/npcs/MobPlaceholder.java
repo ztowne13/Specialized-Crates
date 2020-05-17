@@ -93,7 +93,7 @@ public class MobPlaceholder extends DynamicCratePlaceholder
     {
         Location l = cm.getL().clone();
         l.setY(l.getY() + getEnt().getHeight() - .5);
-        cm.getCholo().getDh().teleport(l);
+        cm.getHologram().getDh().teleport(l);
 
     }
 

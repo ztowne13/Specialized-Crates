@@ -18,10 +18,10 @@ public class MaterialPlaceholder extends DynamicCratePlaceholder
 
     public void place(PlacedCrate cm)
     {
-        Material m = cm.getCrates().getSettings().getCrateItemHandler().getItem(1).getType();
-        if (cm.getCrates().isEnabled())
+        Material m = cm.getCrate().getSettings().getCrateItemHandler().getItem(1).getType();
+        if (cm.getCrate().isEnabled())
         {
-            if(!cm.getCrates().getSettings().getCrateItemHandler().crateMatchesBlock(cm.getL().getBlock().getType()))
+            if(!cm.getCrate().getSettings().getCrateItemHandler().crateMatchesBlock(cm.getL().getBlock().getType()))
             {
                 try
                 {
@@ -33,9 +33,9 @@ public class MaterialPlaceholder extends DynamicCratePlaceholder
                 }
                 catch (Exception exc)
                 {
-                    StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(cm.getCrates().getSettings().getStatusLogger(),
+                    StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(cm.getCrate().getSettings().getStatusLogger(),
                             new String[]{m.toString() + " is not a block and therefore cannot be used as a crate type!"});
-                    cm.getCrates().setEnabled(false);
+                    cm.getCrate().setEnabled(false);
                     cm.setCratesEnabled(false);
                 }
             }

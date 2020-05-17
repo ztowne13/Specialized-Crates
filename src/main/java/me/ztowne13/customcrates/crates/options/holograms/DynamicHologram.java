@@ -26,9 +26,9 @@ public abstract class DynamicHologram
         this.cc = cc;
         this.cm = cm;
 
-        if (cm.getCholo().getHat() != null && cm.getCholo().getHat() != HoloAnimType.NONE)
+        if (cm.getHologram().getHat() != null && cm.getHologram().getHat() != HoloAnimType.NONE)
         {
-            setHa(cm.getCholo().getHat().getAsHoloAnimation(cc, this));
+            setHa(cm.getHologram().getHat().getAsHoloAnimation(cc, this));
         }
     }
 
@@ -46,7 +46,7 @@ public abstract class DynamicHologram
     {
         if (getHa() != null)
         {
-            if(!cm.getCholo().getPrefixes().isEmpty())
+            if(!cm.getHologram().getPrefixes().isEmpty())
                 getHa().tick();
         }
     }

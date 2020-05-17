@@ -39,8 +39,8 @@ public class Edit extends SubCommand
                     if (PlacedCrate.crateExistsAt(cc, b.getLocation()))
                     {
                         PlacedCrate pc = PlacedCrate.get(cc, b.getLocation());
-                        new IGCCratesMain(cc, p, null, pc.getCrates()).open();
-                        ChatUtils.msgSuccess(p, "Opening config menu for crate: " + pc.getCrates().getName());
+                        new IGCCratesMain(cc, p, null, pc.getCrate()).open();
+                        ChatUtils.msgSuccess(p, "Opening config menu for crate: " + pc.getCrate().getName());
                         return true;
                     }
                 }

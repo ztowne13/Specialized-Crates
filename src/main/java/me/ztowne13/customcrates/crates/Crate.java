@@ -112,7 +112,7 @@ public class Crate
         for (Location l : placed.keySet())
         {
             PlacedCrate cm = placed.get(l);
-            if (cm.getCrates().equals(this))
+            if (cm.getCrate().equals(this))
             {
                 cm.rename(newName);
                 PlacedCrate.getPlacedCrates().remove(l);
@@ -174,10 +174,10 @@ public class Crate
         for (Location l : placed.keySet())
         {
             PlacedCrate cm = placed.get(l);
-            if (cm.getCrates().equals(this))
+            if (cm.getCrate().equals(this))
             {
                 deleted.add(cm);
-                cm.getCrates().getSettings().getPlaceholder().remove(cm);
+                cm.getCrate().getSettings().getPlaceholder().remove(cm);
                 cm.delete();
             }
         }

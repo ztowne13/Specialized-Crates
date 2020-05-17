@@ -17,7 +17,7 @@ public abstract class HoloAnimation extends Animation
     {
         super(cc);
         this.dh = dh;
-        this.ch = dh.getCm().getCholo();
+        this.ch = dh.getCm().getHologram();
     }
 
     public int getIntTicks()

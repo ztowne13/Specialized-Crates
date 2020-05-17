@@ -93,7 +93,7 @@ public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
     {
         Location l = cm.getL().clone();
         l.setY(l.getY() + EntityTypes.PLAYER.getHeight() - .8);
-        cm.getCholo().getDh().teleport(l);
+        cm.getHologram().getDh().teleport(l);
     }
 
     public void applySkin(NPC npc, String name)

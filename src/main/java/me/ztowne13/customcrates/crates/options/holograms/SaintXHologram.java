@@ -62,7 +62,7 @@ public class SaintXHologram extends DynamicHologram
     @Override
     public void teleport(Location l)
     {
-        l.setY(l.getY() + getDefaultYOffSet() + getCm().getCholo().getHologramOffset());
+        l.setY(l.getY() + getDefaultYOffSet() + getCm().getHologram().getHologramOffset());
         hologram.teleport(LocationUtils.getLocationCentered(l));
     }
 

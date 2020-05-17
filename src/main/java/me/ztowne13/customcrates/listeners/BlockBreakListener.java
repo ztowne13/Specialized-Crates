@@ -33,7 +33,7 @@ public class BlockBreakListener implements Listener
         if (PlacedCrate.crateExistsAt(cc, l))
         {
             PlacedCrate cm = PlacedCrate.get(cc, l);
-            Crate crates = cm.getCrates();
+            Crate crates = cm.getCrate();
 
             if (crates.getSettings().getObtainType().isStatic())
             {

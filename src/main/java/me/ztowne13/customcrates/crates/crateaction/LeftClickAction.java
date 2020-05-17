@@ -31,7 +31,7 @@ public class LeftClickAction extends CrateAction
             {
                 cm.delete();
                 pm.setDeleteCrate(false);
-                Messages.SUCCESS_DELETE.msgSpecified(cc, player, new String[]{"%crate%"}, new String[]{cm.getCrates().getName()});
+                Messages.SUCCESS_DELETE.msgSpecified(cc, player, new String[]{"%crate%"}, new String[]{cm.getCrate().getName()});
                 return true;
             }
 
@@ -40,8 +40,8 @@ public class LeftClickAction extends CrateAction
             {
                 if (!pm.isDeleteCrate() && (Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(cc))
                 {
-                    if (!cm.getCrates().isMultiCrate())
-                        cm.getCrates().getSettings().getDisplayer().openFor(player);
+                    if (!cm.getCrate().isMultiCrate())
+                        cm.getCrate().getSettings().getDisplayer().openFor(player);
                     return true;
                 }
             }

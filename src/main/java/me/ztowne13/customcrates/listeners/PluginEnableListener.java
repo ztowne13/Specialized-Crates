@@ -30,7 +30,7 @@ public class PluginEnableListener implements Listener
             {
                 for(PlacedCrate crate : PlacedCrate.getPlacedCrates().values())
                 {
-                    crate.setupHolo(crate.getCrates());
+                    crate.setupHolo(crate.getCrate());
                 }
             }
         }

@@ -156,6 +156,7 @@ public class Reward implements Comparable<Reward>
                                 "CRATES ISSUE, it is the issue of the plugin who's command was run. Command: " + command);
             }
         }
+
         //new RewardLimitEvent(this, PlayerManager.get(cc, p).getPdm().getCurrentRewardLimitUses(this), 1).addTo(PlayerManager.get(cc, p).getPdm());
     }
 

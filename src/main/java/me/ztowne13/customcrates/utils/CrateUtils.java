@@ -43,6 +43,6 @@ public class CrateUtils
 
     public static boolean isCrateUsable(PlacedCrate cm)
     {
-        return cm.isCratesEnabled() && cm.getCrates() != null && cm.getCrates().isEnabled();
+        return cm.isCratesEnabled() && cm.getCrate() != null && cm.getCrate().isEnabled();
     }
 }

@@ -311,9 +311,9 @@ public class CHolograms extends CSetting
     {
         for (PlacedCrate cm : PlacedCrate.getPlacedCrates().values())
         {
-            if (!(cm.getCholo() == null))
+            if (!(cm.getHologram() == null))
             {
-                cm.getCholo().getDh().delete();
+                cm.getHologram().getDh().delete();
             }
         }
 

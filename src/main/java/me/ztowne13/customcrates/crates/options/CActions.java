@@ -276,7 +276,7 @@ public class CActions extends CSetting
         if (!(pm.getLastOpenedPlacedCrate() == null))
         {
             final PlacedCrate placedCrate = pm.getLastOpenedPlacedCrate();
-            String msg = placedCrate.getCrates().getSettings().getHologram().getRewardHologram();
+            String msg = placedCrate.getCrate().getSettings().getHologram().getRewardHologram();
             if (!msg.equalsIgnoreCase(""))
             {
 //                msg = ChatUtils.toChatColor(msg.replace("%reward%", rewards.toString().replace("[", "").replace("]", ""))).replace("%player%", p.getName()));
@@ -291,7 +291,7 @@ public class CActions extends CSetting
                 msg = ChatUtils.toChatColor(msg);
 
 
-                final DynamicHologram dynamicHologram = placedCrate.getCholo().getDh();
+                final DynamicHologram dynamicHologram = placedCrate.getHologram().getDh();
                 dynamicHologram.setDisplayingRewardHologram(true);
                 dynamicHologram.delete();
 
@@ -316,9 +316,9 @@ public class CActions extends CSetting
                         final Location cloneY = placedCrate.getL().clone();
                         cloneY.setY(cloneY.getY() + .5);
 
-                        if (placedCrate.getCrates().getSettings().getObtainType().equals(ObtainType.STATIC))
+                        if (placedCrate.getCrate().getSettings().getObtainType().equals(ObtainType.STATIC))
                         {
-                            placedCrate.getCrates().getSettings().getHologram().createHologram(cloneY, dynamicHologram);
+                            placedCrate.getCrate().getSettings().getHologram().createHologram(cloneY, dynamicHologram);
                         }
 
                         pm.setLastOpenedPlacedCrate(null);

@@ -51,7 +51,7 @@ public class AttemptKeyUseAction extends CrateAction
             }
 
             PlacedCrate cm = PlacedCrate.get(cc, location);
-            Crate crates = cm.getCrates();
+            Crate crates = cm.getCrate();
             if (crates.isMultiCrate())
             {
                 if(pm.isInCrate())
