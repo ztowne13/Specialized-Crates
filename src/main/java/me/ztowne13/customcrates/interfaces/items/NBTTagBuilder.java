@@ -70,6 +70,7 @@ public class NBTTagBuilder
 
     public static ItemStack applyTo(ItemStack item, String tag)
     {
+
         Object stack = getNMSItemStack(item);
         Object tagCompound = getNBTTagCompound(stack);
         if (tagCompound == null)
@@ -83,10 +84,19 @@ public class NBTTagBuilder
         try
         {
             key = args[0];
-            value = args[1].replaceAll(",Properties:\\{textures:\\[0:\\{Value:", ",Properties:{textures:[{Value:");
+
+            String remainingValue = "";
+            for(int i = 1; i < args.length; i++)
+            {
+                remainingValue += args[i] + " ";
+            }
+            remainingValue = remainingValue.substring(0, remainingValue.length() - 1);
+
+            value = remainingValue.replaceAll(",Properties:\\{textures:\\[0:\\{Value:", ",Properties:{textures:[{Value:");
         }
         catch (Exception exc)
         {
+            exc.printStackTrace();
             ChatUtils.log("Tag " + tag +
                     " is not formatted 'TagType Tag' (without the quotes). Try using the in-game config, it does NBT tags automatically!");
         }
@@ -150,7 +160,7 @@ public class NBTTagBuilder
         }
         catch (Exception exc)
         {
-            ChatUtils.log("Failed to get apply '" + key + " " + value + "' tag. Please check plugin is up to date.");
+            ChatUtils.log("Failed to apply '" + key + " " + value + "' tag. Please check plugin is up to date.");
             exc.printStackTrace();
         }
 
@@ -164,6 +174,7 @@ public class NBTTagBuilder
         }
         catch (Exception exc)
         {
+            exc.printStackTrace();
             ChatUtils.log("Failed to get apply final Tag. Please check plugin is up to date.");
         }
         return null;
@@ -221,7 +232,13 @@ public class NBTTagBuilder
                     else
                     {
                         nbtBase = tagCompound.getClass().getMethod("get", String.class).invoke(tagCompound, key);
-                        list.add(key + " " + nbtBase);
+                        String baseAsString = nbtBase.toString();
+//                        if(key.equalsIgnoreCase("pages"))
+//                        {
+//                            baseAsString = baseAsString.replaceAll("\\\\\\\\", "\\\\");;
+//                            baseAsString = baseAsString.replace("\\\"", "\"");
+//                        }
+                        list.add(key + " " + baseAsString);
                     }
 
                 }
