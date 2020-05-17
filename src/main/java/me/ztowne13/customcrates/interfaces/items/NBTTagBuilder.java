@@ -186,7 +186,10 @@ public class NBTTagBuilder
             "ench",
             "HideFlags",
             "Potion",
-            "StoredEnchantments"
+            "StoredEnchantments",
+
+            // Don't work
+            "pages"
     };
 
     private static String[] booleanTags = new String[]{
