@@ -2,6 +2,7 @@ package me.ztowne13.customcrates.interfaces;
 
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -29,7 +30,12 @@ public class InventoryBuilder
         this.minimumSlots = minimumSlots;
         this.p = p;
 
-        setInv(Bukkit.createInventory(p, min(54, max(minimumSlots, slots)), ChatColor.translateAlternateColorCodes('&', invName)));
+        String title = ChatColor.translateAlternateColorCodes('&', invName);
+        if(VersionUtils.Version.v1_12.isServerVersionOrEarlier() && title.length() > 32)
+        {
+            title = title.substring(0, 32);
+        }
+        setInv(Bukkit.createInventory(p, min(54, max(minimumSlots, slots)), title));
     }
 
     public void clear()
