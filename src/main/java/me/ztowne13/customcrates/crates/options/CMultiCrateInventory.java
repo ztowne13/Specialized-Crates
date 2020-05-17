@@ -23,6 +23,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +46,23 @@ public class CMultiCrateInventory extends CSetting
     public CMultiCrateInventory(Crate crates)
     {
         super(crates, crates.getCc());
+    }
+
+    public void updateCrateSpots()
+    {
+        for (int i = 0; i < getIb().getSize(); i++)
+        {
+            if (crateSpots.keySet().contains(i))
+            {
+                Crate crateAtSpot = crateSpots.get(i);
+                ItemStack itemAtSlot = getIb().getInv().getItem(i);
+                if (itemAtSlot == null || itemAtSlot.getType().equals(Material.AIR) ||
+                        !(new ItemBuilder(itemAtSlot).equals(crateAtSpot.getSettings().getCrateItemHandler().getItem())))
+                {
+                    crateSpots.remove(i);
+                }
+            }
+        }
     }
 
     @Override
@@ -230,6 +248,7 @@ public class CMultiCrateInventory extends CSetting
                     try
                     {
                         SaveableItemBuilder s2 = materialsWithID.get(s);
+
                         if (s2.equals(stack))
                         {
                             line = line + s;

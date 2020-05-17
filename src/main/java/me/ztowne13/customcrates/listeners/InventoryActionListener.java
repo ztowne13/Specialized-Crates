@@ -216,10 +216,12 @@ public class InventoryActionListener implements Listener
                     }
                 }, 1);
             }
+            // Closing a multicrate
             else if (e.getView().getTitle().equalsIgnoreCase(ChatUtils.toChatColor("&c&lClose to save")))
             {
                 ChatUtils.msgInfo(p, "There are unsaved changes, please remember to save.");
-
+                IGCMultiCrateMain openMenu = (IGCMultiCrateMain) pm.getOpenMenu();
+                openMenu.getCrates().getSettings().getMultiCrateSettings().updateCrateSpots();
                 Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
                 {
                     @Override
