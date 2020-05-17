@@ -75,7 +75,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
 
         // Lore
         if (!getLore().isEmpty())
-            fc.set(prefix + ".lore", getLore());
+            fc.set(prefix + ".lore", ChatUtils.fromColor(getLore()));
         else
             fc.set(prefix + ".lore", null);
 

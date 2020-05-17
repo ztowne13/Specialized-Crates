@@ -125,6 +125,16 @@ public class ChatUtils
         return newList;
     }
 
+    public static List<String> fromColor(List list)
+    {
+        ArrayList<String> newList = new ArrayList<String>();
+        for (Object s : list)
+        {
+            newList.add(s.toString().replaceAll("§", "&"));
+        }
+        return newList;
+    }
+
     public static String lastChatColor(String s)
     {
         String col;
