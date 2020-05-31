@@ -13,10 +13,10 @@ public class SQL
 
     int attempts = 0;
 
-    public SQL(SpecializedCrates sc, String databaseIP, String database, String username, String password)
+    public SQL(SpecializedCrates sc, String databaseIP, String database, String port, String username, String password)
     {
         this.sc = sc;
-        sqlc = new SQLConnection(this, databaseIP, database, username, password);
+        sqlc = new SQLConnection(this, databaseIP, port, database, username, password);
     }
 
     public Object get(String table, String where, String whereResult,

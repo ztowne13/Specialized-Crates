@@ -9,20 +9,21 @@ import java.sql.SQLException;
 public class SQLConnection
 {
     Connection connection;
-    String dbIP, db, user, pass;
+    String dbIP, db, user, pass, port;
     SQL sql;
 
     static int queries = 0;
 
     boolean saidOnce = false;
 
-    public SQLConnection(SQL sql, String dbIP, String db, String user, String pass)
+    public SQLConnection(SQL sql, String dbIP, String dbPort, String db, String user, String pass)
     {
         this.dbIP = dbIP;
         this.db = db;
         this.user = user;
         this.pass = pass;
         this.sql = sql;
+        this.port = dbPort;
     }
 
     public Connection open()
@@ -36,7 +37,7 @@ public class SQLConnection
         try
         {
             Connection c = connection =
-                    DriverManager.getConnection("jdbc:mysql://" + this.dbIP + "/" + this.db + "?autoReconnect=true&useSSL=false", this.user, this.pass);
+                    DriverManager.getConnection("jdbc:mysql://" + this.dbIP + ":" + port + "/" + this.db + "?autoReconnect=true&useSSL=false", this.user, this.pass);
             if(log)
                 ChatUtils.log("[SpecializedCrates] Connection to the SQL database was completed successfuly.");
             return c;

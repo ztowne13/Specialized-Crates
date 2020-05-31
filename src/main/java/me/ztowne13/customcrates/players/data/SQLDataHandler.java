@@ -39,12 +39,12 @@ public class SQLDataHandler extends DataHandler
 
             String dbName = fc.getString("database.name");
             String dbIp = fc.getString("database.ip");
-            String dpPort = fc.getString("database.port");
+            String dbPort = fc.getString("database.port");
             String dbUsername = fc.getString("database.username");
             String dbPassword = fc.getString("database.password");
 
             cc.getDu().log("load() - Opening connection and creating query thread.", getClass());
-            sql = new SQL(sc, dbIp, dbName, dbUsername, dbPassword);
+            sql = new SQL(sc, dbIp, dbName, dbPort, dbUsername, dbPassword);
             sqlQueryThread = new SQLQueryThread(sql);
 
             cc.getDu().log("load() - Completed creating thread and opening connection in " +

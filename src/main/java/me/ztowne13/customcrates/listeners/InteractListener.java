@@ -31,11 +31,6 @@ public class InteractListener implements Listener
 
         Player p = e.getPlayer();
 
-        if(!e.isCancelled())
-        {
-
-        }
-
         // Handle crate left or right click
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_BLOCK))
         {
