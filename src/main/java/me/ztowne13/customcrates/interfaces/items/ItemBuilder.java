@@ -191,6 +191,9 @@ public class ItemBuilder implements EditableItem
 
     public ItemMeta im()
     {
+        if(getStack().getItemMeta() == null) {
+            return Bukkit.getItemFactory().getItemMeta(getStack().getType());
+        }
         return getStack().getItemMeta();
     }
 
