@@ -423,12 +423,12 @@ public class CMultiCrateInventory extends CSetting
 
     public void checkClick(final PlayerManager pm, int slot, ClickType clickType)
     {
-        Player player = pm.getP();
+        final Player player = pm.getP();
         Crate crate = pm.getOpenCrate();
 
         if (crate.getSettings().getMultiCrateSettings().getCrateSpots().keySet().contains(slot))
         {
-            Crate clickedCrate = crate.getSettings().getMultiCrateSettings().getCrateSpots().get(slot);
+            final Crate clickedCrate = crate.getSettings().getMultiCrateSettings().getCrateSpots().get(slot);
 
             if (clickType != ClickType.LEFT && clickType != ClickType.RIGHT)
             {
@@ -475,109 +475,122 @@ public class CMultiCrateInventory extends CSetting
                     return;
                 }
 
-                    // Gamemode check
-                    if (!player.getGameMode().equals(GameMode.CREATIVE) ||
-                            (Boolean) cc.getSettings().getConfigValues().get("open-creative"))
+                // Gamemode check
+                if (!player.getGameMode().equals(GameMode.CREATIVE) ||
+                        (Boolean) cc.getSettings().getConfigValues().get("open-creative"))
+                {
+                    // Cooldown check
+                    CrateCooldownEvent cce = pm.getPdm().getCrateCooldownEventByCrates(clickedCrate);
+                    if (cce == null || cce.isCooldownOverAsBoolean())
                     {
-                        // Cooldown check
-                        CrateCooldownEvent cce = pm.getPdm().getCrateCooldownEventByCrates(clickedCrate);
-                        if (cce == null || cce.isCooldownOverAsBoolean())
+                        // Economy check
+                        if (cc.getEconomyHandler().handleCheck(player, clickedCrate.getSettings().getCost(), true))
                         {
-                            // Economy check
-                            if (cc.getEconomyHandler().handleCheck(player, clickedCrate.getSettings().getCost(), true))
-                            {
-                                // Open crate
-                                player.closeInventory();
-                                if (clickedCrate.getSettings().getAnimation()
-                                        .startAnimation(player, pm.getLastOpenCrate(), false, false))
-                                {
-                                    new CrateCooldownEvent(clickedCrate, System.currentTimeMillis(), true)
-                                            .addTo(pm.getPdm());
-                                    // Post Conditions
-                                    if (pm.isUseVirtualCrate())
-                                    {
-                                        pm.getPdm().setVirtualCrateCrates(clickedCrate,
-                                                pm.getPdm().getVCCrateData(clickedCrate).getCrates() - 1);
-                                    }
-                                    else if (!crates.getSettings().getObtainType().equals(ObtainType.STATIC))
-                                    {
-                                        try
-                                        {
-                                            PlacedCrate pc = PlacedCrate.get(cc, pm.getLastOpenCrate());
-                                            pc.delete();
-                                        }
-                                        catch (Exception exc)
-                                        {
+                            // Open crate
+                            player.closeInventory();
 
-                                        }
-                                    }
-                                }
-                                else
+                            if (clickedCrate.getSettings().isCanFastTrack())
+                            {
+                                clickedCrate.getSettings().setCanFastTrack(false);
+                                Bukkit.getScheduler().runTaskLater(cc, new Runnable()
                                 {
-                                    invCheck(player, pm);
-                                    cc.getEconomyHandler().failSoReturn(player, clickedCrate.getSettings().getCost());
+                                    @Override
+                                    public void run()
+                                    {
+                                        clickedCrate.getSettings().setCanFastTrack(true);
+                                    }
+                                }, 2L);
+                            }
+                            if (clickedCrate.getSettings().getAnimation()
+                                    .startAnimation(player, pm.getLastOpenCrate(), false, false))
+                            {
+                                new CrateCooldownEvent(clickedCrate, System.currentTimeMillis(), true)
+                                        .addTo(pm.getPdm());
+                                // Post Conditions
+                                if (pm.isUseVirtualCrate())
+                                {
+                                    pm.getPdm().setVirtualCrateCrates(clickedCrate,
+                                            pm.getPdm().getVCCrateData(clickedCrate).getCrates() - 1);
+                                }
+                                else if (!crates.getSettings().getObtainType().equals(ObtainType.STATIC))
+                                {
+                                    try
+                                    {
+                                        PlacedCrate pc = PlacedCrate.get(cc, pm.getLastOpenCrate());
+                                        pc.delete();
+                                    }
+                                    catch (Exception exc)
+                                    {
+
+                                    }
                                 }
                             }
                             else
                             {
-                                crate.getSettings().getAnimation().playFailToOpen(player, false, true);
                                 invCheck(player, pm);
+                                cc.getEconomyHandler().failSoReturn(player, clickedCrate.getSettings().getCost());
                             }
                         }
                         else
                         {
+                            crate.getSettings().getAnimation().playFailToOpen(player, false, true);
                             invCheck(player, pm);
-                            cce.playFailure(pm.getPdm());
                         }
                     }
                     else
                     {
-                        Messages.DENY_CREATIVE_MODE.msgSpecified(cc, player);
+                        invCheck(player, pm);
+                        cce.playFailure(pm.getPdm());
                     }
                 }
                 else
                 {
-                    Messages.INSUFFICIENT_VIRTUAL_CRATES.msgSpecified(pm.getCc(), player);
+                    Messages.DENY_CREATIVE_MODE.msgSpecified(cc, player);
                 }
             }
-        }
-
-        public void openFor (Player player, PlacedCrate cm)
-        {
-            PlayerManager pm = PlayerManager.get(cc, player);
-            crates.getSettings().getMultiCrateSettings()
-                    .getInventory(player, crates.getSettings().getCrateInventoryName() == null ? crates.getName() :
-                            crates.getSettings().getCrateInventoryName(), true).open();
-            pm.setLastOpenCrate(cm.getL());
-            pm.setLastOpenedPlacedCrate(cm);
-            pm.openCrate(crates);
-        }
-
-        public void invCheck (Player p, PlayerManager pm)
-        {
-            if (p.getLocation().distance(pm.getLastOpenCrate()) > 10)
+            else
             {
-                p.closeInventory();
+                Messages.INSUFFICIENT_VIRTUAL_CRATES.msgSpecified(pm.getCc(), player);
             }
         }
+    }
 
-        public HashMap<Integer, Crate> getCrateSpots ()
-        {
-            return crateSpots;
-        }
+    public void openFor(Player player, PlacedCrate cm)
+    {
+        PlayerManager pm = PlayerManager.get(cc, player);
+        crates.getSettings().getMultiCrateSettings()
+                .getInventory(player, crates.getSettings().getCrateInventoryName() == null ? crates.getName() :
+                        crates.getSettings().getCrateInventoryName(), true).open();
+        pm.setLastOpenCrate(cm.getL());
+        pm.setLastOpenedPlacedCrate(cm);
+        pm.openCrate(crates);
+    }
 
-        public HashMap<Integer, ItemBuilder> getItems ()
+    public void invCheck(Player p, PlayerManager pm)
+    {
+        if (p.getLocation().distance(pm.getLastOpenCrate()) > 10)
         {
-            return items;
-        }
-
-        public InventoryBuilder getIb ()
-        {
-            return ib;
-        }
-
-        public void setIb (InventoryBuilder ib)
-        {
-            this.ib = ib;
+            p.closeInventory();
         }
     }
+
+    public HashMap<Integer, Crate> getCrateSpots()
+    {
+        return crateSpots;
+    }
+
+    public HashMap<Integer, ItemBuilder> getItems()
+    {
+        return items;
+    }
+
+    public InventoryBuilder getIb()
+    {
+        return ib;
+    }
+
+    public void setIb(InventoryBuilder ib)
+    {
+        this.ib = ib;
+    }
+}
