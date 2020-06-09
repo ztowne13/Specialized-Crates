@@ -24,23 +24,27 @@ public class FlatFileDataHandler extends DataHandler
     @Override
     public boolean load()
     {
-
         return false;
     }
 
     @Override
     public Object get(String value)
     {
+        cc.getDu().log("FlatFileDataHandler.get() - CALL", getClass());
         return getFc().get(toPath(value));
     }
 
     @Override
     public void write(String value, String toWrite)
     {
+        cc.getDu().log("FlatFileDataHandler.write() - CALL", getClass());
         getFc().set(toPath(value), toWrite);
 
         if(!toSave.contains(this))
+        {
+            cc.getDu().log("FlatFileDataHandler.write() - Adding to toSave list.", getClass());
             toSave.add(this);
+        }
     }
 
     @Override

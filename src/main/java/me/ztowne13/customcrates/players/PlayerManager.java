@@ -66,6 +66,8 @@ public class PlayerManager
 
     public void remove(int delay)
     {
+        cc.getDu().log("PlayerManager.remove() - CALL", getClass());
+
         if(isInCrateAnimation())
         {
             getCurrentAnimation().setFastTrack(true, true);
@@ -77,6 +79,7 @@ public class PlayerManager
             public void run()
             {
                 getpManagers().remove(getP().getUniqueId());
+                cc.getDu().log("PlayerManager.remove() - Removed", getClass());
             }
         }, delay);
 
@@ -123,6 +126,7 @@ public class PlayerManager
 
     public static PlayerManager get(SpecializedCrates cc, Player p)
     {
+        cc.getDu().log("PlayerManager.get() - CALL (contains: " + getpManagers().containsKey(p.getUniqueId()) + ")", PlayerManager.class);
         return getpManagers().containsKey(p.getUniqueId()) ? getpManagers().get(p.getUniqueId()) : new PlayerManager(cc, p);
     }
 

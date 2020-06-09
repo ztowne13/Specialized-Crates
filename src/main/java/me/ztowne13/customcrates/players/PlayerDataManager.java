@@ -84,6 +84,7 @@ public class PlayerDataManager
 
     public void loadAllInformationHelper()
     {
+        pm.getCc().getDu().log("loadAllInformationHelper() - CALL (" + pm.getP().getName() + ")", getClass());
         if (getDh().hasDataValue("history"))
         {
             setHistory(getDh().get("history").toString(), false);
@@ -94,6 +95,7 @@ public class PlayerDataManager
         }
         if (getDh().hasDataValue("virtual-crates"))
         {
+            pm.getCc().getDu().log("loadAllInformationHelper() - contains virtual-crates value: (" + getDh().get("virtual-crates").toString() + ")", getClass());
             setVirtualCrates(getDh().get("virtual-crates").toString());
         }
        /* if (dh.hasDataValue("reward-limits")) {
@@ -233,6 +235,7 @@ public class PlayerDataManager
 
     public void setVirtualCrateCrates(Crate crate, int crates)
     {
+        pm.getCc().getDu().log("setVirtualCrateCrates() - CALL (" + pm.getP().getName() + ", " + crates + ")", getClass());
         VirtualCrateData vCD = getVCCrateData(crate);
         String temp = removeStringFromList(vCD.toString(), getVirtualCrates());
         vCD.setCrates(crates);
@@ -242,21 +245,28 @@ public class PlayerDataManager
 
     public void setVirtualCrateKeys(Crate crate, int keys)
     {
+        pm.getCc().getDu().log("setVirtualCrateKeys() - CALL (" + pm.getP().getName() + ", " + crate.getName() + ", " + keys + ")", getClass());
         VirtualCrateData vCD = getVCCrateData(crate);
+        pm.getCc().getDu().log("setVirtualCrateKeys() - Before: " + vCD.toString(), getClass());
         String temp = removeStringFromList(vCD.toString(), getVirtualCrates());
         vCD.setKeys(keys);
+        pm.getCc().getDu().log("setVirtualCrateKeys() - After: " + vCD.toString(), getClass());
+        pm.getCc().getDu().log("setVirtualCrateKeys() - Result: " + addStringToList(vCD.toString(), temp), getClass());
         setVirtualCrates(addStringToList(vCD.toString(), temp));
         getDh().write("virtual-crates", getVirtualCrates());
     }
 
     public VirtualCrateData getVCCrateData(Crate crate)
     {
+        pm.getCc().getDu().log("getVCCrateData() - CALL (" + pm.getP().getName() + ", " + crate.getName() + ")", getClass());
         if (getVirtualCrateData().containsKey(crate))
         {
+            pm.getCc().getDu().log("getVCCrateData() - already contains", getClass());
             return getVirtualCrateData().get(crate);
         }
         else
         {
+            pm.getCc().getDu().log("getVCCrateData() - doesn't contain", getClass());
             getVirtualCrateData().put(crate, new VirtualCrateData(crate, 0, 0));
             return getVCCrateData(crate);
         }
@@ -375,11 +385,13 @@ public class PlayerDataManager
 
     public String getVirtualCrates()
     {
+        pm.getCc().getDu().log("getVirtualCrates() - CALL (" + pm.getP().getName() + ")", getClass());
         return virtualCrates;
     }
 
     public void setVirtualCrates(String virtualCrates)
     {
+        pm.getCc().getDu().log("setVirtualCrates() - CALL (" + pm.getP().getName() + ")", getClass());
         this.virtualCrates = virtualCrates;
     }
 

@@ -61,7 +61,7 @@ public class FileHandler
 
     public void loadFile()
     {
-        cc.getDu().log("loadFile() - CALL", getClass(), true);
+        cc.getDu().log("loadFile() - CALL", getClass(), false);
 
         if (getDataFile() == null)
         {
@@ -89,7 +89,7 @@ public class FileHandler
 
     public void reload()
     {
-        cc.getDu().log("reload() - CALL", getClass(), true);
+        cc.getDu().log("reload() - CALL", getClass(), false);
 
         loadFile();
 
@@ -140,7 +140,7 @@ public class FileHandler
 
     private void loadByByte()
     {
-        cc.getDu().log("loadByByte() - CALL", getClass(), true);
+        cc.getDu().log("loadByByte() - CALL", getClass(), false);
 
         if (saveWithCustomSave)
         {
@@ -187,7 +187,7 @@ public class FileHandler
 
     public void save()
     {
-        cc.getDu().log("save() - CALL", getClass(), true);
+        cc.getDu().log("save() - CALL", getClass(), false);
         long curTime = System.currentTimeMillis();
 
         if (getData() == null || getDataFile() == null)
@@ -225,7 +225,7 @@ public class FileHandler
 
     private void saveByByte()
     {
-        cc.getDu().log("saveByByte() - CALL", getClass(), true);
+        cc.getDu().log("saveByByte() - CALL", getClass(), false);
         ArrayList<String> bukkitLoad = new ArrayList<>();
         for (String s : getData().saveToString().split("\n"))
         {
