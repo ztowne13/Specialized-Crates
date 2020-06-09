@@ -385,12 +385,11 @@ public class SpecializedCrates extends JavaPlugin
 
     public void saveFilesTick()
     {
-        for(FlatFileDataHandler file : FlatFileDataHandler.toSave)
+        if(FlatFileDataHandler.isToSave())
         {
-            getDu().log("saveFilesTick() - Saving flat file for " + file.getPm().getP().getName(), getClass());
-            file.getFileHandler().save();
+            getDu().log("saveFilesTick() - Saving playerdata.db flat file");
+            FlatFileDataHandler.getFileHandler().save();
         }
-        FlatFileDataHandler.toSave.clear();
 
         for(IndividualFileDataHandler file : IndividualFileDataHandler.toSave)
         {

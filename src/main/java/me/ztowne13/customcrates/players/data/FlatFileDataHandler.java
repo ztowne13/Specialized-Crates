@@ -4,21 +4,21 @@ import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.players.PlayerManager;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
-
 public class FlatFileDataHandler extends DataHandler
 {
-    public static ArrayList<FlatFileDataHandler> toSave = new ArrayList<>();
-
-    FileHandler fu;
-    FileConfiguration fc;
+    static FileHandler fu = null;
+    static FileConfiguration fc;
+    static boolean toSave = false;
 
     public FlatFileDataHandler(PlayerManager pm)
     {
         super(pm);
         cc.getDu().log("Loading flat file data handler for " + pm.getP().getName());
-        this.fu = new FileHandler(getCc(), "PlayerData.db", false, false);
-        this.fc = getFileHandler().get();
+        if(fu == null)
+        {
+            fu = new FileHandler(getCc(), "PlayerData.db", false, false);
+            fc = getFileHandler().get();
+        }
     }
 
     @Override
@@ -40,11 +40,7 @@ public class FlatFileDataHandler extends DataHandler
         cc.getDu().log("FlatFileDataHandler.write() - CALL", getClass());
         getFc().set(toPath(value), toWrite);
 
-        if(!toSave.contains(this))
-        {
-            cc.getDu().log("FlatFileDataHandler.write() - Adding to toSave list.", getClass());
-            toSave.add(this);
-        }
+        toSave = true;
     }
 
     @Override
@@ -64,23 +60,21 @@ public class FlatFileDataHandler extends DataHandler
         return getUuid() + "." + value;
     }
 
-    public FileHandler getFileHandler()
+    public static FileHandler getFileHandler()
     {
         return fu;
     }
 
-    public void setFu(FileHandler fu)
-    {
-        this.fu = fu;
-    }
-
-    public FileConfiguration getFc()
+    public static FileConfiguration getFc()
     {
         return fc;
     }
 
-    public void setFc(FileConfiguration fc)
-    {
-        this.fc = fc;
+    public static boolean isToSave() {
+        return toSave;
+    }
+
+    public static void resetToSave() {
+        toSave = false;
     }
 }
