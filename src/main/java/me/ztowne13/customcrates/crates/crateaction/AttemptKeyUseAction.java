@@ -60,12 +60,6 @@ public class AttemptKeyUseAction extends CrateAction
                 }
 
                 crates.getSettings().getMultiCrateSettings().openFor(player, cm);
-//                crates.getSettings().getMultiCrateSettings()
-//                        .getInventory(player, crates.getSettings().getCrateInventoryName() == null ? crates.getName() :
-//                                crates.getSettings().getCrateInventoryName(), true).open();
-//                pm.setLastOpenCrate(location);
-//                pm.setLastOpenedPlacedCrate(cm);
-//                pm.openCrate(crates);
                 return true;
             }
             else if (!player.getGameMode().equals(GameMode.CREATIVE) ||
