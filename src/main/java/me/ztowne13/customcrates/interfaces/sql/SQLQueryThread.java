@@ -1,5 +1,7 @@
 package me.ztowne13.customcrates.interfaces.sql;
 
+import me.ztowne13.customcrates.players.data.SQLDataHandler;
+
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SQLQueryThread extends Thread
@@ -36,6 +38,10 @@ public class SQLQueryThread extends Thread
             catch (InterruptedException exc)
             {
 
+            }
+
+            if(!SQLDataHandler.loaded) {
+                continue;
             }
 
             for (String query : sql_query)

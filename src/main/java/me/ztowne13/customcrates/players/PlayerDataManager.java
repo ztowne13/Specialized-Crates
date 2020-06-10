@@ -4,7 +4,6 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.sql.SQLQueryThread;
 import me.ztowne13.customcrates.players.data.DataHandler;
-import me.ztowne13.customcrates.players.data.FlatFileDataHandler;
 import me.ztowne13.customcrates.players.data.SQLDataHandler;
 import me.ztowne13.customcrates.players.data.VirtualCrateData;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
@@ -64,9 +63,10 @@ public class PlayerDataManager
                     }
                     catch (Exception exc)
                     {
-                        ChatUtils.log("Failed to load the SQL Database Handler, using FLATFILE in the meantime.");
-                        setDh(new FlatFileDataHandler(getPm()));
-                        loadAllInformation();
+                        ChatUtils.log("&4ERROR: &cFailed to load the SQL Database Handler");
+//                        setDh(new FlatFileDataHandler(getPm()));
+//                        loadAllInformation();
+                        return;
                     }
 
                     loaded = true;
