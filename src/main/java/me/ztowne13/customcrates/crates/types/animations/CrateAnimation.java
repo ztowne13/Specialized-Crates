@@ -155,7 +155,7 @@ public abstract class CrateAnimation
         }
 
 
-        CrateOpenEvent crateOpenEvent = new CrateOpenEvent(p, rewards, crate);
+        CrateOpenEvent crateOpenEvent = new CrateOpenEvent(p, rewards, crate, 1);
         Bukkit.getPluginManager().callEvent(crateOpenEvent);
 
         pm.closeCrate();

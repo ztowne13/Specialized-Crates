@@ -38,17 +38,27 @@ public abstract class CrateAction
 
     public abstract boolean run();
 
-    public boolean useCrate(PlayerManager pm, PlacedCrate cm)
-    {
-        return useCrate(pm, cm, false);
-    }
-
     public boolean useCrate(PlayerManager pm, PlacedCrate cm, boolean skipAnimation)
     {
         return useCrate(pm, cm, skipAnimation, false);
     }
 
+    public boolean useCrateHelper(PlayerManager pm, PlacedCrate cm, boolean skipAnimation, boolean hasSkipped, int opened)
+    {
+        if(!useCrate(pm, cm, true, true, opened)) {
+            CrateOpenEvent crateOpenEvent = new CrateOpenEvent(player, null, cm.getCrate(), opened);
+            Bukkit.getPluginManager().callEvent(crateOpenEvent);
+            return false;
+        }
+        return true;
+    }
+
     public boolean useCrate(PlayerManager pm, PlacedCrate cm, boolean skipAnimation, boolean hasSkipped)
+    {
+        return useCrate(pm, cm, skipAnimation, hasSkipped, 0);
+    }
+
+    public boolean useCrate(PlayerManager pm, PlacedCrate cm, boolean skipAnimation, boolean hasSkipped, int opened)
     {
         Player player = pm.getP();
         PlayerDataManager pdm = pm.getPdm();
@@ -83,14 +93,12 @@ public abstract class CrateAction
                                     rewards.add(reward);
                                     reward.giveRewardToPlayer(player);
 
-                                    CrateOpenEvent crateOpenEvent = new CrateOpenEvent(player, rewards, crates);
-                                    Bukkit.getPluginManager().callEvent(crateOpenEvent);
-
                                     cs.getKeyItemHandler().takeKeyFromPlayer(player, false);
                                     new HistoryEvent(Utils.currentTimeParsed(), crates, rewards, true)
                                             .addTo(PlayerManager.get(cc, player).getPdm());
                                     new CrateCooldownEvent(crates, System.currentTimeMillis(), true).addTo(pdm);
-                                    useCrate(pm, cm, true, true);
+
+                                    useCrateHelper(pm, cm, true, true, opened + 1);
 
                                     if (!hasSkipped)
                                     {
@@ -132,6 +140,7 @@ public abstract class CrateAction
                                         location.getBlock().setType(Material.AIR);
                                     }
                                     new CrateCooldownEvent(crates, System.currentTimeMillis(), true).addTo(pdm);
+                                    Bukkit.broadcastMessage("Here");
                                     return !skipAnimation;
                                 }
                                 cc.getEconomyHandler().failSoReturn(player, cs.getCost());

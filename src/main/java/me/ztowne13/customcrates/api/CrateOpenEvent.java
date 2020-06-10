@@ -15,12 +15,14 @@ public class CrateOpenEvent extends Event
     private Crate crate;
     private ArrayList<Reward> rewards;
     private Player player;
+    private int openedCratesCount;
 
-    public CrateOpenEvent(Player player, ArrayList<Reward> rewards, Crate crate)
+    public CrateOpenEvent(Player player, ArrayList<Reward> rewards, Crate crate, int openedCratesCount)
     {
         this.player = player;
         this.rewards = rewards;
         this.crate = crate;
+        this.openedCratesCount = openedCratesCount;
     }
 
     @Override
@@ -42,6 +44,11 @@ public class CrateOpenEvent extends Event
     public Player getPlayer()
     {
         return player;
+    }
+
+    public int getOpenedCratesCount()
+    {
+        return openedCratesCount;
     }
 
     public static HandlerList getHandlerList()
