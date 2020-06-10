@@ -14,6 +14,7 @@ public class NativeHologram extends DynamicHologram
 {
     HologramManager hologramManager;
     Hologram hologram;
+    Location l;
 
     public NativeHologram(SpecializedCrates cc, PlacedCrate placedCrate)
     {
@@ -24,13 +25,19 @@ public class NativeHologram extends DynamicHologram
     @Override
     public void create(Location l)
     {
-        this.hologram = hologramManager.createHologram("test", l);
-        teleport(l);
+        this.l = l;
+//        this.hologram = hologramManager.createHologram("test", l);
+//        teleport(l);
     }
 
     @Override
     public void addLine(String line)
     {
+        if(hologram == null) {
+            this.hologram = hologramManager.createHologram("test", l);
+            teleport(l);
+        }
+
         hologram.addLine(line);
 
         if(hologram instanceof HologramNMS)
@@ -42,6 +49,11 @@ public class NativeHologram extends DynamicHologram
     @Override
     public void setLine(int lineNum, String line)
     {
+        if(hologram == null) {
+            this.hologram = hologramManager.createHologram("test", l);
+            teleport(l);
+        }
+
         hologram.setLine(lineNum, line);
         if(hologram instanceof HologramNMS)
         {
@@ -52,16 +64,22 @@ public class NativeHologram extends DynamicHologram
     @Override
     public void delete()
     {
-        hologramManager.deleteHologram(hologram);
+        if(hologram != null)
+        {
+            hologramManager.deleteHologram(hologram);
+        }
     }
 
     @Override
     public void teleport(Location l)
     {
-        hologram.setLocation(LocationUtils.getLocationCentered(l.clone()));
-        if(hologram instanceof HologramNMS)
+        if(hologram != null)
         {
-            ((HologramNMS)hologram).displayTo(Bukkit.getOnlinePlayers().iterator().next());
+            hologram.setLocation(LocationUtils.getLocationCentered(l.clone()));
+            if (hologram instanceof HologramNMS)
+            {
+                ((HologramNMS) hologram).displayTo(Bukkit.getOnlinePlayers().iterator().next());
+            }
         }
     }
 }

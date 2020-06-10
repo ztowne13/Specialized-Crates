@@ -20,6 +20,7 @@ public class SaintXHologram extends DynamicHologram
     HologramManager hm;
     Hologram hologram;
     double defaultYOffSet = -.2;
+    Location l;
 
     public SaintXHologram(SpecializedCrates cc, PlacedCrate cm)
     {
@@ -31,10 +32,9 @@ public class SaintXHologram extends DynamicHologram
     @Override
     public void create(Location l)
     {
+        this.l = l;
         UUID uuid = UUID.randomUUID();
-        this.hologram = new Hologram(uuid.toString(), l);
-        hologram.addLine(new TextLine(hologram, "THIS LINE SHOULD BE GETTING REMOVED"));
-        hm.addActiveHologram(hologram);
+        this.hologram = new Hologram(uuid.toString(), l);hm.addActiveHologram(hologram);
         this.hologram.spawn();
         teleport(l);
     }
