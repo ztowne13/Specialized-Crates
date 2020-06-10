@@ -16,7 +16,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,7 +24,9 @@ import java.util.List;
  */
 public class IGCCrateActions extends IGCTierMenu
 {
-    List<String> actionTypes = new ArrayList<>();
+    List<String> actionTypes;
+    List<String> descriptors;
+    List<ItemBuilder> builders;
     boolean deleteMode = false;
 
     public IGCCrateActions(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, String tier)
@@ -37,11 +38,43 @@ public class IGCCrateActions extends IGCTierMenu
                 "TITLE",
                 "SUBTITLE",
                 "ACTIONBAR",
+                "COMMAND",
                 "PRE_MESSAGE",
                 "PRE_BROADCAST",
                 "PRE_TITLE",
                 "PRE_SUBTITLE",
-                "PRE_ACTIONBAR"
+                "PRE_ACTIONBAR",
+                "PRE_COMMAND"
+                );
+
+        descriptors = Arrays.asList(
+                "Send a message to the player after the crate animation has been completed.",
+                "Sends a broadcast to the server after the crate animation has been completed.",
+                "Displays a title to the player after the crate animation has been completed.",
+                "Displays a subtitle to the player after the crate animation has been completed.",
+                "Displays an action bar to the player after the crate animation has been completed.",
+                "Runs a command in console after the crate animation has been completed. To add per-reward commands, visit the rewards.yml.",
+                "Send a message to the player immediately when the player begins opening the crate.",
+                "Sends a broadcast to the server immediately when the player begins opening the crate.",
+                "Displays a title to the player immediately when the player begins opening the crate.",
+                "Displays a subtitle to the player immediately when the player begins opening the crate.",
+                "Displays an action bar to the player immediately when the player begins opening the crate.",
+                "Runs a command in console immediately when the player begins opening the crate. To add per-reward commands, visit the rewards.yml."
+        );
+
+        builders = Arrays.asList(
+                new ItemBuilder(DynamicMaterial.PAPER),
+                new ItemBuilder(DynamicMaterial.BEACON),
+                new ItemBuilder(DynamicMaterial.WRITTEN_BOOK),
+                new ItemBuilder(DynamicMaterial.BOOK),
+                new ItemBuilder(DynamicMaterial.IRON_INGOT),
+                new ItemBuilder(DynamicMaterial.COMMAND_BLOCK),
+                new ItemBuilder(DynamicMaterial.PAPER),
+                new ItemBuilder(DynamicMaterial.BEACON),
+                new ItemBuilder(DynamicMaterial.WRITTEN_BOOK),
+                new ItemBuilder(DynamicMaterial.BOOK),
+                new ItemBuilder(DynamicMaterial.IRON_INGOT),
+                new ItemBuilder(DynamicMaterial.COMMAND_BLOCK)
         );
     }
 
@@ -126,7 +159,7 @@ public class IGCCrateActions extends IGCTierMenu
         {
 //            new InputMenu(getCc(), getP(), "new action - type", "null", "Valid action types: " + actionTypes.toString(),
 //                    String.class, this, true);
-            new IGCListSelector(getCc(), getP(), this, "Actions", actionTypes, DynamicMaterial.PAPER, 1, null).open();
+            new IGCListSelector(getCc(), getP(), this, "Actions", actionTypes, DynamicMaterial.PAPER, 1, descriptors, builders).open();
         }
         else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType().equals(Material.BOOK))
         {

@@ -140,7 +140,6 @@ public abstract class CrateAction
                                         location.getBlock().setType(Material.AIR);
                                     }
                                     new CrateCooldownEvent(crates, System.currentTimeMillis(), true).addTo(pdm);
-                                    Bukkit.broadcastMessage("Here");
                                     return !skipAnimation;
                                 }
                                 cc.getEconomyHandler().failSoReturn(player, cs.getCost());

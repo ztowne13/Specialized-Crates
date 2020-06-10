@@ -167,16 +167,16 @@ public class CActions extends CSetting
                     !getActions().keySet().contains(rewards.get(0).getRarity().toLowerCase())) ||
                     rewards.get(0).getRarity().equalsIgnoreCase(tier))
             {
-                for (String s : getActions().get(tier).keySet())
+                for (String actionVal : getActions().get(tier).keySet())
                 {
-                    s = s.toUpperCase();
+                    String s = actionVal.toUpperCase();
                     for (String msg : getActions().get(tier).get(s))
                     {
                         if (pre)
                         {
-                            if (s.startsWith("PRE_"))
+                            if (actionVal.startsWith("PRE_"))
                             {
-                                s = s.substring(4);
+                                s = actionVal.substring(4);
                             }
                             else
                             {
@@ -185,7 +185,7 @@ public class CActions extends CSetting
                         }
                         else
                         {
-                            if (s.startsWith("PRE_"))
+                            if (actionVal.startsWith("PRE_"))
                             {
                                 continue;
                             }
@@ -200,6 +200,7 @@ public class CActions extends CSetting
                         msg = msg.replace("%crate%", getCrate().getName()).replace("%cratename%", getCrate().getDisplayName());
                         msg = msg.replace("%reward%", rewardsAsString).replace("%rewards%", rewardsAsString);
                         msg = ChatUtils.toChatColor(msg);
+
                         if (s.equalsIgnoreCase("MESSAGE"))
                         {
                             p.sendMessage(msg);
@@ -227,12 +228,15 @@ public class CActions extends CSetting
                             actionEffect.setDisplaySubtitle(msg);
                             toRunTitle = true;
                         }
+                        else if(s.equalsIgnoreCase("COMMAND")) {
+                            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), msg);
+                        }
                         else
                         {
                             ChatUtils.log(new String[]{
                                     "Please note that an action type called " + s + " was attempted to be run",
                                     "    However, this action type does not exist. Valid types are:",
-                                    "      MESSAGE, BROADCAST, ACTIONBAR, TITLE, and SUBTITLE"});
+                                    "      MESSAGE, BROADCAST, ACTIONBAR, TITLE, SUBTITLE, and COMMAND"});
                         }
                     }
                 }
