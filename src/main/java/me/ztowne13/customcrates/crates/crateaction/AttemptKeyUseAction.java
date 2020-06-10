@@ -47,7 +47,7 @@ public class AttemptKeyUseAction extends CrateAction
             if(!pm.getPdm().isLoaded())
             {
                 Messages.LOADING_FROM_DATABASE.msgSpecified(cc, player);
-                return false;
+                return true;
             }
 
             PlacedCrate cm = PlacedCrate.get(cc, location);
