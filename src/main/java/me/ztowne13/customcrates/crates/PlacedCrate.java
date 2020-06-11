@@ -64,6 +64,11 @@ public class PlacedCrate
 
     public void setup(Crate crates, boolean writeToFile)
     {
+        setup(crates, writeToFile, true);
+    }
+
+    public void setup(Crate crates, boolean writeToFile, boolean createdByPlayer)
+    {
         this.crates = crates;
         crates.setPlacedCount(crates.getPlacedCount() + 1);
         setCratesEnabled(CrateUtils.isCrateUsable(crates));
@@ -71,7 +76,7 @@ public class PlacedCrate
         if (CrateUtils.isCrateUsable(this))
         {
             setupDisplay();
-            setupHolo(crates);
+            setupHolo(crates, createdByPlayer);
 
             getCrate().getSettings().getPlaceholder().fixHologram(this);
 
@@ -89,9 +94,13 @@ public class PlacedCrate
     }
 
 
-    public void setupHolo(Crate crates)
+    public void setupHolo(Crate crates, boolean createdByPlayer)
     {
         setCholo(crates.getSettings().getHologram().clone());
+        if(!createdByPlayer) {
+            getHologram().setCreatedByPlayer(false);
+        }
+
         Location dupeLoc = getL().clone();
         dupeLoc.setY(dupeLoc.getY() + .5);
         getHologram().setDh(getHologram().createHologram(this, dupeLoc));
@@ -128,7 +137,7 @@ public class PlacedCrate
         {
             bl = l.getBlock().getLocation();
         }
-        catch(Exception exc)
+        catch (Exception exc)
         {
             ChatUtils.log("A crate is trying to be placed in an ungenerated chunk or world. Deleting that placed instance.");
             return null;

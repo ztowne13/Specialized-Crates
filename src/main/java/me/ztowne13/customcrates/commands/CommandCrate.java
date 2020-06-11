@@ -45,6 +45,7 @@ public class CommandCrate extends Commands implements CommandExecutor
                 new Debug(),
                 new ForceOpen(),
                 new ToggleParticles(),
+                new SpawnCrate(),
                 vcSubCommand));
     }
 
@@ -155,6 +156,8 @@ public class CommandCrate extends Commands implements CommandExecutor
         msg("    &7Force a player to open a crate.");
         msg("&6&l> &etoggleparticles");
         msg("    &7Temporarily disable all particle effects.");
+        msg("&6&l> &espawncrate [crate] [world] [x] [y] [z]");
+        msg("    &7Spawn a crate at a given location.");
         msg("");
 
     }

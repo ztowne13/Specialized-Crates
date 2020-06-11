@@ -26,6 +26,8 @@ public class CHolograms extends CSetting
     ArrayList<String> prefixes = new ArrayList<String>();
     double hologramOffset = -123.123;
 
+    boolean createdByPlayer = true;
+
     public CHolograms(Crate crates)
     {
         super(crates, crates.getCc());
@@ -235,7 +237,7 @@ public class CHolograms extends CSetting
 
         CrateSettings settings = getCrate().getSettings();
         // This is a dynamic hologram and doesn't need them created when placed
-        if(settings.getObtainType().equals(ObtainType.DYNAMIC) && !settings.isRequireKey())
+        if(settings.getObtainType().equals(ObtainType.DYNAMIC) && !settings.isRequireKey() && createdByPlayer)
         {
             return h;
         }
@@ -407,5 +409,10 @@ public class CHolograms extends CSetting
     public void setRewardHologram(String rewardHologram)
     {
         this.rewardHologram = rewardHologram;
+    }
+
+    public void setCreatedByPlayer(boolean createdByPlayer)
+    {
+        this.createdByPlayer = createdByPlayer;
     }
 }

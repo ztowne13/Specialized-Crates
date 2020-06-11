@@ -6,6 +6,7 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -57,6 +58,7 @@ public class TabCompleteListener implements TabCompleter
                     list.add("luckychest");
                     list.add("forceopen");
                     list.add("toggleparticles");
+                    list.add("spawncrate");
                     list = Utils.onlyLeaveEntriesWithPref(list, args[0]);
                 }
                 else
@@ -152,6 +154,29 @@ public class TabCompleteListener implements TabCompleter
                             list.add(crates.getName());
                         }
                         list = Utils.onlyLeaveEntriesWithPref(list, args[1]);
+                    }
+                    else if(args[0].equalsIgnoreCase("spawncrate"))
+                    {
+                        if(args.length == 2)
+                        {
+                            for (Crate crates : Crate.getLoadedCrates().values())
+                            {
+                                list.add(crates.getName());
+                            }
+                            list = Utils.onlyLeaveEntriesWithPref(list, args[1]);
+                        } else if(args.length == 3) {
+                            for(World world : Bukkit.getWorlds())
+                            {
+                                list.add(world.getName());
+                            }
+                            list = Utils.onlyLeaveEntriesWithPref(list, args[2]);
+                        } else if(args.length == 4) {
+                            list.add("x");
+                        } else if(args.length == 5) {
+                            list.add("y");
+                        } else if(args.length == 6) {
+                            list.add("z");
+                        }
                     }
                 }
 
