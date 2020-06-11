@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.interfaces.igc.buttons;
 
 import me.ztowne13.customcrates.crates.options.CRewards;
+import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 
@@ -23,7 +24,7 @@ public class IGCButtonRewardFilter implements IGCButton
     }
 
     @Override
-    public boolean handleClick()
+    public boolean handleClick(IGCMenu menu)
     {
         sortType = sortType.getNext();
         return true;

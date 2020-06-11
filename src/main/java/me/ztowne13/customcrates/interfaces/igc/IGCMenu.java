@@ -72,7 +72,7 @@ public abstract class IGCMenu
             IGCButton button = buttons[i];
             if(buttonSpot == slot)
             {
-                if(button.handleClick())
+                if(button.handleClick(this))
                 {
                     open();
                 }
@@ -105,7 +105,6 @@ public abstract class IGCMenu
 
     public void up()
     {
-        //p.closeInventory();
         lastMenu.open();
     }
 
