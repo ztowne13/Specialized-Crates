@@ -10,10 +10,13 @@ import me.ztowne13.customcrates.interfaces.igc.crates.IGCMultiCrateMain;
 import me.ztowne13.customcrates.interfaces.igc.crates.previeweditor.IGCCratePreviewEditor;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCDragAndDrop;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
+import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
+import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,6 +25,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class InventoryActionListener implements Listener
 {
@@ -153,7 +157,7 @@ public class InventoryActionListener implements Listener
         Player p = (Player) e.getWhoClicked();
         PlayerManager pm = PlayerManager.get(cc, p);
 
-        if (p.hasPermission("customcrates.admin") && pm.isInOpenMenu())
+        if ((p.hasPermission("customcrates.admin") || p.hasPermission("specializedcrates.admin")) && pm.isInOpenMenu())
         {
             if (!(e.getClickedInventory() == null || e.getView().getTopInventory() == null))
             {
@@ -187,7 +191,39 @@ public class InventoryActionListener implements Listener
             AnimationDataHolder dataHolder = pm.getCurrentAnimation();
             dataHolder.getCrateAnimation().handleKeyPress(dataHolder, CrateAnimation.KeyType.ESC);
         }
+    }
 
+    @EventHandler
+    public void onCratesClaimClose(InventoryCloseEvent e)
+    {
+        if(e.getPlayer() instanceof Player)
+        {
+            Player player = (Player) e.getPlayer();
+            PlayerManager playerManager = PlayerManager.get(cc, player);
+            PlayerDataManager dataManager = playerManager.getPdm();
+
+            if(playerManager.isInCratesClaimMenu())
+            {
+                playerManager.setInCratesClaimMenu(false);
+                for(ItemStack stack : e.getInventory().getContents())
+                {
+                    if(stack == null || stack.getType() == Material.AIR)
+                    {
+                        continue;
+                    }
+
+                    Crate result = CrateUtils.searchByKey(stack);
+                    if(result != null)
+                    {
+                        dataManager.setVirtualCrateKeys(result, dataManager.getVCCrateData(result).getKeys() + stack.getAmount());
+                    }
+                    else
+                    {
+                        Utils.addItemAndDropRest(player, stack);
+                    }
+                }
+            }
+        }
     }
 
     @EventHandler

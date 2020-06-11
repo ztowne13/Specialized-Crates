@@ -33,6 +33,7 @@ public class TabCompleteListener implements TabCompleter
         List<String> list = new ArrayList<String>();
         if (sender instanceof Player)
         {
+            Player player = (Player) sender;
             String cN = cmd.getName();
             if (cN.equalsIgnoreCase("crates") ||
                     cN.equalsIgnoreCase("specializedcrates") ||
@@ -42,23 +43,32 @@ public class TabCompleteListener implements TabCompleter
             {
                 if (args.length == 1)
                 {
-                    list.add("config");
-                    list.add("virtualcrates");
-                    list.add("givecrate");
-                    list.add("givekey");
-                    list.add("edit");
-                    list.add("errors");
-                    list.add("deletecrate");
-                    list.add("listcrates");
-                    list.add("listhistory");
-                    list.add("delallcratetype");
-                    list.add("reload");
-                    list.add("info");
-                    list.add("!");
-                    list.add("luckychest");
-                    list.add("forceopen");
-                    list.add("toggleparticles");
-                    list.add("spawncrate");
+                    if(player.hasPermission("customcrates.admin") || player.hasPermission("specializedcratest.admin"))
+                    {
+                        list.add("config");
+                        list.add("virtualcrates");
+                        list.add("givecrate");
+                        list.add("givekey");
+                        list.add("edit");
+                        list.add("errors");
+                        list.add("deletecrate");
+                        list.add("listcrates");
+                        list.add("listhistory");
+                        list.add("delallcratetype");
+                        list.add("reload");
+                        list.add("info");
+                        list.add("!");
+                        list.add("luckychest");
+                        list.add("forceopen");
+                        list.add("toggleparticles");
+                        list.add("spawncrate");
+                        list.add("claim");
+                    }
+                    else
+                    {
+                        list.add("luckychest");
+                        list.add("claim");
+                    }
                     list = Utils.onlyLeaveEntriesWithPref(list, args[0]);
                 }
                 else
@@ -187,7 +197,6 @@ public class TabCompleteListener implements TabCompleter
                 {
                     for (Crate crates : Crate.getLoadedCrates().values())
                     {
-                        Player player = (Player) sender;
                         CrateSettings cs = crates.getSettings();
 
                         if (player.hasPermission(cs.getPermission()) || cs.getPermission().equalsIgnoreCase("no permission"))

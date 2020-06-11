@@ -20,6 +20,7 @@ public class CommandCrate extends Commands implements CommandExecutor
 {
     SpecializedCrates cc;
     VirtualCrates vcSubCommand;
+    Claim claimSubCommand;
     ArrayList<SubCommand> subCommands;
 
     public CommandCrate(SpecializedCrates cc)
@@ -28,6 +29,7 @@ public class CommandCrate extends Commands implements CommandExecutor
         this.cc = cc;
 
         vcSubCommand = new VirtualCrates();
+        claimSubCommand = new Claim();
 
         subCommands = new ArrayList<>(Arrays.asList(new Config(),
                 new DelAllCrateType(),
@@ -46,7 +48,7 @@ public class CommandCrate extends Commands implements CommandExecutor
                 new ForceOpen(),
                 new ToggleParticles(),
                 new SpawnCrate(),
-                new Claim(),
+                claimSubCommand,
                 vcSubCommand));
     }
 
@@ -82,13 +84,33 @@ public class CommandCrate extends Commands implements CommandExecutor
             }
         }
 
-        if (args.length >= 1 && args[0].equalsIgnoreCase("luckychest") &&
-                canExecute(false, true, "customcrates.luckychestcommand", "specializedcrates.luckychestcommand"))
+        if(args.length >= 1 && args[0].equalsIgnoreCase("luckychest"))
         {
-            PlayerDataManager pdm = PlayerManager.get(cc, (Player) sender).getPdm();
-            pdm.setActivatedLuckyChests(!pdm.isActivatedLuckyChests());
-            Messages.TOGGLE_LUCKYCRATE.msgSpecified(cc, (Player) sender, new String[]{"%state%"},
-                    new String[]{pdm.isActivatedLuckyChests() + ""});
+            if (canExecute(false, true, "customcrates.luckychestcommand", "specializedcrates.luckychestcommand"))
+            {
+                PlayerDataManager pdm = PlayerManager.get(cc, (Player) sender).getPdm();
+                pdm.setActivatedLuckyChests(!pdm.isActivatedLuckyChests());
+                Messages.TOGGLE_LUCKYCRATE.msgSpecified(cc, (Player) sender, new String[]{"%state%"},
+                        new String[]{pdm.isActivatedLuckyChests() + ""});
+            }
+            else
+            {
+                msg(Messages.NO_PERMISSIONS.getFromConf(cc)
+                        .replaceAll("%permission%", "specializedcrates.luckychestcommand"));
+            }
+            return true;
+        }
+        else if(args.length >= 1 && args[0].equalsIgnoreCase("claim"))
+        {
+            if(canExecute(false, true, "customcrates.claim", "specializedcrates.claim"))
+            {
+                claimSubCommand.run(cc, this, args);
+            }
+            else
+            {
+                msg(Messages.NO_PERMISSIONS.getFromConf(cc)
+                        .replaceAll("%permission%", "specializedcrates.claim"));
+            }
             return true;
         }
         else if (!canExecute(false, true, "customcrates.admin", "specializedcrates.admin"))
@@ -99,10 +121,12 @@ public class CommandCrate extends Commands implements CommandExecutor
             }
             else if (args.length == 0)
             {
-                msg("&7&l>> &3&m                    ");
-                msg("&c" + cc.getDescription().getName() + " &fV" + cc.getDescription().getVersion());
-                msg("&6By &e" + cc.getDescription().getAuthors().get(0));
-                msg("&7&l>> &3&m                    ");
+                msg(Messages.NO_PERMISSIONS.getFromConf(cc)
+                        .replaceAll("%permission%", "specializedcrates.crates (for users) or specializedcrates.admin (for admins)"));
+//                msg("&7&l>> &3&m                    ");
+//                msg("&c" + cc.getDescription().getName() + " &fV" + cc.getDescription().getVersion());
+//                msg("&6By &e" + cc.getDescription().getAuthors().get(0));
+//                msg("&7&l>> &3&m                    ");
                 return true;
             }
 
