@@ -107,6 +107,7 @@ public class IGCMenuCrateOrMulticrate extends IGCMenu
                     }
 
                     cs.saveAll();
+                    newCrate.setNeedsReload(true);
 
                     new IGCCratesMain(getCc(), getP(), this, newCrate).open();
                     ChatUtils.msgSuccess(getP(), "Created a new crate with the name " + input);

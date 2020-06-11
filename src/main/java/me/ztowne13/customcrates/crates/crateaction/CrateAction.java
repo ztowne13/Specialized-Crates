@@ -14,6 +14,7 @@ import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.players.data.events.HistoryEvent;
+import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -62,9 +63,20 @@ public abstract class CrateAction
     {
         Player player = pm.getP();
         PlayerDataManager pdm = pm.getPdm();
-        Crate crates = cm.getCrate();
-        CrateSettings cs = crates.getSettings();
+        Crate crate = cm.getCrate();
+        CrateSettings cs = crate.getSettings();
         Location location = cm.getL();
+
+        if (crate.isNeedsReload())
+        {
+            ChatUtils.msgInfo(player,
+                    "Hey! It looks like you just created a new crate." +
+                            " Whenever you edit something in the in-game config," +
+                            " make sure to click the green '&asave&e' and pink '&dreload&e' button before testing it out!" +
+                            " This crate won't work until saved and reloaded! Try &b/scrates edit " + crate.getName() + " &eto" +
+                            " open up the menu where you can &asave &eand &dreload &ethe crate.");
+            return true;
+        }
 
         // Player has correct permissions
         if (player.hasPermission(cs.getPermission()) || cs.getPermission().equalsIgnoreCase("no permission"))
@@ -73,7 +85,7 @@ public abstract class CrateAction
             if (isInventoryTooEmpty(cc, player))
             {
                 // There is no cooldown or the previous cooldown is over
-                CrateCooldownEvent cce = pdm.getCrateCooldownEventByCrates(crates);
+                CrateCooldownEvent cce = pdm.getCrateCooldownEventByCrates(crate);
                 if (cce == null || cce.isCooldownOverAsBoolean())
                 {
                     pm.setLastOpenedPlacedCrate(cm);
@@ -84,9 +96,9 @@ public abstract class CrateAction
                     {
                         if(pm.isConfirming() || !((Boolean) SettingsValues.SHIFT_CLICK_CONFIRM.getValue(cc)))
                         {
-                            if (cs.getAnimation().canExecuteFor(player, !crates.isMultiCrate()))
+                            if (cs.getAnimation().canExecuteFor(player, !crate.isMultiCrate()))
                             {
-                                if(cc.getEconomyHandler().handleCheck(player, crates.getSettings().getCost(), true))
+                                if(cc.getEconomyHandler().handleCheck(player, crate.getSettings().getCost(), true))
                                 {
                                     Reward reward = cs.getRewards().getRandomReward();
                                     ArrayList<Reward> rewards = new ArrayList<>();
@@ -94,15 +106,15 @@ public abstract class CrateAction
                                     reward.giveRewardToPlayer(player);
 
                                     cs.getKeyItemHandler().takeKeyFromPlayer(player, false);
-                                    new HistoryEvent(Utils.currentTimeParsed(), crates, rewards, true)
+                                    new HistoryEvent(Utils.currentTimeParsed(), crate, rewards, true)
                                             .addTo(PlayerManager.get(cc, player).getPdm());
-                                    new CrateCooldownEvent(crates, System.currentTimeMillis(), true).addTo(pdm);
+                                    new CrateCooldownEvent(crate, System.currentTimeMillis(), true).addTo(pdm);
 
                                     useCrateHelper(pm, cm, true, true, opened + 1);
 
                                     if (!hasSkipped)
                                     {
-                                        crates.tick(location, cm, CrateState.OPEN, player, new ArrayList<Reward>());
+                                        crate.tick(location, cm, CrateState.OPEN, player, new ArrayList<Reward>());
                                         pm.setConfirming(false);
                                     }
 
@@ -113,7 +125,7 @@ public abstract class CrateAction
                             }
 
                             if (!hasSkipped)
-                                crates.getSettings().getAnimation().playFailToOpen(player, true, true);
+                                crate.getSettings().getAnimation().playFailToOpen(player, true, true);
 
                             return false;
                         }
@@ -131,7 +143,7 @@ public abstract class CrateAction
                         {
                             if(cc.getEconomyHandler().handleCheck(player, cs.getCost(), true))
                             {
-                                if (cs.getAnimation().startAnimation(player, location, !crates.isMultiCrate(), false))
+                                if (cs.getAnimation().startAnimation(player, location, !crate.isMultiCrate(), false))
                                 {
                                     // Crate isn't static but it ALSO isn't special handling (i.e. the BLOCK_ CrateTypes)
                                     if (!cs.getObtainType().equals(ObtainType.STATIC) && !cs.getCrateType().isSpecialDynamicHandling())
@@ -139,7 +151,7 @@ public abstract class CrateAction
                                         cm.delete();
                                         location.getBlock().setType(Material.AIR);
                                     }
-                                    new CrateCooldownEvent(crates, System.currentTimeMillis(), true).addTo(pdm);
+                                    new CrateCooldownEvent(crate, System.currentTimeMillis(), true).addTo(pdm);
                                     return !skipAnimation;
                                 }
                                 cc.getEconomyHandler().failSoReturn(player, cs.getCost());
@@ -164,13 +176,13 @@ public abstract class CrateAction
                 return false;
             }
             Messages.INVENTORY_TOO_FULL.msgSpecified(cc, player);
-            crates.getSettings().getAnimation().playFailToOpen(player, false, true);
+            crate.getSettings().getAnimation().playFailToOpen(player, false, true);
             return false;
         }
         else
         {
             Messages.NO_PERMISSION_CRATE.msgSpecified(cc, player);
-            crates.getSettings().getAnimation().playFailToOpen(player, false, true);
+            crate.getSettings().getAnimation().playFailToOpen(player, false, true);
         }
         return false;
     }

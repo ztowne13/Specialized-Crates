@@ -2,13 +2,6 @@ package me.ztowne13.customcrates.interfaces.igc.fileconfigs;
 
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
-import me.ztowne13.customcrates.crates.CrateSettings;
-import me.ztowne13.customcrates.crates.options.CRewards;
-import me.ztowne13.customcrates.crates.options.ObtainType;
-import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayType;
-import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SimpleRewardDisplayer;
-import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
-import me.ztowne13.customcrates.crates.types.display.MaterialPlaceholder;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
@@ -16,7 +9,6 @@ import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCCratesMain;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
-import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -112,7 +104,6 @@ public class IGCMenuCrates extends IGCMenu
             up();
         else if (slot == 8)
             new IGCMenuCrateOrMulticrate(getCc(), getP(), this).open();
-            //new InputMenu(getCc(), getP(), "crate name", "null", "Name the crate whatever you want.", String.class, this, true);
         else if (slot == 9)
             new IGCMenuCrates(getCc(), getP(), getLastMenu(), page - 1).open();
         else if(slot == 18)
@@ -127,50 +118,6 @@ public class IGCMenuCrates extends IGCMenu
     @Override
     public boolean handleInput(String value, String input)
     {
-        if (value.equalsIgnoreCase("crate name"))
-        {
-            if (!Crate.existsNotCaseSensitive(input))
-            {
-                if (!input.contains(" "))
-                {
-                    Crate newCrate = new Crate(getCc(), input, true);
-                    CrateSettings cs = newCrate.getSettings();
-                    cs.setObtainType(ObtainType.STATIC);
-                    cs.setPlaceholder(new MaterialPlaceholder(getCc()));
-                    cs.setCrateType(CrateAnimationType.INV_ROULETTE);
-                    cs.setRequireKey(true);
-                    cs.setRewardDisplayType(RewardDisplayType.IN_ORDER);
-                    cs.setDisplayer(new SimpleRewardDisplayer(newCrate));
-
-                    SaveableItemBuilder builder = new SaveableItemBuilder(DynamicMaterial.CHEST, 1);
-                    builder.setDisplayName(input);
-
-                    cs.getCrateItemHandler().setItem(builder);
-
-                    newCrate.setEnabled(true);
-                    newCrate.setCanBeEnabled(false);
-
-                    if (!CRewards.getAllRewards().isEmpty())
-                    {
-                        cs.getRewards().addReward(CRewards.getAllRewards().values().iterator().next().getRewardName());
-                    }
-
-                    cs.saveAll();
-
-                    new IGCCratesMain(getCc(), getP(), this, newCrate).open();
-                    ChatUtils.msgSuccess(getP(), "Created a new crate with the name " + input);
-                    //	new InputMenu(getCc(), getP(), "crate obtain method", "null", "Available obtain methods: " + Arrays.toString(ObtainType.values()), String.class, this);
-                }
-                else
-                {
-                    ChatUtils.msgError(getP(), "Crate names cannot have spaces in their names.");
-                }
-            }
-            else
-            {
-                ChatUtils.msgError(getP(), "This crate name already exists!");
-            }
-        }
         return false;
     }
 }

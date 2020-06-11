@@ -32,7 +32,8 @@ public class Crate
             canBeEnabled = true,
             isMultiCrate,
             isUsedForCratesCommand = false,
-            loadedProperly = false;
+            loadedProperly = false,
+            needsReload = false;
 
     CrateSettings cs;
 
@@ -346,5 +347,15 @@ public class Crate
     public boolean isLoadedProperly()
     {
         return loadedProperly;
+    }
+
+    public boolean isNeedsReload()
+    {
+        return needsReload;
+    }
+
+    public void setNeedsReload(boolean needsReload)
+    {
+        this.needsReload = needsReload;
     }
 }

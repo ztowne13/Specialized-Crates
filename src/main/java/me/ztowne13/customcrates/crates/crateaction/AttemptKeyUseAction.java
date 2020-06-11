@@ -27,39 +27,41 @@ public class AttemptKeyUseAction extends CrateAction
 
         if (PlacedCrate.crateExistsAt(cc, location))
         {
-            if(!cc.getAntiFraudSQLHandler().isAuthenticated())
+            if (!cc.getAntiFraudSQLHandler().isAuthenticated())
             {
-                ChatUtils.msgError(pm.getP(), "This plugin has been blacklisted because it has been assumed to be on more servers than just the" +
-                        "person who purchased this plugin. If you believe this is in error, please try re-downloading the plugin" +
-                        " (this does not mean deleting the plugin files, just the .jar) and try again. If the issue persists and" +
-                        "you still believe it is in error, please contact the plugin author, Ztowne13.");
+                ChatUtils.msgError(pm.getP(),
+                        "This plugin has been blacklisted because it has been assumed to be on more servers than just the" +
+                                "person who purchased this plugin. If you believe this is in error, please try re-downloading the plugin" +
+                                " (this does not mean deleting the plugin files, just the .jar) and try again. If the issue persists and" +
+                                "you still believe it is in error, please contact the plugin author, Ztowne13.");
                 return false;
             }
 
             long curTime = System.currentTimeMillis();
-            if(curTime - pm.getLastClickedCrateTime() < 500)
+            if (curTime - pm.getLastClickedCrateTime() < 500)
             {
                 return true;
             }
             pm.setLastClickedCrateTime(System.currentTimeMillis());
 
             // For SQL, to make sure the player data is loaded
-            if(!pm.getPdm().isLoaded())
+            if (!pm.getPdm().isLoaded())
             {
                 Messages.LOADING_FROM_DATABASE.msgSpecified(cc, player);
                 return true;
             }
 
             PlacedCrate cm = PlacedCrate.get(cc, location);
-            Crate crates = cm.getCrate();
-            if (crates.isMultiCrate())
+            Crate crate = cm.getCrate();
+
+            if (crate.isMultiCrate())
             {
-                if(pm.isInCrate())
+                if (pm.isInCrate())
                 {
                     return true;
                 }
 
-                crates.getSettings().getMultiCrateSettings().openFor(player, cm);
+                crate.getSettings().getMultiCrateSettings().openFor(player, cm);
                 return true;
             }
             else if (!player.getGameMode().equals(GameMode.CREATIVE) ||
@@ -82,7 +84,7 @@ public class AttemptKeyUseAction extends CrateAction
             }
             else
             {
-                crates.getSettings().getAnimation().playFailToOpen(player, false, true);
+                crate.getSettings().getAnimation().playFailToOpen(player, false, true);
                 Messages.DENY_CREATIVE_MODE.msgSpecified(cc, player);
                 return true;
             }
