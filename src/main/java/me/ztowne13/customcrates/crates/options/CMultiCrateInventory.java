@@ -7,6 +7,7 @@ import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.crateaction.CrateAction;
+import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
@@ -564,6 +565,7 @@ public class CMultiCrateInventory extends CSetting
         pm.setLastOpenCrate(cm.getL());
         pm.setLastOpenedPlacedCrate(cm);
         pm.openCrate(crates);
+        getCrate().getSettings().getSounds().runAll(player, cm.getL(), new ArrayList<Reward>());
     }
 
     public void invCheck(Player p, PlayerManager pm)

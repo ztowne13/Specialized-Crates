@@ -6,6 +6,7 @@ import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
+import me.ztowne13.customcrates.interfaces.igc.buttons.IGCButtonType;
 import me.ztowne13.customcrates.interfaces.igc.crates.previeweditor.IGCCratePreviewOrRewardMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
@@ -26,18 +27,24 @@ public class IGCCratesMain extends IGCMenuCrate
 {
     public IGCCratesMain(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates)
     {
-        super(cc, p, lastMenu, "&7&l> &6&l" + crates.getName(), crates);
+        super(cc, p, lastMenu, "&7&l> &6&l" + crates.getName(), crates,
+                new IGCButtonType[]{
+                        IGCButtonType.BACK
+                },
+                new int[]{
+                        (crates.isMultiCrate() ? 27 : 36)
+                });
     }
 
     @Override
     public void openMenu()
     {
 
-        InventoryBuilder ib = createDefault(crates.isMultiCrate() ? 27 : 45);
+        InventoryBuilder ib = createDefault(crates.isMultiCrate() ? 36 : 45);
 
         ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
         ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
-        ib.setItem(crates.isMultiCrate() ? 18 : 36, IGCDefaultItems.EXIT_BUTTON.getIb());
+        ib.setItem(crates.isMultiCrate() ? 27 : 36, IGCDefaultItems.EXIT_BUTTON.getIb());
         ib.setItem(3, new ItemBuilder(DynamicMaterial.RED_DYE, 1).setName("&4&lDelete this crate")
                 .setLore("&cThis action CANNOT be undone.").addLore("&e&oNote: This does not delete rewards").addLore("")
                 .addLore("&7This will delete the entire").addLore("&7file for this crate and will")
@@ -55,7 +62,6 @@ public class IGCCratesMain extends IGCMenuCrate
                 .setLore("&7Click this runs the command:").addLore("&7/ccrates delallcratetype " + crates.getName())
                 .addLore("").addLore("&7It deletes all crates").addLore("&7of this type that have been")
                 .addLore("&7placed."));
-        //ib.setItem(4, new ItemBuilder(Material.CHEST, 1, 0).setName("&a" + crates.getName()));
 
         int errors = crates.getSettings().getStatusLogger().getFailures();
         ib.setItem(5, new ItemBuilder(DynamicMaterial.REDSTONE_BLOCK, 1)
@@ -70,11 +76,20 @@ public class IGCCratesMain extends IGCMenuCrate
                         .addLore("&7and open use."));
         ib.setItem(21, new ItemBuilder(Material.BOOK, 1, 0).setName("&a&lHolograms").setLore("&7Modify the holograms."));
 
+        ItemBuilder sounds = new ItemBuilder(DynamicMaterial.NOTE_BLOCK);
+        sounds.setDisplayName("&a&lSounds");
+        if(crates.isMultiCrate())
+        {
+            sounds.addAutomaticLore("&7", 30, "Edit the sounds played when the multicrate is opened initially.");
+        }
+        else
+        {
+            sounds.addAutomaticLore("&7", 30, "Edit the sounds for when the crate is opened and reward is given.");
+        }
+        ib.setItem(23, sounds);
+
         if (!crates.isMultiCrate())
         {
-            ib.setItem(23,
-                    new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&a&lSounds").setLore("&7Modify the sounds for when")
-                            .addLore("&7the crate is opened and").addLore("&7reward is given."));
             ib.setItem(28, new ItemBuilder(DynamicMaterial.FIREWORK_ROCKET, 1).setName("&a&lFireworks")
                     .setLore("&7Modify the fireworks."));
             ib.setItem(34,
@@ -89,7 +104,7 @@ public class IGCCratesMain extends IGCMenuCrate
         }
         else
         {
-            ib.setItem(23, new ItemBuilder(Material.LADDER, 1, 0).setName("&aMultiCrate Values")
+            ib.setItem(34, new ItemBuilder(Material.LADDER, 1, 0).setName("&aMultiCrate Values")
                     .setLore("&7Modify the multicrate inventory and").addLore("&7other values."));
         }
 
@@ -106,7 +121,7 @@ public class IGCCratesMain extends IGCMenuCrate
     @Override
     public void handleClick(int slot)
     {
-        if (crates.isMultiCrate() && (slot == 28 || slot == 34 || slot == 40))
+        if (crates.isMultiCrate() && (slot == 28 || slot == 40))
         {
             return;
         }
@@ -161,19 +176,19 @@ public class IGCCratesMain extends IGCMenuCrate
             case 9:
                 reload();
                 break;
-            case 18:
-                if (!crates.isMultiCrate())
-                {
-                    return;
-                }
-            case 36:
-                if (getLastMenu() == null)
-                {
-                    getP().closeInventory();
-                    break;
-                }
-                up();
-                break;
+//            case 27:
+//                if (!crates.isMultiCrate())
+//                {
+//                    return;
+//                }
+//            case 36:
+//                if (getLastMenu() == null)
+//                {
+//                    getP().closeInventory();
+//                    break;
+//                }
+//                up();
+//                break;
             case 8:
                 getP().chat("/ccrates delallcratetype " + crates.getName());
                 break;
@@ -194,17 +209,10 @@ public class IGCCratesMain extends IGCMenuCrate
                 new IGCCrateHolograms(getCc(), getP(), this, crates).open();
                 break;
             case 23:
-                if (crates.isMultiCrate())
-                {
-                    new IGCMultiCrateMain(getCc(), getP(), this, crates).open();
-                }
-                else
-                {
-                    Set<String> blankSounds = new HashSet<String>();
-                    blankSounds.add("OPEN");
-                    new IGCTierSelector(getCc(), getP(), this, crates, blankSounds,
-                            new IGCCrateSounds(getCc(), getP(), this, crates, "")).open();
-                }
+                Set<String> blankSounds = new HashSet<String>();
+                blankSounds.add("OPEN");
+                new IGCTierSelector(getCc(), getP(), this, crates, blankSounds,
+                        new IGCCrateSounds(getCc(), getP(), this, crates, "")).open();
                 break;
             case 28:
                 Set<String> blankFireworks = new HashSet<String>();
@@ -213,16 +221,18 @@ public class IGCCratesMain extends IGCMenuCrate
                         new IGCCrateFireworks(getCc(), getP(), this, crates, "")).open();
                 break;
             case 34:
-                Set<String> blankActions = new HashSet<String>();
-                blankActions.add("DEFAULT");
-                new IGCTierSelector(getCc(), getP(), this, crates, blankActions,
-                        new IGCCrateActions(getCc(), getP(), this, crates, "")).open();
-                break;
-            case 35:
-                if (!crates.isMultiCrate())
+                if (crates.isMultiCrate())
                 {
-                    return;
+                    new IGCMultiCrateMain(getCc(), getP(), this, crates).open();
                 }
+                else
+                {
+                    Set<String> blankActions = new HashSet<String>();
+                    blankActions.add("DEFAULT");
+                    new IGCTierSelector(getCc(), getP(), this, crates, blankActions,
+                            new IGCCrateActions(getCc(), getP(), this, crates, "")).open();
+                }
+                break;
             case 40:
                 new IGCCratePreviewOrRewardMenu(getCc(), getP(), crates, this).open();
                 break;

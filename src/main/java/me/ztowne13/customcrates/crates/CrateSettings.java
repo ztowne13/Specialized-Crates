@@ -82,11 +82,11 @@ public class CrateSettings
         }
         getHologram().saveToFile();
         getParticles().saveToFile();
+        getSounds().saveToFile();
 
         if (!getCrate().isMultiCrate())
         {
             getRewards().saveToFile();
-            getSounds().saveToFile();
             getActions().saveToFile();
             getFireworks().saveToFile();
             getDisplayer().saveToFile();;
@@ -144,10 +144,10 @@ public class CrateSettings
         setHologram(new CHolograms(getCrate()));
         setKeyItemHandler(new KeyItemHandler(getCrate(), getSc()));
         setCrateItemHandler(new CrateItemHandler(getCrate(), getSc()));
+        setSounds(new CSounds(getCrate()));
 
         if (!getCrate().isMultiCrate())
         {
-            setSounds(new CSounds(getCrate()));
             setRewards(new CRewards(getCrate()));
             setActions(new CActions(getCrate()));
             setFireworks(new CFireworks(getCrate()));
@@ -188,6 +188,9 @@ public class CrateSettings
             // Holograms
             getHologram().loadFor(getSettingsBuilder(), CrateState.PLAY);
 
+            // Sounds
+            getSounds().loadFor(getSettingsBuilder(), CrateState.OPEN);
+
             // Lucky Chest
             if (getObtainType().equals(ObtainType.LUCKYCHEST))
             {
@@ -196,9 +199,6 @@ public class CrateSettings
 
             if (!getCrate().isMultiCrate())
             {
-                // Sounds
-                getSounds().loadFor(getSettingsBuilder(), CrateState.OPEN);
-
                 // Rewards
                 getRewards().loadFor(getSettingsBuilder(), CrateState.OPEN);
 

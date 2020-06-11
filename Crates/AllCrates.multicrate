@@ -75,3 +75,8 @@ play:
       center-x: 0
       center-y: 0
       center-z: 0
+
+open:
+  sounds:
+  - BLOCK_ANVIL_PLACE, 1, 10
+  - ENTITY_PLAYER_LEVELUP, 1, 5
