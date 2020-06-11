@@ -62,7 +62,8 @@ public class AttemptCrateUseAction extends CrateAction
                         // The crate is a static crate
                         if (ot.equals(ObtainType.STATIC))
                         {
-                            if (player.hasPermission("customcrates.place.bypass") || player.hasPermission("customcrates.admin"))
+                            if (player.hasPermission("customcrates.place.bypass") || player.hasPermission("customcrates.admin") ||
+                                    player.hasPermission("specializedcrates.place.bypass") || player.hasPermission("specializedcrates.admin"))
                             {
                                 Messages.BYPASS_BREAK_RESTRICTIONS.msgSpecified(cc, player);
                                 b = false;
@@ -116,7 +117,7 @@ public class AttemptCrateUseAction extends CrateAction
                     else
                     {
                         Messages.CRATE_DISABLED.msgSpecified(cc, player);
-                        if (player.hasPermission("customcrates.admin") || player.isOp())
+                        if (player.hasPermission("customcrates.admin") || player.hasPermission("specializedcrates.admin") || player.isOp())
                         {
                             Messages.CRATE_DISABLED_ADMIN.msgSpecified(cc, player);
                         }

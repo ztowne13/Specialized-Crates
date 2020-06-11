@@ -30,7 +30,7 @@ public class CommandKey extends Commands implements CommandExecutor
     {
         setCmdSender(commandSender);
 
-        if (canExecute(false, true, "customcrates.keys"))
+        if (canExecute(false, true, "customcrates.keys", "specializedcrates.keys"))
         {
             if(!cc.getAntiFraudSQLHandler().isAuthenticated())
             {
@@ -62,7 +62,7 @@ public class CommandKey extends Commands implements CommandExecutor
                 msg("This command cannot be run from console. To give virtual crates / keys simply add a -v to the end of the /scrates givekey command.");
                 return false;
             }
-            msg(Messages.NO_PERMISSIONS.getFromConf(cc).replaceAll("%permission%", "customcrates.keys"));
+            msg(Messages.NO_PERMISSIONS.getFromConf(cc).replaceAll("%permission%", "specializedcrates.keys"));
         }
         return false;
     }

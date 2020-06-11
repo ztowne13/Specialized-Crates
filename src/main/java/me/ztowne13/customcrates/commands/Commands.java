@@ -21,9 +21,16 @@ public abstract class Commands
         this.cmdSender = cmdSender;
     }
 
-    public boolean canExecute(boolean console, boolean reqperm, String perm)
+    public boolean canExecute(boolean console, boolean reqperm, String... perms)
     {
-        return cmdSender instanceof Player ? !reqperm || cmdSender.hasPermission(perm) : console;
+        for(String perm : perms)
+        {
+            if(cmdSender instanceof Player ? !reqperm || cmdSender.hasPermission(perm) : console)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void msg(String s)

@@ -37,7 +37,7 @@ public class BlockBreakListener implements Listener
 
             if (crates.getSettings().getObtainType().isStatic())
             {
-                if (!p.hasPermission("customcrates.deletestatic"))
+                if (!p.hasPermission("customcrates.admin") && !p.hasPermission("specializedcrates.admin"))
                 {
                     e.setCancelled(true);
                     Messages.FAILED_BREAK_CRATE.msgSpecified(cc, p, new String[]{"%crate%", "%reason%"},

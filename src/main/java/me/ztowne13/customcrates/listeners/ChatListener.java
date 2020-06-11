@@ -29,7 +29,7 @@ public class ChatListener implements Listener
     public void onChat(final AsyncPlayerChatEvent e)
     {
         final Player p = e.getPlayer();
-        if (p.hasPermission("customcrates.admin"))
+        if (p.hasPermission("customcrates.admin") || p.hasPermission("specializedcrates.admin"))
         {
             PlayerManager pm = PlayerManager.get(cc, p);
             if (pm.isInOpenMenu())
@@ -62,7 +62,7 @@ public class ChatListener implements Listener
     {
         final Player player = event.getPlayer();
 
-        if (player.hasPermission("customcrates.admin"))
+        if (player.hasPermission("customcrates.admin") || player.hasPermission("specializedcrates.admin"))
         {
             if (cc.getSettings().getInfoToLog().containsKey("Hologram Plugin") &&
                     cc.getSettings().getInfoToLog().get("Hologram Plugin").equalsIgnoreCase("CMI"))

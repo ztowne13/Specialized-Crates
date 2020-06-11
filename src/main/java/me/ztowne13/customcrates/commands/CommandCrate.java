@@ -46,6 +46,7 @@ public class CommandCrate extends Commands implements CommandExecutor
                 new ForceOpen(),
                 new ToggleParticles(),
                 new SpawnCrate(),
+                new Claim(),
                 vcSubCommand));
     }
 
@@ -63,7 +64,7 @@ public class CommandCrate extends Commands implements CommandExecutor
             return false;
         }
 
-        if (canExecute(true, true, "customcrates.admin"))
+        if (canExecute(true, true, "customcrates.admin", "specializedcrates.admin"))
         {
             if (args.length > 0)
             {
@@ -82,7 +83,7 @@ public class CommandCrate extends Commands implements CommandExecutor
         }
 
         if (args.length >= 1 && args[0].equalsIgnoreCase("luckychest") &&
-                canExecute(false, true, "customcrates.luckychestcommand"))
+                canExecute(false, true, "customcrates.luckychestcommand", "specializedcrates.luckychestcommand"))
         {
             PlayerDataManager pdm = PlayerManager.get(cc, (Player) sender).getPdm();
             pdm.setActivatedLuckyChests(!pdm.isActivatedLuckyChests());
@@ -90,7 +91,7 @@ public class CommandCrate extends Commands implements CommandExecutor
                     new String[]{pdm.isActivatedLuckyChests() + ""});
             return true;
         }
-        else if (!canExecute(false, true, "customcrates.admin"))
+        else if (!canExecute(false, true, "customcrates.admin", "specializedcrates.admin"))
         {
             if (vcSubCommand.run(cc, this, args))
             {
@@ -106,7 +107,7 @@ public class CommandCrate extends Commands implements CommandExecutor
             }
 
             msg(Messages.NO_PERMISSIONS.getFromConf(cc)
-                    .replaceAll("%permission%", "customcrates.admin"));
+                    .replaceAll("%permission%", "specializedcrates.admin"));
         }
         else
         {

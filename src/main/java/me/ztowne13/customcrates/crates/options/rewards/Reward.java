@@ -90,7 +90,7 @@ public class Reward implements Comparable<Reward>
         if (!fallbackRewardName.equalsIgnoreCase("") && !fallbackPermission.equalsIgnoreCase("") &&
                 p.hasPermission(fallbackPermission))
         {
-            if (!p.hasPermission("customcrates.admin"))
+            if (!p.hasPermission("customcrates.admin") && !p.hasPermission("specializedcrates.admin"))
             {
                 Reward fallbackReward = CRewards.getAllRewards().get(fallbackRewardName);
                 if (fallbackReward == null)

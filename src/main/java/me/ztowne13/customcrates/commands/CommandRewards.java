@@ -26,7 +26,7 @@ public class CommandRewards extends Commands implements CommandExecutor
     {
         setCmdSender(commandSender);
 
-        if (canExecute(false, true, "customcrates.rewards"))
+        if (canExecute(false, true, "customcrates.rewards", "specializedcrates.rewards"))
         {
             Player player = (Player)commandSender;
             if(args.length == 0)
@@ -59,7 +59,7 @@ public class CommandRewards extends Commands implements CommandExecutor
                 msg("This command can not be run from console.");
             else
                 Messages.NO_PERMISSIONS.msgSpecified(sc, (Player) commandSender, new String[]{"%permission%"},
-                        new String[]{"customcrates.rewards"});
+                        new String[]{"specializedcrates.rewards"});
         }
         return false;
     }

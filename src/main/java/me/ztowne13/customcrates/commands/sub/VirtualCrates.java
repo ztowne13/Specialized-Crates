@@ -36,7 +36,8 @@ public class VirtualCrates extends SubCommand
             }
         }
 
-        if (cmds.canExecute(false, true, "customcrates.crates") || cmds.canExecute(false, true, "customcrates.admin"))
+        if (cmds.canExecute(false, true, "customcrates.crates", "specializedcrates.crates") ||
+                cmds.canExecute(false, true, "customcrates.admin", "specializedcrates.admin"))
         {
             if (successfulLoad)
             {

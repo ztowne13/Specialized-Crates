@@ -437,6 +437,11 @@ public class SpecializedCrates extends JavaPlugin
             {
                 pm.getCurrentAnimation().setFastTrack(true, true);
             }
+
+            if(pm.isInCratesClaimMenu())
+            {
+                p.closeInventory();
+            }
         }
     }
 

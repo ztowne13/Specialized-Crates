@@ -175,6 +175,9 @@ virtual-crate-cratecount: true
 virtual-crate-lore: '&cCrates: &f(&7%crates%&f)'
 virtual-key-lore: '&cKeys: &f(&7%keys%&f)'
 
+# What do you want the inventory name of the /crates claim menu to be?
+crates-claim-inventory-name: '&7&l> &6&lCrates Claim'
+
 #-------------------------------------------------------#
 #       Rewards Display Inventory + Display Items       #
 #-------------------------------------------------------#

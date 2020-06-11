@@ -315,6 +315,12 @@ public enum SettingsValues
                     "Anywhere there is a %crate% placeholder",
                     "the crate item's display name will be used",
                     "instead of just the crate's name."
+            }),
+
+    CRATES_CLAIM_INVENTORY_NAME("crates-claim-inventory-name", String.class, true, "&7&l> &6&lCrates Claim", "/Crates Claim Inv. Name",
+            new String[]{
+                    "The name of the inventory when a player",
+                    "types /crates claim."
             });
 
     String easyName;

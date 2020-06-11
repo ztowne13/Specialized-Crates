@@ -75,7 +75,7 @@ public class AttemptKeyUseAction extends CrateAction
                 else
                 {
                     Messages.CRATE_DISABLED.msgSpecified(cc, player);
-                    if (player.hasPermission("customcrates.admin") || player.isOp())
+                    if (player.hasPermission("customcrates.admin") || player.hasPermission("specializedcrates.admin") || player.isOp())
                     {
                         Messages.CRATE_DISABLED_ADMIN.msgSpecified(cc, player);
                     }
