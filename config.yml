@@ -27,9 +27,6 @@ store-data: FLATFILE
 #  NOTHING - Logs nothing at all to console.
 log-successes: FAILURES
 
-# Would you like the plugin to notify you of updates?
-notify-updates: true
-
 # Is the plugin in debug mode?
 debug: false
 
@@ -88,9 +85,6 @@ hologram-offset: 0
 
 # Should the break effect be played when a crate is placed / created?
 place-effect: true
-
-# Should the crates automatically close when their animations is done playing?
-auto-close: true
 
 # Should the player have to confirm to open the crate or not?
 confirm-open: false
@@ -161,22 +155,11 @@ prioritize-physical-key: true
 #   for something like: virtual crates are earned through minigames, virtual keys are bought on buycraft.
 require-virtual-crate-and-key: false
 
-# Should multicrates show the virtual key count?
-virtual-crate-keycount: true
-
-# Should the multicrates show the virtual crate count?
-virtual-crate-cratecount: true
-
-# Format for how the player's virtual keys and crates are show
-#    note: This is added to the bottom of the displayed crate's lores.
-#
-# > %keys% - Amount of virtual keys
-# > %crates% - Amount of virtual crates
-virtual-crate-lore: '&cCrates: &f(&7%crates%&f)'
-virtual-key-lore: '&cKeys: &f(&7%keys%&f)'
-
 # What do you want the inventory name of the /crates claim menu to be?
 crates-claim-inventory-name: '&7&l> &6&lCrates Claim'
+
+# Should people be allowed to deposit keys into the /crates claim menu?
+crates-claim-allow-deposit: true
 
 #-------------------------------------------------------#
 #       Rewards Display Inventory + Display Items       #
@@ -187,10 +170,6 @@ enabled: true
 
 # Should the multicrate reward display inventory open on right or left click?
 mc-reward-display-leftclick: true
-
-# The format for the name of the inventory displaying the rewards.
-# > %crate% - Name of the crate.
-inv-reward-display-name: '&4%crate% &cRewards'
 
 # The format for the name and lore of the item(s) being displayed in the inventory
 #   note: If a reward has a custom lore value set for it, this will be ignored.
@@ -204,3 +183,39 @@ inv-reward-item-name: '&c%displayname%'
 inv-reward-item-lore:
   - '&7-'
   - '&eChance: &6%writtenchance%%'
+
+#---------------------------------------------------------#
+#       Deprecated Values (Should no longer be used)      #
+#---------------------------------------------------------#
+# NOTE: These values still work, but their alternatives are suggested.
+
+# The format for the name of the inventory displaying the rewards.
+# > %crate% - Name of the crate.
+#
+# !! REPLACED BY THE 'reward-display.name' VALUE IN EACH .CRATE FILE
+inv-reward-display-name: '&4%crate% &cRewards'
+
+# Should multicrates show the 'virtual-key-lore' value on crate items?
+#
+# !! REPLACED BY USING %keys% IN THE 'crate.lore' VALUE IN EACH .CRATE FILE
+virtual-crate-keycount: false
+
+# Should multicrates show the 'virtual-crate-lore' value on crate items?
+#
+# !! REPLACED BY USING %crates% IN THE 'crate.lore' VALUE IN EACH .CRATE FILE
+virtual-crate-cratecount: false
+
+# Format for how the player's virtual keys and crates are show
+#    note: This is added to the bottom of the displayed crate's lores.
+#
+# > %keys% - Amount of virtual keys
+# > %crates% - Amount of virtual crates
+#
+# !! REPLACED BY USING %keys% AND %crate% IN THE 'crate.lore' VALUE IN EACH .CRATE FILE
+virtual-crate-lore: '&cCrates: &f(&7%crates%&f)'
+virtual-key-lore: '&cKeys: &f(&7%keys%&f)'
+
+# Should the crates automatically close when their animations is done playing?
+#
+# REPLACED BY
+auto-close: true

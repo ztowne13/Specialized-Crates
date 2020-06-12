@@ -47,10 +47,9 @@ crate:
   name: '&5&l> &dMaster Crate &5&l<'
   lore:
   - ''
-  - '&5&lCrate&e&l:'
+  - '   &e%keys% &7keys'
   - ''
-  - '&7This crate will be used'
-  - '&7when you place it.'
+  - '&dHas the &5&lRAREST &dof rewards'
   enchantments:
   - DURABILITY;0
 

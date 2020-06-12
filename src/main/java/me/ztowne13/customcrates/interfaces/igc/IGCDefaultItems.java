@@ -15,7 +15,7 @@ public enum IGCDefaultItems
     SAVE_BUTTON(new ItemBuilder(DynamicMaterial.LIME_DYE, 1).setName("&aSave and reload").addLore("")
             .addLore("&7Save your current changes and reload the plugin.")),
 
-    SAVE_ONLY_BUTTON(new ItemBuilder(DynamicMaterial.LIME_DYE, 1).setName("&aSave it").setLore("&7Note: click reload to")
+    SAVE_ONLY_BUTTON(new ItemBuilder(DynamicMaterial.LIME_DYE, 1).setName("&aSave").setLore("&7Note: click reload to")
             .addLore("&7see the changes.")),
 
     RELOAD_BUTTON(new ItemBuilder(DynamicMaterial.PINK_DYE, 1).setName("&aReload").setLore("&7This reloads the plugin")

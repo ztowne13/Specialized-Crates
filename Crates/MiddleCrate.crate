@@ -9,7 +9,10 @@ crate:
   material: Chest;0
   name: '&6&l[&aMiddle Crate&6&l]'
   lore:
-  - '&bTry placing me down!'
+  - ''
+  - '&6&lKeys: &e%keys%'
+  - ''
+  - '&bRewards are kinda eh.'
 
 key:
   require: true

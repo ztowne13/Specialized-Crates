@@ -9,6 +9,9 @@ display:
 crate:
   material: Chest;0
   name: '&c&lBeginner Crate &7[&eTier 2&7]'
+  lore:
+    - ''
+    - '&eKeys: %keys%'
 
 key:
   require: true
