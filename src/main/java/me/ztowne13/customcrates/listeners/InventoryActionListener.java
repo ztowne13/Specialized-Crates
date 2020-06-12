@@ -190,8 +190,8 @@ public class InventoryActionListener implements Listener
             {
                 if(!((boolean) SettingsValue.CRATES_CLAIM_ALLOW_DEPOSIT.getValue(cc)))
                 {
-                    if(e.getClickedInventory() == player.getInventory() ||
-                            (!e.getClick().equals(ClickType.LEFT) && !e.getClick().equals(ClickType.RIGHT)))
+                    if((e.getClickedInventory() != player.getInventory() && (player.getItemOnCursor() != null && !player.getItemOnCursor().getType().equals(Material.AIR) ))
+                            || (!e.getClick().equals(ClickType.LEFT) && !e.getClick().equals(ClickType.RIGHT)))
                     {
                         e.setCancelled(true);
                         Messages.CRATES_CLAIM_DENY_DEPOSIT_KEYS.msgSpecified(cc, player);
@@ -225,6 +225,7 @@ public class InventoryActionListener implements Listener
 
             if(playerManager.isInCratesClaimMenu())
             {
+                preventDupeReopen(player, e.getInventory(), false);
                 playerManager.setInCratesClaimMenu(false);
                 for(ItemStack stack : e.getInventory().getContents())
                 {

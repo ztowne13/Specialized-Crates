@@ -198,8 +198,8 @@ public class IGCMenuConfigCategory extends IGCMenu
 
             getIb().setItem(slot, item);
 
-            getCc().getSettings().getConfigValues().put(sv.getPath(), item.getStack().getDurability() == 5 ||
-                    DynamicMaterial.LIME_WOOL.isSameMaterial(item.getStack()));
+            sv.setValue(getCc(), item.getStack().getDurability() == 5 || DynamicMaterial.LIME_WOOL.isSameMaterial(item.getStack()));
+
             open();
         }
         else if (DynamicMaterial.ORANGE_WOOL.isSameMaterial(inv.getItem(slot)))
@@ -232,7 +232,7 @@ public class IGCMenuConfigCategory extends IGCMenu
 
         if (sv.getObj() == String.class)
         {
-            settings.getConfigValues().put(sv.getPath(), input);
+            sv.setValue(getCc(), input);
             ChatUtils.msgSuccess(getP(), "Set " + path + " to '" + input + "'");
             return true;
         }
@@ -240,7 +240,7 @@ public class IGCMenuConfigCategory extends IGCMenu
         {
             if (Utils.isInt(input))
             {
-                settings.getConfigValues().put(path, Integer.parseInt(input));
+                sv.setValue(getCc(), Integer.parseInt(input));
                 ChatUtils.msgSuccess(getP(), "Set " + path + " to '" + input + "'");
                 return true;
             }
@@ -253,7 +253,7 @@ public class IGCMenuConfigCategory extends IGCMenu
         {
             if (Utils.isDouble(input))
             {
-                settings.getConfigValues().put(path, input);
+                sv.setValue(getCc(), input);
                 ChatUtils.msgSuccess(getP(), "Set " + path + " to '" + input + "'");
                 return true;
             }

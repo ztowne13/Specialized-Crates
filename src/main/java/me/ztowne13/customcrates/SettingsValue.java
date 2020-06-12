@@ -429,9 +429,10 @@ public enum SettingsValue
         }
     }
 
-    public void write(SpecializedCrates cc, Object obj)
+    public void setValue(SpecializedCrates sc, Object val)
     {
-
+        sc.getSettings().getConfigValues().put(getPath(), val);
+        valuesCache.put(this, val);
     }
 
     public String getPath()

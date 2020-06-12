@@ -183,11 +183,6 @@ public class Settings
         return configValues;
     }
 
-    public void setConfigValues(HashMap<String, Object> configValues)
-    {
-        this.configValues = configValues;
-    }
-
     public SpecializedCrates getCc()
     {
         return cc;
@@ -203,18 +198,8 @@ public class Settings
         return infoToLog;
     }
 
-    public void setInfoToLog(HashMap<String, String> infoToLog)
-    {
-        this.infoToLog = infoToLog;
-    }
-
     public ArrayList<String> getFailedPlacedCrate()
     {
         return failedPlacedCrate;
-    }
-
-    public void setFailedPlacedCrate(ArrayList<String> failedPlacedCrate)
-    {
-        this.failedPlacedCrate = failedPlacedCrate;
     }
 }
