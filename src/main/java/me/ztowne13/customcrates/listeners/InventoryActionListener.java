@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.listeners;
 
 import me.ztowne13.customcrates.Messages;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
@@ -20,10 +21,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -174,6 +172,29 @@ public class InventoryActionListener implements Listener
                     catch (Exception exc)
                     {
                         exc.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onCratesClaimClick(InventoryClickEvent e)
+    {
+        if(e.getWhoClicked() instanceof Player)
+        {
+            Player player = (Player) e.getWhoClicked();
+            PlayerManager playerManager = PlayerManager.get(cc, player);
+
+            if(playerManager.isInCratesClaimMenu())
+            {
+                if(!((boolean) SettingsValue.CRATES_CLAIM_ALLOW_DEPOSIT.getValue(cc)))
+                {
+                    if(e.getClickedInventory() == player.getInventory() ||
+                            (!e.getClick().equals(ClickType.LEFT) && !e.getClick().equals(ClickType.RIGHT)))
+                    {
+                        e.setCancelled(true);
+                        Messages.CRATES_CLAIM_DENY_DEPOSIT_KEYS.msgSpecified(cc, player);
                     }
                 }
             }

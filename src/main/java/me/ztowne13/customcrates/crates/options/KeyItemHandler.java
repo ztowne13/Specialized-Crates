@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates.options;
 
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
@@ -96,7 +96,7 @@ public class KeyItemHandler extends CSetting
         {
             return true;
         }
-        if ((Boolean) SettingsValues.REQUIRE_KEY_LORE.getValue(getSc()))
+        if ((Boolean) SettingsValue.REQUIRE_KEY_LORE.getValue(getSc()))
         {
             if (stack.hasItemMeta())
             {

@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates;
 
 import me.ztowne13.customcrates.DataHandler;
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
@@ -336,7 +336,7 @@ public class Crate
 
     public String getDisplayName()
     {
-        if((boolean) SettingsValues.USE_CRATE_NAME_FOR_DISPLAY.getValue(getCc())) {
+        if((boolean) SettingsValue.USE_CRATE_NAME_FOR_DISPLAY.getValue(getCc())) {
             if(getSettings().getCrateItemHandler().getItem().hasDisplayName()) {
                 return getSettings().getCrateItemHandler().getItem().getDisplayName(true);
             }

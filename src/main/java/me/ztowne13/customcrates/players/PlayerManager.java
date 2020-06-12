@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.players;
 
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
@@ -95,7 +95,7 @@ public class PlayerManager
         try
         {
             StorageType st = StorageType.valueOf(
-                    ChatUtils.stripFromWhitespace(SettingsValues.STORE_DATA.getValue(getCc()).toString().toUpperCase()));
+                    ChatUtils.stripFromWhitespace(SettingsValue.STORE_DATA.getValue(getCc()).toString().toUpperCase()));
             switch (st)
             {
                 case MYSQL:
@@ -154,7 +154,7 @@ public class PlayerManager
                 {
                     setConfirming(false);
                 }
-            }, 20 * (Integer) SettingsValues.CONFIRM_TIMEOUT.getValue(cc));
+            }, 20 * (Integer) SettingsValue.CONFIRM_TIMEOUT.getValue(cc));
         }
         else
         {

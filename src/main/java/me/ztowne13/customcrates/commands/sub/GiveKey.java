@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.commands.sub;
 
 import me.ztowne13.customcrates.DataHandler;
 import me.ztowne13.customcrates.Messages;
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
 import me.ztowne13.customcrates.crates.Crate;
@@ -56,7 +56,7 @@ public class GiveKey extends SubCommand
                     Player p = (Player) cmds.getCmdSender();
                     cmds.msgSuccess("Given key for crate: " + args[1]);
 
-                    Boolean toNotDrop = (Boolean) SettingsValues.VIRTUAL_KEY_INSTEAD_OF_DROP.getValue(cc);
+                    Boolean toNotDrop = (Boolean) SettingsValue.VIRTUAL_KEY_INSTEAD_OF_DROP.getValue(cc);
                     int count = Utils.addItemAndDropRest(p, toAdd, !toNotDrop);
 
                     if(toNotDrop)
@@ -157,7 +157,7 @@ public class GiveKey extends SubCommand
             }
             else
             {
-                Boolean toNotDrop = (Boolean) SettingsValues.VIRTUAL_KEY_INSTEAD_OF_DROP.getValue(cc);
+                Boolean toNotDrop = (Boolean) SettingsValue.VIRTUAL_KEY_INSTEAD_OF_DROP.getValue(cc);
                 int count = Utils.addItemAndDropRest(toGive, toAdd, !toNotDrop);
 
                 if(toNotDrop)

@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates.options;
 
 import me.ztowne13.customcrates.Messages;
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
@@ -366,7 +366,7 @@ public class CMultiCrateInventory extends CSetting
 
                 if (cc.getSettings().getConfigValAsBoolean("virtual-crate-cratecount"))
                 {
-                    String toAddLore = (String) SettingsValues.VIRTUAL_CRATE_LORE.getValue(cc);
+                    String toAddLore = (String) SettingsValue.VIRTUAL_CRATE_LORE.getValue(cc);
                     if (!toAddLore.equalsIgnoreCase("") && !toAddLore.equalsIgnoreCase("none"))
                     {
                         crateIb.addLore("");
@@ -375,7 +375,7 @@ public class CMultiCrateInventory extends CSetting
                 }
                 if (cc.getSettings().getConfigValAsBoolean("virtual-crate-keycount"))
                 {
-                    String toAddLore = (String) SettingsValues.VIRTUAL_KEY_LORE.getValue(cc);
+                    String toAddLore = (String) SettingsValue.VIRTUAL_KEY_LORE.getValue(cc);
                     if (!toAddLore.equalsIgnoreCase("") && !toAddLore.equalsIgnoreCase("none"))
                     {
                         crateIb.addLore("");
@@ -438,8 +438,8 @@ public class CMultiCrateInventory extends CSetting
 
             // Is preview menu
             if (clickType.equals(Boolean
-                    .parseBoolean(SettingsValues.MC_REWARD_DISPLAY_LEFTCLICK.getValue(getSc()).toString().toUpperCase()) ?
-                    ClickType.LEFT : ClickType.RIGHT) && (Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(cc))
+                    .parseBoolean(SettingsValue.MC_REWARD_DISPLAY_LEFTCLICK.getValue(getSc()).toString().toUpperCase()) ?
+                    ClickType.LEFT : ClickType.RIGHT) && (Boolean) SettingsValue.REWARD_DISPLAY_ENABLED.getValue(cc))
             {
                 clickedCrate.getSettings().getDisplayer().openFor(player);
                 // Set last open crate back to multicrate so that closing the reward previewer reopens the multicrate
@@ -454,7 +454,7 @@ public class CMultiCrateInventory extends CSetting
                 }, 2);
             }
             // Virtual crates check
-            else if (!((Boolean) SettingsValues.REQUIRE_VIRTUAL_CRATE_AND_KEY.getValue(cc))
+            else if (!((Boolean) SettingsValue.REQUIRE_VIRTUAL_CRATE_AND_KEY.getValue(cc))
                     || pm.getPdm().getVCCrateData(clickedCrate).getCrates() > 0)
             {
 

@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.utils;
 
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -353,7 +353,7 @@ public class Utils
 
         if(cachedParticleDistance == -1)
         {
-            cachedParticleDistance = (int) SettingsValues.PARTICLE_VIEW_DISTANCE.getValue(sc);
+            cachedParticleDistance = (int) SettingsValue.PARTICLE_VIEW_DISTANCE.getValue(sc);
         }
 
         double distance = 0.0D;

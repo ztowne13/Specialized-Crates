@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.commands.sub;
 
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.commands.Commands;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
@@ -42,7 +42,7 @@ public class Claim extends SubCommand
 
         int rowsNeeded = (stacks / 9) + (stacks % 9 == 0 ? 0 : 1) + 1;
 
-        String invName = SettingsValues.CRATES_CLAIM_INVENTORY_NAME.getValue(cc).toString();
+        String invName = SettingsValue.CRATES_CLAIM_INVENTORY_NAME.getValue(cc).toString();
         InventoryBuilder builder = new InventoryBuilder(player, rowsNeeded > 6 ? 54 : (rowsNeeded * 9), invName);
 
         for (VirtualCrateData vcd : dataManager.getVirtualCrateData().values())

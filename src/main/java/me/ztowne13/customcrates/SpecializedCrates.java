@@ -237,7 +237,7 @@ public class SpecializedCrates extends JavaPlugin
         setBr(null);
 
         CRewards.getAllRewards().clear();
-        SettingsValues.valuesCache.clear();
+        SettingsValue.valuesCache.clear();
 
 //        ChatUtils.log("Enabling, wait 1 second...");
 

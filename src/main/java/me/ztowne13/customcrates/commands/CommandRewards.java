@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.commands;
 
 import me.ztowne13.customcrates.Messages;
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.utils.CrateUtils;
@@ -39,7 +39,7 @@ public class CommandRewards extends Commands implements CommandExecutor
                     Crate crate = Crate.getCrate(sc, crateName);
                     if (CrateUtils.isCrateUsable(crate))
                     {
-                        if ((Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(sc))
+                        if ((Boolean) SettingsValue.REWARD_DISPLAY_ENABLED.getValue(sc))
                         {
                             if (!crate.isMultiCrate())
                             {

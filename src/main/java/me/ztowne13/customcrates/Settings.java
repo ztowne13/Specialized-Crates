@@ -130,7 +130,7 @@ public class Settings
 
     public void loadSettings()
     {
-        for (SettingsValues sv : SettingsValues.values())
+        for (SettingsValue sv : SettingsValue.values())
         {
             getConfigValues().put(sv.getPath(), getCc().getConfig().get(sv.getPath()));
         }

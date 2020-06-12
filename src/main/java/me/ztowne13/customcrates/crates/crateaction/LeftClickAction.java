@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates.crateaction;
 
 import me.ztowne13.customcrates.Messages;
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.players.PlayerManager;
@@ -41,7 +41,7 @@ public class LeftClickAction extends CrateAction
             // Preventing crates from being broken and displaying reward menu if need be
             if (CrateUtils.isCrateUsable(cm))
             {
-                if (!pm.isDeleteCrate() && (Boolean) SettingsValues.REWARD_DISPLAY_ENABLED.getValue(cc))
+                if (!pm.isDeleteCrate() && (Boolean) SettingsValue.REWARD_DISPLAY_ENABLED.getValue(cc))
                 {
                     if (!cm.getCrate().isMultiCrate())
                         cm.getCrate().getSettings().getDisplayer().openFor(player);

@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.listeners;
 
 import me.ztowne13.customcrates.Messages;
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
@@ -56,7 +56,7 @@ public class BlockBreakListener implements Listener
             if (!e.isCancelled())
             {
                 // Not in creative mode or creative mode is allowed
-                if (!p.getGameMode().equals(GameMode.CREATIVE) || (Boolean) SettingsValues.LUCKYCHEST_CREATIVE.getValue(cc))
+                if (!p.getGameMode().equals(GameMode.CREATIVE) || (Boolean) SettingsValue.LUCKYCHEST_CREATIVE.getValue(cc))
                 {
                     // Luckychests enabled
                     if (PlayerManager.get(cc, p).getPdm().isActivatedLuckyChests())
@@ -74,7 +74,7 @@ public class BlockBreakListener implements Listener
                                     // Check if this block is a placed block or not and whether or not that's okay
                                     if ((!e.getBlock().hasMetadata("PLACED") ||
                                             e.getBlock().getMetadata("PLACED") == null) ||
-                                            (Boolean) SettingsValues.LUCKYCHEST_ALLOW_PLACED_BLOCKS.getValue(cc))
+                                            (Boolean) SettingsValue.LUCKYCHEST_ALLOW_PLACED_BLOCKS.getValue(cc))
                                     {
                                         // Check to make sure the player has the permission or doesn't need the permission
                                         if (!crates.getSettings().getLuckyChestSettings().isRequirePermission() ||

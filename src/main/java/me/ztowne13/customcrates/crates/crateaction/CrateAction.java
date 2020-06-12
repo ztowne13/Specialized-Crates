@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates.crateaction;
 
 import me.ztowne13.customcrates.Messages;
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.api.CrateOpenEvent;
 import me.ztowne13.customcrates.crates.Crate;
@@ -94,7 +94,7 @@ public abstract class CrateAction
                     // If the animation needs to be skipped (shift click). Also required to be a static crate
                     if (skipAnimation && cs.getObtainType().equals(ObtainType.STATIC))
                     {
-                        if(pm.isConfirming() || !((Boolean) SettingsValues.SHIFT_CLICK_CONFIRM.getValue(cc)))
+                        if(pm.isConfirming() || !((Boolean) SettingsValue.SHIFT_CLICK_CONFIRM.getValue(cc)))
                         {
                             if (cs.getAnimation().canExecuteFor(player, !crate.isMultiCrate()))
                             {
@@ -132,14 +132,15 @@ public abstract class CrateAction
                         else
                         {
                             pm.setConfirming(true);
-                            Messages.CONFIRM_OPEN_ALL.msgSpecified(cc, player, new String[]{"%timeout%"}, new String[]{SettingsValues.CONFIRM_TIMEOUT.getValue(cc) + ""});
+                            Messages.CONFIRM_OPEN_ALL.msgSpecified(cc, player, new String[]{"%timeout%"}, new String[]{
+                                    SettingsValue.CONFIRM_TIMEOUT.getValue(cc) + ""});
                         }
                         return false;
                     }
                     // NORMAL OPEN
                     else
                     {
-                        if(pm.isConfirming() || !((Boolean) SettingsValues.CONFIRM_OPEN.getValue(cc)))
+                        if(pm.isConfirming() || !((Boolean) SettingsValue.CONFIRM_OPEN.getValue(cc)))
                         {
                             if(cc.getEconomyHandler().handleCheck(player, cs.getCost(), true))
                             {
@@ -167,7 +168,8 @@ public abstract class CrateAction
                         else
                         {
                             pm.setConfirming(true);
-                            Messages.CONFIRM_OPEN.msgSpecified(cc, player, new String[]{"%timeout%"}, new String[]{SettingsValues.CONFIRM_TIMEOUT.getValue(cc) + ""});
+                            Messages.CONFIRM_OPEN.msgSpecified(cc, player, new String[]{"%timeout%"}, new String[]{
+                                    SettingsValue.CONFIRM_TIMEOUT.getValue(cc) + ""});
                         }
                         return false;
                     }
@@ -216,6 +218,6 @@ public abstract class CrateAction
 
     public static boolean isInventoryTooEmpty(SpecializedCrates cc, Player p)
     {
-        return Utils.getOpenInventorySlots(p) >= ((Integer) SettingsValues.REQUIRED_SLOTS.getValue(cc));
+        return Utils.getOpenInventorySlots(p) >= ((Integer) SettingsValue.REQUIRED_SLOTS.getValue(cc));
     }
 }

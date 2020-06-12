@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.listeners;
 
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import org.bukkit.block.Block;
@@ -27,7 +27,7 @@ public class BlockRemoveListener implements Listener
     public void onBlockChange(BlockExplodeEvent e)
     {
         if(cc.isAllowTick())
-            if ((Boolean) SettingsValues.EXPLODE_DYNAMIC.getValue(cc))
+            if ((Boolean) SettingsValue.EXPLODE_DYNAMIC.getValue(cc))
                 for (Block b : new ArrayList<Block>(e.blockList()))
                     if (PlacedCrate.crateExistsAt(cc, b.getLocation()))
                         e.blockList().remove(b);
@@ -44,7 +44,7 @@ public class BlockRemoveListener implements Listener
     public void onEntityExplode(EntityExplodeEvent e)
     {
         if(cc.isAllowTick())
-            if ((Boolean) SettingsValues.EXPLODE_DYNAMIC.getValue(cc))
+            if ((Boolean) SettingsValue.EXPLODE_DYNAMIC.getValue(cc))
             for (Block b : new ArrayList<Block>(e.blockList()))
                 if (PlacedCrate.crateExistsAt(cc, b.getLocation()))
                     e.blockList().remove(b);
@@ -53,7 +53,7 @@ public class BlockRemoveListener implements Listener
     public boolean shouldCancel(List<Block> blocks, BlockFace bf)
     {
         boolean shouldCancel = false;
-        if ((Boolean) SettingsValues.EXPLODE_DYNAMIC.getValue(cc))
+        if ((Boolean) SettingsValue.EXPLODE_DYNAMIC.getValue(cc))
         {
             for (Block b : blocks)
             {

@@ -81,6 +81,8 @@ public enum Messages
 
     GIVEN_FALLBACK_REWARD("", "&6&lINFO: &eYou already have the %reward% &ereward, so you have been given the %fallbackreward% &ereward instead."),
 
+    CRATES_CLAIM_DENY_DEPOSIT_KEYS("", "&4&lHey! &cYou can not deposit keys into /crates claim."),
+
     BLACKLISTED_PLUGIN("&cIMPORTANT: THIS COPY OF THE SPECIALIZED CRATES HAS BEEN BLACKLISTED BECAUSE THE USER WHO PURCHASED IT" +
             " IS NOT THE ONLY PERSON USING IT, OR THIS PERSON HAS REFUNDED IT. IF YOU BELIEVE THIS IS AN ERROR, PLEASE RE-DOWNLOAD THE PLUGIN (NO" +
             " NEED TO REGENERATE CONFIG) AND TRY AGAIN. IF IT'S STILL NOT WORKING, PLEASE CONTACT ZTOWNE13."),

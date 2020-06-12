@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates;
 
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.*;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayType;
@@ -135,7 +135,7 @@ public class CrateSettings
     {
         cc.getDu().log("loadAll() - CALL");
         // Crate Loging
-        String toLog = SettingsValues.LOG_SUCCESSES.getValue(getCrate().getCc()).toString();
+        String toLog = SettingsValue.LOG_SUCCESSES.getValue(getCrate().getCc()).toString();
         cc.getDu().log("loadAll() - Preparing to load notice.");
         loadNotice(toLog);
         cc.getDu().log("loadAll() - Loaded notice.");

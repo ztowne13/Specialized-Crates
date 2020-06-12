@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates;
 
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.CHolograms;
 import me.ztowne13.customcrates.crates.options.ObtainType;
@@ -117,7 +117,7 @@ public class PlacedCrate
 
         if (crates.getSettings().getObtainType().equals(ObtainType.LUCKYCHEST))
         {
-            int num = (int) cc.getSettings().getConfigValues().get(SettingsValues.LUCKYCHEST_DESPAWN.getPath()) * 60;
+            int num = (int) cc.getSettings().getConfigValues().get(SettingsValue.LUCKYCHEST_DESPAWN.getPath()) * 60;
             if (num > 0 && ((System.currentTimeMillis() - getPlacedTime()) / 1000) > num)
             {
                 delete();

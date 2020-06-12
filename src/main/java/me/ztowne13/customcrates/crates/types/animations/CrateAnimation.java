@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates.types.animations;
 
 import me.ztowne13.customcrates.Messages;
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.api.CrateOpenEvent;
 import me.ztowne13.customcrates.crates.Crate;
@@ -229,7 +229,7 @@ public abstract class CrateAnimation
     {
         if (!(p == null))
         {
-            if ((Boolean) SettingsValues.PUSHBACK.getValue(getSc()) && !getCrate().isMultiCrate())
+            if ((Boolean) SettingsValue.PUSHBACK.getValue(getSc()) && !getCrate().isMultiCrate())
             {
                 p.setVelocity(p.getLocation().getDirection().multiply(-1));
             }

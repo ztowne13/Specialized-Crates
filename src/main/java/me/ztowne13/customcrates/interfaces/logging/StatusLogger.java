@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.logging;
 
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Bukkit;
@@ -60,7 +60,7 @@ public class StatusLogger
         }
 
         if (getFailedEvents().isEmpty() &&
-                SettingsValues.LOG_SUCCESSES.getValue(getCc()).toString().equalsIgnoreCase("FAILURES"))
+                SettingsValue.LOG_SUCCESSES.getValue(getCc()).toString().equalsIgnoreCase("FAILURES"))
         {
             ChatUtils.log("  &a+&f Success: there were no issues.");
         }
@@ -69,7 +69,7 @@ public class StatusLogger
     public void logSection(CommandSender sender, String section, boolean forceOnlyFailures)
     {
         boolean hasLoggedHeader = false;
-        String toLog = SettingsValues.LOG_SUCCESSES.getValue(getCc()).toString();
+        String toLog = SettingsValue.LOG_SUCCESSES.getValue(getCc()).toString();
 
         if (!toLog.equalsIgnoreCase("NOTHING") || forceOnlyFailures)
         {

@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.crates.options.actions;
 
-import me.ztowne13.customcrates.SettingsValues;
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.actions.actionbar.ActionBar;
 import org.bukkit.entity.Player;
@@ -25,9 +25,9 @@ public class BukkitActionEffect extends ActionEffect
 
     public void newTitle()
     {
-        fadeIn = Integer.parseInt(SettingsValues.CA_FADE_IN.getValue(cc).toString());
-        stay = Integer.parseInt(SettingsValues.CA_STAY.getValue(cc).toString());
-        fadeOut = Integer.parseInt(SettingsValues.CA_FADE_OUT.getValue(cc).toString());
+        fadeIn = Integer.parseInt(SettingsValue.CA_FADE_IN.getValue(cc).toString());
+        stay = Integer.parseInt(SettingsValue.CA_STAY.getValue(cc).toString());
+        fadeOut = Integer.parseInt(SettingsValue.CA_FADE_OUT.getValue(cc).toString());
     }
 
     public void playTitle(Player p)
