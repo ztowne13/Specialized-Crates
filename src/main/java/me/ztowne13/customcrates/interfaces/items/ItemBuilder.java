@@ -641,6 +641,11 @@ public class ItemBuilder implements EditableItem
         return equal;
     }
 
+    public ItemBuilder clone()
+    {
+        return new ItemBuilder(this);
+    }
+
     public ItemStack get()
     {
         return getStack();
