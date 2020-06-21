@@ -192,7 +192,15 @@ public class Crate
 
     public static Crate getCrate(SpecializedCrates cc, String name, boolean isMultiCrate)
     {
-        return getLoadedCrates().containsKey(name) ? getLoadedCrates().get(name) : new Crate(cc, name, false, isMultiCrate);
+        for(String crateName : getLoadedCrates().keySet())
+        {
+            if(crateName.equalsIgnoreCase(name))
+            {
+                return getLoadedCrates().get(crateName);
+            }
+        }
+
+        return new Crate(cc, name, false, isMultiCrate);
     }
 
     public static boolean existsNotCaseSensitive(String name)
