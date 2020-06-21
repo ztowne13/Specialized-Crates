@@ -6,6 +6,7 @@ import me.ztowne13.customcrates.utils.Utils;
 import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +34,9 @@ public class NBTTagBuilder
     {
         try
         {
+            Class<?> craftItemStack = getCraftItemStack();
+            Method asNMSCopy = craftItemStack.getMethod("asNMSCopy", ItemStack.class);
+            Object invokedResult = asNMSCopy.invoke(craftItemStack, stack);
             return getCraftItemStack().getMethod("asNMSCopy", ItemStack.class).invoke(getCraftItemStack(), stack);
         }
         catch (Exception exc)
@@ -50,6 +54,7 @@ public class NBTTagBuilder
         }
         catch (Exception exc)
         {
+            exc.printStackTrace();
             ChatUtils.log("Failed to create new NBT Tag Compound. Please check plugin is up to date.");
         }
         return null;
@@ -59,10 +64,13 @@ public class NBTTagBuilder
     {
         try
         {
-            return nmsStack.getClass().getMethod("getTag").invoke(nmsStack);
+            Class<?> clazz = nmsStack.getClass();
+            Method method = clazz.getMethod("getTag");
+            return method.invoke(nmsStack);
         }
         catch (Exception exc)
         {
+            exc.printStackTrace();
             ChatUtils.log("Failed to get existing NBT Tag Compound. Please check plugin is up to date.");
         }
         return null;
@@ -72,6 +80,12 @@ public class NBTTagBuilder
     {
 
         Object stack = getNMSItemStack(item);
+
+        if(stack == null)
+        {
+            return item;
+        }
+
         Object tagCompound = getNBTTagCompound(stack);
         if (tagCompound == null)
         {
@@ -202,6 +216,12 @@ public class NBTTagBuilder
         List<String> list = new ArrayList<>();
 
         Object stack = getNMSItemStack(item);
+
+        if(stack == null)
+        {
+            return list;
+        }
+
         Object tagCompound = getNBTTagCompound(stack);
 
         try
