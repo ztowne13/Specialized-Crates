@@ -426,7 +426,7 @@ public class CMultiCrateInventory extends CSetting
         final Player player = pm.getP();
         Crate crate = pm.getOpenCrate();
 
-        if (crate.getSettings().getMultiCrateSettings().getCrateSpots().keySet().contains(slot))
+        if (crate.getSettings().getMultiCrateSettings().getCrateSpots().keySet().contains(slot) && !pm.isInRewardMenu())
         {
             final Crate clickedCrate = crate.getSettings().getMultiCrateSettings().getCrateSpots().get(slot);
 
