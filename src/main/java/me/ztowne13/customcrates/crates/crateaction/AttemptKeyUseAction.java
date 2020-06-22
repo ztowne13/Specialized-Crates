@@ -81,7 +81,7 @@ public class AttemptKeyUseAction extends CrateAction
             else if (!player.getGameMode().equals(GameMode.CREATIVE) ||
                     (Boolean) cc.getSettings().getConfigValues().get("open-creative"))
             {
-                useCrate(pm, cm, player.isSneaking() && (Boolean) SettingsValues.SHIFT_CLICK_OPEN_ALL.getValue(cc));
+                useCrate(pm, cm, player.isSneaking() && (Boolean) SettingsValue.SHIFT_CLICK_OPEN_ALL.getValue(cc));
                 return true;
             }
             else
