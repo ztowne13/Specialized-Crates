@@ -29,6 +29,7 @@ public class Crate
 
 
     boolean enabled = true,
+            disabledByError = false,
             canBeEnabled = true,
             isMultiCrate,
             isUsedForCratesCommand = false,
@@ -193,7 +194,15 @@ public class Crate
 
     public static Crate getCrate(SpecializedCrates cc, String name, boolean isMultiCrate)
     {
-        return getLoadedCrates().containsKey(name) ? getLoadedCrates().get(name) : new Crate(cc, name, false, isMultiCrate);
+        for(String crateName : getLoadedCrates().keySet())
+        {
+            if(crateName.equalsIgnoreCase(name))
+            {
+                return getLoadedCrates().get(crateName);
+            }
+        }
+
+        return new Crate(cc, name, false, isMultiCrate);
     }
 
     public static boolean existsNotCaseSensitive(String name)
@@ -357,5 +366,15 @@ public class Crate
     public void setNeedsReload(boolean needsReload)
     {
         this.needsReload = needsReload;
+    }
+
+    public boolean isDisabledByError()
+    {
+        return disabledByError;
+    }
+
+    public void setDisabledByError(boolean disabledByError)
+    {
+        this.disabledByError = disabledByError;
     }
 }

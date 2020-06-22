@@ -57,13 +57,13 @@ public enum Messages
 
     LOADING_FROM_DATABASE,
 
-    PLACEHOLDER_SECONDS("","seconds"),
+    PLACEHOLDER_SECONDS("", "seconds"),
 
-    PLACEHOLDER_MINUTES("","minutes"),
+    PLACEHOLDER_MINUTES("", "minutes"),
 
-    PLACEHOLDER_HOURS("","hours"),
+    PLACEHOLDER_HOURS("", "hours"),
 
-    PLACEHOLDER_DAYS("","days"),
+    PLACEHOLDER_DAYS("", "days"),
 
     ECONOMY_NOT_ENOUGH_MONEY("", "&4&lERROR: &cYou do not have enough money, you need %amount% and are %short% short."),
 
@@ -79,20 +79,23 @@ public enum Messages
 
     RECEIVED_VIRTUAL_KEY("", "&2&lSUCCESS! &aYou just received %amount% virtual %crate% key(s)!"),
 
-    GIVEN_FALLBACK_REWARD("", "&6&lINFO: &eYou already have the %reward% &ereward, so you have been given the %fallbackreward% &ereward instead."),
+    GIVEN_FALLBACK_REWARD("",
+            "&6&lINFO: &eYou already have the %reward% &ereward, so you have been given the %fallbackreward% &ereward instead."),
+
+    BLACKLISTED_PLUGIN(
+            "&cIMPORTANT: THIS COPY OF THE SPECIALIZED CRATES HAS BEEN BLACKLISTED BECAUSE THE USER WHO PURCHASED IT" +
+                    " IS NOT THE ONLY PERSON USING IT, OR THIS PERSON HAS REFUNDED IT. IF YOU BELIEVE THIS IS AN ERROR, PLEASE RE-DOWNLOAD THE PLUGIN (NO" +
+                    " NEED TO REGENERATE CONFIG) AND TRY AGAIN. IF IT'S STILL NOT WORKING, PLEASE CONTACT ZTOWNE13."),
 
     CRATES_CLAIM_DENY_DEPOSIT_KEYS("", "&4&lHey! &cYou can not deposit keys into /crates claim."),
-
-    BLACKLISTED_PLUGIN("&cIMPORTANT: THIS COPY OF THE SPECIALIZED CRATES HAS BEEN BLACKLISTED BECAUSE THE USER WHO PURCHASED IT" +
-            " IS NOT THE ONLY PERSON USING IT, OR THIS PERSON HAS REFUNDED IT. IF YOU BELIEVE THIS IS AN ERROR, PLEASE RE-DOWNLOAD THE PLUGIN (NO" +
-            " NEED TO REGENERATE CONFIG) AND TRY AGAIN. IF IT'S STILL NOT WORKING, PLEASE CONTACT ZTOWNE13."),
 
     BYPASS_BREAK_RESTRICTIONS("&9&lNOTICE! &bThis crate typically isn't placeable, you have bypassed this restriction."),
 
     SUCCESS_DELETE("&2&lSUCCESS! &aDeleted the %crate% crate from this location."),
 
     CRATE_DISABLED_ADMIN(
-            "  &9&lNOTE: &bIf you did not disable this crate manually, something was misconfigured. Please view console to see why."),
+            "&6&lNOTE! &eIf you did not disable this crate manually, something was not configured properly. Please type" +
+                    " /scrates errors (crate name) to see possible issues."),
 
     NEEDS_UPDATE("&9&lNOTICE: &bSpecialized Crates has an update available: v%version%"),
 
@@ -123,7 +126,7 @@ public enum Messages
 
     public String getFromConf(SpecializedCrates cc)
     {
-        if(cachedMessages.containsKey(this))
+        if (cachedMessages.containsKey(this))
             return cachedMessages.get(this);
 
         try
@@ -138,7 +141,7 @@ public enum Messages
         }
         catch (Exception exc)
         {
-            if(defaultMsg.equalsIgnoreCase(""))
+            if (defaultMsg.equalsIgnoreCase(""))
             {
                 cachedMessages.put(this, ChatUtils.toChatColor(
                         "&eThis value isn't set, please tell the server operator to configure the " + name() + " value."));
@@ -166,9 +169,10 @@ public enum Messages
     public void msgSpecified(SpecializedCrates cc, Player p, String[] replaceValue, String[] setValue)
     {
         String correctMSG = getPropperMsg(cc);
-        if(correctMSG.equalsIgnoreCase("none")
+        if (correctMSG.equalsIgnoreCase("none")
                 || correctMSG.equalsIgnoreCase("")
-                || correctMSG.equalsIgnoreCase("&f")) {
+                || correctMSG.equalsIgnoreCase("&f"))
+        {
             return;
         }
 

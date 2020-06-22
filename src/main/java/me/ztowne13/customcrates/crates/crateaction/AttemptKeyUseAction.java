@@ -55,6 +55,20 @@ public class AttemptKeyUseAction extends CrateAction
             Crate crate = cm.getCrate();
 
             if (crate.isMultiCrate())
+
+            if(!CrateUtils.isCrateUsable(cm))
+            {
+                Messages.CRATE_DISABLED.msgSpecified(cc, player);
+                if (player.hasPermission("customcrates.admin") || player.isOp())
+                {
+                    Messages.CRATE_DISABLED_ADMIN.msgSpecified(cc, player);
+                }
+                return true;
+            }
+
+            Crate crates = cm.getCrate();
+
+            if (crates.isMultiCrate())
             {
                 if (pm.isInCrate())
                 {
@@ -67,20 +81,8 @@ public class AttemptKeyUseAction extends CrateAction
             else if (!player.getGameMode().equals(GameMode.CREATIVE) ||
                     (Boolean) cc.getSettings().getConfigValues().get("open-creative"))
             {
-                if (CrateUtils.isCrateUsable(cm))
-                {
-                    useCrate(pm, cm, player.isSneaking() && (Boolean) SettingsValue.SHIFT_CLICK_OPEN_ALL.getValue(cc));
-                    return true;
-                }
-                else
-                {
-                    Messages.CRATE_DISABLED.msgSpecified(cc, player);
-                    if (player.hasPermission("customcrates.admin") || player.hasPermission("specializedcrates.admin") || player.isOp())
-                    {
-                        Messages.CRATE_DISABLED_ADMIN.msgSpecified(cc, player);
-                    }
-                    return true;
-                }
+                useCrate(pm, cm, player.isSneaking() && (Boolean) SettingsValues.SHIFT_CLICK_OPEN_ALL.getValue(cc));
+                return true;
             }
             else
             {

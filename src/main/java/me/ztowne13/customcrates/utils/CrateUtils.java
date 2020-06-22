@@ -38,11 +38,11 @@ public class CrateUtils
 
     public static boolean isCrateUsable(Crate crates)
     {
-        return crates != null && crates.isEnabled();
+        return crates != null && crates.isEnabled() && !crates.isDisabledByError();
     }
 
     public static boolean isCrateUsable(PlacedCrate cm)
     {
-        return cm.isCratesEnabled() && cm.getCrate() != null && cm.getCrate().isEnabled();
+        return cm.isCratesEnabled() && cm.getCrate() != null && cm.getCrate().isEnabled() && !cm.getCrate().isDisabledByError();
     }
 }
