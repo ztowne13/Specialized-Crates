@@ -9,6 +9,7 @@ import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -51,7 +52,19 @@ public class AttemptKeyUseAction extends CrateAction
             }
 
             PlacedCrate cm = PlacedCrate.get(cc, location);
+
+            if(!CrateUtils.isCrateUsable(cm))
+            {
+                Messages.CRATE_DISABLED.msgSpecified(cc, player);
+                if (player.hasPermission("customcrates.admin") || player.isOp())
+                {
+                    Messages.CRATE_DISABLED_ADMIN.msgSpecified(cc, player);
+                }
+                return true;
+            }
+
             Crate crates = cm.getCrate();
+
             if (crates.isMultiCrate())
             {
                 if(pm.isInCrate())
@@ -65,20 +78,9 @@ public class AttemptKeyUseAction extends CrateAction
             else if (!player.getGameMode().equals(GameMode.CREATIVE) ||
                     (Boolean) cc.getSettings().getConfigValues().get("open-creative"))
             {
-                if (CrateUtils.isCrateUsable(cm))
-                {
+                    Bukkit.broadcastMessage("Crate is usable: " + cm.getCrate().isEnabled());
                     useCrate(pm, cm, player.isSneaking() && (Boolean) SettingsValues.SHIFT_CLICK_OPEN_ALL.getValue(cc));
                     return true;
-                }
-                else
-                {
-                    Messages.CRATE_DISABLED.msgSpecified(cc, player);
-                    if (player.hasPermission("customcrates.admin") || player.isOp())
-                    {
-                        Messages.CRATE_DISABLED_ADMIN.msgSpecified(cc, player);
-                    }
-                    return true;
-                }
             }
             else
             {

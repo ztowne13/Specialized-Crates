@@ -457,6 +457,18 @@ public class CMultiCrateInventory extends CSetting
                     || pm.getPdm().getVCCrateData(clickedCrate).getCrates() > 0)
             {
 
+                // Usability check
+                if(!CrateUtils.isCrateUsable(clickedCrate))
+                {
+                    Messages.CRATE_DISABLED.msgSpecified(cc, player);
+                    if (player.hasPermission("customcrates.admin") || player.isOp())
+                    {
+                        Messages.CRATE_DISABLED_ADMIN.msgSpecified(cc, player);
+                    }
+                    return;
+                }
+
+                // Inventory check
                 if (!CrateAction.isInventoryTooEmpty(cc, player))
                 {
                     Messages.INVENTORY_TOO_FULL.msgSpecified(cc, player);
@@ -466,6 +478,7 @@ public class CMultiCrateInventory extends CSetting
                     return;
                 }
 
+                // Permission check
                 if (!player.hasPermission(clickedCrate.getSettings().getPermission()) &&
                         !clickedCrate.getSettings().getPermission().equalsIgnoreCase("no permission"))
                 {
