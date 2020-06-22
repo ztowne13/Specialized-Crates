@@ -29,6 +29,7 @@ public class Crate
 
 
     boolean enabled = true,
+            disabledByError = false,
             canBeEnabled = true,
             isMultiCrate,
             isUsedForCratesCommand = false,
@@ -354,5 +355,15 @@ public class Crate
     public boolean isLoadedProperly()
     {
         return loadedProperly;
+    }
+
+    public boolean isDisabledByError()
+    {
+        return disabledByError;
+    }
+
+    public void setDisabledByError(boolean disabledByError)
+    {
+        this.disabledByError = disabledByError;
     }
 }

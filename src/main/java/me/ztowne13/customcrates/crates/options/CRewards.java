@@ -136,9 +136,16 @@ public class CRewards extends CSetting
             }
 
             setCrateRewards(finalUpdate);
+
+            if(finalUpdate.length == 0)
+            {
+                StatusLoggerEvent.REWARDS_EMPTY.log(getCrate());
+                getCrate().setDisabledByError(true);
+            }
+
             return;
         }
-        StatusLoggerEvent.REWARD_NONEXISTENT.log(getCrate());
+        StatusLoggerEvent.REWARDS_PATH_NONEXISTENT.log(getCrate());
     }
 
     public void setReward(Integer i, Reward reward)
