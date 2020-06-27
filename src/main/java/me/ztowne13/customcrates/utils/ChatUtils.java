@@ -46,11 +46,6 @@ public class ChatUtils
         return toChatColor(str);
     }
 
-    public static String toChatColor(String s)
-    {
-        return ChatColor.translateAlternateColorCodes('&', s);
-    }
-
     public static void msg(Player p, String s)
     {
         p.sendMessage(ChatUtils.toChatColor(s));
@@ -75,6 +70,50 @@ public class ChatUtils
     {
         msg(p, "&6&lInfo &e" + s);
     }
+
+    public static String toChatColor(String s)
+    {
+        s = s.replaceAll("<!!special_chat_encoding!!>", "§");
+        return ChatColor.translateAlternateColorCodes('&', s);
+    }
+
+//    public static String fromChatColor(String s)
+//    {
+//        String newS = "";
+//        boolean checkNext = false;
+//        for(String letter : s.split(""))
+//        {
+//            if(letter.equalsIgnoreCase("§"))
+//            {
+//                checkNext = true;
+//                continue;
+//            }
+//
+//            if(checkNext)
+//            {
+//                checkNext = false;
+//                char let = letter.charAt(0);
+//                String toTrans = "&" + let;
+//                if(ChatColor.translateAlternateColorCodes('&', toTrans).equalsIgnoreCase(toTrans))
+//                {
+//                    newS += "<!!special_chat_encoding!!>" + let;
+//                }
+//                else
+//                {
+//                    newS += toTrans;
+//                }
+//                continue;
+//            }
+//            newS += letter;
+//        }
+//
+//        if(checkNext)
+//        {
+//            newS += "<!!special_chat_encoding!!>";
+//        }
+//
+//        return newS.replace("§", "&");
+//    }
 
     public static String fromChatColor(String s)
     {

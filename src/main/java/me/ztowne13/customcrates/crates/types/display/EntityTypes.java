@@ -91,10 +91,17 @@ public enum EntityTypes
     FOX(2, VersionUtils.Version.v1_14),
 
     // v1.15
-    BEE(2, VersionUtils.Version.v1_15);
+    BEE(2, VersionUtils.Version.v1_15),
 
-//    Not allowed / Disabled entities
+    // v1.16
+    ZOMBIFIED_PIGLIN(2, VersionUtils.Version.v1_16),
+    HOGLIN(2, VersionUtils.Version.v1_16),
+    PIGLIN(2, VersionUtils.Version.v1_16),
+    STRIDER(2, VersionUtils.Version.v1_16),
+    ZOGLIN(2, VersionUtils.Version.v1_16);
 
+
+    // Not allowed
 //    EVOKER_FANGS(2, VersionUtils.Version.v1_11),
 //    LLAMA_SPIT(2, VersionUtils.Version.v1_11),
 //    DROPPED_ITEM(2, VersionUtils.Version.v1_9),

@@ -32,14 +32,15 @@ public class Debug extends SubCommand
             {
                 if(args.length == 1)
                 {
-                    ChatUtils.msgInfo(player, "Commands: iteminfo[tostring,-{-nolore,-ignoreexcluded}], applytag[{tag id}], glow[-, asbuilder]");
+                    ChatUtils.msgInfo(player, "Commands: iteminfo[tostring,-{-nolore,-ignoreexcluded,-stripcolor}], applytag[{tag id}], glow[-, asbuilder]");
                     return true;
                 }
 
                 if (args[1].equalsIgnoreCase("iteminfo"))
                 {
                     boolean noLoreArg = false,
-                            ignoreExcludedArg = false;
+                            ignoreExcludedArg = false,
+                            stripColorArg = false;
 
                     for(int i = 0; i < args.length; i++)
                     {
@@ -47,6 +48,8 @@ public class Debug extends SubCommand
                             noLoreArg = true;
                         } else if(args[i].equalsIgnoreCase("-ignoreexcluded")) {
                             ignoreExcludedArg = true;
+                        } else if(args[i].equalsIgnoreCase("-stripcolor")) {
+                            stripColorArg = true;
                         }
                     }
 
@@ -65,8 +68,18 @@ public class Debug extends SubCommand
                     {
                         cmds.msg("Lore:");
                         for (String s : im.getLore())
-                            cmds.msg("- " + s);
+                        {
+                            if(stripColorArg)
+                            {
+                                ((Player)cmds.getCmdSender()).sendMessage("- " + ChatUtils.fromChatColor(s));
+                            }
+                            else
+                            {
+                                cmds.msg("- " + s);
+                            }
+                        }
                     }
+
 
                     cmds.msg("Enchants: ");
                     if(VersionUtils.Version.v1_13.isServerVersionOrLater())
