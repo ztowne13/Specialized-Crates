@@ -389,7 +389,6 @@ public class SpecializedCrates extends JavaPlugin
         {
             getDu().log("saveFilesTick() - Saving playerdata.db flat file");
             FlatFileDataHandler.getFileHandler().save();
-            FlatFileDataHandler.resetToSave();
         }
 
         for(IndividualFileDataHandler file : IndividualFileDataHandler.toSave)
