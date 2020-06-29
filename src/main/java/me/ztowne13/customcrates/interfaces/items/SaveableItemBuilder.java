@@ -163,18 +163,6 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
             for (String line : fc.getStringList(prefix + ".lore"))
                 addLore(line);
 
-        // Glow
-
-        if (fc.contains(prefix + ".glow"))
-        {
-            String unparsedGlow = fc.getString(prefix + ".glow");
-            if (Utils.isBoolean(unparsedGlow))
-                setGlowing(Boolean.parseBoolean(unparsedGlow));
-            else if (improperGlow != null)
-                improperGlow
-                        .log(statusLogger, new String[]{"The '" + prefix + ".glow' value is not a proper true/false value"});
-        }
-
         // Enchantments
         if (fc.contains(prefix + ".enchantments"))
         {
@@ -192,6 +180,18 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
                                 " is not formatted enchant;level or either the enchant is not a valid enchantment or the level is not a number."});
                 }
             }
+        }
+
+        // Glow
+
+        if (fc.contains(prefix + ".glow") && getEnchantments().size() == 0)
+        {
+            String unparsedGlow = fc.getString(prefix + ".glow");
+            if (Utils.isBoolean(unparsedGlow))
+                setGlowing(Boolean.parseBoolean(unparsedGlow));
+            else if (improperGlow != null)
+                improperGlow
+                        .log(statusLogger, new String[]{"The '" + prefix + ".glow' value is not a proper true/false value"});
         }
 
         // Potion Effects
