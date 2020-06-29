@@ -240,11 +240,6 @@ public class Reward implements Comparable<Reward>
         fc.set(getPath("fallback-reward.reward-name"), fallbackRewardName);
         fc.set(getPath("fallback-reward.permission"), fallbackPermission);
 
-        if (fallbackPermission.equalsIgnoreCase(""))
-        {
-            fc.set(getPath("fallback-reward"), null);
-        }
-
         saveBuilder.saveItem(getCc().getRewardsFile(), getPath("display-item"), false);
 
         fu.save();
