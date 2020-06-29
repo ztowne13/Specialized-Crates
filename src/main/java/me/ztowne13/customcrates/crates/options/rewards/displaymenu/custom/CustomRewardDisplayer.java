@@ -34,7 +34,7 @@ public class CustomRewardDisplayer extends RewardDisplayer
     public void open(Player p)
     {
         createInventory(p);
-        PlayerManager.get(getCrates().getCc(), p).setInRewardMenu(true);
+        PlayerManager.get(getCrate().getCc(), p).setInRewardMenu(true);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CustomRewardDisplayer extends RewardDisplayer
     {
         loadDefaults();
 
-        FileHandler fileHandler = getCrates().getSettings().getFileHandler();
+        FileHandler fileHandler = getCrate().getSettings().getFileHandler();
         FileConfiguration fc = fileHandler.get();
 
         ConfigurationSection configSection;
@@ -63,7 +63,8 @@ public class CustomRewardDisplayer extends RewardDisplayer
             {
                 SaveableItemBuilder itemBuilder = new SaveableItemBuilder(DynamicMaterial.STONE, 1);
                 boolean successLoadItem =
-                        itemBuilder.loadItem(getCrates().getSettings().getFileHandler(), PREFIX + "." + key, getCrates().getSettings().getStatusLogger(),
+                        itemBuilder.loadItem(
+                                getCrate().getSettings().getFileHandler(), PREFIX + "." + key, getCrate().getSettings().getStatusLogger(),
                                 StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_ITEM_FAILURE,
                                 StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_ENCHANTMENT_ADD_FAILURE,
                                 StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_POTION_ADD_FAILURE,
