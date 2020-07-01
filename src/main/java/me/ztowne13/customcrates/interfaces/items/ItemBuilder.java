@@ -641,6 +641,41 @@ public class ItemBuilder implements EditableItem
         return equal;
     }
 
+    @Override
+    public void setDamage(int damage)
+    {
+        if(damage == 0 && getDamage() == 0)
+        {
+            return;
+        }
+
+        if(VersionUtils.Version.v1_13.isServerVersionOrLater() && im() instanceof Damageable)
+        {
+            Damageable meta = (Damageable)im();
+            meta.setDamage(damage);
+            setIm((ItemMeta)meta);
+        }
+        else if(VersionUtils.Version.v1_12.isServerVersionOrEarlier())
+        {
+            getStack().setDurability((short)damage);
+        }
+    }
+
+    @Override
+    public int getDamage()
+    {
+        if(VersionUtils.Version.v1_13.isServerVersionOrLater() && im() instanceof Damageable)
+        {
+            Damageable meta = (Damageable)im();
+            return meta.getDamage();
+        }
+        else if(VersionUtils.Version.v1_12.isServerVersionOrEarlier())
+        {
+            return get().getDurability();
+        }
+        return 0;
+    }
+
     public ItemStack get()
     {
         return getStack();

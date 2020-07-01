@@ -91,7 +91,15 @@ public class IGCItemEditor extends IGCMenu
                 "This will toggle whether or not the display item will have a glowing effect. For enchanted items, if this value is true, the enchantments will be hidden.");
         glow.addLore("").addAutomaticLore("&e&l", 30, "Same as HIDE ENCHANTS");
 
-        DynamicMaterial editableItemDM = DynamicMaterial.fromItemStack(editableItem.getStack());
+        DynamicMaterial editableItemDM;
+        try
+        {
+            editableItemDM = DynamicMaterial.fromItemStack(editableItem.getStack());
+        }
+        catch(Exception exc)
+        {
+            editableItemDM = DynamicMaterial.fromString(editableItem.getStack().getType() + ";0");
+        }
 
         // Player head
         ItemBuilder playerHead = new ItemBuilder(DynamicMaterial.PLAYER_HEAD, 1);
@@ -158,18 +166,30 @@ public class IGCItemEditor extends IGCMenu
 
         // Edit color
         ItemBuilder color = new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1);
-        if(item.isColorable())
+        if (item.isColorable())
         {
             color.setDisplayName("&aEdit the armour Color");
-            color.addLore("&7Current Value:").addLore("&7" + item.getColor().getR() + ", " + item.getColor().getG() + ", " + item.getColor().getB());
+            color.addLore("&7Current Value:")
+                    .addLore("&7" + item.getColor().getR() + ", " + item.getColor().getG() + ", " + item.getColor().getB());
             color.addLore("").addAutomaticLore("&f", 30, "Edit the red, green, and blue values of the colored armour.");
         }
         else
         {
             color.setDisplayName("&cEdit the armour Color");
             color.addLore("").addLore("&cThis item is not colorable.");
-
         }
+
+        // Damage
+        ItemBuilder damage = new ItemBuilder(DynamicMaterial.GOLDEN_AXE);
+        damage.setDamage(20);
+        damage.setDisplayName("&aEdit the item damage");
+        damage.addLore("&7Current Value: ");
+        damage.addLore("&7" + item.getDamage());
+        damage.addLore("");
+        damage.addAutomaticLore("&f", 30,
+                "This is to set the damage of an item, NOT TO SET THE DATA VALUE. " +
+                        "If you want a 'damaged' item like red wool or acacia log (for example)," +
+                        " use RED_WOOL or ACACIA_LOG - EVEN ON 1.8-1.12. This value is ONLY to damage things like swords.");
 
         ib.setItem(10, everything);
         ib.setItem(11, item);
@@ -183,6 +203,7 @@ public class IGCItemEditor extends IGCMenu
         ib.setItem(25, attributes);
         ib.setItem(31, playerHead);
         ib.setItem(32, color);
+        ib.setItem(33, damage);
 
         ib.open();
         putInMenu();
@@ -254,15 +275,16 @@ public class IGCItemEditor extends IGCMenu
             case 25:
                 List<String> descriptors = new ArrayList<>();
                 List<ItemBuilder> builders = new ArrayList<>();
-                for(ItemFlag flag : ItemFlag.values())
+                for (ItemFlag flag : ItemFlag.values())
                 {
                     descriptors.add("");
-                    if(editableItem.getItemFlags().contains(flag))
+                    if (editableItem.getItemFlags().contains(flag))
                         builders.add(new ItemBuilder(DynamicMaterial.LIME_WOOL, 1));
                     else
                         builders.add(new ItemBuilder(DynamicMaterial.RED_WOOL, 1));
                 }
-                new IGCListSelector(getCc(), getP(), this, "Item Flags", Arrays.asList(ItemFlag.values()), DynamicMaterial.PAPER, 1,
+                new IGCListSelector(getCc(), getP(), this, "Item Flags", Arrays.asList(ItemFlag.values()),
+                        DynamicMaterial.PAPER, 1,
                         descriptors, builders).open();
                 break;
             case 31:
@@ -273,7 +295,7 @@ public class IGCItemEditor extends IGCMenu
                     ChatUtils.msgError(getP(), "The current item is not a player head or skull.");
                 break;
             case 32:
-                if(editableItem.isColorable())
+                if (editableItem.isColorable())
                 {
                     new IGCColoredArmour(getCc(), getP(), this, editableItem).open();
                 }
@@ -281,6 +303,10 @@ public class IGCItemEditor extends IGCMenu
                 {
                     ChatUtils.msgError(getP(), "The current item is not a colorable piece of armor");
                 }
+                break;
+            case 33:
+                new InputMenu(getCc(), getP(), "damage", editableItem.getDamage() + "", Integer.class, this);
+                break;
         }
     }
 
@@ -328,10 +354,23 @@ public class IGCItemEditor extends IGCMenu
                 ChatUtils.msgError(getP(), input + " is not a valid number.");
             }
         }
+        else if (value.equalsIgnoreCase("damage"))
+        {
+            if (Utils.isInt(input))
+            {
+                editableItem.setDamage(Integer.parseInt(input));
+                ChatUtils.msgSuccess(getP(), "Set the damage to " + input);
+                return true;
+            }
+            else
+            {
+                ChatUtils.msgError(getP(), input + " is not a valid number.");
+            }
+        }
         else if (value.equalsIgnoreCase("Item Flags"))
         {
             ItemFlag flag = ItemFlag.valueOf(input);
-            if(editableItem.getItemFlags().contains(flag))
+            if (editableItem.getItemFlags().contains(flag))
             {
                 editableItem.removeItemFlag(flag);
                 ChatUtils.msgSuccess(getP(), "Removed flag: " + flag.name());

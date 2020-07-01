@@ -61,6 +61,10 @@ public interface EditableItem
 
     void removeItemFlag(ItemFlag flag);
 
+    void setDamage(int damage);
+
+    int getDamage();
+
     /**
      * Clears all the currently set values and updates them based on the current itemstack.
      */
