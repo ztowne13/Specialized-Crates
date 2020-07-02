@@ -175,6 +175,8 @@ public class SpecializedCrates extends JavaPlugin
         Messages.clearCache();
         SQLQueryThread.sql_query.clear();
         SQLQueryThread.task_query.clear();
+
+        saveFilesTick();
     }
 
     public void saveEverything()
