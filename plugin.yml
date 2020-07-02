@@ -8,7 +8,7 @@ softdepend: [HolographicDisplays,IndividualHolograms,Holograms,Citizens,CMI,Plac
 commands:
   scrates:
     description: All commands for the specialized crates plugin.
-    aliases: [ccrates,crates,specializedcrates,sc,crate]
+    aliases: [ccrates,crates,specializedcrates,sc]
   keys:
     description: See how many virtual keys you have for your crates.
     aliases: [skeys,cratekey,cratekeys]

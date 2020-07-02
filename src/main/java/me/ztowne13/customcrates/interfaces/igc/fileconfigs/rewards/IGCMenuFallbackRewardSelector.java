@@ -136,6 +136,7 @@ public class IGCMenuFallbackRewardSelector extends IGCMenu
             String rName = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
             reward.setFallbackRewardName(rName);
             ChatUtils.msgSuccess(getP(), "Set the fallback reward to " + rName);
+            up();
         }
     }
 

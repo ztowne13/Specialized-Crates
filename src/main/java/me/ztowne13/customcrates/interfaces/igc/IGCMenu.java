@@ -14,6 +14,8 @@ import org.bukkit.entity.Player;
  */
 public abstract class IGCMenu
 {
+    static int GLOBAL_MIN = 9;
+
     SpecializedCrates cc;
     Player p;
 
@@ -91,12 +93,20 @@ public abstract class IGCMenu
 
     public InventoryBuilder createDefault(int slots)
     {
+        if(slots < GLOBAL_MIN)
+        {
+            slots = GLOBAL_MIN;
+        }
         ib = new InventoryBuilder(p, slots > 54 ? 54 : slots, inventoryName);
         return ib;
     }
 
     public InventoryBuilder createDefault(int slots, int minSlots)
     {
+        if(slots < GLOBAL_MIN)
+        {
+            slots = GLOBAL_MIN;
+        }
         if(slots > 54)
             slots = 54;
         ib = new InventoryBuilder(p, slots, inventoryName, minSlots);

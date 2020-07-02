@@ -201,6 +201,7 @@ public class NBTTagBuilder
             "HideFlags",
             "Potion",
             "StoredEnchantments",
+            "Damage",
 
             // Don't work
             "pages"
@@ -208,7 +209,6 @@ public class NBTTagBuilder
 
     private static String[] booleanTags = new String[]{
             "Unbreakable"
-
     };
 
     public static List<String> getFrom(ItemStack item, boolean ignoreExcluded)

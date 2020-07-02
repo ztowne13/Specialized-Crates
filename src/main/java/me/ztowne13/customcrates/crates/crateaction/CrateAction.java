@@ -46,7 +46,7 @@ public abstract class CrateAction
 
     public boolean useCrateHelper(PlayerManager pm, PlacedCrate cm, boolean skipAnimation, boolean hasSkipped, int opened)
     {
-        if(!useCrate(pm, cm, true, true, opened)) {
+        if(opened < 300 && !useCrate(pm, cm, true, true, opened)) {
             CrateOpenEvent crateOpenEvent = new CrateOpenEvent(player, null, cm.getCrate(), opened);
             Bukkit.getPluginManager().callEvent(crateOpenEvent);
             return false;

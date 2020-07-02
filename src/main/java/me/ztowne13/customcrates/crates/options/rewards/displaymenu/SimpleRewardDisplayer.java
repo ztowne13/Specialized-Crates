@@ -18,13 +18,13 @@ public class SimpleRewardDisplayer extends RewardDisplayer
     public void open(Player p)
     {
         p.openInventory(createInventory(p).getInv());
-        PlayerManager.get(getCrates().getCc(), p).setInRewardMenu(true);
+        PlayerManager.get(getCrate().getCc(), p).setInRewardMenu(true);
     }
 
     @Override
     public InventoryBuilder createInventory(Player p)
     {
-        CRewards cr = getCrates().getSettings().getRewards();
+        CRewards cr = getCrate().getSettings().getRewards();
         int amount = cr.getCrateRewards().length;
         int rows = amount % 9 == 0 ? amount / 9 : (amount / 9) + 1;
         InventoryBuilder ib = new InventoryBuilder(p, rows * 9, getInvName());
@@ -32,6 +32,11 @@ public class SimpleRewardDisplayer extends RewardDisplayer
         int i = 0;
         for (Reward r : crewards)
         {
+            if(i >= 54)
+            {
+                break;
+            }
+
             ib.setItem(i, r.getDisplayBuilder());
             i++;
         }

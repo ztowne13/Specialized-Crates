@@ -47,7 +47,7 @@ public class IGCMenuFallbackReward extends IGCMenu
         fallbackReward.addLore("&7Current Value:");
         fallbackReward.addLore("&7" + reward.getFallbackRewardName());
         fallbackReward.addLore("");
-        fallbackReward.addAutomaticLore("&f", 30, "if a player has the specified permission and wins this reward," +
+        fallbackReward.addAutomaticLore("&f", 30, "If a player has the specified permission and wins this reward," +
                 " they will receive this specified reward instead.");
 
         ib.setItem(2, fallbackPerm);

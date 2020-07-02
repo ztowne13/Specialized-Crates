@@ -71,6 +71,11 @@ public class ChatUtils
         msg(p, "&6&lInfo &e" + s);
     }
 
+    public static void msgHey(Player p, String s)
+    {
+        msg(p, "&6&lHey! &e" + s);
+    }
+
     public static String toChatColor(String s)
     {
         s = s.replaceAll("<!!special_chat_encoding!!>", "§");

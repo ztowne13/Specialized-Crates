@@ -7,10 +7,12 @@ import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 
 import java.util.ArrayList;
 
@@ -35,10 +37,38 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
     public void saveItem(FileHandler fileHandler, String prefix, boolean allowUnnamedItems)
     {
         FileConfiguration fc = fileHandler.get();
-        fc.set(prefix + ".material", DynamicMaterial.fromItemStack(getStack()).name());
+        short durability = getStack().getDurability();
+        try
+        {
+            DynamicMaterial dynMat = DynamicMaterial.fromItemStack(getStack());
+            fc.set(prefix + ".material", dynMat.name());
+            fc.set(prefix + ".damage",
+                    durability == 0 ||
+                                dynMat.data != 0 ||
+                            VersionUtils.Version.v1_13.isServerVersionOrLater()
+                            ? null : durability);
+        }
+        catch(Exception exc)
+        {
+            if(VersionUtils.Version.v1_12.isServerVersionOrEarlier())
+            {
+                getStack().setDurability((short) 0);
+                fc.set(prefix + ".material", DynamicMaterial.fromItemStack(getStack()).name());
+                fc.set(prefix + ".damage", durability);
+            }
+            else
+            {
+                exc.printStackTrace();
+            }
+        }
+
         fc.set(prefix + ".glow", isGlowing());
         fc.set(prefix + ".amount", getStack().getAmount());
         fc.set(prefix + ".player-head-name", getPlayerHeadName());
+        if(VersionUtils.Version.v1_13.isServerVersionOrLater() && im() instanceof Damageable)
+        {
+            fc.set(prefix + ".damage", ((Damageable)im()).getDamage());
+        }
 
         if(!hasDisplayName())
         {
@@ -112,6 +142,9 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         return loadItem(fileHandler, prefix, null, null, null, null, null, null, null);
     }
 
+    /*
+     * TODO: Add status logger event for 'damage'
+     */
     @Override
     public boolean loadItem(FileHandler fileHandler, String prefix, StatusLogger statusLogger, StatusLoggerEvent itemFailure,
                             StatusLoggerEvent improperEnchant, StatusLoggerEvent improperPotion,
@@ -121,6 +154,8 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         FileConfiguration fc = fileHandler.get();
 
         convertOldConfigurations(fileHandler, prefix);
+
+        short foundMaterialDurability = 0;
 
         // material
         if (!fc.contains(prefix + ".material"))
@@ -136,6 +171,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
             try
             {
                 DynamicMaterial dynamicMaterial = DynamicMaterial.fromString(mat);
+                foundMaterialDurability = (short)dynamicMaterial.data;
                 setStack(dynamicMaterial.parseItem());
 
                 if(dynamicMaterial.equals(DynamicMaterial.AIR))
@@ -151,6 +187,16 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
             }
         }
 
+
+        if(fc.contains(prefix + ".damage") && foundMaterialDurability == 0)
+        {
+            if (Utils.isInt(fc.getString(prefix + ".damage")))
+            {
+                int damage = Integer.parseInt(fc.getString(prefix + ".damage"));
+                setDamage(damage);
+            }
+        }
+
         // Name
         if (!fc.contains(prefix + ".name"))
         {
@@ -162,18 +208,6 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         if (fc.contains(prefix + ".lore"))
             for (String line : fc.getStringList(prefix + ".lore"))
                 addLore(line);
-
-        // Glow
-
-        if (fc.contains(prefix + ".glow"))
-        {
-            String unparsedGlow = fc.getString(prefix + ".glow");
-            if (Utils.isBoolean(unparsedGlow))
-                setGlowing(Boolean.parseBoolean(unparsedGlow));
-            else if (improperGlow != null)
-                improperGlow
-                        .log(statusLogger, new String[]{"The '" + prefix + ".glow' value is not a proper true/false value"});
-        }
 
         // Enchantments
         if (fc.contains(prefix + ".enchantments"))
@@ -192,6 +226,18 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
                                 " is not formatted enchant;level or either the enchant is not a valid enchantment or the level is not a number."});
                 }
             }
+        }
+
+        // Glow
+
+        if (fc.contains(prefix + ".glow") && getEnchantments().size() == 0)
+        {
+            String unparsedGlow = fc.getString(prefix + ".glow");
+            if (Utils.isBoolean(unparsedGlow))
+                setGlowing(Boolean.parseBoolean(unparsedGlow));
+            else if (improperGlow != null)
+                improperGlow
+                        .log(statusLogger, new String[]{"The '" + prefix + ".glow' value is not a proper true/false value"});
         }
 
         // Potion Effects

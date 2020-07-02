@@ -40,7 +40,7 @@ public class DisplayPage
         if(builders == null)
             buildFormat();
 
-        FileHandler fileHandler = customRewardDisplayer.getCrates().getSettings().getFileHandler();
+        FileHandler fileHandler = customRewardDisplayer.getCrate().getSettings().getFileHandler();
         FileConfiguration fc = fileHandler.get();
 
         ArrayList<String> format = new ArrayList<>();
@@ -102,7 +102,7 @@ public class DisplayPage
 
     public boolean load()
     {
-        FileHandler fileHandler = customRewardDisplayer.getCrates().getSettings().getFileHandler();
+        FileHandler fileHandler = customRewardDisplayer.getCrate().getSettings().getFileHandler();
         FileConfiguration fc = fileHandler.get();
 
         if (!fc.contains(PREFIX + "." + pageNum))
@@ -191,7 +191,7 @@ public class DisplayPage
 
         if(builder == null && open)
         {
-            final PlayerManager pm = PlayerManager.get(customRewardDisplayer.getCrates().getCc(), player);
+            final PlayerManager pm = PlayerManager.get(customRewardDisplayer.getCrate().getCc(), player);
             pm.setNextPageInventoryCloseGrace(pm.getCc().getTotalTicks() + 2);
 
             final Inventory inv = ib.getInv();
@@ -230,7 +230,7 @@ public class DisplayPage
                     }
                     else
                     {
-                        Reward reward = customRewardDisplayer.getCrates().getSettings().getRewards().getByName(symbol);
+                        Reward reward = customRewardDisplayer.getCrate().getSettings().getRewards().getByName(symbol);
                         if (reward != null)
                             rewards[x][y] = reward;
                     }
@@ -241,7 +241,7 @@ public class DisplayPage
 
     public void handleInput(Player player, int slot)
     {
-        SpecializedCrates sc = customRewardDisplayer.getCrates().getCc();
+        SpecializedCrates sc = customRewardDisplayer.getCrate().getCc();
         int x = slot / 9;
         sc.getDu().log("handleInput() - x: " + x, getClass());
         int y = slot % 9;
