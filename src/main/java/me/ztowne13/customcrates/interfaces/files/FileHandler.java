@@ -220,7 +220,7 @@ public class FileHandler
             getCc().getLogger().log(Level.SEVERE, "Could not save config to " + getDataFile(), ex);
         }
         cc.getDu().log("save() - Time to complete: " + (System.currentTimeMillis() - curTime), getClass());
-        if(DebugUtils.OUTPUT_SAVE_TIME)
+        if(DebugUtils.OUTPUT_FILE_SAVE_TIME)
         {
             ChatUtils.log("Time to save " + name + ": " + (System.currentTimeMillis() - curTime));
         }
