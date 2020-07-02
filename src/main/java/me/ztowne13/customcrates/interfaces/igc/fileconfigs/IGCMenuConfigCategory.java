@@ -3,10 +3,12 @@ package me.ztowne13.customcrates.interfaces.igc.fileconfigs;
 import me.ztowne13.customcrates.Settings;
 import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
+import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCListEditor;
+import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
@@ -18,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -134,9 +137,21 @@ public class IGCMenuConfigCategory extends IGCMenu
             else
             {
                 boolean isCollection = val instanceof Collection;
+                DynamicMaterial material;
+                if(val instanceof Collection)
+                {
+                    material = DynamicMaterial.LIGHT_BLUE_WOOL;
+                }
+                else if(settingsValue.getListValues() != null)
+                {
+                    material = DynamicMaterial.MAGENTA_WOOL;
+                }
+                else
+                {
+                    material = DynamicMaterial.ORANGE_WOOL;
+                }
 
-                ItemBuilder newBuilder =
-                        new ItemBuilder(!isCollection ? DynamicMaterial.ORANGE_WOOL : DynamicMaterial.LIGHT_GRAY_WOOL, 1);
+                ItemBuilder newBuilder = new ItemBuilder(material);
                 newBuilder.setDisplayName("&a" + settingsValue.getEasyName());
                 newBuilder.addLore("").addLore("&e" + settingsValue.getPath());
                 if (isCollection)
@@ -208,11 +223,39 @@ public class IGCMenuConfigCategory extends IGCMenu
 
             new InputMenu(getCc(), getP(), sv.getPath(), sv.getValue(getCc()).toString(), sv.getObj(), this, !sv.isWithColor());
         }
-        else if (DynamicMaterial.LIGHT_GRAY_WOOL.isSameMaterial(inv.getItem(slot)))
+        else if (DynamicMaterial.LIGHT_BLUE_WOOL.isSameMaterial(inv.getItem(slot)))
         {
             SettingsValue sv = SettingsValue.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(1));
             new IGCListEditor(getCc(), getP(), this, "inv-reward-item-lore", "Line", (List<String>) sv.getValue(getCc()),
                     DynamicMaterial.BOOK, 1).open();
+        }
+        else if (DynamicMaterial.MAGENTA_WOOL.isSameMaterial(inv.getItem(slot)))
+        {
+            SettingsValue sv = SettingsValue.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(1));
+
+            List<String> values;
+            List<String> descriptors;
+
+            if(sv.getListValues().length != 0){
+                values = Arrays.asList(sv.getListValues());
+                descriptors = Arrays.asList(sv.getListValueDescriptors());
+            }
+            else
+            {
+                values = new ArrayList<String>();
+                descriptors = new ArrayList<String>();
+                for(Crate crate : Crate.getLoadedCrates().values())
+                {
+                    if(crate.isMultiCrate())
+                    {
+                        values.add(crate.getName());
+                        descriptors.add("Set the " + crate.getName() + " crate to be the multicrate that opens when a player types /crates.");
+                    }
+                }
+            }
+
+            new IGCListSelector(getCc(), getP(), this, sv.getPath(), values,
+                    DynamicMaterial.BOOK, 1, descriptors).open();
         }
         else
         {

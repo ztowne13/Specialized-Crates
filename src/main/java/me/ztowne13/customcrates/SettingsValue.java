@@ -7,14 +7,36 @@ import java.util.List;
 
 public enum SettingsValue
 {
-    STORE_DATA("store-data", Category.GENERAL_SETTINGS, String.class, false, "FLATFILE", "Data Storage Type",
+    STORE_DATA("store-data", Category.GENERAL_SETTINGS, String.class,
+            new String[]{
+                    "FLATFILE",
+                    "MYSQL",
+                    "PLAYERFILES"
+            },
+            new String[]{
+                    "Stores all player data in a single file",
+                    "Stores all player data in a MySQL database. The connection info is defined in the MySQL.yml file",
+                    "Stores all player data in individual files for each player"
+            }
+            ,false, "FLATFILE", "Data Storage Type",
             new String[]{
                     "Set how would you like to store",
                     "player data. Options: FLATFILE,",
                     "MYSQL, or PLAYERFILES."
             }),
 
-    LOG_SUCCESSES("log-successes", Category.GENERAL_SETTINGS, String.class, false, "FAILURES", "Console Log Type",
+    LOG_SUCCESSES("log-successes", Category.GENERAL_SETTINGS, String.class,
+            new String[]{
+                    "EVERYTHING",
+                    "FAILURES",
+                    "NOTHING"
+            },
+            new String[]{
+                    "Logs both successfully loaded configuration data and the data that had issues",
+                    "Logs only the issues with the configuration files",
+                    "Logs nothing to console except the loaded crate names"
+            }
+            ,false, "FAILURES", "Console Log Type",
             new String[]{
                     "Set how much would you like to",
                     "be logged to console.",
@@ -209,7 +231,10 @@ public enum SettingsValue
                     "LORE."
             }),
 
-    CRATES_COMMAND_MULTICRATE("crates-command-multicrate", Category.VIRTUAL_CRATE_SETTINGS, String.class, false, "AllCrates",
+    CRATES_COMMAND_MULTICRATE("crates-command-multicrate", Category.VIRTUAL_CRATE_SETTINGS, String.class,
+            new String[]{},
+            new String[]{},
+            false, "AllCrates",
             "'/Crates' Crate Name",
             new String[]{
                     "The name of the crate that",
@@ -385,6 +410,9 @@ public enum SettingsValue
     boolean withColor;
     Category category;
 
+    String[] listValues = null;
+    String[] listValueDescriptors = null;
+
     SettingsValue(String path, Category category, Object obj, boolean withColor, Object defaultVal, String easyName,
                   String[] descriptor)
     {
@@ -395,6 +423,14 @@ public enum SettingsValue
         this.obj = obj;
         this.defaultVal = defaultVal;
         this.withColor = withColor;
+    }
+
+    SettingsValue(String path, Category category, Object obj, String[] listValues, String[] listValueDescriptors, boolean withColor, Object defaultVal, String easyName,
+                  String[] descriptor)
+    {
+        this(path, category, obj, withColor, defaultVal, easyName, descriptor);
+        this.listValueDescriptors = listValueDescriptors;
+        this.listValues = listValues;
     }
 
     public static SettingsValue getByPath(String s)
@@ -478,6 +514,16 @@ public enum SettingsValue
     public String getEasyName()
     {
         return easyName;
+    }
+
+    public String[] getListValues()
+    {
+        return listValues;
+    }
+
+    public String[] getListValueDescriptors()
+    {
+        return listValueDescriptors;
     }
 
     public enum Category
