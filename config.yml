@@ -27,6 +27,32 @@ store-data: FLATFILE
 #  NOTHING - Logs nothing at all to console.
 log-successes: FAILURES
 
+# When should player data be saved when using the FLATFILE data handler?
+#   Options: DISABLE, INTERVAL
+#   DISABLE: Player data is saved when the plugin is disabled (server stopped, reload, restart). This
+#     is the MOST efficient and least resource consuming but will result in data loss on crashes.
+#   INTERVAL: Player data is saved on an interval specified by 'data-save-interval' and ALSO when
+#     the plugin is disabled (server stopped, reload, restart). The player data is only saved on the
+#     interval if there has been a change. If nothing has been written to the file, it is not saved.
+#     This is the LEAST efficient method as a file is periodically saved to disk but is safest and is
+#     unlikely to lose data on crashes
+flatfile-save-method: INTERVAL
+
+# What should the interval, in SECONDS, be to save the player data?
+#   Note: If there is no new player data to save, it won't save - the interval is to check IF
+#   there is new information to be saved, and, if so, to save it.
+flatfile-save-interval: 300
+
+# What amount of history be kept for the player?
+#
+# Set to -1 to keep all player history and anything above that to keep that amount of most recent
+#   history data for a player. (i.e. if it was set to 20, the last 20 crates worth of data for a
+#   player would be kept - anything beyond that would be purged).
+#
+# Why purge old crate history data? The more data the player has to their name, the longer it takes
+#   to load their history, the more server resources that are consumed every time a player joins.
+player-history-limit: 500
+
 # Is the plugin in debug mode?
 debug: false
 

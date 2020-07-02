@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.players;
 
+import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.sql.SQLQueryThread;
@@ -117,8 +118,19 @@ public class PlayerDataManager
 
     public void parseAll()
     {
+        int historyLimit = (int) SettingsValue.PLAYER_HISTORY_LIMIT.getValue(getPm().getCc());
+        int count = 0;
+        String recreatedHistory = "";
         for (String unParsed : getHistory().split(","))
         {
+            recreatedHistory = (recreatedHistory.equalsIgnoreCase("") ? unParsed : recreatedHistory + "," + unParsed);
+            count++;
+            if(count > historyLimit && historyLimit >= 0)
+            {
+                setHistory(recreatedHistory, false);
+                break;
+            }
+
             if (!unParsed.equalsIgnoreCase(""))
             {
                 String[] split = unParsed.split(";");

@@ -55,6 +55,7 @@ public class SpecializedCrates extends JavaPlugin
 
     int tick = 0;
     int totalTicks = 0;
+    int saveFilesTick = 0;
     boolean allowTick = true;
     boolean onlyUseBuildInHolograms = true;
     boolean hasAttemptedReload = false;
@@ -176,7 +177,7 @@ public class SpecializedCrates extends JavaPlugin
         SQLQueryThread.sql_query.clear();
         SQLQueryThread.task_query.clear();
 
-        saveFilesTick();
+        saveFilesTick(false);
     }
 
     public void saveEverything()
@@ -368,7 +369,7 @@ public class SpecializedCrates extends JavaPlugin
             if (getTick() == 10)
             {
                 setTick(0);
-                saveFilesTick();
+                saveFilesTick(true);
 
                 for (Player p : Bukkit.getOnlinePlayers())
                 {
@@ -385,8 +386,17 @@ public class SpecializedCrates extends JavaPlugin
         }
     }
 
-    public void saveFilesTick()
+    public void saveFilesTick(boolean isInterval)
     {
+        saveFilesTick++;
+
+        String dataSaveType = SettingsValue.DATA_SAVE_METHOD.getValue(this).toString();
+        int saveInterVal = (int)SettingsValue.DATA_SAVE_INTERVAL.getValue(this);
+        if(isInterval && (dataSaveType.equalsIgnoreCase("DISABLE") || saveFilesTick % saveInterVal != 0))
+        {
+            return;
+        }
+
         if(FlatFileDataHandler.isToSave())
         {
             getDu().log("saveFilesTick() - Saving playerdata.db flat file");
@@ -616,5 +626,15 @@ public class SpecializedCrates extends JavaPlugin
     public void setTotalTicks(int totalTicks)
     {
         this.totalTicks = totalTicks;
+    }
+
+    public int getSaveFilesTick()
+    {
+        return saveFilesTick;
+    }
+
+    public void setSaveFilesTick(int saveFilesTick)
+    {
+        this.saveFilesTick = saveFilesTick;
     }
 }

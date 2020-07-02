@@ -400,6 +400,36 @@ public enum SettingsValue
             new String[]{
                     "Player's can deposit keys into the /crates",
                     "claim inventory in addition to withdraw keys"
+            }),
+
+    DATA_SAVE_METHOD("flatfile-data-save-method", Category.GENERAL_SETTINGS, String.class,
+            new String[]{
+                    "INTERVAL",
+                    "DISABLE"
+            },
+            new String[]{
+                    "If new player data needs to be saved, it is saved every X seconds, specified by 'data-save-interval' in addition to when the plugin is disabled." +
+                            " This is the least efficient as it periodically saves the file but safest as server crashes will be less likely to lead to data loss.",
+                    "Player data is only saved when the server is disabled (server restart, reload, etc.). This will lead to data loss on crashes but will be the best performance"
+            },
+            true, "INTERVAL", "FLATFILE Save Method",
+            new String[]{
+                    "If the datatype is FLATFILE, either INTERVAL where player data is saved periodically and on plugin disable to ensure no data loss but has worse performance, " +
+                            "or DISABLE where player data is saved only on plugin disable (server restart, reload, etc.) which will result in data loss on crashes " +
+                            "but has much better server performance."
+            }),
+
+    DATA_SAVE_INTERVAL("flatfile-save-interval", Category.GENERAL_SETTINGS, Integer.class, true, 300, "FLATFILE Save Interval",
+            new String[]{
+                    "If the data type is FLATFILE and 'data-save-method' is set to INTERVAL, this is the interval IN SECONDS that the data will be saved if there" +
+                            " is new data to be saved. If there is no new data to be saved, it won't waste time re-saving."
+            }),
+
+    PLAYER_HISTORY_LIMIT("player-history-limit", Category.GENERAL_SETTINGS, Integer.class, true, 500, "Player History Limit",
+            new String[]{
+                    "The maximum number of most recent history data points to store for a player. The lower the number, the less amount of history is stored " +
+                            "(which is bad if you want to track who opened what) but allows for greater plugin performance as loading player data is significantly " +
+                            "faster, putting less of a load on server resources."
             });
 
     String easyName;

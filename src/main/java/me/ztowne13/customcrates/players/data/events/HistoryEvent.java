@@ -67,7 +67,6 @@ public class HistoryEvent extends DataEvent
                 "&aOldest Entries\n" +
                 "      to\n" +
                 "&aNewest Entries\n\n");
-        ChatUtils.msg(sender, "&eHistory for " + toDisplay.getName());
 
         ArrayList<HistoryEvent> hevents =
                 (ArrayList<HistoryEvent>) PlayerManager.get(cc, toDisplay).getPdm().getHistoryEvents().clone();
@@ -75,6 +74,7 @@ public class HistoryEvent extends DataEvent
         Collections.reverse(hevents);
 
         amount = Math.min(amount, hevents.size());
+        ChatUtils.msg(sender, "&eHistory for " + toDisplay.getName() + " &7(Showing " + amount + "/" + hevents.size() + ")");
 
         for (int i = amount - 1; i >= 0; i--)
         {
