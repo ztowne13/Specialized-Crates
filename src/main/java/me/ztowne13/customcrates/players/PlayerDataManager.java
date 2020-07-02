@@ -10,6 +10,7 @@ import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.players.data.events.HistoryEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
+import me.ztowne13.customcrates.utils.DebugUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,6 +85,7 @@ public class PlayerDataManager
 
     public void loadAllInformationHelper()
     {
+        long curTime = System.currentTimeMillis();
         pm.getCc().getDu().log("loadAllInformationHelper() - CALL (" + pm.getP().getName() + ")", getClass());
         if (getDh().hasDataValue("history"))
         {
@@ -107,6 +109,10 @@ public class PlayerDataManager
         parseAll();
 
         loaded = true;
+        if(DebugUtils.OUTPUT_PLAYER_DATA_LOAD_TIME)
+        {
+            ChatUtils.log("Loaded " + getPm().getP().getName() + "'s data in " + (System.currentTimeMillis() - curTime) + "ms");
+        }
     }
 
     public void parseAll()
