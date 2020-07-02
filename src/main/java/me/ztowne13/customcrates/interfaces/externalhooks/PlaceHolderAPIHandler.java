@@ -7,6 +7,7 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
+import me.ztowne13.customcrates.players.data.VirtualCrateData;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.entity.Player;
 
@@ -53,6 +54,7 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
     public String onPlaceholderRequest(Player player, String identifier)
     {
         // %specializedcrates_virtual_keys_[cratename]%
+        // %specializedcrates_total_virtual_keys%
         // %specializedcrates_virtual_crates_[cratename]%
         // %specializedcrates_cooldown_[cratename]%
         // %specializedcrates_placedcrates%
@@ -99,11 +101,14 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
                     String formatted = "";
 
                     if (!values[0].equalsIgnoreCase("0"))
-                        formatted = formatted + values[0] + " " + Messages.PLACEHOLDER_DAYS.getPropperMsg(crate.getCc()) + ", ";
+                        formatted =
+                                formatted + values[0] + " " + Messages.PLACEHOLDER_DAYS.getPropperMsg(crate.getCc()) + ", ";
                     if (!values[1].equalsIgnoreCase("00"))
-                        formatted = formatted + values[1] + " " + Messages.PLACEHOLDER_HOURS.getPropperMsg(crate.getCc()) + ", ";
+                        formatted =
+                                formatted + values[1] + " " + Messages.PLACEHOLDER_HOURS.getPropperMsg(crate.getCc()) + ", ";
                     if (!values[2].equalsIgnoreCase("00"))
-                        formatted = formatted + values[2] + " " + Messages.PLACEHOLDER_MINUTES.getPropperMsg(crate.getCc()) + ", ";
+                        formatted = formatted + values[2] + " " + Messages.PLACEHOLDER_MINUTES.getPropperMsg(crate.getCc()) +
+                                ", ";
                     if (!values[3].equalsIgnoreCase("00"))
                         formatted = formatted + values[3] + " " + Messages.PLACEHOLDER_SECONDS.getPropperMsg(crate.getCc());
 //                    else
@@ -111,7 +116,10 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
 
                     return formatted.equals("") ? "0" : formatted;
                 }
-                catch(Exception exc) {exc.printStackTrace();}
+                catch (Exception exc)
+                {
+                    exc.printStackTrace();
+                }
             }
         }
         else if (args.length == 3)
@@ -133,7 +141,9 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
                     {
                         value = "" + playerDataManager.getVirtualCrateData().get(crate).getKeys();
                     }
-                    catch (Exception exc) {}
+                    catch (Exception exc)
+                    {
+                    }
 
                     return value;
                 }
@@ -145,7 +155,10 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
                     try
                     {
                         value = playerDataManager.getVirtualCrateData().get(crate).getCrates() + "";
-                    } catch (Exception exc) {}
+                    }
+                    catch (Exception exc)
+                    {
+                    }
 
                     return value;
                 }
@@ -166,10 +179,21 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion
 
                 Crate crate = Crate.getCrate(cc, args[2]);
 
-                if(args[1].equalsIgnoreCase("player"))
+                if (args[1].equalsIgnoreCase("player"))
                     return crate.getLastOpenedName();
-                else if(args[1].equalsIgnoreCase("reward"))
+                else if (args[1].equalsIgnoreCase("reward"))
                     return crate.getLastOpenedReward();
+            }
+            else if (args[0].equalsIgnoreCase("total") && args[1].equalsIgnoreCase("virtual") &&
+                    args[2].equalsIgnoreCase("keys"))
+            {
+                int total = 0;
+                for(VirtualCrateData virtualCrateData : playerDataManager.getVirtualCrateData().values())
+                {
+                    total += virtualCrateData.getKeys();
+                }
+
+                return total + "";
             }
         }
         else if (args.length == 4)
