@@ -130,6 +130,17 @@ public class AttemptCrateUseAction extends CrateAction
                     return true;
                 }
             }
+            else
+            {
+                if(CrateUtils.searchByCrate(player.getItemInHand(), true) != null)
+                {
+                    if (player.hasPermission("customcrates.place.bypass") || player.hasPermission("customcrates.admin") ||
+                            player.hasPermission("specializedcrates.place.bypass") || player.hasPermission("specializedcrates.admin"))
+                    {
+                        ChatUtils.msgError(player, "This crate is disabled either manually or due to an error and cannot be used.");
+                    }
+                }
+            }
         }
         return false;
     }
