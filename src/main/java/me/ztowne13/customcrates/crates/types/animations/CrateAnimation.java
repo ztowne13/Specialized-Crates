@@ -36,7 +36,7 @@ public abstract class CrateAnimation {
         this.prefix = animationType.getPrefixDotted();
         this.crate = crate;
         this.cc = crate.getCc();
-        this.fu = cc.getCrateconfigFile();
+        this.fu = cc.getCrateConfigFile();
     }
 
     /**

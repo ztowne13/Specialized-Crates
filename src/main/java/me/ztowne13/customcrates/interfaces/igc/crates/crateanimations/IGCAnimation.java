@@ -18,7 +18,7 @@ public abstract class IGCAnimation extends IGCMenu {
     public IGCAnimation(SpecializedCrates cc, Player p, IGCMenu lastMenu, String inventoryName, CrateAnimationType crateAnimationType) {
         super(cc, p, lastMenu, inventoryName);
         this.crateAnimationType = crateAnimationType;
-        this.fu = cc.getCrateconfigFile();
+        this.fu = cc.getCrateConfigFile();
         this.fc = fu.get();
     }
 

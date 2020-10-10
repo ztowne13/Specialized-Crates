@@ -29,7 +29,7 @@ public class IGCMenuCrateConfig extends IGCMenu {
     @Override
     public void openMenu() {
 
-        FileHandler fu = getCc().getCrateconfigFile();
+        FileHandler fu = getCc().getCrateConfigFile();
         FileConfiguration fc = fu.get();
 
         InventoryBuilder ib = createDefault(27);
@@ -68,7 +68,7 @@ public class IGCMenuCrateConfig extends IGCMenu {
                 up();
                 break;
             case 0:
-                getCc().getCrateconfigFile().save();
+                getCc().getCrateConfigFile().save();
                 ChatUtils.msgSuccess(getP(), "CrateConfig.YML saved!");
                 break;
             case 9:
@@ -101,7 +101,7 @@ public class IGCMenuCrateConfig extends IGCMenu {
         Object type = getInputMenu().getType();
         if (type == Double.class) {
             if (Utils.isDouble(input)) {
-                getCc().getCrateconfigFile().get().set(getPath(value), Double.valueOf(input));
+                getCc().getCrateConfigFile().get().set(getPath(value), Double.valueOf(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 return true;
             } else {
@@ -109,7 +109,7 @@ public class IGCMenuCrateConfig extends IGCMenu {
             }
         } else if (type == Integer.class) {
             if (Utils.isInt(input)) {
-                getCc().getCrateconfigFile().get().set(getPath(value), Integer.parseInt(input));
+                getCc().getCrateConfigFile().get().set(getPath(value), Integer.parseInt(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 return true;
             } else {
@@ -122,11 +122,11 @@ public class IGCMenuCrateConfig extends IGCMenu {
                     DynamicMaterial m = DynamicMaterial.fromString(input.toUpperCase());
                     if (Utils.isInt(split[1])) {
                         int id = Integer.parseInt(split[1]);
-                        List<String> currentList = getCc().getCrateconfigFile().get().contains(getPath(value.substring(4))) ?
-                                getCc().getCrateconfigFile().get().getStringList(getPath(value.substring(4))) :
+                        List<String> currentList = getCc().getCrateConfigFile().get().contains(getPath(value.substring(4))) ?
+                                getCc().getCrateConfigFile().get().getStringList(getPath(value.substring(4))) :
                                 new ArrayList<String>();
                         currentList.add(m.name() + ";" + id);
-                        getCc().getCrateconfigFile().get().set(getPath(value.substring(4)), currentList);
+                        getCc().getCrateConfigFile().get().set(getPath(value.substring(4)), currentList);
                         return true;
                     } else {
                         ChatUtils.msgError(getP(), split[1] + " is not a valid number.");
@@ -136,10 +136,10 @@ public class IGCMenuCrateConfig extends IGCMenu {
                 }
             } else if (value.equalsIgnoreCase("remove Roulette.random-blocks") ||
                     value.equalsIgnoreCase("remove CSGO.filler-blocks")) {
-                if (getCc().getCrateconfigFile().get().contains(getPath(value.substring(7)))) {
+                if (getCc().getCrateConfigFile().get().contains(getPath(value.substring(7)))) {
                     boolean found = false;
                     List<String> newList = new ArrayList<>();
-                    for (String s : getCc().getCrateconfigFile().get().getStringList(getPath(value.substring(7)))) {
+                    for (String s : getCc().getCrateConfigFile().get().getStringList(getPath(value.substring(7)))) {
                         if (s.equalsIgnoreCase(input)) {
                             found = true;
                         } else {
@@ -149,18 +149,18 @@ public class IGCMenuCrateConfig extends IGCMenu {
 
                     if (found) {
                         ChatUtils.msgSuccess(getP(), "Removed the " + input + " value.");
-                        getCc().getCrateconfigFile().get().set(getPath(value.substring(7)), newList);
+                        getCc().getCrateConfigFile().get().set(getPath(value.substring(7)), newList);
                         return true;
                     } else {
                         ChatUtils.msgError(getP(), input + " does not exist in the filler / random blocks: " +
-                                getCc().getCrateconfigFile().get().getStringList(getPath(value.substring(7))));
+                                getCc().getCrateConfigFile().get().getStringList(getPath(value.substring(7))));
                     }
                 } else {
                     ChatUtils.msgError(getP(), "No filler blocks currently exist to remove.");
                     return true;
                 }
             } else {
-                getCc().getCrateconfigFile().get().set(getPath(value), input);
+                getCc().getCrateConfigFile().get().set(getPath(value), input);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 return true;
             }
@@ -173,7 +173,7 @@ public class IGCMenuCrateConfig extends IGCMenu {
     }
 
     public String getValue(String crateType, String value) {
-        FileHandler fu = getCc().getCrateconfigFile();
+        FileHandler fu = getCc().getCrateConfigFile();
         FileConfiguration fc = fu.get();
         return fc.get("CrateType.Inventory." + crateType + "." + value).toString();
     }

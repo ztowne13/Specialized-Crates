@@ -71,13 +71,13 @@ public class Settings {
     }
 
     public void loadPlacedCrates() {
-        for (String s : getCc().getActivecratesFile().get().getKeys(false))
+        for (String s : getCc().getActiveCratesFile().get().getKeys(false))
             if (!loadCrateFromFile(s))
                 failedPlacedCrate.add(s);
     }
 
     public boolean loadCrateFromFile(String s) {
-        FileHandler activeCrates = getCc().getActivecratesFile();
+        FileHandler activeCrates = getCc().getActiveCratesFile();
         String crateName = activeCrates.get().getString(s + ".crate");
         Location l = LocationUtils.stringToLoc(s);
 

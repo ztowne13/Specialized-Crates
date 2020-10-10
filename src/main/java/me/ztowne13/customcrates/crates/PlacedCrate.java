@@ -67,8 +67,8 @@ public class PlacedCrate {
     }
 
     public void delete() {
-        getCc().getActivecratesFile().get().set(LocationUtils.locToString(getL()), null);
-        getCc().getActivecratesFile().save();
+        getCc().getActiveCratesFile().get().set(LocationUtils.locToString(getL()), null);
+        getCc().getActiveCratesFile().save();
         getHologram().getDh().delete();
         getCrate().getSettings().getPlaceholder().remove(this);
         getPlacedCrates().remove(getL());
@@ -76,14 +76,14 @@ public class PlacedCrate {
     }
 
     public void writeToFile() {
-        getCc().getActivecratesFile().get().set(LocationUtils.locToString(getL()) + ".crate", getCrate().getName());
-        getCc().getActivecratesFile().get().set(LocationUtils.locToString(getL()) + ".placedTime", getPlacedTime());
-        getCc().getActivecratesFile().save();
+        getCc().getActiveCratesFile().get().set(LocationUtils.locToString(getL()) + ".crate", getCrate().getName());
+        getCc().getActiveCratesFile().get().set(LocationUtils.locToString(getL()) + ".placedTime", getPlacedTime());
+        getCc().getActiveCratesFile().save();
     }
 
     public void rename(String newCrateName) {
-        getCc().getActivecratesFile().get().set(LocationUtils.locToString(getL()) + ".crate", newCrateName);
-        getCc().getActivecratesFile().save();
+        getCc().getActiveCratesFile().get().set(LocationUtils.locToString(getL()) + ".crate", newCrateName);
+        getCc().getActiveCratesFile().save();
     }
 
     public void setup(Crate crates, boolean writeToFile) {

@@ -12,7 +12,6 @@ import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.animations.block.OpenChestAnimation;
 import me.ztowne13.customcrates.interfaces.externalhooks.EconomyHandler;
-import me.ztowne13.customcrates.interfaces.externalhooks.MetricsLite;
 import me.ztowne13.customcrates.interfaces.externalhooks.PlaceHolderAPIHandler;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramInteractListener;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramManager;
@@ -27,6 +26,7 @@ import me.ztowne13.customcrates.players.data.FlatFileDataHandler;
 import me.ztowne13.customcrates.players.data.IndividualFileDataHandler;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.utils.*;
+import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -42,8 +42,8 @@ public class SpecializedCrates extends JavaPlugin {
     public static double count = 0;
     FileHandler messageFile;
     FileHandler rewardsFile;
-    FileHandler activecratesFile;
-    FileHandler crateconfigFile;
+    FileHandler activeCratesFile;
+    FileHandler crateConfigFile;
     FileHandler dataFile;
     FileHandler sqlFile;
     Settings settings;
@@ -72,9 +72,8 @@ public class SpecializedCrates extends JavaPlugin {
     }
 
     public void onEnable(boolean register) {
-        if (metricsLite == null && VersionUtils.Version.v1_8_R3.isServerVersionOrLater()) {
-            metricsLite = new MetricsLite(this);
-
+        if (metricsLite == null) {
+            metricsLite = new MetricsLite(this, 5642);
         }
         if (du == null) {
             du = new DebugUtils(this);
@@ -169,7 +168,7 @@ public class SpecializedCrates extends JavaPlugin {
     public void saveEverything() {
         messageFile.save();
         rewardsFile.save();
-        crateconfigFile.save();
+        crateConfigFile.save();
         settings.writeSettingsValues();
         for (Crate crate : Crate.getLoadedCrates().values()) {
             try {
@@ -187,8 +186,8 @@ public class SpecializedCrates extends JavaPlugin {
 
         setMessageFile(null);
         setRewardsFile(null);
-        setActivecratesFile(null);
-        setCrateconfigFile(null);
+        setActiveCratesFile(null);
+        setCrateConfigFile(null);
         setSettings(null);
         setDataFile(null);
         setSqlFile(null);
@@ -279,16 +278,16 @@ public class SpecializedCrates extends JavaPlugin {
 
     public void loadFiles() {
         setRewardsFile(new FileHandler(this, "Rewards.yml", true, false));
-        setActivecratesFile(new FileHandler(this, "ActiveCrates.db", false, false));
-        setCrateconfigFile(new FileHandler(this, "CrateConfig.yml", true, false));
+        setActiveCratesFile(new FileHandler(this, "ActiveCrates.db", false, false));
+        setCrateConfigFile(new FileHandler(this, "CrateConfig.yml", true, false));
         setMessageFile(new FileHandler(this, "Messages.yml", true, false));
         setDataFile(new FileHandler(this, "PluginData.db", false, false));
         setSqlFile(new FileHandler(this, "SQL.yml", true, false));
 
         getMessageFile().saveDefaults();
         getRewardsFile().saveDefaults();
-        getActivecratesFile().saveDefaults();
-        getCrateconfigFile().saveDefaults();
+        getActiveCratesFile().saveDefaults();
+        getCrateConfigFile().saveDefaults();
         getDataFile().saveDefaults();
         getSqlFile().saveDefaults();
     }
@@ -435,20 +434,20 @@ public class SpecializedCrates extends JavaPlugin {
         this.rewardsFile = rewardsFile;
     }
 
-    public FileHandler getActivecratesFile() {
-        return activecratesFile;
+    public FileHandler getActiveCratesFile() {
+        return activeCratesFile;
     }
 
-    public void setActivecratesFile(FileHandler activecratesFile) {
-        this.activecratesFile = activecratesFile;
+    public void setActiveCratesFile(FileHandler activeCratesFile) {
+        this.activeCratesFile = activeCratesFile;
     }
 
-    public FileHandler getCrateconfigFile() {
-        return crateconfigFile;
+    public FileHandler getCrateConfigFile() {
+        return crateConfigFile;
     }
 
-    public void setCrateconfigFile(FileHandler crateconfigFile) {
-        this.crateconfigFile = crateconfigFile;
+    public void setCrateConfigFile(FileHandler crateConfigFile) {
+        this.crateConfigFile = crateConfigFile;
     }
 
 
@@ -507,10 +506,6 @@ public class SpecializedCrates extends JavaPlugin {
 
     public boolean isUsingPlaceholderAPI() {
         return placeHolderAPIHandler != null;
-    }
-
-    public boolean isHasAttemptedReload() {
-        return hasAttemptedReload;
     }
 
     public boolean isParticlesEnabled() {
