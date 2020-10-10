@@ -109,7 +109,7 @@ public class NBTTagBuilder {
             if (value.startsWith("[") && value.endsWith("]")) {
                 Class<?> clazz = ReflectionUtilities.getNMSClass("MojangsonParser");
                 Object comp = clazz.getMethod("parse", String.class).invoke(clazz, "{" + key + ":" + value + "}");
-                Object nbtBase = ReflectionUtilities.getMethod(comp.getClass(), "get", new Class[]{String.class}).invoke(comp, key);
+                Object nbtBase = ReflectionUtilities.getMethod(comp.getClass(), "get", String.class).invoke(comp, key);
 
                 tagCompound.getClass().getMethod("set", String.class, ReflectionUtilities.getNMSClass("NBTBase"))
                         .invoke(tagCompound, key, nbtBase);

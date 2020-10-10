@@ -10,7 +10,7 @@ public class NMSChestState {
         try {
             Location location = chest.getLocation();
 
-            Class<?> craftWorldClass = (ReflectionUtilities.getOBCClass("CraftWorld"));
+            Class<?> craftWorldClass = ReflectionUtilities.getOBCClass("CraftWorld");
             Object craftWorld = craftWorldClass.cast(location.getWorld());
             Object world = ReflectionUtilities.getHandle(craftWorld);
 
@@ -19,15 +19,15 @@ public class NMSChestState {
                     .newInstance(location.getX(), location.getY(), location.getZ());
 
             Object iBlockData =
-                    ReflectionUtilities.getMethod(world.getClass(), "getType", new Class[]{blockPosition.getClass()})
+                    ReflectionUtilities.getMethod(world.getClass(), "getType", blockPosition.getClass())
                             .invoke(world, blockPosition);
             Object block =
-                    ReflectionUtilities.getMethod(iBlockData.getClass(), "getBlock", new Class[]{}).invoke(iBlockData);
+                    ReflectionUtilities.getMethod(iBlockData.getClass(), "getBlock").invoke(iBlockData);
 
 
             ReflectionUtilities.getMethod(world.getClass(), "playBlockAction",
-                    new Class[]{blockPosition.getClass(), ReflectionUtilities.getNMSClass("Block"), Integer.TYPE,
-                            Integer.TYPE}).invoke(world, blockPosition, block, 1, open ? 1 : 0);
+                    blockPosition.getClass(), ReflectionUtilities.getNMSClass("Block"), Integer.TYPE,
+                            Integer.TYPE).invoke(world, blockPosition, block, 1, open ? 1 : 0);
         } catch (Exception exc) {
             exc.printStackTrace();
         }

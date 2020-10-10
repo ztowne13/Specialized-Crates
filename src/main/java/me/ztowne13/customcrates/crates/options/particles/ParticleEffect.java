@@ -223,7 +223,7 @@ public enum ParticleEffect {
                         offsetZ, speed, count, new int[0]);
                 Object handle = ReflectionUtilities.getHandle(player);
                 Object connection = ReflectionUtilities.getField(handle.getClass(), "playerConnection").get(handle);
-                ReflectionUtilities.getMethod(connection.getClass(), "sendPacket", new Class[0]).invoke(connection, packet);
+                ReflectionUtilities.getMethod(connection.getClass(), "sendPacket").invoke(connection, packet);
             } catch (Exception e) {
                 throw new IllegalArgumentException("Unable to send Particle " + name() + ". (Version 1.8 / 1.9)");
             }
