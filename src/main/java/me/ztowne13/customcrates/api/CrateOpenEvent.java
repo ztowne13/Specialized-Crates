@@ -6,53 +6,45 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class CrateOpenEvent extends Event
-{
+public class CrateOpenEvent extends Event {
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 
-    private Crate crate;
-    private ArrayList<Reward> rewards;
-    private Player player;
-    private int openedCratesCount;
+    private final Crate crate;
+    private final List<Reward> rewards;
+    private final Player player;
+    private final int openedCratesCount;
 
-    public CrateOpenEvent(Player player, ArrayList<Reward> rewards, Crate crate, int openedCratesCount)
-    {
+    public CrateOpenEvent(Player player, List<Reward> rewards, Crate crate, int openedCratesCount) {
         this.player = player;
         this.rewards = rewards;
         this.crate = crate;
         this.openedCratesCount = openedCratesCount;
     }
 
-    @Override
-    public HandlerList getHandlers()
-    {
+    public static HandlerList getHandlerList() {
         return HANDLERS_LIST;
     }
 
-    public Crate getCrate()
-    {
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS_LIST;
+    }
+
+    public Crate getCrate() {
         return crate;
     }
 
-    public ArrayList<Reward> getRewards()
-    {
+    public List<Reward> getRewards() {
         return rewards;
     }
 
-    public Player getPlayer()
-    {
+    public Player getPlayer() {
         return player;
     }
 
-    public int getOpenedCratesCount()
-    {
+    public int getOpenedCratesCount() {
         return openedCratesCount;
-    }
-
-    public static HandlerList getHandlerList()
-    {
-        return HANDLERS_LIST;
     }
 }

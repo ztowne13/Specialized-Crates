@@ -8,81 +8,63 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by ztowne13 on 7/7/16.
  */
-public class UpdateChecker
-{
+public class UpdateChecker {
     SpecializedCrates cc;
     String latestVersion;
     boolean needsUpdate = false;
 
-    public UpdateChecker(SpecializedCrates cc)
-    {
+    public UpdateChecker(SpecializedCrates cc) {
         this.cc = cc;
 
-        if (Boolean.valueOf(cc.getSettings().getConfigValues().get("notify-updates").toString()))
-        {
+        if (Boolean.parseBoolean(cc.getSettings().getConfigValues().get("notify-updates").toString())) {
             updateMostRecentVersion();
         }
     }
 
-    public void updateMostRecentVersion()
-    {
-        Bukkit.getScheduler().runTaskAsynchronously(cc, new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                try
-                {
-                    HttpURLConnection con =
-                            (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
-                    con.setDoOutput(true);
-                    con.setRequestMethod("POST");
-                    con.getOutputStream()
-                            .write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=" + 9047)
-                                    .getBytes("UTF-8"));
-                    String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
-                    if (version.length() <= 7)
-                    {
-                        latestVersion = version;
-                    }
-                    updateNeedsUpdate();
+    public void updateMostRecentVersion() {
+        Bukkit.getScheduler().runTaskAsynchronously(cc, () -> {
+            try {
+                HttpURLConnection con =
+                        (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
+                con.setDoOutput(true);
+                con.setRequestMethod("POST");
+                con.getOutputStream()
+                        .write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=" + 9047)
+                                .getBytes(StandardCharsets.UTF_8));
+                String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+                if (version.length() <= 7) {
+                    latestVersion = version;
                 }
-                catch (Exception ex)
-                {
-                    ex.printStackTrace();
-                    ChatUtils.log("Failed to check for a update on spigot.");
-                }
+                updateNeedsUpdate();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                ChatUtils.log("Failed to check for a update on spigot.");
             }
         });
     }
 
-    public void updateNeedsUpdate()
-    {
+    public void updateNeedsUpdate() {
         String thisVersion = cc.getDescription().getVersion();
 
         String[] splitCurrent = latestVersion.split("\\.");
         String[] splitThis = thisVersion.split("\\.");
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             int currentI = splitCurrent.length <= i ? 0 : Integer.parseInt(splitCurrent[i]);
             int thisI = splitThis.length <= i ? 0 : Integer.parseInt(splitThis[i]);
 
-            if (currentI == thisI)
-            {
+            if (currentI == thisI) {
                 continue;
-            }
-            else if (currentI > thisI)
-            {
+            } else if (currentI > thisI) {
                 ChatUtils.log(new String[]{
                         "There is an update for Specialized Crates! You are currently on version " + thisVersion +
                                 " but an update for version " + latestVersion + " is available."});
                 //notifyPlayers();
                 needsUpdate = true;
-                return;
             }
             return; // If the plugin is a newer version
         }
@@ -107,23 +89,19 @@ public class UpdateChecker
 //        }
 //    }
 
-    public String getLatestVersion()
-    {
+    public String getLatestVersion() {
         return latestVersion;
     }
 
-    public void setLatestVersion(String latestVersion)
-    {
+    public void setLatestVersion(String latestVersion) {
         this.latestVersion = latestVersion;
     }
 
-    public boolean needsUpdate()
-    {
+    public boolean needsUpdate() {
         return needsUpdate;
     }
 
-    public void setNeedsUpdate(boolean needsUpdate)
-    {
+    public void setNeedsUpdate(boolean needsUpdate) {
         this.needsUpdate = needsUpdate;
     }
 }

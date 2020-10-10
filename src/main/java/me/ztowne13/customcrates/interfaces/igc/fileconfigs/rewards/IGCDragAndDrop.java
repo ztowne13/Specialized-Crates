@@ -18,16 +18,13 @@ import java.util.ArrayList;
 /**
  * Created by ztowne13 on 8/7/16.
  */
-public class IGCDragAndDrop extends IGCMenu
-{
-    public IGCDragAndDrop(SpecializedCrates cc, Player p, IGCMenu lastMenu)
-    {
+public class IGCDragAndDrop extends IGCMenu {
+    public IGCDragAndDrop(SpecializedCrates cc, Player p, IGCMenu lastMenu) {
         super(cc, p, lastMenu, "&4&lDrag and Drop");
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(54);
 
@@ -40,30 +37,22 @@ public class IGCDragAndDrop extends IGCMenu
     }
 
     @Override // For this menu it has been repurposed to be used as the "save" function
-    public void handleClick(int slot)
-    {
-        if(slot == 53)
-        {
-            for (int i = 0; i < getIb().getInv().getSize() - 2; i++)
-            {
+    public void handleClick(int slot) {
+        if (slot == 53) {
+            for (int i = 0; i < getIb().getInv().getSize() - 2; i++) {
                 ItemStack stack = getIb().getInv().getItem(i);
-                if (stack != null && !stack.getType().equals(Material.AIR))
-                {
+                if (stack != null && !stack.getType().equals(Material.AIR)) {
                     Utils.addItemAndDropRest(getP(), stack);
                 }
             }
             ChatUtils.msgInfo(getP(), "Added all items back to your inventory.");
             up();
-        }
-        else if(slot == 52)
-        {
+        } else if (slot == 52) {
             ArrayList<String> cmds = new ArrayList<>();
 
-            for (int i = 0; i < getIb().getInv().getSize() - 2; i++)
-            {
+            for (int i = 0; i < getIb().getInv().getSize() - 2; i++) {
                 ItemStack stack = getIb().getInv().getItem(i);
-                if (stack != null && !stack.getType().equals(Material.AIR))
-                {
+                if (stack != null && !stack.getType().equals(Material.AIR)) {
                     String rewardName = getNameFor(stack);
                     Reward r = new Reward(getCc(), rewardName);
 
@@ -86,11 +75,9 @@ public class IGCDragAndDrop extends IGCMenu
 
                     ItemBuilder builderToSet = new ItemBuilder(stack);
 
-                    if(builderToSet.getLore().isEmpty() || builderToSet.getLore().size() == 0)
-                    {
+                    if (builderToSet.getLore().isEmpty() || builderToSet.getLore().size() == 0) {
                         for (Object s : (ArrayList<String>) getCc().getSettings().getConfigValues()
-                                .get("inv-reward-item-lore"))
-                        {
+                                .get("inv-reward-item-lore")) {
                             builderToSet.addLore(s.toString());
                         }
 
@@ -108,13 +95,11 @@ public class IGCDragAndDrop extends IGCMenu
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         return false;
     }
 
-    public String getNameFor(ItemStack stack)
-    {
+    public String getNameFor(ItemStack stack) {
 
         String rewardName = ChatUtils.removeColor(
                 stack.hasItemMeta() && stack.getItemMeta().hasDisplayName() ? stack.getItemMeta().getDisplayName() :
@@ -122,11 +107,9 @@ public class IGCDragAndDrop extends IGCMenu
         rewardName = rewardName.replaceAll(" ", "_");
 
         int i = 0;
-        while (true)
-        {
+        while (true) {
             String name = rewardName + (i == 0 ? "" : i);
-            if (!CRewards.rewardNameExists(getCc(), name))
-            {
+            if (!CRewards.rewardNameExists(getCc(), name)) {
 
                 return name;
             }

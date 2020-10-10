@@ -20,16 +20,13 @@ import org.bukkit.entity.Player;
  * minimum-rewards: 1
  * maximum-rewards: 8
  */
-public class IGCAnimMenu extends IGCAnimation
-{
-    public IGCAnimMenu(SpecializedCrates cc, Player p, IGCMenu lastMenu)
-    {
+public class IGCAnimMenu extends IGCAnimation {
+    public IGCAnimMenu(SpecializedCrates cc, Player p, IGCMenu lastMenu) {
         super(cc, p, lastMenu, "&7&l> &6&lMenu Animation", CrateAnimationType.INV_MENU);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(9);
 
@@ -57,10 +54,8 @@ public class IGCAnimMenu extends IGCAnimation
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 0:
                 up();
                 break;
@@ -84,24 +79,17 @@ public class IGCAnimMenu extends IGCAnimation
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         Object type = getInputMenu().getType();
-        if (type == Integer.class)
-        {
-            if (Utils.isInt(input))
-            {
+        if (type == Integer.class) {
+            if (Utils.isInt(input)) {
                 fc.set(getPath(value), Integer.parseInt(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This is not a valid number, please try again.");
             }
-        }
-        else
-        {
+        } else {
             fc.set(getPath(value), input);
             ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
             return true;

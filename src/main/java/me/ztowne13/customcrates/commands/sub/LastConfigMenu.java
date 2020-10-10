@@ -8,24 +8,18 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 6/23/16.
  */
-public class LastConfigMenu extends SubCommand
-{
-    public LastConfigMenu()
-    {
+public class LastConfigMenu extends SubCommand {
+    public LastConfigMenu() {
         super("!", 1, "");
     }
 
     @Override
-    public boolean run(SpecializedCrates cc, Commands cmds, String[] args)
-    {
+    public boolean run(SpecializedCrates cc, Commands cmds, String[] args) {
         Player p = (Player) cmds.getCmdSender();
-        try
-        {
+        try {
             PlayerManager.get(cc, p).getLastOpenMenu().open();
             cmds.msgSuccess("Opened last crate config page.");
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             p.chat("/scrates config");
         }
         return true;

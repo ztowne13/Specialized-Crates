@@ -19,33 +19,27 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class CParticles extends CSetting
-{
-    private HashMap<String, ArrayList<ParticleData>> particles = new HashMap<String, ArrayList<ParticleData>>();
+public class CParticles extends CSetting {
+    private Map<String, List<ParticleData>> particles = new HashMap<>();
 
-    public CParticles(Crate crates)
-    {
+    public CParticles(Crate crates) {
         super(crates, crates.getCc());
     }
 
     @Override
-    public void loadFor(CrateSettingsBuilder csb, CrateState cstate)
-    {
-        if (csb.hasV(cstate.name().toLowerCase() + ".particles"))
-        {
+    public void loadFor(CrateSettingsBuilder csb, CrateState cstate) {
+        if (csb.hasV(cstate.name().toLowerCase() + ".particles")) {
             parseAndAddParticles(cstate.name().toUpperCase(),
                     cstate.name().toLowerCase() + ".particles");
         }
 
-        if (cstate.equals(CrateState.OPEN))
-        {
-            if (csb.hasV("open.crate-tiers"))
-            {
-                for (String id : getCrate().getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false))
-                {
-                    if (csb.hasV("open.crate-tiers." + id + ".particles"))
-                    {
+        if (cstate.equals(CrateState.OPEN)) {
+            if (csb.hasV("open.crate-tiers")) {
+                for (String id : getCrate().getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false)) {
+                    if (csb.hasV("open.crate-tiers." + id + ".particles")) {
                         parseAndAddParticles(id, "open.crate-tiers." + id + ".particles");
                     }
                 }
@@ -53,39 +47,32 @@ public class CParticles extends CSetting
         }
     }
 
-    public void saveToFile()
-    {
+    public void saveToFile() {
         if (!particles.isEmpty())
-            for (String tier : particles.keySet())
-                for (ParticleData pd : particles.get(tier))
-                    pd.save(getFileHandler(), getPath(tier));
+            for (Map.Entry<String, List<ParticleData>> entry : particles.entrySet())
+                for (ParticleData pd : entry.getValue())
+                    pd.save(getFileHandler(), getPath(entry.getKey()));
     }
 
-    public void deleteParticle(String tier, ParticleData pd)
-    {
+    public void deleteParticle(String tier, ParticleData pd) {
         getParticles().get(tier).remove(pd);
         getFileHandler().get().set(getPath(tier) + "." + pd.getName(), null);
     }
 
-    public void addParticle(ParticleData pd, String s)
-    {
-        ArrayList<ParticleData> plist =
-                getParticles().containsKey(s) ? getParticles().get(s) : new ArrayList<ParticleData>();
+    public void addParticle(ParticleData pd, String s) {
+        List<ParticleData> plist = getParticles().getOrDefault(s, new ArrayList<>());
         plist.add(pd);
         StatusLoggerEvent.PARTICLE_ADD_SUCCESS.log(getCrate(), new String[]{pd.getParticleName()});
         getParticles().put(s, plist);
     }
 
-    public void parseAndAddParticles(String id, String path)
-    {
+    public void parseAndAddParticles(String id, String path) {
         SettingsConverter.convertParticles(getFileHandler(), path);
 
         FileConfiguration fc = getFileHandler().get();
 
-        try
-        {
-            for (String parent : getFileHandler().get().getConfigurationSection(path).getValues(false).keySet())
-            {
+        try {
+            for (String parent : getFileHandler().get().getConfigurationSection(path).getValues(false).keySet()) {
                 String particleTypeAS = getFileHandler().get().getString(path + "." + parent + ".type");
                 String rangeXAS = fc.getString(path + "." + parent + ".range-x");
                 String rangeYAS = fc.getString(path + "." + parent + ".range-y");
@@ -102,32 +89,22 @@ public class CParticles extends CSetting
                 String colorEnabled = fc.getString(path + "." + parent + ".color.enabled");
                 String redstoneSize = fc.getString(path + "." + parent + ".redstone-size");
 
-                try
-                {
+                try {
                     ParticleData pd;
 
-                    if (VersionUtils.Version.v1_9.isServerVersionOrEarlier())
-                    {
-                        ParticleEffect pe = null;
-                        try
-                        {
+                    if (VersionUtils.Version.v1_9.isServerVersionOrEarlier()) {
+                        ParticleEffect pe;
+                        try {
                             pe = ParticleEffect.valueOf(particleTypeAS);
-                        }
-                        catch (Exception exc)
-                        {
+                        } catch (Exception exc) {
                             StatusLoggerEvent.PARTICLE_INVALID.log(getCrate(), new String[]{parent, particleTypeAS});
                             continue;
                         }
                         pd = new NMSParticleEffect(getSc(), pe, parent, false);
-                    }
-                    else
-                    {
-                        try
-                        {
+                    } else {
+                        try {
                             pd = new BukkitParticleEffect(getSc(), particleTypeAS, parent, false);
-                        }
-                        catch (Exception exc)
-                        {
+                        } catch (Exception exc) {
                             StatusLoggerEvent.PARTICLE_INVALID.log(getCrate(), new String[]{parent, particleTypeAS});
                             continue;
                         }
@@ -135,56 +112,52 @@ public class CParticles extends CSetting
 
                     // Load default values - these must be correct for particles to work.
 
-                    pd.setRangeX(Float.valueOf(rangeXAS));
-                    pd.setRangeY(Float.valueOf(rangeYAS));
-                    pd.setRangeZ(Float.valueOf(rangeZAS));
-                    pd.setSpeed(Float.valueOf(speedAS));
-                    pd.setAmount(Integer.valueOf(amountAS));
+                    pd.setRangeX(Float.parseFloat(rangeXAS));
+                    pd.setRangeY(Float.parseFloat(rangeYAS));
+                    pd.setRangeZ(Float.parseFloat(rangeZAS));
+                    pd.setSpeed(Float.parseFloat(speedAS));
+                    pd.setAmount(Integer.parseInt(amountAS));
 
                     // Loading option values
 
                     // center x
-                    try
-                    {
-                        pd.setCenterX(Float.valueOf(centerXAS));
-                    } catch (Exception exc) { }
+                    try {
+                        pd.setCenterX(Float.parseFloat(centerXAS));
+                    } catch (Exception exc) {
+                    }
 
                     // center y
-                    try
-                    {
-                        pd.setCenterY(Float.valueOf(centerYAS));
-                    } catch (Exception exc) { }
+                    try {
+                        pd.setCenterY(Float.parseFloat(centerYAS));
+                    } catch (Exception exc) {
+                    }
 
                     // center z
-                    try
-                    {
-                        pd.setCenterZ(Float.valueOf(centerZAS));
-                    } catch (Exception exc) { }
+                    try {
+                        pd.setCenterZ(Float.parseFloat(centerZAS));
+                    } catch (Exception exc) {
+                    }
 
                     // colors
-                    try
-                    {
+                    try {
                         pd.setColorRed(Integer.parseInt(colorRed));
                     } catch (Exception exc) {
                         pd.setColorRed(255);
                     }
 
-                    try
-                    {
+                    try {
                         pd.setColorBlue(Integer.parseInt(colorBlue));
-                    } catch(Exception exc) {
+                    } catch (Exception exc) {
                         pd.setColorBlue(0);
                     }
 
-                    try
-                    {
+                    try {
                         pd.setColorGreen(Integer.parseInt(colorGreen));
-                    } catch(Exception exc) {
+                    } catch (Exception exc) {
                         pd.setColorGreen(0);
                     }
 
-                    try
-                    {
+                    try {
                         pd.setColorEnabled(Boolean.parseBoolean(colorEnabled));
                     } catch (Exception exc) {
                         pd.setColorEnabled(false);
@@ -192,22 +165,18 @@ public class CParticles extends CSetting
 
                     float size;
 
-                    try
-                    {
+                    try {
                         size = Float.parseFloat(redstoneSize);
 
-                        if(size <= 0)
+                        if (size <= 0)
                             size = 1;
-                    } catch(Exception exc)
-                    {
+                    } catch (Exception exc) {
                         size = 1;
                     }
 
                     // Redstone info
-                    try
-                    {
-                        if(VersionUtils.Version.v1_13.isServerVersionOrLater() && particleTypeAS.equalsIgnoreCase("REDSTONE"))
-                        {
+                    try {
+                        if (VersionUtils.Version.v1_13.isServerVersionOrLater() && particleTypeAS.equalsIgnoreCase("REDSTONE")) {
                             pd.setHasColor(true);
                             pd.setColorEnabled(true);
 
@@ -222,69 +191,50 @@ public class CParticles extends CSetting
                         exc.printStackTrace();
                     }
 
-                    try
-                    {
+                    try {
                         PEAnimationType peAnimationType = PEAnimationType.valueOf(animationAS);
-                        if (!peAnimationType.equals(peAnimationType.NONE))
-                        {
+                        if (!peAnimationType.equals(PEAnimationType.NONE)) {
                             // This is to default the particle animation speed and particle count so it doesn't appear broken
-                            if(pd.getSpeed() < 3)
-                            {
+                            if (pd.getSpeed() < 3) {
                                 pd.setSpeed(20);
                             }
-                            if(pd.getAmount() == 0)
-                            {
+                            if (pd.getAmount() == 0) {
                                 pd.setAmount(1);
                             }
 
                             pd.setParticleAnimationEffect(peAnimationType.getAnimationEffectInstance(cc, pd));
                             pd.setHasAnimation(true);
                         }
-                    }
-                    catch (Exception exc)
-                    {
+                    } catch (Exception exc) {
                         StatusLoggerEvent.PARTICLE_ANIMATION_INVALID.log(getCrate(), new String[]{animationAS});
                     }
 
                     addParticle(pd, id);
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     exc.printStackTrace();
                     StatusLoggerEvent.PARTICLE_STRING_INVALID.log(getCrate(), new String[]{parent});
                 }
             }
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             exc.printStackTrace();
         }
     }
 
-    public void runAll(Location l, CrateState cs, ArrayList<Reward> rewards)
-    {
-        ArrayList<ParticleData> alreadyUpdatedAnimations = cc.getAlreadyUpdated();
-        for (String id : getParticles().keySet())
-        {
-            if (cs.equals(CrateState.PLAY))
-            {
-                if (cs.name().toUpperCase().equalsIgnoreCase(id))
-                {
-                    for (ParticleData pd : getParticles().get(id))
-                    {
-                        if (pd.isHasAnimation())
-                        {
+    public void runAll(Location l, CrateState cs, List<Reward> rewards) {
+        List<ParticleData> alreadyUpdatedAnimations = cc.getAlreadyUpdated();
+        for (String id : getParticles().keySet()) {
+            if (cs.equals(CrateState.PLAY)) {
+                if (cs.name().toUpperCase().equalsIgnoreCase(id)) {
+                    for (ParticleData pd : getParticles().get(id)) {
+                        if (pd.isHasAnimation()) {
                             //PEAnimationType peAnimationType = PEAnimationType.getFromParticleAnimationEffect(pd.getParticleAnimationEffect());
-                            if (!alreadyUpdatedAnimations.contains(pd))
-                            {
+                            if (!alreadyUpdatedAnimations.contains(pd)) {
                                 pd.getParticleAnimationEffect().update();
                                 alreadyUpdatedAnimations.add(pd);
                             }
                             //System.out.println("has animation");
                             pd.getParticleAnimationEffect().display(l);
-                        }
-                        else
-                        {
+                        } else {
                             //System.out.println("does not have an animation");
                             pd.display(l);
                         }
@@ -294,23 +244,17 @@ public class CParticles extends CSetting
             }
 
             if ((id.equalsIgnoreCase(cs.name().toUpperCase()) && (!getSettings().isTiersOverrideDefaults() || rewards.isEmpty() ||
-                    !getParticles().keySet().contains(rewards.get(0).getRarity().toUpperCase()))) ||
-                    (!rewards.isEmpty() && rewards.get(0).getRarity().equalsIgnoreCase(id)))
-            {
-                for (ParticleData pd : getParticles().get(id))
-                {
-                    if (pd.isHasAnimation())
-                    {
+                    !getParticles().containsKey(rewards.get(0).getRarity().toUpperCase()))) ||
+                    (!rewards.isEmpty() && rewards.get(0).getRarity().equalsIgnoreCase(id))) {
+                for (ParticleData pd : getParticles().get(id)) {
+                    if (pd.isHasAnimation()) {
                         //PEAnimationType peAnimationType = PEAnimationType.getFromParticleAnimationEffect(pd.getParticleAnimationEffect());
-                        if (!alreadyUpdatedAnimations.contains(pd))
-                        {
+                        if (!alreadyUpdatedAnimations.contains(pd)) {
                             pd.getParticleAnimationEffect().update();
                             alreadyUpdatedAnimations.add(pd);
                         }
                         pd.getParticleAnimationEffect().display(l);
-                    }
-                    else
-                    {
+                    } else {
                         pd.display(l);
                     }
                 }
@@ -318,20 +262,17 @@ public class CParticles extends CSetting
         }
     }
 
-    public String getPath(String tier)
-    {
+    public String getPath(String tier) {
         return (tier.equalsIgnoreCase("PLAY") ? "play." : "open.") +
                 (tier.equalsIgnoreCase("open") || tier.equalsIgnoreCase("play") ? "" : "crate-tiers." + tier + ".") +
                 "particles";
     }
 
-    public HashMap<String, ArrayList<ParticleData>> getParticles()
-    {
+    public Map<String, List<ParticleData>> getParticles() {
         return particles;
     }
 
-    public void setParticles(HashMap<String, ArrayList<ParticleData>> particles)
-    {
+    public void setParticles(Map<String, List<ParticleData>> particles) {
         this.particles = particles;
     }
 

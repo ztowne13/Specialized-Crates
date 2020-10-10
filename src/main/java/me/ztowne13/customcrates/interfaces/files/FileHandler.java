@@ -7,16 +7,16 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
-public class FileHandler
-{
+public class FileHandler {
 
-    static HashMap<String, FileHandler> map = new HashMap<String, FileHandler>();
+    static Map<String, FileHandler> map = new HashMap<>();
 
     String name;
     String directory = "";
@@ -34,8 +34,7 @@ public class FileHandler
     private File dataFile = null;
 
     public FileHandler(SpecializedCrates cc, String name, String directory, boolean canBeEdited, boolean saveWithCustomSave,
-                       boolean newFile)
-    {
+                       boolean newFile) {
         this.name = name;
         this.cc = cc;
         this.directory = directory;
@@ -48,8 +47,7 @@ public class FileHandler
         map.put(name, this);
     }
 
-    public FileHandler(SpecializedCrates cc, String name, boolean canBeEdited, boolean saveWithCustomSave)
-    {
+    public FileHandler(SpecializedCrates cc, String name, boolean canBeEdited, boolean saveWithCustomSave) {
         this.name = name;
         this.canBeEdited = canBeEdited;
         this.cc = cc;
@@ -60,26 +58,32 @@ public class FileHandler
         map.put(name, this);
     }
 
-    public void loadFile()
-    {
+    public static void clearLoaded() {
+        map.clear();
+        map = new HashMap<>();
+    }
+
+    public static Map<String, FileHandler> getMap() {
+        return map;
+    }
+
+    public static void setMap(Map<String, FileHandler> map) {
+        FileHandler.map = map;
+    }
+
+    public void loadFile() {
         cc.getDu().log("loadFile() - CALL", getClass(), false);
 
-        if (getDataFile() == null)
-        {
+        if (getDataFile() == null) {
             setDataFile(new File(new File(getCc().getDataFolder().getPath() + getDirectory()), getName()));
 
-            if (getName().equalsIgnoreCase("Messages.yml"))
-            {
-                if (!folderExists("Crates"))
-                {
+            if (getName().equalsIgnoreCase("Messages.yml")) {
+                if (!folderExists("Crates")) {
                     new File(getCc().getDataFolder().getPath() + getDirectory()).mkdir();
 
-                    try
-                    {
+                    try {
                         getCc().firstLoadFiles();
-                    }
-                    catch (Exception exc)
-                    {
+                    } catch (Exception exc) {
                         exc.printStackTrace();
                     }
 
@@ -88,49 +92,37 @@ public class FileHandler
         }
     }
 
-    public void reload()
-    {
+    public void reload() {
         cc.getDu().log("reload() - CALL", getClass(), false);
 
         loadFile();
 
-        try
-        {
+        try {
             data = YamlConfiguration.loadConfiguration(getDataFile());
 
-            if (canBeEdited)
-            {
+            if (canBeEdited) {
                 if (data.saveToString() != null &&
-                        (name.equalsIgnoreCase("Rewards.YML") || !data.saveToString().equalsIgnoreCase("")))
-                {
+                        (name.equalsIgnoreCase("Rewards.YML") || !data.saveToString().equalsIgnoreCase(""))) {
                     File defConfigFile = new File(getCc().getDataFolder(), getName());
-                    if (defConfigFile.exists())
-                    {
+                    if (defConfigFile.exists()) {
                         YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigFile);
                         getData().setDefaults(defConfig);
                     }
 
 
-                    if (isCanBeEdited())
-                    {
+                    if (isCanBeEdited()) {
                         loadByByte();
                     }
 
                     properLoad = true;
-                }
-                else
-                {
+                } else {
                     if (!newFile)
                         throw new NullPointerException("Failed to load the file " + getName());
                 }
-            }
-            else
-            {
+            } else {
                 properLoad = true;
             }
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             exc.printStackTrace();
             ChatUtils.log(new String[]{"Failed to load the " + name +
                     " file due to a critical error. Please fix the file and restart your server.",
@@ -139,130 +131,96 @@ public class FileHandler
         }
     }
 
-    private void loadByByte()
-    {
+    private void loadByByte() {
         cc.getDu().log("loadByByte() - CALL", getClass(), false);
 
-        if (saveWithCustomSave)
-        {
-            try
-            {
+        if (saveWithCustomSave) {
+            try {
                 FileInputStream fileInputSteamBefore = new FileInputStream(getDataFile());
-                InputStreamReader fileInputSteam = new InputStreamReader(fileInputSteamBefore, Charset.forName("UTF-8"));
+                InputStreamReader fileInputSteam = new InputStreamReader(fileInputSteamBefore, StandardCharsets.UTF_8);
 
                 setLoaded("");
 
                 int content;
-                while ((content = fileInputSteam.read()) != -1)
-                {
+                while ((content = fileInputSteam.read()) != -1) {
                     setLoaded(getLoaded() + ((char) content));
                 }
 
                 getData().loadFromString(getLoaded());
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
 
             }
         }
     }
 
-    public boolean folderExists(String path)
-    {
-        try
-        {
-            for (File file : getCc().getDataFolder().listFiles())
-            {
-                if (file.isDirectory() && file.getName().equalsIgnoreCase(path.replace("/", "")))
-                {
+    public boolean folderExists(String path) {
+        try {
+            for (File file : getCc().getDataFolder().listFiles()) {
+                if (file.isDirectory() && file.getName().equalsIgnoreCase(path.replace("/", ""))) {
                     return true;
                 }
             }
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
 
         }
         return false;
     }
 
-    public void save()
-    {
+    public void save() {
         cc.getDu().log("save() - CALL", getClass(), false);
         long curTime = System.currentTimeMillis();
 
-        if (getData() == null || getDataFile() == null)
-        {
+        if (getData() == null || getDataFile() == null) {
             return;
         }
 
-        try
-        {
-            if (properLoad || newFile)
-            {
-                if (!isSaveWithCustomSave() || newFile)
-                {
+        try {
+            if (properLoad || newFile) {
+                if (!isSaveWithCustomSave() || newFile) {
                     get().save(getDataFile());
-                }
-                else
-                {
+                } else {
                     saveByByte();
                 }
-            }
-            else
-            {
+            } else {
                 ChatUtils.log(name + " file not saving to prevent it from further damage.");
             }
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
-            getCc().getLogger().log(Level.SEVERE, "Could not save config to " + getDataFile(), ex);
+            getCc().getLogger().log(Level.SEVERE, ex, () -> "Could not save config to " + getDataFile());
         }
         cc.getDu().log("save() - Time to complete: " + (System.currentTimeMillis() - curTime), getClass());
-        if(DebugUtils.OUTPUT_FILE_SAVE_TIME)
-        {
+        if (DebugUtils.OUTPUT_FILE_SAVE_TIME) {
             ChatUtils.log("Time to save " + name + ": " + (System.currentTimeMillis() - curTime));
         }
     }
 
-
-
-    private void saveByByte()
-    {
+    private void saveByByte() {
         cc.getDu().log("saveByByte() - CALL", getClass(), false);
         ArrayList<String> bukkitLoad = new ArrayList<>();
-        for (String s : getData().saveToString().split("\n"))
-        {
-            if (!isCommentLine(s))
-            {
+        for (String s : getData().saveToString().split("\n")) {
+            if (!isCommentLine(s)) {
                 bukkitLoad.add(s);
             }
         }
 
         ArrayList<String> byteLoad = new ArrayList<>(Arrays.asList(getLoaded().split("\n")));
 
-        String modifiedString = "";
+        StringBuilder modifiedString = new StringBuilder();
 
-        HashMap<String, Integer> lastLevel = new HashMap<String, Integer>();
+        HashMap<String, Integer> lastLevel = new HashMap<>();
 
-        for (String s : bukkitLoad)
-        {
-            String commentSec = "";
+        for (String s : bukkitLoad) {
+            StringBuilder commentSec = new StringBuilder();
             String without = ChatUtils.stripFromWhitespace(s);
 
-            if (!isCommentLine(s))
-            {
+            if (!isCommentLine(s)) {
                 String[] split1 = without.split(":");
 
                 int id = 0;
                 int currentLevel = 0;
-                for (String bks : byteLoad)
-                {
-                    if (ChatUtils.stripFromWhitespace(bks).split(":")[0].equals(split1[0]))
-                    {
-                        if (!lastLevel.containsKey(split1[0]) || lastLevel.get(split1[0]) < currentLevel)
-                        {
+                for (String bks : byteLoad) {
+                    if (ChatUtils.stripFromWhitespace(bks).split(":")[0].equals(split1[0])) {
+                        if (!lastLevel.containsKey(split1[0]) || lastLevel.get(split1[0]) < currentLevel) {
                             lastLevel.put(split1[0], currentLevel);
                             break;
                         }
@@ -271,41 +229,33 @@ public class FileHandler
                     id++;
                 }
 
-                for (int end = id - 1; end > -1; end--)
-                {
+                for (int end = id - 1; end > -1; end--) {
                     String line = byteLoad.get(end);
-                    if (isCommentLine(line))
-                    {
-                        commentSec = line + "\n" + commentSec;
-                    }
-                    else if (!line.equalsIgnoreCase(s))
-                    {
+                    if (isCommentLine(line)) {
+                        commentSec.insert(0, line + "\n");
+                    } else if (!line.equalsIgnoreCase(s)) {
                         break;
                     }
                 }
             }
-            modifiedString += commentSec + s + "\n";
+            modifiedString.append(commentSec).append(s).append("\n");
         }
 
-        try
-        {
+        try {
             FileOutputStream fop = new FileOutputStream(getDataFile());
 
-            byte[] contentInBytes = modifiedString.getBytes();
+            byte[] contentInBytes = modifiedString.toString().getBytes();
 
             fop.write(contentInBytes);
             fop.flush();
             fop.close();
 
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void copy(FileHandler dest) throws IOException
-    {
+    public void copy(FileHandler dest) throws IOException {
         InputStream is;
         OutputStream os;
 
@@ -321,146 +271,105 @@ public class FileHandler
         os.close();
     }
 
-    public FileConfiguration get()
-    {
+    public FileConfiguration get() {
         cc.getDu().log("get() - CALL", getClass(), false);
-        if (getData() == null)
-        {
+        if (getData() == null) {
             reload();
         }
         return getData();
     }
 
-    public void saveDefaults()
-    {
+    public void saveDefaults() {
         loadFile();
 
-        if (!dataFile.exists())
-        {
+        if (!dataFile.exists()) {
             cc.saveResource(directory + name, false);
         }
 
-        if (dataFile == null)
-        {
+        if (dataFile == null) {
             reload();
         }
     }
 
-    public boolean isCommentLine(String s)
-    {
+    public boolean isCommentLine(String s) {
         return s.trim().length() == 0 || s.equalsIgnoreCase("\n") || ChatUtils.stripFromWhitespace(s).startsWith("#");
     }
 
-    public static void clearLoaded()
-    {
-        map.clear();
-        map = new HashMap<String, FileHandler>();
-    }
-
-    public static HashMap<String, FileHandler> getMap()
-    {
-        return map;
-    }
-
-    public static void setMap(HashMap<String, FileHandler> map)
-    {
-        FileHandler.map = map;
-    }
-
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getDirectory()
-    {
+    public String getDirectory() {
         return directory;
     }
 
-    public void setDirectory(String directory)
-    {
+    public void setDirectory(String directory) {
         this.directory = directory;
     }
 
-    public String getLoaded()
-    {
+    public String getLoaded() {
         return loaded;
     }
 
-    public void setLoaded(String loaded)
-    {
+    public void setLoaded(String loaded) {
         this.loaded = loaded;
     }
 
-    public SpecializedCrates getCc()
-    {
+    public SpecializedCrates getCc() {
         return cc;
     }
 
-    public void setCc(SpecializedCrates cc)
-    {
+    public void setCc(SpecializedCrates cc) {
         this.cc = cc;
     }
 
-    public FileConfiguration getData()
-    {
+    public FileConfiguration getData() {
         cc.getDu().log("getData() - CALL", getClass(), false);
 
         return data;
     }
 
-    public void setData(FileConfiguration data)
-    {
+    public void setData(FileConfiguration data) {
         this.data = data;
     }
 
-    public File getDataFile()
-    {
+    public File getDataFile() {
         return dataFile;
     }
 
-    public void setDataFile(File dataFile)
-    {
+    public void setDataFile(File dataFile) {
         this.dataFile = dataFile;
     }
 
-    public boolean isCanBeEdited()
-    {
+    public boolean isCanBeEdited() {
         return canBeEdited;
     }
 
-    public void setCanBeEdited(boolean canBeEdited)
-    {
+    public void setCanBeEdited(boolean canBeEdited) {
         this.canBeEdited = canBeEdited;
     }
 
-    public boolean isProperLoad()
-    {
+    public boolean isProperLoad() {
         return properLoad;
     }
 
-    public void setProperLoad(boolean properLoad)
-    {
+    public void setProperLoad(boolean properLoad) {
         this.properLoad = properLoad;
     }
 
-    public boolean isSaveWithCustomSave()
-    {
+    public boolean isSaveWithCustomSave() {
         return saveWithCustomSave;
     }
 
-    public void setSaveWithCustomSave(boolean saveWithCustomSave)
-    {
+    public void setSaveWithCustomSave(boolean saveWithCustomSave) {
         this.saveWithCustomSave = saveWithCustomSave;
     }
 
-    public FileDataLoader getFileDataLoader()
-    {
+    public FileDataLoader getFileDataLoader() {
         return fileDataLoader;
     }
 }

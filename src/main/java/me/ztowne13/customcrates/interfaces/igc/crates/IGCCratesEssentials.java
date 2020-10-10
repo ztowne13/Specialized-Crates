@@ -24,16 +24,13 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
-public class IGCCratesEssentials extends IGCMenuCrate
-{
-    public IGCCratesEssentials(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates)
-    {
+public class IGCCratesEssentials extends IGCMenuCrate {
+    public IGCCratesEssentials(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates) {
         super(cc, p, lastMenu, "&7&l> &6&lThe Defaults", crates);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(27);
 
@@ -59,8 +56,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
                 .addAutomaticLore("&f", 30, "How the crate will appear to players (block, npc, mob, etc.)"));
 
         if (crates.getSettings().getPlaceholder().toString().equalsIgnoreCase("mob") ||
-                crates.getSettings().getPlaceholder().toString().equalsIgnoreCase("npc"))
-        {
+                crates.getSettings().getPlaceholder().toString().equalsIgnoreCase("npc")) {
             ib.setItem(15, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aSet the " + cs.getPlaceholder() + " type")
                     .setLore("&7Current value: ").addLore("&7" + cs.getPlaceholder().getType()).addLore("")
                     .addAutomaticLore("&f", 30, "Set the type of mob it will be or playername for the NPC."));
@@ -72,8 +68,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
                         "The duration of time, in seconds, between when a player can open the crate. Set to -1 to have no cooldown."));
         ib.setItem(8, new ItemBuilder(DynamicMaterial.CHEST, 1).setName("&a&lEdit the crate item.").addLore("")
                 .addAutomaticLore("&f", 30, "Click to open the crate item editor."));
-        if (!crates.isMultiCrate())
-        {
+        if (!crates.isMultiCrate()) {
             ib.setItem(17,
                     new ItemBuilder(DynamicMaterial.TRIPWIRE_HOOK, 1).setName("&a&lEdit the crate key.").addLore("")
                             .addAutomaticLore("&f", 30,
@@ -103,29 +98,23 @@ public class IGCCratesEssentials extends IGCMenuCrate
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if ((slot == 5 || slot == 7 || slot == 16) && crates.isMultiCrate())
-        {
+    public void handleClick(int slot) {
+        if ((slot == 5 || slot == 7 || slot == 16) && crates.isMultiCrate()) {
             return;
         }
 
-        switch (slot)
-        {
+        switch (slot) {
             case 0:
                 up();
                 break;
             case 9:
-                if (crates.isCanBeEnabled())
-                {
+                if (crates.isCanBeEnabled()) {
                     crates.setEnabled(!crates.isEnabled());
                     getIb().setItem(9,
                             new ItemBuilder(crates.isEnabled() ? DynamicMaterial.LIME_WOOL : DynamicMaterial.RED_WOOL, 1)
                                     .setName(crates.isEnabled() ? "&aEnabled" : "&cDisabled")
                                     .addLore("&7Click me to toggle the crate."));
-                }
-                else
-                {
+                } else {
                     getIb().setItem(9, new ItemBuilder(getIb().getInv().getItem(9)).setName("&4You cannot do this")
                             .setLore("&4This crate cannot be enabled").addLore("&4for it failed to load,")
                             .addLore("&4due to a misconfiguration, on").addLore("&4startup. Please fix any errors,")
@@ -155,16 +144,13 @@ public class IGCCratesEssentials extends IGCMenuCrate
                         Arrays.asList("", "Requires Citizens v2", "Requires Citizens v2")).open();
                 break;
             case 15:
-                if (cs.getPlaceholder().toString().equalsIgnoreCase("npc"))
-                {
+                if (cs.getPlaceholder().toString().equalsIgnoreCase("npc")) {
                     new InputMenu(getCc(), getP(),
                             "display." + (cs.getPlaceholder().toString().equalsIgnoreCase("mob") ? "creature" : "name"),
                             cs.getPlaceholder().getType(), cs.getPlaceholder().toString().equalsIgnoreCase("mob") ?
                             "Available mob types: " + EntityTypes.enumValues().toString() : "Use a player's name",
                             String.class, this, true);
-                }
-                else if (cs.getPlaceholder().toString().equalsIgnoreCase("mob"))
-                {
+                } else if (cs.getPlaceholder().toString().equalsIgnoreCase("mob")) {
                     new IGCListSelector(getCc(), getP(), this, "Mob Type", EntityTypes.enumValues(),
                             DynamicMaterial.PAPER, 1, null).open();
                 }
@@ -194,58 +180,39 @@ public class IGCCratesEssentials extends IGCMenuCrate
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
-        if (value.equalsIgnoreCase("Obtain Type"))
-        {
-            try
-            {
+    public boolean handleInput(String value, String input) {
+        if (value.equalsIgnoreCase("Obtain Type")) {
+            try {
                 ObtainType ot = ObtainType.valueOf(input.toUpperCase());
                 cs.setObtainType(ot);
                 ChatUtils.msgSuccess(getP(), "Set the obtain type to " + input);
                 return true;
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.msgError(getP(),
                         input + " is not one of the obtain types: " + Arrays.toString(ObtainType.values()));
             }
-        }
-        else if (value.equalsIgnoreCase("permission"))
-        {
-            if (input.equalsIgnoreCase("none"))
-            {
+        } else if (value.equalsIgnoreCase("permission")) {
+            if (input.equalsIgnoreCase("none")) {
                 cs.setPermission("no permission");
                 ChatUtils.msgSuccess(getP(), "Removed the permission.");
-            }
-            else
-            {
+            } else {
                 cs.setPermission(input);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
             }
             return true;
-        }
-        else if (value.equalsIgnoreCase("Animation Type"))
-        {
-            try
-            {
+        } else if (value.equalsIgnoreCase("Animation Type")) {
+            try {
                 CrateAnimationType ct = CrateAnimationType.valueOf(input.toUpperCase());
                 cs.setCrateType(ct);
                 ChatUtils.msgSuccess(getP(), "Set the Animation Type to " + input);
                 return true;
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.msgError(getP(),
                         input + " is not valid in the list of crate animations: " + Arrays.toString(CrateAnimationType.values()));
             }
-        }
-        else if (value.equalsIgnoreCase("inventory-name"))
-        {
-            if (input.length() < 33)
-            {
-                if (input.equalsIgnoreCase("null") || input.equalsIgnoreCase("none"))
-                {
+        } else if (value.equalsIgnoreCase("inventory-name")) {
+            if (input.length() < 33) {
+                if (input.equalsIgnoreCase("null") || input.equalsIgnoreCase("none")) {
                     cs.setCrateInventoryName(null);
                     return true;
                 }
@@ -254,17 +221,13 @@ public class IGCCratesEssentials extends IGCMenuCrate
                 return true;
             }
             ChatUtils.msgError(getP(), input + " as an inventory-name cannot be longer than 32 characters.");
-        }
-        else if (value.equalsIgnoreCase("Display Type"))
-        {
-            switch (input.toUpperCase())
-            {
+        } else if (value.equalsIgnoreCase("Display Type")) {
+            switch (input.toUpperCase()) {
                 case "BLOCK":
                     cs.setPlaceholder(new MaterialPlaceholder(getCc()));
                     return true;
                 case "NPC":
-                    if (!NPCUtils.isCitizensInstalled())
-                    {
+                    if (!NPCUtils.isCitizensInstalled()) {
                         ChatUtils.msgError(getP(), "Citizens is not installed!");
                         return false;
                     }
@@ -273,8 +236,7 @@ public class IGCCratesEssentials extends IGCMenuCrate
                     manageClick(15);
                     break;
                 case "MOB":
-                    if (!NPCUtils.isCitizensInstalled())
-                    {
+                    if (!NPCUtils.isCitizensInstalled()) {
                         ChatUtils.msgError(getP(), "Citizens is not installed!");
                         return false;
                     }
@@ -286,56 +248,38 @@ public class IGCCratesEssentials extends IGCMenuCrate
                     ChatUtils.msgError(getP(), input + " is not BLOCK, NPC, or MOB");
             }
 
-            if (input.equalsIgnoreCase("mob") || input.equalsIgnoreCase("npc"))
-            {
+            if (input.equalsIgnoreCase("mob") || input.equalsIgnoreCase("npc")) {
                 getIb().setItem(15,
                         new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aSet the " + cs.getPlaceholder() + " type")
                                 .setLore("&7Current value: ").addLore("&7" + cs.getPlaceholder().getType()));
             }
-        }
-        else if (value.equalsIgnoreCase("Mob Type"))
-        {
-            try
-            {
+        } else if (value.equalsIgnoreCase("Mob Type")) {
+            try {
                 EntityTypes et = EntityTypes.getEnum(input.toUpperCase());
                 cs.getPlaceholder().setType(et.name());
                 ChatUtils.msgSuccess(getP(), "Set mob type to " + input);
                 return true;
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.msgError(getP(), input + " is not a valid entity type: " + EntityTypes.enumValues().toString());
             }
-        }
-        else if (value.equalsIgnoreCase("display.name"))
-        {
+        } else if (value.equalsIgnoreCase("display.name")) {
             cs.getPlaceholder().setType(input);
             ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
             return true;
-        }
-        else if (value.equalsIgnoreCase("cooldown"))
-        {
-            if (Utils.isInt(input))
-            {
+        } else if (value.equalsIgnoreCase("cooldown")) {
+            if (Utils.isInt(input)) {
                 cs.setCooldown(Integer.parseInt(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid number.");
             }
-        }
-        else if (value.equalsIgnoreCase("cost"))
-        {
-            if (Utils.isInt(input))
-            {
+        } else if (value.equalsIgnoreCase("cost")) {
+            if (Utils.isInt(input)) {
                 cs.setCost(Integer.valueOf(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid number.");
             }
         }

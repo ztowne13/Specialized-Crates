@@ -18,12 +18,10 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 3/21/16.
  */
-public class IGCMenuRewards extends IGCMenu
-{
+public class IGCMenuRewards extends IGCMenu {
     int page;
 
-    public IGCMenuRewards(SpecializedCrates cc, Player p, IGCMenu lastMenu, int page)
-    {
+    public IGCMenuRewards(SpecializedCrates cc, Player p, IGCMenu lastMenu, int page) {
         super(cc, p, lastMenu, "&7&l> &6&lRewards.YML PG" + page,
                 new IGCButtonType[]{
                         IGCButtonType.REWARD_FILTER
@@ -35,20 +33,16 @@ public class IGCMenuRewards extends IGCMenu
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
         int slots = 0;
 
         boolean newValues = false;
 
         CRewards.loadAll(getCc(), getP());
 
-        if (CRewards.getAllRewards().size() - ((page - 1) * 28) >= 28)
-        {
+        if (CRewards.getAllRewards().size() - ((page - 1) * 28) >= 28) {
             slots = 28;
-        }
-        else
-        {
+        } else {
             slots = CRewards.getAllRewards().size() - ((page - 1) * 28);
         }
 
@@ -76,18 +70,15 @@ public class IGCMenuRewards extends IGCMenu
         int skipped = 0;
         int displayedRewards = 0;
 
-        for (Reward r : CRewards.getAllRewardsSorted(getCc(), (CRewards.RewardSortType)getButtons()[0].getValue()).values())
-        {
+        for (Reward r : CRewards.getAllRewardsSorted(getCc(), (CRewards.RewardSortType) getButtons()[0].getValue()).values()) {
             String rName = r.getRewardName();
 
-            if (toSkip > skipped || displayedRewards >= 28)
-            {
+            if (toSkip > skipped || displayedRewards >= 28) {
                 skipped++;
                 continue;
             }
 
-            if (i % 9 == 8)
-            {
+            if (i % 9 == 8) {
                 i += 2;
             }
 
@@ -101,8 +92,7 @@ public class IGCMenuRewards extends IGCMenu
                 newR = new ItemBuilder(r.getDisplayBuilder().getStack()).setName("&a" + rName);
 
             newR.addLore("").addLore("&7Used by crates:").addLore("");
-            for (String s : r.delete(false).replace("[", "").replace("]", "").split(", "))
-            {
+            for (String s : r.delete(false).replace("[", "").replace("]", "").split(", ")) {
                 newR.addLore("&7- &f" + s);
             }
 
@@ -113,13 +103,11 @@ public class IGCMenuRewards extends IGCMenu
             displayedRewards++;
         }
 
-        if (page != 1)
-        {
+        if (page != 1) {
             ib.setItem(2, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo back a page"));
         }
 
-        if ((CRewards.getAllRewards().size() / 28) + (CRewards.getAllRewards().size() % 28 == 0 ? 0 : 1) != page)
-        {
+        if ((CRewards.getAllRewards().size() / 28) + (CRewards.getAllRewards().size() % 28 == 0 ? 0 : 1) != page) {
             ib.setItem(6, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo forward a page"));
         }
 
@@ -128,70 +116,46 @@ public class IGCMenuRewards extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (slot == 0)
-        {
+    public void handleClick(int slot) {
+        if (slot == 0) {
             //getP().closeInventory();
             getCc().getRewardsFile().save();
             ChatUtils.msgSuccess(getP(), "Saved the Rewards.YML file.");
             //getCc().reload();
-        }
-        else if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
-        {
+        } else if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
             page--;
             open();
-        }
-        else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
-        {
+        } else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
             page++;
             open();
-        }
-        else if (slot == 9)
-        {
+        } else if (slot == 9) {
             reload();
-        }
-        else if (slot == getIb().getInv().getSize() - 9)
-        {
+        } else if (slot == getIb().getInv().getSize() - 9) {
             up();
-        }
-        else if(slot == 5)
-        {
+        } else if (slot == 5) {
             new IGCDragAndDrop(getCc(), getP(), this).open();
-        }
-        else if (slot == 4)
-        {
+        } else if (slot == 4) {
             new InputMenu(getCc(), getP(), "rewardName", "null",
                     "No spaces allowed. No duplicate names. &7&oNote: These 'reward names' will never be seen by your player: they are just an 'identifier'.",
                     String.class, this, true);
-        }
-        else if (getIb().getInv().getItem(slot) != null)
-        {
+        } else if (getIb().getInv().getItem(slot) != null) {
             String rName = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
             new IGCMenuReward(getCc(), getP(), this, rName).open();
         }
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
-        if (value.equalsIgnoreCase("rewardName"))
-        {
-            if (!input.contains(" "))
-            {
+    public boolean handleInput(String value, String input) {
+        if (value.equalsIgnoreCase("rewardName")) {
+            if (!input.contains(" ")) {
 
-                if (!CRewards.rewardNameExists(getCc(), input))
-                {
+                if (!CRewards.rewardNameExists(getCc(), input)) {
                     new IGCMenuReward(getCc(), getP(), this, input).open();
-                }
-                else
-                {
+                } else {
                     ChatUtils.msgError(getP(),
                             "This name already exists. &7&oNote: These 'reward names' will never be seen by your player: they are just an identifier.");
                 }
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(),
                         "Your reward name cannot have a space. &7&oNote: These 'reward names' will never be seen by your player: they are just an identifier.");
             }

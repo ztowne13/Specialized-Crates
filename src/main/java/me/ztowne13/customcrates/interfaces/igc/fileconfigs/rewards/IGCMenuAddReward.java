@@ -17,14 +17,12 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
-public class IGCMenuAddReward extends IGCMenu
-{
+public class IGCMenuAddReward extends IGCMenu {
 
     int page;
     Crate crate;
 
-    public IGCMenuAddReward(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crate, int page)
-    {
+    public IGCMenuAddReward(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crate, int page) {
         super(cc, p, lastMenu, "&7&l> &6&lRewards PG" + page,
                 new IGCButtonType[]{
                         IGCButtonType.REWARD_FILTER
@@ -37,20 +35,16 @@ public class IGCMenuAddReward extends IGCMenu
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
         int slots = 0;
 
         CRewards.loadAll(getCc(), getP());
 
-        HashMap<String, Reward> rewards = getUnusedRewards((CRewards.RewardSortType)getButtons()[0].getValue());
+        HashMap<String, Reward> rewards = getUnusedRewards((CRewards.RewardSortType) getButtons()[0].getValue());
 
-        if (rewards.size() - ((page - 1) * 28) >= 28)
-        {
+        if (rewards.size() - ((page - 1) * 28) >= 28) {
             slots = 28;
-        }
-        else
-        {
+        } else {
             slots = rewards.size() - ((page - 1) * 28);
         }
 
@@ -67,16 +61,13 @@ public class IGCMenuAddReward extends IGCMenu
         int skipped = 0;
         int displayedRewards = 0;
 
-        for (String rName : rewards.keySet())
-        {
-            if (toSkip > skipped || displayedRewards >= 28)
-            {
+        for (String rName : rewards.keySet()) {
+            if (toSkip > skipped || displayedRewards >= 28) {
                 skipped++;
                 continue;
             }
 
-            if (i % 9 == 8)
-            {
+            if (i % 9 == 8) {
                 i += 2;
             }
 
@@ -107,13 +98,11 @@ public class IGCMenuAddReward extends IGCMenu
             displayedRewards++;
         }
 
-        if (page != 1)
-        {
+        if (page != 1) {
             ib.setItem(2, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo back a page"));
         }
 
-        if ((CRewards.getAllRewards().size() / 28) + (CRewards.getAllRewards().size() % 28 == 0 ? 0 : 1) != page)
-        {
+        if ((CRewards.getAllRewards().size() / 28) + (CRewards.getAllRewards().size() % 28 == 0 ? 0 : 1) != page) {
             ib.setItem(6, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo forward a page"));
         }
 
@@ -122,51 +111,37 @@ public class IGCMenuAddReward extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
-        {
+    public void handleClick(int slot) {
+        if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
             page--;
             open();
-        }
-        else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
-        {
+        } else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
             page++;
             open();
-        }
-        else if (slot == 0)
-        {
+        } else if (slot == 0) {
             up();
-        }
-        else if (getIb().getInv().getItem(slot) != null)
-        {
+        } else if (getIb().getInv().getItem(slot) != null) {
             String rName = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
-            if (crate.getSettings().getRewards().addReward(rName))
-            {
+            if (crate.getSettings().getRewards().addReward(rName)) {
                 ChatUtils.msgSuccess(getP(), "Added " + rName);
                 open();
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "Failed to add the reward, maybe it's not completely configured?");
             }
         }
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         return false;
     }
 
-    public HashMap<String, Reward> getUnusedRewards(CRewards.RewardSortType sortType)
-    {
+    public HashMap<String, Reward> getUnusedRewards(CRewards.RewardSortType sortType) {
         CRewards cRewards = crate.getSettings().getRewards();
 
         HashMap<String, Reward> rewards = (HashMap<String, Reward>) CRewards.getAllRewardsSorted(getCc(), sortType);
 
-        for(Reward reward : cRewards.getCrateRewards())
-        {
+        for (Reward reward : cRewards.getCrateRewards()) {
             rewards.remove(reward.getRewardName());
         }
 

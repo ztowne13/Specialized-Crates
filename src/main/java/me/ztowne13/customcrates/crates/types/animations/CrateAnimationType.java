@@ -8,9 +8,8 @@ import me.ztowne13.customcrates.crates.types.animations.minimal.GiveKeyAnimation
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public enum CrateAnimationType
-{
-    INV_ROULETTE( "Roulette", Category.INVENTORY, true),
+public enum CrateAnimationType {
+    INV_ROULETTE("Roulette", Category.INVENTORY, true),
 
     INV_MENU("Menu", Category.INVENTORY, true),
 
@@ -30,19 +29,16 @@ public enum CrateAnimationType
     Category category;
     boolean canFastTrackOnReload;
 
-    CrateAnimationType(String prefix, Category category, boolean canFastTrackOnReload)
-    {
+    CrateAnimationType(String prefix, Category category, boolean canFastTrackOnReload) {
         this.prefix = prefix;
         this.category = category;
         this.canFastTrackOnReload = canFastTrackOnReload;
     }
 
-    public void setupFor(Crate crates)
-    {
+    public void setupFor(Crate crates) {
         CrateAnimation ch;
 
-        switch (this)
-        {
+        switch (this) {
             case INV_ROULETTE:
                 ch = new RouletteAnimation(crates);
                 break;
@@ -72,10 +68,8 @@ public enum CrateAnimationType
         crates.getSettings().setAnimation(ch);
     }
 
-    public AnimationDataHolder newDataHolderInstance(Player player, Location location, CrateAnimation crateAnimation)
-    {
-        switch(this)
-        {
+    public AnimationDataHolder newDataHolderInstance(Player player, Location location, CrateAnimation crateAnimation) {
+        switch (this) {
             case INV_ROULETTE:
                 return new RouletteAnimationDataHolder(player, location, (RouletteAnimation) crateAnimation);
             case INV_CSGO:
@@ -94,15 +88,11 @@ public enum CrateAnimationType
         }
     }
 
-    public int getUses()
-    {
+    public int getUses() {
         int uses = 0;
-        for (Crate crate : Crate.getLoadedCrates().values())
-        {
-            if (!crate.isMultiCrate())
-            {
-                if (crate.getSettings().getCrateType().equals(this))
-                {
+        for (Crate crate : Crate.getLoadedCrates().values()) {
+            if (!crate.isMultiCrate()) {
+                if (crate.getSettings().getCrateType().equals(this)) {
                     uses++;
                 }
             }
@@ -111,18 +101,27 @@ public enum CrateAnimationType
         return uses;
     }
 
-    public String getPrefix()
-    {
+    public String getPrefix() {
         return "CrateType." + getCategory().getPrefix() + prefix;
     }
 
-    public String getPrefixDotted()
-    {
+    public String getPrefixDotted() {
         return getPrefix() + ".";
     }
 
-    public enum Category
-    {
+    public Category getCategory() {
+        return category;
+    }
+
+    public boolean isSpecialDynamicHandling() {
+        return category.isSpecialDynamicHandling();
+    }
+
+    public boolean isCanFastTrackOnReload() {
+        return canFastTrackOnReload;
+    }
+
+    public enum Category {
         INVENTORY(false, "Inventory."),
 
         BLOCK(true, "Block."),
@@ -134,35 +133,17 @@ public enum CrateAnimationType
         boolean specialDynamicHandling;
         String prefix;
 
-        Category(boolean specialDynamicHandling, String prefix)
-        {
+        Category(boolean specialDynamicHandling, String prefix) {
             this.specialDynamicHandling = specialDynamicHandling;
             this.prefix = prefix;
         }
 
-        public boolean isSpecialDynamicHandling()
-        {
+        public boolean isSpecialDynamicHandling() {
             return specialDynamicHandling;
         }
 
-        public String getPrefix()
-        {
+        public String getPrefix() {
             return prefix;
         }
-    }
-
-    public Category getCategory()
-    {
-        return category;
-    }
-
-    public boolean isSpecialDynamicHandling()
-    {
-        return category.isSpecialDynamicHandling();
-    }
-
-    public boolean isCanFastTrackOnReload()
-    {
-        return canFastTrackOnReload;
     }
 }

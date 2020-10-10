@@ -13,52 +13,45 @@ import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
  * Created by ztowne13 on 6/30/16.
  */
-public class RouletteAnimation extends InventoryCrateAnimation
-{
+public class RouletteAnimation extends InventoryCrateAnimation {
     protected double finalTickLength, tickIncrease;
     protected int glassUpdateTicks = 2;
-    protected ArrayList<ItemBuilder> items;
+    protected List<ItemBuilder> items;
+    Random r = new Random();
 
-    public RouletteAnimation(Crate crate)
-    {
+    public RouletteAnimation(Crate crate) {
         super(crate, CrateAnimationType.INV_ROULETTE);
     }
 
     @Override
-    public void tickInventory(InventoryAnimationDataHolder dataHolder, boolean update)
-    {
+    public void tickInventory(InventoryAnimationDataHolder dataHolder, boolean update) {
         RouletteAnimationDataHolder rdh = (RouletteAnimationDataHolder) dataHolder;
 
-        switch (rdh.getCurrentState())
-        {
-            case PLAYING:
-                drawFillers(rdh, glassUpdateTicks);
+        if (rdh.getCurrentState() == AnimationDataHolder.State.PLAYING) {
+            drawFillers(rdh, glassUpdateTicks);
 
-                if (update)
-                {
-                    playSound(rdh);
-                    updateReward(rdh);
-                }
+            if (update) {
+                playSound(rdh);
+                updateReward(rdh);
+            }
 
-                drawRewards(rdh);
+            drawRewards(rdh);
         }
     }
 
     @Override
-    public boolean updateTicks(AnimationDataHolder dataHolder)
-    {
+    public boolean updateTicks(AnimationDataHolder dataHolder) {
         RouletteAnimationDataHolder rdh = (RouletteAnimationDataHolder) dataHolder;
 
-        switch(rdh.getCurrentState())
-        {
+        switch (rdh.getCurrentState()) {
             case PLAYING:
-                if (rdh.getIndividualTicks() * BASE_SPEED >= rdh.getCurrentTicks() - 1.1)
-                {
+                if (rdh.getIndividualTicks() * BASE_SPEED >= rdh.getCurrentTicks() - 1.1) {
                     rdh.setUpdates(rdh.getUpdates() + 1);
                     rdh.setIndividualTicks(0);
 
@@ -75,55 +68,44 @@ public class RouletteAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public void checkStateChange(AnimationDataHolder dataHolder, boolean update)
-    {
+    public void checkStateChange(AnimationDataHolder dataHolder, boolean update) {
         RouletteAnimationDataHolder rdh = (RouletteAnimationDataHolder) dataHolder;
 
-        switch (rdh.getCurrentState())
-        {
+        switch (rdh.getCurrentState()) {
             case PLAYING:
-                if (rdh.getCurrentTicks() > getFinalTickLength())
-                {
+                if (rdh.getCurrentTicks() > getFinalTickLength()) {
                     rdh.setCurrentState(AnimationDataHolder.State.ENDING);
                 }
             case ENDING:
-                if (rdh.getWaitingTicks() == 50)
-                {
+                if (rdh.getWaitingTicks() == 50) {
                     rdh.setCurrentState(CSGOAnimationDataHolder.State.COMPLETED);
                 }
         }
     }
 
-    public void updateReward(RouletteAnimationDataHolder rdh)
-    {
+    public void updateReward(RouletteAnimationDataHolder rdh) {
         Reward r = getCrate().getSettings().getRewards().getRandomReward();
         rdh.setLastShownReward(r);
     }
 
-    public void drawRewards(RouletteAnimationDataHolder rdh)
-    {
+    public void drawRewards(RouletteAnimationDataHolder rdh) {
         InventoryBuilder inv = rdh.getInventoryBuilder();
 
         inv.setItem(13, rdh.getLastShownReward().getDisplayBuilder());
     }
 
-
     @Override
-    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh)
-    {
+    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh) {
 
     }
 
     @Override
-    public ItemBuilder getFiller()
-    {
-        Random r = new Random();
+    public ItemBuilder getFiller() {
         return getItems().get(r.nextInt(getItems().size()));
     }
 
     @Override
-    public void endAnimation(AnimationDataHolder dataHolder)
-    {
+    public void endAnimation(AnimationDataHolder dataHolder) {
         RouletteAnimationDataHolder rdh = (RouletteAnimationDataHolder) dataHolder;
         Player player = rdh.getPlayer();
 
@@ -135,8 +117,7 @@ public class RouletteAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public void loadDataValues(StatusLogger sl)
-    {
+    public void loadDataValues(StatusLogger sl) {
         invName = fu.getFileDataLoader()
                 .loadString(prefix + "inv-name", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_ROULETTE_INVNAME_SUCCESS);
@@ -167,21 +148,15 @@ public class RouletteAnimation extends InventoryCrateAnimation
                         StatusLoggerEvent.ANIMATION_ROULETTE_TICKSPEED_INVALID);
 
 
-        setItems(new ArrayList<ItemBuilder>());
+        setItems(new ArrayList<>());
 
-        try
-        {
-            for (String s : fu.get().getStringList("CrateType.Inventory.Roulette.random-blocks"))
-            {
-                try
-                {
-                    DynamicMaterial m = null;
-                    try
-                    {
+        try {
+            for (String s : fu.get().getStringList("CrateType.Inventory.Roulette.random-blocks")) {
+                try {
+                    DynamicMaterial m;
+                    try {
                         m = DynamicMaterial.fromString(s.toUpperCase());
-                    }
-                    catch (Exception exc)
-                    {
+                    } catch (Exception exc) {
                         StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_NONEXISTENT
                                 .log(getStatusLogger(), new String[]{s});
                         continue;
@@ -189,46 +164,36 @@ public class RouletteAnimation extends InventoryCrateAnimation
                     getItems().add(new ItemBuilder(m, 1).setName("&f"));
                     StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_SUCCESS
                             .log(getStatusLogger(), new String[]{s});
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_ITEM_INVALID.log(getStatusLogger(), new String[]{s});
                 }
             }
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_NONEXISTENT.log(getStatusLogger());
         }
     }
 
-    public ArrayList<ItemBuilder> getItems()
-    {
+    public List<ItemBuilder> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<ItemBuilder> items)
-    {
+    public void setItems(List<ItemBuilder> items) {
         this.items = items;
     }
 
-    public double getFinalTickLength()
-    {
+    public double getFinalTickLength() {
         return finalTickLength;
     }
 
-    public void setFinalTickLength(double finalTickLength)
-    {
+    public void setFinalTickLength(double finalTickLength) {
         this.finalTickLength = finalTickLength;
     }
 
-    public double getTickIncrease()
-    {
+    public double getTickIncrease() {
         return tickIncrease;
     }
 
-    public void setTickIncrease(double tickIncrease)
-    {
+    public void setTickIncrease(double tickIncrease) {
         this.tickIncrease = tickIncrease;
     }
 }

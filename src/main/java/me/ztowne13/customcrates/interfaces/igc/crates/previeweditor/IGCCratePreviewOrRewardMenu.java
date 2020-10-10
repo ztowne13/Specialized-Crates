@@ -11,16 +11,13 @@ import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import org.bukkit.entity.Player;
 
-public class IGCCratePreviewOrRewardMenu extends IGCMenuCrate
-{
-    public IGCCratePreviewOrRewardMenu(SpecializedCrates specializedCrates, Player player, Crate crate, IGCMenu lastMenu)
-    {
+public class IGCCratePreviewOrRewardMenu extends IGCMenuCrate {
+    public IGCCratePreviewOrRewardMenu(SpecializedCrates specializedCrates, Player player, Crate crate, IGCMenu lastMenu) {
         super(specializedCrates, player, lastMenu, "&7&l> &6&lRewards", crate);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
         InventoryBuilder ib = createDefault(9);
 
         // Reward Editor
@@ -42,10 +39,8 @@ public class IGCCratePreviewOrRewardMenu extends IGCMenuCrate
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch(slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 0:
                 up();
                 break;
@@ -59,8 +54,7 @@ public class IGCCratePreviewOrRewardMenu extends IGCMenuCrate
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         return false;
     }
 }

@@ -6,30 +6,27 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ztowne13 on 3/6/16.
  */
-public class MenuAnimationDataHolder extends InventoryAnimationDataHolder
-{
+public class MenuAnimationDataHolder extends InventoryAnimationDataHolder {
     ArrayList<Reward> displayedRewards;
     ArrayList<Integer> usedNumbers;
 
-    public MenuAnimationDataHolder(Player player, Location location, MenuAnimation crateAnimation)
-    {
+    public MenuAnimationDataHolder(Player player, Location location, MenuAnimation crateAnimation) {
         super(player, location, crateAnimation, crateAnimation.getInventoryRows() * 9);
 
         displayedRewards = new ArrayList<>();
         usedNumbers = new ArrayList<>();
     }
 
-    public ArrayList<Reward> getDisplayedRewards()
-    {
+    public List<Reward> getDisplayedRewards() {
         return displayedRewards;
     }
 
-    public ArrayList<Integer> getUsedNumbers()
-    {
+    public List<Integer> getUsedNumbers() {
         return usedNumbers;
     }
 

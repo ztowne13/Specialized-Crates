@@ -2,11 +2,10 @@ package me.ztowne13.customcrates;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 
-public enum SettingsValue
-{
+public enum SettingsValue {
     STORE_DATA("store-data", Category.GENERAL_SETTINGS, String.class,
             new String[]{
                     "FLATFILE",
@@ -18,7 +17,7 @@ public enum SettingsValue
                     "Stores all player data in a MySQL database. The connection info is defined in the MySQL.yml file",
                     "Stores all player data in individual files for each player"
             }
-            ,false, "FLATFILE", "Data Storage Type",
+            , false, "FLATFILE", "Data Storage Type",
             new String[]{
                     "Set how would you like to store",
                     "player data. Options: FLATFILE,",
@@ -36,7 +35,7 @@ public enum SettingsValue
                     "Logs only the issues with the configuration files",
                     "Logs nothing to console except the loaded crate names"
             }
-            ,false, "FAILURES", "Console Log Type",
+            , false, "FAILURES", "Console Log Type",
             new String[]{
                     "Set how much would you like to",
                     "be logged to console.",
@@ -432,6 +431,7 @@ public enum SettingsValue
                             "faster, putting less of a load on server resources."
             });
 
+    static EnumMap<SettingsValue, Object> valuesCache = new EnumMap<>(SettingsValue.class);
     String easyName;
     String path;
     String[] descriptor;
@@ -439,13 +439,11 @@ public enum SettingsValue
     Object defaultVal;
     boolean withColor;
     Category category;
-
     String[] listValues = null;
     String[] listValueDescriptors = null;
 
     SettingsValue(String path, Category category, Object obj, boolean withColor, Object defaultVal, String easyName,
-                  String[] descriptor)
-    {
+                  String[] descriptor) {
         this.category = category;
         this.easyName = easyName;
         this.path = path;
@@ -456,19 +454,15 @@ public enum SettingsValue
     }
 
     SettingsValue(String path, Category category, Object obj, String[] listValues, String[] listValueDescriptors, boolean withColor, Object defaultVal, String easyName,
-                  String[] descriptor)
-    {
+                  String[] descriptor) {
         this(path, category, obj, withColor, defaultVal, easyName, descriptor);
         this.listValueDescriptors = listValueDescriptors;
         this.listValues = listValues;
     }
 
-    public static SettingsValue getByPath(String s)
-    {
-        for (SettingsValue sv : values())
-        {
-            if (sv.getPath().equalsIgnoreCase(s))
-            {
+    public static SettingsValue getByPath(String s) {
+        for (SettingsValue sv : values()) {
+            if (sv.getPath().equalsIgnoreCase(s)) {
                 return sv;
             }
         }
@@ -476,16 +470,10 @@ public enum SettingsValue
         return null;
     }
 
-    static HashMap<SettingsValue, Object> valuesCache = new HashMap<>();
-
-    public Object getValue(SpecializedCrates cc)
-    {
-        if (valuesCache.containsKey(this))
-        {
+    public Object getValue(SpecializedCrates cc) {
+        if (valuesCache.containsKey(this)) {
             return valuesCache.get(this);
-        }
-        else
-        {
+        } else {
             Object val = cc.getSettings().getConfigValues().get(path);
             if (val == null)
                 val = defaultVal;
@@ -495,69 +483,56 @@ public enum SettingsValue
         }
     }
 
-    public void setValue(SpecializedCrates sc, Object val)
-    {
+    public void setValue(SpecializedCrates sc, Object val) {
         sc.getSettings().getConfigValues().put(getPath(), val);
         valuesCache.put(this, val);
     }
 
-    public String getPath()
-    {
+    public String getPath() {
         return path;
     }
 
-    public void setPath(String path)
-    {
+    public void setPath(String path) {
         this.path = path;
     }
 
-    public String[] getDescriptor()
-    {
+    public String[] getDescriptor() {
         return descriptor;
     }
 
-    public void setDescriptor(String[] descriptor)
-    {
+    public void setDescriptor(String[] descriptor) {
         this.descriptor = descriptor;
     }
 
-    public Object getObj()
-    {
+    public Object getObj() {
         return obj;
     }
 
-    public void setObj(Object obj)
-    {
+    public void setObj(Object obj) {
         this.obj = obj;
     }
 
-    public boolean isWithColor()
-    {
+    public boolean isWithColor() {
         return withColor;
     }
 
-    public void setWithColor(boolean withColor)
-    {
+    public void setWithColor(boolean withColor) {
         this.withColor = withColor;
     }
 
-    public String getEasyName()
-    {
+    public String getEasyName() {
         return easyName;
     }
 
-    public String[] getListValues()
-    {
+    public String[] getListValues() {
         return listValues;
     }
 
-    public String[] getListValueDescriptors()
-    {
+    public String[] getListValueDescriptors() {
         return listValueDescriptors;
     }
 
-    public enum Category
-    {
+    public enum Category {
         GENERAL_SETTINGS("General", "General Settings",
                 "This includes general settings for the entire plugin.",
                 "To edit a crate's specific settings, do /scrates edit (crate)"),
@@ -590,35 +565,28 @@ public enum SettingsValue
         String shortTitle;
         String[] description;
 
-        Category(String shortTitle, String title, String... description)
-        {
+        Category(String shortTitle, String title, String... description) {
             this.shortTitle = shortTitle;
             this.title = title;
             this.description = description;
         }
 
-        public String getShortTitle()
-        {
+        public String getShortTitle() {
             return shortTitle;
         }
 
-        public String getTitle()
-        {
+        public String getTitle() {
             return title;
         }
 
-        public String[] getDescription()
-        {
+        public String[] getDescription() {
             return description;
         }
 
-        public List<SettingsValue> getAssociatedValues()
-        {
+        public List<SettingsValue> getAssociatedValues() {
             ArrayList<SettingsValue> vals = new ArrayList<>();
-            for (SettingsValue value : SettingsValue.values())
-            {
-                if (value.category == this)
-                {
+            for (SettingsValue value : SettingsValue.values()) {
+                if (value.category == this) {
                     vals.add(value);
                 }
             }

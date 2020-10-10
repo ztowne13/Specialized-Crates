@@ -12,19 +12,18 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * All commands for the plugin
  */
-public class CommandCrate extends Commands implements CommandExecutor
-{
+public class CommandCrate extends Commands implements CommandExecutor {
     SpecializedCrates cc;
     VirtualCrates vcSubCommand;
     Claim claimSubCommand;
     ArrayList<SubCommand> subCommands;
 
-    public CommandCrate(SpecializedCrates cc)
-    {
+    public CommandCrate(SpecializedCrates cc) {
         super("scrates");
         this.cc = cc;
 
@@ -53,12 +52,10 @@ public class CommandCrate extends Commands implements CommandExecutor
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String[] args)
-    {
+    public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String[] args) {
         setCmdSender(sender);
 
-        if(!cc.getAntiFraudSQLHandler().isAuthenticated())
-        {
+        if (!cc.getAntiFraudSQLHandler().isAuthenticated()) {
             msgError("This plugin has been blacklisted because it has been assumed to be on more servers than just the" +
                     "person who purchased this plugin. If you believe this is in error, please try re-downloading the plugin" +
                     " (this does not mean deleting the plugin files, just the .jar) and try again. If the issue persists and" +
@@ -66,16 +63,11 @@ public class CommandCrate extends Commands implements CommandExecutor
             return false;
         }
 
-        if (canExecute(true, true, "customcrates.admin", "specializedcrates.admin"))
-        {
-            if (args.length > 0)
-            {
-                for (SubCommand subCommand : subCommands)
-                {
-                    if (subCommand.isCommand(args[0]))
-                    {
-                        if (subCommand.checkProperUsage(sender, args))
-                        {
+        if (canExecute(true, true, "customcrates.admin", "specializedcrates.admin")) {
+            if (args.length > 0) {
+                for (SubCommand subCommand : subCommands) {
+                    if (subCommand.isCommand(args[0])) {
+                        if (subCommand.checkProperUsage(sender, args)) {
                             return subCommand.run(cc, this, args);
                         }
                         return false;
@@ -84,45 +76,31 @@ public class CommandCrate extends Commands implements CommandExecutor
             }
         }
 
-        if(args.length >= 1 && args[0].equalsIgnoreCase("luckychest"))
-        {
-            if (canExecute(false, true, "customcrates.luckychestcommand", "specializedcrates.luckychestcommand"))
-            {
+        if (args.length >= 1 && args[0].equalsIgnoreCase("luckychest")) {
+            if (canExecute(false, true, "customcrates.luckychestcommand", "specializedcrates.luckychestcommand")) {
                 PlayerDataManager pdm = PlayerManager.get(cc, (Player) sender).getPdm();
                 pdm.setActivatedLuckyChests(!pdm.isActivatedLuckyChests());
                 Messages.TOGGLE_LUCKYCRATE.msgSpecified(cc, (Player) sender, new String[]{"%state%"},
                         new String[]{pdm.isActivatedLuckyChests() + ""});
-            }
-            else
-            {
+            } else {
                 msg(Messages.NO_PERMISSIONS.getFromConf(cc)
-                        .replaceAll("%permission%", "specializedcrates.luckychestcommand"));
+                        .replace("%permission%", "specializedcrates.luckychestcommand"));
             }
             return true;
-        }
-        else if(args.length >= 1 && args[0].equalsIgnoreCase("claim"))
-        {
-            if(canExecute(false, true, "customcrates.claim", "specializedcrates.claim"))
-            {
+        } else if (args.length >= 1 && args[0].equalsIgnoreCase("claim")) {
+            if (canExecute(false, true, "customcrates.claim", "specializedcrates.claim")) {
                 claimSubCommand.run(cc, this, args);
-            }
-            else
-            {
+            } else {
                 msg(Messages.NO_PERMISSIONS.getFromConf(cc)
-                        .replaceAll("%permission%", "specializedcrates.claim"));
+                        .replace("%permission%", "specializedcrates.claim"));
             }
             return true;
-        }
-        else if (!canExecute(false, true, "customcrates.admin", "specializedcrates.admin"))
-        {
-            if (vcSubCommand.run(cc, this, args))
-            {
+        } else if (!canExecute(false, true, "customcrates.admin", "specializedcrates.admin")) {
+            if (vcSubCommand.run(cc, this, args)) {
                 return true;
-            }
-            else if (args.length == 0)
-            {
+            } else if (args.length == 0) {
                 msg(Messages.NO_PERMISSIONS.getFromConf(cc)
-                        .replaceAll("%permission%", "specializedcrates.crates (for users) or specializedcrates.admin (for admins)"));
+                        .replace("%permission%", "specializedcrates.crates (for users) or specializedcrates.admin (for admins)"));
 //                msg("&7&l>> &3&m                    ");
 //                msg("&c" + cc.getDescription().getName() + " &fV" + cc.getDescription().getVersion());
 //                msg("&6By &e" + cc.getDescription().getAuthors().get(0));
@@ -131,10 +109,8 @@ public class CommandCrate extends Commands implements CommandExecutor
             }
 
             msg(Messages.NO_PERMISSIONS.getFromConf(cc)
-                    .replaceAll("%permission%", "specializedcrates.admin"));
-        }
-        else
-        {
+                    .replace("%permission%", "specializedcrates.admin"));
+        } else {
             msgPage(1);
         }
 
@@ -142,8 +118,7 @@ public class CommandCrate extends Commands implements CommandExecutor
         return false;
     }
 
-    public void msgPage(int page)
-    {
+    public void msgPage(int page) {
         msg("");
         msg("");
         msg("");
@@ -187,8 +162,7 @@ public class CommandCrate extends Commands implements CommandExecutor
 
     }
 
-    public ArrayList<SubCommand> getSubCommands()
-    {
+    public List<SubCommand> getSubCommands() {
         return subCommands;
     }
 }

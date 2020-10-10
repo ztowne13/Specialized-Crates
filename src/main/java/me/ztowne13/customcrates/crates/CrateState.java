@@ -1,7 +1,6 @@
 package me.ztowne13.customcrates.crates;
 
-public enum CrateState
-{
+public enum CrateState {
     PLAY,
 
     OPEN,

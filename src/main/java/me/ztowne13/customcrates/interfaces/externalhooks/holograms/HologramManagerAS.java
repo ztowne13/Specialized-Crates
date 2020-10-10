@@ -5,20 +5,16 @@ import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 
 @Deprecated
-public class HologramManagerAS extends HologramManager
-{
+public class HologramManagerAS extends HologramManager {
 
-    public HologramManagerAS(SpecializedCrates cc)
-    {
+    public HologramManagerAS(SpecializedCrates cc) {
         super(cc);
     }
 
     @Override
-    public boolean isHologramEntity(ArmorStand stand)
-    {
-        for(Hologram hologram : getHolograms())
-        {
-            if(((HologramAS)hologram).getStands().contains(stand))
+    public boolean isHologramEntity(ArmorStand stand) {
+        for (Hologram hologram : getHolograms()) {
+            if (((HologramAS) hologram).getStands().contains(stand))
                 return true;
         }
 
@@ -26,8 +22,7 @@ public class HologramManagerAS extends HologramManager
     }
 
     @Override
-    public Hologram createHologram(String name, Location location)
-    {
+    public Hologram createHologram(String name, Location location) {
         HologramAS newHolo = new HologramAS(getCc(), name, location);
         getHolograms().add(newHolo);
 
@@ -35,14 +30,12 @@ public class HologramManagerAS extends HologramManager
     }
 
     @Override
-    public void deleteHologram(Hologram hologram)
-    {
-        ((HologramAS)hologram).deleteStands();
+    public void deleteHologram(Hologram hologram) {
+        ((HologramAS) hologram).deleteStands();
         getHolograms().remove(hologram);
     }
 
-    public SpecializedCrates getCc()
-    {
+    public SpecializedCrates getCc() {
         return cc;
     }
 }

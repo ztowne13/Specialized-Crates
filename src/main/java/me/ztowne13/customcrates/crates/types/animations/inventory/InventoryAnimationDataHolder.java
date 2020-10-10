@@ -8,16 +8,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public abstract class InventoryAnimationDataHolder extends AnimationDataHolder
-{
+public abstract class InventoryAnimationDataHolder extends AnimationDataHolder {
     BukkitRunnable runnable;
     InventoryBuilder inventoryBuilder;
 
     ArrayList<Integer> clickedSlots;
 
-    public InventoryAnimationDataHolder(Player player, Location location, CrateAnimation crateAnimation, int slots)
-    {
+    public InventoryAnimationDataHolder(Player player, Location location, CrateAnimation crateAnimation, int slots) {
         super(player, location, crateAnimation);
 
         String inventoryName = getPropperInventoryName(crateAnimation);
@@ -27,55 +26,44 @@ public abstract class InventoryAnimationDataHolder extends AnimationDataHolder
     }
 
     @Override
-    public InventoryCrateAnimation getCrateAnimation()
-    {
+    public InventoryCrateAnimation getCrateAnimation() {
         return (InventoryCrateAnimation) super.getCrateAnimation();
     }
 
-    public String getPropperInventoryName(CrateAnimation crateAnimation)
-    {
+    public String getPropperInventoryName(CrateAnimation crateAnimation) {
         String inventoryName;
-        if(getCrateAnimation().getCrate().getSettings().getCrateInventoryName() == null)
-        {
+        if (getCrateAnimation().getCrate().getSettings().getCrateInventoryName() == null) {
             inventoryName = getCrateAnimation().getInvName();
-        }
-        else
-        {
+        } else {
             inventoryName = getCrateAnimation().getCrate().getSettings().getCrateInventoryName();
         }
 
-        inventoryName.replaceAll("%crate%", crateAnimation.getCrate().getDisplayName());
+        inventoryName.replace("%crate%", crateAnimation.getCrate().getDisplayName());
 
-        if(inventoryName.length() > 31)
-        {
+        if (inventoryName.length() > 31) {
             inventoryName = inventoryName.substring(0, 31);
         }
 
         return inventoryName;
     }
 
-    public ArrayList<Integer> getClickedSlots()
-    {
+    public List<Integer> getClickedSlots() {
         return clickedSlots;
     }
 
-    public BukkitRunnable getRunnable()
-    {
+    public BukkitRunnable getRunnable() {
         return runnable;
     }
 
-    public void setRunnable(BukkitRunnable runnable)
-    {
+    public void setRunnable(BukkitRunnable runnable) {
         this.runnable = runnable;
     }
 
-    public InventoryBuilder getInventoryBuilder()
-    {
+    public InventoryBuilder getInventoryBuilder() {
         return inventoryBuilder;
     }
 
-    public void setInventoryBuilder(InventoryBuilder inventoryBuilder)
-    {
+    public void setInventoryBuilder(InventoryBuilder inventoryBuilder) {
         this.inventoryBuilder = inventoryBuilder;
     }
 }

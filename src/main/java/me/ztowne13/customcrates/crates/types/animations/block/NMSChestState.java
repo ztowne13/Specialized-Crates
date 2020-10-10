@@ -4,13 +4,10 @@ import me.ztowne13.customcrates.utils.ReflectionUtilities;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
-public class NMSChestState
-{
+public class NMSChestState {
 
-    public void playChestAction(Block chest, boolean open)
-    {
-        try
-        {
+    public void playChestAction(Block chest, boolean open) {
+        try {
             Location location = chest.getLocation();
 
             Class<?> craftWorldClass = (ReflectionUtilities.getOBCClass("CraftWorld"));
@@ -18,7 +15,7 @@ public class NMSChestState
             Object world = ReflectionUtilities.getHandle(craftWorld);
 
             Class<?> blockPositionClass = ReflectionUtilities.getNMSClass("BlockPosition");
-            Object blockPosition = blockPositionClass.getConstructor(new Class[]{Double.TYPE, Double.TYPE, Double.TYPE})
+            Object blockPosition = blockPositionClass.getConstructor(Double.TYPE, Double.TYPE, Double.TYPE)
                     .newInstance(location.getX(), location.getY(), location.getZ());
 
             Object iBlockData =
@@ -31,9 +28,7 @@ public class NMSChestState
             ReflectionUtilities.getMethod(world.getClass(), "playBlockAction",
                     new Class[]{blockPosition.getClass(), ReflectionUtilities.getNMSClass("Block"), Integer.TYPE,
                             Integer.TYPE}).invoke(world, blockPosition, block, 1, open ? 1 : 0);
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             exc.printStackTrace();
         }
     }

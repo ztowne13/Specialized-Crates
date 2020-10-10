@@ -6,17 +6,14 @@ import me.ztowne13.customcrates.crates.PlacedCrate;
 /**
  * Created by ztowne13 on 2/24/16.
  */
-public abstract class DynamicCratePlaceholder
-{
+public abstract class DynamicCratePlaceholder {
     SpecializedCrates cc;
 
-    public DynamicCratePlaceholder(SpecializedCrates cc)
-    {
+    public DynamicCratePlaceholder(SpecializedCrates cc) {
         this.cc = cc;
     }
 
-    public SpecializedCrates getCc()
-    {
+    public SpecializedCrates getCc() {
         return cc;
     }
 
@@ -24,9 +21,9 @@ public abstract class DynamicCratePlaceholder
 
     public abstract void remove(PlacedCrate cm);
 
-    public abstract void setType(Object obj);
-
     public abstract String getType();
+
+    public abstract void setType(Object obj);
 
     public abstract void fixHologram(PlacedCrate cm);
 

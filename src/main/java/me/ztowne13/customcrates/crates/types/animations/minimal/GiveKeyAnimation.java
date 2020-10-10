@@ -11,23 +11,19 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class GiveKeyAnimation extends CrateAnimation
-{
+public class GiveKeyAnimation extends CrateAnimation {
 
-    public GiveKeyAnimation(Crate crate)
-    {
+    public GiveKeyAnimation(Crate crate) {
         super(crate, CrateAnimationType.GIVE_KEY);
     }
 
     @Override
-    public void tickAnimation(AnimationDataHolder dataHolder, boolean update)
-    {
+    public void tickAnimation(AnimationDataHolder dataHolder, boolean update) {
 
     }
 
     @Override
-    public void endAnimation(AnimationDataHolder dataHolder)
-    {
+    public void endAnimation(AnimationDataHolder dataHolder) {
         Player player = dataHolder.getPlayer();
 
         Reward r = getCrate().getSettings().getRewards().getRandomReward();
@@ -39,24 +35,19 @@ public class GiveKeyAnimation extends CrateAnimation
     }
 
     @Override
-    public boolean updateTicks(AnimationDataHolder dataHolder)
-    {
+    public boolean updateTicks(AnimationDataHolder dataHolder) {
         return false;
     }
 
     @Override
-    public void checkStateChange(AnimationDataHolder dataHolder, boolean update)
-    {
-        switch(dataHolder.getCurrentState())
-        {
-            case PLAYING:
-                dataHolder.setCurrentState(AnimationDataHolder.State.COMPLETED);
+    public void checkStateChange(AnimationDataHolder dataHolder, boolean update) {
+        if (dataHolder.getCurrentState() == AnimationDataHolder.State.PLAYING) {
+            dataHolder.setCurrentState(AnimationDataHolder.State.COMPLETED);
         }
     }
 
     @Override
-    public void loadDataValues(StatusLogger sl)
-    {
+    public void loadDataValues(StatusLogger sl) {
 
     }
 

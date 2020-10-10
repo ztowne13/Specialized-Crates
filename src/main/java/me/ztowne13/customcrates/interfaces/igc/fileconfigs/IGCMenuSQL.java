@@ -15,16 +15,13 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 3/20/16.
  */
-public class IGCMenuSQL extends IGCMenu
-{
-    public IGCMenuSQL(SpecializedCrates cc, Player p, IGCMenu lastMenu)
-    {
+public class IGCMenuSQL extends IGCMenu {
+    public IGCMenuSQL(SpecializedCrates cc, Player p, IGCMenu lastMenu) {
         super(cc, p, lastMenu, "&7&l> &6&lCrateConfig.YML");
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         FileHandler fu = getCc().getSqlFile();
         FileConfiguration fc = fu.get();
@@ -51,10 +48,8 @@ public class IGCMenuSQL extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 18:
                 up();
                 ChatUtils.msgInfo(getP(), "Remember to change the store-data value in the config.yml if you want to enable SQL for storage.");
@@ -93,8 +88,7 @@ public class IGCMenuSQL extends IGCMenu
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         FileHandler fileHandler = getCc().getSqlFile();
         fileHandler.get().set(value, input);
 

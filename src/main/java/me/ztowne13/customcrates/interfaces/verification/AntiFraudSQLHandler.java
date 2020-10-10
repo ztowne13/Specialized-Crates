@@ -16,8 +16,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.UUID;
 
-public class AntiFraudSQLHandler extends Thread
-{
+public class AntiFraudSQLHandler extends Thread {
     boolean authenticated = true;
     boolean alreadyLogged = false;
 
@@ -25,31 +24,24 @@ public class AntiFraudSQLHandler extends Thread
 
     UUID id;
 
-    public AntiFraudSQLHandler(SpecializedCrates specializedCrates)
-    {
+    public AntiFraudSQLHandler(SpecializedCrates specializedCrates) {
         this.specializedCrates = specializedCrates;
 
-        if(Bukkit.getPluginManager().getPlugin("SpecializedCrates").getDescription().getVersion().contains("BETA"))
-        {
+        if (Bukkit.getPluginManager().getPlugin("SpecializedCrates").getDescription().getVersion().contains("BETA")) {
             AntiFraudPlaceholders.NONCE = AntiFraudPlaceholders.NONCE_BETA;
             AntiFraudPlaceholders.USER = AntiFraudPlaceholders.USER_BETA;
             AntiFraudPlaceholders.RESOURCE = AntiFraudPlaceholders.RESOURCE_BETA;
             specializedCrates.getSettings().getInfoToLog().put("Beta Version", "&atrue");
-        }
-        else
-        {
+        } else {
             specializedCrates.getSettings().getInfoToLog().put("Beta Version", "&cfalse");
         }
 
         FileHandler data = specializedCrates.getDataFile();
         FileConfiguration fc = data.get();
 
-        if (fc.contains("server-id"))
-        {
+        if (fc.contains("server-id")) {
             id = UUID.fromString(fc.getString("server-id"));
-        }
-        else
-        {
+        } else {
             id = UUID.randomUUID();
             fc.set("server-id", id.toString());
             data.save();
@@ -60,10 +52,8 @@ public class AntiFraudSQLHandler extends Thread
     }
 
     @Override
-    public void run()
-    {
-        try
-        {
+    public void run() {
+        try {
             String values = "'" + id + "','" + AntiFraudPlaceholders.USER + "','" + AntiFraudPlaceholders.RESOURCE + "','" +
                     AntiFraudPlaceholders.NONCE + "'";
 
@@ -80,27 +70,23 @@ public class AntiFraudSQLHandler extends Thread
 
             updateURL.openStream();
 
-            if(!authenticate("SERVERID", id.toString()))
+            if (!authenticate("SERVERID", id.toString()))
                 authenticated = false;
 
-            if(!authenticate("NONCE", AntiFraudPlaceholders.NONCE))
+            if (!authenticate("NONCE", AntiFraudPlaceholders.NONCE))
                 authenticated = false;
 
-            if(!authenticate("USER", AntiFraudPlaceholders.USER))
+            if (!authenticate("USER", AntiFraudPlaceholders.USER))
                 authenticated = false;
 
-            if(!authenticate("RESOURCE", AntiFraudPlaceholders.RESOURCE))
+            if (!authenticate("RESOURCE", AntiFraudPlaceholders.RESOURCE))
                 authenticated = false;
 
-            if (!authenticated)
-            {
+            if (!authenticated) {
                 ChatUtils.log(Messages.BLACKLISTED_PLUGIN.getMsg());
             }
-        }
-        catch (Exception exc)
-        {
-            if(!alreadyLogged)
-            {
+        } catch (Exception exc) {
+            if (!alreadyLogged) {
                 ChatUtils
                         .log("Failed to authenticate via the Specialized Crates authentication DB. Authenticating anyways.");
                 alreadyLogged = true;
@@ -109,10 +95,8 @@ public class AntiFraudSQLHandler extends Thread
 
     }
 
-    public boolean authenticate(String type, String toMatch) throws Exception
-    {
-        try
-        {
+    public boolean authenticate(String type, String toMatch) throws Exception {
+        try {
             URL idsURL = new URL("http://vps210053.vps.ovh.ca/specializedcrates_service.php?type='" + type + "'");
             URLConnection connection = idsURL.openConnection();
             BufferedReader in = new BufferedReader(
@@ -121,14 +105,12 @@ public class AntiFraudSQLHandler extends Thread
 
             String inputLine;
 
-            while ((inputLine = in.readLine()) != null)
-            {
+            while ((inputLine = in.readLine()) != null) {
                 specializedCrates.getDu().log("run() - idsURL: " + inputLine, getClass());
                 Object obj = new JSONParser().parse(inputLine);
                 JSONArray jsonArray = (JSONArray) obj;
 
-                for (int i = 0; i < jsonArray.size(); i++)
-                {
+                for (int i = 0; i < jsonArray.size(); i++) {
                     JSONObject jobj = (JSONObject) jsonArray.get(i);
                     String toCompareVal = jobj.get("value").toString();
 
@@ -143,11 +125,8 @@ public class AntiFraudSQLHandler extends Thread
             in.close();
 
             idsURL.openStream();
-        }
-        catch(Exception exc)
-        {
-            if(!alreadyLogged)
-            {
+        } catch (Exception exc) {
+            if (!alreadyLogged) {
                 ChatUtils
                         .log("Failed to authenticate via the Specialized Crates authentication DB. Authenticating anyways.");
                 alreadyLogged = true;
@@ -157,8 +136,7 @@ public class AntiFraudSQLHandler extends Thread
         return true;
     }
 
-    public boolean isAuthenticated()
-    {
+    public boolean isAuthenticated() {
         return authenticated;
     }
 }

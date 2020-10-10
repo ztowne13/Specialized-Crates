@@ -3,51 +3,50 @@ package me.ztowne13.customcrates.crates.options.actions.title;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public abstract class Title
-{
-    public abstract void setTitle(String title);
+public interface Title {
+    String getTitle();
 
-    public abstract String getTitle();
+    void setTitle(String title);
 
-    public abstract void setSubtitle(String subtitle);
+    String getSubtitle();
 
-    public abstract String getSubtitle();
+    void setSubtitle(String subtitle);
 
-    abstract void setTitleColor(ChatColor color);
+    void setTimingsToTicks();
 
-    abstract void setSubtitleColor(ChatColor color);
+    void setTimingsToSeconds();
 
-    abstract void setFadeInTime(int time);
+    void send(Player player);
 
-    abstract void setFadeOutTime(int time);
+    void updateTimes(Player player);
 
-    abstract void setStayTime(int time);
+    void updateTitle(Player player);
 
-    abstract void setTimingsToTicks();
+    void updateSubtitle(Player player);
 
-    abstract void setTimingsToSeconds();
+    void broadcast();
 
-    public abstract void send(Player player);
+    void clearTitle(Player player);
 
-    abstract void updateTimes(Player player);
+    ChatColor getTitleColor();
 
-    abstract void updateTitle(Player player);
+    void setTitleColor(ChatColor color);
 
-    abstract void updateSubtitle(Player player);
+    ChatColor getSubtitleColor();
 
-    abstract void broadcast();
+    void setSubtitleColor(ChatColor color);
 
-    abstract void clearTitle(Player player);
+    int getFadeInTime();
 
-    abstract ChatColor getTitleColor();
+    void setFadeInTime(int time);
 
-    abstract ChatColor getSubtitleColor();
+    int getFadeOutTime();
 
-    abstract int getFadeInTime();
+    void setFadeOutTime(int time);
 
-    abstract int getFadeOutTime();
+    int getStayTime();
 
-    abstract int getStayTime();
+    void setStayTime(int time);
 
-    abstract boolean isTicks();
+    boolean isTicks();
 }

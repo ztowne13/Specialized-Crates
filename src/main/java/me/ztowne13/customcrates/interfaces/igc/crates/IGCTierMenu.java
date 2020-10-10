@@ -8,23 +8,19 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 4/2/16.
  */
-public abstract class IGCTierMenu extends IGCMenuCrate
-{
+public abstract class IGCTierMenu extends IGCMenuCrate {
     String tier;
 
-    public IGCTierMenu(SpecializedCrates cc, Player p, IGCMenu lastMenu, String name, Crate crates, String tier)
-    {
+    public IGCTierMenu(SpecializedCrates cc, Player p, IGCMenu lastMenu, String name, Crate crates, String tier) {
         super(cc, p, lastMenu, name, crates);
         this.tier = tier;
     }
 
-    public String getTier()
-    {
+    public String getTier() {
         return tier;
     }
 
-    public void setTier(String tier)
-    {
+    public void setTier(String tier) {
         this.tier = tier;
     }
 }

@@ -29,8 +29,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-public enum DynamicMaterial
-{
+// TODO: Use XMaterial from XSeries
+public enum DynamicMaterial {
     PLAYER_HEAD(3, "SKULL_ITEM", "SKULL"),
 
     ACACIA_BOAT(0, "BOAT_ACACIA"),
@@ -140,8 +140,8 @@ public enum DynamicMaterial
     BRAIN_CORAL_FAN(0, "STONE"),
     BRAIN_CORAL_WALL_FAN(0, "STONE"),
     BREAD(0, "BREAD"),
-//    BREWING_STAND(0, "BREWING_STAND_ITEM"),
-    BREWING_STAND_ITEM(0,"BREWING_STAND", "BREWING_STAND_ITEM"),
+    //    BREWING_STAND(0, "BREWING_STAND_ITEM"),
+    BREWING_STAND_ITEM(0, "BREWING_STAND", "BREWING_STAND_ITEM"),
     BRICK(0, "CLAY_BRICK"),
     BRICKS(0, "BRICK"),
     BRICK_SLAB(4, "STEP"),
@@ -1120,79 +1120,31 @@ public enum DynamicMaterial
     ZOGLIN_SPAWN_EGG(0, "STONE"),
     ZOMBIFIED_PIGLIN_SPAWN_EGG(0, "STONE");
 
+    private static final HashMap<String, DynamicMaterial> cachedSearch = new HashMap<>();
     String[] m;
     int data;
     boolean preProgrammedNBTTag = false;
     String nbtTag = "";
 
-    DynamicMaterial(int data, String... m)
-    {
+    DynamicMaterial(int data, String... m) {
         this.m = m;
         this.data = data;
 
-        if (name().endsWith("_SPAWN_EGG"))
-        {
+        if (name().endsWith("_SPAWN_EGG")) {
             preProgrammedNBTTag = true;
             nbtTag = name().replaceAll("_SPAWN_EGG", "");
         }
     }
 
-    public ItemStack parseItem()
-    {
-        Material mat = parseMaterial();
-
-        if (isNewVersion())
-            return new ItemStack(mat);
-
-        return new ItemStack(mat, 1, (byte) data);
-    }
-
-    public static boolean isNewVersion()
-    {
+    public static boolean isNewVersion() {
         return Material.getMaterial("RED_WOOL") != null;
     }
 
-    public boolean isSameMaterial(ItemStack comp)
-    {
-        if (isNewVersion())
-            return comp.getType() == this.parseMaterial();
-
-        if (comp.getType() == this.parseMaterial() && (int) comp.getData().getData() == (int) this.data)
-            return true;
-
-        DynamicMaterial xmat = fromMaterial(comp.getType());
-
-        if (isDamageable(xmat))
-            if (this.parseMaterial() == comp.getType())
-                return true;
-
-        return false;
-    }
-
-    public DynamicMaterial fromMaterial(Material mat)
-    {
-        try
-        {
-            return DynamicMaterial.valueOf(mat.toString());
-        }
-        catch (IllegalArgumentException e)
-        {
-            for (DynamicMaterial xmat : DynamicMaterial.values())
-                for (String test : xmat.m)
-                    if (test.equalsIgnoreCase(mat.toString()))
-                        return xmat;
-        }
-
-        return null;
-    }
-
-    public static DynamicMaterial fromItemStack(ItemStack stack)
-    {
+    public static DynamicMaterial fromItemStack(ItemStack stack) {
         return fromString(stack.getType() + ";" + stack.getDurability());
     }
 
-    public static DynamicMaterial fromString(String key)
-    {
+    public static DynamicMaterial fromString(String key) {
         key = key.toUpperCase();
         String[] split = key.split(";");
         String keyMat = split[0];
@@ -1202,23 +1154,18 @@ public enum DynamicMaterial
 
         DynamicMaterial xmat = null;
 
-        try
-        {
+        try {
             xmat = DynamicMaterial.valueOf(keyMat);
 
-            if(split.length > 1 && !split[1].equalsIgnoreCase("0"))
-            {
+            if (split.length > 1 && !split[1].equalsIgnoreCase("0")) {
                 DynamicMaterial newxmat = requestXMaterial(keyMat, (byte) Integer.parseInt(split[1]));
-                if(newxmat != null)
-                {
+                if (newxmat != null) {
                     return newxmat;
                 }
             }
 
             return xmat;
-        }
-        catch (IllegalArgumentException e)
-        {
+        } catch (IllegalArgumentException e) {
             if (split.length == 1)
                 xmat = requestXMaterial(keyMat, (byte) 0);
             else
@@ -1232,16 +1179,67 @@ public enum DynamicMaterial
 
     }
 
-    public boolean isDamageable(DynamicMaterial type)
-    {
+    public static DynamicMaterial requestXMaterial(String name, byte data) {
+        if (cachedSearch.containsKey(name.toUpperCase() + "," + data))
+            return cachedSearch.get(name.toUpperCase() + "," + data);
+
+        for (DynamicMaterial mat : DynamicMaterial.values()) {
+            for (String test : mat.m) {
+                if (name.toUpperCase().equals(test) && ((byte) mat.data) == data) {
+                    cachedSearch.put(test + "," + data, mat);
+                    return mat;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public ItemStack parseItem() {
+        Material mat = parseMaterial();
+
+        if (isNewVersion())
+            return new ItemStack(mat);
+
+        return new ItemStack(mat, 1, (byte) data);
+    }
+
+    public boolean isSameMaterial(ItemStack comp) {
+        if (isNewVersion())
+            return comp.getType() == this.parseMaterial();
+
+        if (comp.getType() == this.parseMaterial() && (int) comp.getData().getData() == this.data)
+            return true;
+
+        DynamicMaterial xmat = fromMaterial(comp.getType());
+
+        if (isDamageable(xmat))
+            return this.parseMaterial() == comp.getType();
+
+        return false;
+    }
+
+    public DynamicMaterial fromMaterial(Material mat) {
+        try {
+            return DynamicMaterial.valueOf(mat.toString());
+        } catch (IllegalArgumentException e) {
+            for (DynamicMaterial xmat : DynamicMaterial.values())
+                for (String test : xmat.m)
+                    if (test.equalsIgnoreCase(mat.toString()))
+                        return xmat;
+        }
+
+        return null;
+    }
+
+    public boolean isDamageable(DynamicMaterial type) {
         if (type == null)
             return false;
 
         String[] split = type.toString().split("_");
         int length = split.length;
 
-        switch (split[length - 1])
-        {
+        switch (split[length - 1]) {
             case "HELMET":
                 return true;
             case "CHESTPLATE":
@@ -1275,15 +1273,11 @@ public enum DynamicMaterial
         }
     }
 
-    public Material parseMaterialRecur(int idx)
-    {
+    public Material parseMaterialRecur(int idx) {
         Material mat = null;
-        if (idx == -1)
-        {
+        if (idx == -1) {
             mat = Material.matchMaterial(toString());
-        }
-        else
-        {
+        } else {
             if (m.length == idx)
                 return null;
 
@@ -1296,30 +1290,7 @@ public enum DynamicMaterial
         return parseMaterialRecur(idx + 1);
     }
 
-    public Material parseMaterial()
-    {
+    public Material parseMaterial() {
         return parseMaterialRecur(-1);
-    }
-
-    private static HashMap<String, DynamicMaterial> cachedSearch = new HashMap<>();
-
-    public static DynamicMaterial requestXMaterial(String name, byte data)
-    {
-        if (cachedSearch.containsKey(name.toUpperCase() + "," + data))
-            return cachedSearch.get(name.toUpperCase() + "," + data);
-
-        for (DynamicMaterial mat : DynamicMaterial.values())
-        {
-            for (String test : mat.m)
-            {
-                if (name.toUpperCase().equals(test) && ((byte) mat.data) == data)
-                {
-                    cachedSearch.put(test + "," + data, mat);
-                    return mat;
-                }
-            }
-        }
-
-        return null;
     }
 }

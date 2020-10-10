@@ -13,72 +13,58 @@ import java.util.List;
 /**
  * Created by ztowne13 on 3/3/16.
  */
-public class ChatUtils
-{
+public class ChatUtils {
     @Deprecated
-    public static void log(String[] args)
-    {
+    public static void log(String[] args) {
         Bukkit.getLogger().info("-----------------------------------");
-        for (int i = 0; i < args.length; i++)
-        {
-            Bukkit.getServer().getConsoleSender().sendMessage(ChatUtils.toChatColor(args[i]));
+        for (String arg : args) {
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatUtils.toChatColor(arg));
         }
         Bukkit.getLogger().info("-----------------------------------");
     }
 
-    public static void log(String s)
-    {
+    public static void log(String s) {
         Bukkit.getServer().getConsoleSender().sendMessage(ChatUtils.toChatColor("&7" + s));
     }
 
-    public static void logFailLoad(String crate, String failLoad, String failLoadValue)
-    {
+    public static void logFailLoad(String crate, String failLoad, String failLoadValue) {
         ChatUtils.log(new String[]{"Failed to load " + failLoad + " for crate " + crate + ": " + failLoadValue});
     }
 
-    public static String formatAndColor(SpecializedCrates specializedCrates, Player player, String str)
-    {
-        if(specializedCrates.isUsingPlaceholderAPI())
-        {
+    public static String formatAndColor(SpecializedCrates specializedCrates, Player player, String str) {
+        if (specializedCrates.isUsingPlaceholderAPI()) {
             str = PlaceHolderAPIHandler.setPlaceHolders(player, str);
         }
 
         return toChatColor(str);
     }
 
-    public static void msg(Player p, String s)
-    {
+    public static void msg(Player p, String s) {
         p.sendMessage(ChatUtils.toChatColor(s));
     }
 
-    public static void msg(CommandSender sender, String s)
-    {
+    public static void msg(CommandSender sender, String s) {
         sender.sendMessage(ChatUtils.toChatColor(s));
     }
 
-    public static void msgError(Player p, String s)
-    {
+    public static void msgError(Player p, String s) {
         msg(p, "&4&lERROR! &c" + s);
     }
 
-    public static void msgSuccess(Player p, String s)
-    {
+    public static void msgSuccess(Player p, String s) {
         msg(p, "&2&lSUCCESS! &a" + s);
     }
 
-    public static void msgInfo(Player p, String s)
-    {
+    public static void msgInfo(Player p, String s) {
         msg(p, "&6&lInfo &e" + s);
     }
 
-    public static void msgHey(Player p, String s)
-    {
+    public static void msgHey(Player p, String s) {
         msg(p, "&6&lHey! &e" + s);
     }
 
-    public static String toChatColor(String s)
-    {
-        s = s.replaceAll("<!!special_chat_encoding!!>", "§");
+    public static String toChatColor(String s) {
+        s = s.replace("<!!special_chat_encoding!!>", "§");
         return ChatColor.translateAlternateColorCodes('&', s);
     }
 
@@ -120,76 +106,60 @@ public class ChatUtils
 //        return newS.replace("§", "&");
 //    }
 
-    public static String fromChatColor(String s)
-    {
+    public static String fromChatColor(String s) {
         return s.replace("§", "&");
     }
 
-    public static String stripQuotes(String s)
-    {
-        while(s.startsWith("'") || s.startsWith("\""))
+    public static String stripQuotes(String s) {
+        while (s.startsWith("'") || s.startsWith("\""))
             s = s.substring(1);
 
-        while(s.endsWith("'") || s.endsWith("\""))
+        while (s.endsWith("'") || s.endsWith("\""))
             s = s.substring(0, s.length() - 1);
 
         return s;
     }
 
-    public static String removeColor(String s)
-    {
+    public static String removeColor(String s) {
         s = ChatColor.stripColor(s);
-        String newString = "";
-        for (int i = 0; i < s.length(); i++)
-        {
-            if (s.substring(i, i + 1).equalsIgnoreCase("&"))
-            {
+        StringBuilder newString = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.substring(i, i + 1).equalsIgnoreCase("&")) {
                 i++;
-            }
-            else
-            {
-                newString = newString + s.substring(i, i + 1);
+            } else {
+                newString.append(s.charAt(i));
             }
         }
-        return newString;
+        return newString.toString();
     }
 
-    public static String stripFromWhitespace(String s)
-    {
+    public static String stripFromWhitespace(String s) {
         return s.replaceAll("\\s+", "");
     }
 
-    public static List<String> removeColorFrom(List list)
-    {
-        ArrayList<String> newList = new ArrayList<String>();
-        for (Object s : list)
-        {
+    public static List<String> removeColorFrom(List<?> list) {
+        ArrayList<String> newList = new ArrayList<>();
+        for (Object s : list) {
             newList.add(ChatColor.stripColor(s.toString()));
         }
         return newList;
     }
 
-    public static List<String> fromColor(List list)
-    {
-        ArrayList<String> newList = new ArrayList<String>();
-        for (Object s : list)
-        {
-            newList.add(s.toString().replaceAll("§", "&"));
+    public static List<String> fromColor(List<?> list) {
+        ArrayList<String> newList = new ArrayList<>();
+        for (Object s : list) {
+            newList.add(s.toString().replace("§", "&"));
         }
         return newList;
     }
 
-    public static String lastChatColor(String s)
-    {
+    public static String lastChatColor(String s) {
         String col;
 
         String[] split = fromChatColor(s).split("&");
-        if(split.length == 1)
-        {
+        if (split.length == 1) {
             col = "&f";
-        }
-        else
-        {
+        } else {
             int last = split.length - 1;
             col = ChatColor.translateAlternateColorCodes('&', "&" + split[last].split("")[0]);
         }

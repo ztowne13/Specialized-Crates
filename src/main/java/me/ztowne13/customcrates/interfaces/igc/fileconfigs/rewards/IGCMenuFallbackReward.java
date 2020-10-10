@@ -14,19 +14,16 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 3/22/16.
  */
-public class IGCMenuFallbackReward extends IGCMenu
-{
+public class IGCMenuFallbackReward extends IGCMenu {
     Reward reward;
 
-    public IGCMenuFallbackReward(SpecializedCrates cc, Player p, IGCMenu lastMenu, Reward reward)
-    {
+    public IGCMenuFallbackReward(SpecializedCrates cc, Player p, IGCMenu lastMenu, Reward reward) {
         super(cc, p, lastMenu, "&7&l> &6&lFallback Reward");
         this.reward = reward;
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(9);
 
@@ -58,10 +55,8 @@ public class IGCMenuFallbackReward extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 0:
                 up();
                 break;
@@ -75,12 +70,9 @@ public class IGCMenuFallbackReward extends IGCMenu
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
-        if(value.equalsIgnoreCase("fallback-reward.permission"))
-        {
-            if(input.equalsIgnoreCase("none"))
-            {
+    public boolean handleInput(String value, String input) {
+        if (value.equalsIgnoreCase("fallback-reward.permission")) {
+            if (input.equalsIgnoreCase("none")) {
                 reward.setFallbackPermission("");
                 ChatUtils.msgSuccess(getP(), "Removed the fallback reward.");
                 return true;

@@ -11,38 +11,29 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandRewards extends Commands implements CommandExecutor
-{
+public class CommandRewards extends Commands implements CommandExecutor {
     SpecializedCrates sc;
 
-    public CommandRewards(SpecializedCrates sc)
-    {
+    public CommandRewards(SpecializedCrates sc) {
         super("rewards");
         this.sc = sc;
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args)
-    {
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         setCmdSender(commandSender);
 
-        if (canExecute(false, true, "customcrates.rewards", "specializedcrates.rewards"))
-        {
-            Player player = (Player)commandSender;
-            if(args.length == 0)
+        if (canExecute(false, true, "customcrates.rewards", "specializedcrates.rewards")) {
+            Player player = (Player) commandSender;
+            if (args.length == 0)
                 Messages.COMMAND_REWARDS_USAGE.msgSpecified(sc, player);
-            else
-            {
+            else {
                 String crateName = args[0];
-                if(Crate.exists(crateName))
-                {
+                if (Crate.exists(crateName)) {
                     Crate crate = Crate.getCrate(sc, crateName);
-                    if (CrateUtils.isCrateUsable(crate))
-                    {
-                        if ((Boolean) SettingsValue.REWARD_DISPLAY_ENABLED.getValue(sc))
-                        {
-                            if (!crate.isMultiCrate())
-                            {
+                    if (CrateUtils.isCrateUsable(crate)) {
+                        if ((Boolean) SettingsValue.REWARD_DISPLAY_ENABLED.getValue(sc)) {
+                            if (!crate.isMultiCrate()) {
                                 crate.getSettings().getDisplayer().openFor(player);
                                 Messages.COMMAND_REWARDS_OPENING.msgSpecified(sc, player, new String[]{"%crate%"}, new String[]{crateName});
                                 return true;
@@ -52,9 +43,7 @@ public class CommandRewards extends Commands implements CommandExecutor
                 }
                 Messages.COMMAND_REWARDS_INVALID_CRATE.msgSpecified(sc, player, new String[]{"%crate%"}, new String[]{crateName});
             }
-        }
-        else
-        {
+        } else {
             if (getCmdSender() instanceof ConsoleCommandSender)
                 msg("This command can not be run from console.");
             else
@@ -65,5 +54,6 @@ public class CommandRewards extends Commands implements CommandExecutor
     }
 
     @Override
-    public void msgPage(int page) { }
+    public void msgPage(int page) {
+    }
 }

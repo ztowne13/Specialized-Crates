@@ -7,19 +7,16 @@ import org.bukkit.Location;
 /**
  * Created by ztowne13 on 6/27/16.
  */
-public class OffsetTiltedRingsPA extends ParticleAnimationEffect
-{
-    int updatesPerSec = 20;
+public class OffsetTiltedRingsPA extends ParticleAnimationEffect {
+    int updatesPerSec;
 
-    public OffsetTiltedRingsPA(SpecializedCrates cc, ParticleData particleData)
-    {
+    public OffsetTiltedRingsPA(SpecializedCrates cc, ParticleData particleData) {
         super(cc, particleData);
         this.updatesPerSec = (int) particleData.getSpeed();
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         toDisplay.clear();
 
         totalTick += updatesPerSec;
@@ -31,11 +28,9 @@ public class OffsetTiltedRingsPA extends ParticleAnimationEffect
 
         double rotateInRadians = Math.toRadians(rotation);
 
-        for (int i = tick; i < tick + updatesPerSec; i++)
-        {
+        for (int i = tick; i < tick + updatesPerSec; i++) {
             int iTemp = i;
-            if (i % (2 + particleData.getAmount()) == 0)
-            {
+            if (i % (2 + particleData.getAmount()) == 0) {
                 i = iTemp;
                 double x = Math.sin(Math.toRadians(i)) * radius;
                 double y = Math.cos(Math.toRadians(i)) * radius;
@@ -61,8 +56,7 @@ public class OffsetTiltedRingsPA extends ParticleAnimationEffect
                 newL = new Location(null, toX, yOffset - tilt, -toY);
                 toDisplay.add(newL);
 
-                if (i > 360)
-                {
+                if (i > 360) {
                     i = 1;
                     tick = 0;
                 }

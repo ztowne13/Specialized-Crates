@@ -8,8 +8,7 @@ import org.bukkit.Location;
 
 import java.util.UUID;
 
-public abstract class DynamicHologram
-{
+public abstract class DynamicHologram {
     UUID uuid;
 
     SpecializedCrates cc;
@@ -19,15 +18,13 @@ public abstract class DynamicHologram
 
     boolean displayingRewardHologram = false;
 
-    public DynamicHologram(SpecializedCrates cc, PlacedCrate cm)
-    {
+    public DynamicHologram(SpecializedCrates cc, PlacedCrate cm) {
         this.uuid = UUID.randomUUID();
 
         this.cc = cc;
         this.cm = cm;
 
-        if (cm.getHologram().getHat() != null && cm.getHologram().getHat() != HoloAnimType.NONE)
-        {
+        if (cm.getHologram().getHat() != null && cm.getHologram().getHat() != HoloAnimType.NONE) {
             setHa(cm.getHologram().getHat().getAsHoloAnimation(cc, this));
         }
     }
@@ -42,57 +39,46 @@ public abstract class DynamicHologram
 
     public abstract void teleport(Location l);
 
-    public void tick()
-    {
-        if (getHa() != null)
-        {
-            if(!cm.getHologram().getPrefixes().isEmpty())
+    public void tick() {
+        if (getHa() != null) {
+            if (!cm.getHologram().getPrefixes().isEmpty())
                 getHa().tick();
         }
     }
 
-    public PlacedCrate getCm()
-    {
+    public PlacedCrate getCm() {
         return cm;
     }
 
-    public void setCm(PlacedCrate cm)
-    {
+    public void setCm(PlacedCrate cm) {
         this.cm = cm;
     }
 
-    public HoloAnimation getHa()
-    {
+    public HoloAnimation getHa() {
         return ha;
     }
 
-    public void setHa(HoloAnimation ha)
-    {
+    public void setHa(HoloAnimation ha) {
         this.ha = ha;
     }
 
-    public SpecializedCrates getCc()
-    {
+    public SpecializedCrates getCc() {
         return cc;
     }
 
-    public void setCc(SpecializedCrates cc)
-    {
+    public void setCc(SpecializedCrates cc) {
         this.cc = cc;
     }
 
-    public boolean getDisplayingRewardHologram()
-    {
+    public boolean getDisplayingRewardHologram() {
         return displayingRewardHologram;
     }
 
-    public void setDisplayingRewardHologram(boolean displayingRewardHologram)
-    {
+    public void setDisplayingRewardHologram(boolean displayingRewardHologram) {
         this.displayingRewardHologram = displayingRewardHologram;
     }
 
-    public UUID getUuid()
-    {
+    public UUID getUuid() {
         return uuid;
     }
 }

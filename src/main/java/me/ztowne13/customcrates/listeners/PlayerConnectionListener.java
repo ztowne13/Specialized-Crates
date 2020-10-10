@@ -7,12 +7,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class PlayerConnectionListener implements Listener
-{
+public class PlayerConnectionListener implements Listener {
     SpecializedCrates cc;
 
-    public PlayerConnectionListener(SpecializedCrates cc)
-    {
+    public PlayerConnectionListener(SpecializedCrates cc) {
         this.cc = cc;
     }
 
@@ -36,8 +34,7 @@ public class PlayerConnectionListener implements Listener
 //    }
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent e)
-    {
+    public void onQuit(PlayerQuitEvent e) {
         cc.getDu().log("onQuit() - CALL (" + e.getPlayer().getName() + ")", getClass());
         Player p = e.getPlayer();
         PlayerManager.get(cc, p).remove(20);

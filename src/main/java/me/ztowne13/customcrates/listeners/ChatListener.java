@@ -16,38 +16,27 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 /**
  * Created by ztowne13 on 3/15/16.
  */
-public class ChatListener implements Listener
-{
+public class ChatListener implements Listener {
     SpecializedCrates cc;
 
-    public ChatListener(SpecializedCrates cc)
-    {
+    public ChatListener(SpecializedCrates cc) {
         this.cc = cc;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onChat(final AsyncPlayerChatEvent e)
-    {
+    public void onChat(final AsyncPlayerChatEvent e) {
         final Player p = e.getPlayer();
-        if (p.hasPermission("customcrates.admin") || p.hasPermission("specializedcrates.admin"))
-        {
+        if (p.hasPermission("customcrates.admin") || p.hasPermission("specializedcrates.admin")) {
             PlayerManager pm = PlayerManager.get(cc, p);
-            if (pm.isInOpenMenu())
-            {
+            if (pm.isInOpenMenu()) {
                 final IGCMenu menu = pm.getOpenMenu();
-                if (menu.isInInputMenu())
-                {
+                if (menu.isInInputMenu()) {
                     final String msg = e.getMessage();
                     final InputMenu im = menu.getInputMenu();
 
-                    Bukkit.getScheduler().runTaskLater(cc, new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            im.runFor(menu, msg);
-                            p.sendMessage(ChatUtils.toChatColor(" &7&l> &f" + msg));
-                        }
+                    Bukkit.getScheduler().runTaskLater(cc, () -> {
+                        im.runFor(menu, msg);
+                        p.sendMessage(ChatUtils.toChatColor(" &7&l> &f" + msg));
                     }, 1);
 
                     e.getRecipients().clear();
@@ -58,35 +47,24 @@ public class ChatListener implements Listener
     }
 
     @EventHandler
-    public void onCmiReloadListener(PlayerCommandPreprocessEvent event)
-    {
+    public void onCmiReloadListener(PlayerCommandPreprocessEvent event) {
         final Player player = event.getPlayer();
 
-        if (player.hasPermission("customcrates.admin") || player.hasPermission("specializedcrates.admin"))
-        {
+        if (player.hasPermission("customcrates.admin") || player.hasPermission("specializedcrates.admin")) {
             if (cc.getSettings().getInfoToLog().containsKey("Hologram Plugin") &&
-                    cc.getSettings().getInfoToLog().get("Hologram Plugin").equalsIgnoreCase("CMI"))
-            {
+                    cc.getSettings().getInfoToLog().get("Hologram Plugin").equalsIgnoreCase("CMI")) {
                 String[] split = event.getMessage().split(" ");
-                if (split.length >= 2)
-                {
-                    if (split[0].equalsIgnoreCase("/cmi") || split[0].equalsIgnoreCase("/cmi:cmi"))
-                    {
-                        if (split[1].equalsIgnoreCase("reload"))
-                        {
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
-                            {
-                                @Override
-                                public void run()
-                                {
-                                    long start = System.currentTimeMillis();
-                                    ChatUtils.msgInfo(player,
-                                            "You have executed &c/cmi reload&e. In order to keep holograms on the &6Specialized&7Crates &ecrates, &6Specialized&7Crates &eis also reloading.");
-                                    cc.reload();
-                                    ChatUtils.msgInfo(player,
-                                            "Reloaded the Specialized Crate plugin &7(" + (System.currentTimeMillis() - start) +
-                                                    "ms)&a.");
-                                }
+                if (split.length >= 2) {
+                    if (split[0].equalsIgnoreCase("/cmi") || split[0].equalsIgnoreCase("/cmi:cmi")) {
+                        if (split[1].equalsIgnoreCase("reload")) {
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(cc, () -> {
+                                long start = System.currentTimeMillis();
+                                ChatUtils.msgInfo(player,
+                                        "You have executed &c/cmi reload&e. In order to keep holograms on the &6Specialized&7Crates &ecrates, &6Specialized&7Crates &eis also reloading.");
+                                cc.reload();
+                                ChatUtils.msgInfo(player,
+                                        "Reloaded the Specialized Crate plugin &7(" + (System.currentTimeMillis() - start) +
+                                                "ms)&a.");
                             }, 10);
                         }
                     }

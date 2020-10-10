@@ -27,16 +27,14 @@ import java.util.List;
 /**
  * Created by ztowne13 on 3/11/16.
  */
-public class IGCMenuConfigCategory extends IGCMenu
-{
+public class IGCMenuConfigCategory extends IGCMenu {
     ArrayList<Integer> slotsWithBoolean = new ArrayList<Integer>();
 
     ItemBuilder red;
     ItemBuilder green;
     SettingsValue.Category category;
 
-    public IGCMenuConfigCategory(SpecializedCrates cc, Player p, IGCMenu lastMenu, SettingsValue.Category category)
-    {
+    public IGCMenuConfigCategory(SpecializedCrates cc, Player p, IGCMenu lastMenu, SettingsValue.Category category) {
         super(cc, p, lastMenu, "&7&l> &6&l" + category.getShortTitle());
 
         this.category = category;
@@ -45,8 +43,7 @@ public class IGCMenuConfigCategory extends IGCMenu
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(2, category.getAssociatedValues().size()));
 
@@ -58,25 +55,19 @@ public class IGCMenuConfigCategory extends IGCMenu
 
         int back = 0;
         int forward = 0;
-        for (SettingsValue settingsValue : category.getAssociatedValues())
-        {
+        for (SettingsValue settingsValue : category.getAssociatedValues()) {
             Object val = settingsValue.getValue(getCc());
-            if (val instanceof Boolean)
-            {
+            if (val instanceof Boolean) {
                 sortedObj[forward] = settingsValue;
                 forward++;
-            }
-            else
-            {
+            } else {
                 back++;
                 sortedObj[sortedObj.length - back] = settingsValue;
             }
         }
 
-        for (SettingsValue settingsValue : sortedObj)
-        {
-            if (i % 9 == 0)
-            {
+        for (SettingsValue settingsValue : sortedObj) {
+            if (i % 9 == 0) {
                 i += 2;
             }
 
@@ -86,39 +77,27 @@ public class IGCMenuConfigCategory extends IGCMenu
 
             boolean isOntoExtra = false;
 
-            for (String lore : settingsValue.getDescriptor())
-            {
-                if(lore.startsWith("THE"))
-                {
+            for (String lore : settingsValue.getDescriptor()) {
+                if (lore.startsWith("THE")) {
                     isOntoExtra = true;
                 }
 
-                if(isOntoExtra)
-                {
-                    if (combinedDescriptorExtra.equalsIgnoreCase(""))
-                    {
+                if (isOntoExtra) {
+                    if (combinedDescriptorExtra.equalsIgnoreCase("")) {
                         combinedDescriptorExtra = lore;
-                    }
-                    else
-                    {
+                    } else {
                         combinedDescriptorExtra += " " + lore;
                     }
-                }
-                else
-                {
-                    if (combinedDescriptor.equalsIgnoreCase(""))
-                    {
+                } else {
+                    if (combinedDescriptor.equalsIgnoreCase("")) {
                         combinedDescriptor = lore;
-                    }
-                    else
-                    {
+                    } else {
                         combinedDescriptor += " " + lore;
                     }
                 }
             }
 
-            if (val instanceof Boolean)
-            {
+            if (val instanceof Boolean) {
                 ItemBuilder newBuilder = new ItemBuilder(((boolean) val ? green : red));
                 newBuilder.setDisplayName("&a" + settingsValue.getEasyName());
                 newBuilder.addLore("").addLore("&e" + settingsValue.getPath());
@@ -126,50 +105,38 @@ public class IGCMenuConfigCategory extends IGCMenu
                 newBuilder.addLore("");
 
                 newBuilder.addAutomaticLore("&7", 35, combinedDescriptor);
-                if(!combinedDescriptorExtra.equalsIgnoreCase(""))
-                {
+                if (!combinedDescriptorExtra.equalsIgnoreCase("")) {
                     newBuilder.addLore("");
                     newBuilder.addAutomaticLore("&b", 35, combinedDescriptorExtra);
                 }
                 ib.setItem(i, newBuilder);
                 slotsWithBoolean.add(i);
-            }
-            else
-            {
+            } else {
                 boolean isCollection = val instanceof Collection;
                 DynamicMaterial material;
-                if(val instanceof Collection)
-                {
+                if (val instanceof Collection) {
                     material = DynamicMaterial.LIGHT_BLUE_WOOL;
-                }
-                else if(settingsValue.getListValues() != null)
-                {
+                } else if (settingsValue.getListValues() != null) {
                     material = DynamicMaterial.MAGENTA_WOOL;
-                }
-                else
-                {
+                } else {
                     material = DynamicMaterial.ORANGE_WOOL;
                 }
 
                 ItemBuilder newBuilder = new ItemBuilder(material);
                 newBuilder.setDisplayName("&a" + settingsValue.getEasyName());
                 newBuilder.addLore("").addLore("&e" + settingsValue.getPath());
-                if (isCollection)
-                {
+                if (isCollection) {
                     newBuilder.addLore("&f&oCurrent value: &f");
                     List<String> objects = (List<String>) val;
                     for (String obj : objects)
                         newBuilder.addLore(obj);
-                }
-                else
-                {
+                } else {
                     newBuilder.addLore("&f&oCurrent value: &f" + val);
                 }
 
                 newBuilder.addLore("");
                 newBuilder.addAutomaticLore("&7", 35, combinedDescriptor);
-                if(!combinedDescriptorExtra.equalsIgnoreCase(""))
-                {
+                if (!combinedDescriptorExtra.equalsIgnoreCase("")) {
                     newBuilder.addLore("");
                     newBuilder.addAutomaticLore("&b", 35, combinedDescriptorExtra);
                 }
@@ -185,26 +152,20 @@ public class IGCMenuConfigCategory extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
+    public void handleClick(int slot) {
         Inventory inv = getIb().getInv();
 
-        if(inv.getItem(slot) == null)
-        {
+        if (inv.getItem(slot) == null) {
             return;
         }
 
         ItemBuilder item = new ItemBuilder(inv.getItem(slot));
-        if (slotsWithBoolean.contains(slot))
-        {
+        if (slotsWithBoolean.contains(slot)) {
             SettingsValue sv = SettingsValue.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(1));
 
-            if (VersionUtils.Version.v1_12.isServerVersionOrEarlier())
-            {
+            if (VersionUtils.Version.v1_12.isServerVersionOrEarlier()) {
                 item.getStack().setDurability((byte) (item.getStack().getDurability() == 5 ? 14 : 5));
-            }
-            else
-            {
+            } else {
                 if (DynamicMaterial.RED_WOOL.isSameMaterial(item.getStack()))
                     item.getStack().setType(DynamicMaterial.LIME_WOOL.parseMaterial());
                 else
@@ -216,38 +177,28 @@ public class IGCMenuConfigCategory extends IGCMenu
             sv.setValue(getCc(), item.getStack().getDurability() == 5 || DynamicMaterial.LIME_WOOL.isSameMaterial(item.getStack()));
 
             open();
-        }
-        else if (DynamicMaterial.ORANGE_WOOL.isSameMaterial(inv.getItem(slot)))
-        {
+        } else if (DynamicMaterial.ORANGE_WOOL.isSameMaterial(inv.getItem(slot))) {
             SettingsValue sv = SettingsValue.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(1));
 
             new InputMenu(getCc(), getP(), sv.getPath(), sv.getValue(getCc()).toString(), sv.getObj(), this, !sv.isWithColor());
-        }
-        else if (DynamicMaterial.LIGHT_BLUE_WOOL.isSameMaterial(inv.getItem(slot)))
-        {
+        } else if (DynamicMaterial.LIGHT_BLUE_WOOL.isSameMaterial(inv.getItem(slot))) {
             SettingsValue sv = SettingsValue.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(1));
             new IGCListEditor(getCc(), getP(), this, "inv-reward-item-lore", "Line", (List<String>) sv.getValue(getCc()),
                     DynamicMaterial.BOOK, 1).open();
-        }
-        else if (DynamicMaterial.MAGENTA_WOOL.isSameMaterial(inv.getItem(slot)))
-        {
+        } else if (DynamicMaterial.MAGENTA_WOOL.isSameMaterial(inv.getItem(slot))) {
             SettingsValue sv = SettingsValue.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(1));
 
             List<String> values;
             List<String> descriptors;
 
-            if(sv.getListValues().length != 0){
+            if (sv.getListValues().length != 0) {
                 values = Arrays.asList(sv.getListValues());
                 descriptors = Arrays.asList(sv.getListValueDescriptors());
-            }
-            else
-            {
+            } else {
                 values = new ArrayList<String>();
                 descriptors = new ArrayList<String>();
-                for(Crate crate : Crate.getLoadedCrates().values())
-                {
-                    if(crate.isMultiCrate())
-                    {
+                for (Crate crate : Crate.getLoadedCrates().values()) {
+                    if (crate.isMultiCrate()) {
                         values.add(crate.getName());
                         descriptors.add("Set the " + crate.getName() + " crate to be the multicrate that opens when a player types /crates.");
                     }
@@ -256,52 +207,37 @@ public class IGCMenuConfigCategory extends IGCMenu
 
             new IGCListSelector(getCc(), getP(), this, sv.getPath(), values,
                     DynamicMaterial.BOOK, 1, descriptors).open();
-        }
-        else
-        {
-            if (slot == getIb().getInv().getSize() - 9)
-            {
+        } else {
+            if (slot == getIb().getInv().getSize() - 9) {
                 up();
             }
         }
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         SettingsValue sv = SettingsValue.getByPath(value);
         Settings settings = getCc().getSettings();
         String path = sv.getPath();
 
-        if (sv.getObj() == String.class)
-        {
+        if (sv.getObj() == String.class) {
             sv.setValue(getCc(), input);
             ChatUtils.msgSuccess(getP(), "Set " + path + " to '" + input + "'");
             return true;
-        }
-        else if (sv.getObj() == Integer.class)
-        {
-            if (Utils.isInt(input))
-            {
+        } else if (sv.getObj() == Integer.class) {
+            if (Utils.isInt(input)) {
                 sv.setValue(getCc(), Integer.parseInt(input));
                 ChatUtils.msgSuccess(getP(), "Set " + path + " to '" + input + "'");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This is not a valid number, please try again.");
             }
-        }
-        else if (sv.getObj() == Double.class)
-        {
-            if (Utils.isDouble(input))
-            {
+        } else if (sv.getObj() == Double.class) {
+            if (Utils.isDouble(input)) {
                 sv.setValue(getCc(), input);
                 ChatUtils.msgSuccess(getP(), "Set " + path + " to '" + input + "'");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This is not a valid decimal value, please try again.");
             }
         }

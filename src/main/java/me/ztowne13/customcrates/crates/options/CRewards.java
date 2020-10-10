@@ -11,53 +11,103 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class CRewards extends CSetting
-{
-    public static HashMap<String, Reward> allRewards = new HashMap<String, Reward>();
+public class CRewards extends CSetting {
+    private static final Map<String, Reward> allRewards = new HashMap<>();
 
     Reward[] crateRewards;
+    Random r = new Random();
 
-    public CRewards(Crate crates)
-    {
+    public CRewards(Crate crates) {
         super(crates, crates.getCc());
     }
 
-    public Reward getByName(String s)
-    {
-        for (Reward r : getCrateRewards())
-        {
+    public static void loadAll(SpecializedCrates specializedCrates, Player player) {
+        boolean newValues = false;
+
+        for (String rName : specializedCrates.getRewardsFile().get().getKeys(false)) {
+            if (!getAllRewards().containsKey(rName)) {
+                if (!newValues) {
+                    newValues = true;
+                    ChatUtils.msgInfo(player, "It can take a while to load all of the rewards for the first time...");
+                }
+                Reward r = new Reward(specializedCrates, rName);
+                r.loadFromConfig();
+                r.loadChance();
+                allRewards.put(rName, r);
+            }
+        }
+    }
+
+    public static boolean rewardNameExists(SpecializedCrates cc, String name) {
+        for (String s : cc.getRewardsFile().get().getKeys(false)) {
+            if (s.equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Map<String, Reward> getAllRewards() {
+        return allRewards;
+    }
+
+    public static Map<String, Reward> getAllRewardsSorted(SpecializedCrates specializedCrates, RewardSortType rewardSortType) {
+        LinkedHashMap<String, Reward> sortedRewards = new LinkedHashMap<>();
+        switch (rewardSortType) {
+            case CREATED_ORDER:
+                for (String rewardName : specializedCrates.getRewardsFile().get().getKeys(false)) {
+                    Reward reward = getAllRewards().get(rewardName);
+                    if (reward != null) {
+                        sortedRewards.put(rewardName, reward);
+                    }
+                }
+                return sortedRewards;
+            case ALPHABETICAL:
+                ArrayList<String> keys = new ArrayList<>(getAllRewards().keySet());
+                keys.sort(String.CASE_INSENSITIVE_ORDER);
+                for (String key : keys) {
+                    sortedRewards.put(key, getAllRewards().get(key));
+                }
+                return sortedRewards;
+            case CHANCE:
+                ArrayList<Reward> rewards = new ArrayList<>(getAllRewards().values());
+                Collections.sort(rewards);
+                for (Reward reward : rewards) {
+                    sortedRewards.put(reward.getRewardName(), reward);
+                }
+                return sortedRewards;
+        }
+
+        return null;
+    }
+
+    public Reward getByName(String s) {
+        for (Reward r : getCrateRewards()) {
             if (r.getDisplayName(false).equals(s) || r.getRewardName().equals(s))
                 return r;
         }
         return null;
     }
 
-    public void saveToFile()
-    {
+    public void saveToFile() {
         String[] displayNameRewards = new String[crateRewards.length];
-        for (int i = 0; i < displayNameRewards.length; i++)
-        {
+        for (int i = 0; i < displayNameRewards.length; i++) {
             displayNameRewards[i] = crateRewards[i].getRewardName();
         }
         getFileHandler().get().set("rewards", Arrays.asList(displayNameRewards));
     }
 
-    public void removeReward(String name)
-    {
+    public void removeReward(String name) {
         Reward toRemove = getByName(name);
         Reward[] newRewards = new Reward[crateRewards.length - 1];
 
         int i = 0;
         boolean foundOne = false;
-        for (Reward r : crateRewards)
-        {
-            if (!r.equals(toRemove) || foundOne)
-            {
+        for (Reward r : crateRewards) {
+            if (!r.equals(toRemove) || foundOne) {
                 newRewards[i] = r;
                 i++;
-            }
-            else
-            {
+            } else {
                 foundOne = true;
             }
         }
@@ -65,20 +115,14 @@ public class CRewards extends CSetting
         crateRewards = newRewards;
     }
 
-    public boolean addReward(String rName)
-    {
-        if (allRewards.containsKey(rName))
-        {
+    public boolean addReward(String rName) {
+        if (allRewards.containsKey(rName)) {
             Reward toAdd = allRewards.get(rName);
-            if (!toAdd.isNeedsMoreConfig())
-            {
+            if (!toAdd.isNeedsMoreConfig()) {
                 Reward[] newRewards =
                         new Reward[(crateRewards == null || crateRewards.length == 0 ? 0 : crateRewards.length) + 1];
 
-                for (int i = 0; i < newRewards.length - 1; i++)
-                {
-                    newRewards[i] = crateRewards[i];
-                }
+                System.arraycopy(crateRewards, 0, newRewards, 0, newRewards.length - 1);
 
                 newRewards[newRewards.length - 1] = toAdd;
 
@@ -89,20 +133,15 @@ public class CRewards extends CSetting
         return false;
     }
 
-    public void loadFor(CrateSettingsBuilder csb, CrateState cs)
-    {
-        if (csb.hasV("rewards"))
-        {
+    public void loadFor(CrateSettingsBuilder csb, CrateState cs) {
+        if (csb.hasV("rewards")) {
             int slot = 0;
 
             setCrateRewards(new Reward[getCrate().getSettings().getFc().getStringList("rewards").size()]);
 
             List<String> unparsedRewards = getCrate().getSettings().getFc().getStringList("rewards");
 
-            for (int i = 0; i < unparsedRewards.size(); i++)
-            {
-                String s = unparsedRewards.get(i);
-
+            for (String s : unparsedRewards) {
                 Reward reward = new Reward(getCrate().getCc(), this, s);
 
                 setReward(slot, reward);
@@ -115,10 +154,8 @@ public class CRewards extends CSetting
 
             Reward[] updatedRewards = new Reward[getCrateRewards().length];
             int count = 0;
-            for (Reward r : getCrateRewards().clone())
-            {
-                if (r.loadFromConfig())
-                {
+            for (Reward r : getCrateRewards().clone()) {
+                if (r.loadFromConfig()) {
                     updatedRewards[count] = r;
                     count++;
                 }
@@ -126,10 +163,8 @@ public class CRewards extends CSetting
 
             Reward[] finalUpdate = new Reward[count];
             count = 0;
-            for (Reward r : updatedRewards)
-            {
-                if (r != null)
-                {
+            for (Reward r : updatedRewards) {
+                if (r != null) {
                     finalUpdate[count] = r;
                     count++;
                 }
@@ -137,8 +172,7 @@ public class CRewards extends CSetting
 
             setCrateRewards(finalUpdate);
 
-            if(finalUpdate.length == 0)
-            {
+            if (finalUpdate.length == 0) {
                 StatusLoggerEvent.REWARDS_EMPTY.log(getCrate());
                 getCrate().setDisabledByError(true);
             }
@@ -148,13 +182,11 @@ public class CRewards extends CSetting
         StatusLoggerEvent.REWARDS_PATH_NONEXISTENT.log(getCrate());
     }
 
-    public void setReward(Integer i, Reward reward)
-    {
+    public void setReward(Integer i, Reward reward) {
         getCrateRewards()[i] = reward;
     }
 
-    public Reward getRandomReward()
-    {
+    public Reward getRandomReward() {
         double totalOdds = getTotalOdds();
 
         double randNum = getRandomNumber(totalOdds);
@@ -163,12 +195,10 @@ public class CRewards extends CSetting
 
         Reward[] crateRewardsClone = getCrateRewards();
 
-        for (Reward r : crateRewardsClone)
-        {
+        for (Reward r : crateRewardsClone) {
             double odds = r.getChance();
             currentStackedOdds += odds;
-            if (randNum <= currentStackedOdds)
-            {
+            if (randNum <= currentStackedOdds) {
                 return r;
             }
         }
@@ -176,112 +206,30 @@ public class CRewards extends CSetting
         return null;
     }
 
-    public Double getRandomNumber(double outOfOdds)
-    {
-        Random r = new Random();
-
+    public Double getRandomNumber(double outOfOdds) {
         return outOfOdds * r.nextDouble();
     }
 
-    public Double getTotalOdds()
-    {
+    public Double getTotalOdds() {
         double totalOdds = 0;
-        for (Reward r : getCrateRewards())
-        {
+        for (Reward r : getCrateRewards()) {
             double odds = r.getChance();
-            if(odds < 0)
+            if (odds < 0)
                 odds = 0;
             totalOdds += odds;
         }
         return totalOdds;
     }
 
-    public static void loadAll(SpecializedCrates specializedCrates, Player player)
-    {
-        boolean newValues = false;
-
-        for(String rName : specializedCrates.getRewardsFile().get().getKeys(false))
-        {
-            if (!getAllRewards().keySet().contains(rName))
-            {
-                if(!newValues)
-                {
-                    newValues = true;
-                    ChatUtils.msgInfo(player, "It can take a while to load all of the rewards for the first time...");
-                }
-                Reward r = new Reward(specializedCrates, rName);
-                r.loadFromConfig();
-                r.loadChance();
-                allRewards.put(rName, r);
-            }
-        }
-    }
-
-    public static boolean rewardNameExists(SpecializedCrates cc, String name)
-    {
-        for (String s : cc.getRewardsFile().get().getKeys(false))
-        {
-            if (s.equalsIgnoreCase(name))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Reward[] getCrateRewards()
-    {
+    public Reward[] getCrateRewards() {
         return crateRewards;
     }
 
-    public void setCrateRewards(Reward[] crateRewards)
-    {
+    public void setCrateRewards(Reward[] crateRewards) {
         this.crateRewards = crateRewards;
     }
 
-    public static HashMap<String, Reward> getAllRewards()
-    {
-        return allRewards;
-    }
-
-    public static HashMap<String, Reward> getAllRewardsSorted(SpecializedCrates specializedCrates, RewardSortType rewardSortType)
-    {
-        LinkedHashMap<String, Reward> sortedRewards = new LinkedHashMap<>();
-        switch(rewardSortType)
-        {
-            case CREATED_ORDER:
-                for(String rewardName : specializedCrates.getRewardsFile().get().getKeys(false))
-                {
-                    Reward reward = getAllRewards().get(rewardName);
-                    if(reward != null)
-                    {
-                        sortedRewards.put(rewardName, reward);
-                    }
-                }
-                return sortedRewards;
-            case ALPHABETICAL:
-                ArrayList<String> keys = new ArrayList<>(getAllRewards().keySet());
-                Collections.sort(keys, String.CASE_INSENSITIVE_ORDER);
-                for(String key : keys)
-                {
-                    sortedRewards.put(key, getAllRewards().get(key));
-                }
-                return sortedRewards;
-            case CHANCE:
-                ArrayList<Reward> rewards = new ArrayList<>(getAllRewards().values());
-                Collections.sort(rewards);
-                for(Reward reward : rewards)
-                {
-                    sortedRewards.put(reward.getRewardName(), reward);
-                }
-                return sortedRewards;
-        }
-
-        return null;
-    }
-
-    public enum RewardSortType
-    {
+    public enum RewardSortType {
         CREATED_ORDER("Created Order", "ALPHABETICAL",
                 new String[]{
                         "The order in which the",
@@ -301,25 +249,21 @@ public class CRewards extends CSetting
         String[] niceDescription;
         String next;
 
-        RewardSortType(String niceName, String next, String[] niceDescription)
-        {
+        RewardSortType(String niceName, String next, String[] niceDescription) {
             this.niceName = niceName;
             this.niceDescription = niceDescription;
             this.next = next;
         }
 
-        public RewardSortType getNext()
-        {
+        public RewardSortType getNext() {
             return valueOf(next);
         }
 
-        public String getNiceName()
-        {
+        public String getNiceName() {
             return niceName;
         }
 
-        public String[] getNiceDescription()
-        {
+        public String[] getNiceDescription() {
             return niceDescription;
         }
     }
