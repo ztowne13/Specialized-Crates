@@ -143,7 +143,7 @@ public enum ParticleEffect {
     private final String particleName;
     protected String enumValue;
     private Class<?> nmsEnumParticle;
-//    public static int particleRange = 25;
+    //    public static int particleRange = 25;
     private Constructor<?> cachedConstructor = null;
 
     ParticleEffect(String particleName, String enumValue) {

@@ -27,7 +27,7 @@ public class NMSChestState {
 
             ReflectionUtilities.getMethod(world.getClass(), "playBlockAction",
                     blockPosition.getClass(), ReflectionUtilities.getNMSClass("Block"), Integer.TYPE,
-                            Integer.TYPE).invoke(world, blockPosition, block, 1, open ? 1 : 0);
+                    Integer.TYPE).invoke(world, blockPosition, block, 1, open ? 1 : 0);
         } catch (Exception exc) {
             exc.printStackTrace();
         }
