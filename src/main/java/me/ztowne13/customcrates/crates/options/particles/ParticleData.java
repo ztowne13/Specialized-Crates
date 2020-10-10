@@ -8,17 +8,23 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.configuration.file.FileConfiguration;
 
-public abstract class ParticleData
-{
+public abstract class ParticleData {
     SpecializedCrates sc;
 
     String name;
-    float rangeX, rangeY, rangeZ;
-    float centerX, centerY, centerZ;
+    float rangeX;
+    float rangeY;
+    float rangeZ;
+    float centerX;
+    float centerY;
+    float centerZ;
     float speed;
-    boolean hasAnimation, hasColor;
+    boolean hasAnimation;
+    boolean hasColor;
     int amount;
-    int colorRed, colorGreen, colorBlue;
+    int colorRed;
+    int colorGreen;
+    int colorBlue;
     float size;
     boolean colorEnabled;
 
@@ -26,8 +32,7 @@ public abstract class ParticleData
 
     ParticleAnimationEffect particleAnimationEffect;
 
-    public ParticleData(SpecializedCrates sc, String name, boolean hasAnimation)
-    {
+    public ParticleData(SpecializedCrates sc, String name, boolean hasAnimation) {
         this.sc = sc;
         this.name = name;
         this.hasAnimation = hasAnimation;
@@ -44,13 +49,15 @@ public abstract class ParticleData
 
     public abstract boolean setParticle(String particleName);
 
-    public float getRangeX()
-    {
+    public float getRangeX() {
         return rangeX;
     }
 
-    public void save(FileHandler fileHandler, String path)
-    {
+    public void setRangeX(float rangeX) {
+        this.rangeX = rangeX;
+    }
+
+    public void save(FileHandler fileHandler, String path) {
         FileConfiguration fc = fileHandler.get();
         fc.set(path + "." + getName() + ".type", getParticleName());
         fc.set(path + "." + getName() + ".range-x", getRangeX());
@@ -62,7 +69,7 @@ public abstract class ParticleData
         fc.set(path + "." + getName() + ".speed", getSpeed());
         fc.set(path + "." + getName() + ".amount", getAmount());
 
-        if (!(getParticleAnimationEffect() == null))
+        if (getParticleAnimationEffect() != null)
             fileHandler.get().set(path + "." + getName() + ".animation",
                     PEAnimationType.getFromParticleAnimationEffect(getParticleAnimationEffect()).name());
         else
@@ -75,183 +82,139 @@ public abstract class ParticleData
         fc.set(path + "." + getName() + ".redstone-size", getSize() == 0 ? null : getSize());
     }
 
-    public ParticleData setRangeX(float rangeX)
-    {
-        this.rangeX = rangeX;
-        return this;
-    }
-
-    public float getRangeY()
-    {
+    public float getRangeY() {
         return rangeY;
     }
 
-    public ParticleData setRangeY(float rangeY)
-    {
+    public void setRangeY(float rangeY) {
         this.rangeY = rangeY;
-        return this;
     }
 
-    public float getRangeZ()
-    {
+    public float getRangeZ() {
         return rangeZ;
     }
 
-    public ParticleData setRangeZ(float rangeZ)
-    {
+    public void setRangeZ(float rangeZ) {
         this.rangeZ = rangeZ;
-        return this;
     }
 
-    public float getSpeed()
-    {
+    public float getSpeed() {
         return speed;
     }
 
-    public ParticleData setSpeed(float speed)
-    {
+    public void setSpeed(float speed) {
         this.speed = speed;
-        return this;
     }
 
-    public int getAmount()
-    {
+    public int getAmount() {
         return amount;
     }
 
-    public ParticleData setAmount(int amount)
-    {
+    public void setAmount(int amount) {
         this.amount = amount;
-        return this;
     }
 
-    public boolean isHasAnimation()
-    {
+    public boolean isHasAnimation() {
         return hasAnimation;
     }
 
-    public void setHasAnimation(boolean hasAnimation)
-    {
+    public void setHasAnimation(boolean hasAnimation) {
         this.hasAnimation = hasAnimation;
     }
 
-    public ParticleAnimationEffect getParticleAnimationEffect()
-    {
+    public ParticleAnimationEffect getParticleAnimationEffect() {
         return particleAnimationEffect;
     }
 
-    public void setParticleAnimationEffect(ParticleAnimationEffect particleAnimationEffect)
-    {
+    public void setParticleAnimationEffect(ParticleAnimationEffect particleAnimationEffect) {
         this.particleAnimationEffect = particleAnimationEffect;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public float getCenterX()
-    {
+    public float getCenterX() {
         return centerX;
     }
 
-    public void setCenterX(float centerX)
-    {
+    public void setCenterX(float centerX) {
         this.centerX = centerX;
     }
 
-    public float getCenterY()
-    {
+    public float getCenterY() {
         return centerY;
     }
 
-    public void setCenterY(float centerY)
-    {
+    public void setCenterY(float centerY) {
         this.centerY = centerY;
     }
 
-    public float getCenterZ()
-    {
+    public float getCenterZ() {
         return centerZ;
     }
 
-    public void setCenterZ(float centerZ)
-    {
+    public void setCenterZ(float centerZ) {
         this.centerZ = centerZ;
     }
 
-    public Particle.DustOptions getDustOptions()
-    {
+    public Particle.DustOptions getDustOptions() {
         return dustOptions;
     }
 
-    public void setDustOptions(Particle.DustOptions dustOptions)
-    {
+    public void setDustOptions(Particle.DustOptions dustOptions) {
         this.dustOptions = dustOptions;
     }
 
-    public int getColorRed()
-    {
+    public int getColorRed() {
         return colorRed;
     }
 
-    public void setColorRed(int colorRed)
-    {
+    public void setColorRed(int colorRed) {
         this.colorRed = colorRed;
     }
 
-    public int getColorGreen()
-    {
+    public int getColorGreen() {
         return colorGreen;
     }
 
-    public void setColorGreen(int colorGreen)
-    {
+    public void setColorGreen(int colorGreen) {
         this.colorGreen = colorGreen;
     }
 
-    public int getColorBlue()
-    {
+    public int getColorBlue() {
         return colorBlue;
     }
 
-    public void setColorBlue(int colorBlue)
-    {
+    public void setColorBlue(int colorBlue) {
         this.colorBlue = colorBlue;
     }
 
-    public float getSize()
-    {
+    public float getSize() {
         return size;
     }
 
-    public void setSize(float size)
-    {
+    public void setSize(float size) {
         this.size = size;
     }
 
-    public boolean isHasColor()
-    {
+    public boolean isHasColor() {
         return hasColor;
     }
 
-    public void setHasColor(boolean hasColor)
-    {
+    public void setHasColor(boolean hasColor) {
         this.hasColor = hasColor;
     }
 
-    public boolean isColorEnabled()
-    {
+    public boolean isColorEnabled() {
         return colorEnabled;
     }
 
-    public void setColorEnabled(boolean colorEnabled)
-    {
+    public void setColorEnabled(boolean colorEnabled) {
         this.colorEnabled = colorEnabled;
     }
 }

@@ -7,12 +7,10 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztown on 2/14/2017.
  */
-public abstract class ActionEffect
-{
+public abstract class ActionEffect {
     SpecializedCrates cc;
 
-    public ActionEffect(SpecializedCrates cc)
-    {
+    public ActionEffect(SpecializedCrates cc) {
         this.cc = cc;
     }
 

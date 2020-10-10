@@ -9,17 +9,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 /**
  * Created by ztown on 2/17/2017.
  */
-public class BukkitGlowEffect
-{
+public class BukkitGlowEffect {
     ItemStack stack;
 
-    public BukkitGlowEffect(ItemStack stack)
-    {
+    public BukkitGlowEffect(ItemStack stack) {
         this.stack = stack;
     }
 
-    public ItemStack apply()
-    {
+    public ItemStack apply() {
         stack.addUnsafeEnchantment(Enchantment.DURABILITY, 0);
         ItemMeta im = stack.getItemMeta();
         im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -27,8 +24,7 @@ public class BukkitGlowEffect
         return stack;
     }
 
-    public ItemStack remove()
-    {
+    public ItemStack remove() {
         ItemMeta im = stack.getItemMeta();
         im.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
         im.removeEnchant(Enchantment.DURABILITY);

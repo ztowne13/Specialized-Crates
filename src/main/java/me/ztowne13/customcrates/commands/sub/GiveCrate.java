@@ -17,28 +17,20 @@ import java.util.UUID;
 /**
  * Created by ztowne13 on 6/23/16.
  */
-public class GiveCrate extends SubCommand
-{
-    public GiveCrate()
-    {
+public class GiveCrate extends SubCommand {
+    public GiveCrate() {
         super("givecrate", 2, "Usage: /SCrates GiveCrate (Crate) (Player/ALL) [Amount] [-v : for a virtual crate]",
                 new String[]{"gcrate", "gc", "crategive", "crate"});
     }
 
     @Override
-    public boolean run(SpecializedCrates cc, Commands cmds, String[] args)
-    {
-        if (Crate.exists(args[1]))
-        {
+    public boolean run(SpecializedCrates cc, Commands cmds, String[] args) {
+        if (Crate.exists(args[1])) {
             int amount = 1;
-            if (args.length >= 4)
-            {
-                if (Utils.isInt(args[3]))
-                {
+            if (args.length >= 4) {
+                if (Utils.isInt(args[3])) {
                     amount = Integer.parseInt(args[3]);
-                }
-                else
-                {
+                } else {
                     cmds.msgError(args[3] + " is not a valid number.");
                     return true;
                 }
@@ -47,10 +39,8 @@ public class GiveCrate extends SubCommand
             Crate crate = Crate.getCrate(cc, args[1]);
             ItemStack toAdd = crate.getSettings().getCrateItemHandler().getItem(amount);
 
-            if (args.length < 3)
-            {
-                if (cmds.getCmdSender() instanceof Player)
-                {
+            if (args.length < 3) {
+                if (cmds.getCmdSender() instanceof Player) {
                     Player p = (Player) cmds.getCmdSender();
                     cmds.msgSuccess("Given crate for crate: " + args[1]);
                     Utils.addItemAndDropRest(p, toAdd);
@@ -61,12 +51,9 @@ public class GiveCrate extends SubCommand
             String end = args[args.length - 1];
             boolean isVirtual = end.toLowerCase().startsWith("-v");
 
-            if (args[2].equalsIgnoreCase("ALL"))
-            {
-                if (isVirtual)
-                {
-                    for (Player p : Bukkit.getOnlinePlayers())
-                    {
+            if (args[2].equalsIgnoreCase("ALL")) {
+                if (isVirtual) {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
                         PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
                         pdm.setVirtualCrateCrates(crate, pdm.getVCCrateData(crate).getCrates() + amount);
                     }
@@ -80,42 +67,33 @@ public class GiveCrate extends SubCommand
 
             Player op = Bukkit.getPlayer(args[2]);
             Player op2 = null;
-            try
-            {
+            try {
                 op2 = Bukkit.getPlayer(UUID.fromString(args[2]));
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 //exc.printStackTrace();
             }
 
             boolean foundPlayer = true;
 
-            if (op == null && op2 == null)
-            {
-                if (!args[2].equalsIgnoreCase("ALL"))
-                {
+            if (op == null && op2 == null) {
+                if (!args[2].equalsIgnoreCase("ALL")) {
                     foundPlayer = false;
                 }
             }
 
-            if (!foundPlayer)
-            {
+            if (!foundPlayer) {
                 OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[2]);
 
                 cmds.msgError(args[2] +
                         " is not an online player / online player's UUID. Adding the commands to the queue for when they rejoin.");
                 DataHandler dataHandler = cc.getDataHandler();
-                try
-                {
+                try {
                     DataHandler.QueuedGiveCommand queuedGiveCommand = dataHandler.new QueuedGiveCommand(
                             offlinePlayer == null ? UUID.fromString(args[2]) : offlinePlayer.getUniqueId(), false, isVirtual,
                             amount, crate);
 
                     dataHandler.addQueuedGiveCommand(queuedGiveCommand);
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     exc.printStackTrace();
                     cmds.msgError("FAILED to add the give command! The player and/or UUID do not exist.");
                 }
@@ -124,13 +102,10 @@ public class GiveCrate extends SubCommand
 
             Player toGive = op == null ? op2 : op;
             PlayerDataManager pdm = PlayerManager.get(cc, toGive).getPdm();
-            if (isVirtual)
-            {
+            if (isVirtual) {
                 pdm.setVirtualCrateCrates(crate, pdm.getVCCrateData(crate).getCrates() + amount);
                 cmds.msgSuccess("Given virtual crate for crate: " + args[1]);
-            }
-            else
-            {
+            } else {
                 Utils.addItemAndDropRest(toGive, toAdd);
                 cmds.msgSuccess("Given physical crate for crate: " + args[1]);
             }

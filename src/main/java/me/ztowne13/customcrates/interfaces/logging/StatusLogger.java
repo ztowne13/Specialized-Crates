@@ -9,80 +9,66 @@ import org.bukkit.command.ConsoleCommandSender;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class StatusLogger
-{
+public class StatusLogger {
     SpecializedCrates cc;
 
     int failures;
 
-    HashMap<String, ArrayList<String>> completedEvents = new HashMap<String, ArrayList<String>>();
-    HashMap<String, ArrayList<String>> failedEvents = new HashMap<String, ArrayList<String>>();
+    Map<String, List<String>> completedEvents = new HashMap<>();
+    Map<String, List<String>> failedEvents = new HashMap<>();
 
-    public StatusLogger(SpecializedCrates cc)
-    {
+    public StatusLogger(SpecializedCrates cc) {
         this.cc = cc;
     }
 
-    public void addEvent(boolean success, String section, String event, String cause)
-    {
+    public void addEvent(boolean success, String section, String event, String cause) {
         failures += success ? 0 : 1;
-        HashMap<String, ArrayList<String>> map = success ? getCompletedEvents() : getFailedEvents();
-        ArrayList<String> list = (map.keySet().contains(section) ? map.get(section) : new ArrayList<String>());
+        Map<String, List<String>> map = success ? getCompletedEvents() : getFailedEvents();
+        List<String> list = map.getOrDefault(section, new ArrayList<>());
         list.add(event + "%CAUSE%" + cause);
         map.put(section, list);
     }
 
-    public void logAll()
-    {
+    public void logAll() {
         logAll(Bukkit.getConsoleSender(), false);
     }
 
-    public void logAll(CommandSender sender, boolean forceOnlyFailures)
-    {
-        ArrayList<String> hasLogged = new ArrayList<String>();
-        for (String s : getCompletedEvents().keySet())
-        {
-            if (!hasLogged.contains(s.toUpperCase()))
-            {
+    public void logAll(CommandSender sender, boolean forceOnlyFailures) {
+        ArrayList<String> hasLogged = new ArrayList<>();
+        for (String s : getCompletedEvents().keySet()) {
+            if (!hasLogged.contains(s.toUpperCase())) {
                 logSection(sender, s, forceOnlyFailures);
                 hasLogged.add(s.toUpperCase());
             }
         }
 
-        for (String s : getFailedEvents().keySet())
-        {
-            if (!hasLogged.contains(s.toUpperCase()))
-            {
+        for (String s : getFailedEvents().keySet()) {
+            if (!hasLogged.contains(s.toUpperCase())) {
                 logSection(sender, s, forceOnlyFailures);
                 hasLogged.add(s.toUpperCase());
             }
         }
 
         if (getFailedEvents().isEmpty() &&
-                SettingsValue.LOG_SUCCESSES.getValue(getCc()).toString().equalsIgnoreCase("FAILURES"))
-        {
+                SettingsValue.LOG_SUCCESSES.getValue(getCc()).toString().equalsIgnoreCase("FAILURES")) {
             ChatUtils.log("  &a+&f Success: there were no issues.");
         }
     }
 
-    public void logSection(CommandSender sender, String section, boolean forceOnlyFailures)
-    {
+    public void logSection(CommandSender sender, String section, boolean forceOnlyFailures) {
         boolean hasLoggedHeader = false;
         String toLog = SettingsValue.LOG_SUCCESSES.getValue(getCc()).toString();
 
-        if (!toLog.equalsIgnoreCase("NOTHING") || forceOnlyFailures)
-        {
-            if (!toLog.equalsIgnoreCase("FAILURES") && !forceOnlyFailures)
-            {
+        if (!toLog.equalsIgnoreCase("NOTHING") || forceOnlyFailures) {
+            if (!toLog.equalsIgnoreCase("FAILURES") && !forceOnlyFailures) {
                 hasLoggedHeader = true;
                 logValue(sender, "  " + section);
-                for (String checkSec : getCompletedEvents().keySet())
-                {
-                    if (checkSec.equalsIgnoreCase(section))
-                    {
-                        for (String s : getCompletedEvents().get(checkSec))
-                        {
+                for (String checkSec : getCompletedEvents().keySet()) {
+                    if (checkSec.equalsIgnoreCase(section)) {
+                        for (String s : getCompletedEvents().get(checkSec)) {
                             String[] split = s.split("%CAUSE%");
                             String event = split[0];
                             logValue(sender, "    &a+&f " + event);
@@ -91,26 +77,21 @@ public class StatusLogger
                 }
             }
 
-            for (String checkSec : getFailedEvents().keySet())
-            {
-                if (checkSec.equalsIgnoreCase(section))
-                {
-                    if (!hasLoggedHeader)
-                    {
+            for (String checkSec : getFailedEvents().keySet()) {
+                if (checkSec.equalsIgnoreCase(section)) {
+                    if (!hasLoggedHeader) {
                         logValue(sender, "  " + section);
                         hasLoggedHeader = true;
                     }
 
-                    for (String s : getFailedEvents().get(checkSec))
-                    {
+                    for (String s : getFailedEvents().get(checkSec)) {
                         String[] parsedEvent = s.split("%CAUSE%");
                         String event = parsedEvent[0];
                         String cause = parsedEvent[1];
 
                         logValue(sender, "    &c-&f " + event);
 
-                        if (cause.equalsIgnoreCase("NONE"))
-                        {
+                        if (cause.equalsIgnoreCase("NONE")) {
                             continue;
                         }
 
@@ -121,53 +102,43 @@ public class StatusLogger
         }
     }
 
-    public void logValue(CommandSender sender, String s)
-    {
-        if (sender instanceof ConsoleCommandSender)
-        {
+    public void logValue(CommandSender sender, String s) {
+        if (sender instanceof ConsoleCommandSender) {
             ChatUtils.log(s);
             return;
         }
         sender.sendMessage(ChatUtils.toChatColor(s));
     }
 
-    public HashMap<String, ArrayList<String>> getCompletedEvents()
-    {
+    public Map<String, List<String>> getCompletedEvents() {
         return completedEvents;
     }
 
-    public void setCompletedEvents(HashMap<String, ArrayList<String>> completedEvents)
-    {
+    public void setCompletedEvents(Map<String, List<String>> completedEvents) {
         this.completedEvents = completedEvents;
     }
 
-    public HashMap<String, ArrayList<String>> getFailedEvents()
-    {
+    public Map<String, List<String>> getFailedEvents() {
         return failedEvents;
     }
 
-    public void setFailedEvents(HashMap<String, ArrayList<String>> failedEvents)
-    {
+    public void setFailedEvents(Map<String, List<String>> failedEvents) {
         this.failedEvents = failedEvents;
     }
 
-    public SpecializedCrates getCc()
-    {
+    public SpecializedCrates getCc() {
         return cc;
     }
 
-    public void setCc(SpecializedCrates cc)
-    {
+    public void setCc(SpecializedCrates cc) {
         this.cc = cc;
     }
 
-    public int getFailures()
-    {
+    public int getFailures() {
         return failures;
     }
 
-    public void setFailures(int failures)
-    {
+    public void setFailures(int failures) {
         this.failures = failures;
     }
 }

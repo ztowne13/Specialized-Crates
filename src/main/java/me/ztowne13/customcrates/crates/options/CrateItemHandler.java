@@ -11,13 +11,11 @@ import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-public class CrateItemHandler extends CSetting
-{
+public class CrateItemHandler extends CSetting {
 
     SaveableItemBuilder crateItem;
 
-    public CrateItemHandler(Crate crates, SpecializedCrates cc)
-    {
+    public CrateItemHandler(Crate crates, SpecializedCrates cc) {
         super(crates, cc);
 
         crateItem = new SaveableItemBuilder(DynamicMaterial.RED_WOOL, 1);
@@ -25,66 +23,51 @@ public class CrateItemHandler extends CSetting
     }
 
     @Override
-    public void loadFor(CrateSettingsBuilder csb, CrateState cs)
-    {
+    public void loadFor(CrateSettingsBuilder csb, CrateState cs) {
         boolean result = crateItem
                 .loadItem(getCrate().getSettings().getFileHandler(), "crate", csb.getStatusLogger(),
                         StatusLoggerEvent.SETTINGS_CRATE_FAILURE,
                         StatusLoggerEvent.SETTINGS_CRATE_ENCHANTMENT_ADD_FAILURE,
                         StatusLoggerEvent.SETTINGS_CRATE_POTION_ADD_FAILURE, StatusLoggerEvent.SETTINGS_CRATE_GLOW_FAILURE,
                         StatusLoggerEvent.SETTINGS_CRATE_AMOUNT_FAILURE, StatusLoggerEvent.SETTINGS_CRATE_FLAG_FAILURE);
-        if (!result)
-        {
+        if (!result) {
             StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(csb.getStatusLogger());
         }
     }
 
     @Override
-    public void saveToFile()
-    {
+    public void saveToFile() {
         crateItem.saveItem(getCrate().getSettings().getFileHandler(), "crate", false);
     }
 
-    public boolean crateMatchesToStack(ItemStack stack)
-    {
+    public boolean crateMatchesToStack(ItemStack stack) {
         ItemStack crate = getItem(1);
-        if (Utils.itemHasName(stack))
-        {
+        if (Utils.itemHasName(stack)) {
             return crate.getType().equals(stack.getType()) &&
                     crate.getItemMeta().getDisplayName().equals(stack.getItemMeta().getDisplayName());
         }
         return false;
     }
 
-    public boolean crateMatchesBlock(Material blockType)
-    {
-        if (blockType.equals(getItem(1).getType()))
-        {
+    public boolean crateMatchesBlock(Material blockType) {
+        if (blockType.equals(getItem(1).getType())) {
             return true;
         }
 
-        if (blockType.name().equalsIgnoreCase("SKULL") && getItem(1).getType().name().equalsIgnoreCase("SKULL_ITEM"))
-        {
-            return true;
-        }
-
-        return false;
+        return blockType.name().equalsIgnoreCase("SKULL") && getItem(1).getType().name().equalsIgnoreCase("SKULL_ITEM");
     }
 
-    public ItemStack getItem(int amount)
-    {
+    public ItemStack getItem(int amount) {
         ItemStack stack = crateItem.get().clone();
         stack.setAmount(amount);
         return stack;
     }
 
-    public SaveableItemBuilder getItem()
-    {
+    public SaveableItemBuilder getItem() {
         return crateItem;
     }
 
-    public void setItem(SaveableItemBuilder crateItem)
-    {
+    public void setItem(SaveableItemBuilder crateItem) {
         this.crateItem = crateItem;
     }
 }

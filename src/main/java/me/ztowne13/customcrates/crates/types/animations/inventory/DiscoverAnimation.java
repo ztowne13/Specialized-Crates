@@ -30,10 +30,13 @@ import java.util.Random;
  * random-display-duration: 50
  * uncover-block: CHEST;0
  */
-public class DiscoverAnimation extends InventoryCrateAnimation
-{
-    SoundData clickSound, uncoverSound;
-    int minRewards, maxRewards, shuffleDisplayDuration, invRows;
+public class DiscoverAnimation extends InventoryCrateAnimation {
+    SoundData clickSound;
+    SoundData uncoverSound;
+    int minRewards;
+    int maxRewards;
+    int shuffleDisplayDuration;
+    int invRows;
     String coverBlockName = "&aReward #%numbetsorr%";
     String coverBlockLore = "&7You have &f%remaining-clicks% rewards to chose from.";
     String rewardBlockName = "&aReward";
@@ -42,19 +45,17 @@ public class DiscoverAnimation extends InventoryCrateAnimation
     ItemBuilder uncoverBlock;
     ItemBuilder rewardBlock;
     boolean count;
+    Random r = new Random();
 
-    public DiscoverAnimation(Crate crate)
-    {
+    public DiscoverAnimation(Crate crate) {
         super(crate, CrateAnimationType.INV_DISCOVER);
     }
 
     @Override
-    public void tickInventory(InventoryAnimationDataHolder dataHolder, boolean update)
-    {
+    public void tickInventory(InventoryAnimationDataHolder dataHolder, boolean update) {
         DiscoverAnimationDataHolder dadh = (DiscoverAnimationDataHolder) dataHolder;
 
-        switch (dadh.getCurrentState())
-        {
+        switch (dadh.getCurrentState()) {
             case PLAYING:
                 drawFillers(dadh, 1);
                 updateUncoverTiles(dadh);
@@ -81,24 +82,20 @@ public class DiscoverAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh)
-    {
+    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh) {
 
     }
 
     @Override
-    public ItemBuilder getFiller()
-    {
+    public ItemBuilder getFiller() {
         return new ItemBuilder(DynamicMaterial.AIR);
     }
 
     @Override
-    public boolean updateTicks(AnimationDataHolder dataHolder)
-    {
+    public boolean updateTicks(AnimationDataHolder dataHolder) {
         DiscoverAnimationDataHolder dadh = (DiscoverAnimationDataHolder) dataHolder;
 
-        switch(dadh.getCurrentState())
-        {
+        switch (dadh.getCurrentState()) {
             case WAITING:
             case ENDING:
                 dadh.setWaitingTicks(dataHolder.getWaitingTicks() + 1);
@@ -111,66 +108,53 @@ public class DiscoverAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public void checkStateChange(AnimationDataHolder dataHolder, boolean update)
-    {
+    public void checkStateChange(AnimationDataHolder dataHolder, boolean update) {
         DiscoverAnimationDataHolder dadh = (DiscoverAnimationDataHolder) dataHolder;
 
-        switch(dadh.getCurrentState())
-        {
+        switch (dadh.getCurrentState()) {
             case PLAYING:
-                if (dadh.getRemainingClicks() <= 0)
-                {
+                if (dadh.getRemainingClicks() <= 0) {
                     dadh.setCurrentState(AnimationDataHolder.State.WAITING);
                 }
                 break;
             case WAITING:
-                if(dadh.getWaitingTicks() == 20)
-                {
+                if (dadh.getWaitingTicks() == 20) {
                     dadh.setWaitingTicks(0);
                     dadh.setCurrentState(AnimationDataHolder.State.SHUFFLING);
                 }
                 break;
             case SHUFFLING:
-                if(dadh.getShuffleTicks() > getShuffleDisplayDuration())
-                {
+                if (dadh.getShuffleTicks() > getShuffleDisplayDuration()) {
                     dadh.setCurrentState(AnimationDataHolder.State.UNCOVERING);
                 }
                 break;
             case UNCOVERING:
-                if (dadh.getAlreadyDisplayedRewards().keySet().size() == dadh.getAlreadyChosenSlots().size())
-                {
+                if (dadh.getAlreadyDisplayedRewards().keySet().size() == dadh.getAlreadyChosenSlots().size()) {
                     dadh.setCurrentState(AnimationDataHolder.State.ENDING);
                 }
                 break;
             case ENDING:
-                if(dadh.getWaitingTicks() == 50)
-                {
+                if (dadh.getWaitingTicks() == 50) {
                     dadh.setCurrentState(AnimationDataHolder.State.COMPLETED);
                 }
                 break;
         }
     }
 
-    public void drawUncoverTiles(DiscoverAnimationDataHolder dadh)
-    {
+    public void drawUncoverTiles(DiscoverAnimationDataHolder dadh) {
         InventoryBuilder inventoryBuilder = dadh.getInventoryBuilder();
-        
+
         ItemBuilder uncoverBlockIb = uncoverBlock.setLore("")
-                .addLore(coverBlockLore.replaceAll("%remaining-clicks%", dadh.getRemainingClicks() + ""));
+                .addLore(coverBlockLore.replace("%remaining-clicks%", dadh.getRemainingClicks() + ""));
         ItemBuilder alreadyUncoveredIb = rewardBlock;
         alreadyUncoveredIb.setDisplayName(rewardBlockWaitingName);
-        
-        for (int i = 0; i < inventoryBuilder.getSize(); i++)
-        {
-            if (dadh.getAlreadyChosenSlots().contains(i))
-            {
+
+        for (int i = 0; i < inventoryBuilder.getSize(); i++) {
+            if (dadh.getAlreadyChosenSlots().contains(i)) {
                 inventoryBuilder.setItem(i, alreadyUncoveredIb);
-            }
-            else
-            {
-                uncoverBlockIb.setDisplayName(coverBlockName.replaceAll("%number%", (i + 1) + ""));
-                if (count)
-                {
+            } else {
+                uncoverBlockIb.setDisplayName(coverBlockName.replace("%number%", (i + 1) + ""));
+                if (count) {
                     uncoverBlockIb.get().setAmount(i + 1);
                 }
                 inventoryBuilder.setItem(i, uncoverBlockIb);
@@ -178,12 +162,9 @@ public class DiscoverAnimation extends InventoryCrateAnimation
         }
     }
 
-    public void updateUncoverTiles(DiscoverAnimationDataHolder dadh)
-    {
-        for(int slot : dadh.getClickedSlots())
-        {
-            if (!dadh.getAlreadyChosenSlots().contains(slot) && dadh.getRemainingClicks() != 0)
-            {
+    public void updateUncoverTiles(DiscoverAnimationDataHolder dadh) {
+        for (int slot : dadh.getClickedSlots()) {
+            if (!dadh.getAlreadyChosenSlots().contains(slot) && dadh.getRemainingClicks() != 0) {
                 dadh.getAlreadyChosenSlots().add(slot);
                 dadh.setRemainingClicks(dadh.getRemainingClicks() - 1);
 
@@ -194,61 +175,45 @@ public class DiscoverAnimation extends InventoryCrateAnimation
 
         dadh.getClickedSlots().clear();
     }
-    
-    public void drawShufflingTiles(DiscoverAnimationDataHolder dadh)
-    {
+
+    public void drawShufflingTiles(DiscoverAnimationDataHolder dadh) {
         ItemBuilder reward = rewardBlock;
         reward.setDisplayName(rewardBlockName);
-        
-        for(int i = 0; i < dadh.getShufflingTiles().size(); i++)
-        {
+
+        for (int i = 0; i < dadh.getShufflingTiles().size(); i++) {
             dadh.getInventoryBuilder().setItem(dadh.getShufflingTiles().get(i), reward);
         }
     }
-    
-    public void updateShufflingTiles(DiscoverAnimationDataHolder dadh)
-    {
-        dadh.getShufflingTiles().clear();
-        
-        Random r = new Random();
 
-        for (int i = 0; i < dadh.getInventoryBuilder().getSize(); i++)
-        {
-            if (r.nextInt(7) == 1)
-            {
+    public void updateShufflingTiles(DiscoverAnimationDataHolder dadh) {
+        dadh.getShufflingTiles().clear();
+
+        for (int i = 0; i < dadh.getInventoryBuilder().getSize(); i++) {
+            if (r.nextInt(7) == 1) {
                 dadh.getShufflingTiles().add(i);
             }
         }
     }
-    
-    public void drawWinningTiles(DiscoverAnimationDataHolder dadh)
-    {
+
+    public void drawWinningTiles(DiscoverAnimationDataHolder dadh) {
         InventoryBuilder inventoryBuilder = dadh.getInventoryBuilder();
-        
+
         ItemBuilder reward = rewardBlock;
         reward.setDisplayName(rewardBlockUnlockName);
-        
-        for (int i : dadh.getAlreadyChosenSlots())
-        {
-            if (dadh.getAlreadyDisplayedRewards().keySet().contains(i))
-            {
+
+        for (int i : dadh.getAlreadyChosenSlots()) {
+            if (dadh.getAlreadyDisplayedRewards().containsKey(i)) {
                 inventoryBuilder.setItem(i, dadh.getAlreadyDisplayedRewards().get(i).getDisplayBuilder());
-            }
-            else
-            {
+            } else {
                 inventoryBuilder.setItem(i, reward);
             }
         }
     }
 
-    public void updateWinningTiles(DiscoverAnimationDataHolder dadh)
-    {
-        for(int slot : dadh.getClickedSlots())
-        {
-            if (dadh.getAlreadyChosenSlots().contains(slot))
-            {
-                if (!dadh.getAlreadyDisplayedRewards().keySet().contains(slot))
-                {
+    public void updateWinningTiles(DiscoverAnimationDataHolder dadh) {
+        for (int slot : dadh.getClickedSlots()) {
+            if (dadh.getAlreadyChosenSlots().contains(slot)) {
+                if (!dadh.getAlreadyDisplayedRewards().containsKey(slot)) {
                     Reward newR = getCrate().getSettings().getRewards().getRandomReward();
 
                     if (uncoverSound != null)
@@ -263,21 +228,18 @@ public class DiscoverAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public void endAnimation(AnimationDataHolder dataHolder)
-    {
+    public void endAnimation(AnimationDataHolder dataHolder) {
         DiscoverAnimationDataHolder dadh = (DiscoverAnimationDataHolder) dataHolder;
         Player player = dadh.getPlayer();
 
-        ArrayList<Reward> rewards = new ArrayList<>();
-        rewards.addAll(dadh.getAlreadyDisplayedRewards().values());
+        ArrayList<Reward> rewards = new ArrayList<>(dadh.getAlreadyDisplayedRewards().values());
 
         finishAnimation(player, rewards, false, null);
         getCrate().tick(dadh.getLocation(), CrateState.OPEN, player, rewards);
     }
 
     @Override
-    public void loadDataValues(StatusLogger sl)
-    {
+    public void loadDataValues(StatusLogger sl) {
         FileConfiguration fc = getFileHandler().get();
 
         invName = fc.getString(prefix + "inv-name");
@@ -374,64 +336,56 @@ public class DiscoverAnimation extends InventoryCrateAnimation
                 StatusLoggerEvent.ANIMATION_DISCOVER_REWARD_BLOCK_WAITING_NAME_SUCCESS);
     }
 
-    public String getInvName()
-    {
+    @Override
+    public String getInvName() {
         return invName;
     }
 
-    public void setInvName(String invName)
-    {
+    @Override
+    public void setInvName(String invName) {
         this.invName = invName;
     }
 
-    public String getPrefix()
-    {
+    public String getPrefix() {
         return prefix;
     }
 
-    public void setPrefix(String prefix)
-    {
+    public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
-    public SoundData getTickSound()
-    {
+    @Override
+    public SoundData getTickSound() {
         return tickSound;
     }
 
-    public void setTickSound(SoundData tickSound)
-    {
+    @Override
+    public void setTickSound(SoundData tickSound) {
         this.tickSound = tickSound;
     }
 
 
-    public int getMinRewards()
-    {
+    public int getMinRewards() {
         return minRewards;
     }
 
-    public int getMaxRewards()
-    {
+    public int getMaxRewards() {
         return maxRewards;
     }
 
-    public int getShuffleDisplayDuration()
-    {
+    public int getShuffleDisplayDuration() {
         return shuffleDisplayDuration;
     }
 
-    public boolean isCount()
-    {
+    public boolean isCount() {
         return count;
     }
 
-    public void setCount(boolean count)
-    {
+    public void setCount(boolean count) {
         this.count = count;
     }
 
-    public int getInvRows()
-    {
+    public int getInvRows() {
         return invRows;
     }
 }

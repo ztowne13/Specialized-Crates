@@ -16,48 +16,37 @@ import org.bukkit.inventory.meta.Damageable;
 
 import java.util.ArrayList;
 
-public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
-{
-    public SaveableItemBuilder(ItemBuilder builder)
-    {
+public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
+    public SaveableItemBuilder(ItemBuilder builder) {
         super(builder);
     }
 
-    public SaveableItemBuilder(ItemStack fromStack)
-    {
+    public SaveableItemBuilder(ItemStack fromStack) {
         super(fromStack);
     }
 
-    public SaveableItemBuilder(DynamicMaterial m, int amnt)
-    {
+    public SaveableItemBuilder(DynamicMaterial m, int amnt) {
         super(m, amnt);
     }
 
     @Override
-    public void saveItem(FileHandler fileHandler, String prefix, boolean allowUnnamedItems)
-    {
+    public void saveItem(FileHandler fileHandler, String prefix, boolean allowUnnamedItems) {
         FileConfiguration fc = fileHandler.get();
         short durability = getStack().getDurability();
-        try
-        {
+        try {
             DynamicMaterial dynMat = DynamicMaterial.fromItemStack(getStack());
             fc.set(prefix + ".material", dynMat.name());
             fc.set(prefix + ".damage",
                     durability == 0 ||
-                                dynMat.data != 0 ||
+                            dynMat.data != 0 ||
                             VersionUtils.Version.v1_13.isServerVersionOrLater()
                             ? null : durability);
-        }
-        catch(Exception exc)
-        {
-            if(VersionUtils.Version.v1_12.isServerVersionOrEarlier())
-            {
+        } catch (Exception exc) {
+            if (VersionUtils.Version.v1_12.isServerVersionOrEarlier()) {
                 getStack().setDurability((short) 0);
                 fc.set(prefix + ".material", DynamicMaterial.fromItemStack(getStack()).name());
                 fc.set(prefix + ".damage", durability);
-            }
-            else
-            {
+            } else {
                 exc.printStackTrace();
             }
         }
@@ -65,42 +54,34 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         fc.set(prefix + ".glow", isGlowing());
         fc.set(prefix + ".amount", getStack().getAmount());
         fc.set(prefix + ".player-head-name", getPlayerHeadName());
-        if(VersionUtils.Version.v1_13.isServerVersionOrLater() && im() instanceof Damageable)
-        {
-            fc.set(prefix + ".damage", ((Damageable)im()).getDamage());
+        if (VersionUtils.Version.v1_13.isServerVersionOrLater() && im() instanceof Damageable) {
+            fc.set(prefix + ".damage", ((Damageable) im()).getDamage());
         }
 
-        if(!hasDisplayName())
-        {
+        if (!hasDisplayName()) {
             fc.set(prefix + ".name", null);
-        }
-        else
-        {
+        } else {
             fc.set(prefix + ".name", getDisplayNameFromChatColor(false));
         }
 
         // Enchantments
-        if (!getEnchantments().isEmpty())
-        {
+        if (!getEnchantments().isEmpty()) {
             ArrayList<String> enchants = new ArrayList<>();
             for (CompressedEnchantment enchant : getEnchantments())
                 enchants.add(enchant.toString());
 
             fc.set(prefix + ".enchantments", enchants);
-        }
-        else
+        } else
             fc.set(prefix + ".enchantments", null);
 
         // Potion Effects
-        if (!getPotionEffects().isEmpty())
-        {
+        if (!getPotionEffects().isEmpty()) {
             ArrayList<String> parsedPots = new ArrayList<>();
             for (CompressedPotionEffect potion : getPotionEffects())
                 parsedPots.add(potion.toString());
 
             fc.set(prefix + ".potion-effects", parsedPots);
-        }
-        else
+        } else
             fc.set(prefix + ".potion-effects", null);
 
         // Lore
@@ -116,20 +97,17 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
             fc.set(prefix + ".nbt-tags", null);
 
         // Item Flags
-        if (!getItemFlags().isEmpty())
-        {
+        if (!getItemFlags().isEmpty()) {
             ArrayList<String> flags = new ArrayList<>();
             for (ItemFlag flag : getItemFlags())
                 flags.add(flag.name());
 
             fc.set(prefix + ".item-flags", flags);
-        }
-        else
+        } else
             fc.set(prefix + ".item-flags", null);
 
         // Leather armour color
-        if(isColorable() && getColor() != null)
-        {
+        if (isColorable() && getColor() != null) {
             fc.set(prefix + ".color.red", getColor().getR());
             fc.set(prefix + ".color.green", getColor().getG());
             fc.set(prefix + ".color.blue", getColor().getB());
@@ -137,8 +115,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
 
     }
 
-    public boolean loadItem(FileHandler fileHandler, String prefix)
-    {
+    public boolean loadItem(FileHandler fileHandler, String prefix) {
         return loadItem(fileHandler, prefix, null, null, null, null, null, null, null);
     }
 
@@ -149,38 +126,30 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
     public boolean loadItem(FileHandler fileHandler, String prefix, StatusLogger statusLogger, StatusLoggerEvent itemFailure,
                             StatusLoggerEvent improperEnchant, StatusLoggerEvent improperPotion,
                             StatusLoggerEvent improperGlow, StatusLoggerEvent improperAmount,
-                            StatusLoggerEvent invalidItemFlag)
-    {
+                            StatusLoggerEvent invalidItemFlag) {
         FileConfiguration fc = fileHandler.get();
 
         convertOldConfigurations(fileHandler, prefix);
 
-        short foundMaterialDurability = 0;
+        short foundMaterialDurability;
 
         // material
-        if (!fc.contains(prefix + ".material"))
-        {
+        if (!fc.contains(prefix + ".material")) {
             if (itemFailure != null)
                 itemFailure.log(statusLogger, new String[]{"The '" + prefix + ".material' value does not exist."});
             return false;
-        }
-        else
-        {
+        } else {
             String mat = fc.getString(prefix + ".material");
 
-            try
-            {
+            try {
                 DynamicMaterial dynamicMaterial = DynamicMaterial.fromString(mat);
-                foundMaterialDurability = (short)dynamicMaterial.data;
+                foundMaterialDurability = (short) dynamicMaterial.data;
                 setStack(dynamicMaterial.parseItem());
 
-                if(dynamicMaterial.equals(DynamicMaterial.AIR))
-                {
+                if (dynamicMaterial.equals(DynamicMaterial.AIR)) {
                     return true;
                 }
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 if (itemFailure != null)
                     itemFailure.log(statusLogger, new String[]{mat + " is not a valid material."});
                 return false;
@@ -188,18 +157,15 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         }
 
 
-        if(fc.contains(prefix + ".damage") && foundMaterialDurability == 0)
-        {
-            if (Utils.isInt(fc.getString(prefix + ".damage")))
-            {
+        if (fc.contains(prefix + ".damage") && foundMaterialDurability == 0) {
+            if (Utils.isInt(fc.getString(prefix + ".damage"))) {
                 int damage = Integer.parseInt(fc.getString(prefix + ".damage"));
                 setDamage(damage);
             }
         }
 
         // Name
-        if (!fc.contains(prefix + ".name"))
-        {
+        if (!fc.contains(prefix + ".name")) {
             setDisplayName(null);
         }
         setDisplayName(fc.getString(prefix + ".name"));
@@ -210,17 +176,12 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
                 addLore(line);
 
         // Enchantments
-        if (fc.contains(prefix + ".enchantments"))
-        {
-            for (String unparsedEnchant : fc.getStringList(prefix + ".enchantments"))
-            {
-                try
-                {
+        if (fc.contains(prefix + ".enchantments")) {
+            for (String unparsedEnchant : fc.getStringList(prefix + ".enchantments")) {
+                try {
                     CompressedEnchantment compressedEnchantment = CompressedEnchantment.fromString(unparsedEnchant);
                     addEnchantment(compressedEnchantment);
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     if (improperEnchant != null)
                         improperEnchant.log(statusLogger, new String[]{unparsedEnchant +
                                 " is not formatted enchant;level or either the enchant is not a valid enchantment or the level is not a number."});
@@ -230,8 +191,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
 
         // Glow
 
-        if (fc.contains(prefix + ".glow") && getEnchantments().size() == 0)
-        {
+        if (fc.contains(prefix + ".glow") && getEnchantments().isEmpty()) {
             String unparsedGlow = fc.getString(prefix + ".glow");
             if (Utils.isBoolean(unparsedGlow))
                 setGlowing(Boolean.parseBoolean(unparsedGlow));
@@ -241,17 +201,12 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         }
 
         // Potion Effects
-        if (fc.contains(prefix + ".potion-effects"))
-        {
-            for (String unparsedPotion : fc.getStringList(prefix + ".potion-effects"))
-            {
-                try
-                {
+        if (fc.contains(prefix + ".potion-effects")) {
+            for (String unparsedPotion : fc.getStringList(prefix + ".potion-effects")) {
+                try {
                     CompressedPotionEffect compressedPotionEffect = CompressedPotionEffect.fromString(unparsedPotion);
                     addPotionEffect(compressedPotionEffect);
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     exc.printStackTrace();
                     if (improperPotion != null)
                         improperPotion.log(statusLogger, new String[]{unparsedPotion +
@@ -266,17 +221,12 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
                 addNBTTag(line);
 
         // Item Flags
-        if (fc.contains(prefix + ".item-flags"))
-        {
-            for (String line : fc.getStringList(prefix + ".item-flags"))
-            {
-                try
-                {
+        if (fc.contains(prefix + ".item-flags")) {
+            for (String line : fc.getStringList(prefix + ".item-flags")) {
+                try {
                     ItemFlag flag = ItemFlag.valueOf(line);
                     addItemFlag(flag);
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     if (invalidItemFlag != null)
                         invalidItemFlag.log(statusLogger, new String[]{line + " is an invalid flag."});
                 }
@@ -285,8 +235,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
 
         // Amount
 
-        if (fc.contains(prefix + ".amount"))
-        {
+        if (fc.contains(prefix + ".amount")) {
             String unparsedAmount = fc.getString(prefix + ".amount");
             if (Utils.isInt(unparsedAmount))
                 getStack().setAmount(Integer.parseInt(unparsedAmount));
@@ -296,38 +245,32 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
 
         // Player Head Name
 
-        if (fc.contains(prefix + ".player-head-name"))
-        {
+        if (fc.contains(prefix + ".player-head-name")) {
             // If the head has the SkullOwner tag, it LIKELY doesn't need a player-head name. So, don't save the player-head
             // name, otherwise it will overwrite the tag.
-            if(!hasNBTTag("SkullOwner"))
-            {
+            if (!hasNBTTag("SkullOwner")) {
                 setPlayerHeadName(fc.getString(prefix + ".player-head-name"));
             }
         }
 
         // Leather armour color
 
-        if(fc.contains(prefix + ".color") && isColorable())
-        {
+        if (fc.contains(prefix + ".color") && isColorable()) {
             int red = 0;
             int green = 0;
             int blue = 0;
 
             String unparsedRed = fc.getString(prefix + ".color.red");
             String unparsedGreen = fc.getString(prefix + ".color.green");
-            String unparsedBlue  = fc.getString(prefix + ".color.blue");
+            String unparsedBlue = fc.getString(prefix + ".color.blue");
 
-            if(Utils.isInt(unparsedRed))
-            {
+            if (Utils.isInt(unparsedRed)) {
                 red = Integer.parseInt(unparsedRed);
             }
-            if(Utils.isInt(unparsedGreen))
-            {
+            if (Utils.isInt(unparsedGreen)) {
                 green = Integer.parseInt(unparsedGreen);
             }
-            if(Utils.isInt(unparsedBlue))
-            {
+            if (Utils.isInt(unparsedBlue)) {
                 blue = Integer.parseInt(unparsedBlue);
             }
 
@@ -337,24 +280,19 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
         return true;
     }
 
-    public void convertOldConfigurations(FileHandler fileHandler, String prefix)
-    {
+    public void convertOldConfigurations(FileHandler fileHandler, String prefix) {
         convertOldEnchantType(fileHandler, prefix);
         convertOldItemType(fileHandler, prefix);
     }
 
-    public void convertOldItemType(FileHandler fileHandler, String prefix)
-    {
+    public void convertOldItemType(FileHandler fileHandler, String prefix) {
         FileConfiguration fc = fileHandler.get();
 
-        if(fc.contains(prefix))
-        {
-            if (!(fc.get(prefix) instanceof MemorySection))
-            {
+        if (fc.contains(prefix)) {
+            if (!(fc.get(prefix) instanceof MemorySection)) {
                 ChatUtils.log("Converting old item format to new item format...");
 
-                try
-                {
+                try {
                     String original = fc.getString(prefix);
                     String[] args = original.split(";");
 
@@ -367,45 +305,32 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
                     newItem.saveItem(fileHandler, prefix, true);
                     ChatUtils.log("Successfully converted " + original);
                     fileHandler.save();
-                }
-                catch(Exception exc)
-                {
+                } catch (Exception exc) {
                     exc.printStackTrace();
                     ChatUtils.log("Failed to convert " + fc.getString(prefix) + ", it is likely not a proper material.");
-                    return;
                 }
             }
         }
 
     }
 
-    public void convertOldEnchantType(FileHandler fileHandler, String prefix)
-    {
+    public void convertOldEnchantType(FileHandler fileHandler, String prefix) {
         FileConfiguration fc = fileHandler.get();
-        if (fc.contains(prefix + ".enchantment") && !fc.contains(prefix + ".enchantments"))
-        {
+        if (fc.contains(prefix + ".enchantment") && !fc.contains(prefix + ".enchantments")) {
             ChatUtils.log("Converting old enchantment format to new enchantment format...");
-            try
-            {
+            try {
                 boolean isSet = !fc.getStringList(prefix + ".enchantment").isEmpty();
-                ArrayList<String> newEnchs = new ArrayList<String>();
-                if (isSet)
-                {
-                    for (String line : fc.getStringList(prefix + ".enchantment"))
-                    {
-                        try
-                        {
+                ArrayList<String> newEnchs = new ArrayList<>();
+                if (isSet) {
+                    for (String line : fc.getStringList(prefix + ".enchantment")) {
+                        try {
                             CompressedEnchantment compressedEnchantment = CompressedEnchantment.fromString(line);
                             newEnchs.add(compressedEnchantment.toString());
-                        }
-                        catch (Exception exc)
-                        {
+                        } catch (Exception exc) {
 
                         }
                     }
-                }
-                else
-                {
+                } else {
                     String enchant = fc.getString(prefix + ".enchantment");
                     CompressedEnchantment compressedEnchantment = CompressedEnchantment.fromString(enchant);
                     newEnchs.add(compressedEnchantment.toString());
@@ -416,11 +341,8 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem
                 ChatUtils.log("Success. Saving...");
                 fileHandler.save();
                 ChatUtils.log("Saved.");
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.log("Failed.");
-                return;
             }
         }
     }

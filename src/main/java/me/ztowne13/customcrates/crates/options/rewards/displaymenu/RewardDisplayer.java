@@ -9,17 +9,15 @@ import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-public abstract class RewardDisplayer
-{
+public abstract class RewardDisplayer {
     Crate crate;
     String name = null;
-    boolean multiplePages = false;
+    //    boolean multiplePages = false;
     boolean requirePermForPreview = false;
 
     FileHandler fileHandler;
 
-    public RewardDisplayer(Crate crate)
-    {
+    public RewardDisplayer(Crate crate) {
         this.crate = crate;
         this.fileHandler = crate.getSettings().getFileHandler();
     }
@@ -30,21 +28,16 @@ public abstract class RewardDisplayer
 
     public abstract void load();
 
-    public void openFor(Player player)
-    {
-        if (isRequirePermForPreview())
-        {
-            if (!player.hasPermission(getCrate().getSettings().getPermission()))
-            {
+    public void openFor(Player player) {
+        if (isRequirePermForPreview()) {
+            if (!player.hasPermission(getCrate().getSettings().getPermission())) {
                 Messages.NO_PERMISSION_CRATE.msgSpecified(crate.getCc(), player);
                 return;
             }
         }
 
-        if (!(this instanceof CustomRewardDisplayer) && crate.getSettings().getRewards().getCrateRewards().length > 54)
-        {
-            if (player.hasPermission("customcrates.admin") || player.hasPermission("specializedcrates.admin"))
-            {
+        if (!(this instanceof CustomRewardDisplayer) && crate.getSettings().getRewards().getCrateRewards().length > 54) {
+            if (player.hasPermission("customcrates.admin") || player.hasPermission("specializedcrates.admin")) {
                 ChatUtils.msgHey(player,
                         "Just a heads up: you have more than 54 rewards in this crate, but only the &lCUSTOM &ereward display" +
                                 " type supports multiple pages, so not all rewards are shown &o(note: only admins can see this message).");
@@ -54,8 +47,7 @@ public abstract class RewardDisplayer
         open(player);
     }
 
-    public String getInvName()
-    {
+    public String getInvName() {
         if (name == null)
             return ChatUtils.toChatColor(
                     getCrate().getCc().getSettings().getConfigValues().get("inv-reward-display-name").toString()
@@ -64,67 +56,53 @@ public abstract class RewardDisplayer
             return ChatUtils.toChatColor(name);
     }
 
-    public void loadDefaults()
-    {
+    public void loadDefaults() {
         FileConfiguration fc = fileHandler.get();
 
-        if (fc.contains("reward-display.name"))
-        {
+        if (fc.contains("reward-display.name")) {
             this.name = fc.getString("reward-display.name");
         }
 
-        if (fc.contains("reward-display.require-permission"))
-        {
-            try
-            {
+        if (fc.contains("reward-display.require-permission")) {
+            try {
                 this.requirePermForPreview = fc.getBoolean("reward-display.require-permission");
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
 
             }
         }
     }
 
-    public void saveToFile()
-    {
+    public void saveToFile() {
         getFileHandler().get().set("reward-display.type", getCrate().getSettings().getRewardDisplayType().name());
         getFileHandler().get().set("reward-display.name", name);
         getFileHandler().get().set("reward-display.require-permission", requirePermForPreview);
     }
 
-    public Crate getCrate()
-    {
+    public Crate getCrate() {
         return crate;
     }
 
-    public void setCrate(Crate crate)
-    {
+    public void setCrate(Crate crate) {
         this.crate = crate;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public FileHandler getFileHandler()
-    {
+    public FileHandler getFileHandler() {
         return fileHandler;
     }
 
-    public boolean isRequirePermForPreview()
-    {
+    public boolean isRequirePermForPreview() {
         return requirePermForPreview;
     }
 
-    public void setRequirePermForPreview(boolean requirePermForPreview)
-    {
+    public void setRequirePermForPreview(boolean requirePermForPreview) {
         this.requirePermForPreview = requirePermForPreview;
     }
 }

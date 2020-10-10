@@ -6,32 +6,27 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
 
-public class SettingsConverter
-{
-    public static void convertParticles(FileHandler fileHandler, String path)
-    {
+public class SettingsConverter {
+    public static void convertParticles(FileHandler fileHandler, String path) {
         FileConfiguration fc = fileHandler.get();
         boolean isSet = !fc.getStringList(path).isEmpty();
 
-        if (isSet)
-        {
+        if (isSet) {
             ChatUtils.log("Converting particles for " + path + "...");
             List<String> list = fc.getStringList(path);
             int i = 0;
-            for (String s : list)
-            {
-                try
-                {
+            for (String s : list) {
+                try {
                     i++;
                     String section = i + "";
 
                     String[] split = s.replace(" ", "").split(",");
                     String type = split[0].toUpperCase();
-                    float rangeX = Float.valueOf(split[1]);
-                    float rangeY = Float.valueOf(split[2]);
-                    float rangeZ = Float.valueOf(split[3]);
-                    float speed = Float.valueOf(split[4]);
-                    int amnt = Integer.valueOf(split[5]);
+                    float rangeX = Float.parseFloat(split[1]);
+                    float rangeY = Float.parseFloat(split[2]);
+                    float rangeZ = Float.parseFloat(split[3]);
+                    float speed = Float.parseFloat(split[4]);
+                    int amnt = Integer.parseInt(split[5]);
                     String animation = "NONE";
 
                     if (split.length >= 7)
@@ -51,9 +46,7 @@ public class SettingsConverter
                     fc.set(path + "." + section + ".center-z", 0);
                     fileHandler.save();
                     ChatUtils.log("Success. Converted " + s);
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     //exc.printStackTrace();
                     ChatUtils
                             .log("FAILED TO CONVERT PARTICLES. This is like due to a misformatted particle that wasn't in use anyways and can be ignored.");

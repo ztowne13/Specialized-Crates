@@ -7,33 +7,27 @@ import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.players.PlayerManager;
 import org.bukkit.entity.Player;
 
-public class SimpleRewardDisplayer extends RewardDisplayer
-{
-    public SimpleRewardDisplayer(Crate crate)
-    {
+public class SimpleRewardDisplayer extends RewardDisplayer {
+    public SimpleRewardDisplayer(Crate crate) {
         super(crate);
     }
 
     @Override
-    public void open(Player p)
-    {
+    public void open(Player p) {
         p.openInventory(createInventory(p).getInv());
         PlayerManager.get(getCrate().getCc(), p).setInRewardMenu(true);
     }
 
     @Override
-    public InventoryBuilder createInventory(Player p)
-    {
+    public InventoryBuilder createInventory(Player p) {
         CRewards cr = getCrate().getSettings().getRewards();
         int amount = cr.getCrateRewards().length;
         int rows = amount % 9 == 0 ? amount / 9 : (amount / 9) + 1;
         InventoryBuilder ib = new InventoryBuilder(p, rows * 9, getInvName());
         Reward[] crewards = cr.getCrateRewards();
         int i = 0;
-        for (Reward r : crewards)
-        {
-            if(i >= 54)
-            {
+        for (Reward r : crewards) {
+            if (i >= 54) {
                 break;
             }
 
@@ -44,8 +38,7 @@ public class SimpleRewardDisplayer extends RewardDisplayer
     }
 
     @Override
-    public void load()
-    {
+    public void load() {
         loadDefaults();
     }
 }

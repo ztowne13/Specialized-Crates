@@ -7,12 +7,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
-public class DataHandler
-{
+public class DataHandler {
     String playerCmdsPath = "queued-player-commands";
 
     int LOGIN_WAIT = 20;
@@ -20,101 +17,81 @@ public class DataHandler
     SpecializedCrates cc;
     FileHandler dataFile;
 
-    HashMap<UUID, ArrayList<QueuedGiveCommand>> quedGiveCommands = new HashMap<>();
+    Map<UUID, List<QueuedGiveCommand>> queuedGiveCommands = new HashMap<>();
 
-    public DataHandler(SpecializedCrates cc, FileHandler dataFile)
-    {
+    public DataHandler(SpecializedCrates cc, FileHandler dataFile) {
         this.cc = cc;
         this.dataFile = dataFile;
     }
 
-    public void loadFromFile()
-    {
+    public void loadFromFile() {
         FileConfiguration fileConfig = dataFile.get();
 
         // Queued give commands
         ConfigurationSection configSection = fileConfig.getConfigurationSection(playerCmdsPath);
-        if(configSection != null)
-        {
+        if (configSection != null) {
 
-            for (Object queuedCmd : configSection.getKeys(false))
-            {
+            for (Object queuedCmd : configSection.getKeys(false)) {
                 String uuidStr = queuedCmd.toString();
                 UUID uuid = UUID.fromString(uuidStr);
 
                 ArrayList<QueuedGiveCommand> cmds = new ArrayList<>();
 
-                for (String cmd : configSection.getStringList(uuidStr))
-                {
+                for (String cmd : configSection.getStringList(uuidStr)) {
                     QueuedGiveCommand queuedGiveCommand = new QueuedGiveCommand(cmd);
-                    if(queuedGiveCommand.isStillExists())
-                    {
+                    if (queuedGiveCommand.isStillExists()) {
                         cmds.add(queuedGiveCommand);
                     }
                 }
 
-                quedGiveCommands.put(uuid, cmds);
+                queuedGiveCommands.put(uuid, cmds);
             }
         }
     }
 
-    public void saveToFile()
-    {
+    public void saveToFile() {
         FileConfiguration fileConfig = dataFile.get();
 
         // Queued give commands
-        for (UUID uuid : quedGiveCommands.keySet())
-        {
+        for (Map.Entry<UUID, List<QueuedGiveCommand>> entry : queuedGiveCommands.entrySet()) {
             ArrayList<String> giveCmdsStr = new ArrayList<>();
-            ArrayList<QueuedGiveCommand> giveCmds = quedGiveCommands.get(uuid);
-            for (QueuedGiveCommand cmd : giveCmds)
-            {
+            for (QueuedGiveCommand cmd : entry.getValue()) {
                 giveCmdsStr.add(cmd.toString());
             }
 
-            fileConfig.set(playerCmdsPath + "." + uuid.toString(), giveCmdsStr.toArray());
+            fileConfig.set(playerCmdsPath + "." + entry.getKey().toString(), giveCmdsStr.toArray());
         }
 
         dataFile.save();
     }
 
-    public void addQueuedGiveCommand(QueuedGiveCommand queuedGiveCommand)
-    {
+    public void addQueuedGiveCommand(QueuedGiveCommand queuedGiveCommand) {
         UUID uuid = queuedGiveCommand.getUuid();
 
-        ArrayList<QueuedGiveCommand> thisCmds;
-        thisCmds = quedGiveCommands.containsKey(uuid) ? quedGiveCommands.get(uuid) : new ArrayList<QueuedGiveCommand>();
+        List<QueuedGiveCommand> thisCmds;
+        thisCmds = queuedGiveCommands.getOrDefault(uuid, new ArrayList<>());
         thisCmds.add(queuedGiveCommand);
 
-        quedGiveCommands.put(uuid, thisCmds);
+        queuedGiveCommands.put(uuid, thisCmds);
     }
 
-    public void playAllQueuedGiveCommands(final UUID uuid)
-    {
-        Bukkit.getScheduler().runTaskLater(cc, new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                if (quedGiveCommands.containsKey(uuid))
-                {
-                    for (QueuedGiveCommand cmd : quedGiveCommands.get(uuid))
-                        cmd.run();
+    public void playAllQueuedGiveCommands(final UUID uuid) {
+        Bukkit.getScheduler().runTaskLater(cc, () -> {
+            if (queuedGiveCommands.containsKey(uuid)) {
+                for (QueuedGiveCommand cmd : queuedGiveCommands.get(uuid))
+                    cmd.run();
 
-                    quedGiveCommands.remove(uuid);
-                    dataFile.get().set(playerCmdsPath + "." + uuid.toString(), null);
-                }
+                queuedGiveCommands.remove(uuid);
+                dataFile.get().set(playerCmdsPath + "." + uuid.toString(), null);
             }
         }, LOGIN_WAIT);
     }
 
-    public HashMap<UUID, ArrayList<QueuedGiveCommand>> getQuedGiveCommands()
-    {
-        return quedGiveCommands;
+    public Map<UUID, List<QueuedGiveCommand>> getQueuedGiveCommands() {
+        return queuedGiveCommands;
     }
 
-    public class QueuedGiveCommand
-    {
+    public class QueuedGiveCommand {
         UUID uuid;
         boolean key;
         boolean virtual;
@@ -122,32 +99,24 @@ public class DataHandler
         Crate crate;
         boolean stillExists = true;
 
-        public QueuedGiveCommand(String cmd)
-        {
+        public QueuedGiveCommand(String cmd) {
             String[] args = cmd.split(";");
             this.uuid = UUID.fromString(args[0]);
-            this.key = Boolean.valueOf(args[1]);
-            this.virtual = Boolean.valueOf(args[2]);
+            this.key = Boolean.parseBoolean(args[1]);
+            this.virtual = Boolean.parseBoolean(args[2]);
             this.amount = Integer.parseInt(args[3]);
-            try
-            {
-                if(Crate.existsNotCaseSensitive(args[4]))
-                {
+            try {
+                if (Crate.existsNotCaseSensitive(args[4])) {
                     this.crate = Crate.getCrate(cc, args[4], false);
-                }
-                else
-                {
+                } else {
                     stillExists = false;
                 }
-            }
-            catch(Exception exc)
-            {
+            } catch (Exception exc) {
                 stillExists = false;
             }
         }
 
-        public QueuedGiveCommand(UUID uuid, boolean key, boolean virtual, int amount, Crate crate)
-        {
+        public QueuedGiveCommand(UUID uuid, boolean key, boolean virtual, int amount, Crate crate) {
             this.uuid = uuid;
             this.key = key;
             this.virtual = virtual;
@@ -155,15 +124,12 @@ public class DataHandler
             this.crate = crate;
         }
 
-        public UUID getUuid()
-        {
+        public UUID getUuid() {
             return uuid;
         }
 
-        public void run()
-        {
-            try
-            {
+        public void run() {
+            try {
                 String give = key ? "givekey" : "givecrate";
                 String crateName = crate.getName();
                 String uuidToStr = uuid.toString();
@@ -182,19 +148,14 @@ public class DataHandler
                 // Crate = 3, Key = 4
 
 
-                if (key)
-                {
+                if (key) {
                     ChatUtils.log("[SpecializedCrate] Executing givecrate command for player that was offline.");
                     cc.getCommandCrate().getSubCommands().get(4).run(cc, cc.getCommandCrate(), args);
-                }
-                else
-                {
+                } else {
                     ChatUtils.log("[SpecializedCrate] Executing givekey command for player that was offline.");
                     cc.getCommandCrate().getSubCommands().get(3).run(cc, cc.getCommandCrate(), args);
                 }
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils
                         .log("&7Failed to run a qued givekey or givecrate command. The crate to give the player probably" +
                                 " no longer exists. The qued command will be removed.");
@@ -202,19 +163,16 @@ public class DataHandler
             }
         }
 
-        public boolean isStillExists()
-        {
+        public boolean isStillExists() {
             return stillExists;
         }
 
-        public Crate getCrate()
-        {
+        public Crate getCrate() {
             return crate;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return uuid + ";" + key + ";" + virtual + ";" + amount + ";" + crate.getName() + ";";
         }
     }

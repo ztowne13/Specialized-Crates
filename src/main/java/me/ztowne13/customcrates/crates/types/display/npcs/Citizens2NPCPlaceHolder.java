@@ -15,122 +15,99 @@ import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ztowne13 on 2/25/16.
  */
-public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder
-{
-    static HashMap<PlacedCrate, NPC> npcs = new HashMap<PlacedCrate, NPC>();
+public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder {
+    static Map<PlacedCrate, NPC> npcs = new HashMap<>();
 
     String name;
 
-    public Citizens2NPCPlaceHolder(SpecializedCrates cc)
-    {
+    public Citizens2NPCPlaceHolder(SpecializedCrates cc) {
         super(cc);
     }
 
-    public void place(final PlacedCrate cm)
-    {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                LocationUtils.removeDubBlocks(cm.getL());
+    public static Map<PlacedCrate, NPC> getNpcs() {
+        return npcs;
+    }
 
-                NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
-                NPC npc;
+    public static void setNpcs(Map<PlacedCrate, NPC> npcs) {
+        Citizens2NPCPlaceHolder.npcs = npcs;
+    }
 
-                if(NPCUtils.npcExists(cm))
-                {
-                    npc = NPCUtils.getNpcForCrate(cm);
-                    if(npc.getEntity().getType().equals(EntityType.PLAYER))
-                    {
-                        getNpcs().put(cm, npc);
-                        return;
-                    }
-                    else
-                    {
-                        npc.destroy();
-                    }
+    public void place(final PlacedCrate cm) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), () -> {
+            LocationUtils.removeDubBlocks(cm.getL());
+
+            NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
+            NPC npc;
+
+            if (NPCUtils.npcExists(cm)) {
+                npc = NPCUtils.getNpcForCrate(cm);
+                if (npc.getEntity().getType().equals(EntityType.PLAYER)) {
+                    getNpcs().put(cm, npc);
+                    return;
+                } else {
+                    npc.destroy();
                 }
-
-                npc = npcRegistry.createNPC(EntityType.PLAYER, "Specialized Crate - Crate");
-                //npc.addTrait(new IdentifierTrait());
-
-                npc.data().setPersistent(NPC.PLAYER_SKIN_UUID_METADATA, name);
-                //npc.data().setPersistent(NPC.PLAYER_SKIN_USE_LATEST, false);
-
-                npc.spawn(LocationUtils.getLocationCentered(cm.getL()));
-
-                NPCUtils.applyDefaultInfo(npc);
-
-                //applySkin(npc, getName());
-
-                getNpcs().put(cm, npc);
             }
+
+            npc = npcRegistry.createNPC(EntityType.PLAYER, "Specialized Crate - Crate");
+            //npc.addTrait(new IdentifierTrait());
+
+            npc.data().setPersistent(NPC.PLAYER_SKIN_UUID_METADATA, name);
+            //npc.data().setPersistent(NPC.PLAYER_SKIN_USE_LATEST, false);
+
+            npc.spawn(LocationUtils.getLocationCentered(cm.getL()));
+
+            NPCUtils.applyDefaultInfo(npc);
+
+            //applySkin(npc, getName());
+
+            getNpcs().put(cm, npc);
         }, 20);
 
     }
 
-    public void remove(PlacedCrate cm)
-    {
+    public void remove(PlacedCrate cm) {
         getNpcs().get(cm).destroy();
     }
 
-    public void setType(Object obj)
-    {
-        setName(obj.toString());
-    }
-
-    public String getType()
-    {
+    public String getType() {
         return getName();
     }
 
-    public void fixHologram(PlacedCrate cm)
-    {
+    public void setType(Object obj) {
+        setName(obj.toString());
+    }
+
+    public void fixHologram(PlacedCrate cm) {
         Location l = cm.getL().clone();
         l.setY(l.getY() + EntityTypes.PLAYER.getHeight() - .8);
         cm.getHologram().getDh().teleport(l);
     }
 
-    public void applySkin(NPC npc, String name)
-    {
-        if (npc.isSpawned())
-        {
+    public void applySkin(NPC npc, String name) {
+        if (npc.isSpawned()) {
 
             SkinnableEntity skinnable = (SkinnableEntity) npc.getEntity();
-            if (skinnable != null)
-            {
+            if (skinnable != null) {
                 skinnable.setSkinName(name);
             }
         }
     }
 
-    public static HashMap<PlacedCrate, NPC> getNpcs()
-    {
-        return npcs;
-    }
-
-    public static void setNpcs(HashMap<PlacedCrate, NPC> npcs)
-    {
-        Citizens2NPCPlaceHolder.npcs = npcs;
-    }
-
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "NPC";
     }
 }

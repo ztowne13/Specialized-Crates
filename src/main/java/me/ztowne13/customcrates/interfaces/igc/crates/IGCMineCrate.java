@@ -19,16 +19,13 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 4/5/16.
  */
-public class IGCMineCrate extends IGCMenuCrate
-{
-    public IGCMineCrate(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates)
-    {
+public class IGCMineCrate extends IGCMenuCrate {
+    public IGCMineCrate(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates) {
         super(cc, p, lastMenu, "&7&l> &6&lMine Crate", crates);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(27);
 
@@ -45,8 +42,7 @@ public class IGCMineCrate extends IGCMenuCrate
         ItemBuilder bList =
                 new ItemBuilder(Material.STONE, 1, 0).setName("&aEdit the block-list").setLore("&7Current values: ");
 
-        for (Material m : cs.getLuckyChestSettings().getWhiteList())
-        {
+        for (Material m : cs.getLuckyChestSettings().getWhiteList()) {
             bList.addLore("&7" + m.name());
         }
         bList.addLore("").addAutomaticLore("&f", 30, "These are all the materials on the blacklist (or whitelist).");
@@ -54,8 +50,7 @@ public class IGCMineCrate extends IGCMenuCrate
 
         ItemBuilder wList =
                 new ItemBuilder(DynamicMaterial.PURPLE_DYE, 1).setName("&aEdit the worlds").setLore("&7Current values: ");
-        for (String w : cs.getLuckyChestSettings().getWorldsRaw())
-        {
+        for (String w : cs.getLuckyChestSettings().getWorldsRaw()) {
             wList.addLore("&7" + w);
         }
         wList.addLore("").addAutomaticLore("&f", 30,
@@ -75,10 +70,8 @@ public class IGCMineCrate extends IGCMenuCrate
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 9:
                 up();
                 break;
@@ -112,100 +105,65 @@ public class IGCMineCrate extends IGCMenuCrate
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
-        if (value.equalsIgnoreCase("chance"))
-        {
-            try
-            {
+    public boolean handleInput(String value, String input) {
+        if (value.equalsIgnoreCase("chance")) {
+            try {
                 String[] split = input.split("/");
-                if (Utils.isInt(split[0]))
-                {
-                    if (Utils.isInt(split[1]))
-                    {
+                if (Utils.isInt(split[0])) {
+                    if (Utils.isInt(split[1])) {
                         cs.getLuckyChestSettings().setChance(Double.valueOf(split[0]));
                         cs.getLuckyChestSettings().setOutOfChance(Double.valueOf(split[1]));
                         ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                         return true;
-                    }
-                    else
-                    {
+                    } else {
                         ChatUtils.msgError(getP(), split[1] + " is not a valid number.");
                     }
-                }
-                else
-                {
+                } else {
                     ChatUtils.msgError(getP(), split[0] + " is not a valid number.");
                 }
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.msgError(getP(), input + " is not formatted 'number/number' or 'chance/out of chance'");
             }
-        }
-        else if (value.equalsIgnoreCase("remove block-list"))
-        {
-            try
-            {
+        } else if (value.equalsIgnoreCase("remove block-list")) {
+            try {
                 Material m = DynamicMaterial.fromString(input.toUpperCase()).parseMaterial();
-                if (cs.getLuckyChestSettings().getWhiteList().contains(m))
-                {
+                if (cs.getLuckyChestSettings().getWhiteList().contains(m)) {
                     cs.getLuckyChestSettings().getWhiteList().remove(m);
                     ChatUtils.msgSuccess(getP(), "Removed the " + input + " value from the whitelist / blacklist");
                     return true;
-                }
-                else
-                {
+                } else {
                     ChatUtils.msgError(getP(), input + " does not exist in the blacklist / whitelist.");
                 }
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.msgError(getP(), input + " is not a valid material.");
             }
-        }
-        else if (value.equalsIgnoreCase("add worlds"))
-        {
-            try
-            {
+        } else if (value.equalsIgnoreCase("add worlds")) {
+            try {
                 World w = Bukkit.getWorld(input);
                 cs.getLuckyChestSettings().getWorlds().add(w);
                 ChatUtils.msgSuccess(getP(), "Added " + input + " to the list of allowed worlds.");
                 return true;
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.msgError(getP(),
                         input + " is a non-existent world from the list of worlds: " + Bukkit.getWorlds().toString());
             }
-        }
-        else if (value.equalsIgnoreCase("remove worlds"))
-        {
-            try
-            {
+        } else if (value.equalsIgnoreCase("remove worlds")) {
+            try {
                 World w = Bukkit.getWorld(input);
-                if (w != null)
-                {
-                    if (cs.getLuckyChestSettings().getWorlds().contains(w))
-                    {
+                if (w != null) {
+                    if (cs.getLuckyChestSettings().getWorlds().contains(w)) {
                         cs.getLuckyChestSettings().getWorlds().remove(w);
                         ChatUtils.msgSuccess(getP(), "Removed " + input + " from the list of allowed worlds.");
                         return true;
-                    }
-                    else
-                    {
+                    } else {
                         ChatUtils.msgError(getP(),
                                 input + " is not currently allowed in the worlds list to be remobed. Current worlds: " +
                                         cs.getLuckyChestSettings().getWorlds().toString());
                     }
-                }
-                else
-                {
+                } else {
                     throw new Exception();
                 }
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.msgError(getP(),
                         input + " is a non-existent world from the list of worlds: " + Bukkit.getWorlds().toString());
             }

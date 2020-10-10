@@ -14,34 +14,27 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 2/14/2017.
  */
-public class NMSActionEffect extends ActionEffect
-{
+public class NMSActionEffect extends ActionEffect {
     Title title;
 
-    public NMSActionEffect(SpecializedCrates cc)
-    {
+    public NMSActionEffect(SpecializedCrates cc) {
         super(cc);
     }
 
-    public ActionBar getActionBarExecutor()
-    {
+    public ActionBar getActionBarExecutor() {
         if (VersionUtils.Version.v1_8.isServerVersionOrEarlier())
             return new ActionBarV1_7_8();
         else
             return new ActionBarV1_9_10_11();
     }
 
-    public void newTitle()
-    {
-        if (VersionUtils.Version.v1_10.isServerVersionOrEarlier())
-        {
+    public void newTitle() {
+        if (VersionUtils.Version.v1_10.isServerVersionOrEarlier()) {
             title = new TitleV1_7_8_9_10("", "",
                     (Integer.parseInt(SettingsValue.CA_FADE_IN.getValue(cc).toString())),
                     (Integer.parseInt(SettingsValue.CA_STAY.getValue(cc).toString())),
                     (Integer.parseInt(SettingsValue.CA_FADE_OUT.getValue(cc).toString())));
-        }
-        else
-        {
+        } else {
             title = new TitleV1_11("", "",
                     (Integer.parseInt(SettingsValue.CA_FADE_IN.getValue(cc).toString())),
                     (Integer.parseInt(SettingsValue.CA_STAY.getValue(cc).toString())),
@@ -49,22 +42,18 @@ public class NMSActionEffect extends ActionEffect
         }
     }
 
-    public void playTitle(Player p)
-    {
-        if (title != null)
-        {
+    public void playTitle(Player p) {
+        if (title != null) {
             title.send(p);
             title = null;
         }
     }
 
-    public void setDisplayTitle(String titleMsg)
-    {
+    public void setDisplayTitle(String titleMsg) {
         title.setTitle(titleMsg);
     }
 
-    public void setDisplaySubtitle(String subtitleMsg)
-    {
+    public void setDisplaySubtitle(String subtitleMsg) {
         title.setSubtitle(subtitleMsg);
     }
 }

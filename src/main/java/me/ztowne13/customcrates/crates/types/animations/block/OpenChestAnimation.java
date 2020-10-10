@@ -12,17 +12,16 @@ import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class OpenChestAnimation extends CrateAnimation
-{
-    public static ArrayList<Item> items = new ArrayList<>();
+public class OpenChestAnimation extends CrateAnimation {
+    private static final List<Item> items = new ArrayList<>();
 
     int openDuration;
     boolean earlyRewardHologram;
@@ -34,44 +33,41 @@ public class OpenChestAnimation extends CrateAnimation
     HashMap<Player, Reward> rewardMap = new HashMap<>();
     HashMap<Player, PlacedCrate> placedCrateMap = new HashMap<>();
 
-    public OpenChestAnimation(Crate crate)
-    {
+    public OpenChestAnimation(Crate crate) {
         super(crate, CrateAnimationType.BLOCK_CRATEOPEN);
     }
 
+    public static void removeAllItems() {
+        for (Item item : items)
+            item.remove();
+    }
+
     @Override
-    public void tickAnimation(AnimationDataHolder dataHolder, boolean update)
-    {
+    public void tickAnimation(AnimationDataHolder dataHolder, boolean update) {
 
     }
 
     @Override
-    public void endAnimation(AnimationDataHolder dataHolder)
-    {
+    public void endAnimation(AnimationDataHolder dataHolder) {
 
     }
 
     @Override
-    public boolean updateTicks(AnimationDataHolder dataHolder)
-    {
+    public boolean updateTicks(AnimationDataHolder dataHolder) {
         return false;
     }
 
     @Override
-    public void checkStateChange(AnimationDataHolder dataHolder, boolean update)
-    {
+    public void checkStateChange(AnimationDataHolder dataHolder, boolean update) {
 
     }
 
     @Override
-    public boolean startAnimation(Player p, Location l, boolean requireKeyInHand, boolean force)
-    {
+    public boolean startAnimation(Player p, Location l, boolean requireKeyInHand, boolean force) {
         this.loc = l;
 
-        if (force || canExecuteFor(p, requireKeyInHand))
-        {
-            if(getCrate().getSettings().getCrateType().isSpecialDynamicHandling() && !getCrate().getSettings().getObtainType().isStatic())
-            {
+        if (force || canExecuteFor(p, requireKeyInHand)) {
+            if (getCrate().getSettings().getCrateType().isSpecialDynamicHandling() && !getCrate().getSettings().getObtainType().isStatic()) {
                 PlacedCrate placedCrate = PlayerManager.get(cc, p).getLastOpenedPlacedCrate();
                 placedCrate.setCratesEnabled(false);
 
@@ -86,10 +82,9 @@ public class OpenChestAnimation extends CrateAnimation
         return false;
     }
 
-    public void playAnimation(final Player p, final Location l)
-    {
+    public void playAnimation(final Player p, final Location l) {
         Reward reward = getCrate().getSettings().getRewards().getRandomReward();
-        final ArrayList<String> rewards = new ArrayList<String>();
+        final ArrayList<String> rewards = new ArrayList<>();
         rewards.add(reward.getDisplayName(true));
         rewardMap.put(p, reward);
 
@@ -103,50 +98,31 @@ public class OpenChestAnimation extends CrateAnimation
         item.setVelocity(new Vector(0, item.getVelocity().getY(), 0));
         items.add(item);
 
-        ArrayList<Reward> rewardsStr = new ArrayList<Reward>();
+        ArrayList<Reward> rewardsStr = new ArrayList<>();
         rewardsStr.add(reward);
 
-        if(earlyEffects)
-        {
+        if (earlyEffects) {
             getCrate().tick(loc, CrateState.OPEN, p, rewardsStr);
         }
 
-        if(attachTo)
-        {
+        if (attachTo) {
             crate.getSettings().getActions().playRewardHologram(p, rewards, .6, true, item, openDuration);
-        }
-        else if (isEarlyRewardHologram())
-        {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    crate.getSettings().getActions().playRewardHologram(p, rewards, .6);
-                }
-            }, rewardHoloDelay);
+        } else if (isEarlyRewardHologram()) {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(cc, () -> crate.getSettings().getActions().playRewardHologram(p, rewards, .6), rewardHoloDelay);
         }
 
         new NMSChestState().playChestAction(l.getBlock(), true);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                new NMSChestState().playChestAction(l.getBlock(), false);
-                items.remove(item);
-                item.remove();
-                endAnimation(p);
-            }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(cc, () -> {
+            new NMSChestState().playChestAction(l.getBlock(), false);
+            items.remove(item);
+            item.remove();
+            endAnimation(p);
         }, openDuration);
     }
 
     @Override
-    public void loadDataValues(StatusLogger sl)
-    {
-        FileConfiguration fc = getFileHandler().get();
-
+    public void loadDataValues(StatusLogger sl) {
         openDuration = fu.getFileDataLoader().loadInt(prefix + "chest-open-duration", 80, sl,
                 StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_SUCCESS,
@@ -172,38 +148,29 @@ public class OpenChestAnimation extends CrateAnimation
                 StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_OPEN_ACTIONS_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_OPEN_ACTIONS_INVALID);
 
-        if(attachTo == true)
+        if (attachTo)
             earlyRewardHologram = true;
     }
 
-    public void endAnimation(Player p)
-    {
+    public void endAnimation(Player p) {
         Reward reward = rewardMap.get(p);
         rewardMap.remove(p);
         PlacedCrate placedCrate = placedCrateMap.get(p);
         placedCrateMap.remove(p);
 
-        ArrayList<Reward> rewards = new ArrayList<Reward>();
+        ArrayList<Reward> rewards = new ArrayList<>();
         rewards.add(reward);
 
         finishAnimation(p, rewards, false, placedCrate);
-        if(!earlyEffects)
+        if (!earlyEffects)
             getCrate().tick(loc, CrateState.OPEN, p, rewards);
     }
 
-    public static void removeAllItems()
-    {
-        for (Item item : items)
-            item.remove();
-    }
-
-    public boolean isEarlyRewardHologram()
-    {
+    public boolean isEarlyRewardHologram() {
         return earlyRewardHologram;
     }
 
-    public void setEarlyRewardHologram(boolean earlyRewardHologram)
-    {
+    public void setEarlyRewardHologram(boolean earlyRewardHologram) {
         this.earlyRewardHologram = earlyRewardHologram;
     }
 }

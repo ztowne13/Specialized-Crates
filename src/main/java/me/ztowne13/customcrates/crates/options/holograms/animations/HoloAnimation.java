@@ -7,46 +7,38 @@ import me.ztowne13.customcrates.crates.options.holograms.DynamicHologram;
 /**
  * Hologram, Animation subtype
  */
-public abstract class HoloAnimation extends Animation
-{
+public abstract class HoloAnimation extends Animation {
     protected DynamicHologram dh;
     protected CHolograms ch;
     int intTicks = 0;
 
-    public HoloAnimation(SpecializedCrates cc, DynamicHologram dh)
-    {
+    public HoloAnimation(SpecializedCrates cc, DynamicHologram dh) {
         super(cc);
         this.dh = dh;
         this.ch = dh.getCm().getHologram();
     }
 
-    public int getIntTicks()
-    {
+    public int getIntTicks() {
         return intTicks;
     }
 
-    public void setIntTicks(int intTicks)
-    {
+    public void setIntTicks(int intTicks) {
         this.intTicks = intTicks;
     }
 
-    public DynamicHologram getDh()
-    {
+    public DynamicHologram getDh() {
         return dh;
     }
 
-    public void setDh(DynamicHologram dh)
-    {
+    public void setDh(DynamicHologram dh) {
         this.dh = dh;
     }
 
-    public CHolograms getCh()
-    {
+    public CHolograms getCh() {
         return ch;
     }
 
-    public void setCh(CHolograms ch)
-    {
+    public void setCh(CHolograms ch) {
         this.ch = ch;
     }
 

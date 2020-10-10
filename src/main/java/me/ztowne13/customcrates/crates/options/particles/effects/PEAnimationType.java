@@ -6,8 +6,7 @@ import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 /**
  * Created by ztowne13 on 6/25/16.
  */
-public enum PEAnimationType
-{
+public enum PEAnimationType {
     CIRCLE(CirclePA.class),
 
     SPIRAL(SpiralPA.class),
@@ -25,15 +24,21 @@ public enum PEAnimationType
 
     Class<? extends ParticleAnimationEffect> particleAnimationEffect;
 
-    PEAnimationType(Class<? extends ParticleAnimationEffect> particleAnimationEffect)
-    {
+    PEAnimationType(Class<? extends ParticleAnimationEffect> particleAnimationEffect) {
         this.particleAnimationEffect = particleAnimationEffect;
     }
 
-    public ParticleAnimationEffect getAnimationEffectInstance(SpecializedCrates cc, ParticleData particleData)
-    {
-        switch (this)
-        {
+    public static PEAnimationType getFromParticleAnimationEffect(ParticleAnimationEffect pae) {
+        for (PEAnimationType peAnimationType : values()) {
+            if (pae.getClass() == peAnimationType.particleAnimationEffect) {
+                return peAnimationType;
+            }
+        }
+        return null;
+    }
+
+    public ParticleAnimationEffect getAnimationEffectInstance(SpecializedCrates cc, ParticleData particleData) {
+        switch (this) {
             case CIRCLE:
                 return new CirclePA(cc, particleData);
             case SPIRAL:
@@ -46,18 +51,6 @@ public enum PEAnimationType
                 return new TiltedRingsPA(cc, particleData);
             case OFFSET_TILTED_RINGS:
                 return new OffsetTiltedRingsPA(cc, particleData);
-        }
-        return null;
-    }
-
-    public static PEAnimationType getFromParticleAnimationEffect(ParticleAnimationEffect pae)
-    {
-        for (PEAnimationType peAnimationType : values())
-        {
-            if (pae.getClass() == peAnimationType.particleAnimationEffect)
-            {
-                return peAnimationType;
-            }
         }
         return null;
     }

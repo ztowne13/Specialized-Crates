@@ -12,172 +12,101 @@ import org.bukkit.inventory.ItemStack;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Utils
-{
+public class Utils {
 
-    public static boolean hasItemInHand(Player p)
-    {
+    public static int cachedParticleDistance = -1;
+    static Random r = new Random();
+
+    public static boolean hasItemInHand(Player p) {
         return p.getItemInHand() != null && !p.getItemInHand().getType().equals(Material.AIR);
     }
 
-    public static boolean itemHasName(ItemStack stack)
-    {
-        return stack.getItemMeta() != null && stack.getItemMeta().getDisplayName() != null;
+    public static boolean itemHasName(ItemStack stack) {
+        return stack.hasItemMeta() && stack.getItemMeta().hasDisplayName();
     }
 
-    public static String getStringFromColor(Color c)
-    {
-        if (c.asRGB() == Color.AQUA.asRGB())
-        {
+    public static String getStringFromColor(Color c) {
+        if (c.asRGB() == Color.AQUA.asRGB()) {
             return "AQUA";
-        }
-        else if (c.asRGB() == Color.BLACK.asRGB())
-        {
+        } else if (c.asRGB() == Color.BLACK.asRGB()) {
             return "BLACK";
-        }
-        else if (c.asRGB() == Color.BLUE.asRGB())
-        {
+        } else if (c.asRGB() == Color.BLUE.asRGB()) {
             return "BLUE";
-        }
-        else if (c.asRGB() == Color.FUCHSIA.asRGB())
-        {
+        } else if (c.asRGB() == Color.FUCHSIA.asRGB()) {
             return "FUCHSIA";
-        }
-        else if (c.asRGB() == Color.GRAY.asRGB())
-        {
+        } else if (c.asRGB() == Color.GRAY.asRGB()) {
             return "GRAY";
-        }
-        else if (c.asRGB() == Color.GREEN.asRGB())
-        {
+        } else if (c.asRGB() == Color.GREEN.asRGB()) {
             return "GREEN";
-        }
-        else if (c.asRGB() == Color.LIME.asRGB())
-        {
+        } else if (c.asRGB() == Color.LIME.asRGB()) {
             return "LIME";
-        }
-        else if (c.asRGB() == Color.MAROON.asRGB())
-        {
+        } else if (c.asRGB() == Color.MAROON.asRGB()) {
             return "MAROON";
-        }
-        else if (c.asRGB() == Color.NAVY.asRGB())
-        {
+        } else if (c.asRGB() == Color.NAVY.asRGB()) {
             return "NAVY";
-        }
-        else if (c.asRGB() == Color.OLIVE.asRGB())
-        {
+        } else if (c.asRGB() == Color.OLIVE.asRGB()) {
             return "OLIVE";
-        }
-        else if (c.asRGB() == Color.ORANGE.asRGB())
-        {
+        } else if (c.asRGB() == Color.ORANGE.asRGB()) {
             return "ORANGE";
-        }
-        else if (c.asRGB() == Color.PURPLE.asRGB())
-        {
+        } else if (c.asRGB() == Color.PURPLE.asRGB()) {
             return "PURPLE";
-        }
-        else if (c.asRGB() == Color.RED.asRGB())
-        {
+        } else if (c.asRGB() == Color.RED.asRGB()) {
             return "RED";
-        }
-        else if (c.asRGB() == Color.SILVER.asRGB())
-        {
+        } else if (c.asRGB() == Color.SILVER.asRGB()) {
             return "SILVER";
-        }
-        else if (c.asRGB() == Color.TEAL.asRGB())
-        {
+        } else if (c.asRGB() == Color.TEAL.asRGB()) {
             return "TEAL";
-        }
-        else if (c.asRGB() == Color.WHITE.asRGB())
-        {
+        } else if (c.asRGB() == Color.WHITE.asRGB()) {
             return "WHITE";
-        }
-        else if (c.asBGR() == Color.YELLOW.asBGR())
-        {
+        } else if (c.asBGR() == Color.YELLOW.asBGR()) {
             return "YELLOW";
         }
         return null;
     }
 
-    public static Color getColorFromString(String s)
-    {
-        if (s.equalsIgnoreCase("AQUA"))
-        {
+    public static Color getColorFromString(String s) {
+        if (s.equalsIgnoreCase("AQUA")) {
             return Color.AQUA;
-        }
-        else if (s.equalsIgnoreCase("BLACK"))
-        {
+        } else if (s.equalsIgnoreCase("BLACK")) {
             return Color.BLACK;
-        }
-        else if (s.equalsIgnoreCase("BLUE"))
-        {
+        } else if (s.equalsIgnoreCase("BLUE")) {
             return Color.BLUE;
-        }
-        else if (s.equalsIgnoreCase("FUCHSIA"))
-        {
+        } else if (s.equalsIgnoreCase("FUCHSIA")) {
             return Color.FUCHSIA;
-        }
-        else if (s.equalsIgnoreCase("GRAY"))
-        {
+        } else if (s.equalsIgnoreCase("GRAY")) {
             return Color.GRAY;
-        }
-        else if (s.equalsIgnoreCase("GREEN"))
-        {
+        } else if (s.equalsIgnoreCase("GREEN")) {
             return Color.GREEN;
-        }
-        else if (s.equalsIgnoreCase("LIME"))
-        {
+        } else if (s.equalsIgnoreCase("LIME")) {
             return Color.LIME;
-        }
-        else if (s.equalsIgnoreCase("MAROON"))
-        {
+        } else if (s.equalsIgnoreCase("MAROON")) {
             return Color.MAROON;
-        }
-        else if (s.equalsIgnoreCase("NAVY"))
-        {
+        } else if (s.equalsIgnoreCase("NAVY")) {
             return Color.NAVY;
-        }
-        else if (s.equalsIgnoreCase("OLIVE"))
-        {
+        } else if (s.equalsIgnoreCase("OLIVE")) {
             return Color.OLIVE;
-        }
-        else if (s.equalsIgnoreCase("ORANGE"))
-        {
+        } else if (s.equalsIgnoreCase("ORANGE")) {
             return Color.ORANGE;
-        }
-        else if (s.equalsIgnoreCase("PURPLE"))
-        {
+        } else if (s.equalsIgnoreCase("PURPLE")) {
             return Color.PURPLE;
-        }
-        else if (s.equalsIgnoreCase("RED"))
-        {
+        } else if (s.equalsIgnoreCase("RED")) {
             return Color.RED;
-        }
-        else if (s.equalsIgnoreCase("SILVER"))
-        {
+        } else if (s.equalsIgnoreCase("SILVER")) {
             return Color.SILVER;
-        }
-        else if (s.equalsIgnoreCase("TEAL"))
-        {
+        } else if (s.equalsIgnoreCase("TEAL")) {
             return Color.TEAL;
-        }
-        else if (s.equalsIgnoreCase("WHITE"))
-        {
+        } else if (s.equalsIgnoreCase("WHITE")) {
             return Color.WHITE;
-        }
-        else if (s.equalsIgnoreCase("YELLOW"))
-        {
+        } else if (s.equalsIgnoreCase("YELLOW")) {
             return Color.YELLOW;
         }
         return null;
     }
 
-    public static int getOpenInventorySlots(Player p)
-    {
+    public static int getOpenInventorySlots(Player p) {
         int slots = 0;
-        for (int i = 0; i < 36; i++)
-        {
-            if (p.getInventory().getItem(i) == null || p.getInventory().getItem(i).getType().equals(Material.AIR))
-            {
+        for (int i = 0; i < 36; i++) {
+            if (p.getInventory().getItem(i) == null || p.getInventory().getItem(i).getType().equals(Material.AIR)) {
                 slots++;
             }
         }
@@ -185,140 +114,104 @@ public class Utils
         return slots;
     }
 
-    public static String currentTimeParsed()
-    {
+    public static String currentTimeParsed() {
         long millis = System.currentTimeMillis();
         Date d = new Date(millis);
         return d.toString();
     }
 
-    public static List<String> onlyLeaveEntriesWithPref(List<String> list, String pref)
-    {
-        List<String> newList = new ArrayList<String>();
-        for (String s : list)
-        {
-            if (s.toLowerCase().startsWith(pref.toLowerCase()))
-            {
+    public static List<String> onlyLeaveEntriesWithPref(List<String> list, String pref) {
+        List<String> newList = new ArrayList<>();
+        for (String s : list) {
+            if (s.toLowerCase().startsWith(pref.toLowerCase())) {
                 newList.add(s);
             }
         }
         return newList;
     }
 
-    public static List iteratorToList(Iterator i)
-    {
-        List l = new ArrayList<>();
-        while (i.hasNext())
-        {
+    public static <T> List<T> iteratorToList(Iterator<T> i) {
+        List<T> l = new ArrayList<>();
+        while (i.hasNext()) {
             l.add(i.next());
         }
         return l;
     }
 
-    public static ArrayList<Object> wrapArrays(ArrayList<Object> ar1, ArrayList<Object> ar2)
-    {
+    public static List<Object> wrapArrays(List<Object> ar1, List<Object> ar2) {
         ar1.addAll(ar2);
         return ar1;
     }
 
-    public static boolean isPLInstalled(String name)
-    {
-        if (!(Bukkit.getPluginManager().getPlugin(name) == null))
-        {
+    public static boolean isPLInstalled(String name) {
+        if (Bukkit.getPluginManager().getPlugin(name) != null) {
             return Bukkit.getPluginManager().isPluginEnabled(name);
         }
         return false;
     }
 
-    public static boolean isInt(String s)
-    {
-        try
-        {
-            Integer i = Integer.parseInt(s);
+    public static boolean isInt(String s) {
+        try {
+            Integer.parseInt(s);
             return true;
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             return false;
         }
     }
 
-    public static boolean isDouble(String s)
-    {
-        try
-        {
-            Double i = Double.valueOf(s);
+    public static boolean isDouble(String s) {
+        try {
+            Double.valueOf(s);
             return true;
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             return false;
         }
     }
 
-    public static boolean isLong(String s)
-    {
-        try
-        {
-            Long i = Long.valueOf(s);
+    public static boolean isLong(String s) {
+        try {
+            Long.valueOf(s);
             return true;
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             return false;
         }
     }
 
-    public static boolean isBoolean(String s)
-    {
-        try
-        {
+    public static boolean isBoolean(String s) {
+        try {
             return s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false");
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             return false;
         }
     }
 
-    public static void giveAllItem(ItemStack stack)
-    {
-        for (Player p : Bukkit.getOnlinePlayers())
-        {
+    public static void giveAllItem(ItemStack stack) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
             p.getInventory().addItem(stack);
         }
     }
 
-    public static void addToInfoLog(SpecializedCrates cc, String s, String s2)
-    {
-        if (cc.getSettings().getInfoToLog().containsKey(s))
-        {
-            cc.getSettings().getInfoToLog().remove(s);
-        }
+    public static void addToInfoLog(SpecializedCrates cc, String s, String s2) {
+        cc.getSettings().getInfoToLog().remove(s);
 
         cc.getSettings().getInfoToLog().put(s, s2);
     }
 
-    public static int getRandomNumberExcluding(int limit, ArrayList<Integer> exclude)
-    {
-        Random r = new Random();
+    public static int getRandomNumberExcluding(int limit, List<Integer> exclude) {
         int generated = r.nextInt(limit);
         return exclude.contains(generated) ? getRandomNumberExcluding(limit, exclude) : generated;
     }
 
-    public static void addItemAndDropRest(final Player player, ItemStack stack)
-    {
+    public static void addItemAndDropRest(final Player player, ItemStack stack) {
         addItemAndDropRest(player, stack, true);
     }
 
-    public static int addItemAndDropRest(final Player player, ItemStack stack, boolean doDrop)
-    {
+    public static int addItemAndDropRest(final Player player, ItemStack stack, boolean doDrop) {
         HashMap<Integer, ItemStack> list = player.getInventory().addItem(stack);
         int count = 0;
 
-        for(ItemStack toDrop : list.values())
-        {
-            if(doDrop)
+        for (ItemStack toDrop : list.values()) {
+            if (doDrop)
                 player.getWorld().dropItemNaturally(player.getLocation(), toDrop);
 
             count += toDrop.getAmount();
@@ -327,12 +220,11 @@ public class Utils
         return count;
     }
 
-    public static String[] ConvertSecondToHHMMString(int secondtTime)
-    {
+    public static String[] convertSecondToHHMMString(int secondTime) {
         TimeZone tz = TimeZone.getTimeZone("UTC");
         SimpleDateFormat df = new SimpleDateFormat("dd:HH:mm:ss");
         df.setTimeZone(tz);
-        String time = df.format(new Date(secondtTime * 1000L));
+        String time = df.format(new Date(secondTime * 1000L));
 
         String[] args = time.split(":");
         String seconds = args[3];
@@ -343,24 +235,21 @@ public class Utils
         return new String[]{days, hours, minutes, seconds};
     }
 
-    public static int cachedParticleDistance = -1;
-    public static boolean isPlayerInRange(SpecializedCrates sc, Player p, Location center)
-    {
-        if(!sc.isParticlesEnabled())
-        {
+    public static boolean isPlayerInRange(SpecializedCrates sc, Player p, Location center) {
+        if (!sc.isParticlesEnabled()) {
             return false;
         }
 
-        if(cachedParticleDistance == -1)
-        {
+        if (cachedParticleDistance == -1) {
             cachedParticleDistance = (int) SettingsValue.PARTICLE_VIEW_DISTANCE.getValue(sc);
         }
 
-        double distance = 0.0D;
-        if (center.getWorld().equals(p.getWorld()))
-        {
-            if ((distance = center.distance(p.getLocation())) > 1.7976931348623157E+308D) return false;
-            {
+        double distance;
+        if (Objects.equals(center.getWorld(), p.getWorld())) {
+            distance = center.distance(p.getLocation());
+            if (distance > 1.7976931348623157E+308D)
+                return false;
+            else {
                 return distance < cachedParticleDistance;
             }
         }

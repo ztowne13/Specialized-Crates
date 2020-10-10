@@ -10,15 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Deprecated
-public class HologramAS extends Hologram
-{
+public class HologramAS extends Hologram {
     double SEPARATION = 0.25;
 
     List<String> lines;
     List<ArmorStand> stands;
 
-    protected HologramAS(SpecializedCrates cc, String name, Location location)
-    {
+    protected HologramAS(SpecializedCrates cc, String name, Location location) {
         super(cc, name, location);
 
         this.name = name;
@@ -28,15 +26,13 @@ public class HologramAS extends Hologram
         stands = new ArrayList<>();
     }
 
-    protected void deleteStands()
-    {
-        for(ArmorStand stand : getStands())
+    protected void deleteStands() {
+        for (ArmorStand stand : getStands())
             stand.remove();
     }
 
     @Override
-    public void addLine(String line)
-    {
+    public void addLine(String line) {
         ArmorStand armorStand = spawnNewArmourStand(getLocation());
         armorStand.setCustomName(ChatUtils.toChatColor(line));
 
@@ -47,14 +43,10 @@ public class HologramAS extends Hologram
     }
 
     @Override
-    public void setLine(int i, String line)
-    {
-        if(i >= getLines().size())
-        {
+    public void setLine(int i, String line) {
+        if (i >= getLines().size()) {
             addLine(line);
-        }
-        else
-        {
+        } else {
             getLines().set(i, line);
 
             ArmorStand armorStand = getStands().get(i);
@@ -63,11 +55,9 @@ public class HologramAS extends Hologram
     }
 
     @Override
-    public void update()
-    {
-        for(int i = 0; i < getLines().size(); i++)
-        {
-            double offset = (getLines().size() - 1.0 - i)*SEPARATION;
+    public void update() {
+        for (int i = 0; i < getLines().size(); i++) {
+            double offset = (getLines().size() - 1.0 - i) * SEPARATION;
 
             getStands().get(i).remove();
             ArmorStand newStand = spawnNewArmourStand(getLocation().clone().add(0, offset - 2.5, 0));
@@ -79,8 +69,7 @@ public class HologramAS extends Hologram
     }
 
 
-    private ArmorStand spawnNewArmourStand(Location spawnLoc)
-    {
+    private ArmorStand spawnNewArmourStand(Location spawnLoc) {
         ArmorStand as = (ArmorStand) spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
 
         as.setGravity(false);
@@ -91,23 +80,21 @@ public class HologramAS extends Hologram
         return as;
     }
 
-    public String getName()
-    {
+    @Override
+    public String getName() {
         return name;
     }
 
-    public Location getLocation()
-    {
+    @Override
+    public Location getLocation() {
         return location;
     }
 
-    public List<String> getLines()
-    {
+    public List<String> getLines() {
         return lines;
     }
 
-    public List<ArmorStand> getStands()
-    {
+    public List<ArmorStand> getStands() {
         return stands;
     }
 }

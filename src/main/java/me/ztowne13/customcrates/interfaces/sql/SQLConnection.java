@@ -6,18 +6,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class SQLConnection
-{
-    Connection connection;
-    String dbIP, db, user, pass, port;
-    SQL sql;
-
+public class SQLConnection {
     static int queries = 0;
-
+    Connection connection;
+    String dbIP;
+    String db;
+    String user;
+    String pass;
+    String port;
+    SQL sql;
     boolean saidOnce = false;
 
-    public SQLConnection(SQL sql, String dbIP, String dbPort, String db, String user, String pass)
-    {
+    public SQLConnection(SQL sql, String dbIP, String dbPort, String db, String user, String pass) {
         this.dbIP = dbIP;
         this.db = db;
         this.user = user;
@@ -26,53 +26,44 @@ public class SQLConnection
         this.port = dbPort;
     }
 
-    public Connection open()
-    {
+    public static int getQueries() {
+        return queries;
+    }
+
+    public Connection open() {
         return open(true);
     }
 
-    @SuppressWarnings("deprecation")
-    public Connection open(boolean log)
-    {
-        try
-        {
+    public Connection open(boolean log) {
+        try {
             Connection c = connection =
                     DriverManager.getConnection("jdbc:mysql://" + this.dbIP + ":" + port + "/" + this.db + "?autoReconnect=true&useSSL=false", this.user, this.pass);
-            if(log)
+            if (log)
                 ChatUtils.log("[SpecializedCrates] Connection to the SQL database was completed successfuly.");
             return c;
-        }
-        catch (SQLException exc)
-        {
-            if(!saidOnce)
-            {
+        } catch (SQLException exc) {
+            if (!saidOnce) {
                 saidOnce = true;
-                if(log)
+                if (log)
                     ChatUtils.log("[SpecializedCrates] Error connecting to the database, are the values in the config correct?");
             }
             return null;
         }
     }
 
-    public boolean isOpen()
-    {
-        try
-        {
+    public boolean isOpen() {
+        try {
             return (connection != null) && (!connection.isClosed());
+        } catch (SQLException e) {
         }
-        catch (SQLException e) {}
 
         return false;
     }
 
-    public Connection get()
-    {
-        try
-        {
-            if (queries >= 1000)
-            {
-                if (connection != null)
-                {
+    public Connection get() {
+        try {
+            if (queries >= 1000) {
+                if (connection != null) {
                     ChatUtils.log("[SpecializedCrates] Re-opening connection.");
                     connection.close();
                 }
@@ -80,13 +71,10 @@ public class SQLConnection
                 open();
             }
 
-            if (connection == null || connection.isClosed())
-            {
+            if (connection == null || connection.isClosed()) {
                 open();
             }
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
 
         }
 
@@ -94,38 +82,27 @@ public class SQLConnection
         return connection;
     }
 
-    public Connection getConnection()
-    {
+    public Connection getConnection() {
         return connection;
     }
 
-    public String getDbIP()
-    {
+    public String getDbIP() {
         return dbIP;
     }
 
-    public String getDb()
-    {
+    public String getDb() {
         return db;
     }
 
-    public String getUser()
-    {
+    public String getUser() {
         return user;
     }
 
-    public String getPass()
-    {
+    public String getPass() {
         return pass;
     }
 
-    public SQL getSql()
-    {
+    public SQL getSql() {
         return sql;
-    }
-
-    public static int getQueries()
-    {
-        return queries;
     }
 }

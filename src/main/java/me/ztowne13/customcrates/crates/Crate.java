@@ -12,13 +12,10 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
-public class Crate
-{
-    static HashMap<String, Crate> loadedCrates = new HashMap<String, Crate>();
+public class Crate {
+    static Map<String, Crate> loadedCrates = new HashMap<>();
 
     SpecializedCrates cc;
     String name;
@@ -28,23 +25,21 @@ public class Crate
     String lastOpenedReward = "Nothing";
 
 
-    boolean enabled = true,
-            disabledByError = false,
-            canBeEnabled = true,
-            isMultiCrate,
-            isUsedForCratesCommand = false,
-            loadedProperly = false,
-            needsReload = false;
+    boolean enabled = true;
+    boolean disabledByError = false;
+    boolean canBeEnabled = true;
+    boolean isMultiCrate;
+    boolean isUsedForCratesCommand = false;
+    boolean loadedProperly = false;
+    boolean needsReload = false;
 
     CrateSettings cs;
 
-    public Crate(SpecializedCrates cc, String name, boolean newFile)
-    {
+    public Crate(SpecializedCrates cc, String name, boolean newFile) {
         this(cc, name, newFile, false);
     }
 
-    public Crate(SpecializedCrates cc, String name, boolean newFile, boolean isMultiCrate)
-    {
+    public Crate(SpecializedCrates cc, String name, boolean newFile, boolean isMultiCrate) {
         cc.getDu().log("Crate() - new", getClass());
         this.cc = cc;
         this.name = name;
@@ -60,37 +55,70 @@ public class Crate
         loadedProperly = true;
     }
 
+    public static Crate getCrate(SpecializedCrates cc, String name) {
+        return getCrate(cc, name, false);
+    }
+
+    public static Crate getCrate(SpecializedCrates cc, String name, boolean isMultiCrate) {
+        for (String crateName : getLoadedCrates().keySet()) {
+            if (crateName.equalsIgnoreCase(name)) {
+                return getLoadedCrates().get(crateName);
+            }
+        }
+
+        return new Crate(cc, name, false, isMultiCrate);
+    }
+
+    public static boolean existsNotCaseSensitive(String name) {
+        for (String crates : getLoadedCrates().keySet()) {
+            if (crates.equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean exists(String name) {
+        return getLoadedCrates().containsKey(name);
+    }
+
+    public static void clearLoaded() {
+        getLoadedCrates().clear();
+        setLoadedCrates(new HashMap<>());
+    }
+
+    public static Map<String, Crate> getLoadedCrates() {
+        return loadedCrates;
+    }
+
+    public static void setLoadedCrates(Map<String, Crate> loadedCrates) {
+        Crate.loadedCrates = loadedCrates;
+    }
+
     @Deprecated
-    public void tick(Location l, CrateState cstate, Player p, ArrayList<Reward> rewards)
-    {
+    public void tick(Location l, CrateState cstate, Player p, List<Reward> rewards) {
         tick(l, null, cstate, p, rewards);
     }
 
-    public void tick(Location l, PlacedCrate placedCrate, CrateState cstate, Player p, ArrayList<Reward> rewards)
-    {
+    public void tick(Location l, PlacedCrate placedCrate, CrateState cstate, Player p, List<Reward> rewards) {
         getSettings().getParticles().runAll(l, cstate, rewards);
-        if (cstate.equals(CrateState.OPEN) && CrateUtils.isCrateUsable(this))
-        {
+        if (cstate.equals(CrateState.OPEN) && CrateUtils.isCrateUsable(this)) {
             getSettings().getSounds().runAll(p, l, rewards);
             getSettings().getFireworks().runAll(p, l, rewards);
-            if (rewards != null && !rewards.isEmpty())
-            {
+            if (rewards != null && !rewards.isEmpty()) {
                 getSettings().getActions().playAll(p, placedCrate, rewards, false);
             }
         }
     }
 
-    public boolean rename(String newName)
-    {
+    public boolean rename(String newName) {
 
-        if (newName.contains("."))
-        {
+        if (newName.contains(".")) {
             newName = newName.split(".")[0];
         }
 
-        if(FileHandler.getMap().containsKey(newName + ".crate") |
-                FileHandler.getMap().containsKey(newName + ".multicrate"))
-        {
+        if (FileHandler.getMap().containsKey(newName + ".crate") |
+                FileHandler.getMap().containsKey(newName + ".multicrate")) {
             return false;
         }
 
@@ -99,25 +127,20 @@ public class Crate
                         "/Crates", true, true, true);
         newFile.reload();
 
-        try
-        {
+        try {
             getSettings().getFileHandler().copy(newFile);
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             exc.printStackTrace();
             return false;
         }
 
         HashMap<Location, PlacedCrate> placed = new HashMap<>(PlacedCrate.getPlacedCrates());
 
-        for (Location l : placed.keySet())
-        {
-            PlacedCrate cm = placed.get(l);
-            if (cm.getCrate().equals(this))
-            {
+        for (Map.Entry<Location, PlacedCrate> entry : placed.entrySet()) {
+            PlacedCrate cm = entry.getValue();
+            if (cm.getCrate().equals(this)) {
                 cm.rename(newName);
-                PlacedCrate.getPlacedCrates().remove(l);
+                PlacedCrate.getPlacedCrates().remove(entry.getKey());
             }
         }
 
@@ -125,59 +148,40 @@ public class Crate
         return true;
     }
 
-    public String deleteCrate()
-    {
+    public String deleteCrate() {
         deleteAllPlaced();
 
         Path path = getSettings().getFileHandler().getDataFile().toPath();
 
-        if (getSettings().getFileHandler().getDataFile().delete())
-        {
+        if (getSettings().getFileHandler().getDataFile().delete()) {
             ChatUtils.log("Successfully deleted file " + path);
-        }
-        else
-        {
+        } else {
             return "File nonexistent, please try reloading or contacting the plugin author.";
         }
 
-        for (UUID id : cc.getDataHandler().getQuedGiveCommands().keySet())
-        {
-            ArrayList<DataHandler.QueuedGiveCommand> cmds = cc.getDataHandler().getQuedGiveCommands().get(id);
-            for (DataHandler.QueuedGiveCommand cmd : cmds)
-            {
-                if (cmd.getCrate().equals(this))
-                {
+        for (UUID id : cc.getDataHandler().getQueuedGiveCommands().keySet()) {
+            List<DataHandler.QueuedGiveCommand> cmds = cc.getDataHandler().getQueuedGiveCommands().get(id);
+            for (DataHandler.QueuedGiveCommand cmd : cmds) {
+                if (cmd.getCrate().equals(this)) {
                     cmds.remove(cmd);
-                    cc.getDataHandler().getQuedGiveCommands().remove(id);
-                    cc.getDataHandler().getQuedGiveCommands().put(id, cmds);
+                    cc.getDataHandler().getQueuedGiveCommands().remove(id);
+                    cc.getDataHandler().getQueuedGiveCommands().put(id, cmds);
                 }
             }
         }
 
         cc.getDataHandler().saveToFile();
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                cc.reload();
-
-            }
-        }, 20);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(cc, () -> cc.reload(), 20);
         return path.toString();
     }
 
-    public ArrayList<PlacedCrate> deleteAllPlaced()
-    {
-        HashMap<Location, PlacedCrate> placed = new HashMap<Location, PlacedCrate>(PlacedCrate.getPlacedCrates());
-        ArrayList<PlacedCrate> deleted = new ArrayList<PlacedCrate>();
+    public List<PlacedCrate> deleteAllPlaced() {
+        HashMap<Location, PlacedCrate> placed = new HashMap<>(PlacedCrate.getPlacedCrates());
+        ArrayList<PlacedCrate> deleted = new ArrayList<>();
 
-        for (Location l : placed.keySet())
-        {
-            PlacedCrate cm = placed.get(l);
-            if (cm.getCrate().equals(this))
-            {
+        for (PlacedCrate cm : placed.values()) {
+            if (cm.getCrate().equals(this)) {
                 deleted.add(cm);
                 cm.getCrate().getSettings().getPlaceholder().remove(cm);
                 cm.delete();
@@ -187,194 +191,116 @@ public class Crate
         return deleted;
     }
 
-    public static Crate getCrate(SpecializedCrates cc, String name)
-    {
-        return getCrate(cc, name, false);
-    }
-
-    public static Crate getCrate(SpecializedCrates cc, String name, boolean isMultiCrate)
-    {
-        for(String crateName : getLoadedCrates().keySet())
-        {
-            if(crateName.equalsIgnoreCase(name))
-            {
-                return getLoadedCrates().get(crateName);
-            }
-        }
-
-        return new Crate(cc, name, false, isMultiCrate);
-    }
-
-    public static boolean existsNotCaseSensitive(String name)
-    {
-        for (String crates : getLoadedCrates().keySet())
-        {
-            if (crates.equalsIgnoreCase(name))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean exists(String name)
-    {
-        return getLoadedCrates().containsKey(name);
-    }
-
-    public static void clearLoaded()
-    {
-        getLoadedCrates().clear();
-        setLoadedCrates(new HashMap<String, Crate>());
-    }
-
-    public SpecializedCrates getCc()
-    {
+    public SpecializedCrates getCc() {
         return cc;
     }
 
-    public void setCc(SpecializedCrates cc)
-    {
+    public void setCc(SpecializedCrates cc) {
         this.cc = cc;
     }
 
-    public static HashMap<String, Crate> getLoadedCrates()
-    {
-        return loadedCrates;
-    }
-
-    public static void setLoadedCrates(HashMap<String, Crate> loadedCrates)
-    {
-        Crate.loadedCrates = loadedCrates;
-    }
-
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public CrateSettings getSettings()
-    {
+    public CrateSettings getSettings() {
         return cs;
     }
 
-    public void setSettings(CrateSettings cs)
-    {
+    public void setSettings(CrateSettings cs) {
         this.cs = cs;
     }
 
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled)
-    {
-        for (PlacedCrate cm : PlacedCrate.getPlacedCrates().values())
-        {
+    public void setEnabled(boolean enabled) {
+        for (PlacedCrate cm : PlacedCrate.getPlacedCrates().values()) {
             cm.setCratesEnabled(enabled);
         }
 
         this.enabled = enabled;
     }
 
-    public boolean isCanBeEnabled()
-    {
+    public boolean isCanBeEnabled() {
         return canBeEnabled;
     }
 
-    public void setCanBeEnabled(boolean canBeEnabled)
-    {
+    public void setCanBeEnabled(boolean canBeEnabled) {
         this.canBeEnabled = canBeEnabled;
     }
 
-    public boolean isMultiCrate()
-    {
+    public boolean isMultiCrate() {
         return isMultiCrate;
     }
 
-    public void setMultiCrate(boolean multiCrate)
-    {
+    public void setMultiCrate(boolean multiCrate) {
         isMultiCrate = multiCrate;
     }
 
-    public int getPlacedCount()
-    {
+    public int getPlacedCount() {
         return placedCount;
     }
 
-    public void setPlacedCount(int placedCount)
-    {
+    public void setPlacedCount(int placedCount) {
         this.placedCount = placedCount;
     }
 
-    public boolean isUsedForCratesCommand()
-    {
+    public boolean isUsedForCratesCommand() {
         return isUsedForCratesCommand;
     }
 
-    public void setUsedForCratesCommand(boolean usedForCratesCommand)
-    {
+    public void setUsedForCratesCommand(boolean usedForCratesCommand) {
         isUsedForCratesCommand = usedForCratesCommand;
     }
 
-    public String getLastOpenedName()
-    {
+    public String getLastOpenedName() {
         return lastOpenedName;
     }
 
-    public void setLastOpenedName(String lastOpenedName)
-    {
+    public void setLastOpenedName(String lastOpenedName) {
         this.lastOpenedName = lastOpenedName;
     }
 
-    public String getLastOpenedReward()
-    {
+    public String getLastOpenedReward() {
         return lastOpenedReward;
     }
 
-    public void setLastOpenedReward(String lastOpenedReward)
-    {
+    public void setLastOpenedReward(String lastOpenedReward) {
         this.lastOpenedReward = lastOpenedReward;
     }
 
-    public String getDisplayName()
-    {
-        if((boolean) SettingsValue.USE_CRATE_NAME_FOR_DISPLAY.getValue(getCc())) {
-            if(getSettings().getCrateItemHandler().getItem().hasDisplayName()) {
+    public String getDisplayName() {
+        if ((boolean) SettingsValue.USE_CRATE_NAME_FOR_DISPLAY.getValue(getCc())) {
+            if (getSettings().getCrateItemHandler().getItem().hasDisplayName()) {
                 return getSettings().getCrateItemHandler().getItem().getDisplayName(true);
             }
         }
         return getName();
     }
 
-    public boolean isLoadedProperly()
-    {
+    public boolean isLoadedProperly() {
         return loadedProperly;
     }
 
-    public boolean isNeedsReload()
-    {
+    public boolean isNeedsReload() {
         return needsReload;
     }
 
-    public void setNeedsReload(boolean needsReload)
-    {
+    public void setNeedsReload(boolean needsReload) {
         this.needsReload = needsReload;
     }
 
-    public boolean isDisabledByError()
-    {
+    public boolean isDisabledByError() {
         return disabledByError;
     }
 
-    public void setDisabledByError(boolean disabledByError)
-    {
+    public void setDisabledByError(boolean disabledByError) {
         this.disabledByError = disabledByError;
     }
 }

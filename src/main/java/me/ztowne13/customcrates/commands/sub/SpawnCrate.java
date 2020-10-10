@@ -9,39 +9,31 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-public class SpawnCrate extends SubCommand
-{
-    public SpawnCrate()
-    {
+public class SpawnCrate extends SubCommand {
+    public SpawnCrate() {
         super("spawncrate", 5, "/scrates spawncrate (crate) (world) X Y Z");
     }
 
     @Override
-    public boolean run(SpecializedCrates cc, Commands cmds, String[] args)
-    {
-        if(Crate.exists(args[1]))
-        {
+    public boolean run(SpecializedCrates cc, Commands cmds, String[] args) {
+        if (Crate.exists(args[1])) {
             Crate toSpawn = Crate.getCrate(cc, args[1]);
             World world = Bukkit.getWorld(args[2]);
 
-            if(world == null)
-            {
+            if (world == null) {
                 cmds.msgError(args[2] + " is not a valid world.");
                 return true;
             }
 
-            if(!Utils.isInt(args[5]))
-            {
+            if (!Utils.isInt(args[5])) {
                 cmds.msgError(args[5] + " is not a valid number.");
                 return true;
             }
-            if(!Utils.isInt(args[3]))
-            {
+            if (!Utils.isInt(args[3])) {
                 cmds.msgError(args[3] + " is not a valid number.");
                 return true;
             }
-            if(!Utils.isInt(args[4]))
-            {
+            if (!Utils.isInt(args[4])) {
                 cmds.msgError(args[4] + " is not a valid number.");
                 return true;
             }

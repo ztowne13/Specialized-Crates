@@ -21,16 +21,14 @@ import java.util.Set;
 /**
  * Created by ztowne13 on 4/2/16.
  */
-public class IGCTierSelector extends IGCMenuCrate
-{
-    static List<String> allowedTiers = Arrays.asList(new String[]{"PLAY", "OPEN", "DEFAULT"});
+public class IGCTierSelector extends IGCMenuCrate {
+    static List<String> allowedTiers = Arrays.asList("PLAY", "OPEN", "DEFAULT");
 
     Set<String> tiers;
     IGCTierMenu igcTierMenu;
 
     public IGCTierSelector(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, Set<String> tiers,
-                           IGCTierMenu igcTierMenu)
-    {
+                           IGCTierMenu igcTierMenu) {
         super(cc, p, lastMenu, "&7&l> &6&lTier Selector", crates);
         this.tiers = tiers;
         this.igcTierMenu = igcTierMenu;
@@ -38,10 +36,8 @@ public class IGCTierSelector extends IGCMenuCrate
     }
 
     @Override
-    public void openMenu()
-    {
-        if (tiers.size() == 1)
-        {
+    public void openMenu() {
+        if (tiers.size() == 1) {
             igcTierMenu.setTier(tiers.iterator().next());
             igcTierMenu.open();
             return;
@@ -56,26 +52,21 @@ public class IGCTierSelector extends IGCMenuCrate
         int i = 2;
 
         ArrayList<String> allTiers = new ArrayList<>(tiers);
-        for (Reward reward : crates.getSettings().getRewards().getCrateRewards())
-        {
+        for (Reward reward : crates.getSettings().getRewards().getCrateRewards()) {
             String tier = reward.getRarity().toUpperCase();
-            if (!tier.equalsIgnoreCase("DEFAULT") && !allTiers.contains(tier))
-            {
+            if (!tier.equalsIgnoreCase("DEFAULT") && !allTiers.contains(tier)) {
                 allTiers.add(tier);
             }
         }
 
-        for (String tier : allTiers)
-        {
-            if (i % 9 == 7)
-            {
+        for (String tier : allTiers) {
+            if (i % 9 == 7) {
                 i += 4;
             }
 
             ItemBuilder button = new ItemBuilder(DynamicMaterial.STONE_BUTTON);
             button.setDisplayName("&a" + tier);
-            if (tier.equalsIgnoreCase("PLAY"))
-            {
+            if (tier.equalsIgnoreCase("PLAY")) {
                 ItemBuilder play = button.clone();
                 play.getStack().setType(Material.EMERALD);
                 play.addAutomaticLore("&7", 30, "These are the values run while the crate is sitting, idle.");
@@ -83,32 +74,24 @@ public class IGCTierSelector extends IGCMenuCrate
                 play.addAutomaticLore("&e", 30,
                         "To add a new 'tier,' change the 'rarity' of a reward in this crate to a new value.");
                 ib.setItem(i, play);
-            }
-            else
-            {
+            } else {
                 button.addLore("&7Rewards in this tier:");
                 int listedRewards = 0;
                 int remaining = 0;
-                for (Reward reward : crates.getSettings().getRewards().getCrateRewards())
-                {
+                for (Reward reward : crates.getSettings().getRewards().getCrateRewards()) {
                     if (!reward.getRarity().equalsIgnoreCase(tier) &&
-                            !(reward.getRarity().equalsIgnoreCase("DEFAULT") && tier.equalsIgnoreCase("OPEN")))
-                    {
+                            !(reward.getRarity().equalsIgnoreCase("DEFAULT") && tier.equalsIgnoreCase("OPEN"))) {
                         continue;
                     }
-                    if (listedRewards >= 5)
-                    {
+                    if (listedRewards >= 5) {
                         remaining++;
-                    }
-                    else
-                    {
+                    } else {
                         button.addLore("&7- &f" + reward.getRewardName());
                         listedRewards++;
                     }
                 }
 
-                if (remaining > 0)
-                {
+                if (remaining > 0) {
                     button.addLore("&7(and &f" + remaining + "&7 more)");
                 }
 
@@ -126,14 +109,10 @@ public class IGCTierSelector extends IGCMenuCrate
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (slot == 9)
-        {
+    public void handleClick(int slot) {
+        if (slot == 9) {
             up();
-        }
-        else if (getIb().getInv().getItem(slot) != null && !getIb().getInv().getItem(slot).getType().equals(Material.AIR))
-        {
+        } else if (getIb().getInv().getItem(slot) != null && !getIb().getInv().getItem(slot).getType().equals(Material.AIR)) {
             String tier = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
             igcTierMenu.setTier(tier);
             igcTierMenu.open();
@@ -141,8 +120,7 @@ public class IGCTierSelector extends IGCMenuCrate
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         return false;
     }
 }

@@ -22,16 +22,13 @@ import org.bukkit.entity.Player;
  * update-speed: 5
  * reward-amount: 1
  */
-public class IGCAnimEnclose extends IGCAnimation
-{
-    public IGCAnimEnclose(SpecializedCrates cc, Player p, IGCMenu lastMenu)
-    {
+public class IGCAnimEnclose extends IGCAnimation {
+    public IGCAnimEnclose(SpecializedCrates cc, Player p, IGCMenu lastMenu) {
         super(cc, p, lastMenu, "&7&l> &6&lEnclose Animation", CrateAnimationType.INV_ENCLOSE);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(18);
 
@@ -65,10 +62,8 @@ public class IGCAnimEnclose extends IGCAnimation
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 0:
                 up();
                 break;
@@ -103,27 +98,19 @@ public class IGCAnimEnclose extends IGCAnimation
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         Object type = getInputMenu().getType();
-        if (type == Integer.class)
-        {
-            if (Utils.isInt(input))
-            {
+        if (type == Integer.class) {
+            if (Utils.isInt(input)) {
                 fc.set(getPath(value), Integer.parseInt(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This is not a valid number, please try again.");
             }
-        }
-        else
-        {
+        } else {
             if (value.equalsIgnoreCase("tick-sound") &&
-                    (input.equalsIgnoreCase("null") || input.equalsIgnoreCase("none")))
-            {
+                    (input.equalsIgnoreCase("null") || input.equalsIgnoreCase("none"))) {
                 fc.set(getPath(value), null);
             }
             fc.set(getPath(value), input);

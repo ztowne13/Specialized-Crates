@@ -23,10 +23,8 @@ import java.util.regex.Pattern;
 /**
  * Created by ztowne13 on 3/26/16.
  */
-public class IGCCratesMain extends IGCMenuCrate
-{
-    public IGCCratesMain(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates)
-    {
+public class IGCCratesMain extends IGCMenuCrate {
+    public IGCCratesMain(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates) {
         super(cc, p, lastMenu, "&7&l> &6&l" + crates.getName(), crates,
                 new IGCButtonType[]{
                         IGCButtonType.BACK
@@ -37,8 +35,7 @@ public class IGCCratesMain extends IGCMenuCrate
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(crates.isMultiCrate() ? 36 : 45);
 
@@ -78,18 +75,14 @@ public class IGCCratesMain extends IGCMenuCrate
 
         ItemBuilder sounds = new ItemBuilder(DynamicMaterial.NOTE_BLOCK);
         sounds.setDisplayName("&a&lSounds");
-        if(crates.isMultiCrate())
-        {
+        if (crates.isMultiCrate()) {
             sounds.addAutomaticLore("&7", 30, "Edit the sounds played when the multicrate is opened initially.");
-        }
-        else
-        {
+        } else {
             sounds.addAutomaticLore("&7", 30, "Edit the sounds for when the crate is opened and reward is given.");
         }
         ib.setItem(23, sounds);
 
-        if (!crates.isMultiCrate())
-        {
+        if (!crates.isMultiCrate()) {
             ib.setItem(28, new ItemBuilder(DynamicMaterial.FIREWORK_ROCKET, 1).setName("&a&lFireworks")
                     .setLore("&7Modify the fireworks."));
             ib.setItem(34,
@@ -101,15 +94,12 @@ public class IGCCratesMain extends IGCMenuCrate
             rewards.addAutomaticLore("&7", 30, "Edit the rewards and edit the reward preview menu.");
 
             ib.setItem(40, rewards);
-        }
-        else
-        {
+        } else {
             ib.setItem(34, new ItemBuilder(Material.LADDER, 1, 0).setName("&aMultiCrate Values")
                     .setLore("&7Modify the multicrate inventory and").addLore("&7other values."));
         }
 
-        if (cs.getObtainType().equals(ObtainType.LUCKYCHEST))
-        {
+        if (cs.getObtainType().equals(ObtainType.LUCKYCHEST)) {
             ib.setItem(crates.isMultiCrate() ? 35 : 44, new ItemBuilder(Material.ENDER_CHEST, 1, 0).setName("&aMine Chest")
                     .setLore("&7Config all values for the").addLore("&7mine chest."));
         }
@@ -119,32 +109,23 @@ public class IGCCratesMain extends IGCMenuCrate
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (crates.isMultiCrate() && (slot == 28 || slot == 40))
-        {
+    public void handleClick(int slot) {
+        if (crates.isMultiCrate() && (slot == 28 || slot == 40)) {
             return;
         }
 
-        switch (slot)
-        {
+        switch (slot) {
             case 0:
                 if (!crates.isMultiCrate() &&
-                        (cs.getRewards().getCrateRewards() == null || cs.getRewards().getCrateRewards().length == 0))
-                {
+                        (cs.getRewards().getCrateRewards() == null || cs.getRewards().getCrateRewards().length == 0)) {
                     getIb().setItem(slot,
                             new ItemBuilder(getIb().getInv().getItem(slot)).setName("&cPlease add some rewards")
                                     .setLore("&cbefore saving!"));
-                }
-                else
-                {
-                    try
-                    {
+                } else {
+                    try {
                         crates.getSettings().saveAll();
                         ChatUtils.msgSuccess(getP(), "Saved the file!");
-                    }
-                    catch (Exception exc)
-                    {
+                    } catch (Exception exc) {
                         exc.printStackTrace();
                         ChatUtils.msgError(getP(), "Failed to save the file!");
                     }
@@ -152,13 +133,10 @@ public class IGCCratesMain extends IGCMenuCrate
                 break;
             case 3:
                 if (ChatUtils.removeColor(getIb().getInv().getItem(3).getItemMeta().getDisplayName())
-                        .equalsIgnoreCase("Delete this crate"))
-                {
+                        .equalsIgnoreCase("Delete this crate")) {
                     getIb().setItem(3, new ItemBuilder(DynamicMaterial.RED_DYE, 1).setName("&6CONFIRM DELETE")
                             .setLore("&4&lTHIS CANNOT BE UNDONE!"));
-                }
-                else
-                {
+                } else {
                     getP().closeInventory();
                     ChatUtils.msg(getP(), "&6&lNote: &eDeleting...");
                     String path = crates.deleteCrate();
@@ -198,8 +176,7 @@ public class IGCCratesMain extends IGCMenuCrate
             case 16:
                 Set<String> blankParticles = new HashSet<String>();
                 blankParticles.add("PLAY");
-                if (!crates.isMultiCrate())
-                {
+                if (!crates.isMultiCrate()) {
                     blankParticles.add("OPEN");
                 }
                 new IGCTierSelector(getCc(), getP(), this, crates, blankParticles,
@@ -221,12 +198,9 @@ public class IGCCratesMain extends IGCMenuCrate
                         new IGCCrateFireworks(getCc(), getP(), this, crates, "")).open();
                 break;
             case 34:
-                if (crates.isMultiCrate())
-                {
+                if (crates.isMultiCrate()) {
                     new IGCMultiCrateMain(getCc(), getP(), this, crates).open();
-                }
-                else
-                {
+                } else {
                     Set<String> blankActions = new HashSet<String>();
                     blankActions.add("DEFAULT");
                     new IGCTierSelector(getCc(), getP(), this, crates, blankActions,
@@ -237,8 +211,7 @@ public class IGCCratesMain extends IGCMenuCrate
                 new IGCCratePreviewOrRewardMenu(getCc(), getP(), crates, this).open();
                 break;
             case 44:
-                if (cs.getObtainType().equals(ObtainType.LUCKYCHEST))
-                {
+                if (cs.getObtainType().equals(ObtainType.LUCKYCHEST)) {
                     new IGCMineCrate(getCc(), getP(), this, crates).open();
                 }
                 break;
@@ -246,27 +219,23 @@ public class IGCCratesMain extends IGCMenuCrate
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
-		if(value.equalsIgnoreCase("crate name"))
-		{
+    public boolean handleInput(String value, String input) {
+        if (value.equalsIgnoreCase("crate name")) {
             String regex = "^[a-zA-Z0-9]+$";
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(input);
-			if(matcher.matches())
-			{
-			    if(crates.rename(input))
-                {
+            if (matcher.matches()) {
+                if (crates.rename(input)) {
                     ChatUtils.msgSuccess(getP(), "Successfully renamed " + crates.getName() + " to " + input);
                     ChatUtils.msgInfo(getP(), "Reloading the plugin to let changes take effect.");
                     return false;
                 }
                 ChatUtils.msgError(getP(), "Failed to rename the crate. This likely because the crate name " + input + " already exists. Please try a different name.");
                 return false;
-			}
-			ChatUtils.msgError(getP(), input + " is not alphanumeric (no spaces and only letters)");
-			return false;
-		}
+            }
+            ChatUtils.msgError(getP(), input + " is not alphanumeric (no spaces and only letters)");
+            return false;
+        }
         return false;
     }
 }

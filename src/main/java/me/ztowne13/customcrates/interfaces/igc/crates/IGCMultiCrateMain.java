@@ -16,16 +16,13 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 6/29/16.
  */
-public class IGCMultiCrateMain extends IGCMenuCrate
-{
-    public IGCMultiCrateMain(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates)
-    {
+public class IGCMultiCrateMain extends IGCMenuCrate {
+    public IGCMultiCrateMain(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates) {
         super(cc, p, lastMenu, "&7&l> &6&lMultiCrates Main", crates);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(9);
 
@@ -46,10 +43,8 @@ public class IGCMultiCrateMain extends IGCMenuCrate
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 0:
                 up();
                 break;
@@ -71,29 +66,22 @@ public class IGCMultiCrateMain extends IGCMenuCrate
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
-        if (value.equalsIgnoreCase("set rows"))
-        {
-            if (Utils.isInt(input))
-            {
+    public boolean handleInput(String value, String input) {
+        if (value.equalsIgnoreCase("set rows")) {
+            if (Utils.isInt(input)) {
                 InventoryBuilder oldIb = crates.getSettings().getMultiCrateSettings().getInventory(getP(), "", false);
                 InventoryBuilder newIb = new InventoryBuilder(getP(), Integer.parseInt(input) * 9, oldIb.getName());
 
                 for (int i = 0; i < (oldIb.getInv().getSize() < newIb.getInv().getSize() ? oldIb.getInv().getSize() :
-                        newIb.getInv().getSize()); i++)
-                {
-                    if (!(oldIb.getInv().getItem(i) == null))
-                    {
+                        newIb.getInv().getSize()); i++) {
+                    if (!(oldIb.getInv().getItem(i) == null)) {
                         newIb.setItem(i, oldIb.getInv().getItem(i));
                     }
                 }
                 crates.getSettings().getMultiCrateSettings().setIb(newIb);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid number.");
             }
         }

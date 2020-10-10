@@ -17,18 +17,15 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 4/3/16.
  */
-public class IGCCrateFireworks extends IGCTierMenu
-{
+public class IGCCrateFireworks extends IGCTierMenu {
     boolean deleteMode = false;
 
-    public IGCCrateFireworks(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, String tier)
-    {
+    public IGCCrateFireworks(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, String tier) {
         super(cc, p, lastMenu, "&7&l> &6&lFireworks", crates, tier);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4,
                 (crates.getSettings().getFireworks().getFireworks().containsKey(tier) ? cs.getFireworks().getFireworks().get(tier).size() : 0)) +
@@ -42,13 +39,10 @@ public class IGCCrateFireworks extends IGCTierMenu
 
         updateDeleteModeItem();
 
-        if (cs.getFireworks().getFireworks().containsKey(tier))
-        {
+        if (cs.getFireworks().getFireworks().containsKey(tier)) {
             int i = 2;
-            for (FireworkData fd : cs.getFireworks().getFireworks().get(tier))
-            {
-                if (i % 9 == 7)
-                {
+            for (FireworkData fd : cs.getFireworks().getFireworks().get(tier)) {
+                if (i % 9 == 7) {
                     i += 4;
                 }
 
@@ -68,28 +62,19 @@ public class IGCCrateFireworks extends IGCTierMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (slot == 0)
-        {
+    public void handleClick(int slot) {
+        if (slot == 0) {
             up();
-        }
-        else if (slot == 8)
-        {
+        } else if (slot == 8) {
             deleteMode = !deleteMode;
             updateDeleteModeItem();
-        }
-        else if (slot == 17)
-        {
+        } else if (slot == 17) {
             new InputMenu(getCc(), getP(), "add firework", "null",
                     "Please hold whatever fireworks in your hand you want to add and type 'add'.",
                     String.class, this, true);
-        }
-        else if (getIb().getInv().getItem(slot) != null &&
-                DynamicMaterial.FIREWORK_ROCKET.isSameMaterial(getIb().getInv().getItem(slot)))
-        {
-            if (deleteMode)
-            {
+        } else if (getIb().getInv().getItem(slot) != null &&
+                DynamicMaterial.FIREWORK_ROCKET.isSameMaterial(getIb().getInv().getItem(slot))) {
+            if (deleteMode) {
                 cs.getFireworks().removeFireworks(tier, cs.getFireworks().getByItemStack(tier, getIb().getInv().getItem(slot)));
                 open();
             }
@@ -97,19 +82,14 @@ public class IGCCrateFireworks extends IGCTierMenu
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
-        if (value.equalsIgnoreCase("add firework"))
-        {
-            if (input.equalsIgnoreCase("add"))
-            {
+    public boolean handleInput(String value, String input) {
+        if (value.equalsIgnoreCase("add firework")) {
+            if (input.equalsIgnoreCase("add")) {
                 if (getP().getItemInHand() != null &&
-                        getP().getItemInHand().getType().equals(DynamicMaterial.FIREWORK_ROCKET.parseMaterial()))
-                {
+                        getP().getItemInHand().getType().equals(DynamicMaterial.FIREWORK_ROCKET.parseMaterial())) {
                     FireworkData fd = new FireworkData(getCc(), cs);
                     boolean result = fd.loadFromFirework(getP().getItemInHand());
-                    if(!result)
-                    {
+                    if (!result) {
                         ChatUtils.msgError(getP(), "You cannot add a firework with no colors.");
                         return false;
                     }
@@ -118,30 +98,22 @@ public class IGCCrateFireworks extends IGCTierMenu
                     ChatUtils.msgSuccess(getP(),
                             "Added the firework you are holding to the crate. Please type 'add' to add another firework you are holding or 'done' to return to the menu.");
                     return true;
-                }
-                else
-                {
+                } else {
                     ChatUtils.msgError(getP(), "You are not holding a firework!");
                 }
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "You can only type 'add' to add a firework and 'done' to return to the menu.");
             }
         }
         return false;
     }
 
-    void updateDeleteModeItem()
-    {
+    void updateDeleteModeItem() {
         ItemBuilder deleteModeItem = new ItemBuilder(DynamicMaterial.RED_CARPET, 1);
-        if (!deleteMode)
-        {
+        if (!deleteMode) {
             getIb().setItem(8, deleteModeItem.setName("&aEnable 'delete' mode").setLore("&7By enabling 'delete' mode")
                     .addLore("&7you can just click on fireworks").addLore("&7to remove them"));
-        }
-        else
-        {
+        } else {
             getIb().setItem(8, deleteModeItem.setName("&cDisable 'delete' mode").setLore("&7This will stop you from")
                     .addLore("&7removing fireworks"));
         }
