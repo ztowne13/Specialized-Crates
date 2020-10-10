@@ -7,13 +7,11 @@ import java.util.Map;
 
 public class ReflectionUtilities {
     public static final Map<Object, Object> cachedHandles = new HashMap<>();
-    private static final HashMap<Class<?>, HashMap<String, Method>> cachedMethods = new HashMap<>();
     private static final HashMap<Class<?>, HashMap<String, Field>> cachedFields = new HashMap<>();
     private static final HashMap<String, Class<?>> cachedOBCClass = new HashMap<>();
     private static final HashMap<String, Class<?>> cachedNMSClass = new HashMap<>();
 
-    public static void setValue(Object instance, String fieldName, Object value)
-            throws Exception {
+    public static void setValue(Object instance, String fieldName, Object value) throws Exception {
         Field field = instance.getClass().getDeclaredField(fieldName);
         field.setAccessible(true);
         field.set(instance, value);
@@ -85,7 +83,6 @@ public class ReflectionUtilities {
         try {
             Object returnObj = getMethod(obj.getClass(), "getHandle").invoke(obj);
             cachedHandles.put(obj, returnObj);
-
             return returnObj;
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,9 +110,7 @@ public class ReflectionUtilities {
             return val2;
         } else {
             Field field = getFieldOriginal(clazz, name);
-
             cachedFields.get(clazz).put(name, field);
-
             return field;
         }
     }
@@ -127,60 +122,22 @@ public class ReflectionUtilities {
             return field;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     public static Method getMethod(Class<?> clazz, String name, Class<?>... args) {
-        if (DebugUtils.LOG_CACHED_INFO) {
-            ChatUtils.log("Cached methods: " + cachedMethods.size());
-        }
-
-        if (!DebugUtils.ENABLE_CACHING) {
-            return getMethodOriginal(clazz, name, args);
-        }
-
-        if (!cachedMethods.containsKey(clazz)) {
-            cachedMethods.put(clazz, new HashMap<>());
-        }
-
-        if (cachedMethods.get(clazz).containsKey(name)) {
-            return cachedMethods.get(clazz).get(name);
-        } else {
-            Method method = getMethodOriginal(clazz, name, args);
-
-            cachedMethods.get(clazz).put(name, method);
-
+        try {
+            Method method = clazz.getDeclaredMethod(name, args);
+            method.setAccessible(true);
             return method;
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            return null;
         }
-    }
-
-    public static Method getMethodOriginal(Class<?> clazz, String name, Class<?>... args) {
-        for (Method m : clazz.getMethods()) {
-            if ((m.getName().equals(name)) && ((args.length == 0) || (classListEqual(args, m.getParameterTypes())))) {
-                m.setAccessible(true);
-                return m;
-            }
-        }
-        return null;
-    }
-
-    public static boolean classListEqual(Class<?>[] l1, Class<?>[] l2) {
-        boolean equal = true;
-        if (l1.length != l2.length) {
-            return false;
-        }
-        for (int i = 0; i < l1.length; i++) {
-            if (l1[i] != l2[i]) {
-                equal = false;
-                break;
-            }
-        }
-        return equal;
     }
 
     public static void clearLoaded() {
-        cachedMethods.clear();
         cachedHandles.clear();
         cachedNMSClass.clear();
         cachedOBCClass.clear();
