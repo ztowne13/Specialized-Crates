@@ -18,19 +18,16 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 4/2/16.
  */
-public class IGCCrateSound extends IGCTierMenu
-{
+public class IGCCrateSound extends IGCTierMenu {
     SoundData sd;
 
-    public IGCCrateSound(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, SoundData sd, String tier)
-    {
+    public IGCCrateSound(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, SoundData sd, String tier) {
         super(cc, p, lastMenu, "&7&l> &6&lSound", crates, tier);
         this.sd = sd;
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(27);
 
@@ -60,10 +57,8 @@ public class IGCCrateSound extends IGCTierMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 8:
                 cs.getSounds().getSounds().get(tier).remove(sd);
             case 9:
@@ -89,46 +84,31 @@ public class IGCCrateSound extends IGCTierMenu
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
-        if (value.equalsIgnoreCase("sound type"))
-        {
-            try
-            {
+    public boolean handleInput(String value, String input) {
+        if (value.equalsIgnoreCase("sound type")) {
+            try {
                 Sound s = Sound.valueOf(input.toUpperCase());
                 sd.setSound(s);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
                 return true;
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.msgError(getP(), input +
                         " is not a valid sound. Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/");
             }
-        }
-        else if (value.equalsIgnoreCase("sound pitch"))
-        {
-            if (Utils.isInt(input))
-            {
+        } else if (value.equalsIgnoreCase("sound pitch")) {
+            if (Utils.isInt(input)) {
                 sd.setPitch(Integer.parseInt(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid integer (number). Make sure it has no decimals.");
             }
-        }
-        else if (value.equalsIgnoreCase("sound volume"))
-        {
-            if (Utils.isInt(input))
-            {
+        } else if (value.equalsIgnoreCase("sound volume")) {
+            if (Utils.isInt(input)) {
                 sd.setVolume(Integer.parseInt(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid integer (number). Make sure it has no decimals.");
             }
         }

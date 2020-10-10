@@ -35,16 +35,13 @@ import java.util.List;
  * - STAINED_GLASS_PANE;8
  * - STAINED_GLASS_PANE;9
  */
-public class IGCAnimRoulette extends IGCAnimation
-{
-    public IGCAnimRoulette(SpecializedCrates cc, Player p, IGCMenu lastMenu)
-    {
+public class IGCAnimRoulette extends IGCAnimation {
+    public IGCAnimRoulette(SpecializedCrates cc, Player p, IGCMenu lastMenu) {
         super(cc, p, lastMenu, "&7&l> &6&lRoulette Animation", CrateAnimationType.INV_ROULETTE);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(18);
 
@@ -75,8 +72,7 @@ public class IGCAnimRoulette extends IGCAnimation
 
         ItemBuilder fillerBlocks =
                 new ItemBuilder(Material.ENDER_CHEST, 1, 0).setName("&aAdd new random-blocks").setLore("&7Current values: ");
-        for (String s : fc.getStringList(getPath("random-blocks")))
-        {
+        for (String s : fc.getStringList(getPath("random-blocks"))) {
             fillerBlocks.addLore("&7- " + s);
         }
 
@@ -89,10 +85,8 @@ public class IGCAnimRoulette extends IGCAnimation
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 0:
                 up();
                 break;
@@ -129,95 +123,64 @@ public class IGCAnimRoulette extends IGCAnimation
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         Object type = getInputMenu().getType();
-        if (type == Double.class)
-        {
-            if (Utils.isDouble(input))
-            {
+        if (type == Double.class) {
+            if (Utils.isDouble(input)) {
                 fc.set(getPath(value), Double.valueOf(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This is not a valid decimal value, please try again.");
             }
-        }
-        else if (type == Integer.class)
-        {
-            if (Utils.isInt(input))
-            {
+        } else if (type == Integer.class) {
+            if (Utils.isInt(input)) {
                 fc.set(getPath(value), Integer.parseInt(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This is not a valid number, please try again.");
             }
-        }
-        else
-        {
-            if (value.equalsIgnoreCase("add random-blocks"))
-            {
-                try
-                {
+        } else {
+            if (value.equalsIgnoreCase("add random-blocks")) {
+                try {
                     DynamicMaterial dm = DynamicMaterial.fromString(input);
                     List<String> currentList =
                             fc.contains(getPath(value.substring(4))) ? fc.getStringList(getPath(value.substring(4))) :
-                                    new ArrayList<String>();
+                                    new ArrayList<>();
                     currentList.add(dm.name());
                     fc.set(getPath(value.substring(4)), currentList);
                     return true;
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     ChatUtils.msgError(getP(), input + " does not have a valid material/data value or is not formatted MATERIAL;DATA");
                 }
-            }
-            else if (value.equalsIgnoreCase("remove random-blocks"))
-            {
-                if (fc.contains(getPath(value.substring(7))))
-                {
+            } else if (value.equalsIgnoreCase("remove random-blocks")) {
+                if (fc.contains(getPath(value.substring(7)))) {
                     boolean found = false;
                     List<String> newList = new ArrayList<>();
-                    for (String s : fc.getStringList(getPath(value.substring(7))))
-                    {
-                        if (s.equalsIgnoreCase(input))
-                        {
+                    for (String s : fc.getStringList(getPath(value.substring(7)))) {
+                        if (s.equalsIgnoreCase(input)) {
                             found = true;
-                        }
-                        else
-                        {
+                        } else {
                             newList.add(s);
                         }
                     }
 
-                    if (found)
-                    {
+                    if (found) {
                         ChatUtils.msgSuccess(getP(), "Removed the " + input + " value.");
                         fc.set(getPath(value.substring(7)), newList);
                         return true;
-                    }
-                    else
-                    {
+                    } else {
                         ChatUtils.msgError(getP(), input + " does not exist in the filler / random blocks: " +
                                 fc.getStringList(getPath(value.substring(7))));
                     }
-                }
-                else
-                {
+                } else {
                     ChatUtils.msgError(getP(), "No filler blocks currently exist to remove.");
                     return true;
                 }
-            }
-            else
-            {
+            } else {
                 if (value.equalsIgnoreCase("tick-sound") &&
-                        (input.equalsIgnoreCase("null") || input.equalsIgnoreCase("none")))
-                {
+                        (input.equalsIgnoreCase("null") || input.equalsIgnoreCase("none"))) {
                     fc.set(getPath(value), null);
                 }
                 fc.set(getPath(value), input);

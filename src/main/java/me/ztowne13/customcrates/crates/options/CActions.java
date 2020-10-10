@@ -24,38 +24,30 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class CActions extends CSetting
-{
-    HashMap<String, HashMap<String, ArrayList<String>>> actions = new HashMap<String, HashMap<String, ArrayList<String>>>();
+public class CActions extends CSetting {
+    Map<String, Map<String, List<String>>> actions = new HashMap<>();
 
-    public CActions(Crate crates)
-    {
+    public CActions(Crate crates) {
         super(crates, crates.getCc());
     }
 
     @Override
-    public void loadFor(CrateSettingsBuilder csb, CrateState cs)
-    {
-        if (csb.hasV("open.actions"))
-        {
+    public void loadFor(CrateSettingsBuilder csb, CrateState cs) {
+        if (csb.hasV("open.actions")) {
             List<String> list = getCrate().getSettings().getFc().getStringList("open.actions");
-            for (String s : list)
-            {
+            for (String s : list) {
                 addEntryByString("DEFAULT", s);
             }
         }
 
-        if (csb.hasV("open.crate-tiers"))
-        {
-            for (String tier : getCrate().getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false))
-            {
-                if (csb.hasV("open.crate-tiers." + tier + ".actions"))
-                {
+        if (csb.hasV("open.crate-tiers")) {
+            for (String tier : getCrate().getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false)) {
+                if (csb.hasV("open.crate-tiers." + tier + ".actions")) {
                     List<String> list =
                             getCrate().getSettings().getFc().getStringList("open.crate-tiers." + tier + ".actions");
-                    for (String s : list)
-                    {
+                    for (String s : list) {
                         addEntryByString(tier, s);
                     }
                 }
@@ -63,19 +55,16 @@ public class CActions extends CSetting
         }
     }
 
-    public void saveToFile()
-    {
-        if (!actions.isEmpty())
-        {
-            for (String tier : actions.keySet())
-            {
+    public void saveToFile() {
+        if (!actions.isEmpty()) {
+            for (Map.Entry<String, Map<String, List<String>>> entry : actions.entrySet()) {
                 ArrayList<String> toSetList = new ArrayList<>();
+                String tier = entry.getKey();
                 String path = "open." + (tier.equalsIgnoreCase("DEFAULT") ? "" : "crate-tiers." + tier + ".") + "actions";
 
-                for (String actionType : actions.get(tier).keySet())
-                {
-                    for (String action : actions.get(tier).get(actionType))
-                    {
+                for (Map.Entry<String, List<String>> entry1 : entry.getValue().entrySet()) {
+                    String actionType = entry1.getKey();
+                    for (String action : entry1.getValue()) {
                         toSetList.add(ChatUtils.fromChatColor(actionType + ", " + action));
                     }
                 }
@@ -85,12 +74,10 @@ public class CActions extends CSetting
         }
     }
 
-    public void addEntry(String type, String action, String tier)
-    {
-        HashMap<String, ArrayList<String>> map =
-                getActions().containsKey(tier) ? getActions().get(tier) : new HashMap<String, ArrayList<String>>();
+    public void addEntry(String type, String action, String tier) {
+        Map<String, List<String>> map = getActions().getOrDefault(tier, new HashMap<>());
 
-        ArrayList<String> list = map.containsKey(type) ? map.get(type) : new ArrayList<String>();
+        List<String> list = map.getOrDefault(type, new ArrayList<>());
         list.add(action);
         map.put(type, list);
 
@@ -98,18 +85,15 @@ public class CActions extends CSetting
         getActions().put(tier, map);
     }
 
-    public void removeEntry(String type, String action, String tier)
-    {
+    public void removeEntry(String type, String action, String tier) {
         getActions().get(tier).get(type).remove(action);
     }
 
-    public void addEntryByString(String crateTier, String toAdd)
-    {
+    public void addEntryByString(String crateTier, String toAdd) {
         String[] split = toAdd.split(",");
         String type = split[0].replace(" ", "").replace(",", "");
 
-        if (split.length == 1)
-        {
+        if (split.length == 1) {
             addEntry(type, "", crateTier);
             return;
         }
@@ -117,8 +101,7 @@ public class CActions extends CSetting
         String action = "";
 
         boolean b = false;
-        for (String words : split)
-        {
+        for (String words : split) {
             if (b)
                 action = words + " ";
             b = true;
@@ -133,18 +116,15 @@ public class CActions extends CSetting
         addEntry(type, action, crateTier);
     }
 
-    public void playAll(Player p, boolean pre)
-    {
-        playAll(p, new ArrayList<Reward>(), pre);
+    public void playAll(Player p, boolean pre) {
+        playAll(p, new ArrayList<>(), pre);
     }
 
-    public void playAll(Player p, ArrayList<Reward> rewards, boolean pre)
-    {
+    public void playAll(Player p, List<Reward> rewards, boolean pre) {
         playAll(p, null, rewards, pre);
     }
 
-    public void playAll(Player p, PlacedCrate placedCrate, ArrayList<Reward> rewards, boolean pre)
-    {
+    public void playAll(Player p, PlacedCrate placedCrate, List<Reward> rewards, boolean pre) {
         cc.getDu().log("playAll() - CALL (pre: " + pre + ")", getClass());
 
         if (rewards.isEmpty() && !pre)
@@ -156,37 +136,25 @@ public class CActions extends CSetting
         boolean toRunTitle = false;
 
         ArrayList<String> rewardsAsDisplayname = new ArrayList<>();
-        for (Reward r : rewards)
-        {
+        for (Reward r : rewards) {
             rewardsAsDisplayname.add(r.getDisplayName(true));
         }
 
-        for (String tier : getActions().keySet())
-        {
+        for (String tier : getActions().keySet()) {
             if (pre || (tier.equalsIgnoreCase("DEFAULT") &&
-                    !getActions().keySet().contains(rewards.get(0).getRarity().toLowerCase())) ||
-                    rewards.get(0).getRarity().equalsIgnoreCase(tier))
-            {
-                for (String actionVal : getActions().get(tier).keySet())
-                {
+                    !getActions().containsKey(rewards.get(0).getRarity().toLowerCase())) ||
+                    rewards.get(0).getRarity().equalsIgnoreCase(tier)) {
+                for (String actionVal : getActions().get(tier).keySet()) {
                     String s = actionVal.toUpperCase();
-                    for (String msg : getActions().get(tier).get(s))
-                    {
-                        if (pre)
-                        {
-                            if (actionVal.startsWith("PRE_"))
-                            {
+                    for (String msg : getActions().get(tier).get(s)) {
+                        if (pre) {
+                            if (actionVal.startsWith("PRE_")) {
                                 s = actionVal.substring(4);
-                            }
-                            else
-                            {
+                            } else {
                                 continue;
                             }
-                        }
-                        else
-                        {
-                            if (actionVal.startsWith("PRE_"))
-                            {
+                        } else {
+                            if (actionVal.startsWith("PRE_")) {
                                 continue;
                             }
                         }
@@ -201,38 +169,25 @@ public class CActions extends CSetting
                         msg = msg.replace("%reward%", rewardsAsString).replace("%rewards%", rewardsAsString);
                         msg = ChatUtils.toChatColor(msg);
 
-                        if (s.equalsIgnoreCase("MESSAGE"))
-                        {
+                        if (s.equalsIgnoreCase("MESSAGE")) {
                             p.sendMessage(msg);
-                        }
-                        else if (s.equalsIgnoreCase("BROADCAST"))
-                        {
-                            for (Player onlinePlayer : Bukkit.getOnlinePlayers())
-                            {
+                        } else if (s.equalsIgnoreCase("BROADCAST")) {
+                            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                                 onlinePlayer.sendMessage(msg);
                             }
 
                             //Bukkit.broadcastMessage(msg);
-                        }
-                        else if (s.equalsIgnoreCase("ACTIONBAR"))
-                        {
+                        } else if (s.equalsIgnoreCase("ACTIONBAR")) {
                             actionEffect.getActionBarExecutor().play(p, msg);
-                        }
-                        else if (s.equalsIgnoreCase("TITLE"))
-                        {
+                        } else if (s.equalsIgnoreCase("TITLE")) {
                             actionEffect.setDisplayTitle(msg);
                             toRunTitle = true;
-                        }
-                        else if (s.equalsIgnoreCase("SUBTITLE"))
-                        {
+                        } else if (s.equalsIgnoreCase("SUBTITLE")) {
                             actionEffect.setDisplaySubtitle(msg);
                             toRunTitle = true;
-                        }
-                        else if(s.equalsIgnoreCase("COMMAND")) {
+                        } else if (s.equalsIgnoreCase("COMMAND")) {
                             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), msg);
-                        }
-                        else
-                        {
+                        } else {
                             ChatUtils.log(new String[]{
                                     "Please note that an action type called " + s + " was attempted to be run",
                                     "    However, this action type does not exist. Valid types are:",
@@ -243,16 +198,13 @@ public class CActions extends CSetting
             }
         }
 
-        if (toRunTitle)
-        {
+        if (toRunTitle) {
             actionEffect.playTitle(p);
         }
 
-        if (!pre)
-        {
+        if (!pre) {
             if (!crates.getSettings().getCrateType().equals(CrateAnimationType.BLOCK_CRATEOPEN) ||
-                    !((OpenChestAnimation) crates.getSettings().getAnimation()).isEarlyRewardHologram())
-            {
+                    !((OpenChestAnimation) crates.getSettings().getAnimation()).isEarlyRewardHologram()) {
                 if (crates.getSettings().getObtainType().isStatic() ||
                         crates.getSettings().getCrateType().isSpecialDynamicHandling())
                     playRewardHologram(p, rewardsAsDisplayname);
@@ -260,29 +212,24 @@ public class CActions extends CSetting
         }
     }
 
-    public void playRewardHologram(Player p, ArrayList<String> rewards, double additionalYOffset)
-    {
+    public void playRewardHologram(Player p, List<String> rewards, double additionalYOffset) {
         playRewardHologram(p, rewards, additionalYOffset, false, null, -1);
     }
 
-    public void playRewardHologram(Player p, ArrayList<String> rewards)
-    {
+    public void playRewardHologram(Player p, List<String> rewards) {
         playRewardHologram(p, rewards, 0, false, null, -1);
     }
 
-    public void playRewardHologram(Player p, ArrayList<String> rewards, double additionalYOffset, boolean attach, Item item,
-                                   int openDuration)
-    {
+    public void playRewardHologram(Player p, List<String> rewards, double additionalYOffset, boolean attach, Item item,
+                                   int openDuration) {
         if (rewards.isEmpty())
             return;
 
         final PlayerManager pm = PlayerManager.get(cc, p);
-        if (!(pm.getLastOpenedPlacedCrate() == null))
-        {
+        if (pm.getLastOpenedPlacedCrate() != null) {
             final PlacedCrate placedCrate = pm.getLastOpenedPlacedCrate();
             String msg = placedCrate.getCrate().getSettings().getHologram().getRewardHologram();
-            if (!msg.equalsIgnoreCase(""))
-            {
+            if (!msg.equalsIgnoreCase("")) {
 //                msg = ChatUtils.toChatColor(msg.replace("%reward%", rewards.toString().replace("[", "").replace("]", ""))).replace("%player%", p.getName()));
 
                 String rewardsAsString = rewards.toString().substring(1, rewards.toString().length() - 1);
@@ -305,80 +252,63 @@ public class CActions extends CSetting
                 dynamicHologram.create(rewardLoc);
                 dynamicHologram.addLine(msg);
 
-                if (attach)
-                {
+                if (attach) {
                     attachTo(item, msg);
                 }
 
-                Bukkit.getScheduler().scheduleSyncDelayedTask(cc, new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        dynamicHologram.delete();
+                Bukkit.getScheduler().scheduleSyncDelayedTask(cc, () -> {
+                    dynamicHologram.delete();
 
-                        final Location cloneY = placedCrate.getL().clone();
-                        cloneY.setY(cloneY.getY() + .5);
+                    final Location cloneY = placedCrate.getL().clone();
+                    cloneY.setY(cloneY.getY() + .5);
 
-                        if (placedCrate.getCrate().getSettings().getObtainType().equals(ObtainType.STATIC))
-                        {
-                            placedCrate.getCrate().getSettings().getHologram().createHologram(cloneY, dynamicHologram);
-                        }
-
-                        pm.setLastOpenedPlacedCrate(null);
-                        dynamicHologram.setDisplayingRewardHologram(false);
-
-                        if (!(dynamicHologram.getHa() == null))
-                        {
-                            dynamicHologram.getHa().update(true);
-                        }
-
+                    if (placedCrate.getCrate().getSettings().getObtainType().equals(ObtainType.STATIC)) {
+                        placedCrate.getCrate().getSettings().getHologram().createHologram(cloneY, dynamicHologram);
                     }
+
+                    pm.setLastOpenedPlacedCrate(null);
+                    dynamicHologram.setDisplayingRewardHologram(false);
+
+                    if (!(dynamicHologram.getHa() == null)) {
+                        dynamicHologram.getHa().update(true);
+                    }
+
                 }, attach ? openDuration : getCrate().getSettings().getHologram().getRewardHoloDuration());
 
             }
         }
     }
 
-    public void attachTo(Item item, String rewardName)
-    {
+    public void attachTo(Item item, String rewardName) {
         Entity real = null;
 
-        for (Entity entity : item.getLocation().getChunk().getEntities())
-        {
+        for (Entity entity : item.getLocation().getChunk().getEntities()) {
             if (item.getLocation().distance(entity.getLocation()) < 2 &&
                     ChatUtils.removeColor(rewardName).equalsIgnoreCase(ChatUtils.removeColor(entity.getName())) &&
-                    !entity.equals(item))
-            {
+                    !entity.equals(item)) {
                 real = entity;
                 break;
             }
         }
 
-        try
-        {
-            if (real != null)
-            {
+        try {
+            if (real != null) {
                 if (VersionUtils.Version.v1_13.isServerVersionOrLater())
                     item.addPassenger(real);
                 else
                     item.setPassenger(real);
             }
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             exc.printStackTrace();
         }
 
     }
 
-    public HashMap<String, HashMap<String, ArrayList<String>>> getActions()
-    {
+    public Map<String, Map<String, List<String>>> getActions() {
         return actions;
     }
 
-    public void setActions(HashMap<String, HashMap<String, ArrayList<String>>> actions)
-    {
+    public void setActions(Map<String, Map<String, List<String>>> actions) {
         this.actions = actions;
     }
 }

@@ -14,8 +14,7 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Method;
 import java.util.List;
 
-public class IGCListEditor extends IGCMenu
-{
+public class IGCListEditor extends IGCMenu {
     int page;
     String header;
     String identifier;
@@ -26,8 +25,7 @@ public class IGCListEditor extends IGCMenu
     String methodName, errorMsg;
 
     public IGCListEditor(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header, String identifier,
-                         List values, DynamicMaterial displayItem, int page)
-    {
+                         List values, DynamicMaterial displayItem, int page) {
         super(cc, p, lastMenu, "&7&l> &6&l" + header + " PG" + page);
         this.header = header;
         this.values = values;
@@ -37,8 +35,7 @@ public class IGCListEditor extends IGCMenu
     }
 
     public IGCListEditor(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header, String identifier,
-                         List values, DynamicMaterial displayItem, int page, Class<?> clazz, String methodName, String errorMsg)
-    {
+                         List values, DynamicMaterial displayItem, int page, Class<?> clazz, String methodName, String errorMsg) {
         this(cc, p, lastMenu, header, identifier, values, displayItem, page);
         this.clazz = clazz;
         this.methodName = methodName;
@@ -46,8 +43,7 @@ public class IGCListEditor extends IGCMenu
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         int slots;
 
@@ -58,8 +54,7 @@ public class IGCListEditor extends IGCMenu
 
         slots = InventoryUtils.getRowsFor(2, slots) + 9;
 
-        if(header.length() > 18)
-        {
+        if (header.length() > 18) {
             header = header.substring(0, 18);
         }
         setInventoryName("&7&l> &6&l" + header + " PG" + page);
@@ -78,16 +73,13 @@ public class IGCListEditor extends IGCMenu
         int displayedItems = 0;
         int itemNum = (page - 1) * 28;
 
-        for (Object val : values)
-        {
-            if (toSkip > skipped || displayedItems >= 28)
-            {
+        for (Object val : values) {
+            if (toSkip > skipped || displayedItems >= 28) {
                 skipped++;
                 continue;
             }
 
-            if (i % 9 == 8)
-            {
+            if (i % 9 == 8) {
                 i += 2;
             }
 
@@ -104,13 +96,11 @@ public class IGCListEditor extends IGCMenu
             displayedItems++;
         }
 
-        if (page != 1)
-        {
+        if (page != 1) {
             ib.setItem(2, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo back a page"));
         }
 
-        if (((values.size() / 28) + (values.size() % 28 == 0 ? 0 : 1) != page) && values.size() != 0)
-        {
+        if (((values.size() / 28) + (values.size() % 28 == 0 ? 0 : 1) != page) && values.size() != 0) {
             ib.setItem(6, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo forward a page"));
         }
 
@@ -119,43 +109,28 @@ public class IGCListEditor extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (slot == 0)
-        {
+    public void handleClick(int slot) {
+        if (slot == 0) {
             up();
-        }
-        else if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
-        {
+        } else if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
             page--;
             open();
-        }
-        else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
-        {
+        } else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
             page++;
             open();
-        }
-        else if (slot == 8)
-        {
+        } else if (slot == 8) {
             new InputMenu(getCc(), getP(), "new " + ChatUtils.removeColor(identifier), "null", clazz != null ? clazz : String.class, this);
-        }
-        else if (slot == 17)
-        {
+        } else if (slot == 17) {
             deleteMode = !deleteMode;
             updateDeleteMode();
-        }
-        else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType().equals(displayItem.parseMaterial()))
-        {
+        } else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType().equals(displayItem.parseMaterial())) {
             ItemBuilder clickedItem = new ItemBuilder(getIb().getInv().getItem(slot));
-            if (deleteMode)
-            {
+            if (deleteMode) {
                 String[] split = ChatUtils.removeColor(clickedItem.getName(true)).split(" ");
                 int id = Integer.parseInt(split[split.length - 1]);
                 values.remove(id - 1);
                 open();
-            }
-            else
-            {
+            } else {
                 new InputMenu(getCc(), getP(), ChatUtils.removeColor(clickedItem.getName(true)),
                         clickedItem.im().getLore().get(0), String.class, this);
             }
@@ -163,31 +138,23 @@ public class IGCListEditor extends IGCMenu
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         Object handledInput = input;
-        if (clazz != null)
-        {
-            try
-            {
-                Method method = ReflectionUtilities.getMethod(clazz, methodName, new Class[]{String.class});
+        if (clazz != null) {
+            try {
+                Method method = ReflectionUtilities.getMethod(clazz, methodName, String.class);
                 handledInput = method.invoke(clazz, input.toUpperCase());
 
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.msgError(getP(), errorMsg);
                 return false;
             }
         }
 
-        if (value.equalsIgnoreCase("new " + ChatUtils.removeColor(identifier)))
-        {
+        if (value.equalsIgnoreCase("new " + ChatUtils.removeColor(identifier))) {
             values.add(handledInput);
             ChatUtils.msgSuccess(getP(), "Added the " + identifier + " '" + input + "'");
-        }
-        else
-        {
+        } else {
             String[] split = value.split(" ");
             int id = Integer.parseInt(split[split.length - 1]);
 
@@ -198,18 +165,14 @@ public class IGCListEditor extends IGCMenu
         return true;
     }
 
-    public void updateDeleteMode()
-    {
-        if (!deleteMode)
-        {
+    public void updateDeleteMode() {
+        if (!deleteMode) {
             getIb().setItem(17, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&aEnable 'remove' mode")
                     .setLore("&7By enabling 'remove' mode")
                     .addLore("&7you can just click on " + ChatUtils.removeColor(identifier) + "s")
                     .addLore("&7to remove them").addLore("").addLore("&fDelete every item to use the")
                     .addLore("&fdefault lore in the config.yml"));
-        }
-        else
-        {
+        } else {
             getIb().setItem(17, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&cDisable 'remove' mode")
                     .setLore("&7This will stop you from").addLore("&7removing " + ChatUtils.removeColor(identifier) + "s")
                     .addLore("").addLore("&fDelete every item to use the").addLore("&fdefault lore in the config.yml"));

@@ -7,8 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public interface EditableItem
-{
+public interface EditableItem {
     ItemStack getStack();
 
     void setStack(ItemStack stack);
@@ -17,9 +16,9 @@ public interface EditableItem
 
     String getDisplayName(boolean useMaterialWhenNull);
 
-    void setPlayerHeadName(String name);
-
     String getPlayerHeadName();
+
+    void setPlayerHeadName(String name);
 
     /**
      * These functions are handled outside of the ItemStack
@@ -53,17 +52,17 @@ public interface EditableItem
 
     RGBColor getColor();
 
-    boolean isColorable();
-
     void setColor(RGBColor color);
+
+    boolean isColorable();
 
     void addItemFlag(ItemFlag flag);
 
     void removeItemFlag(ItemFlag flag);
 
-    void setDamage(int damage);
-
     int getDamage();
+
+    void setDamage(int damage);
 
     /**
      * Clears all the currently set values and updates them based on the current itemstack.

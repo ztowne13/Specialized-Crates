@@ -9,25 +9,19 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 6/23/16.
  */
-public class Config extends SubCommand
-{
-    public Config()
-    {
+public class Config extends SubCommand {
+    public Config() {
         super("config", 1, "", new String[]{"conf", "c", "configure", "igc", "configuration", "yml"});
     }
 
     @Override
-    public boolean run(SpecializedCrates cc, Commands cmds, String[] args)
-    {
+    public boolean run(SpecializedCrates cc, Commands cmds, String[] args) {
         CommandSender sender = cmds.getCmdSender();
-        if (cmds.canExecute(false, false, ""))
-        {
+        if (cmds.canExecute(false, false, "")) {
             new IGCMenuMain(cc, (Player) sender, null).open();
             cmds.msgSuccess("Opened in game configuration.");
             return true;
-        }
-        else
-        {
+        } else {
             cmds.msgError("This is an in-game command only.");
             return false;
         }

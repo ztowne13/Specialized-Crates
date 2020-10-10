@@ -7,22 +7,22 @@ import org.bukkit.Location;
 /**
  * Created by ztowne13 on 6/26/16.
  */
-public class GrowingSpiralPA extends ParticleAnimationEffect
-{
+public class GrowingSpiralPA extends ParticleAnimationEffect {
     static int degrees = 540;
     int updatesPerSec;
 
-    double toChangeHeight = 0, currentYOffset = 0, toChangeRadius = 0, currentRadius = 0;
+    double toChangeHeight = 0;
+    double currentYOffset = 0;
+    double toChangeRadius = 0;
+    double currentRadius = 0;
 
-    public GrowingSpiralPA(SpecializedCrates cc, ParticleData particleData)
-    {
+    public GrowingSpiralPA(SpecializedCrates cc, ParticleData particleData) {
         super(cc, particleData);
         this.updatesPerSec = (int) particleData.getSpeed();
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         toDisplay.clear();
 
         totalTick += updatesPerSec;
@@ -32,23 +32,20 @@ public class GrowingSpiralPA extends ParticleAnimationEffect
         double yOffset = particleData.getRangeY();
         double height = particleData.getRangeZ();
 
-        if (toChangeHeight == 0 && height != 0)
-        {
+        if (toChangeHeight == 0 && height != 0) {
             toChangeHeight = height / degrees;
         }
 
-        if (toChangeRadius == 0)
-        {
+        if (toChangeRadius == 0) {
             currentRadius = radius;
             toChangeRadius = -(radius / degrees);
         }
 
-        for (int i = tick; i < tick + updatesPerSec; i++)
-        {
+        int i = tick;
+        while (i < tick + updatesPerSec) {
             currentYOffset += toChangeHeight;
             currentRadius += toChangeRadius;
-            if (i % (2 + particleData.getAmount()) == 0)
-            {
+            if (i % (2 + particleData.getAmount()) == 0) {
                 double toX = Math.sin(Math.toRadians(i)) * currentRadius;
                 double toY = Math.cos(Math.toRadians(i)) * currentRadius;
 
@@ -58,18 +55,17 @@ public class GrowingSpiralPA extends ParticleAnimationEffect
                 toDisplay.add(newL);
                 toDisplay.add(newL2);
 
-                if (i > degrees)
-                {
+                if (i > degrees) {
                     i = 1;
                     tick = 0;
                 }
 
-                if ((currentYOffset > height && toChangeHeight > 0) || (currentYOffset < 0 && toChangeHeight < 0))
-                {
+                if ((currentYOffset > height && toChangeHeight > 0) || (currentYOffset < 0 && toChangeHeight < 0)) {
                     toChangeHeight = -toChangeHeight;
                     toChangeRadius = -toChangeRadius;
                 }
             }
+            i++;
         }
     }
 }

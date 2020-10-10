@@ -17,18 +17,15 @@ import java.util.ArrayList;
 /**
  * Created by ztowne13 on 3/15/16.
  */
-public class IGCMenuMessages extends IGCMenu
-{
+public class IGCMenuMessages extends IGCMenu {
     static int msgLoreLength = 40;
 
-    public IGCMenuMessages(SpecializedCrates cc, Player p, IGCMenu lastMenu)
-    {
+    public IGCMenuMessages(SpecializedCrates cc, Player p, IGCMenu lastMenu) {
         super(cc, p, lastMenu, "&7&l> &6&lMessages.YML");
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(2, Messages.values().length - 1));
         ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
         ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
@@ -36,19 +33,15 @@ public class IGCMenuMessages extends IGCMenu
 
         ArrayList<Messages> msgs = new ArrayList<>();
 
-        for (Messages msg : Messages.values())
-        {
-            if (msg.getMsg().equalsIgnoreCase(""))
-            {
+        for (Messages msg : Messages.values()) {
+            if (msg.getMsg().equalsIgnoreCase("")) {
                 msgs.add(msg);
             }
         }
 
         int i = 2;
-        for (Messages msg : msgs)
-        {
-            if (i % 9 == 0)
-            {
+        for (Messages msg : msgs) {
+            if (i % 9 == 0) {
                 i += 2;
             }
 
@@ -68,23 +61,15 @@ public class IGCMenuMessages extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (slot == 0)
-        {
+    public void handleClick(int slot) {
+        if (slot == 0) {
             getCc().getMessageFile().save();
             ChatUtils.msgSuccess(getP(), "Messages.YML saved!");
-        }
-        else if (slot == 9)
-        {
+        } else if (slot == 9) {
             reload();
-        }
-        else if (slot == getIb().getInv().getSize() - 9)
-        {
+        } else if (slot == getIb().getInv().getSize() - 9) {
             up();
-        }
-        else if (!(getIb().getInv().getItem(slot) == null))
-        {
+        } else if (!(getIb().getInv().getItem(slot) == null)) {
             Messages msg = Messages.valueOf(
                     ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName()).toUpperCase());
             new InputMenu(getCc(), getP(), msg.name(), msg.getPropperMsg(getCc()), String.class, this);
@@ -92,8 +77,7 @@ public class IGCMenuMessages extends IGCMenu
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         Messages msg = Messages.valueOf(value.toUpperCase());
         msg.writeValue(getCc(), input);
         ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");

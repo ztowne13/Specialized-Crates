@@ -13,32 +13,24 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class BlockPlaceListener implements Listener
-{
+public class BlockPlaceListener implements Listener {
     SpecializedCrates cc;
 
-    public BlockPlaceListener(SpecializedCrates cc)
-    {
+    public BlockPlaceListener(SpecializedCrates cc) {
         this.cc = cc;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlaceCrateKey(BlockPlaceEvent e)
-    {
+    public void onPlaceCrateKey(BlockPlaceEvent e) {
         Player p = e.getPlayer();
         Location l = e.getBlock().getLocation();
 
-        if (!e.isCancelled())
-        {
-            if (CrateUtils.searchByKey(e.getItemInHand()) != null)
-            {
+        if (!e.isCancelled()) {
+            if (CrateUtils.searchByKey(e.getItemInHand()) != null) {
                 Messages.DENY_PLACE_KEY.msgSpecified(cc, p);
                 e.setCancelled(true);
-            }
-            else
-            {
-                if(new AttemptCrateUseAction(cc, p, l, true).run())
-                {
+            } else {
+                if (new AttemptCrateUseAction(cc, p, l, true).run()) {
                     e.setCancelled(true);
                 }
             }
@@ -46,8 +38,7 @@ public class BlockPlaceListener implements Listener
     }
 
     @EventHandler
-    public void onPlace(BlockPlaceEvent e)
-    {
+    public void onPlace(BlockPlaceEvent e) {
         Block b = e.getBlock();
         b.setMetadata("PLACED", new FixedMetadataValue(cc, "something"));
     }

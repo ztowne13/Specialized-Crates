@@ -17,10 +17,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-public class FireworkData
-{
+public class FireworkData {
     SpecializedCrates cc;
     CrateSettings cs;
 
@@ -30,51 +30,46 @@ public class FireworkData
     Builder effect;
     int power = 1;
 
-    ArrayList<String> colors = new ArrayList<>(), fadeColors = new ArrayList<>();
-    boolean trail = false, flicker = false;
+    List<String> colors = new ArrayList<>();
+    List<String> fadeColors = new ArrayList<>();
+    boolean trail = false;
+    boolean flicker = false;
     FireworkEffect.Type feType = FireworkEffect.Type.BALL_LARGE;
 
-    public FireworkData(SpecializedCrates cc, CrateSettings cs)
-    {
+    public FireworkData(SpecializedCrates cc, CrateSettings cs) {
         this.cc = cc;
         this.cs = cs;
         this.id = UUID.randomUUID().toString().substring(0, 8);
     }
 
-    public boolean loadFromFirework(ItemStack stack)
-    {
+    public boolean loadFromFirework(ItemStack stack) {
         FireworkMeta fm = (FireworkMeta) stack.getItemMeta();
         setEffect(FireworkEffect.builder());
         power = fm.getPower();
-        for (FireworkEffect ef : fm.getEffects())
-        {
+        for (FireworkEffect ef : fm.getEffects()) {
             flicker = ef.hasFlicker();
             effect.flicker(flicker);
 
             trail = ef.hasTrail();
             effect.trail(trail);
 
-            for (Color c : ef.getColors())
-            {
+            for (Color c : ef.getColors()) {
                 colors.add(c.asRGB() + "");
                 effect.withColor(c);
             }
 
-            for (Color c : ef.getFadeColors())
-            {
+            for (Color c : ef.getFadeColors()) {
                 fadeColors.add(c.asRGB() + "");
                 effect.withFade(c);
             }
 
-            if (ef.getType() != null)
-            {
+            if (ef.getType() != null) {
                 feType = ef.getType();
             }
             effect.with(feType);
         }
 
-        if(colors.size() == 0)
-        {
+        if (colors.isEmpty()) {
             return false;
         }
 
@@ -82,69 +77,51 @@ public class FireworkData
         return true;
     }
 
-    public void load(String s)
-    {
-        String[] args = ChatUtils.stripFromWhitespace(s).split(FileSettings.splitter1);
+    public void load(String s) {
+        String[] args = ChatUtils.stripFromWhitespace(s).split(FileSettings.SPLITTER_1);
         setEffect(FireworkEffect.builder());
 
         unLoaded = s;
 
-        try
-        {
-            String[] splitArgs0 = args[0].split(FileSettings.splitter2);
-            for (String colorUnParsed : splitArgs0)
-            {
-                if(colorUnParsed.equalsIgnoreCase(""))
-                {
+        try {
+            String[] splitArgs0 = args[0].split(FileSettings.SPLITTER_2);
+            for (String colorUnParsed : splitArgs0) {
+                if (colorUnParsed.equalsIgnoreCase("")) {
                     continue;
                 }
 
-                try
-                {
-                    if (Utils.getColorFromString(colorUnParsed) != null)
-                    {
+                try {
+                    if (Utils.getColorFromString(colorUnParsed) != null) {
                         Color c = Utils.getColorFromString(colorUnParsed);
                         colors.add(colorUnParsed);
                         getEffect().withColor(c);
-                    }
-                    else
-                    {
+                    } else {
                         Color c = Color.fromRGB(Integer.parseInt(colorUnParsed));
                         colors.add(colorUnParsed);
                         getEffect().withColor(c);
                     }
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     StatusLoggerEvent.FIREWORK_DATA_INVALIDCOLOR
                             .log(getCs().getCrate(), new String[]{s, colorUnParsed, "color"});
                 }
             }
 
-            for (String colorUnParsed : args[1].split(";"))
-            {
-                if(colorUnParsed.equalsIgnoreCase(""))
-                {
+            for (String colorUnParsed : args[1].split(";")) {
+                if (colorUnParsed.equalsIgnoreCase("")) {
                     continue;
                 }
 
-                try
-                {
-                    if (Utils.getColorFromString(colorUnParsed) != null)
-                    {
+                try {
+                    if (Utils.getColorFromString(colorUnParsed) != null) {
                         Color c = Utils.getColorFromString(colorUnParsed);
                         fadeColors.add(colorUnParsed);
                         getEffect().withFade(c);
-                    }
-                    else
-                    {
+                    } else {
                         Color c = Color.fromRGB(Integer.parseInt(colorUnParsed));
                         fadeColors.add(colorUnParsed);
                         getEffect().withFade(c);
                     }
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     StatusLoggerEvent.FIREWORK_DATA_INVALIDCOLOR
                             .log(getCs().getCrate(), new String[]{s, colorUnParsed, "fade"});
                 }
@@ -152,8 +129,7 @@ public class FireworkData
 
             String cause = args[2] + " is not true / false.";
 
-            try
-            {
+            try {
                 Boolean b = Boolean.valueOf(args[2].toLowerCase());
                 getEffect().trail(b);
                 trail = b;
@@ -177,21 +153,16 @@ public class FireworkData
                 setPower(Integer.valueOf(args[5]));
 
                 StatusLoggerEvent.FIREWORK_DATA_SUCCESS.log(getCs().getCrate(), new String[]{s});
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 StatusLoggerEvent.FIREWORK_DATA_PARTIALSUCCESS.log(getCs().getCrate(), new String[]{s, cause});
             }
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             StatusLoggerEvent.FIREWORK_DATA_FAILURE.log(getCs().getCrate(), new String[]{s});
         }
 
     }
 
-    public void play(Location l)
-    {
+    public void play(Location l) {
         final Firework fw = (Firework) l.getWorld().spawnEntity(l, EntityType.FIREWORK);
         FireworkMeta fm = fw.getFireworkMeta();
         fw.setCustomName("scf");
@@ -200,40 +171,28 @@ public class FireworkData
         fm.setPower(getPower());
         fw.setFireworkMeta(fm);
 
-        if (getPower() == 0)
-        {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
-            {
-                public void run()
-                {
-                    fw.detonate();
-                }
-            }, 2);
+        if (getPower() == 0) {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), fw::detonate, 2);
         }
     }
 
     // Formatted color;color, fade color;fade color, trail?, flicker?, effect type, power
-    public String asString()
-    {
+    public String asString() {
         String serializedFw = "";
-        for (String color : getColors())
-        {
+        for (String color : getColors()) {
             serializedFw = color + ";";
         }
 
-        if(getColors().size() == 0)
-        {
+        if (getColors().isEmpty()) {
             serializedFw += ";";
         }
         serializedFw = serializedFw.substring(0, serializedFw.length() - 1) + ", ";
 
-        for (String color : getFadeColors())
-        {
+        for (String color : getFadeColors()) {
             serializedFw = color + ";";
         }
 
-        if(getFadeColors().size() == 0)
-        {
+        if (getFadeColors().isEmpty()) {
             serializedFw += ";";
         }
 
@@ -246,113 +205,91 @@ public class FireworkData
         return serializedFw;
     }
 
-    public boolean equals(FireworkData fd)
-    {
+    public boolean equals(FireworkData fd) {
         return fd.toString().equalsIgnoreCase(toString());
     }
 
-    public String toString()
-    {
+    public String toString() {
         return unLoaded;
     }
 
-    public SpecializedCrates getCc()
-    {
+    public SpecializedCrates getCc() {
         return cc;
     }
 
-    public void setCc(SpecializedCrates cc)
-    {
+    public void setCc(SpecializedCrates cc) {
         this.cc = cc;
     }
 
-    public CrateSettings getCs()
-    {
+    public CrateSettings getCs() {
         return cs;
     }
 
-    public void setCs(CrateSettings cs)
-    {
+    public void setCs(CrateSettings cs) {
         this.cs = cs;
     }
 
-    public Builder getEffect()
-    {
+    public Builder getEffect() {
         return effect;
     }
 
-    public void setEffect(Builder effect)
-    {
+    public void setEffect(Builder effect) {
         this.effect = effect;
     }
 
-    public int getPower()
-    {
+    public int getPower() {
         return power;
     }
 
-    public void setPower(int power)
-    {
+    public void setPower(int power) {
         this.power = power;
     }
 
-    public boolean isTrail()
-    {
+    public boolean isTrail() {
         return trail;
     }
 
-    public void setTrail(boolean trail)
-    {
+    public void setTrail(boolean trail) {
         this.trail = trail;
     }
 
-    public boolean isFlicker()
-    {
+    public boolean isFlicker() {
         return flicker;
     }
 
-    public void setFlicker(boolean flicker)
-    {
+    public void setFlicker(boolean flicker) {
         this.flicker = flicker;
     }
 
-    public FireworkEffect.Type getFeType()
-    {
+    public FireworkEffect.Type getFeType() {
         return feType;
     }
 
-    public void setFeType(FireworkEffect.Type feType)
-    {
+    public void setFeType(FireworkEffect.Type feType) {
         this.feType = feType;
     }
 
-    public ArrayList<String> getColors()
-    {
+    public List<String> getColors() {
         return colors;
     }
 
-    public void setColors(ArrayList<String> colors)
-    {
+    public void setColors(List<String> colors) {
         this.colors = colors;
     }
 
-    public ArrayList<String> getFadeColors()
-    {
+    public List<String> getFadeColors() {
         return fadeColors;
     }
 
-    public void setFadeColors(ArrayList<String> fadeColors)
-    {
+    public void setFadeColors(List<String> fadeColors) {
         this.fadeColors = fadeColors;
     }
 
-    public String getId()
-    {
+    public String getId() {
         return id;
     }
 
-    public void setId(String id)
-    {
+    public void setId(String id) {
         this.id = id;
     }
 }

@@ -12,19 +12,16 @@ import me.ztowne13.customcrates.interfaces.items.attributes.RGBColor;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.entity.Player;
 
-public class IGCColoredArmour extends IGCMenu
-{
+public class IGCColoredArmour extends IGCMenu {
     EditableItem item;
 
-    public IGCColoredArmour(SpecializedCrates cc, Player p, IGCMenu lastMenu, EditableItem item)
-    {
+    public IGCColoredArmour(SpecializedCrates cc, Player p, IGCMenu lastMenu, EditableItem item) {
         super(cc, p, lastMenu, "&7&l> &6&lColor");
         this.item = item;
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(27);
 
@@ -51,10 +48,8 @@ public class IGCColoredArmour extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 0:
                 up();
                 break;
@@ -74,26 +69,22 @@ public class IGCColoredArmour extends IGCMenu
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         int inputAsFloat;
-        try
-        {
+        try {
             inputAsFloat = Integer.parseInt(input);
-        }
-        catch(Exception exc)
-        {
+        } catch (Exception exc) {
             ChatUtils.msgError(getP(), input + " is not a valid number.");
             return false;
         }
 
         RGBColor rgbColor = item.getColor();
 
-        if(value.equalsIgnoreCase("red"))
+        if (value.equalsIgnoreCase("red"))
             rgbColor.setR(inputAsFloat);
-        else if(value.equalsIgnoreCase("green"))
+        else if (value.equalsIgnoreCase("green"))
             rgbColor.setG(inputAsFloat);
-        else if(value.equalsIgnoreCase("blue"))
+        else if (value.equalsIgnoreCase("blue"))
             rgbColor.setB(inputAsFloat);
 
         item.setColor(rgbColor);

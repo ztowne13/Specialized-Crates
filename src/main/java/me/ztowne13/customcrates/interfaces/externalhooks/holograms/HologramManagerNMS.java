@@ -4,22 +4,18 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 
-public class HologramManagerNMS extends HologramManager
-{
-    public HologramManagerNMS(SpecializedCrates cc)
-    {
+public class HologramManagerNMS extends HologramManager {
+    public HologramManagerNMS(SpecializedCrates cc) {
         super(cc);
     }
 
     @Override
-    public boolean isHologramEntity(ArmorStand stand)
-    {
+    public boolean isHologramEntity(ArmorStand stand) {
         return false;
     }
 
     @Override
-    public Hologram createHologram(String name, Location location)
-    {
+    public Hologram createHologram(String name, Location location) {
         HologramNMS hologram = new HologramNMS(cc, name, location);
 
         getHolograms().add(hologram);
@@ -28,15 +24,13 @@ public class HologramManagerNMS extends HologramManager
     }
 
     @Override
-    public void deleteHologram(Hologram hologram)
-    {
+    public void deleteHologram(Hologram hologram) {
         getHolograms().remove(hologram);
-        ((HologramNMS)hologram).remove();
+        ((HologramNMS) hologram).remove();
     }
 
     @Override
-    SpecializedCrates getCc()
-    {
+    SpecializedCrates getCc() {
         return null;
     }
 }

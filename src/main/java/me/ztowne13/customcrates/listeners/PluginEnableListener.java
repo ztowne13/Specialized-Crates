@@ -6,8 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;
 
-public class PluginEnableListener implements Listener
-{
+public class PluginEnableListener implements Listener {
     SpecializedCrates sc;
 
     String[] toListenHolograms = new String[]{
@@ -16,28 +15,22 @@ public class PluginEnableListener implements Listener
             "Holograms"
     };
 
-    public PluginEnableListener(SpecializedCrates sc)
-    {
+    public PluginEnableListener(SpecializedCrates sc) {
         this.sc = sc;
     }
 
     @EventHandler
-    public void onPluginEnable(PluginEnableEvent pluginEnableEvent)
-    {
-        for(String hologramName : toListenHolograms)
-        {
-            if(hologramName.equalsIgnoreCase(pluginEnableEvent.getPlugin().getName()))
-            {
-                for(PlacedCrate crate : PlacedCrate.getPlacedCrates().values())
-                {
+    public void onPluginEnable(PluginEnableEvent pluginEnableEvent) {
+        for (String hologramName : toListenHolograms) {
+            if (hologramName.equalsIgnoreCase(pluginEnableEvent.getPlugin().getName())) {
+                for (PlacedCrate crate : PlacedCrate.getPlacedCrates().values()) {
                     crate.setupHolo(crate.getCrate(), false);
                 }
             }
         }
 
-        if(pluginEnableEvent.getPlugin().getName().equalsIgnoreCase("Multiverse-Core"))
-        {
-            for(String s : sc.getSettings().getFailedPlacedCrate())
+        if (pluginEnableEvent.getPlugin().getName().equalsIgnoreCase("Multiverse-Core")) {
+            for (String s : sc.getSettings().getFailedPlacedCrate())
                 sc.getSettings().loadCrateFromFile(s);
         }
     }

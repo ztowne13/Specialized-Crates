@@ -10,28 +10,24 @@ import java.util.ArrayList;
 /**
  * Created by ztowne13 on 6/25/16.
  */
-public abstract class ParticleAnimationEffect
-{
+public abstract class ParticleAnimationEffect {
     SpecializedCrates cc;
     ParticleData particleData;
 
-    ArrayList<Location> toDisplay = new ArrayList<Location>();
+    ArrayList<Location> toDisplay = new ArrayList<>();
 
     int totalTick = 0;
     int tick = 0;
 
-    public ParticleAnimationEffect(SpecializedCrates cc, ParticleData particleData)
-    {
+    public ParticleAnimationEffect(SpecializedCrates cc, ParticleData particleData) {
         this.cc = cc;
         this.particleData = particleData;
     }
 
     public abstract void update();
 
-    public void display(Location l)
-    {
-        for (Location toDisplayLocation : toDisplay)
-        {
+    public void display(Location l) {
+        for (Location toDisplayLocation : toDisplay) {
             toDisplayLocation.setWorld(l.getWorld());
 
             Location modifiedL = l.clone().add(toDisplayLocation);

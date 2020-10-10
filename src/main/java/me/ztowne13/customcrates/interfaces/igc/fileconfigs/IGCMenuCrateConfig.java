@@ -21,18 +21,15 @@ import java.util.List;
 /**
  * Created by ztowne13 on 3/20/16.
  */
-public class IGCMenuCrateConfig extends IGCMenu
-{
-    public IGCMenuCrateConfig(SpecializedCrates cc, Player p, IGCMenu lastMenu)
-    {
+public class IGCMenuCrateConfig extends IGCMenu {
+    public IGCMenuCrateConfig(SpecializedCrates cc, Player p, IGCMenu lastMenu) {
         super(cc, p, lastMenu, "&7&l> &6&lCrateConfig.YML");
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
-        FileHandler fu = getCc().getCrateconfigFile();
+        FileHandler fu = getCc().getCrateConfigFile();
         FileConfiguration fc = fu.get();
 
         InventoryBuilder ib = createDefault(27);
@@ -65,15 +62,13 @@ public class IGCMenuCrateConfig extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 18:
                 up();
                 break;
             case 0:
-                getCc().getCrateconfigFile().save();
+                getCc().getCrateConfigFile().save();
                 ChatUtils.msgSuccess(getP(), "CrateConfig.YML saved!");
                 break;
             case 9:
@@ -102,103 +97,70 @@ public class IGCMenuCrateConfig extends IGCMenu
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         Object type = getInputMenu().getType();
-        if (type == Double.class)
-        {
-            if (Utils.isDouble(input))
-            {
-                getCc().getCrateconfigFile().get().set(getPath(value), Double.valueOf(input));
+        if (type == Double.class) {
+            if (Utils.isDouble(input)) {
+                getCc().getCrateConfigFile().get().set(getPath(value), Double.valueOf(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This is not a valid decimal value, please try again.");
             }
-        }
-        else if (type == Integer.class)
-        {
-            if (Utils.isInt(input))
-            {
-                getCc().getCrateconfigFile().get().set(getPath(value), Integer.parseInt(input));
+        } else if (type == Integer.class) {
+            if (Utils.isInt(input)) {
+                getCc().getCrateConfigFile().get().set(getPath(value), Integer.parseInt(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This is not a valid number, please try again.");
             }
-        }
-        else
-        {
-            if (value.equalsIgnoreCase("add Roulette.random-blocks") || value.equalsIgnoreCase("add CSGO.filler-blocks"))
-            {
-                try
-                {
+        } else {
+            if (value.equalsIgnoreCase("add Roulette.random-blocks") || value.equalsIgnoreCase("add CSGO.filler-blocks")) {
+                try {
                     String[] split = input.split(";");
                     DynamicMaterial m = DynamicMaterial.fromString(input.toUpperCase());
-                    if (Utils.isInt(split[1]))
-                    {
+                    if (Utils.isInt(split[1])) {
                         int id = Integer.parseInt(split[1]);
-                        List<String> currentList = getCc().getCrateconfigFile().get().contains(getPath(value.substring(4))) ?
-                                getCc().getCrateconfigFile().get().getStringList(getPath(value.substring(4))) :
+                        List<String> currentList = getCc().getCrateConfigFile().get().contains(getPath(value.substring(4))) ?
+                                getCc().getCrateConfigFile().get().getStringList(getPath(value.substring(4))) :
                                 new ArrayList<String>();
                         currentList.add(m.name() + ";" + id);
-                        getCc().getCrateconfigFile().get().set(getPath(value.substring(4)), currentList);
+                        getCc().getCrateConfigFile().get().set(getPath(value.substring(4)), currentList);
                         return true;
-                    }
-                    else
-                    {
+                    } else {
                         ChatUtils.msgError(getP(), split[1] + " is not a valid number.");
                     }
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     ChatUtils.msgError(getP(), input + " does not have a valid material or is not formatted MATERIAL;DATA");
                 }
-            }
-            else if (value.equalsIgnoreCase("remove Roulette.random-blocks") ||
-                    value.equalsIgnoreCase("remove CSGO.filler-blocks"))
-            {
-                if (getCc().getCrateconfigFile().get().contains(getPath(value.substring(7))))
-                {
+            } else if (value.equalsIgnoreCase("remove Roulette.random-blocks") ||
+                    value.equalsIgnoreCase("remove CSGO.filler-blocks")) {
+                if (getCc().getCrateConfigFile().get().contains(getPath(value.substring(7)))) {
                     boolean found = false;
                     List<String> newList = new ArrayList<>();
-                    for (String s : getCc().getCrateconfigFile().get().getStringList(getPath(value.substring(7))))
-                    {
-                        if (s.equalsIgnoreCase(input))
-                        {
+                    for (String s : getCc().getCrateConfigFile().get().getStringList(getPath(value.substring(7)))) {
+                        if (s.equalsIgnoreCase(input)) {
                             found = true;
-                        }
-                        else
-                        {
+                        } else {
                             newList.add(s);
                         }
                     }
 
-                    if (found)
-                    {
+                    if (found) {
                         ChatUtils.msgSuccess(getP(), "Removed the " + input + " value.");
-                        getCc().getCrateconfigFile().get().set(getPath(value.substring(7)), newList);
+                        getCc().getCrateConfigFile().get().set(getPath(value.substring(7)), newList);
                         return true;
-                    }
-                    else
-                    {
+                    } else {
                         ChatUtils.msgError(getP(), input + " does not exist in the filler / random blocks: " +
-                                getCc().getCrateconfigFile().get().getStringList(getPath(value.substring(7))));
+                                getCc().getCrateConfigFile().get().getStringList(getPath(value.substring(7))));
                     }
-                }
-                else
-                {
+                } else {
                     ChatUtils.msgError(getP(), "No filler blocks currently exist to remove.");
                     return true;
                 }
-            }
-            else
-            {
-                getCc().getCrateconfigFile().get().set(getPath(value), input);
+            } else {
+                getCc().getCrateConfigFile().get().set(getPath(value), input);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 return true;
             }
@@ -206,14 +168,12 @@ public class IGCMenuCrateConfig extends IGCMenu
         return false;
     }
 
-    public String getPath(String value)
-    {
+    public String getPath(String value) {
         return "CrateType.Inventory." + value;
     }
 
-    public String getValue(String crateType, String value)
-    {
-        FileHandler fu = getCc().getCrateconfigFile();
+    public String getValue(String crateType, String value) {
+        FileHandler fu = getCc().getCrateConfigFile();
         FileConfiguration fc = fu.get();
         return fc.get("CrateType.Inventory." + crateType + "." + value).toString();
     }

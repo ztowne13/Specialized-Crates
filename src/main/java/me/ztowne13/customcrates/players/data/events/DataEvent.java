@@ -6,12 +6,10 @@ import me.ztowne13.customcrates.players.PlayerDataManager;
 /**
  * Created by ztowne13 on 8/5/15.
  */
-public abstract class DataEvent
-{
+public abstract class DataEvent {
     SpecializedCrates cc;
 
-    public DataEvent(SpecializedCrates cc)
-    {
+    public DataEvent(SpecializedCrates cc) {
         this.cc = cc;
     }
 
@@ -19,13 +17,11 @@ public abstract class DataEvent
 
     public abstract String getFormatted();
 
-    public SpecializedCrates getCc()
-    {
+    public SpecializedCrates getCc() {
         return cc;
     }
 
-    public void setCc(SpecializedCrates cc)
-    {
+    public void setCc(SpecializedCrates cc) {
         this.cc = cc;
     }
 }

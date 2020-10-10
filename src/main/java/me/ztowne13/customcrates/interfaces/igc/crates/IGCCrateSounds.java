@@ -20,18 +20,16 @@ import java.util.HashMap;
 /**
  * Created by ztowne13 on 4/2/16.
  */
-public class IGCCrateSounds extends IGCTierMenu
-{
+public class IGCCrateSounds extends IGCTierMenu {
     HashMap<Integer, SoundData> slots = new HashMap<>();
+    SoundData sd;
 
-    public IGCCrateSounds(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, String tier)
-    {
+    public IGCCrateSounds(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, String tier) {
         super(cc, p, lastMenu, "&7&l> &6&lSounds", crates, tier);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4,
                 (crates.getSettings().getSounds().getSounds().containsKey(tier) ? crates.getSettings().getSounds().getSounds().get(tier).size() :
                         0) + 9));
@@ -40,13 +38,10 @@ public class IGCCrateSounds extends IGCTierMenu
         ib.setItem(8, new ItemBuilder(Material.PAPER, 1, 0).setName("&aCreate a new sound").setLore("&7Make sure you save")
                 .addLore("&7when you're done."));
 
-        if (crates.getSettings().getSounds().getSounds().containsKey(tier))
-        {
+        if (crates.getSettings().getSounds().getSounds().containsKey(tier)) {
             int i = 2;
-            for (SoundData sd : crates.getSettings().getSounds().getSounds().get(tier))
-            {
-                if (i % 9 == 7)
-                {
+            for (SoundData sd : crates.getSettings().getSounds().getSounds().get(tier)) {
+                if (i % 9 == 7) {
                     i += 4;
                 }
 
@@ -62,72 +57,49 @@ public class IGCCrateSounds extends IGCTierMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (slot == 9)
-        {
+    public void handleClick(int slot) {
+        if (slot == 9) {
             up();
-        }
-        else if (slot == 8)
-        {
+        } else if (slot == 8) {
             new InputMenu(getCc(), getP(), "sound type", "null",
                     "Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/", String.class, this, true);
-        }
-        else if (getIb().getInv().getItem(slot) != null &&
-                getIb().getInv().getItem(slot).getType().equals(Material.NOTE_BLOCK))
-        {
+        } else if (getIb().getInv().getItem(slot) != null &&
+                getIb().getInv().getItem(slot).getType().equals(Material.NOTE_BLOCK)) {
             //SoundData sd = crates.getCs().getCs().getSoundFromName(tier, Sound.valueOf(ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName()).toUpperCase()));
             SoundData sd = slots.get(slot);
             new IGCCrateSound(getCc(), getP(), this, crates, sd, tier).open();
         }
     }
 
-    SoundData sd;
-
     @Override
-    public boolean handleInput(String value, String input)
-    {
-        if (value.equalsIgnoreCase("sound type"))
-        {
-            try
-            {
+    public boolean handleInput(String value, String input) {
+        if (value.equalsIgnoreCase("sound type")) {
+            try {
                 Sound s = Sound.valueOf(input.toUpperCase());
                 sd = new SoundData(s);
                 new InputMenu(getCc(), getP(), "sound pitch", "null", "The pitch the sound will play at.", Integer.class,
                         this);
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.msgError(getP(), input +
                         " is not a valid sound. Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/");
             }
-        }
-        else if (value.equalsIgnoreCase("sound pitch"))
-        {
-            if (Utils.isInt(input))
-            {
+        } else if (value.equalsIgnoreCase("sound pitch")) {
+            if (Utils.isInt(input)) {
                 sd.setPitch(Integer.valueOf(input));
                 new InputMenu(getCc(), getP(), "sound volume", "null", "The volume the sound will play at.", Integer.class,
                         this);
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid integer (number).");
             }
-        }
-        else if (value.equalsIgnoreCase("sound volume"))
-        {
-            if (Utils.isInt(input))
-            {
+        } else if (value.equalsIgnoreCase("sound volume")) {
+            if (Utils.isInt(input)) {
                 sd.setVolume(Integer.valueOf(input));
 
                 cs.getSounds().addSound(tier, sd);
 
                 getP().closeInventory();
                 new IGCCrateSound(getCc(), getP(), this, crates, sd, tier).open();
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid integer (number).");
             }
         }

@@ -19,25 +19,21 @@ import java.util.Collections;
 /**
  * Created by ztowne13 on 3/20/16.
  */
-public class IGCMenuCrates extends IGCMenu
-{
+public class IGCMenuCrates extends IGCMenu {
     int page;
 
-    public IGCMenuCrates(SpecializedCrates cc, Player p, IGCMenu lastMenu)
-    {
+    public IGCMenuCrates(SpecializedCrates cc, Player p, IGCMenu lastMenu) {
         this(cc, p, lastMenu, 1);
     }
 
-    public IGCMenuCrates(SpecializedCrates specializedCrates, Player p, IGCMenu lastMenu, int page)
-    {
+    public IGCMenuCrates(SpecializedCrates specializedCrates, Player p, IGCMenu lastMenu, int page) {
         super(specializedCrates, p, lastMenu, "&7&l> &6&lCrates PG " + page);
 
         this.page = page;
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
         int values = Crate.getLoadedCrates().keySet().size();
         int inThisInv = values - ((page - 1) * 30);
 
@@ -55,9 +51,9 @@ public class IGCMenuCrates extends IGCMenu
         lastPage.setDisplayName("&aPrevious Page");
         lastPage.addLore("").addAutomaticLore("&7", 30, "Click to go to the previous page of crates.");
 
-        if(page != 1)
+        if (page != 1)
             ib.setItem(9, lastPage);
-        if(inThisInv > 30)
+        if (inThisInv > 30)
             ib.setItem(18, nextPage);
 
 
@@ -68,22 +64,17 @@ public class IGCMenuCrates extends IGCMenu
         int toSkip = ((page - 1) * 30);
         int skipped = 0;
 
-        for (String crateName : names)
-        {
-            if (i % 9 == 7)
-            {
+        for (String crateName : names) {
+            if (i % 9 == 7) {
                 i += 4;
             }
 
-            if(i > 54)
+            if (i > 54)
                 break;
 
-            if(skipped < toSkip)
-            {
+            if (skipped < toSkip) {
                 skipped++;
-            }
-            else
-            {
+            } else {
                 Crate crate = Crate.getLoadedCrates().get(crateName);
                 ib.setItem(i, new ItemBuilder(Material.CHEST, 1, 0).setName((crate.isEnabled() ? "&a" : "&c") + crateName)
                         .setLore("&7Placed crates: &f" + crate.getPlacedCount()).addLore(
@@ -98,26 +89,23 @@ public class IGCMenuCrates extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
+    public void handleClick(int slot) {
         if (slot == 0)
             up();
         else if (slot == 8)
             new IGCMenuCrateOrMulticrate(getCc(), getP(), this).open();
         else if (slot == 9)
             new IGCMenuCrates(getCc(), getP(), getLastMenu(), page - 1).open();
-        else if(slot == 18)
+        else if (slot == 18)
             new IGCMenuCrates(getCc(), getP(), getLastMenu(), page + 1).open();
-        else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType() == Material.CHEST)
-        {
+        else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType() == Material.CHEST) {
             String name = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
             new IGCCratesMain(getCc(), getP(), this, Crate.getCrate(getCc(), name)).open();
         }
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         return false;
     }
 }

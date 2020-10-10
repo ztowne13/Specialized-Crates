@@ -18,33 +18,26 @@ import java.util.List;
 /**
  * Created by ztowne13 on 2/19/16.
  */
-public class TabCompleteListener implements TabCompleter
-{
+public class TabCompleteListener implements TabCompleter {
     SpecializedCrates cc;
 
-    public TabCompleteListener(SpecializedCrates cc)
-    {
+    public TabCompleteListener(SpecializedCrates cc) {
         this.cc = cc;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args)
-    {
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
         List<String> list = new ArrayList<String>();
-        if (sender instanceof Player)
-        {
+        if (sender instanceof Player) {
             Player player = (Player) sender;
             String cN = cmd.getName();
             if (cN.equalsIgnoreCase("crates") ||
                     cN.equalsIgnoreCase("specializedcrates") ||
                     cN.equalsIgnoreCase("sc") ||
                     cN.equalsIgnoreCase("scrates") ||
-                    cN.equalsIgnoreCase("ccrates"))
-            {
-                if (args.length == 1)
-                {
-                    if(player.hasPermission("customcrates.admin") || player.hasPermission("specializedcratest.admin"))
-                    {
+                    cN.equalsIgnoreCase("ccrates")) {
+                if (args.length == 1) {
+                    if (player.hasPermission("customcrates.admin") || player.hasPermission("specializedcratest.admin")) {
                         list.add("config");
                         list.add("virtualcrates");
                         list.add("givecrate");
@@ -63,140 +56,98 @@ public class TabCompleteListener implements TabCompleter
                         list.add("toggleparticles");
                         list.add("spawncrate");
                         list.add("claim");
-                    }
-                    else
-                    {
+                    } else {
                         list.add("luckychest");
                         list.add("claim");
                     }
                     list = Utils.onlyLeaveEntriesWithPref(list, args[0]);
-                }
-                else
-                {
-                    if(SubCommand.getMappedAliases().containsKey(args[0]))
-                    {
+                } else {
+                    if (SubCommand.getMappedAliases().containsKey(args[0])) {
                         args[0] = SubCommand.getMappedAliases().get(args[0]);
                     }
 
                     if (args[0].equalsIgnoreCase("givekey") || args[0].equalsIgnoreCase("givecrate") ||
-                            args[0].equalsIgnoreCase("delallcratetype"))
-                    {
-                        if (args.length == 2)
-                        {
-                            for (Crate crates : Crate.getLoadedCrates().values())
-                            {
+                            args[0].equalsIgnoreCase("delallcratetype")) {
+                        if (args.length == 2) {
+                            for (Crate crates : Crate.getLoadedCrates().values()) {
                                 list.add(crates.getName());
                             }
                             list = Utils.onlyLeaveEntriesWithPref(list, args[1]);
                         }
-                        if (!args[0].equalsIgnoreCase("delallcratetype"))
-                        {
-                            if (args.length == 3)
-                            {
+                        if (!args[0].equalsIgnoreCase("delallcratetype")) {
+                            if (args.length == 3) {
                                 list.add("all");
-                                for (Player p : Bukkit.getOnlinePlayers())
-                                {
+                                for (Player p : Bukkit.getOnlinePlayers()) {
                                     list.add(p.getName());
                                 }
                                 list = Utils.onlyLeaveEntriesWithPref(list, args[2]);
-                            }
-                            else if (args.length == 4)
-                            {
+                            } else if (args.length == 4) {
                                 list.add("1");
                                 list = Utils.onlyLeaveEntriesWithPref(list, "");
-                            }
-                            else if (args.length == 5)
-                            {
+                            } else if (args.length == 5) {
                                 list.add("-v");
                             }
                         }
-                    }
-                    else if (args[0].equalsIgnoreCase("edit"))
-                    {
-                        for (Crate crates : Crate.getLoadedCrates().values())
-                        {
+                    } else if (args[0].equalsIgnoreCase("edit")) {
+                        for (Crate crates : Crate.getLoadedCrates().values()) {
                             list.add(crates.getName());
                         }
                         list = Utils.onlyLeaveEntriesWithPref(list, args[1]);
-                    }
-                    else if (args[0].equalsIgnoreCase("forceopen"))
-                    {
-                        if(args.length == 2)
-                        {
-                            for (Crate crates : Crate.getLoadedCrates().values())
-                            {
+                    } else if (args[0].equalsIgnoreCase("forceopen")) {
+                        if (args.length == 2) {
+                            for (Crate crates : Crate.getLoadedCrates().values()) {
                                 list.add(crates.getName());
                             }
                             list = Utils.onlyLeaveEntriesWithPref(list, args[1]);
                         }
-                        if(args.length == 3)
-                        {
+                        if (args.length == 3) {
                             list.add("all");
-                            for (Player p : Bukkit.getOnlinePlayers())
-                            {
+                            for (Player p : Bukkit.getOnlinePlayers()) {
                                 list.add(p.getName());
                             }
 
                             list = Utils.onlyLeaveEntriesWithPref(list, args[2]);
                         }
-                    }
-                    else if (args[0].equalsIgnoreCase(("listhistory")))
-                    {
-                        if (args.length == 2)
-                        {
-                            for (Player p : Bukkit.getOnlinePlayers())
-                            {
+                    } else if (args[0].equalsIgnoreCase(("listhistory"))) {
+                        if (args.length == 2) {
+                            for (Player p : Bukkit.getOnlinePlayers()) {
                                 list.add(p.getName());
                             }
 
                             list = Utils.onlyLeaveEntriesWithPref(list, args[1]);
-                        }
-                        else if (args.length == 3)
-                        {
+                        } else if (args.length == 3) {
                             list.add("10");
                             list = Utils.onlyLeaveEntriesWithPref(list, "");
                         }
-                    }
-                    else if (args[0].equalsIgnoreCase("errors"))
-                    {
-                        for (Crate crates : Crate.getLoadedCrates().values())
-                        {
+                    } else if (args[0].equalsIgnoreCase("errors")) {
+                        for (Crate crates : Crate.getLoadedCrates().values()) {
                             list.add(crates.getName());
                         }
                         list = Utils.onlyLeaveEntriesWithPref(list, args[1]);
-                    }
-                    else if(args[0].equalsIgnoreCase("spawncrate"))
-                    {
-                        if(args.length == 2)
-                        {
-                            for (Crate crates : Crate.getLoadedCrates().values())
-                            {
+                    } else if (args[0].equalsIgnoreCase("spawncrate")) {
+                        if (args.length == 2) {
+                            for (Crate crates : Crate.getLoadedCrates().values()) {
                                 list.add(crates.getName());
                             }
                             list = Utils.onlyLeaveEntriesWithPref(list, args[1]);
-                        } else if(args.length == 3) {
-                            for(World world : Bukkit.getWorlds())
-                            {
+                        } else if (args.length == 3) {
+                            for (World world : Bukkit.getWorlds()) {
                                 list.add(world.getName());
                             }
                             list = Utils.onlyLeaveEntriesWithPref(list, args[2]);
-                        } else if(args.length == 4) {
+                        } else if (args.length == 4) {
                             list.add("x");
-                        } else if(args.length == 5) {
+                        } else if (args.length == 5) {
                             list.add("y");
-                        } else if(args.length == 6) {
+                        } else if (args.length == 6) {
                             list.add("z");
                         }
                     }
                 }
 
-            }
-            else if(cN.equalsIgnoreCase("rewards"))
-            {
-                if(args.length >= 1)
-                {
-                    for (Crate crates : Crate.getLoadedCrates().values())
-                    {
+            } else if (cN.equalsIgnoreCase("rewards")) {
+                if (args.length >= 1) {
+                    for (Crate crates : Crate.getLoadedCrates().values()) {
                         CrateSettings cs = crates.getSettings();
 
                         if (player.hasPermission(cs.getPermission()) || cs.getPermission().equalsIgnoreCase("no permission"))
@@ -208,7 +159,6 @@ public class TabCompleteListener implements TabCompleter
                 }
             }
         }
-
 
 
         return list;

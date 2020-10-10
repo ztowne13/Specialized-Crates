@@ -13,44 +13,35 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class CSounds extends CSetting
-{
-    HashMap<String, ArrayList<SoundData>> sounds = new HashMap<String, ArrayList<SoundData>>();
+public class CSounds extends CSetting {
+    Map<String, List<SoundData>> sounds = new HashMap<>();
 
-    public CSounds(Crate crates)
-    {
+    public CSounds(Crate crates) {
         super(crates, crates.getCc());
     }
 
     @Override
-    public void loadFor(CrateSettingsBuilder csb, CrateState cs)
-    {
-        if (csb.hasV("open.sounds"))
-        {
+    public void loadFor(CrateSettingsBuilder csb, CrateState cs) {
+        if (csb.hasV("open.sounds")) {
             addSoundsFromList("OPEN", csb.getSettings().getFc().getStringList("open.sounds"));
         }
-        if (csb.hasV("open.crate-tiers"))
-        {
-            for (String id : getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false))
-            {
-                if (csb.hasV("open.crate-tiers." + id + ".sounds"))
-                {
+        if (csb.hasV("open.crate-tiers")) {
+            for (String id : getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false)) {
+                if (csb.hasV("open.crate-tiers." + id + ".sounds")) {
                     addSoundsFromList(id.toUpperCase(), getSettings().getFc().getStringList("open.crate-tiers." + id + ".sounds"));
                 }
             }
         }
     }
 
-    public void saveToFile()
-    {
-        if (!sounds.isEmpty())
-        {
-            for (String tier : sounds.keySet())
-            {
+    public void saveToFile() {
+        if (!sounds.isEmpty()) {
+            for (Map.Entry<String, List<SoundData>> entry : sounds.entrySet()) {
+                String tier = entry.getKey();
                 ArrayList<String> listToSet = new ArrayList<>();
-                for (SoundData sd : sounds.get(tier))
-                {
+                for (SoundData sd : entry.getValue()) {
                     String parsedSoundData = sd.getSound().name() + ", " + sd.getPitch() + ", " + sd.getVolume();
                     listToSet.add(parsedSoundData);
                 }
@@ -61,60 +52,42 @@ public class CSounds extends CSetting
         }
     }
 
-    public void addSoundsFromList(String id, List<String> list)
-    {
-        for (String sound : list)
-        {
-            try
-            {
+    public void addSoundsFromList(String id, List<String> list) {
+        for (String sound : list) {
+            try {
                 String[] args = sound.replace(" ", "").split(",");
 
                 Sound soundFormatted;
 
-                try
-                {
+                try {
                     soundFormatted = Sound.valueOf(args[0].toUpperCase());
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     StatusLoggerEvent.SOUND_NONEXISTENT.log(getCrate(), new String[]{sound, args[0]});
                     continue;
                 }
 
                 SoundData sd = new SoundData(soundFormatted);
 
-                try
-                {
+                try {
                     Integer pitch = Integer.valueOf(args[1]);
                     sd.setPitch(pitch);
-                }
-                catch (Exception exc)
-                {
-                    if (args.length > 0)
-                    {
+                } catch (Exception exc) {
+                    if (args.length > 0) {
                         StatusLoggerEvent.SOUND_PITCH_INVALID.log(getCrate(), new String[]{soundFormatted.name(), args[1]});
-                    }
-                    else
-                    {
+                    } else {
                         StatusLoggerEvent.SOUND_PITCH_NONEXISTENT.log(getCrate(), new String[]{soundFormatted.name()});
                     }
                     continue;
                 }
 
-                try
-                {
-                    Integer volume = Integer.valueOf(args[2]);
+                try {
+                    int volume = Integer.parseInt(args[2]);
                     sd.setVolume(volume);
-                }
-                catch (Exception exc)
-                {
-                    if (args.length > 1)
-                    {
+                } catch (Exception exc) {
+                    if (args.length > 1) {
                         StatusLoggerEvent.SOUND_VOLUME_INVALID
                                 .log(getCrate(), new String[]{soundFormatted.name(), args[2]});
-                    }
-                    else
-                    {
+                    } else {
                         StatusLoggerEvent.SOUND_VOLUME_NONEXISTENT.log(getCrate(), new String[]{soundFormatted.name()});
                     }
                     continue;
@@ -122,55 +95,37 @@ public class CSounds extends CSetting
 
                 addSound(id, sd);
                 StatusLoggerEvent.SOUND_ADD_SUCCESS.log(getCrate(), new String[]{soundFormatted.name()});
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 StatusLoggerEvent.SOUND_ADD_IMPROPER_SETUP.log(getCrate(), new String[]{sound});
                 exc.printStackTrace();
             }
         }
     }
 
-    public void addSound(String id, SoundData s)
-    {
+    public void addSound(String id, SoundData s) {
         id = id.toUpperCase();
-        if (getSounds().containsKey(id))
-        {
-            ArrayList<SoundData> list = getSounds().get(id);
-            list.add(s);
-            getSounds().put(id, list);
-            return;
-        }
-
-        ArrayList<SoundData> list = new ArrayList<SoundData>();
+        List<SoundData> list = getSounds().getOrDefault(id, new ArrayList<>());
         list.add(s);
         getSounds().put(id, list);
     }
 
-    public void runAll(Player p, Location l, ArrayList<Reward> rewards)
-    {
-        for (String tier : getSounds().keySet())
-        {
+    public void runAll(Player p, Location l, List<Reward> rewards) {
+        for (String tier : getSounds().keySet()) {
             if ((tier.equalsIgnoreCase("OPEN") && (!getSettings().isTiersOverrideDefaults() || rewards.isEmpty() ||
                     !getSounds().containsKey(rewards.get(0).getRarity().toUpperCase()))) ||
-                    (!rewards.isEmpty() && rewards.get(0).getRarity().equalsIgnoreCase(tier)))
-            {
-                for (SoundData sd : getSounds().get(tier))
-                {
+                    (!rewards.isEmpty() && rewards.get(0).getRarity().equalsIgnoreCase(tier))) {
+                for (SoundData sd : getSounds().get(tier)) {
                     sd.playTo(p, l);
                 }
             }
         }
     }
 
-    public SoundData getSoundFromName(String tier, Sound s)
-    {
+    public SoundData getSoundFromName(String tier, Sound s) {
         SoundData sd = null;
 
-        for (SoundData soundData : getSounds().get(tier))
-        {
-            if (soundData.getSound().equals(s))
-            {
+        for (SoundData soundData : getSounds().get(tier)) {
+            if (soundData.getSound().equals(s)) {
                 sd = soundData;
                 break;
             }
@@ -179,13 +134,11 @@ public class CSounds extends CSetting
         return sd;
     }
 
-    public HashMap<String, ArrayList<SoundData>> getSounds()
-    {
+    public Map<String, List<SoundData>> getSounds() {
         return sounds;
     }
 
-    public void setSounds(HashMap<String, ArrayList<SoundData>> sounds)
-    {
+    public void setSounds(Map<String, List<SoundData>> sounds) {
         this.sounds = sounds;
     }
 }

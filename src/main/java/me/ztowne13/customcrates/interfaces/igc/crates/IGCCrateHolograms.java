@@ -23,16 +23,13 @@ import java.util.Arrays;
  * <p>
  * 4:32
  */
-public class IGCCrateHolograms extends IGCMenuCrate
-{
-    public IGCCrateHolograms(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates)
-    {
+public class IGCCrateHolograms extends IGCMenuCrate {
+    public IGCCrateHolograms(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates) {
         super(cc, p, lastMenu, "&7&l> &6&lHolograms", crates);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(27);
         CHolograms cholo = crates.getSettings().getHologram();
@@ -72,8 +69,7 @@ public class IGCCrateHolograms extends IGCMenuCrate
         ItemBuilder hologramLines = new ItemBuilder(DynamicMaterial.BOOK, 1);
         hologramLines.setName("&aEdit the hologram");
         hologramLines.addLore("&7Current value:");
-        for (String line : cholo.getLines())
-        {
+        for (String line : cholo.getLines()) {
             hologramLines.addLore(line);
         }
         hologramLines.addLore("").addAutomaticLore("&f", 30,
@@ -132,142 +128,96 @@ public class IGCCrateHolograms extends IGCMenuCrate
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (slot == 0)
-        {
+    public void handleClick(int slot) {
+        if (slot == 0) {
             up();
-        }
-        else if (slot == 2)
-        {
+        } else if (slot == 2) {
             new InputMenu(getCc(), getP(), "reward-hologram", crates.getSettings().getHologram().getRewardHologram(),
                     "Type 'none' to remove the reward hologram. Use %reward% as a placeholder for the reward and " +
                             "%player% as a placeholder for the player name or %nickname% for the player nickname.",
                     String.class,
                     this);
-        }
-        else if (slot == 11)
-        {
+        } else if (slot == 11) {
             new InputMenu(getCc(), getP(), "reward-hologram-duration",
                     crates.getSettings().getHologram().getRewardHoloDuration() + "", Integer.class, this);
-        }
-        else if (slot == 20)
-        {
+        } else if (slot == 20) {
             new InputMenu(getCc(), getP(), "reward-hologram-yoffset",
                     crates.getSettings().getHologram().getRewardHoloYOffset() + "", Double.class, this);
-        }
-        else if (slot == 4)
-        {
+        } else if (slot == 4) {
             new IGCListEditor(getCc(), getP(), this, "Hologram Editor", "Line", cs.getHologram().getLines(),
                     DynamicMaterial.BOOK,
                     1).open();
-        }
-        else if (slot == 6)
-        {
+        } else if (slot == 6) {
             new IGCListEditor(getCc(), getP(), this, "Animation Editor", "Frame", cs.getHologram().getPrefixes(),
                     DynamicMaterial.BOOK,
                     1).open();
-        }
-        else if (slot == 13)
-        {
+        } else if (slot == 13) {
             new InputMenu(getCc(), getP(), "hologram-offset",
                     crates.getSettings().getHologramOffset() + "", Double.class, this);
-        }
-        else if (slot == 15)
-        {
+        } else if (slot == 15) {
 //            new InputMenu(getCc(), getP(), "hologram.animation.type", crates.getCs().getCholoCopy().getHat().toString(),
 //                    "Animation types: " + Arrays.toString(HoloAnimType.values()), String.class, this, true);
             new IGCListSelector(getCc(), getP(), this, "Holo Animation Type", Arrays.asList(HoloAnimType.values()),
                     DynamicMaterial.PAPER, 1, HoloAnimType.descriptors()).open();
-        }
-        else if (slot == 24)
-        {
+        } else if (slot == 24) {
             new InputMenu(getCc(), getP(), "hologram.animation.speed",
                     crates.getSettings().getHologram().getSpeed() + "", Integer.class, this);
         }
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
-        if (value.equalsIgnoreCase("reward-hologram"))
-        {
-            if (input.equalsIgnoreCase("none") || input.equalsIgnoreCase("off") || input.equalsIgnoreCase("null"))
-            {
+    public boolean handleInput(String value, String input) {
+        if (value.equalsIgnoreCase("reward-hologram")) {
+            if (input.equalsIgnoreCase("none") || input.equalsIgnoreCase("off") || input.equalsIgnoreCase("null")) {
                 cs.getHologram().setRewardHologram("");
                 return true;
             }
             cs.getHologram().setRewardHologram(ChatUtils.fromChatColor(input));
             ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
             return true;
-        }
-        else if (value.equalsIgnoreCase("reward-hologram-duration"))
-        {
-            if (Utils.isInt(input))
-            {
+        } else if (value.equalsIgnoreCase("reward-hologram-duration")) {
+            if (Utils.isInt(input)) {
                 int newDur = Integer.parseInt(input);
                 cs.getHologram().setRewardHoloDuration(newDur);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid whole-number.");
             }
-        }
-        else if (value.equalsIgnoreCase("reward-hologram-yoffset"))
-        {
-            if (Utils.isDouble(input))
-            {
+        } else if (value.equalsIgnoreCase("reward-hologram-yoffset")) {
+            if (Utils.isDouble(input)) {
                 double newYOff = Double.parseDouble(input);
                 cs.getHologram().setRewardHoloYOffset(newYOff);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid decimal-number.");
             }
-        }
-        else if (value.equalsIgnoreCase("hologram-offset"))
-        {
-            if (Utils.isDouble(input))
-            {
+        } else if (value.equalsIgnoreCase("hologram-offset")) {
+            if (Utils.isDouble(input)) {
                 double newYOff = Double.parseDouble(input);
                 cs.setHologramOffset(newYOff);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid decimal-number.");
             }
-        }
-        else if (value.equalsIgnoreCase("Holo Animation Type"))
-        {
-            try
-            {
+        } else if (value.equalsIgnoreCase("Holo Animation Type")) {
+            try {
                 HoloAnimType newHoloAnim = HoloAnimType.valueOf(input.toUpperCase());
                 cs.getHologram().setHat(newHoloAnim);
                 ChatUtils.msgSuccess(getP(), "Set hologram.animation.type to " + input);
                 return true;
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.msgError(getP(), input + " is not a valid hologram animation type.");
             }
-        }
-        else if (value.equalsIgnoreCase("hologram.animation.speed"))
-        {
-            if (Utils.isInt(input))
-            {
+        } else if (value.equalsIgnoreCase("hologram.animation.speed")) {
+            if (Utils.isInt(input)) {
                 int newSpeed = Integer.parseInt(input);
                 cs.getHologram().setSpeed(newSpeed);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid whole-number.");
             }
         }

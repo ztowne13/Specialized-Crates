@@ -4,12 +4,12 @@ import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ztowne13 on 2/27/16.
  */
-public enum EntityTypes
-{
+public enum EntityTypes {
     // v1.8
     PLAYER(2, VersionUtils.Version.v1_8),
     SPIDER(1, VersionUtils.Version.v1_8),
@@ -147,36 +147,27 @@ public enum EntityTypes
     double height;
     VersionUtils.Version minimumVersion;
 
-    EntityTypes(double height, VersionUtils.Version minimumVersion)
-    {
+    EntityTypes(double height, VersionUtils.Version minimumVersion) {
         this.height = height;
         this.minimumVersion = minimumVersion;
     }
 
-    public static EntityTypes getEnum(String name)
-    {
-        try
-        {
+    public static EntityTypes getEnum(String name) {
+        try {
             EntityTypes ent = valueOf(name.toUpperCase());
-            if(!ent.minimumVersion.isServerVersionOrLater())
-            {
+            if (!ent.minimumVersion.isServerVersionOrLater()) {
                 throw new IllegalArgumentException(name + " is not available in this version");
             }
             return ent;
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             throw new IllegalArgumentException(name + " is a nonexistent entity type");
         }
     }
 
-    public static ArrayList<EntityTypes> enumValues()
-    {
+    public static List<EntityTypes> enumValues() {
         ArrayList<EntityTypes> entityTypesList = new ArrayList<>();
-        for(EntityTypes type : values())
-        {
-            if(type.minimumVersion.isServerVersionOrLater())
-            {
+        for (EntityTypes type : values()) {
+            if (type.minimumVersion.isServerVersionOrLater()) {
                 entityTypesList.add(type);
             }
         }
@@ -184,18 +175,15 @@ public enum EntityTypes
         return entityTypesList;
     }
 
-    public EntityType getEt()
-    {
+    public EntityType getEt() {
         return EntityType.valueOf(name());
     }
 
-    public double getHeight()
-    {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(double height)
-    {
+    public void setHeight(double height) {
         this.height = height;
     }
 }

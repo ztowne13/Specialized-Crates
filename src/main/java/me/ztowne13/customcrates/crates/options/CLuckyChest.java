@@ -4,7 +4,6 @@ import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
-import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,269 +18,202 @@ import java.util.Random;
 /**
  * Created by ztowne13 on 8/3/15.
  */
-public class CLuckyChest extends CSetting
-{
+public class CLuckyChest extends CSetting {
 
-    double chance, outOfChance;
+    double chance;
+    double outOfChance;
     boolean isBLWL;
     boolean requirePermission = true;
-    ArrayList<Material> whiteList = new ArrayList<>();
-    ArrayList<World> worlds = new ArrayList<World>();
+    List<Material> whiteList = new ArrayList<>();
+    List<World> worlds = new ArrayList<>();
 
     List<String> worldsRaw = new ArrayList<>();
     boolean allWorlds = true;
+    Random r = new Random();
 
-    public CLuckyChest(Crate crates)
-    {
+    public CLuckyChest(Crate crates) {
         super(crates, crates.getCc());
     }
 
     @Override
-    public void loadFor(CrateSettingsBuilder csb, CrateState cs)
-    {
+    public void loadFor(CrateSettingsBuilder csb, CrateState cs) {
         FileConfiguration fc = getSettings().getFc();
-        StatusLogger sl = getSettings().getStatusLogger();
 
-        if (csb.hasV("lucky-chest"))
-        {
-            if (csb.hasV("lucky-chest.chance"))
-            {
+        if (csb.hasV("lucky-chest")) {
+            if (csb.hasV("lucky-chest.chance")) {
                 String unParsedChance = fc.getString("lucky-chest.chance");
                 String[] args = unParsedChance.split("/");
-                try
-                {
+                try {
                     setChance(Integer.parseInt(args[0]));
                     setOutOfChance(Integer.parseInt(args[1]));
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     StatusLoggerEvent.LUCKYCHEST_CHANCE_MISFORMATTED.log(getCrate());
                 }
-            }
-            else
-            {
+            } else {
                 chance = 1;
                 outOfChance = 100;
                 StatusLoggerEvent.LUCKYCHEST_CHANCE_NONEXISTENT.log(getCrate());
             }
 
-            if (csb.hasV("lucky-chest.is-block-list-whitelist"))
-            {
-                try
-                {
+            if (csb.hasV("lucky-chest.is-block-list-whitelist")) {
+                try {
                     setBLWL(fc.getBoolean("lucky-chest.is-block-list-whitelist"));
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     StatusLoggerEvent.LUCKYCHEST_BLWL_INVALID.log(getCrate());
                 }
-            }
-            else
-            {
+            } else {
                 setBLWL(true);
                 StatusLoggerEvent.LUCKYCHEST_BLWL_NONEXISTENT.log(getCrate());
             }
 
-            if (csb.hasV("lucky-chest.require-permission"))
-            {
-                try
-                {
+            if (csb.hasV("lucky-chest.require-permission")) {
+                try {
                     requirePermission = fc.getBoolean("lucky-chest.require-permission");
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     StatusLoggerEvent.LUCKYCHEST_REQUIRE_PERMISSION_INVALID.log(getCrate());
                 }
-            }
-            else
-            {
+            } else {
                 requirePermission = true;
                 StatusLoggerEvent.LUCKYCHEST_REQUIRE_PERMISSION_NONEXISTENT.log(getCrate());
             }
 
-            if (csb.hasV("lucky-chest.worlds"))
-            {
+            if (csb.hasV("lucky-chest.worlds")) {
                 worldsRaw = fc.getStringList("lucky-chest.worlds");
 
-                for (String s : fc.getStringList("lucky-chest.worlds"))
-                {
+                for (String s : fc.getStringList("lucky-chest.worlds")) {
                     setAllWorlds(false);
                     World w = Bukkit.getWorld(s);
-                    if (w != null)
-                    {
+                    if (w != null) {
                         getWorlds().add(w);
-                    }
-                    else
-                    {
+                    } else {
                         StatusLoggerEvent.LUCKYCHEST_WORLD_INVALID.log(getCrate(), new String[]{s});
                     }
                 }
             }
 
-            if (csb.hasV("lucky-chest.block-list"))
-            {
-                try
-                {
-                    for (String mat : fc.getStringList("lucky-chest.block-list"))
-                    {
-                        try
-                        {
+            if (csb.hasV("lucky-chest.block-list")) {
+                try {
+                    for (String mat : fc.getStringList("lucky-chest.block-list")) {
+                        try {
                             DynamicMaterial m = DynamicMaterial.fromString(mat.toUpperCase());
                             getWhiteList().add(m.parseMaterial());
-                        }
-                        catch (Exception exc)
-                        {
+                        } catch (Exception exc) {
                             StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALIDBLOCK.log(getCrate(), new String[]{mat});
                         }
                     }
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALID.log(getCrate());
                 }
-            }
-            else
-            {
+            } else {
                 StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_NONEXISTENT.log(getCrate());
             }
-        }
-        else
-        {
+        } else {
             StatusLoggerEvent.LUCKYCHEST_NOVALUES.log(getCrate());
         }
     }
 
-    public void saveToFile()
-    {
+    public void saveToFile() {
         getFileHandler().get().set("lucky-chest.chance", ((int) chance) + "/" + ((int) outOfChance));
         getFileHandler().get().set("lucky-chest.require-permission", isRequirePermission());
-        if (!whiteList.isEmpty())
-        {
+        if (!whiteList.isEmpty()) {
             getFileHandler().get().set("lucky-chest.is-block-list-whitelist", isBLWL);
 
             ArrayList<String> whiteListRaw = new ArrayList<>();
-            for(Material mat : getWhiteList())
+            for (Material mat : getWhiteList())
                 whiteListRaw.add(mat.name());
 
             getFileHandler().get().set("lucky-chest.block-list", whiteListRaw);
-        }
-        else
-        {
+        } else {
             getFileHandler().get().set("lucky-chest.is-block-list-whitelist", null);
             getFileHandler().get().set("lucky-chest.block-list", null);
         }
-        if (!worldsRaw.isEmpty())
-        {
+        if (!worldsRaw.isEmpty()) {
             getFileHandler().get().set("lucky-chest.worlds", worldsRaw);
-        }
-        else
-        {
+        } else {
             getFileHandler().get().set("lucky-chest.worlds", null);
         }
     }
 
-    public boolean canRunForBlock(Block b)
-    {
-        if (isAllWorlds() || getWorlds().contains(b.getWorld()))
-        {
-            if (getWhiteList().isEmpty())
-            {
+    public boolean canRunForBlock(Block b) {
+        if (isAllWorlds() || getWorlds().contains(b.getWorld())) {
+            if (getWhiteList().isEmpty()) {
                 return true;
             }
 
-            return isBLWL() ? getWhiteList().contains(b.getType()) : !getWhiteList().contains(b.getType());
+            return isBLWL() == getWhiteList().contains(b.getType());
         }
         return false;
     }
 
-    public boolean runChance()
-    {
-        Random r = new Random();
+    public boolean runChance() {
         return (r.nextInt(((int) getOutOfChance())) + 1) <= getChance();
     }
 
-    public boolean checkRun(Block b)
-    {
+    public boolean checkRun(Block b) {
         return canRunForBlock(b) && runChance();
     }
 
-    public double getChance()
-    {
+    public double getChance() {
         return chance;
     }
 
-    public void setChance(double chance)
-    {
+    public void setChance(double chance) {
         this.chance = chance;
     }
 
-    public double getOutOfChance()
-    {
+    public double getOutOfChance() {
         return outOfChance;
     }
 
-    public void setOutOfChance(double outOfChance)
-    {
+    public void setOutOfChance(double outOfChance) {
         this.outOfChance = outOfChance;
     }
 
-    public boolean isBLWL()
-    {
+    public boolean isBLWL() {
         return isBLWL;
     }
 
-    public void setBLWL(boolean BLWL)
-    {
+    public void setBLWL(boolean BLWL) {
         isBLWL = BLWL;
     }
 
-    public ArrayList<Material> getWhiteList()
-    {
+    public List<Material> getWhiteList() {
         return whiteList;
     }
 
-    public void setWhiteList(ArrayList<Material> whiteList)
-    {
+    public void setWhiteList(List<Material> whiteList) {
         this.whiteList = whiteList;
     }
 
-    public ArrayList<World> getWorlds()
-    {
+    public List<World> getWorlds() {
         return worlds;
     }
 
-    public void setWorlds(ArrayList<World> worlds)
-    {
+    public void setWorlds(List<World> worlds) {
         this.worlds = worlds;
     }
 
-    public boolean isAllWorlds()
-    {
+    public boolean isAllWorlds() {
         return allWorlds;
     }
 
-    public void setAllWorlds(boolean allWorlds)
-    {
+    public void setAllWorlds(boolean allWorlds) {
         this.allWorlds = allWorlds;
     }
 
-    public List<String> getWorldsRaw()
-    {
+    public List<String> getWorldsRaw() {
         return worldsRaw;
     }
 
-    public void setWorldsRaw(List<String> worldsRaw)
-    {
+    public void setWorldsRaw(List<String> worldsRaw) {
         this.worldsRaw = worldsRaw;
     }
 
-    public boolean isRequirePermission()
-    {
+    public boolean isRequirePermission() {
         return requirePermission;
     }
 
-    public void setRequirePermission(boolean requirePermission)
-    {
+    public void setRequirePermission(boolean requirePermission) {
         this.requirePermission = requirePermission;
     }
 }

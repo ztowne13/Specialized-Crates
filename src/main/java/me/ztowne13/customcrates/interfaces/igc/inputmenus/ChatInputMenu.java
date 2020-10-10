@@ -7,28 +7,23 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 6/13/16.
  */
-public class ChatInputMenu extends InputMenuGUI
-{
-    public ChatInputMenu(InputMenu im)
-    {
+public class ChatInputMenu extends InputMenuGUI {
+    public ChatInputMenu(InputMenu im) {
         super(im);
     }
 
     @Override
-    public void initMsg()
-    {
+    public void initMsg() {
         Player p = im.getP();
 
         p.closeInventory();
-        for (int i = 0; i < 20; i++)
-        {
+        for (int i = 0; i < 20; i++) {
             ChatUtils.msg(p, "");
         }
         ChatUtils.msg(p, "&7----------------------------------------");
         ChatUtils.msg(p, "&aYou are currently editing the &f" + im.value + " &avalue.");
         ChatUtils.msg(p, "&BCurrent Value: &f" + im.currentValue);
-        if (!im.formatExp.equalsIgnoreCase(""))
-        {
+        if (!im.formatExp.equalsIgnoreCase("")) {
             ChatUtils.msg(p, "&a" + im.formatExp);
         }
         ChatUtils.msg(p, "&7----------------------------------------");
@@ -37,19 +32,13 @@ public class ChatInputMenu extends InputMenuGUI
     }
 
     @Override
-    public void runFor(IGCMenu igcm, String s)
-    {
-        if (s.equalsIgnoreCase("exit"))
-        {
+    public void runFor(IGCMenu igcm, String s) {
+        if (s.equalsIgnoreCase("exit")) {
             igcm.open();
             igcm.setInputMenu(null);
-            return;
-        }
-        else
-        {
+        } else {
 
-            if (im.inputMenu.handleInput(im.value, s))
-            {
+            if (im.inputMenu.handleInput(im.value, s)) {
                 igcm.open();
                 igcm.setInputMenu(null);
             }
