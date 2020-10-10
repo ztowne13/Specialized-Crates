@@ -12,7 +12,6 @@ import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.animations.block.OpenChestAnimation;
 import me.ztowne13.customcrates.interfaces.externalhooks.EconomyHandler;
-import me.ztowne13.customcrates.interfaces.externalhooks.MetricsLite;
 import me.ztowne13.customcrates.interfaces.externalhooks.PlaceHolderAPIHandler;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramInteractListener;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramManager;
@@ -27,6 +26,7 @@ import me.ztowne13.customcrates.players.data.FlatFileDataHandler;
 import me.ztowne13.customcrates.players.data.IndividualFileDataHandler;
 import me.ztowne13.customcrates.players.data.events.CrateCooldownEvent;
 import me.ztowne13.customcrates.utils.*;
+import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -34,11 +34,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class SpecializedCrates extends JavaPlugin
-{
+public class SpecializedCrates extends JavaPlugin {
 
-    FileHandler messageFile, rewardsFile, activecratesFile, crateconfigFile, dataFile, sqlFile;
+    public static double total = 0;
+    public static double count = 0;
+    FileHandler messageFile;
+    FileHandler rewardsFile;
+    FileHandler activeCratesFile;
+    FileHandler crateConfigFile;
+    FileHandler dataFile;
+    FileHandler sqlFile;
     Settings settings;
     //UpdateChecker updateChecker;
     HologramManager hologramManager;
@@ -46,13 +53,10 @@ public class SpecializedCrates extends JavaPlugin
     EconomyHandler economyHandler;
     CommandCrate commandCrate;
     AntiFraudSQLHandler antiFraudSQLHandler;
-
     BukkitTask br;
     MetricsLite metricsLite = null;
     PlaceHolderAPIHandler placeHolderAPIHandler = null;
-
     DebugUtils du = null;
-
     int tick = 0;
     int totalTicks = 0;
     int saveFilesTick = 0;
@@ -60,28 +64,22 @@ public class SpecializedCrates extends JavaPlugin
     boolean onlyUseBuildInHolograms = true;
     boolean hasAttemptedReload = false;
     boolean particlesEnabled = true;
-
     ArrayList<ParticleData> alreadyUpdated = new ArrayList<>();
 
-
-    public void onEnable()
-    {
+    @Override
+    public void onEnable() {
         onEnable(true);
     }
 
-    public void onEnable(boolean register)
-    {
-        if(metricsLite == null && VersionUtils.Version.v1_8_R3.isServerVersionOrLater())
-        {
-            metricsLite = new MetricsLite(this);
-
+    public void onEnable(boolean register) {
+        if (metricsLite == null) {
+            metricsLite = new MetricsLite(this, 5642);
         }
-        if (du == null)
-        {
+        if (du == null) {
             du = new DebugUtils(this);
         }
 
-        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && !isUsingPlaceholderAPI()){
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && !isUsingPlaceholderAPI()) {
             placeHolderAPIHandler = new PlaceHolderAPIHandler(this);
             placeHolderAPIHandler.register();
         }
@@ -100,13 +98,11 @@ public class SpecializedCrates extends JavaPlugin
         //updateChecker = new UpdateChecker(this);
 
         registerCommands();
-        if (register)
-        {
+        if (register) {
             registerAll();
         }
 
-        for (Player p : Bukkit.getOnlinePlayers())
-        {
+        for (Player p : Bukkit.getOnlinePlayers()) {
             PlayerManager.get(this, p);
         }
 
@@ -125,29 +121,21 @@ public class SpecializedCrates extends JavaPlugin
         getSettings().getInfoToLog().put("Metrics", metricsLite == null ? "&cdisabled" : "&aenabled");
 
         // Check to see if the plugin needs a reload to find the hologram plugin
-        if(!hasAttemptedReload)
-        {
-            Bukkit.getScheduler().runTaskLater(this, new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    if(getSettings().getInfoToLog().containsKey("Hologram Plugin") &&
-                        getSettings().getInfoToLog().get("Hologram Plugin").equalsIgnoreCase("None"))
-                    {
-                        hasAttemptedReload = true;
-                        ChatUtils
-                                .log("&e[SpecializedCrates] No hologram plugin was found. In the off-chance that this is because the hologram plugin" +
-                                        " opted to ignore the softdepend and loaded after SpecializedCrates, the plugin is reloading once to " +
-                                        "try again.");
-                        reload();
-                    }
+        if (!hasAttemptedReload) {
+            Bukkit.getScheduler().runTaskLater(this, () -> {
+                if (getSettings().getInfoToLog().containsKey("Hologram Plugin") &&
+                        getSettings().getInfoToLog().get("Hologram Plugin").equalsIgnoreCase("None")) {
+                    hasAttemptedReload = true;
+                    ChatUtils
+                            .log("&e[SpecializedCrates] No hologram plugin was found. In the off-chance that this is because the hologram plugin" +
+                                    " opted to ignore the softdepend and loaded after SpecializedCrates, the plugin is reloading once to " +
+                                    "try again.");
+                    reload();
                 }
             }, 1);
         }
 
-        if(Bukkit.getServer().getSpawnRadius() != 0)
-        {
+        if (Bukkit.getServer().getSpawnRadius() != 0) {
             ChatUtils.log("&4WARNING: &cThe value 'spawn-protection' is set to " + Bukkit.getServer().getSpawnRadius() +
                     " in the server.properties file. This WILL cause issues with SpecializedCrates - any crates near spawn will " +
                     "only be openable for OP players. Please go to your server.properties file in the main directory of your server" +
@@ -155,16 +143,13 @@ public class SpecializedCrates extends JavaPlugin
         }
     }
 
-    public void onDisable()
-    {
+    @Override
+    public void onDisable() {
         allowTick = false;
 
-        try
-        {
+        try {
             finishUpPlayers();
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
 
         }
 
@@ -180,35 +165,29 @@ public class SpecializedCrates extends JavaPlugin
         saveFilesTick(false);
     }
 
-    public void saveEverything()
-    {
+    public void saveEverything() {
         messageFile.save();
         rewardsFile.save();
-        crateconfigFile.save();
+        crateConfigFile.save();
         settings.writeSettingsValues();
-        for(Crate crate : Crate.getLoadedCrates().values())
-        {
-            try
-            {
+        for (Crate crate : Crate.getLoadedCrates().values()) {
+            try {
                 crate.getSettings().saveAll();
-            }
-            catch(Exception exc)
-            {
+            } catch (Exception exc) {
                 exc.printStackTrace();
             }
         }
     }
 
-    public void reload()
-    {
+    public void reload() {
         ChatUtils.log("Disabling...");
 
         onDisable();
 
         setMessageFile(null);
         setRewardsFile(null);
-        setActivecratesFile(null);
-        setCrateconfigFile(null);
+        setActiveCratesFile(null);
+        setCrateConfigFile(null);
         setSettings(null);
         setDataFile(null);
         setSqlFile(null);
@@ -217,13 +196,10 @@ public class SpecializedCrates extends JavaPlugin
         getCommand("scrates").setTabCompleter(null);
         getCommand("keys").setExecutor(null);
 
-        try
-        {
+        try {
             getCommand("rewards").setExecutor(null);
             getCommand("rewards").setTabCompleter(null);
-        }
-        catch(Exception exc)
-        {
+        } catch (Exception exc) {
 
         }
 
@@ -249,8 +225,7 @@ public class SpecializedCrates extends JavaPlugin
 
     }
 
-    public void registerCommands()
-    {
+    public void registerCommands() {
         TabCompleteListener tabCompleteListener = new TabCompleteListener(this);
 
         commandCrate = new CommandCrate(this);
@@ -263,9 +238,7 @@ public class SpecializedCrates extends JavaPlugin
         getCommand("rewards").setTabCompleter(tabCompleteListener);
     }
 
-
-    public void registerAll()
-    {
+    public void registerAll() {
         rl(new InteractListener(this));
         rl(new BlockBreakListener(this));
         rl(new BlockPlaceListener(this));
@@ -278,84 +251,67 @@ public class SpecializedCrates extends JavaPlugin
         rl(new PluginEnableListener(this));
         rl(new DamageListener(this));
 
-        if (NPCUtils.isCitizensInstalled())
-        {
+        if (NPCUtils.isCitizensInstalled()) {
             rl(new NPCEventListener(this));
         }
     }
 
-    public void loadRewards()
-    {
+    public void loadRewards() {
         boolean newValues = false;
 
-        for(String rName : getRewardsFile().get().getKeys(false))
-        {
-            if (!CRewards.getAllRewards().keySet().contains(rName))
-            {
-                if(!newValues)
-                {
+        for (String rName : getRewardsFile().get().getKeys(false)) {
+            if (!CRewards.getAllRewards().containsKey(rName)) {
+                if (!newValues) {
                     newValues = true;
                 }
                 Reward r = new Reward(this, rName);
                 r.loadFromConfig();
                 r.loadChance();
-                CRewards.allRewards.put(rName, r);
+                CRewards.getAllRewards().put(rName, r);
             }
         }
     }
 
-    public void rl(Listener listener)
-    {
+    public void rl(Listener listener) {
         Bukkit.getPluginManager().registerEvents(listener, this);
     }
 
-
-    public void loadFiles()
-    {
+    public void loadFiles() {
         setRewardsFile(new FileHandler(this, "Rewards.yml", true, false));
-        setActivecratesFile(new FileHandler(this, "ActiveCrates.db", false, false));
-        setCrateconfigFile(new FileHandler(this, "CrateConfig.yml", true, false));
+        setActiveCratesFile(new FileHandler(this, "ActiveCrates.db", false, false));
+        setCrateConfigFile(new FileHandler(this, "CrateConfig.yml", true, false));
         setMessageFile(new FileHandler(this, "Messages.yml", true, false));
         setDataFile(new FileHandler(this, "PluginData.db", false, false));
         setSqlFile(new FileHandler(this, "SQL.yml", true, false));
 
         getMessageFile().saveDefaults();
         getRewardsFile().saveDefaults();
-        getActivecratesFile().saveDefaults();
-        getCrateconfigFile().saveDefaults();
+        getActiveCratesFile().saveDefaults();
+        getCrateConfigFile().saveDefaults();
         getDataFile().saveDefaults();
         getSqlFile().saveDefaults();
     }
 
-    public void firstLoadFiles()
-    {
+    public void firstLoadFiles() {
         String[] firstFiles =
                 new String[]{"BasicCrate", "BeginnerCrate", "MiddleCrate", "MasterCrate", "MineChestExample", "ExpertCrate"};
-        for (String newFile : firstFiles)
-        {
+        for (String newFile : firstFiles) {
             new FileHandler(this, newFile + ".crate", "Crates/", true, true, false).saveDefaults();
         }
 
         new FileHandler(this, "AllCrates.multicrate", "Crates/", true, true, false).saveDefaults();
     }
 
-    public void tick()
-    {
-        if(!antiFraudSQLHandler.isAuthenticated())
+    public void tick() {
+        if (!antiFraudSQLHandler.isAuthenticated())
             return;
 
-        if (allowTick)
-        {
-            for (PlacedCrate cm : new ArrayList<PlacedCrate>(PlacedCrate.getPlacedCrates().values()))
-            {
-                if (cm.isCratesEnabled())
-                {
-                    try
-                    {
+        if (allowTick) {
+            for (PlacedCrate cm : new ArrayList<>(PlacedCrate.getPlacedCrates().values())) {
+                if (cm.isCratesEnabled()) {
+                    try {
                         cm.tick(CrateState.PLAY);
-                    }
-                    catch (Exception exc)
-                    {
+                    } catch (Exception exc) {
                         exc.printStackTrace();
                     }
                 }
@@ -366,19 +322,15 @@ public class SpecializedCrates extends JavaPlugin
             setTotalTicks(getTotalTicks() + 1);
             setTick(getTick() + 1);
 
-            if (getTick() == 10)
-            {
+            if (getTick() == 10) {
                 setTick(0);
                 saveFilesTick(true);
 
-                for (Player p : Bukkit.getOnlinePlayers())
-                {
+                for (Player p : Bukkit.getOnlinePlayers()) {
                     PlayerDataManager pdm = PlayerManager.get(this, p).getPdm();
-                    ArrayList<CrateCooldownEvent> list =
-                            ((ArrayList<CrateCooldownEvent>) pdm.getCrateCooldownEvents().clone());
+                    ArrayList<CrateCooldownEvent> list = new ArrayList<>(pdm.getCrateCooldownEvents());
 
-                    for (CrateCooldownEvent cce : list)
-                    {
+                    for (CrateCooldownEvent cce : list) {
                         cce.tickSecond(pdm);
                     }
                 }
@@ -386,156 +338,120 @@ public class SpecializedCrates extends JavaPlugin
         }
     }
 
-    public void saveFilesTick(boolean isInterval)
-    {
+    public void saveFilesTick(boolean isInterval) {
         saveFilesTick++;
 
         String dataSaveType = SettingsValue.DATA_SAVE_METHOD.getValue(this).toString();
-        int saveInterVal = (int)SettingsValue.DATA_SAVE_INTERVAL.getValue(this);
-        if(isInterval && (dataSaveType.equalsIgnoreCase("DISABLE") || saveFilesTick % saveInterVal != 0))
-        {
+        int saveInterVal = (int) SettingsValue.DATA_SAVE_INTERVAL.getValue(this);
+        if (isInterval && (dataSaveType.equalsIgnoreCase("DISABLE") || saveFilesTick % saveInterVal != 0)) {
             return;
         }
 
-        if(FlatFileDataHandler.isToSave())
-        {
+        if (FlatFileDataHandler.isToSave()) {
             getDu().log("saveFilesTick() - Saving playerdata.db flat file");
             FlatFileDataHandler.getFileHandler().save();
             FlatFileDataHandler.resetToSave();
         }
 
-        for(IndividualFileDataHandler file : IndividualFileDataHandler.toSave)
-        {
+        for (IndividualFileDataHandler file : IndividualFileDataHandler.toSave) {
             file.getFileHandler().save();
         }
         IndividualFileDataHandler.toSave.clear();
     }
 
-    public static double total = 0;
-    public static double count = 0;
+    public void run() {
+        setBr(Bukkit.getScheduler().runTaskTimer(this, () -> {
+            if (DebugUtils.OUTPUT_AVERAGE_TICK) {
+                double curTimeMillis = System.currentTimeMillis();
+                tick();
+                double dif = (System.currentTimeMillis() - curTimeMillis);
+                total += dif;
+                count++;
+                double solved = total / count;
 
-    public void run()
-    {
-        setBr(Bukkit.getScheduler().runTaskTimer(this, new Runnable()
-        {
-            public void run()
-            {
-                if(DebugUtils.OUTPUT_AVERAGE_TICK)
-                {
-                    double curTimeMillis = System.currentTimeMillis();
-                    tick();
-                    double dif = (System.currentTimeMillis() - curTimeMillis);
-                    total += dif;
-                    count++;
-                    double solved = total / count;
-
-                    ChatUtils.log("Average: " + solved);
-                }
-                else
-                {
-                    tick();
-                }
+                ChatUtils.log("Average: " + solved);
+            } else {
+                tick();
             }
-
         }, 0, 2));
     }
 
-    public void finishUpPlayers()
-    {
-        for (Player p : Bukkit.getOnlinePlayers())
-        {
+    public void finishUpPlayers() {
+        for (Player p : Bukkit.getOnlinePlayers()) {
             PlayerManager pm = PlayerManager.get(this, p);
 
-            if(pm.isInCrateAnimation())
-            {
+            if (pm.isInCrateAnimation()) {
                 pm.getCurrentAnimation().setFastTrack(true, true);
             }
 
-            if(pm.isInCratesClaimMenu())
-            {
+            if (pm.isInCratesClaimMenu()) {
                 p.closeInventory();
             }
         }
     }
 
-    public void stopRun()
-    {
+    public void stopRun() {
         br.cancel();
     }
 
-    public Settings getSettings()
-    {
+    public Settings getSettings() {
         return settings;
     }
 
-    public void setSettings(Settings settings)
-    {
+    public void setSettings(Settings settings) {
         this.settings = settings;
     }
 
-    public DebugUtils getDu()
-    {
+    public DebugUtils getDu() {
         return du;
     }
 
-    public void setBr(BukkitTask br)
-    {
+    public void setBr(BukkitTask br) {
         this.br = br;
     }
 
-    public int getTick()
-    {
+    public int getTick() {
         return tick;
     }
 
-    public void setTick(int tick)
-    {
+    public void setTick(int tick) {
         this.tick = tick;
     }
 
-    public FileHandler getMessageFile()
-    {
+    public FileHandler getMessageFile() {
         return messageFile;
     }
 
-    public void setMessageFile(FileHandler messageFile)
-    {
+    public void setMessageFile(FileHandler messageFile) {
         this.messageFile = messageFile;
     }
 
-    public FileHandler getRewardsFile()
-    {
+    public FileHandler getRewardsFile() {
         return rewardsFile;
     }
 
-    public void setRewardsFile(FileHandler rewardsFile)
-    {
+    public void setRewardsFile(FileHandler rewardsFile) {
         this.rewardsFile = rewardsFile;
     }
 
-    public FileHandler getActivecratesFile()
-    {
-        return activecratesFile;
+    public FileHandler getActiveCratesFile() {
+        return activeCratesFile;
     }
 
-    public void setActivecratesFile(FileHandler activecratesFile)
-    {
-        this.activecratesFile = activecratesFile;
+    public void setActiveCratesFile(FileHandler activeCratesFile) {
+        this.activeCratesFile = activeCratesFile;
     }
 
-    public FileHandler getCrateconfigFile()
-    {
-        return crateconfigFile;
+    public FileHandler getCrateConfigFile() {
+        return crateConfigFile;
     }
 
-    public void setCrateconfigFile(FileHandler crateconfigFile)
-    {
-        this.crateconfigFile = crateconfigFile;
+    public void setCrateConfigFile(FileHandler crateConfigFile) {
+        this.crateConfigFile = crateConfigFile;
     }
 
 
-    public ArrayList<ParticleData> getAlreadyUpdated()
-    {
+    public List<ParticleData> getAlreadyUpdated() {
         return alreadyUpdated;
     }
 
@@ -544,58 +460,47 @@ public class SpecializedCrates extends JavaPlugin
 //        return updateChecker;
 //    }
 
-    public HologramManager getHologramManager()
-    {
+    public HologramManager getHologramManager() {
         return hologramManager;
     }
 
-    public boolean isOnlyUseBuildInHolograms()
-    {
+    public boolean isOnlyUseBuildInHolograms() {
         return onlyUseBuildInHolograms;
     }
 
-    public boolean isAllowTick()
-    {
+    public boolean isAllowTick() {
         return allowTick;
     }
 
-    public FileHandler getDataFile()
-    {
+    public FileHandler getDataFile() {
         return dataFile;
     }
 
-    public void setDataFile(FileHandler dataFile)
-    {
+    public void setDataFile(FileHandler dataFile) {
         this.dataFile = dataFile;
     }
 
-    public DataHandler getDataHandler()
-    {
+    public DataHandler getDataHandler() {
         return dataHandler;
     }
 
-    public CommandCrate getCommandCrate()
-    {
+    public CommandCrate getCommandCrate() {
         return commandCrate;
     }
 
-    public FileHandler getSqlFile()
-    {
+    public FileHandler getSqlFile() {
         return sqlFile;
     }
 
-    public void setSqlFile(FileHandler sqlFile)
-    {
+    public void setSqlFile(FileHandler sqlFile) {
         this.sqlFile = sqlFile;
     }
 
-    public AntiFraudSQLHandler getAntiFraudSQLHandler()
-    {
+    public AntiFraudSQLHandler getAntiFraudSQLHandler() {
         return antiFraudSQLHandler;
     }
 
-    public EconomyHandler getEconomyHandler()
-    {
+    public EconomyHandler getEconomyHandler() {
         return economyHandler;
     }
 
@@ -603,38 +508,27 @@ public class SpecializedCrates extends JavaPlugin
         return placeHolderAPIHandler != null;
     }
 
-    public boolean isHasAttemptedReload()
-    {
-        return hasAttemptedReload;
-    }
-
-    public boolean isParticlesEnabled()
-    {
+    public boolean isParticlesEnabled() {
         return particlesEnabled;
     }
 
-    public void setParticlesEnabled(boolean particlesEnabled)
-    {
+    public void setParticlesEnabled(boolean particlesEnabled) {
         this.particlesEnabled = particlesEnabled;
     }
 
-    public int getTotalTicks()
-    {
+    public int getTotalTicks() {
         return totalTicks;
     }
 
-    public void setTotalTicks(int totalTicks)
-    {
+    public void setTotalTicks(int totalTicks) {
         this.totalTicks = totalTicks;
     }
 
-    public int getSaveFilesTick()
-    {
+    public int getSaveFilesTick() {
         return saveFilesTick;
     }
 
-    public void setSaveFilesTick(int saveFilesTick)
-    {
+    public void setSaveFilesTick(int saveFilesTick) {
         this.saveFilesTick = saveFilesTick;
     }
 }

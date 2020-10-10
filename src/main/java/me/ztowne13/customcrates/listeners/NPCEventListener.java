@@ -12,27 +12,22 @@ import org.bukkit.event.Listener;
 /**
  * Created by ztowne13 on 2/26/16.
  */
-public class NPCEventListener implements Listener
-{
+public class NPCEventListener implements Listener {
     SpecializedCrates cc;
 
-    public NPCEventListener(SpecializedCrates cc)
-    {
+    public NPCEventListener(SpecializedCrates cc) {
         this.cc = cc;
     }
 
     @EventHandler
-    public void onNPCClickRight(NPCRightClickEvent e)
-    {
-        if (new AttemptKeyUseAction(cc, e.getClicker(), e.getNPC().getStoredLocation()).run())
-        {
+    public void onNPCClickRight(NPCRightClickEvent e) {
+        if (new AttemptKeyUseAction(cc, e.getClicker(), e.getNPC().getStoredLocation()).run()) {
             e.setCancelled(true);
         }
     }
 
-    @EventHandler(ignoreCancelled = false)
-    public void onNPCClickLeft(NPCLeftClickEvent e)
-    {
+    @EventHandler()
+    public void onNPCClickLeft(NPCLeftClickEvent e) {
         Player p = e.getClicker();
         new LeftClickAction(cc, p, e.getNPC().getStoredLocation()).run();
     }

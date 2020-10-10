@@ -16,16 +16,13 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 7/7/16.
  */
-public class IGCAnimDiscover extends IGCAnimation
-{
-    public IGCAnimDiscover(SpecializedCrates cc, Player p, IGCMenu lastMenu)
-    {
+public class IGCAnimDiscover extends IGCAnimation {
+    public IGCAnimDiscover(SpecializedCrates cc, Player p, IGCMenu lastMenu) {
         super(cc, p, lastMenu, "&7&l> &6&lDiscover Animation", CrateAnimationType.INV_DISCOVER);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(27);
 
@@ -52,12 +49,9 @@ public class IGCAnimDiscover extends IGCAnimation
                 .addAutomaticLore("&f", 30, "The duration in which the 'shuffling' animation will play for."));
 
         boolean b = true;
-        try
-        {
-            b = Boolean.valueOf(getString("count"));
-        }
-        catch (Exception exc)
-        {
+        try {
+            b = Boolean.parseBoolean(getString("count"));
+        } catch (Exception exc) {
 
         }
         ib.setItem(11, new ItemBuilder(b ? DynamicMaterial.LIME_WOOL : DynamicMaterial.RED_WOOL, 1).setName("&acount")
@@ -124,10 +118,8 @@ public class IGCAnimDiscover extends IGCAnimation
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 0:
                 up();
                 break;
@@ -148,7 +140,7 @@ public class IGCAnimDiscover extends IGCAnimation
                         "How many ticks the random display of green grass plane will run for.", Integer.class, this);
                 break;
             case 11:
-                boolean b = !Boolean.valueOf(getString("count"));
+                boolean b = !Boolean.parseBoolean(getString("count"));
                 fc.set(getPath("count"), b);
                 getIb().setItem(20,
                         new ItemBuilder(b ? DynamicMaterial.LIME_WOOL : DynamicMaterial.RED_WOOL, 1).setName("&acount")
@@ -174,7 +166,7 @@ public class IGCAnimDiscover extends IGCAnimation
                 break;
             case 19:
                 new InputMenu(getCc(), getP(), "cover-block-name", getString("cover-block-name"),
-                         String.class, this);
+                        String.class, this);
                 break;
             case 20:
                 new InputMenu(getCc(), getP(), "cover-block-lore", getString("cover-block-lore"),
@@ -209,42 +201,29 @@ public class IGCAnimDiscover extends IGCAnimation
     //        ib.setItem(25, rewardBlockUnlockName);
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         Object type = getInputMenu().getType();
-        if (type == Integer.class)
-        {
-            if (Utils.isInt(input))
-            {
+        if (type == Integer.class) {
+            if (Utils.isInt(input)) {
                 fc.set(getPath(value), Integer.parseInt(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This is not a valid number, please try again.");
             }
-        }
-        else if (type == Boolean.class)
-        {
-            if (Utils.isBoolean(input))
-            {
+        } else if (type == Boolean.class) {
+            if (Utils.isBoolean(input)) {
                 fc.set(getPath(value), Boolean.parseBoolean(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This is not a valid true / false value, please try again.");
             }
-        }
-        else
-        {
+        } else {
 
             if ((value.equalsIgnoreCase("tick-sound") || value.equalsIgnoreCase("click-sound") ||
                     value.equalsIgnoreCase("uncover-sound")) &&
-                    (input.equalsIgnoreCase("null") || input.equalsIgnoreCase("none")))
-            {
+                    (input.equalsIgnoreCase("null") || input.equalsIgnoreCase("none"))) {
                 fc.set(getPath(value), null);
             }
 

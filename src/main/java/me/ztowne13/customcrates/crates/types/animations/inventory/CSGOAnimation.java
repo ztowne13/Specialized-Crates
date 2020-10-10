@@ -12,39 +12,37 @@ import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
  * Created by ztowne13 on 6/30/16.
  */
-public class CSGOAnimation extends InventoryCrateAnimation
-{
-    protected double finalTickLength, tickIncrease;
-    protected int glassUpdateTicks = 2, closeSpeed = -1;
+public class CSGOAnimation extends InventoryCrateAnimation {
+    protected double finalTickLength;
+    protected double tickIncrease;
+    protected int glassUpdateTicks = 2;
+    protected int closeSpeed = -1;
 
     protected ItemBuilder identifierBlock = null;
     protected ArrayList<ItemBuilder> fillerBlocks = new ArrayList<>();
+    Random r = new Random();
 
-    public CSGOAnimation(Crate crate)
-    {
+    public CSGOAnimation(Crate crate) {
         super(crate, CrateAnimationType.INV_CSGO);
     }
 
     @Override
-    public void tickInventory(InventoryAnimationDataHolder dataHolder, boolean update)
-    {
+    public void tickInventory(InventoryAnimationDataHolder dataHolder, boolean update) {
         CSGOAnimationDataHolder cdh = (CSGOAnimationDataHolder) dataHolder;
 
-        switch (cdh.getCurrentState())
-        {
+        switch (cdh.getCurrentState()) {
             case PLAYING:
                 drawFillers(cdh, glassUpdateTicks);
 
-                if (update)
-                {
+                if (update) {
                     playSound(cdh);
                     updateRewards(cdh);
                 }
@@ -56,8 +54,7 @@ public class CSGOAnimation extends InventoryCrateAnimation
                 break;
             case CLOSING:
             case ENDING:
-                if(cdh.isUpdateAnimatedClose())
-                {
+                if (cdh.isUpdateAnimatedClose()) {
                     cdh.setUpdateAnimatedClose(false);
                     drawFillers(cdh, 1);
                 }
@@ -69,19 +66,16 @@ public class CSGOAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public void checkStateChange(AnimationDataHolder dataHolder, boolean update)
-    {
+    public void checkStateChange(AnimationDataHolder dataHolder, boolean update) {
         CSGOAnimationDataHolder cdh = (CSGOAnimationDataHolder) dataHolder;
 
-        switch (cdh.getCurrentState())
-        {
+        switch (cdh.getCurrentState()) {
             case PLAYING:
                 if (update && cdh.getCurrentTicks() > getFinalTickLength())
                     cdh.setCurrentState(AnimationDataHolder.State.WAITING);
                 break;
             case WAITING:
-                if (cdh.getWaitingTicks() == 10)
-                {
+                if (cdh.getWaitingTicks() == 10) {
                     if (getCloseSpeed() > -1)
                         cdh.setCurrentState(AnimationDataHolder.State.CLOSING);
                     else
@@ -89,15 +83,13 @@ public class CSGOAnimation extends InventoryCrateAnimation
                 }
                 break;
             case CLOSING:
-                if (cdh.getAnimatedCloseTicks() == 3)
-                {
+                if (cdh.getAnimatedCloseTicks() == 3) {
                     cdh.setWaitingTicks(0);
                     cdh.setCurrentState(AnimationDataHolder.State.ENDING);
                 }
                 break;
             case ENDING:
-                if (cdh.getWaitingTicks() == 50)
-                {
+                if (cdh.getWaitingTicks() == 50) {
                     cdh.setCurrentState(AnimationDataHolder.State.COMPLETED);
                 }
         }
@@ -109,15 +101,12 @@ public class CSGOAnimation extends InventoryCrateAnimation
      * @return Returns whether or not the rewards should be updated and sound should be played.
      */
     @Override
-    public boolean updateTicks(AnimationDataHolder dataHolder)
-    {
+    public boolean updateTicks(AnimationDataHolder dataHolder) {
         CSGOAnimationDataHolder cdh = (CSGOAnimationDataHolder) dataHolder;
 
-        switch(cdh.getCurrentState())
-        {
+        switch (cdh.getCurrentState()) {
             case PLAYING:
-                if (cdh.getIndividualTicks() * CrateAnimation.BASE_SPEED >= cdh.getCurrentTicks() - 1.1)
-                {
+                if (cdh.getIndividualTicks() * CrateAnimation.BASE_SPEED >= cdh.getCurrentTicks() - 1.1) {
                     cdh.setUpdates(cdh.getUpdates() + 1);
                     cdh.setIndividualTicks(0);
 
@@ -127,8 +116,7 @@ public class CSGOAnimation extends InventoryCrateAnimation
                 }
                 break;
             case CLOSING:
-                if (cdh.getTotalTicks() % getCloseSpeed() == 0)
-                {
+                if (cdh.getTotalTicks() % getCloseSpeed() == 0) {
                     cdh.setUpdateAnimatedClose(true);
                     cdh.setAnimatedCloseTicks(cdh.getAnimatedCloseTicks() + 1);
                 }
@@ -141,15 +129,12 @@ public class CSGOAnimation extends InventoryCrateAnimation
         return false;
     }
 
-    public void updateRewards(CSGOAnimationDataHolder cdh)
-    {
-        for (int i = 0; i < cdh.getDisplayedRewards().length; i++)
-        {
+    public void updateRewards(CSGOAnimationDataHolder cdh) {
+        for (int i = 0; i < cdh.getDisplayedRewards().length; i++) {
             Reward r = cdh.getDisplayedRewards()[i];
             int numToSet = i - 1;
 
-            if (r != null && numToSet >= 0)
-            {
+            if (r != null && numToSet >= 0) {
                 cdh.getDisplayedRewards()[numToSet] = cdh.getDisplayedRewards()[i];
             }
         }
@@ -158,15 +143,12 @@ public class CSGOAnimation extends InventoryCrateAnimation
         cdh.getDisplayedRewards()[cdh.getDisplayedRewards().length - 1] = r;
     }
 
-    public void drawRewards(CSGOAnimationDataHolder cdh, int sideIndent)
-    {
+    public void drawRewards(CSGOAnimationDataHolder cdh, int sideIndent) {
         InventoryBuilder inv = cdh.getInventoryBuilder();
 
-        for (int i = sideIndent; i < cdh.getDisplayedRewards().length - sideIndent; i++)
-        {
+        for (int i = sideIndent; i < cdh.getDisplayedRewards().length - sideIndent; i++) {
             Reward r = cdh.getDisplayedRewards()[i];
-            if (r != null)
-            {
+            if (r != null) {
                 inv.setItem(i + 10, r.getDisplayBuilder());
             }
         }
@@ -174,8 +156,7 @@ public class CSGOAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh)
-    {
+    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh) {
         InventoryBuilder inv = cdh.getInventoryBuilder();
 
         inv.setItem(4, getIdentifierBlock());
@@ -183,15 +164,12 @@ public class CSGOAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public ItemBuilder getFiller()
-    {
-        Random r = new Random();
+    public ItemBuilder getFiller() {
         return getFillerBlocks().get(r.nextInt(getFillerBlocks().size()));
     }
 
     @Override
-    public void endAnimation(AnimationDataHolder dataHolder)
-    {
+    public void endAnimation(AnimationDataHolder dataHolder) {
         CSGOAnimationDataHolder cdh = (CSGOAnimationDataHolder) dataHolder;
 
         ArrayList<Reward> rewards = new ArrayList<>();
@@ -202,11 +180,7 @@ public class CSGOAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public void loadDataValues(StatusLogger sl)
-    {
-        FileConfiguration fc = fu.get();
-
-
+    public void loadDataValues(StatusLogger sl) {
         invName = fu.getFileDataLoader()
                 .loadString(prefix + "inv-name", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_CSGO_INVNAME_SUCCESS);
@@ -249,79 +223,63 @@ public class CSGOAnimation extends InventoryCrateAnimation
                 StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_CSGO_TICKSPEED_SUCCESS, StatusLoggerEvent.ANIMATION_CSGO_TICKSPEED_INVALID);
 
-        try
-        {
-            for (String unParsed : getFileHandler().get().getStringList("CrateType.Inventory.CSGO.filler-blocks"))
-            {
+        try {
+            for (String unParsed : getFileHandler().get().getStringList("CrateType.Inventory.CSGO.filler-blocks")) {
                 String[] args = unParsed.split(";");
-                try
-                {
-                    DynamicMaterial m = null;
-                    try
-                    {
+                try {
+                    DynamicMaterial m;
+                    try {
                         m = DynamicMaterial.fromString(unParsed.toUpperCase());
-                    }
-                    catch (Exception exc)
-                    {
+                    } catch (Exception exc) {
                         StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_MATERIAL_INVALID
                                 .log(getStatusLogger(), new String[]{args[0]});
                         continue;
                     }
-                    int byt = unParsed.contains(";") ? Byte.valueOf(args[1]) : 0;
                     getFillerBlocks().add(new ItemBuilder(m, 1).setName("&f"));
 
                     StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_MATERIAL_SUCCESS
                             .log(getStatusLogger(), new String[]{unParsed});
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_ITEM_INVALID.log(getStatusLogger(), new String[]{unParsed});
                 }
             }
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_NONEXISTENT.log(getStatusLogger());
         }
     }
 
-    public void setTickSound(SoundData tickSound)
-    {
+    @Override
+    public void setTickSound(SoundData tickSound) {
         this.tickSound = tickSound;
     }
 
-    public String getInvName()
-    {
+    @Override
+    public String getInvName() {
         return invName;
     }
 
-    public void setInvName(String invName)
-    {
+    @Override
+    public void setInvName(String invName) {
         this.invName = invName;
     }
 
-    public double getFinalTickLength()
-    {
+    public double getFinalTickLength() {
         return finalTickLength;
     }
 
-    public double getTickIncrease()
-    {
+    public double getTickIncrease() {
         return tickIncrease;
     }
 
-    public int getCloseSpeed()
-    {
+    public int getCloseSpeed() {
         return closeSpeed;
     }
 
-    public ItemBuilder getIdentifierBlock()
-    {
+    public ItemBuilder getIdentifierBlock() {
         return identifierBlock;
     }
 
-    public ArrayList<ItemBuilder> getFillerBlocks()
-    {
+    public List<ItemBuilder> getFillerBlocks() {
         return fillerBlocks;
     }
 

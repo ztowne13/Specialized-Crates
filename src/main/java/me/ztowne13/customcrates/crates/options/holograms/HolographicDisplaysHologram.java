@@ -10,21 +10,17 @@ import org.bukkit.Location;
 
 import java.util.HashMap;
 
-public class HolographicDisplaysHologram extends DynamicHologram
-{
+public class HolographicDisplaysHologram extends DynamicHologram {
     Hologram h;
-    HashMap<Integer, TextLine> lines = new HashMap<Integer, TextLine>();
+    HashMap<Integer, TextLine> lines = new HashMap<>();
 
-    public HolographicDisplaysHologram(SpecializedCrates cc, PlacedCrate cm)
-    {
+    public HolographicDisplaysHologram(SpecializedCrates cc, PlacedCrate cm) {
         super(cc, cm);
     }
 
     @Override
-    public void create(Location l)
-    {
-        if (!getCm().isDeleted())
-        {
+    public void create(Location l) {
+        if (!getCm().isDeleted()) {
             setH(HologramsAPI.createHologram(getCc(), l));
             teleport(l);
         }
@@ -33,50 +29,40 @@ public class HolographicDisplaysHologram extends DynamicHologram
     }
 
     @Override
-    public void addLine(String line)
-    {
+    public void addLine(String line) {
         TextLine tl = getH().appendTextLine(line);
         lines.put(getH().size() - 1, tl);
     }
 
     @Override
-    public void delete()
-    {
-        if (h != null)
-        {
+    public void delete() {
+        if (h != null) {
             getH().delete();
         }
     }
 
     @Override
-    public void teleport(Location l)
-    {
+    public void teleport(Location l) {
         l.setY(l.getY() + getCm().getHologram().getHologramOffset());
         getH().teleport(LocationUtils.getLocationCentered(l));
     }
 
     @Override
-    public void setLine(int lineNum, String line)
-    {
-        if (lines.containsKey(lineNum))
-        {
+    public void setLine(int lineNum, String line) {
+        if (lines.containsKey(lineNum)) {
             lines.get(lineNum).setText(line);
-        }
-        else
-        {
+        } else {
             addLine(line);
         }
 		/*getH().removeLine(lineNum);
 		getH().insertTextLine(lineNum, line);*/
     }
 
-    public Hologram getH()
-    {
+    public Hologram getH() {
         return h;
     }
 
-    public void setH(Hologram h)
-    {
+    public void setH(Hologram h) {
         this.h = h;
     }
 }

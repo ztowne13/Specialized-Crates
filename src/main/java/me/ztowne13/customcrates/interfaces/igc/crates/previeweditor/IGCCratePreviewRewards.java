@@ -20,16 +20,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class IGCCratePreviewRewards extends IGCMenuCrate
-{
+public class IGCCratePreviewRewards extends IGCMenuCrate {
     int page;
     Crate crate;
     int slot;
     CustomRewardDisplayer customRewardDisplayer;
 
     public IGCCratePreviewRewards(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crate, int page, int slot,
-                                  CustomRewardDisplayer customRewardDisplayer)
-    {
+                                  CustomRewardDisplayer customRewardDisplayer) {
         super(cc, p, lastMenu, "&7&l> &6&lRewards PG" + page, crate);
         this.page = page;
         this.crate = crate;
@@ -38,8 +36,7 @@ public class IGCCratePreviewRewards extends IGCMenuCrate
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         int slots = 0;
 
@@ -47,12 +44,9 @@ public class IGCCratePreviewRewards extends IGCMenuCrate
 
         List<Reward> rewards = getUnusedRewards();
 
-        if (rewards.size() - ((page - 1) * 28) >= 28)
-        {
+        if (rewards.size() - ((page - 1) * 28) >= 28) {
             slots = 28;
-        }
-        else
-        {
+        } else {
             slots = rewards.size() - ((page - 1) * 28);
         }
 
@@ -69,16 +63,13 @@ public class IGCCratePreviewRewards extends IGCMenuCrate
         int skipped = 0;
         int displayedRewards = 0;
 
-        for (Reward r : rewards)
-        {
-            if (toSkip > skipped || displayedRewards >= 28)
-            {
+        for (Reward r : rewards) {
+            if (toSkip > skipped || displayedRewards >= 28) {
                 skipped++;
                 continue;
             }
 
-            if (i % 9 == 8)
-            {
+            if (i % 9 == 8) {
                 i += 2;
             }
 
@@ -98,13 +89,11 @@ public class IGCCratePreviewRewards extends IGCMenuCrate
             displayedRewards++;
         }
 
-        if (page != 1)
-        {
+        if (page != 1) {
             ib.setItem(2, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo back a page"));
         }
 
-        if ((CRewards.getAllRewards().size() / 28) + (CRewards.getAllRewards().size() % 28 == 0 ? 0 : 1) != page)
-        {
+        if ((CRewards.getAllRewards().size() / 28) + (CRewards.getAllRewards().size() % 28 == 0 ? 0 : 1) != page) {
             ib.setItem(6, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo forward a page"));
         }
 
@@ -113,24 +102,16 @@ public class IGCCratePreviewRewards extends IGCMenuCrate
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
-        {
+    public void handleClick(int slot) {
+        if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
             page--;
             open();
-        }
-        else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
-        {
+        } else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
             page++;
             open();
-        }
-        else if (slot == 0)
-        {
+        } else if (slot == 0) {
             up();
-        }
-        else if (getIb().getInv().getItem(slot) != null)
-        {
+        } else if (getIb().getInv().getItem(slot) != null) {
             String rName = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
 
             getLastMenu().handleInput("set reward " + this.slot, rName);
@@ -138,27 +119,22 @@ public class IGCCratePreviewRewards extends IGCMenuCrate
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         return false;
     }
 
-    public List<Reward> getUnusedRewards()
-    {
+    public List<Reward> getUnusedRewards() {
         CRewards cRewards = crate.getSettings().getRewards();
 
         List<Reward> rewardsL = Arrays.asList(cRewards.getCrateRewards());
-        ArrayList<Reward> rewards = new ArrayList<>();
-        rewards.addAll(rewardsL);
+        ArrayList<Reward> rewards = new ArrayList<>(rewardsL);
 
         ArrayList<Reward> toCompareRewards = new ArrayList<>();
-        for (DisplayPage page : customRewardDisplayer.getPages().values())
-        {
+        for (DisplayPage page : customRewardDisplayer.getPages().values()) {
             toCompareRewards.addAll(page.rewardsAsList());
         }
 
-        for (Reward reward : toCompareRewards)
-        {
+        for (Reward reward : toCompareRewards) {
             rewards.remove(reward);
         }
 

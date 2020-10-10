@@ -25,8 +25,7 @@ import java.util.Arrays;
 /**
  * Created by ztowne13 on 4/2/16.
  */
-public class IGCCrateParticle extends IGCTierMenu
-{
+public class IGCCrateParticle extends IGCTierMenu {
     ParticleData pd;
 
     String[] colorableParticles = new String[]{
@@ -36,15 +35,13 @@ public class IGCCrateParticle extends IGCTierMenu
             "REDSTONE"
     };
 
-    public IGCCrateParticle(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, ParticleData pd, String tier)
-    {
+    public IGCCrateParticle(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, ParticleData pd, String tier) {
         super(cc, p, lastMenu, "&7&l> &6&lParticles", crates, tier);
         this.pd = pd;
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
         InventoryBuilder ib = createDefault(pd.getParticleAnimationEffect() == null ? 36 : 27);
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
@@ -68,8 +65,7 @@ public class IGCCrateParticle extends IGCTierMenu
             if (s.equalsIgnoreCase(pd.getParticleName()))
                 ib.setItem(20, colorEditor);
 
-        if (pd.getParticleAnimationEffect() == null)
-        {
+        if (pd.getParticleAnimationEffect() == null) {
             ib.setItem(12,
                     new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aX Range")
                             .addLore("&7Current value: ")
@@ -121,9 +117,7 @@ public class IGCCrateParticle extends IGCTierMenu
             getIb().setItem(22, yCenter);
             getIb().setItem(23, zCenter);
 
-        }
-        else
-        {
+        } else {
             ib.setItem(12,
                     new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aRadius")
                             .addAutomaticLore("&f", 30,
@@ -140,17 +134,14 @@ public class IGCCrateParticle extends IGCTierMenu
                             .addLore("&7" + pd.getRangeY()));
 
             if (pd.getParticleAnimationEffect() instanceof TiltedRingsPA ||
-                    pd.getParticleAnimationEffect() instanceof OffsetTiltedRingsPA)
-            {
+                    pd.getParticleAnimationEffect() instanceof OffsetTiltedRingsPA) {
                 ib.setItem(14,
                         new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aRotation")
                                 .addAutomaticLore("&f", 30,
                                         "The rotation (in degrees) of the animation. This helps if the animation is playing sideways. Setting it to 90 will rotate it a quarter turn.")
                                 .addLore("").addLore("&7Current value: ")
                                 .addLore("&7" + pd.getRangeZ()));
-            }
-            else
-            {
+            } else {
                 ib.setItem(14,
                         new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aHeight")
                                 .addAutomaticLore("&f", 30,
@@ -174,10 +165,8 @@ public class IGCCrateParticle extends IGCTierMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 8:
                 cs.getParticles().deleteParticle(tier, pd);
                 up();
@@ -242,98 +231,62 @@ public class IGCCrateParticle extends IGCTierMenu
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
-        if (value.equalsIgnoreCase("amount"))
-        {
-            if (Utils.isInt(input))
-            {
+    public boolean handleInput(String value, String input) {
+        if (value.equalsIgnoreCase("amount")) {
+            if (Utils.isInt(input)) {
                 pd.setAmount(Integer.parseInt(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid integer (number).");
             }
-        }
-        else if (value.equalsIgnoreCase("Particle Type"))
-        {
-            if (pd.setParticle(input))
-            {
+        } else if (value.equalsIgnoreCase("Particle Type")) {
+            if (pd.setParticle(input)) {
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(),
                         input + " is not valid from the list of particles: " + Arrays.toString(ParticleEffect.values()));
             }
-        }
-        else if (value.equalsIgnoreCase("Particle Animation"))
-        {
-            try
-            {
-                if (input.equalsIgnoreCase("none"))
-                {
+        } else if (value.equalsIgnoreCase("Particle Animation")) {
+            try {
+                if (input.equalsIgnoreCase("none")) {
                     pd.setParticleAnimationEffect(null);
                     ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
                     return true;
-                }
-                else
-                {
+                } else {
                     PEAnimationType peAnimationType = PEAnimationType.valueOf(input.toUpperCase());
                     pd.setParticleAnimationEffect(peAnimationType.getAnimationEffectInstance(getCc(), pd));
                     pd.setHasAnimation(true);
                     ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
                     return true;
                 }
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.msgError(getP(),
                         input + " is not valid from the list of animations: " + Arrays.toString(PEAnimationType.values()));
                 return false;
             }
-        }
-        else if (getInputMenu().getType() == Double.class)
-        {
-            if (Utils.isDouble(input))
-            {
+        } else if (getInputMenu().getType() == Double.class) {
+            if (Utils.isDouble(input)) {
                 Float parsedIn = Float.valueOf(input);
-                if (value.equalsIgnoreCase("x range"))
-                {
+                if (value.equalsIgnoreCase("x range")) {
                     pd.setRangeX(parsedIn);
-                }
-                else if (value.equalsIgnoreCase("y range"))
-                {
+                } else if (value.equalsIgnoreCase("y range")) {
                     pd.setRangeY(parsedIn);
-                }
-                else if (value.equalsIgnoreCase("z range"))
-                {
+                } else if (value.equalsIgnoreCase("z range")) {
                     pd.setRangeZ(parsedIn);
-                }
-                else if (value.equalsIgnoreCase("x center offset"))
-                {
+                } else if (value.equalsIgnoreCase("x center offset")) {
                     pd.setCenterX(parsedIn);
-                }
-                else if (value.equalsIgnoreCase("y center offset"))
-                {
+                } else if (value.equalsIgnoreCase("y center offset")) {
                     pd.setCenterY(parsedIn);
-                }
-                else if (value.equalsIgnoreCase("z center offset"))
-                {
+                } else if (value.equalsIgnoreCase("z center offset")) {
                     pd.setCenterZ(parsedIn);
-                }
-                else if (value.equalsIgnoreCase("speed"))
-                {
+                } else if (value.equalsIgnoreCase("speed")) {
                     pd.setSpeed(parsedIn);
                 }
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid double (number).");
             }
         }

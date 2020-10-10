@@ -12,19 +12,15 @@ import org.bukkit.Sound;
 /**
  * Created by ztowne13 on 7/7/16.
  */
-public class FileDataLoader
-{
+public class FileDataLoader {
     FileHandler fileHandler;
 
-    public FileDataLoader(FileHandler fileHandler)
-    {
+    public FileDataLoader(FileHandler fileHandler) {
         this.fileHandler = fileHandler;
     }
 
-    public String loadString(String path, StatusLogger  statusLogger, StatusLoggerEvent pathDoesntExist, StatusLoggerEvent success)
-    {
-        if (!fileHandler.get().contains(path))
-        {
+    public String loadString(String path, StatusLogger statusLogger, StatusLoggerEvent pathDoesntExist, StatusLoggerEvent success) {
+        if (!fileHandler.get().contains(path)) {
             pathDoesntExist.log(statusLogger, new String[]{path});
             return "";
         }
@@ -34,12 +30,10 @@ public class FileDataLoader
     }
 
     public ItemBuilder loadItem(String path, ItemBuilder defValue, StatusLogger statusLogger, StatusLoggerEvent pathDoesntExist,
-                              StatusLoggerEvent invalidMaterial,
-                              StatusLoggerEvent invalidByte,
-                              StatusLoggerEvent invalid, StatusLoggerEvent success)
-    {
-        if (!fileHandler.get().contains(path))
-        {
+                                StatusLoggerEvent invalidMaterial,
+                                StatusLoggerEvent invalidByte,
+                                StatusLoggerEvent invalid, StatusLoggerEvent success) {
+        if (!fileHandler.get().contains(path)) {
             pathDoesntExist.log(statusLogger, new String[]{path});
             return defValue;
         }
@@ -47,37 +41,27 @@ public class FileDataLoader
         String value = fileHandler.get().getString(path);
 
         String[] args = value.split(";");
-        try
-        {
+        try {
             Material m = null;
-            try
-            {
+            try {
                 m = DynamicMaterial.fromString(args[0].toUpperCase()).parseMaterial();
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 invalidMaterial.log(statusLogger, new String[]{args[0]});
                 return defValue;
             }
 
             short byt = 0;
-            if (value.contains(";"))
-            {
-                if (Utils.isInt(args[1]))
-                {
+            if (value.contains(";")) {
+                if (Utils.isInt(args[1])) {
                     byt = Short.valueOf(args[1]);
-                }
-                else
-                {
+                } else {
                     invalidByte.log(statusLogger, new String[]{args[1]});
                 }
             }
             success.log(statusLogger, new String[]{value});
             DynamicMaterial dynMat = DynamicMaterial.fromString(value);
             return new ItemBuilder(dynMat, 1);
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             invalid.log(statusLogger, new String[]{value});
         }
         return defValue;
@@ -90,18 +74,15 @@ public class FileDataLoader
                                StatusLoggerEvent volumeInvalid,
                                StatusLoggerEvent noVolPitch,
                                StatusLoggerEvent pitchSuccess,
-                               StatusLoggerEvent pitchInvalid)
-    {
-        if (!fileHandler.get().contains(path))
-        {
+                               StatusLoggerEvent pitchInvalid) {
+        if (!fileHandler.get().contains(path)) {
             pathDoesntExist.log(statusLogger, new String[]{path});
             return new SoundData(Sound.values()[0], 0);
         }
 
         String value = fileHandler.get().getString(path);
 
-        try
-        {
+        try {
 
             String[] args = value.replaceAll("\\s+", "").split(",");
 
@@ -109,48 +90,34 @@ public class FileDataLoader
 
             soundSuccess.log(statusLogger);
 
-            if (args.length >= 2)
-            {
-                if (Utils.isInt(args[1]))
-                {
+            if (args.length >= 2) {
+                if (Utils.isInt(args[1])) {
                     sd.setVolume(Integer.parseInt(args[1]));
                     volumeSuccess.log(statusLogger);
-                }
-                else
-                {
+                } else {
                     sd.setVolume(5);
                     volumeInvalid.log(statusLogger, new String[]{args[1]});
                 }
 
-                if (args.length >= 3)
-                {
-                    if (Utils.isInt(args[2]))
-                    {
+                if (args.length >= 3) {
+                    if (Utils.isInt(args[2])) {
                         sd.setPitch(Integer.parseInt(args[2]));
                         pitchSuccess.log(statusLogger);
-                    }
-                    else
-                    {
+                    } else {
                         sd.setPitch(5);
                         pitchInvalid.log(statusLogger, new String[]{args[2]});
                     }
-                }
-                else
-                {
+                } else {
                     sd.setPitch(5);
                 }
-            }
-            else
-            {
+            } else {
                 noVolPitch.log(statusLogger);
                 sd.setVolume(5);
                 sd.setPitch(5);
             }
 
             return sd;
-        }
-        catch (Exception exc)
-        {
+        } catch (Exception exc) {
             soundFailure.log(statusLogger);
         }
 
@@ -158,23 +125,18 @@ public class FileDataLoader
     }
 
     public int loadInt(String path, int defValue, StatusLogger statusLogger, StatusLoggerEvent pathDoesntExist,
-                       StatusLoggerEvent success, StatusLoggerEvent invalid)
-    {
-        if (!fileHandler.get().contains(path))
-        {
+                       StatusLoggerEvent success, StatusLoggerEvent invalid) {
+        if (!fileHandler.get().contains(path)) {
             pathDoesntExist.log(statusLogger, new String[]{path});
             return defValue;
         }
 
         String value = fileHandler.get().getString(path);
 
-        if (Utils.isInt(value))
-        {
+        if (Utils.isInt(value)) {
             success.log(statusLogger);
             return Integer.parseInt(value);
-        }
-        else
-        {
+        } else {
             invalid.log(statusLogger);
             return defValue;
         }
@@ -182,23 +144,18 @@ public class FileDataLoader
 
     public double loadDouble(String path, double defValue, StatusLogger statusLogger, StatusLoggerEvent pathDoesntExist,
                              StatusLoggerEvent success,
-                             StatusLoggerEvent invalid)
-    {
-        if (!fileHandler.get().contains(path))
-        {
+                             StatusLoggerEvent invalid) {
+        if (!fileHandler.get().contains(path)) {
             pathDoesntExist.log(statusLogger, new String[]{path});
             return defValue;
         }
 
         String value = fileHandler.get().getString(path);
 
-        if (Utils.isDouble(value))
-        {
+        if (Utils.isDouble(value)) {
             success.log(statusLogger);
             return Double.parseDouble(value);
-        }
-        else
-        {
+        } else {
             invalid.log(statusLogger);
             return defValue;
         }
@@ -206,23 +163,18 @@ public class FileDataLoader
 
     public long loadLong(String path, long defValue, StatusLogger statusLogger, StatusLoggerEvent pathDoesntExist,
                          StatusLoggerEvent success,
-                         StatusLoggerEvent invalid)
-    {
-        if (!fileHandler.get().contains(path))
-        {
+                         StatusLoggerEvent invalid) {
+        if (!fileHandler.get().contains(path)) {
             pathDoesntExist.log(statusLogger, new String[]{path});
             return defValue;
         }
 
         String value = fileHandler.get().getString(path);
 
-        if (Utils.isLong(value))
-        {
+        if (Utils.isLong(value)) {
             success.log(statusLogger);
             return Long.parseLong(value);
-        }
-        else
-        {
+        } else {
             invalid.log(statusLogger);
             return defValue;
         }
@@ -230,23 +182,18 @@ public class FileDataLoader
 
     public boolean loadBoolean(String path, boolean defValue, StatusLogger statusLogger, StatusLoggerEvent pathDoesntExist,
                                StatusLoggerEvent success,
-                               StatusLoggerEvent invalid)
-    {
-        if (!fileHandler.get().contains(path))
-        {
+                               StatusLoggerEvent invalid) {
+        if (!fileHandler.get().contains(path)) {
             pathDoesntExist.log(statusLogger, new String[]{path});
             return defValue;
         }
 
         String value = fileHandler.get().getString(path);
 
-        if (Utils.isBoolean(value))
-        {
+        if (Utils.isBoolean(value)) {
             success.log(statusLogger);
             return Boolean.parseBoolean(value);
-        }
-        else
-        {
+        } else {
             invalid.log(statusLogger);
             return defValue;
         }

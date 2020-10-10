@@ -7,14 +7,12 @@ import org.bukkit.entity.ArmorStand;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class HologramManager
-{
+public abstract class HologramManager {
     SpecializedCrates cc;
 
     List<Hologram> holograms;
 
-    public HologramManager(SpecializedCrates cc)
-    {
+    public HologramManager(SpecializedCrates cc) {
         this.cc = cc;
         holograms = new ArrayList<>();
     }
@@ -27,8 +25,7 @@ public abstract class HologramManager
 
     abstract SpecializedCrates getCc();
 
-    public List<Hologram> getHolograms()
-    {
+    public List<Hologram> getHolograms() {
         return holograms;
     }
 }

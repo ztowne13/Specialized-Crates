@@ -23,16 +23,13 @@ import org.bukkit.entity.Player;
  * update-speed: 5
  * reward-amount: 1
  */
-public class IGCAnimOpenChest extends IGCAnimation
-{
-    public IGCAnimOpenChest(SpecializedCrates cc, Player p, IGCMenu lastMenu)
-    {
+public class IGCAnimOpenChest extends IGCAnimation {
+    public IGCAnimOpenChest(SpecializedCrates cc, Player p, IGCMenu lastMenu) {
         super(cc, p, lastMenu, "&7&l> &6&lOpenChest Animation", CrateAnimationType.BLOCK_CRATEOPEN);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(9);
 
@@ -72,10 +69,8 @@ public class IGCAnimOpenChest extends IGCAnimation
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 0:
                 up();
                 break;
@@ -104,37 +99,25 @@ public class IGCAnimOpenChest extends IGCAnimation
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         Object type = getInputMenu().getType();
-        if (type == Integer.class)
-        {
-            if (Utils.isInt(input))
-            {
+        if (type == Integer.class) {
+            if (Utils.isInt(input)) {
                 fc.set(getPath(value), Integer.parseInt(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This is not a valid number, please try again.");
             }
-        }
-        else if (type == Boolean.class)
-        {
-            if (Utils.isBoolean(input))
-            {
+        } else if (type == Boolean.class) {
+            if (Utils.isBoolean(input)) {
                 fc.set(getPath(value), Boolean.parseBoolean(input));
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 return true;
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This is not a valid true/false value, please try again.");
             }
-        }
-        else
-        {
+        } else {
             fc.set(getPath(value), input);
             ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
             return true;

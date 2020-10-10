@@ -10,16 +10,14 @@ import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
-public abstract class InventoryCrateAnimation extends CrateAnimation
-{
-    static int REDRAW_TICKS = 1;
-    static boolean FORCE_CLOSE = false;
+public abstract class InventoryCrateAnimation extends CrateAnimation {
+    private static final int REDRAW_TICKS = 1;
+    private static final boolean FORCE_CLOSE = false;
 
     protected SoundData tickSound = null;
     protected String invName = "";
 
-    public InventoryCrateAnimation(Crate crate, CrateAnimationType crateAnimationType)
-    {
+    public InventoryCrateAnimation(Crate crate, CrateAnimationType crateAnimationType) {
         super(crate, crateAnimationType);
     }
 
@@ -50,32 +48,26 @@ public abstract class InventoryCrateAnimation extends CrateAnimation
 
 
     @Override
-    public void handleClick(AnimationDataHolder dataHolder, int slot)
-    {
+    public void handleClick(AnimationDataHolder dataHolder, int slot) {
         InventoryAnimationDataHolder inventoryAnimationDataHolder = (InventoryAnimationDataHolder) dataHolder;
-        if (!inventoryAnimationDataHolder.getClickedSlots().contains(slot))
-        {
+        if (!inventoryAnimationDataHolder.getClickedSlots().contains(slot)) {
             inventoryAnimationDataHolder.getClickedSlots().add(slot);
         }
     }
 
     @Override
-    public void handleKeyPress(AnimationDataHolder dataHolder, KeyType type)
-    {
+    public void handleKeyPress(AnimationDataHolder dataHolder, KeyType type) {
         super.handleKeyPress(dataHolder, type);
 
-        if (type.equals(KeyType.ESC))
-        {
-            if (crate.getSettings().isCanFastTrack())
-            {
+        if (type.equals(KeyType.ESC)) {
+            if (crate.getSettings().isCanFastTrack()) {
                 dataHolder.setFastTrack(true, false);
             }
         }
     }
 
     @Override
-    public void tickAnimation(AnimationDataHolder dataHolder, boolean update)
-    {
+    public void tickAnimation(AnimationDataHolder dataHolder, boolean update) {
         InventoryAnimationDataHolder inventoryDataHolder = (InventoryAnimationDataHolder) dataHolder;
 
         tickInventory(inventoryDataHolder, update);
@@ -86,13 +78,11 @@ public abstract class InventoryCrateAnimation extends CrateAnimation
         tickFastTrack(inventoryDataHolder);
     }
 
-    public void drawInventory(InventoryAnimationDataHolder dataHolder)
-    {
+    public void drawInventory(InventoryAnimationDataHolder dataHolder) {
         if (dataHolder.getTotalTicks() % REDRAW_TICKS != 0 || dataHolder.isFastTrack())
             return;
 
-        if (FORCE_CLOSE)
-        {
+        if (FORCE_CLOSE) {
             dataHolder.getPlayer().closeInventory();
         }
 
@@ -100,18 +90,15 @@ public abstract class InventoryCrateAnimation extends CrateAnimation
 
         // Open inventory if it has been closed
         if (!dataHolder.getPlayer().getOpenInventory().getTopInventory().getType().equals(InventoryType.CHEST) ||
-                dataHolder.getPlayer().getOpenInventory().getTopInventory().getSize() != builder.getInv().getSize())
-        {
+                dataHolder.getPlayer().getOpenInventory().getTopInventory().getSize() != builder.getInv().getSize()) {
             dataHolder.getPlayer().openInventory(dataHolder.getInventoryBuilder().getInv());
         }
 
         // Redraw items into inventory if it is still open
         Inventory topInventory = dataHolder.getPlayer().getOpenInventory().getTopInventory();
-        for (int i = 0; i < builder.getInv().getSize(); i++)
-        {
+        for (int i = 0; i < builder.getInv().getSize(); i++) {
             if (builder.getInv().getItem(i) == null || topInventory.getItem(i) == null ||
-                    !topInventory.getItem(i).equals(builder.getInv().getItem(i)))
-            {
+                    !topInventory.getItem(i).equals(builder.getInv().getItem(i))) {
                 dataHolder.getPlayer().getOpenInventory().getTopInventory().setItem(i, builder.getInv().getItem(i));
             }
         }
@@ -119,61 +106,49 @@ public abstract class InventoryCrateAnimation extends CrateAnimation
         dataHolder.getPlayer().updateInventory();
     }
 
-    public void drawFillers(InventoryAnimationDataHolder dataHolder, int glassUpdateTicks)
-    {
+    public void drawFillers(InventoryAnimationDataHolder dataHolder, int glassUpdateTicks) {
         if (dataHolder.getTotalTicks() % glassUpdateTicks != 0 || dataHolder.isFastTrack())
             return;
 
         InventoryBuilder inv = dataHolder.getInventoryBuilder();
 
-        for (int i = 0; i < inv.getInv().getSize(); i++)
-        {
+        for (int i = 0; i < inv.getInv().getSize(); i++) {
             inv.setItem(i, getFiller());
         }
     }
 
-    public void playSound(InventoryAnimationDataHolder dataHolder)
-    {
-        if (getTickSound() != null && !dataHolder.isFastTrack())
-        {
+    public void playSound(InventoryAnimationDataHolder dataHolder) {
+        if (getTickSound() != null && !dataHolder.isFastTrack()) {
             dataHolder.getPlayer().playSound(dataHolder.getLocation(), getTickSound().getSound(), getTickSound().getVolume(),
                     getTickSound().getPitch());
         }
     }
 
-    public void tickFastTrack(InventoryAnimationDataHolder dataHolder)
-    {
-        if (dataHolder.isFastTrack())
-        {
-            for (int i = 0; i < dataHolder.getInventoryBuilder().getSize(); i++)
-            {
+    public void tickFastTrack(InventoryAnimationDataHolder dataHolder) {
+        if (dataHolder.isFastTrack()) {
+            for (int i = 0; i < dataHolder.getInventoryBuilder().getSize(); i++) {
                 handleClick(dataHolder, i);
             }
         }
 
-        if (dataHolder.isFastTrackWaitTick())
-        {
+        if (dataHolder.isFastTrackWaitTick()) {
             dataHolder.setFastTrack(true, true);
         }
     }
 
-    public SoundData getTickSound()
-    {
+    public SoundData getTickSound() {
         return tickSound;
     }
 
-    public void setTickSound(SoundData tickSound)
-    {
+    public void setTickSound(SoundData tickSound) {
         this.tickSound = tickSound;
     }
 
-    public String getInvName()
-    {
+    public String getInvName() {
         return invName;
     }
 
-    public void setInvName(String invName)
-    {
+    public void setInvName(String invName) {
         this.invName = invName;
     }
 }

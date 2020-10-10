@@ -2,8 +2,7 @@ package me.ztowne13.customcrates.interfaces.verification;
 
 import org.bukkit.Bukkit;
 
-public class AntiFraudPlaceholders
-{
+public class AntiFraudPlaceholders {
     static String USER = "%%__USER__%%";
 
     static String RESOURCE = "%%__RESOURCE__%%";

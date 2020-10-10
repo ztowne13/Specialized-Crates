@@ -29,18 +29,16 @@ import java.util.UUID;
 /**
  * Created by ztowne13 on 4/2/16.
  */
-public class IGCCrateParticles extends IGCTierMenu
-{
+public class IGCCrateParticles extends IGCTierMenu {
     HashMap<Integer, ParticleData> slots = new HashMap<Integer, ParticleData>();
+    ParticleData pd;
 
-    public IGCCrateParticles(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, String tier)
-    {
+    public IGCCrateParticles(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, String tier) {
         super(cc, p, lastMenu, "&7&l> &6&lParticles", crates, tier);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4,
                 (crates.getSettings().getParticles().getParticles().containsKey(tier) ?
@@ -51,13 +49,10 @@ public class IGCCrateParticles extends IGCTierMenu
                 new ItemBuilder(Material.PAPER, 1, 0).setName("&aCreate a new particle").setLore("&7Make sure you save")
                         .addLore("&7when you're done."));
 
-        if (crates.getSettings().getParticles().getParticles().containsKey(tier))
-        {
+        if (crates.getSettings().getParticles().getParticles().containsKey(tier)) {
             int i = 2;
-            for (ParticleData pd : crates.getSettings().getParticles().getParticles().get(tier))
-            {
-                if (i % 9 == 7)
-                {
+            for (ParticleData pd : crates.getSettings().getParticles().getParticles().get(tier)) {
+                if (i % 9 == 7) {
                     i += 4;
                 }
 
@@ -80,58 +75,42 @@ public class IGCCrateParticles extends IGCTierMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (slot == 9)
-        {
+    public void handleClick(int slot) {
+        if (slot == 9) {
             up();
-        }
-        else if (slot == 8)
-        {
-            if(VersionUtils.Version.v1_9.isServerVersionOrEarlier())
+        } else if (slot == 8) {
+            if (VersionUtils.Version.v1_9.isServerVersionOrEarlier())
                 new IGCListSelector(getCc(), getP(), this, "particle type", Arrays.asList(ParticleEffect.values()),
                         DynamicMaterial.NETHER_STAR, 1, null).open();
             else
                 new IGCListSelector(getCc(), getP(), this, "particle type", Arrays.asList(org.bukkit.Particle.values()),
                         DynamicMaterial.NETHER_STAR, 1, null).open();
-        }
-        else if (getIb().getInv().getItem(slot) != null &&
-                getIb().getInv().getItem(slot).getType().equals(Material.NETHER_STAR))
-        {
+        } else if (getIb().getInv().getItem(slot) != null &&
+                getIb().getInv().getItem(slot).getType().equals(Material.NETHER_STAR)) {
             ParticleData pd = slots.get(slot);
             new IGCCrateParticle(getCc(), getP(), this, crates, pd, tier).open();
         }
     }
 
-    ParticleData pd;
-
     @Override
-    public boolean handleInput(String value, String input)
-    {
-        if (value.equalsIgnoreCase("particle type"))
-        {
-            try
-            {
+    public boolean handleInput(String value, String input) {
+        if (value.equalsIgnoreCase("particle type")) {
+            try {
                 String newName = UUID.randomUUID().getLeastSignificantBits() + "";
 
-                if (VersionUtils.Version.v1_7.isServerVersionOrLater() && VersionUtils.Version.v1_8.isServerVersionOrEarlier())
-                {
+                if (VersionUtils.Version.v1_7.isServerVersionOrLater() && VersionUtils.Version.v1_8.isServerVersionOrEarlier()) {
                     ParticleEffect pe = ParticleEffect.valueOf(input.toUpperCase());
                     pd = new NMSParticleEffect(getCc(), pe, newName, false);
-                }
-                else
-                {
+                } else {
                     pd = new BukkitParticleEffect(getCc(), input.toUpperCase(), newName, false);
                 }
 
 
 				/*ParticleEffect pe = ParticleEffect.valueOf(input.toUpperCase());
 				pd = new ParticleData(pe);*/
-                Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable()
-                {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable() {
                     @Override
-                    public void run()
-                    {
+                    public void run() {
                         getP().closeInventory();
                     }
                 }, 1);
@@ -140,70 +119,45 @@ public class IGCCrateParticles extends IGCTierMenu
                         "How far the particles can spawn, in the X direction, from the crate.", Double.class, this);
 
                 return true;
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.msgError(getP(),
                         input + " is not valid from the list of particles: " + Arrays.toString(ParticleEffect.values()));
             }
-        }
-        else if (value.equalsIgnoreCase("x offset"))
-        {
-            if (Utils.isDouble(input))
-            {
+        } else if (value.equalsIgnoreCase("x offset")) {
+            if (Utils.isDouble(input)) {
                 pd.setRangeX(Float.valueOf(input));
                 new InputMenu(getCc(), getP(), "Y offset", "null",
                         "How far the particles can spawn, in the Y direction, from the crate.", Double.class, this);
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid double (number) value.");
             }
-        }
-        else if (value.equalsIgnoreCase("y offset"))
-        {
-            if (Utils.isDouble(input))
-            {
+        } else if (value.equalsIgnoreCase("y offset")) {
+            if (Utils.isDouble(input)) {
                 pd.setRangeY(Float.valueOf(input));
                 new InputMenu(getCc(), getP(), "Z offset", "null",
                         "How far the particles can spawn, in the Z direction, from the crate.", Double.class, this);
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid double (number) value.");
             }
-        }
-        else if (value.equalsIgnoreCase("z offset"))
-        {
-            if (Utils.isDouble(input))
-            {
+        } else if (value.equalsIgnoreCase("z offset")) {
+            if (Utils.isDouble(input)) {
                 pd.setRangeZ(Float.valueOf(input));
                 new InputMenu(getCc(), getP(), "speed", "null",
                         "Changes the speed of most of the particles. For some, like music notes, it changes the color.",
                         Double.class, this);
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid double (number) value.");
             }
-        }
-        else if (value.equalsIgnoreCase("speed"))
-        {
-            if (Utils.isDouble(input))
-            {
+        } else if (value.equalsIgnoreCase("speed")) {
+            if (Utils.isDouble(input)) {
                 pd.setSpeed(Float.valueOf(input));
                 new InputMenu(getCc(), getP(), "amount", "null", "How many particles spawn every tick (1/20th of a second).",
                         Integer.class, this);
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid double (number) value.");
             }
-        }
-        else if (value.equalsIgnoreCase("amount"))
-        {
-            if (Utils.isInt(input))
-            {
+        } else if (value.equalsIgnoreCase("amount")) {
+            if (Utils.isInt(input)) {
                 pd.setAmount(Integer.valueOf(input));
                 pd.save(cs.getFileHandler(), cs.getParticles().getPath(tier));
 
@@ -211,9 +165,7 @@ public class IGCCrateParticles extends IGCTierMenu
 
                 ChatUtils.msgSuccess(getP(), "Successfully set all particle values.");
                 new IGCCrateParticle(getCc(), getP(), this, crates, pd, tier).open();
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid integer (number) value.");
             }
         }

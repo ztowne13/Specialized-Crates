@@ -13,37 +13,31 @@ import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
+import java.util.Map;
 
-public class IGCMenuFallbackRewardSelector extends IGCMenu
-{
+public class IGCMenuFallbackRewardSelector extends IGCMenu {
     Reward reward;
     int page;
 
-    public IGCMenuFallbackRewardSelector(SpecializedCrates cc, Player p, IGCMenu lastMenu, Reward reward, int page)
-    {
+    public IGCMenuFallbackRewardSelector(SpecializedCrates cc, Player p, IGCMenu lastMenu, Reward reward, int page) {
         super(cc, p, lastMenu, "&7&l> &6&lRewards PG" + page);
         this.page = page;
         this.reward = reward;
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         int slots = 0;
 
         CRewards.loadAll(getCc(), getP());
 
-        HashMap<String, Reward> rewards = CRewards.getAllRewards();
+        Map<String, Reward> rewards = CRewards.getAllRewards();
         rewards.remove(reward.getRewardName());
 
-        if (rewards.size() - ((page - 1) * 28) >= 28)
-        {
+        if (rewards.size() - ((page - 1) * 28) >= 28) {
             slots = 28;
-        }
-        else
-        {
+        } else {
             slots = rewards.size() - ((page - 1) * 28);
         }
 
@@ -60,16 +54,13 @@ public class IGCMenuFallbackRewardSelector extends IGCMenu
         int skipped = 0;
         int displayedRewards = 0;
 
-        for (String rName : rewards.keySet())
-        {
-            if (toSkip > skipped || displayedRewards >= 28)
-            {
+        for (String rName : rewards.keySet()) {
+            if (toSkip > skipped || displayedRewards >= 28) {
                 skipped++;
                 continue;
             }
 
-            if (i % 9 == 8)
-            {
+            if (i % 9 == 8) {
                 i += 2;
             }
 
@@ -100,13 +91,11 @@ public class IGCMenuFallbackRewardSelector extends IGCMenu
             displayedRewards++;
         }
 
-        if (page != 1)
-        {
+        if (page != 1) {
             ib.setItem(2, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo back a page"));
         }
 
-        if ((CRewards.getAllRewards().size() / 28) + (CRewards.getAllRewards().size() % 28 == 0 ? 0 : 1) != page)
-        {
+        if ((CRewards.getAllRewards().size() / 28) + (CRewards.getAllRewards().size() % 28 == 0 ? 0 : 1) != page) {
             ib.setItem(6, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo forward a page"));
         }
 
@@ -115,24 +104,16 @@ public class IGCMenuFallbackRewardSelector extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
-        {
+    public void handleClick(int slot) {
+        if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
             page--;
             open();
-        }
-        else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
-        {
+        } else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
             page++;
             open();
-        }
-        else if (slot == 0)
-        {
+        } else if (slot == 0) {
             up();
-        }
-        else if (getIb().getInv().getItem(slot) != null)
-        {
+        } else if (getIb().getInv().getItem(slot) != null) {
             String rName = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
             reward.setFallbackRewardName(rName);
             ChatUtils.msgSuccess(getP(), "Set the fallback reward to " + rName);
@@ -141,8 +122,7 @@ public class IGCMenuFallbackRewardSelector extends IGCMenu
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         return false;
     }
 

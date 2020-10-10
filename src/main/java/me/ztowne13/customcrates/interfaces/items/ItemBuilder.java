@@ -24,8 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ItemBuilder implements EditableItem
-{
+public class ItemBuilder implements EditableItem {
     ItemStack stack;
 
     boolean glowing = false;
@@ -36,37 +35,31 @@ public class ItemBuilder implements EditableItem
     List<String> lore;
     List<ItemFlag> flags = null;
 
-    public ItemBuilder(EditableItem builder)
-    {
+    public ItemBuilder(EditableItem builder) {
         glowing = builder.isGlowing();
         stack = new ItemStack(builder.getStack());
         updateFromItem();
     }
 
-    public ItemBuilder(ItemStack fromStack)
-    {
+    public ItemBuilder(ItemStack fromStack) {
         stack = fromStack.clone();
         updateFromItem();
     }
 
     @Deprecated
-    public ItemBuilder(Material m, int amnt, int byt)
-    {
+    public ItemBuilder(Material m, int amnt, int byt) {
         create(DynamicMaterial.fromString(m.name() + ";" + byt), amnt);
     }
 
-    public ItemBuilder(DynamicMaterial material)
-    {
+    public ItemBuilder(DynamicMaterial material) {
         create(material, 1);
     }
 
-    public ItemBuilder(DynamicMaterial m, int amnt)
-    {
+    public ItemBuilder(DynamicMaterial m, int amnt) {
         create(m, amnt);
     }
 
-    public void reset()
-    {
+    public void reset() {
         getEnchantments().clear();
         getNBTTags().clear();
         getLore().clear();
@@ -75,76 +68,59 @@ public class ItemBuilder implements EditableItem
         rgbColor = null;
     }
 
-    public void updateFromItem()
-    {
+    public void updateFromItem() {
         reset();
 
         List<String> cachedTags = NBTTagBuilder.getFrom(stack, false);
 
         // Enchantments
         Map<Enchantment, Integer> enchants;
-        if (im() instanceof EnchantmentStorageMeta)
-        {
+        if (im() instanceof EnchantmentStorageMeta) {
             EnchantmentStorageMeta meta = (EnchantmentStorageMeta) im();
             enchants = meta.getStoredEnchants();
-        }
-        else
-        {
+        } else {
             enchants = stack.getEnchantments();
         }
-        for (Enchantment enchantment : enchants.keySet())
-        {
+        for (Enchantment enchantment : enchants.keySet()) {
             addEnchantment(enchantment, enchants.get(enchantment));
         }
 
         // Potion Effects
-        if (stack.hasItemMeta() && im() instanceof PotionMeta)
-        {
+        if (stack.hasItemMeta() && im() instanceof PotionMeta) {
             PotionMeta pm = (PotionMeta) im();
 
-            if (VersionUtils.Version.v1_9.isServerVersionOrLater())
-            {
+            if (VersionUtils.Version.v1_9.isServerVersionOrLater()) {
                 PotionData baseData = pm.getBasePotionData();
-                if(baseData.getType().getEffectType() != null)
-                {
+                if (baseData.getType().getEffectType() != null) {
                     addPotionEffect(
                             new CompressedPotionEffect(baseData.getType().getEffectType(), baseData.isExtended() ? 1 : 0,
                                     baseData.isUpgraded() ? 1 : 0));
                 }
 
-                for (PotionEffect pe : pm.getCustomEffects())
-                {
+                for (PotionEffect pe : pm.getCustomEffects()) {
                     addPotionEffect(new CompressedPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier()));
                 }
-            }
-            else
-            {
+            } else {
                 Potion pot = Potion.fromItemStack(stack);
 
-                try
-                {
+                try {
                     Potion toClearPot = Potion.fromItemStack(stack);
                     toClearPot.getEffects().clear();
                     toClearPot.apply(stack);
-                }
-                catch(Exception exc)
-                {
+                } catch (Exception exc) {
 
                 }
 
-                if(pot != null && pot.getType() != null)
-                {
+                if (pot != null && pot.getType() != null) {
                     addPotionEffect(new CompressedPotionEffect(pot.getType().getEffectType(), 1, 1));
 
                     ArrayList<CompressedPotionEffect> toAdd = new ArrayList<>();
 
-                    for (PotionEffect pe : pot.getEffects())
-                    {
+                    for (PotionEffect pe : pot.getEffects()) {
                         toAdd.add(new CompressedPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier()));
                     }
 
-                    for(CompressedPotionEffect effect : toAdd)
-                    {
+                    for (CompressedPotionEffect effect : toAdd) {
                         addPotionEffect(effect);
                     }
                 }
@@ -152,28 +128,24 @@ public class ItemBuilder implements EditableItem
         }
 
         // NBT Tags
-        for (String tags : cachedTags)
-        {
+        for (String tags : cachedTags) {
             addNBTTag(tags);
         }
 
         // Lore
-        if (stack.hasItemMeta() && stack.getItemMeta().hasLore())
-        {
+        if (stack.hasItemMeta() && stack.getItemMeta().hasLore()) {
             for (String line : stack.getItemMeta().getLore())
                 addLore(line);
         }
 
         // Item Flags
-        if (stack.hasItemMeta() && stack.getItemMeta().getItemFlags() != null)
-        {
+        if (stack.hasItemMeta() && stack.getItemMeta().getItemFlags() != null) {
             for (ItemFlag flag : stack.getItemMeta().getItemFlags())
                 addItemFlag(flag);
         }
 
         // Coloured Armor
-        if (im() instanceof LeatherArmorMeta)
-        {
+        if (im() instanceof LeatherArmorMeta) {
             LeatherArmorMeta meta = (LeatherArmorMeta) im();
             RGBColor newColor =
                     new RGBColor(meta.getColor().getRed(), meta.getColor().getGreen(), meta.getColor().getBlue());
@@ -181,66 +153,54 @@ public class ItemBuilder implements EditableItem
         }
     }
 
-    public void create(DynamicMaterial m, int amnt)
-    {
+    public void create(DynamicMaterial m, int amnt) {
         stack = m.parseItem();
         stack.setAmount(amnt);
         if (m.preProgrammedNBTTag && VersionUtils.Version.v1_12.isServerVersionOrEarlier())
             addNBTTag("EntityTag " + m.nbtTag);
     }
 
-    public ItemMeta im()
-    {
-        if(getStack().getItemMeta() == null) {
+    public ItemMeta im() {
+        if (getStack().getItemMeta() == null) {
             return Bukkit.getItemFactory().getItemMeta(getStack().getType());
         }
         return getStack().getItemMeta();
     }
 
-    public void setIm(ItemMeta im)
-    {
+    public void setIm(ItemMeta im) {
         getStack().setItemMeta(im);
     }
 
     @Deprecated
-    public ItemBuilder setName(String name)
-    {
+    public ItemBuilder setName(String name) {
         setDisplayName(name);
         return this;
     }
 
     @Override
-    public void setDisplayName(String name)
-    {
+    public void setDisplayName(String name) {
         ItemMeta im = im();
-        if (name == null)
-        {
+        if (name == null) {
             im.setDisplayName(null);
-        }
-        else
-        {
+        } else {
             im.setDisplayName(ChatUtils.toChatColor(name));
         }
         setIm(im);
     }
 
-    public void removeDisplayName()
-    {
+    public void removeDisplayName() {
         ItemMeta im = im();
         im.setDisplayName(null);
         setIm(im);
     }
 
-    public String getDisplayNameFromChatColor(boolean useMaterialWhenNull)
-    {
+    public String getDisplayNameFromChatColor(boolean useMaterialWhenNull) {
         return ChatUtils.fromChatColor(getDisplayName(useMaterialWhenNull));
     }
 
     @Override
-    public String getDisplayName(boolean useMaterialWhenNull)
-    {
-        if (useMaterialWhenNull)
-        {
+    public String getDisplayName(boolean useMaterialWhenNull) {
+        if (useMaterialWhenNull) {
             return hasDisplayName() ? im().getDisplayName() :
                     WordUtils.capitalizeFully(get().getType().name().replaceAll("_", " "));
         }
@@ -248,49 +208,39 @@ public class ItemBuilder implements EditableItem
         return im().getDisplayName();
     }
 
-    public boolean hasDisplayName()
-    {
+    public boolean hasDisplayName() {
         return im() != null &&
                 getDisplayName(false) != null &&
                 !getDisplayName(false).equalsIgnoreCase("");
     }
 
-    public String getName(boolean strippedOfColor)
-    {
+    public String getName(boolean strippedOfColor) {
         return strippedOfColor ? ChatUtils.removeColor(im().getDisplayName()) : im().getDisplayName();
     }
 
-    public ItemBuilder addLore(String s)
-    {
+    public ItemBuilder addLore(String s) {
         getLore().add(s);
         reapplyLore();
         return this;
     }
 
-    public ItemBuilder addAutomaticLore(String lineColor, int charLength, String lore)
-    {
+    public ItemBuilder addAutomaticLore(String lineColor, int charLength, String lore) {
         return addAutomaticLore(lineColor, charLength, false, lore);
     }
 
-    public ItemBuilder addAutomaticLore(String lineColor, int charLength, boolean maintainColor, String lore)
-    {
+    public ItemBuilder addAutomaticLore(String lineColor, int charLength, boolean maintainColor, String lore) {
         String[] split = lore.split(" ");
         int lineSize = 0;
         String currentLine = "";
         String lastLine = "";
 
-        for (String word : split)
-        {
+        for (String word : split) {
             int wordLength = word.length();
-            if (lineSize + wordLength <= charLength)
-            {
+            if (lineSize + wordLength <= charLength) {
                 lineSize += wordLength + 1;
                 currentLine += word + " ";
-            }
-            else
-            {
-                if(maintainColor)
-                {
+            } else {
+                if (maintainColor) {
                     lineColor = ChatUtils.lastChatColor(lastLine);
                 }
                 String line = lineColor + currentLine.substring(0, currentLine.length() - 1);
@@ -302,8 +252,7 @@ public class ItemBuilder implements EditableItem
 
             }
         }
-        if(maintainColor)
-        {
+        if (maintainColor) {
             lineColor = ChatUtils.lastChatColor(lastLine);
         }
         if (lineSize != 0)
@@ -312,16 +261,21 @@ public class ItemBuilder implements EditableItem
         return this;
     }
 
-    public ItemBuilder clearLore()
-    {
+    public ItemBuilder clearLore() {
         getLore().clear();
         reapplyLore();
         return this;
     }
 
+    @Override
+    public List<String> getLore() {
+        if (lore == null)
+            lore = new ArrayList<>();
+        return lore;
+    }
+
     @Deprecated
-    public ItemBuilder setLore(String s)
-    {
+    public ItemBuilder setLore(String s) {
         clearLore();
         addLore(s);
 
@@ -329,16 +283,7 @@ public class ItemBuilder implements EditableItem
     }
 
     @Override
-    public List<String> getLore()
-    {
-        if (lore == null)
-            lore = new ArrayList<>();
-        return lore;
-    }
-
-    @Override
-    public void reapplyLore()
-    {
+    public void reapplyLore() {
         ItemMeta im = im();
 
         ArrayList<String> colorizedLore = new ArrayList<>();
@@ -349,35 +294,28 @@ public class ItemBuilder implements EditableItem
         setIm(im);
     }
 
-    public void addEnchantment(Enchantment enchantment, int level)
-    {
+    public void addEnchantment(Enchantment enchantment, int level) {
         addEnchantment(new CompressedEnchantment(enchantment, level));
     }
 
-    public void addEnchantment(CompressedEnchantment compressedEnchantment)
-    {
+    public void addEnchantment(CompressedEnchantment compressedEnchantment) {
         getEnchantments().add(compressedEnchantment);
         reapplyEnchantments();
     }
 
-    public void addPotionEffect(CompressedPotionEffect compressedPotionEffect)
-    {
+    public void addPotionEffect(CompressedPotionEffect compressedPotionEffect) {
         getPotionEffects().add(compressedPotionEffect);
         reapplyPotionEffects();
     }
 
-    public void addNBTTag(String tag)
-    {
+    public void addNBTTag(String tag) {
         getNBTTags().add(tag);
         reapplyNBTTags();
     }
 
-    public boolean hasNBTTag(String tag)
-    {
-        for (String tagParsed : getNBTTags())
-        {
-            if (tagParsed.split(" ")[0].equalsIgnoreCase(tag))
-            {
+    public boolean hasNBTTag(String tag) {
+        for (String tagParsed : getNBTTags()) {
+            if (tagParsed.split(" ")[0].equalsIgnoreCase(tag)) {
                 return true;
             }
         }
@@ -385,36 +323,37 @@ public class ItemBuilder implements EditableItem
     }
 
     @Override
-    public void addItemFlag(ItemFlag flag)
-    {
+    public void addItemFlag(ItemFlag flag) {
         getItemFlags().add(flag);
         reapplyItemFlags();
     }
 
     @Override
-    public void removeItemFlag(ItemFlag flag)
-    {
+    public void removeItemFlag(ItemFlag flag) {
         getItemFlags().remove(flag);
         reapplyItemFlags();
     }
 
+    @Override
+    public String getPlayerHeadName() {
+        if (DynamicMaterial.fromItemStack(getStack()).equals(DynamicMaterial.PLAYER_HEAD)) {
+            SkullMeta skullMeta = (SkullMeta) im();
+            return skullMeta.getOwner();
+        }
+
+        return null;
+    }
 
     @Override
-    public void setPlayerHeadName(String name)
-    {
-        if (DynamicMaterial.fromItemStack(getStack()).equals(DynamicMaterial.PLAYER_HEAD))
-        {
-            if (Character.isLetterOrDigit(name.charAt(0)))
-            {
+    public void setPlayerHeadName(String name) {
+        if (DynamicMaterial.fromItemStack(getStack()).equals(DynamicMaterial.PLAYER_HEAD)) {
+            if (Character.isLetterOrDigit(name.charAt(0))) {
                 SkullMeta skullMeta = (SkullMeta) im();
-                try
-                {
+                try {
                     UUID uuid = UUID.fromString(name);
                     OfflinePlayer op = Bukkit.getOfflinePlayer(uuid);
                     skullMeta.setOwningPlayer(op);
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     skullMeta.setOwner(name);
 
                 }
@@ -424,26 +363,12 @@ public class ItemBuilder implements EditableItem
     }
 
     @Override
-    public String getPlayerHeadName()
-    {
-        if (DynamicMaterial.fromItemStack(getStack()).equals(DynamicMaterial.PLAYER_HEAD))
-        {
-            SkullMeta skullMeta = (SkullMeta) im();
-            return skullMeta.getOwner();
-        }
-
-        return null;
-    }
-
-    @Override
-    public boolean isGlowing()
-    {
+    public boolean isGlowing() {
         return glowing;
     }
 
     @Override
-    public void setGlowing(boolean glow)
-    {
+    public void setGlowing(boolean glow) {
         BukkitGlowEffect ge = new BukkitGlowEffect(stack);
         if (glow)
             stack = ge.apply();
@@ -453,8 +378,7 @@ public class ItemBuilder implements EditableItem
     }
 
     @Override
-    public List<String> getNBTTags()
-    {
+    public List<String> getNBTTags() {
         if (nbtTags == null)
             nbtTags = new ArrayList<>();
 
@@ -462,17 +386,14 @@ public class ItemBuilder implements EditableItem
     }
 
     @Override
-    public void reapplyNBTTags()
-    {
-        for (String tag : getNBTTags())
-        {
+    public void reapplyNBTTags() {
+        for (String tag : getNBTTags()) {
             stack = NBTTagBuilder.applyTo(stack, tag);
         }
     }
 
     @Override
-    public List<ItemFlag> getItemFlags()
-    {
+    public List<ItemFlag> getItemFlags() {
         if (flags == null)
             flags = new ArrayList<>();
 
@@ -480,8 +401,7 @@ public class ItemBuilder implements EditableItem
     }
 
     @Override
-    public void reapplyItemFlags()
-    {
+    public void reapplyItemFlags() {
         ItemStack stack = get();
         ItemMeta im = stack.getItemMeta();
 
@@ -495,8 +415,7 @@ public class ItemBuilder implements EditableItem
     }
 
     @Override
-    public List<CompressedEnchantment> getEnchantments()
-    {
+    public List<CompressedEnchantment> getEnchantments() {
         if (enchantments == null)
             enchantments = new ArrayList<>();
 
@@ -504,20 +423,17 @@ public class ItemBuilder implements EditableItem
     }
 
     @Override
-    public void reapplyEnchantments()
-    {
+    public void reapplyEnchantments() {
         for (Enchantment enchantment : stack.getEnchantments().keySet())
             im().removeEnchant(enchantment);
 
-        for (CompressedEnchantment compressedEnchantment : getEnchantments())
-        {
+        for (CompressedEnchantment compressedEnchantment : getEnchantments()) {
             compressedEnchantment.applyTo(this);
         }
     }
 
     @Override
-    public List<CompressedPotionEffect> getPotionEffects()
-    {
+    public List<CompressedPotionEffect> getPotionEffects() {
         if (potionEffects == null)
             potionEffects = new ArrayList<>();
 
@@ -525,30 +441,24 @@ public class ItemBuilder implements EditableItem
     }
 
     @Override
-    public void reapplyPotionEffects()
-    {
+    public void reapplyPotionEffects() {
         boolean first = true;
 
-        if (stack.getItemMeta() instanceof PotionMeta)
-        {
+        if (stack.getItemMeta() instanceof PotionMeta) {
             PotionMeta pm = (PotionMeta) im();
             pm.clearCustomEffects();
 
-            if (!getPotionEffects().isEmpty())
-            {
+            if (!getPotionEffects().isEmpty()) {
 
                 CompressedPotionEffect firstVal = getPotionEffects().get(0);
-                if (VersionUtils.Version.v1_9.isServerVersionOrLater())
-                {
+                if (VersionUtils.Version.v1_9.isServerVersionOrLater()) {
                     boolean isOld = (firstVal.getAmplifier() == 1 && firstVal.getDuration() == 1);
 
                     PotionData potionData =
                             new PotionData(PotionType.getByEffect(firstVal.getType()), firstVal.getDuration() == 1 && !isOld,
                                     firstVal.getAmplifier() == 1 && !isOld);
                     pm.setBasePotionData(potionData);
-                }
-                else
-                {
+                } else {
                     Potion pot = new Potion(PotionType.getByEffect(firstVal.getType()), firstVal.getAmplifier() == 0 ? 1 : 2,
                             stack.getType().equals(DynamicMaterial.SPLASH_POTION.parseMaterial()));
                     pot.apply(stack);
@@ -558,8 +468,7 @@ public class ItemBuilder implements EditableItem
 
             stack.setItemMeta(pm);
 
-            for (CompressedPotionEffect compressedPotionEffect : getPotionEffects())
-            {
+            for (CompressedPotionEffect compressedPotionEffect : getPotionEffects()) {
                 if (!first)
                     stack = compressedPotionEffect.applyTo(stack);
                 first = false;
@@ -568,17 +477,8 @@ public class ItemBuilder implements EditableItem
     }
 
     @Override
-    public void setColor(RGBColor rgbColor)
-    {
-        this.rgbColor = rgbColor;
-        reapplyColor();
-    }
-
-    @Override
-    public void reapplyColor()
-    {
-        if (isColorable() && getColor() != null)
-        {
+    public void reapplyColor() {
+        if (isColorable() && getColor() != null) {
             LeatherArmorMeta meta = (LeatherArmorMeta) im();
             meta.setColor(Color.fromRGB(getColor().getR(), getColor().getG(), getColor().getB()));
             setIm(meta);
@@ -586,12 +486,9 @@ public class ItemBuilder implements EditableItem
     }
 
     @Override
-    public RGBColor getColor()
-    {
-        if (isColorable())
-        {
-            if (rgbColor == null)
-            {
+    public RGBColor getColor() {
+        if (isColorable()) {
+            if (rgbColor == null) {
                 RGBColor rgbColor = new RGBColor(160, 101, 64);
                 setColor(rgbColor);
             }
@@ -601,14 +498,18 @@ public class ItemBuilder implements EditableItem
     }
 
     @Override
-    public boolean isColorable()
-    {
+    public void setColor(RGBColor rgbColor) {
+        this.rgbColor = rgbColor;
+        reapplyColor();
+    }
+
+    @Override
+    public boolean isColorable() {
         return im() instanceof LeatherArmorMeta;
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         ItemBuilder compare = (ItemBuilder) obj;
 
         boolean loreEquals = true;
@@ -616,16 +517,12 @@ public class ItemBuilder implements EditableItem
         if (compare == null)
             return false;
 
-        if (getLore().size() == compare.getLore().size())
-        {
-            for (int i = 0; i < getLore().size(); i++)
-            {
+        if (getLore().size() == compare.getLore().size()) {
+            for (int i = 0; i < getLore().size(); i++) {
                 if (!getLore().get(i).equals(compare.getLore().get(i)))
                     loreEquals = false;
             }
-        }
-        else
-        {
+        } else {
             loreEquals = false;
         }
 
@@ -641,58 +538,45 @@ public class ItemBuilder implements EditableItem
         return equal;
     }
 
-    public ItemBuilder clone()
-    {
+    public ItemBuilder clone() {
         return new ItemBuilder(this);
     }
 
     @Override
-    public void setDamage(int damage)
-    {
-        if(damage == 0 && getDamage() == 0)
-        {
-            return;
-        }
-
-        if(VersionUtils.Version.v1_13.isServerVersionOrLater() && im() instanceof Damageable)
-        {
-            Damageable meta = (Damageable)im();
-            meta.setDamage(damage);
-            setIm((ItemMeta)meta);
-        }
-        else if(VersionUtils.Version.v1_12.isServerVersionOrEarlier())
-        {
-            getStack().setDurability((short)damage);
-        }
-    }
-
-    @Override
-    public int getDamage()
-    {
-        if(VersionUtils.Version.v1_13.isServerVersionOrLater() && im() instanceof Damageable)
-        {
-            Damageable meta = (Damageable)im();
+    public int getDamage() {
+        if (VersionUtils.Version.v1_13.isServerVersionOrLater() && im() instanceof Damageable) {
+            Damageable meta = (Damageable) im();
             return meta.getDamage();
-        }
-        else if(VersionUtils.Version.v1_12.isServerVersionOrEarlier())
-        {
+        } else if (VersionUtils.Version.v1_12.isServerVersionOrEarlier()) {
             return get().getDurability();
         }
         return 0;
     }
 
-    public ItemStack get()
-    {
+    @Override
+    public void setDamage(int damage) {
+        if (damage == 0 && getDamage() == 0) {
+            return;
+        }
+
+        if (VersionUtils.Version.v1_13.isServerVersionOrLater() && im() instanceof Damageable) {
+            Damageable meta = (Damageable) im();
+            meta.setDamage(damage);
+            setIm((ItemMeta) meta);
+        } else if (VersionUtils.Version.v1_12.isServerVersionOrEarlier()) {
+            getStack().setDurability((short) damage);
+        }
+    }
+
+    public ItemStack get() {
         return getStack();
     }
 
-    public ItemStack getStack()
-    {
+    public ItemStack getStack() {
         return stack;
     }
 
-    public void setStack(ItemStack stack)
-    {
+    public void setStack(ItemStack stack) {
         this.stack = stack;
     }
 }

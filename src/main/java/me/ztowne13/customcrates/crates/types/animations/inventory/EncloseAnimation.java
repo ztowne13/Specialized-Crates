@@ -10,31 +10,27 @@ import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
-import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * Created by ztowne13 on 7/5/16.
  */
-public class EncloseAnimation extends InventoryCrateAnimation
-{
-    int inventoryRows, updateSpeed, rewardAmount;
+public class EncloseAnimation extends InventoryCrateAnimation {
+    int inventoryRows;
+    int updateSpeed;
+    int rewardAmount;
     ItemBuilder fillerItem;
 
-    public EncloseAnimation(Crate crate)
-    {
+    public EncloseAnimation(Crate crate) {
         super(crate, CrateAnimationType.INV_ENCLOSE);
     }
 
     @Override
-    public void tickInventory(InventoryAnimationDataHolder dataHolder, boolean update)
-    {
+    public void tickInventory(InventoryAnimationDataHolder dataHolder, boolean update) {
         EncloseAnimationDataHolder eadh = (EncloseAnimationDataHolder) dataHolder;
 
-        switch (eadh.getCurrentState())
-        {
+        switch (eadh.getCurrentState()) {
             case PLAYING:
-                if (update)
-                {
+                if (update) {
                     playSound(eadh);
                     updateRewards(eadh);
                 }
@@ -45,44 +41,37 @@ public class EncloseAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public void checkStateChange(AnimationDataHolder dataHolder, boolean update)
-    {
+    public void checkStateChange(AnimationDataHolder dataHolder, boolean update) {
         EncloseAnimationDataHolder eadh = (EncloseAnimationDataHolder) dataHolder;
-        switch (eadh.getCurrentState())
-        {
+        switch (eadh.getCurrentState()) {
             case PLAYING:
-                if (eadh.getCurrentTicksIn() < 0)
-                {
+                if (eadh.getCurrentTicksIn() < 0) {
                     eadh.setCurrentState(AnimationDataHolder.State.ENDING);
                 }
                 break;
             case ENDING:
-                if (dataHolder.getWaitingTicks() == 50)
-                {
+                if (dataHolder.getWaitingTicks() == 50) {
                     dataHolder.setCurrentState(AnimationDataHolder.State.COMPLETED);
                 }
         }
     }
 
     @Override
-    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh) { }
+    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh) {
+    }
 
     @Override
-    public ItemBuilder getFiller()
-    {
+    public ItemBuilder getFiller() {
         return fillerItem;
     }
 
     @Override
-    public boolean updateTicks(AnimationDataHolder dataHolder)
-    {
+    public boolean updateTicks(AnimationDataHolder dataHolder) {
         EncloseAnimationDataHolder eadh = (EncloseAnimationDataHolder) dataHolder;
 
-        switch(eadh.getCurrentState())
-        {
+        switch (eadh.getCurrentState()) {
             case PLAYING:
-                if ((eadh.getIndividualTicks() + updateSpeed - 1) % updateSpeed == 0)
-                {
+                if ((eadh.getIndividualTicks() + updateSpeed - 1) % updateSpeed == 0) {
                     eadh.setCurrentTicksIn(eadh.getCurrentTicksIn() - 1);
                     eadh.setIndividualTicks(1);
                     return true;
@@ -95,18 +84,15 @@ public class EncloseAnimation extends InventoryCrateAnimation
         return false;
     }
 
-    public void updateRewards(EncloseAnimationDataHolder eadh)
-    {
+    public void updateRewards(EncloseAnimationDataHolder eadh) {
         eadh.getLastDisplayRewards().clear();
 
         int size = eadh.getInventoryBuilder().getSize();
         int midPoint = (size / 2) + 1;
 
-        for (int i = 0; i < size; i++)
-        {
+        for (int i = 0; i < size; i++) {
             if (i >= midPoint - eadh.getCurrentTicksIn() - 1 - rewardAmount &&
-                    i < midPoint + eadh.getCurrentTicksIn() + rewardAmount)
-            {
+                    i < midPoint + eadh.getCurrentTicksIn() + rewardAmount) {
                 Reward r = getCrate().getSettings().getRewards().getRandomReward();
                 eadh.getLastDisplayRewards().add(r);
             }
@@ -114,18 +100,15 @@ public class EncloseAnimation extends InventoryCrateAnimation
 
     }
 
-    public void drawRewards(EncloseAnimationDataHolder eadh)
-    {
+    public void drawRewards(EncloseAnimationDataHolder eadh) {
         int size = eadh.getInventoryBuilder().getSize();
         int midPoint = (size / 2) + 1;
 
         int currentDisplayedReward = 0;
 
-        for (int i = 0; i < size; i++)
-        {
+        for (int i = 0; i < size; i++) {
             if (i >= midPoint - eadh.getCurrentTicksIn() - 1 - rewardAmount &&
-                    i < midPoint + eadh.getCurrentTicksIn() + rewardAmount)
-            {
+                    i < midPoint + eadh.getCurrentTicksIn() + rewardAmount) {
                 Reward r = eadh.getLastDisplayRewards().get(currentDisplayedReward);
                 eadh.getInventoryBuilder().setItem(i, r.getDisplayBuilder());
                 currentDisplayedReward++;
@@ -134,8 +117,7 @@ public class EncloseAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public void endAnimation(AnimationDataHolder dataHolder)
-    {
+    public void endAnimation(AnimationDataHolder dataHolder) {
         EncloseAnimationDataHolder edh = (EncloseAnimationDataHolder) dataHolder;
 
         finishAnimation(edh.getPlayer(), edh.getLastDisplayRewards(), false, null);
@@ -143,10 +125,7 @@ public class EncloseAnimation extends InventoryCrateAnimation
     }
 
     @Override
-    public void loadDataValues(StatusLogger sl)
-    {
-        FileConfiguration fc = cc.getCrateconfigFile().get();
-
+    public void loadDataValues(StatusLogger sl) {
         invName = fu.getFileDataLoader()
                 .loadString(prefix + "inv-name", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVNAME_SUCCESS);
@@ -156,8 +135,7 @@ public class EncloseAnimation extends InventoryCrateAnimation
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVROWS_SUCCESS,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVROWS_INVALID);
 
-        if (getInventoryRows() > 2)
-        {
+        if (getInventoryRows() > 2) {
             setInventoryRows(2);
         }
 
@@ -189,46 +167,42 @@ public class EncloseAnimation extends InventoryCrateAnimation
                 StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT, StatusLoggerEvent.ANIMATION_ENCLOSEMENT_REWARDAMOUNT_SUCCESS,
                 StatusLoggerEvent.ANIMATION_ENCLOSEMENT_REWARDAMOUNT_INVALID);
 
-        if (rewardAmount % 2 == 0)
-        {
+        if (rewardAmount % 2 == 0) {
             rewardAmount++;
         }
         rewardAmount--;
         rewardAmount = rewardAmount == 0 ? 0 : rewardAmount / 2;
     }
 
-    public String getInvName()
-    {
+    @Override
+    public String getInvName() {
         return invName;
     }
 
-    public void setInvName(String invName)
-    {
+    @Override
+    public void setInvName(String invName) {
         this.invName = invName;
     }
 
-    public int getInventoryRows()
-    {
+    public int getInventoryRows() {
         return inventoryRows;
     }
 
-    public void setInventoryRows(int inventoryRows)
-    {
+    public void setInventoryRows(int inventoryRows) {
         this.inventoryRows = inventoryRows;
     }
 
-    public int getRewardAmount()
-    {
+    public int getRewardAmount() {
         return rewardAmount;
     }
 
-    public SoundData getTickSound()
-    {
+    @Override
+    public SoundData getTickSound() {
         return tickSound;
     }
 
-    public void setTickSound(SoundData tickSound)
-    {
+    @Override
+    public void setTickSound(SoundData tickSound) {
         this.tickSound = tickSound;
     }
 }

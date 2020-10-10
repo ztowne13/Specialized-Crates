@@ -1,18 +1,14 @@
 package me.ztowne13.customcrates.crates.options.particles;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.DebugUtils;
-import me.ztowne13.customcrates.utils.ReflectionUtilities;
-import me.ztowne13.customcrates.utils.Utils;
+import me.ztowne13.customcrates.utils.*;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
-public enum ParticleEffect
-{
+public enum ParticleEffect {
 
     HUGE_EXPLOSION("hugeexplosion", "EXPLOSION_HUGE"),
 
@@ -142,118 +138,95 @@ public enum ParticleEffect
 
     MOB_APPEARANCE;
 
-    public String particleName;
-    public String enumValue;
-    public static Class<?> nmsPacketPlayOutParticle = ReflectionUtilities.getNMSClass("PacketPlayOutWorldParticles");
-    public static Class<?> nmsEnumParticle;
-    public static int particleRange = 25;
+    public static final Class<?> nmsPacketPlayOutParticle = ReflectionUtilities.getNMSClass("PacketPlayOutWorldParticles");
+    private static final HashMap<String, Enum<?>> cachedEnums = new HashMap<>();
+    private final String particleName;
+    protected String enumValue;
+    private Class<?> nmsEnumParticle;
+    //    public static int particleRange = 25;
+    private Constructor<?> cachedConstructor = null;
 
-    public static Constructor<?> cachedConstructor = null;
-
-    ParticleEffect(String particleName, String enumValue)
-    {
+    ParticleEffect(String particleName, String enumValue) {
         this.particleName = particleName;
         this.enumValue = enumValue;
     }
 
-    ParticleEffect(String particleName)
-    {
+    ParticleEffect(String particleName) {
         this(particleName, null);
     }
 
-    ParticleEffect()
-    {
+    ParticleEffect() {
         this(null, null);
     }
 
-    public String getName()
-    {
+    private static Enum<?> getEnum(String enumFullName) {
+        if (DebugUtils.LOG_CACHED_INFO) {
+            ChatUtils.log("Cached enums: " + cachedEnums.size());
+        }
+
+        Enum<?> val = cachedEnums.get(enumFullName);
+        if (val != null) {
+            return val;
+        }
+
+        String[] x = enumFullName.split("\\.(?=[^\\.]+$)");
+        if (x.length == 2) {
+            String enumClassName = x[0];
+            String enumName = x[1];
+            try {
+                Class cl = Class.forName(enumClassName);
+
+                Enum<?> enumm = Enum.valueOf(cl, enumName);
+
+                if (DebugUtils.ENABLE_CACHING) {
+                    cachedEnums.put(enumFullName, enumm);
+                }
+
+                return enumm;
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public String getName() {
         return this.particleName;
     }
 
     public void sendToPlayer(SpecializedCrates sc, Player player, Location location, float offsetX, float offsetY, float offsetZ, float speed,
-                             int count) throws Exception
-    {
-        if (!Utils.isPlayerInRange(sc, player, location))
-        {
+                             int count) throws Exception {
+        if (!Utils.isPlayerInRange(sc, player, location)) {
             return;
         }
-        if (!ReflectionUtilities.getVersion().contains("v1_7"))
-        {
+        if (!VersionUtils.getServerVersion().contains("v1_7")) {
 
-            if(ReflectionUtilities.getVersion().contains("v1_8_R3"))
-            {
-                ParticleEffect188.sendToPlayer(sc,this, player,location, offsetX, offsetY, offsetZ, speed, count);
+            if (VersionUtils.getServerVersion().contains("v1_8_R3")) {
+                ParticleEffect188.sendToPlayer(sc, this, player, location, offsetX, offsetY, offsetZ, speed, count);
                 return;
             }
 
-            try
-            {
-                if (nmsEnumParticle == null)
-                {
+            try {
+                if (nmsEnumParticle == null) {
                     nmsEnumParticle = ReflectionUtilities.getNMSClass("EnumParticle");
                 }
 
-                if(cachedConstructor == null)
-                {
+                if (cachedConstructor == null) {
                     cachedConstructor = nmsPacketPlayOutParticle.getConstructor(
                             nmsEnumParticle, Boolean.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE,
                             Float.TYPE, Float.TYPE, Float.TYPE, Integer.TYPE, int[].class);
                 }
 
                 Object packet = cachedConstructor.newInstance(getEnum(nmsEnumParticle.getName() + "." +
-                                        (this.enumValue != null ? this.enumValue : name())), true,
-                                (float) location.getX(), (float) location.getY(), (float) location.getZ(), offsetX, offsetY,
-                                offsetZ, speed, count, new int[0]);
+                                (this.enumValue != null ? this.enumValue : name())), true,
+                        (float) location.getX(), (float) location.getY(), (float) location.getZ(), offsetX, offsetY,
+                        offsetZ, speed, count, new int[0]);
                 Object handle = ReflectionUtilities.getHandle(player);
                 Object connection = ReflectionUtilities.getField(handle.getClass(), "playerConnection").get(handle);
-                ReflectionUtilities.getMethod(connection.getClass(), "sendPacket", new Class[0]).invoke(connection, packet);
-            }
-            catch (Exception e)
-            {
+                ReflectionUtilities.getMethod(connection.getClass(), "sendPacket").invoke(connection, packet);
+            } catch (Exception e) {
                 throw new IllegalArgumentException("Unable to send Particle " + name() + ". (Version 1.8 / 1.9)");
             }
         }
-    }
-
-    private static HashMap<String, Enum<?>> cachedEnums = new HashMap<>();
-
-    private static Enum<?> getEnum(String enumFullName)
-    {
-        if (DebugUtils.LOG_CACHED_INFO)
-        {
-            ChatUtils.log("Cached enums: " + cachedEnums.size());
-        }
-
-        Enum<?> val = cachedEnums.get(enumFullName);
-        if(val != null)
-        {
-            return val;
-        }
-
-        String[] x = enumFullName.split("\\.(?=[^\\.]+$)");
-        if (x.length == 2)
-        {
-            String enumClassName = x[0];
-            String enumName = x[1];
-            try
-            {
-                Class cl = Class.forName(enumClassName);
-
-                Enum<?> enumm = Enum.valueOf(cl, enumName);
-
-                if (DebugUtils.ENABLE_CACHING)
-                {
-                    cachedEnums.put(enumFullName, enumm);
-                }
-
-                return enumm;
-            }
-            catch (ClassNotFoundException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        return null;
     }
 }

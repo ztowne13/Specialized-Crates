@@ -18,17 +18,14 @@ import java.util.Arrays;
 /**
  * Created by ztowne13 on 4/2/16.
  */
-public class IGCCrateAnimation extends IGCMenuCrate
-{
+public class IGCCrateAnimation extends IGCMenuCrate {
 
-    public IGCCrateAnimation(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates)
-    {
+    public IGCCrateAnimation(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates) {
         super(cc, p, lastMenu, "&7&l> &6&lAnimation Settings", crates);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(27);
 
@@ -57,10 +54,8 @@ public class IGCCrateAnimation extends IGCMenuCrate
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 0:
                 up();
                 break;
@@ -80,19 +75,14 @@ public class IGCCrateAnimation extends IGCMenuCrate
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
-        if (value.equalsIgnoreCase("Animation Type"))
-        {
-            try
-            {
+    public boolean handleInput(String value, String input) {
+        if (value.equalsIgnoreCase("Animation Type")) {
+            try {
                 CrateAnimationType ct = CrateAnimationType.valueOf(input.toUpperCase());
                 cs.setCrateType(ct);
                 ChatUtils.msgSuccess(getP(), "Set the Animation Type to " + input);
                 return true;
-            }
-            catch (Exception exc)
-            {
+            } catch (Exception exc) {
                 ChatUtils.msgError(getP(),
                         input + " is not valid in the list of crate animations: " + Arrays.toString(CrateAnimationType.values()));
             }

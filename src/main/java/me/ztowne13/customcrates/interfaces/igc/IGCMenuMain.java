@@ -18,16 +18,13 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 3/11/16.
  */
-public class IGCMenuMain extends IGCMenu
-{
-    public IGCMenuMain(SpecializedCrates cc, Player p, IGCMenu lastMenu)
-    {
+public class IGCMenuMain extends IGCMenu {
+    public IGCMenuMain(SpecializedCrates cc, Player p, IGCMenu lastMenu) {
         super(cc, p, lastMenu, "&7&l> &6&lHome");
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
         InventoryBuilder ib = createDefault(36);
         ib.setItem(0, new ItemBuilder(IGCDefaultItems.SAVE_ONLY_BUTTON.getIb()).setName("&aSave every file/crate"));
         ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
@@ -47,7 +44,7 @@ public class IGCMenuMain extends IGCMenu
 
         paper.setDisplayName("&aRewards.YML");
         paper.setLore("").addLore("&6&lCreate / edit rewards").addLore("")
-                .addLore("&7Amount of rewards: &f" + CRewards.allRewards.keySet().size());
+                .addLore("&7Amount of rewards: &f" + CRewards.getAllRewards().keySet().size());
         ib.setItem(13, paper);
 
         paper.setDisplayName("&aMessages.YML");
@@ -80,10 +77,8 @@ public class IGCMenuMain extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 0:
                 getCc().saveEverything();
                 break;
@@ -115,8 +110,7 @@ public class IGCMenuMain extends IGCMenu
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         return false;
     }
 }

@@ -20,18 +20,15 @@ import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.entity.Player;
 
-public class IGCMenuCrateOrMulticrate extends IGCMenu
-{
+public class IGCMenuCrateOrMulticrate extends IGCMenu {
     boolean multicrate = false;
 
-    public IGCMenuCrateOrMulticrate(SpecializedCrates specializedCrates, Player p, IGCMenu lastMenu)
-    {
+    public IGCMenuCrateOrMulticrate(SpecializedCrates specializedCrates, Player p, IGCMenu lastMenu) {
         super(specializedCrates, p, lastMenu, "&7&l> &6&lCrates or Multicrate ");
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
         InventoryBuilder ib = createDefault(9);
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
@@ -53,18 +50,14 @@ public class IGCMenuCrateOrMulticrate extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
+    public void handleClick(int slot) {
         if (slot == 0)
             up();
-        else if (slot == 3)
-        {
+        else if (slot == 3) {
             new InputMenu(getCc(), getP(), "crate name", "null", "Name the crate whatever you want.", String.class, this,
                     true);
             multicrate = false;
-        }
-        else if (slot == 5)
-        {
+        } else if (slot == 5) {
             new InputMenu(getCc(), getP(), "crate name", "null", "Name the multicrate whatever you want.", String.class,
                     this, true);
             multicrate = true;
@@ -72,21 +65,16 @@ public class IGCMenuCrateOrMulticrate extends IGCMenu
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
-        if (value.equalsIgnoreCase("crate name"))
-        {
-            if (!Crate.existsNotCaseSensitive(input))
-            {
-                if (!input.contains(" "))
-                {
+    public boolean handleInput(String value, String input) {
+        if (value.equalsIgnoreCase("crate name")) {
+            if (!Crate.existsNotCaseSensitive(input)) {
+                if (!input.contains(" ")) {
                     Crate newCrate = new Crate(getCc(), input, true, multicrate);
                     CrateSettings cs = newCrate.getSettings();
                     cs.setObtainType(ObtainType.STATIC);
                     cs.setPlaceholder(new MaterialPlaceholder(getCc()));
 
-                    if(!multicrate)
-                    {
+                    if (!multicrate) {
                         cs.setCrateType(CrateAnimationType.INV_ROULETTE);
                         cs.setRequireKey(true);
                         cs.setRewardDisplayType(RewardDisplayType.IN_ORDER);
@@ -101,8 +89,7 @@ public class IGCMenuCrateOrMulticrate extends IGCMenu
                     newCrate.setEnabled(true);
                     newCrate.setCanBeEnabled(false);
 
-                    if (!multicrate && !CRewards.getAllRewards().isEmpty())
-                    {
+                    if (!multicrate && !CRewards.getAllRewards().isEmpty()) {
                         cs.getRewards().addReward(CRewards.getAllRewards().values().iterator().next().getRewardName());
                     }
 
@@ -112,14 +99,10 @@ public class IGCMenuCrateOrMulticrate extends IGCMenu
                     new IGCCratesMain(getCc(), getP(), this, newCrate).open();
                     ChatUtils.msgSuccess(getP(), "Created a new crate with the name " + input);
                     //	new InputMenu(getCc(), getP(), "crate obtain method", "null", "Available obtain methods: " + Arrays.toString(ObtainType.values()), String.class, this);
-                }
-                else
-                {
+                } else {
                     ChatUtils.msgError(getP(), "Crate names cannot have spaces in their names.");
                 }
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This crate name already exists!");
             }
         }

@@ -10,8 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class IGCListSelector extends IGCMenu
-{
+public class IGCListSelector extends IGCMenu {
     int page;
     String header;
     DynamicMaterial displayItem;
@@ -21,8 +20,7 @@ public class IGCListSelector extends IGCMenu
     boolean reopen = true;
 
     public IGCListSelector(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header,
-                           List values, DynamicMaterial displayItem, int page, List<String> descriptors, boolean reopen)
-    {
+                           List values, DynamicMaterial displayItem, int page, List<String> descriptors, boolean reopen) {
         super(cc, p, lastMenu, "&7&l> &6&l" + header + " PG" + page);
         this.header = header;
         this.values = values;
@@ -33,22 +31,19 @@ public class IGCListSelector extends IGCMenu
     }
 
     public IGCListSelector(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header,
-                           List values, DynamicMaterial displayItem, int page, List<String> descriptors)
-    {
+                           List values, DynamicMaterial displayItem, int page, List<String> descriptors) {
         this(cc, p, lastMenu, header, values, displayItem, page, descriptors, true);
     }
 
     public IGCListSelector(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header,
                            List values, DynamicMaterial displayItem, int page, List<String> descriptors,
-                           List<ItemBuilder> builders)
-    {
+                           List<ItemBuilder> builders) {
         this(cc, p, lastMenu, header, values, displayItem, page, descriptors);
         this.builders = builders;
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
         int slots;
 
         if (values.size() - ((page - 1) * 28) > 28)
@@ -70,24 +65,20 @@ public class IGCListSelector extends IGCMenu
         int itemNum = (page - 1) * 28;
 
         int added = 0;
-        for (Object val : values)
-        {
-            if (toSkip > skipped || displayedItems >= 28)
-            {
+        for (Object val : values) {
+            if (toSkip > skipped || displayedItems >= 28) {
                 skipped++;
                 continue;
             }
 
-            if (i % 9 == 8)
-            {
+            if (i % 9 == 8) {
                 i += 2;
             }
 
             itemNum++;
             ItemBuilder item;
 
-            if (builders == null)
-            {
+            if (builders == null) {
                 item = new ItemBuilder(displayItem, 1).setName("&a" + val);
 
                 if (descriptors != null)
@@ -97,9 +88,7 @@ public class IGCListSelector extends IGCMenu
                         .addLore("&7&oClick to select this.");
 
                 added++;
-            }
-            else
-            {
+            } else {
                 item = builders.get(added);
                 item.setDisplayName("&a" + val);
 
@@ -114,13 +103,11 @@ public class IGCListSelector extends IGCMenu
             displayedItems++;
         }
 
-        if (page != 1)
-        {
+        if (page != 1) {
             ib.setItem(2, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo back a page"));
         }
 
-        if (((values.size() / 28) + (values.size() % 28 == 0 ? 0 : 1) != page) && values.size() != 0)
-        {
+        if (((values.size() / 28) + (values.size() % 28 == 0 ? 0 : 1) != page) && values.size() != 0) {
             ib.setItem(6, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo forward a page"));
         }
 
@@ -129,38 +116,29 @@ public class IGCListSelector extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (slot == 0)
-        {
+    public void handleClick(int slot) {
+        if (slot == 0) {
             up();
-        }
-        else if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
-        {
+        } else if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
             page--;
             open();
-        }
-        else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
-        {
+        } else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
             page++;
             open();
-        }
-        else if (getIb().getInv().getItem(slot) != null)
-        {
+        } else if (getIb().getInv().getItem(slot) != null) {
             int row = slot / 9;
             int slotInRow = slot % 9;
             int num = ((page - 1) * 28) + ((row - 1) * 7) + (slotInRow - 1);
 
             lastMenu.handleInput(header, values.get(num).toString());
 
-            if(reopen)
+            if (reopen)
                 up();
         }
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         return true;
     }
 }

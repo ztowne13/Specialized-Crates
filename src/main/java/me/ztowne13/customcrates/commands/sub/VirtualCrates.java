@@ -10,37 +10,30 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 8/3/16.
  */
-public class VirtualCrates extends SubCommand
-{
+public class VirtualCrates extends SubCommand {
     boolean tryLoad = false;
     boolean successfulLoad = false;
     Crate crate;
 
-    public VirtualCrates()
-    {
+    public VirtualCrates() {
         super("virtualcrates", 1, "");
     }
 
     @Override
-    public boolean run(SpecializedCrates cc, Commands cmds, String[] args)
-    {
-        if (!tryLoad)
-        {
+    public boolean run(SpecializedCrates cc, Commands cmds, String[] args) {
+        if (!tryLoad) {
             tryLoad = true;
 
             String crateName = cc.getSettings().getConfigValues().get("crates-command-multicrate").toString();
-            if (crate.exists(crateName))
-            {
+            if (Crate.exists(crateName)) {
                 crate = Crate.getCrate(cc, crateName);
                 successfulLoad = crate.isMultiCrate();
             }
         }
 
         if (cmds.canExecute(false, true, "customcrates.crates", "specializedcrates.crates") ||
-                cmds.canExecute(false, true, "customcrates.admin", "specializedcrates.admin"))
-        {
-            if (successfulLoad)
-            {
+                cmds.canExecute(false, true, "customcrates.admin", "specializedcrates.admin")) {
+            if (successfulLoad) {
                 Player p = (Player) cmds.getCmdSender();
                 PlayerManager pm = PlayerManager.get(cc, p);
                 Messages.OPENING_VIRTUALCRATES.msgSpecified(cc, p);

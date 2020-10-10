@@ -18,31 +18,25 @@ import org.bukkit.entity.Player;
 /**
  * Created by ztowne13 on 3/22/16.
  */
-public class IGCMenuReward extends IGCMenu
-{
+public class IGCMenuReward extends IGCMenu {
     Reward reward;
     boolean unsavedChanges = false;
 
-    public IGCMenuReward(SpecializedCrates cc, Player p, IGCMenu lastMenu, String rName)
-    {
+    public IGCMenuReward(SpecializedCrates cc, Player p, IGCMenu lastMenu, String rName) {
         super(cc, p, lastMenu, "&7&l> &6&l" + rName);
 
-        if (CRewards.getAllRewards().keySet().contains(rName))
-        {
+        if (CRewards.getAllRewards().containsKey(rName)) {
             reward = CRewards.getAllRewards().get(rName);
-        }
-        else
-        {
+        } else {
             reward = new Reward(getCc(), rName);
             reward.loadFromConfig();
             reward.loadChance();
-            CRewards.allRewards.put(rName, reward);
+            CRewards.getAllRewards().put(rName, reward);
         }
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(45);
 
@@ -65,15 +59,11 @@ public class IGCMenuReward extends IGCMenu
                         DynamicMaterial.COMMAND_BLOCK, 1)
                         .setName("&aEdit the commands")
                         .setLore("&7Current value: ");
-        if (reward.getCommands() != null && !reward.getCommands().isEmpty())
-        {
-            for (String cmds : reward.getCommands())
-            {
+        if (reward.getCommands() != null && !reward.getCommands().isEmpty()) {
+            for (String cmds : reward.getCommands()) {
                 commands.addLore("&7" + cmds);
             }
-        }
-        else
-        {
+        } else {
             commands.addLore(getName(null));
         }
         commands.addLore("").addAutomaticLore("&f", 30,
@@ -151,98 +141,61 @@ public class IGCMenuReward extends IGCMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (slot == 8)
-        {
+    public void handleClick(int slot) {
+        if (slot == 8) {
             String n = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
-            if (n.equalsIgnoreCase("Confirm deletion"))
-            {
+            if (n.equalsIgnoreCase("Confirm deletion")) {
                 reward.delete(true);
                 up();
-            }
-            else
-            {
-                try
-                {
+            } else {
+                try {
                     ItemBuilder builder = new ItemBuilder(getIb().getInv().getItem(slot)).setName("&cConfirm deletion")
                             .setLore("&7Crates that use this reward:");
                     boolean none = true;
-                    for (String s : reward.delete(false).replace("[", "").replace("]", "").split(", "))
-                    {
+                    for (String s : reward.delete(false).replace("[", "").replace("]", "").split(", ")) {
                         none = false;
                         builder.addLore("&7" + s);
                     }
-                    if (none)
-                    {
+                    if (none) {
                         builder.addLore("&7none");
                     }
                     getIb().setItem(slot, builder);
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     exc.printStackTrace();
                 }
             }
-        }
-        else if (slot == 22)
-        {
+        } else if (slot == 22) {
             new IGCListEditor(getCc(), getP(), this, "Commands Editor", "Command", reward.getCommands(),
                     DynamicMaterial.COMMAND_BLOCK, 1).open();
-        }
-        else if (slot == 11)
-        {
+        } else if (slot == 11) {
             new IGCItemEditor(getCc(), getP(), this, reward.getSaveBuilder()).open();
-        }
-        else if (slot == 23)
-        {
+        } else if (slot == 23) {
             new InputMenu(getCc(), getP(), "chance", reward.getChance().toString(), Double.class, this);
-        }
-        else if (slot == 24)
-        {
+        } else if (slot == 24) {
             new InputMenu(getCc(), getP(), "rarity", reward.getRarity(), String.class, this);
-        }
-        else if (slot == 31)
-        {
+        } else if (slot == 31) {
             reward.setGiveDisplayItem(!reward.isGiveDisplayItem());
             open();
-        }
-        else if (slot == 32)
-        {
+        } else if (slot == 32) {
             reward.setGiveDisplayItemLore(!reward.isGiveDisplayItemLore());
             open();
-        }
-        else if (slot == 33)
-        {
+        } else if (slot == 33) {
             reward.setGiveDisplayItemName(!reward.isGiveDisplayItemName());
             open();
-        }
-        else if (slot == 29)
-        {
+        } else if (slot == 29) {
             new IGCMenuFallbackReward(getCc(), getP(), this, reward).open();
-        }
-        else if (slot == 0)
-        {
+        } else if (slot == 0) {
             ItemBuilder b = new ItemBuilder(getIb().getInv().getItem(slot));
             b.setName("&4&lERROR! &cPlease configure the");
-            if (reward.getRewardName() == null)
-            {
+            if (reward.getRewardName() == null) {
                 b.setLore("&creward name.");
-            }
-            else if (reward.getSaveBuilder() == null)
-            {
+            } else if (reward.getSaveBuilder() == null) {
                 b.setLore("&creward item.");
-            }
-            else if (reward.getChance() == null || reward.getChance() == 0)
-            {
+            } else if (reward.getChance() == null || reward.getChance() == 0) {
                 b.setLore("&cchance.");
-            }
-            else if (reward.getRarity() == null)
-            {
+            } else if (reward.getRarity() == null) {
                 b.setLore("&crarity.");
-            }
-            else
-            {
+            } else {
                 b.setName("&2SUCCESS");
                 b.setLore("&7Please reload the plugin for").addLore("&7these changes to take effect.");
                 reward.writeToFile();
@@ -250,23 +203,16 @@ public class IGCMenuReward extends IGCMenu
             getIb().setItem(slot, b);
             unsavedChanges = false;
             return;
-        }
-        else if (slot == 36)
-        {
+        } else if (slot == 36) {
             if (!unsavedChanges || ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName())
-                    .equalsIgnoreCase("Are you sure?"))
-            {
+                    .equalsIgnoreCase("Are you sure?")) {
                 up();
-            }
-            else
-            {
+            } else {
                 getIb().setItem(27, new ItemBuilder(getIb().getInv().getItem(slot)).setName("&4Are you sure?")
                         .setLore("&cYou have unsaved changes.").addLore("&7The changes will only be")
                         .addLore("&7temporary if not saved later").addLore("&7and will delete upon reload."));
             }
-        }
-        else
-        {
+        } else {
             unsavedChanges = false;
             return;
         }
@@ -275,43 +221,30 @@ public class IGCMenuReward extends IGCMenu
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         Object type = getInputMenu().getType();
-        if (type == Integer.class)
-        {
-            if (Utils.isInt(input))
-            {
-                if (value.equalsIgnoreCase("chance"))
-                {
+        if (type == Integer.class) {
+            if (Utils.isInt(input)) {
+                if (value.equalsIgnoreCase("chance")) {
                     reward.setChance(Integer.parseInt(input));
                     ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 }
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This is not a valid number.");
                 return false;
             }
         }
-        if (type == Double.class)
-        {
-            if (Utils.isDouble(input))
-            {
-                if (value.equalsIgnoreCase("chance"))
-                {
+        if (type == Double.class) {
+            if (Utils.isDouble(input)) {
+                if (value.equalsIgnoreCase("chance")) {
                     reward.setChance(Double.parseDouble(input));
                     ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
                 }
-            }
-            else
-            {
+            } else {
                 ChatUtils.msgError(getP(), "This is not a valid number.");
                 return false;
             }
-        }
-        else
-        {
+        } else {
 			/*if(value.equalsIgnoreCase("rewardname"))
 			{
 				if(!input.contains(" "))
@@ -323,17 +256,12 @@ public class IGCMenuReward extends IGCMenu
 				ChatUtils.msgError(getP(), input + " cannot have any spaces in it.");
 				return false;
 			}*/
-            if (value.equalsIgnoreCase("addcommand"))
-            {
+            if (value.equalsIgnoreCase("addcommand")) {
                 reward.getCommands().add(input.replace("/", ""));
                 ChatUtils.msgSuccess(getP(), "Added '" + input + "' to the reward commands.");
-            }
-            else if (value.equalsIgnoreCase("removecommand"))
-            {
-                for (String s : reward.getCommands())
-                {
-                    if (s.equalsIgnoreCase(input))
-                    {
+            } else if (value.equalsIgnoreCase("removecommand")) {
+                for (String s : reward.getCommands()) {
+                    if (s.equalsIgnoreCase(input)) {
                         reward.getCommands().remove(s);
                         ChatUtils.msgSuccess(getP(), "Removed '" + input + "' from the reward commands.");
                         return true;
@@ -341,14 +269,10 @@ public class IGCMenuReward extends IGCMenu
                 }
                 ChatUtils.msgError(getP(), "'" + input + "' is not an existing command.");
                 return false;
-            }
-            else if (value.equalsIgnoreCase("rarity"))
-            {
+            } else if (value.equalsIgnoreCase("rarity")) {
                 reward.setRarity(input);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
-            }
-            else if (value.equalsIgnoreCase("head-player-name"))
-            {
+            } else if (value.equalsIgnoreCase("head-player-name")) {
                 reward.getSaveBuilder().setPlayerHeadName(input);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to '" + input + "'");
             }
@@ -356,8 +280,7 @@ public class IGCMenuReward extends IGCMenu
         return true;
     }
 
-    public String getName(String val)
-    {
+    public String getName(String val) {
         return reward == null || val == null ? "&cSet this value." : val;
     }
 

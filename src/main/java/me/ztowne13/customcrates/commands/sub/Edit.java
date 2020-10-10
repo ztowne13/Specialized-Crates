@@ -15,29 +15,22 @@ import java.util.TreeSet;
 /**
  * Created by ztowne13 on 7/4/16.
  */
-public class Edit extends SubCommand
-{
-    public Edit()
-    {
+public class Edit extends SubCommand {
+    public Edit() {
         super("edit", 1, "", new String[]{"e"});
     }
 
     @Override
-    public boolean run(SpecializedCrates cc, Commands cmds, String[] args)
-    {
-        if (cmds.getCmdSender() instanceof Player)
-        {
+    public boolean run(SpecializedCrates cc, Commands cmds, String[] args) {
+        if (cmds.getCmdSender() instanceof Player) {
             Player p = (Player) cmds.getCmdSender();
 
-            if (args.length == 1)
-            {
+            if (args.length == 1) {
                 TreeSet<Material> set = new TreeSet<>();
                 set.add(Material.AIR);
-                if (!(p.getTargetBlock(set, 20) == null))
-                {
+                if (!(p.getTargetBlock(set, 20) == null)) {
                     Block b = p.getTargetBlock(set, 20);
-                    if (PlacedCrate.crateExistsAt(cc, b.getLocation()))
-                    {
+                    if (PlacedCrate.crateExistsAt(cc, b.getLocation())) {
                         PlacedCrate pc = PlacedCrate.get(cc, b.getLocation());
                         new IGCCratesMain(cc, p, null, pc.getCrate()).open();
                         ChatUtils.msgSuccess(p, "Opening config menu for crate: " + pc.getCrate().getName());
@@ -45,11 +38,8 @@ public class Edit extends SubCommand
                     }
                 }
                 ChatUtils.msgError(p, "You are not looking at a crate to open!");
-            }
-            else
-            {
-                if (Crate.existsNotCaseSensitive(args[1]))
-                {
+            } else {
+                if (Crate.existsNotCaseSensitive(args[1])) {
                     Crate crate = Crate.getCrate(cc, args[1]);
                     new IGCCratesMain(cc, p, null, crate).open();
                     ChatUtils.msgSuccess(p, "Opening config menu for crate: " + crate.getName());
@@ -57,9 +47,7 @@ public class Edit extends SubCommand
                 }
                 ChatUtils.msgError(p, args[1] + " is not a valid crate name.");
             }
-        }
-        else
-        {
+        } else {
             cmds.msg("This command can only be run from in-game.");
         }
         return false;

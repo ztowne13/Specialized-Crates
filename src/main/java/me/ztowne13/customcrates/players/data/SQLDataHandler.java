@@ -8,18 +8,14 @@ import me.ztowne13.customcrates.players.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
-public class SQLDataHandler extends DataHandler
-{
+public class SQLDataHandler extends DataHandler {
     public static String table = "scPlayerStats";
-
+    public static SQL sql;
+    public static boolean loaded = false;
+    static SQLQueryThread sqlQueryThread;
     SpecializedCrates sc;
 
-    public static SQL sql;
-    static SQLQueryThread sqlQueryThread;
-    public static boolean loaded = false;
-
-    public SQLDataHandler(PlayerManager pm)
-    {
+    public SQLDataHandler(PlayerManager pm) {
         super(pm);
         cc.getDu().log("SQLDataHandler() - CALL", getClass());
         sc = pm.getCc();
@@ -29,15 +25,11 @@ public class SQLDataHandler extends DataHandler
     }
 
     @Override
-    public boolean load()
-    {
-        if(!loaded)
-        {
-            Bukkit.getScheduler().runTaskLaterAsynchronously(cc, new Runnable()
-            {
+    public boolean load() {
+        if (!loaded) {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(cc, new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     cc.getDu().log("load() - CALL (Note: This is run synchronous not asynchronous)", getClass());
                     long curTime = System.currentTimeMillis();
 
@@ -76,21 +68,18 @@ public class SQLDataHandler extends DataHandler
     }
 
     @Override
-    public Object get(String value)
-    {
+    public Object get(String value) {
         value = formatValue(value);
         return sql.get(table, "uuid", pm.getP().getUniqueId().toString(), value);
     }
 
     @Override
-    public void write(String value, String toWrite)
-    {
+    public void write(String value, String toWrite) {
         value = formatValue(value);
         sql.write(table, "uuid", pm.getP().getUniqueId().toString(), value, toWrite);
     }
 
-    public String formatValue(String value)
-    {
+    public String formatValue(String value) {
         if (value.equalsIgnoreCase("crate-cooldowns"))
             return "crateCooldowns";
         else if (value.equalsIgnoreCase("virtual-crates"))
@@ -99,14 +88,12 @@ public class SQLDataHandler extends DataHandler
     }
 
     @Override
-    public boolean hasDataValue(String value)
-    {
+    public boolean hasDataValue(String value) {
         return true;
     }
 
     @Override
-    public boolean hasDataPath()
-    {
+    public boolean hasDataPath() {
         return true;
     }
 

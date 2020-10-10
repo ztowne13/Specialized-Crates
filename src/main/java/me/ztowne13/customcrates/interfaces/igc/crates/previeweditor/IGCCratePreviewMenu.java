@@ -19,20 +19,17 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class IGCCratePreviewMenu extends IGCMenuCrate
-{
+public class IGCCratePreviewMenu extends IGCMenuCrate {
     boolean isCustom;
 
-    public IGCCratePreviewMenu(SpecializedCrates specializedCrates, Player player, Crate crate, IGCMenu lastMenu)
-    {
+    public IGCCratePreviewMenu(SpecializedCrates specializedCrates, Player player, Crate crate, IGCMenu lastMenu) {
         super(specializedCrates, player, lastMenu, "&7&l> &6&lReward Preview Menu", crate);
 
         isCustom = getCrates().getSettings().getRewardDisplayType().equals(RewardDisplayType.CUSTOM);
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
         InventoryBuilder ib = createDefault(18);
 
         ItemBuilder nameEditor = new ItemBuilder(DynamicMaterial.PAPER, 1);
@@ -58,9 +55,8 @@ public class IGCCratePreviewMenu extends IGCMenuCrate
         ItemBuilder backward = new ItemBuilder(DynamicMaterial.ARROW, 1);
 
         ItemBuilder customEditor = new ItemBuilder(isCustom ? DynamicMaterial.LADDER : DynamicMaterial.RED_DYE, 1);
-            customEditor.setDisplayName((isCustom ?"&a":"&4")+"Edit the Reward Preview");
-            if(isCustom)
-        {
+        customEditor.setDisplayName((isCustom ? "&a" : "&4") + "Edit the Reward Preview");
+        if (isCustom) {
             customEditor.addAutomaticLore("&7", 30, "Edit the reward preview menu to be exactly how you want!");
             customEditor.addLore("")
                     .addAutomaticLore("&e", 30, "PLEASE READ THE 'HELP' MESSAGE THAT APPEARS TO LEARN HOW TO CONFIGURE IT.");
@@ -72,10 +68,7 @@ public class IGCCratePreviewMenu extends IGCMenuCrate
             forward.setDisplayName("&aSelect the forward page button");
             forward.addAutomaticLore("&7", 30,
                     "Put an item in preview-menu editor that will be the forward button. Select that item exact here to assign it to be the 'forward page' button.");
-        }
-            else
-
-        {
+        } else {
             customEditor.addAutomaticLore("&c", 30,
                     "To edit the preview menu manually, please set the Preview Menu Type to CUSTOM.");
 
@@ -88,26 +81,24 @@ public class IGCCratePreviewMenu extends IGCMenuCrate
                     "To edit the backward button manually, please set the Preview Menu Type to CUSTOM.");
         }
 
-        ib.setItem(9,IGCDefaultItems.EXIT_BUTTON.getIb());
-        ib.setItem(0,IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
-        ib.setItem(2,nameEditor);
+        ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
+        ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
+        ib.setItem(2, nameEditor);
         ib.setItem(3, requirePermissions);
-        ib.setItem(4,typeEditor);
-        ib.setItem(6,customEditor);
-        ib.setItem(15,forward);
-        ib.setItem(16,backward);
+        ib.setItem(4, typeEditor);
+        ib.setItem(6, customEditor);
+        ib.setItem(15, forward);
+        ib.setItem(16, backward);
 
         ib.open();
 
-    putInMenu();
+        putInMenu();
 
-}
+    }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 9:
                 up();
                 break;
@@ -131,21 +122,16 @@ public class IGCCratePreviewMenu extends IGCMenuCrate
             case 6:
             case 15:
             case 16:
-                if (isCustom)
-                {
+                if (isCustom) {
                     CustomRewardDisplayer cdr;
-                    try
-                    {
+                    try {
                         cdr = (CustomRewardDisplayer) getCrates().getSettings().getDisplayer();
-                    }
-                    catch (Exception exc)
-                    {
+                    } catch (Exception exc) {
                         ChatUtils.msgError(getP(), "Please SAVE and RELOAD before editing.");
                         break;
                     }
 
-                    if (slot == 6)
-                    {
+                    if (slot == 6) {
                         new IGCCratePreviewPageChooser(getCc(), getP(), getCrates(), this, 1).open();
                         for (int i = 0; i < 30; i++)
                             ChatUtils.msg(getP(), "");
@@ -178,23 +164,17 @@ public class IGCCratePreviewMenu extends IGCMenuCrate
                                         " or backward button - you can move it around wherever you want or have as many of them as you want!");
                         ChatUtils.msg(getP(), "&c&l!! &6&lPLEASE READ THE MESSAGE ABOVE. &c&l!!");
                         ChatUtils.msg(getP(), "&c&l!! &6&lPLEASE READ THE MESSAGE ABOVE. &c&l!!");
-                    }
-                    else if (slot == 15)
-                    {
+                    } else if (slot == 15) {
                         new IGCListSelector(getCc(), getP(), this, "Forward Button",
                                 new ArrayList<>(cdr.getItems().keySet()), DynamicMaterial.PAPER, 1,
-                                cdr.getDescriptors(), new ArrayList<ItemBuilder>(cdr.getItems().values())).open();
-                    }
-                    else if (slot == 16)
-                    {
+                                cdr.getDescriptors(), new ArrayList<>(cdr.getItems().values())).open();
+                    } else if (slot == 16) {
                         new IGCListSelector(getCc(), getP(), this, "Backwards Button",
                                 new ArrayList<>(cdr.getItems().keySet()),
                                 DynamicMaterial.PAPER, 1,
-                                cdr.getDescriptors(), new ArrayList<ItemBuilder>(cdr.getItems().values())).open();
+                                cdr.getDescriptors(), new ArrayList<>(cdr.getItems().values())).open();
                     }
-                }
-                else
-                {
+                } else {
                     ChatUtils.msgError(getP(),
                             "The preview menu type is not CUSTOM. If you just changed it, you need to save and reload the plugin.");
                 }
@@ -203,33 +183,25 @@ public class IGCCratePreviewMenu extends IGCMenuCrate
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         FileConfiguration fc = getCs().getFileHandler().get();
 
-        if (value.equalsIgnoreCase("preview menu type"))
-        {
+        if (value.equalsIgnoreCase("preview menu type")) {
             RewardDisplayType newType = RewardDisplayType.valueOf(input);
             getCrates().getSettings().setRewardDisplayType(newType);
             getCrates().getSettings().getFileHandler().get().set("reward-display.type", input);
             ChatUtils.msgSuccess(getP(), "PLEASE RELOAD NOW. Set the preview menu type to '" + input + "'.");
-        }
-        else if (value.equalsIgnoreCase("inventory name"))
-        {
+        } else if (value.equalsIgnoreCase("inventory name")) {
             getCrates().getSettings().getDisplayer().setName(input);
             getCrates().getSettings().getFileHandler().get().set("reward-display.name", ChatUtils.fromChatColor(input));
             ChatUtils.msgSuccess(getP(), "Set the inventory name to '" + input + "'");
             return true;
-        }
-        else if (value.equalsIgnoreCase("Forward Button"))
-        {
+        } else if (value.equalsIgnoreCase("Forward Button")) {
             CustomRewardDisplayer cdr = (CustomRewardDisplayer) getCrates().getSettings().getDisplayer();
             fc.set("reward-display.custom-display.nextpageitem", input);
             cdr.setNextPageItem(input);
             ChatUtils.msgSuccess(getP(), "Set the forward button to " + input);
-        }
-        else if (value.equalsIgnoreCase("Backwards Button"))
-        {
+        } else if (value.equalsIgnoreCase("Backwards Button")) {
             CustomRewardDisplayer cdr = (CustomRewardDisplayer) getCrates().getSettings().getDisplayer();
             fc.set("reward-display.custom-display.lastpageitem", input);
             cdr.setPrevPageItem(input);

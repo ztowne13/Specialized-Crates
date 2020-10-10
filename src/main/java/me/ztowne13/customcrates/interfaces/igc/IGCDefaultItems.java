@@ -6,8 +6,7 @@ import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 /**
  * Created by ztowne13 on 3/11/16.
  */
-public enum IGCDefaultItems
-{
+public enum IGCDefaultItems {
     EXIT_BUTTON(
             new ItemBuilder(DynamicMaterial.GRAY_DYE, 1).setName("&cExit").setLore("&4&oNOTE: THIS DOES NOT SAVE CHANGES")
                     .addLore("").addLore("&7Exit or return to the previous menu.")),
@@ -23,18 +22,15 @@ public enum IGCDefaultItems
 
     ItemBuilder ib;
 
-    IGCDefaultItems(ItemBuilder ib)
-    {
+    IGCDefaultItems(ItemBuilder ib) {
         this.ib = ib;
     }
 
-    public ItemBuilder getIb()
-    {
+    public ItemBuilder getIb() {
         return ib;
     }
 
-    public void setIb(ItemBuilder ib)
-    {
+    public void setIb(ItemBuilder ib) {
         this.ib = ib;
     }
 }

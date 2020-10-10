@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.interfaces.externalhooks.holograms;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import org.bukkit.Bukkit;
+import me.ztowne13.customcrates.utils.ReflectionUtilities;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -32,43 +32,35 @@ import java.util.List;
  * <p>
  * Thank you! o/
  */
-public class HologramNMS extends Hologram{
+public class HologramNMS extends Hologram {
 
-    private static String version;
-    private static Class<?> craftWorld, entityClass, nmsWorld, armorStand, entityLiving, spawnPacket, removePacket;
+    private static Class<?> craftWorld;
+    private static Class<?> entityClass;
+    private static Class<?> nmsWorld;
+    private static Class<?> armorStand;
+    private static Class<?> entityLiving;
+    private static Class<?> spawnPacket;
 
     static {
-        version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3] + ".";
-
         try {
-            craftWorld = Class.forName("org.bukkit.craftbukkit." + version + "CraftWorld");
-            entityClass = Class.forName("net.minecraft.server." + version + "Entity");
-            nmsWorld = Class.forName("net.minecraft.server." + version + "World");
-            armorStand = Class.forName("net.minecraft.server." + version + "EntityArmorStand");
-            entityLiving = Class.forName("net.minecraft.server." + version + "EntityLiving");
-            spawnPacket = Class.forName("net.minecraft.server." + version + "PacketPlayOutSpawnEntityLiving");
-            removePacket = Class.forName("net.minecraft.server." + version + "PacketPlayOutEntityDestroy");
+            craftWorld = ReflectionUtilities.getOBCClass("CraftWorld");
+            entityClass = ReflectionUtilities.getNMSClass("Entity");
+            nmsWorld = ReflectionUtilities.getNMSClass("World");
+            armorStand = ReflectionUtilities.getNMSClass("EntityArmorStand");
+            entityLiving = ReflectionUtilities.getNMSClass("EntityLiving");
+            spawnPacket = ReflectionUtilities.getNMSClass("PacketPlayOutSpawnEntityLiving");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private List<String> lines = new ArrayList<String>();
-    private List<Integer> ids = new ArrayList<Integer>();
-    private List<Object> entities = new ArrayList<Object>();
-    private double offset = 0.23D;
+    private final List<Integer> ids = new ArrayList<>();
+    private final List<Object> entities = new ArrayList<>();
+    private final double offset = 0.23D;
+    private List<String> lines = new ArrayList<>();
 
     public HologramNMS(SpecializedCrates cc, String name, Location location) {
         super(cc, name, location);
-    }
-
-    /**
-     * Returns the CB/NMS version string. For example v1_10_R1
-     *
-     * @return - The CB/NMS version.
-     */
-    public static String getVersion() {
-        return version;
     }
 
     /**
@@ -106,6 +98,7 @@ public class HologramNMS extends Hologram{
      *
      * @return - The current hologram location.
      */
+    @Override
     public Location getLocation() {
         return location;
     }
@@ -122,8 +115,7 @@ public class HologramNMS extends Hologram{
     }
 
     @Override
-    public void setLine(int index, String line)
-    {
+    public void setLine(int index, String line) {
         getLines().set(index, line);
         update();
     }
@@ -245,7 +237,7 @@ public class HologramNMS extends Hologram{
      */
     private Object getRemovePacket(int id) {
         try {
-            Class<?> packet = Class.forName("net.minecraft.server." + version + "PacketPlayOutEntityDestroy");
+            Class<?> packet = ReflectionUtilities.getNMSClass("PacketPlayOutEntityDestroy");
             return packet.getConstructor(int[].class).newInstance(new int[]{id});
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -325,7 +317,7 @@ public class HologramNMS extends Hologram{
 
             Object entityPlayer = player.getClass().getMethod("getHandle").invoke(player);
             Object connection = entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
-            connection.getClass().getMethod("sendPacket", Class.forName("net.minecraft.server." + version + "Packet")).invoke(connection, packet);
+            connection.getClass().getMethod("sendPacket", ReflectionUtilities.getNMSClass("Packet")).invoke(connection, packet);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

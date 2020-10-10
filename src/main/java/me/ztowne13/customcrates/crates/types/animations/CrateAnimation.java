@@ -19,32 +19,24 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-public abstract class CrateAnimation
-{
-    public static long BASE_SPEED = 1;
-
-    public enum KeyType
-    {
-        ESC;
-    }
-
+public abstract class CrateAnimation {
+    public static final long BASE_SPEED = 1;
     protected SpecializedCrates cc;
-
     protected Crate crate;
     protected FileHandler fu;
     protected String prefix;
     CrateAnimationType animationType;
+    Random r = new Random();
 
-    public CrateAnimation(Crate crate, CrateAnimationType animationType)
-    {
+    public CrateAnimation(Crate crate, CrateAnimationType animationType) {
         this.animationType = animationType;
         this.prefix = animationType.getPrefixDotted();
         this.crate = crate;
         this.cc = crate.getCc();
-        this.fu = cc.getCrateconfigFile();
+        this.fu = cc.getCrateConfigFile();
     }
 
     /**
@@ -93,8 +85,7 @@ public abstract class CrateAnimation
      *
      * @param slot The slot that was clicked in the inventory
      */
-    public void handleClick(AnimationDataHolder dataHolder, int slot)
-    {
+    public void handleClick(AnimationDataHolder dataHolder, int slot) {
     }
 
     /**
@@ -102,15 +93,12 @@ public abstract class CrateAnimation
      *
      * @param type The type of key that was pressed.
      */
-    public void handleKeyPress(AnimationDataHolder dataHolder, KeyType type)
-    {
+    public void handleKeyPress(AnimationDataHolder dataHolder, KeyType type) {
         dataHolder.getClickedKeys().add(type);
     }
 
-    public boolean startAnimation(Player p, Location l, boolean requireKeyInHand, boolean force)
-    {
-        if (force || canExecuteFor(p, requireKeyInHand))
-        {
+    public boolean startAnimation(Player p, Location l, boolean requireKeyInHand, boolean force) {
+        if (force || canExecuteFor(p, requireKeyInHand)) {
             AnimationDataHolder dataHolder = getAnimationType().newDataHolderInstance(p, l, this);
             timer(dataHolder);
             playRequiredOpenActions(p, !requireKeyInHand, force);
@@ -122,8 +110,7 @@ public abstract class CrateAnimation
         return false;
     }
 
-    public void runAnimation(final AnimationDataHolder dataHolder)
-    {
+    public void runAnimation(final AnimationDataHolder dataHolder) {
         long startTime = System.nanoTime();
 
         dataHolder.setIndividualTicks(dataHolder.getIndividualTicks() + (int) BASE_SPEED);
@@ -139,9 +126,8 @@ public abstract class CrateAnimation
         dataHolder.updateTickTime(startTime);
     }
 
-    public void finishAnimation(Player p, ArrayList<Reward> rewards, boolean overrideAutoClose,
-                                final PlacedCrate placedCrate)
-    {
+    public void finishAnimation(Player p, List<Reward> rewards, boolean overrideAutoClose,
+                                final PlacedCrate placedCrate) {
         PlayerManager pm = PlayerManager.get(getSc(), p);
         pm.setInRewardMenu(false);
         pm.setCurrentAnimation(null);
@@ -149,8 +135,7 @@ public abstract class CrateAnimation
         new HistoryEvent(Utils.currentTimeParsed(), getCrate(), rewards, true)
                 .addTo(PlayerManager.get(getSc(), p).getPdm());
 
-        for (Reward r : rewards)
-        {
+        for (Reward r : rewards) {
             r.giveRewardToPlayer(p);
         }
 
@@ -163,58 +148,36 @@ public abstract class CrateAnimation
 
         // Handle the DYNAMIC crates
         if (getCrate().getSettings().getCrateType().isSpecialDynamicHandling() &&
-                !getCrate().getSettings().getObtainType().isStatic())
-        {
-            if (getCrate().getSettings().getCrateType().getCategory().equals(CrateAnimationType.Category.CHEST))
-            {
-                Bukkit.getScheduler().runTaskLater(cc, new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        placedCrate.delete();
-                        placedCrate.getL().getBlock().setType(Material.AIR);
-                    }
+                !getCrate().getSettings().getObtainType().isStatic()) {
+            if (getCrate().getSettings().getCrateType().getCategory().equals(CrateAnimationType.Category.CHEST)) {
+                Bukkit.getScheduler().runTaskLater(cc, () -> {
+                    placedCrate.delete();
+                    placedCrate.getL().getBlock().setType(Material.AIR);
                 }, 20);
-            }
-            else
-            {
+            } else {
                 placedCrate.delete();
                 placedCrate.getL().getBlock().setType(Material.AIR);
             }
         }
     }
 
-    public void timer(final AnimationDataHolder dataHolder)
-    {
+    public void timer(final AnimationDataHolder dataHolder) {
         if (!dataHolder.getCurrentState().equals(AnimationDataHolder.State.COMPLETED) ||
-                (!dataHolder.getCrateAnimation().getCrate().getSettings().isAutoClose() && !dataHolder.isFastTrack()))
-        {
+                (!dataHolder.getCrateAnimation().getCrate().getSettings().isAutoClose() && !dataHolder.isFastTrack())) {
             runAnimation(dataHolder);
 
-            if (dataHolder.isFastTrack())
-            {
+            if (dataHolder.isFastTrack()) {
                 timer(dataHolder);
                 return;
             }
 
-            Bukkit.getScheduler().scheduleSyncDelayedTask(getSc(), new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    timer(dataHolder);
-                }
-            }, BASE_SPEED);
-        }
-        else
-        {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(getSc(), () -> timer(dataHolder), BASE_SPEED);
+        } else {
             endAnimation(dataHolder);
         }
     }
 
-    public boolean canExecuteFor(Player p, boolean requireKeyInHand)
-    {
+    public boolean canExecuteFor(Player p, boolean requireKeyInHand) {
         PlayerManager playerManager = PlayerManager.get(getSc(), p);
         CrateSettings crateSettings = getCrate().getSettings();
 
@@ -225,16 +188,12 @@ public abstract class CrateAnimation
         return hasPropperOpeningTools && passesInventoryCheck;
     }
 
-    public void playFailToOpen(Player p, boolean playMessage, boolean failOpen)
-    {
-        if (!(p == null))
-        {
-            if ((Boolean) SettingsValue.PUSHBACK.getValue(getSc()) && !getCrate().isMultiCrate())
-            {
+    public void playFailToOpen(Player p, boolean playMessage, boolean failOpen) {
+        if (p != null) {
+            if ((Boolean) SettingsValue.PUSHBACK.getValue(getSc()) && !getCrate().isMultiCrate()) {
                 p.setVelocity(p.getLocation().getDirection().multiply(-1));
             }
-            if (playMessage)
-            {
+            if (playMessage) {
                 if (failOpen)
                     Messages.FAIL_OPEN.msgSpecified(cc, p, new String[]{"%crate%", "%key%"},
                             new String[]{crate.getDisplayName(),
@@ -245,56 +204,50 @@ public abstract class CrateAnimation
         }
     }
 
-    public void playRequiredOpenActions(Player p, boolean fromInv, boolean force)
-    {
+    public void playRequiredOpenActions(Player p, boolean fromInv, boolean force) {
         PlayerManager pm = PlayerManager.get(cc, p);
         CrateSettings crateSettings = getCrate().getSettings();
 
-        if (!(pm.getOpenCrate() == null) && pm.getOpenCrate().isMultiCrate() &&
-                !crateSettings.getObtainType().equals(ObtainType.STATIC))
-        {
+        if (pm.getOpenCrate() != null && pm.getOpenCrate().isMultiCrate() &&
+                !crateSettings.getObtainType().equals(ObtainType.STATIC)) {
             PlacedCrate pc = PlacedCrate.get(cc, pm.getLastOpenCrate());
             pc.delete();
         }
 
         pm.openCrate(this.getCrate());
 
-        if (crateSettings.isRequireKey() && !force)
-        {
+        if (crateSettings.isRequireKey() && !force) {
             crateSettings.getKeyItemHandler().takeKeyFromPlayer(p, fromInv);
         }
 
         crateSettings.getActions().playAll(p, true);
     }
 
-    public double getRandomTickTime(double basedOff)
-    {
-        Random r = new Random();
+    public double getRandomTickTime(double basedOff) {
         return basedOff + r.nextInt(3) - r.nextInt(3);
     }
 
-    public StatusLogger getStatusLogger()
-    {
+    public StatusLogger getStatusLogger() {
         return crate.getSettings().getStatusLogger();
     }
 
-    public Crate getCrate()
-    {
+    public Crate getCrate() {
         return crate;
     }
 
-    public SpecializedCrates getSc()
-    {
+    public SpecializedCrates getSc() {
         return cc;
     }
 
-    public FileHandler getFileHandler()
-    {
+    public FileHandler getFileHandler() {
         return fu;
     }
 
-    public CrateAnimationType getAnimationType()
-    {
+    public CrateAnimationType getAnimationType() {
         return animationType;
+    }
+
+    public enum KeyType {
+        ESC
     }
 }

@@ -3,10 +3,9 @@ package me.ztowne13.customcrates;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 
-public enum Messages
-{
+public enum Messages {
     NO_PERMISSIONS,
 
     FAIL_OPEN,
@@ -103,34 +102,32 @@ public enum Messages
 
     FOOTER("&3&l>> &7&m----------------------------------------------&3&l <<");
 
+    static EnumMap<Messages, String> cachedMessages = new EnumMap<>(Messages.class);
     String msg;
     String defaultMsg;
 
-    Messages()
-    {
+    Messages() {
         this("");
     }
 
-    Messages(String msg)
-    {
+    Messages(String msg) {
         this(msg, "");
     }
 
-    Messages(String msg, String defaultMsg)
-    {
+    Messages(String msg, String defaultMsg) {
         this.msg = msg;
         this.defaultMsg = defaultMsg;
     }
 
-    static HashMap<Messages, String> cachedMessages = new HashMap<Messages, String>();
+    public static void clearCache() {
+        cachedMessages.clear();
+    }
 
-    public String getFromConf(SpecializedCrates cc)
-    {
+    public String getFromConf(SpecializedCrates cc) {
         if (cachedMessages.containsKey(this))
             return cachedMessages.get(this);
 
-        try
-        {
+        try {
             String val = cc.getMessageFile().get().getString(nameFormatted());
 
             if (val == null)
@@ -138,16 +135,11 @@ public enum Messages
 
             cachedMessages.put(this, ChatUtils.toChatColor(val));
             return ChatUtils.toChatColor(val);
-        }
-        catch (Exception exc)
-        {
-            if (defaultMsg.equalsIgnoreCase(""))
-            {
+        } catch (Exception exc) {
+            if (defaultMsg.equalsIgnoreCase("")) {
                 cachedMessages.put(this, ChatUtils.toChatColor(
                         "&eThis value isn't set, please tell the server operator to configure the " + name() + " value."));
-            }
-            else
-            {
+            } else {
                 cachedMessages.put(this, ChatUtils.toChatColor(defaultMsg));
                 cc.getMessageFile().get().set(nameFormatted(), defaultMsg);
                 cc.getMessageFile().save();
@@ -156,56 +148,42 @@ public enum Messages
         }
     }
 
-    public String nameFormatted()
-    {
+    public String nameFormatted() {
         return name().toLowerCase().replace("_", "-");
     }
 
-    public void msgSpecified(SpecializedCrates cc, Player p)
-    {
+    public void msgSpecified(SpecializedCrates cc, Player p) {
         msgSpecified(cc, p, new String[]{}, new String[]{});
     }
 
-    public void msgSpecified(SpecializedCrates cc, Player p, String[] replaceValue, String[] setValue)
-    {
+    public void msgSpecified(SpecializedCrates cc, Player p, String[] replaceValue, String[] setValue) {
         String correctMSG = getPropperMsg(cc);
         if (correctMSG.equalsIgnoreCase("none")
                 || correctMSG.equalsIgnoreCase("")
-                || correctMSG.equalsIgnoreCase("&f"))
-        {
+                || correctMSG.equalsIgnoreCase("&f")) {
             return;
         }
 
-        for (int i = 0; i < replaceValue.length; i++)
-        {
+        for (int i = 0; i < replaceValue.length; i++) {
             correctMSG = correctMSG.replace(replaceValue[i], setValue[i]);
         }
 
         p.sendMessage(correctMSG);
     }
 
-    public void writeValue(SpecializedCrates cc, String value)
-    {
+    public void writeValue(SpecializedCrates cc, String value) {
         cc.getMessageFile().get().set(name().toLowerCase().replace("_", "-").toLowerCase(), value);
     }
 
-    public String getPropperMsg(SpecializedCrates cc)
-    {
+    public String getPropperMsg(SpecializedCrates cc) {
         return ChatUtils.toChatColor(getMsg().equalsIgnoreCase("") ? getFromConf(cc) : getMsg());
     }
 
-    public String getMsg()
-    {
+    public String getMsg() {
         return msg;
     }
 
-    public void setMsg(String msg)
-    {
+    public void setMsg(String msg) {
         this.msg = msg;
-    }
-
-    public static void clearCache()
-    {
-        cachedMessages.clear();
     }
 }

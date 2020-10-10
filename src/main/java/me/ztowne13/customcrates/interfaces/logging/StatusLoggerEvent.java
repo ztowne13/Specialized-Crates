@@ -5,8 +5,7 @@ import me.ztowne13.customcrates.crates.Crate;
 /**
  * Created by ztowne13 on 6/12/16.
  */
-public enum StatusLoggerEvent
-{
+public enum StatusLoggerEvent {
     ACTION_ADD(true, "Actions", "Added action $?$ with tier $?$", ""),
 
     FIREWORK_ADD(true, "Fireworks", "Added firework $?$ with tier $?$", ""),
@@ -701,57 +700,50 @@ public enum StatusLoggerEvent
 
 
     boolean success;
-    String event, cause, section;
+    String event;
+    String cause;
+    String section;
 
-    StatusLoggerEvent(boolean success, String section, String event, String cause)
-    {
+    StatusLoggerEvent(boolean success, String section, String event, String cause) {
         this.success = success;
         this.event = event;
         this.section = section;
 
-        if (cause.equalsIgnoreCase(""))
-        {
+        if (cause.equalsIgnoreCase("")) {
             this.cause = "NONE";
-        }
-        else
-        {
+        } else {
             this.cause = cause;
         }
     }
 
-    public void log(Crate crate)
-    {
+    public void log(Crate crate) {
         log(crate.getSettings().getStatusLogger(), new String[]{});
     }
 
-    public void log(Crate crate, String[] args)
-    {
+    public void log(Crate crate, String[] args) {
         log(crate.getSettings().getStatusLogger(), args);
     }
 
-    public void log(StatusLogger sl)
-    {
+    public void log(StatusLogger sl) {
         log(sl, new String[]{});
     }
 
-    public void log(StatusLogger sl, String[] args)
-    {
-        String eventDup = event, causeDup = cause;
+    public void log(StatusLogger sl, String[] args) {
+        String eventDup = event;
+        String causeDup = cause;
         int i = 0;
-        while (eventDup.indexOf("$?$") != -1)
-        {
+        while (eventDup.contains("$?$")) {
             int x = eventDup.indexOf("$?$");
             eventDup = eventDup.substring(0, x) + args[i] +
-                    (x + 3 < eventDup.length() ? eventDup.substring(x + 3, eventDup.length()) : "");
+                    (x + 3 < eventDup.length() ? eventDup.substring(x + 3) : "");
 
             i++;
         }
 
-        while (causeDup.indexOf("$?$") != -1)
-        {
+        while (causeDup.contains("$?$")) {
             int x = causeDup.indexOf("$?$");
             causeDup = causeDup.substring(0, x) + args[i] +
-                    (x + 3 < causeDup.length() ? causeDup.substring(x + 3, causeDup.length()) : "");
+                    (x + 3 < causeDup.length() ? causeDup.substring(x + 3) : "");
             i++;
         }
 

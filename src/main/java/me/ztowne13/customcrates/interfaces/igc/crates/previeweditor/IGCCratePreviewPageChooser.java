@@ -18,28 +18,24 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IGCCratePreviewPageChooser extends IGCMenuCrate
-{
+public class IGCCratePreviewPageChooser extends IGCMenuCrate {
     int page;
     List<Integer> values;
     CustomRewardDisplayer displayer;
 
-    public IGCCratePreviewPageChooser(SpecializedCrates specializedCrates, Player player, Crate crate, IGCMenu lastMenu, int page)
-    {
+    public IGCCratePreviewPageChooser(SpecializedCrates specializedCrates, Player player, Crate crate, IGCMenu lastMenu, int page) {
         super(specializedCrates, player, lastMenu, "&7&l> &6&lReward Preview Menu", crate);
 
         this.displayer = (CustomRewardDisplayer) getCrates().getSettings().getDisplayer();
         this.page = page;
 
-        values = new ArrayList<Integer>();
+        values = new ArrayList<>();
 
-        for(Integer i : displayer.getPages().keySet())
-            values.add(i);
+        values.addAll(displayer.getPages().keySet());
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         int slots;
 
@@ -68,16 +64,13 @@ public class IGCCratePreviewPageChooser extends IGCMenuCrate
         int itemNum = (page - 1) * 28;
 
         int added = 0;
-        for (Object val : values)
-        {
-            if (toSkip > skipped || displayedItems >= 28)
-            {
+        for (Object val : values) {
+            if (toSkip > skipped || displayedItems >= 28) {
                 skipped++;
                 continue;
             }
 
-            if (i % 9 == 8)
-            {
+            if (i % 9 == 8) {
                 i += 2;
             }
 
@@ -96,13 +89,11 @@ public class IGCCratePreviewPageChooser extends IGCMenuCrate
             displayedItems++;
         }
 
-        if (page != 1)
-        {
+        if (page != 1) {
             ib.setItem(2, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo back a page"));
         }
 
-        if (((values.size() / 28) + (values.size() % 28 == 0 ? 0 : 1) != page) && values.size() != 0)
-        {
+        if (((values.size() / 28) + (values.size() % 28 == 0 ? 0 : 1) != page) && values.size() != 0) {
             ib.setItem(6, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo forward a page"));
         }
 
@@ -111,33 +102,21 @@ public class IGCCratePreviewPageChooser extends IGCMenuCrate
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        if (slot == 0)
-        {
+    public void handleClick(int slot) {
+        if (slot == 0) {
             getCrates().getSettings().getFileHandler().save();
             ChatUtils.msgSuccess(getP(), "Saved!");
-        }
-        else if(slot == 9)
-        {
+        } else if (slot == 9) {
             up();
-        }
-        else if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
-        {
+        } else if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
             page--;
             open();
-        }
-        else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW)
-        {
+        } else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
             page++;
             open();
-        }
-        else if(slot == 8)
-        {
-            for(int i = 1; i < 1000; i++)
-            {
-                if (!values.contains(i))
-                {
+        } else if (slot == 8) {
+            for (int i = 1; i < 1000; i++) {
+                if (!values.contains(i)) {
                     DisplayPage page = new DisplayPage(displayer, i);
                     page.load();
                     displayer.getPages().put(i, page);
@@ -146,9 +125,7 @@ public class IGCCratePreviewPageChooser extends IGCMenuCrate
                     break;
                 }
             }
-        }
-        else if (getIb().getInv().getItem(slot) != null)
-        {
+        } else if (getIb().getInv().getItem(slot) != null) {
             int row = slot / 9;
             int slotInRow = slot % 9;
             int num = ((page - 1) * 28) + ((row - 1) * 7) + (slotInRow - 1);
@@ -160,8 +137,7 @@ public class IGCCratePreviewPageChooser extends IGCMenuCrate
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         return true;
     }
 }

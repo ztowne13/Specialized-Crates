@@ -12,19 +12,16 @@ import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.entity.Player;
 
-public class IGCCrateParticleColor extends IGCTierMenu
-{
+public class IGCCrateParticleColor extends IGCTierMenu {
     ParticleData particleData;
 
-    public IGCCrateParticleColor(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, ParticleData particleData, String tier)
-    {
+    public IGCCrateParticleColor(SpecializedCrates cc, Player p, IGCMenu lastMenu, Crate crates, ParticleData particleData, String tier) {
         super(cc, p, lastMenu, "&7&l> &6&lSound", crates, tier);
         this.particleData = particleData;
     }
 
     @Override
-    public void openMenu()
-    {
+    public void openMenu() {
 
         InventoryBuilder ib = createDefault(27);
 
@@ -58,7 +55,7 @@ public class IGCCrateParticleColor extends IGCTierMenu
         ib.setItem(13, green);
         ib.setItem(14, blue);
 
-        if(particleData.getParticleName().equalsIgnoreCase("REDSTONE"))
+        if (particleData.getParticleName().equalsIgnoreCase("REDSTONE"))
             ib.setItem(16, size);
 
         ib.open();
@@ -66,10 +63,8 @@ public class IGCCrateParticleColor extends IGCTierMenu
     }
 
     @Override
-    public void handleClick(int slot)
-    {
-        switch (slot)
-        {
+    public void handleClick(int slot) {
+        switch (slot) {
             case 9:
                 up();
                 break;
@@ -90,34 +85,30 @@ public class IGCCrateParticleColor extends IGCTierMenu
                 open();
                 break;
             case 16:
-                if(particleData.getParticleName().equalsIgnoreCase("REDSTONE"))
+                if (particleData.getParticleName().equalsIgnoreCase("REDSTONE"))
                     new InputMenu(getCc(), getP(), "size", particleData.getSize() + "",
-                        "The size of the redstone.", Float.class, this);
+                            "The size of the redstone.", Float.class, this);
                 break;
         }
     }
 
     @Override
-    public boolean handleInput(String value, String input)
-    {
+    public boolean handleInput(String value, String input) {
         int inputAsFloat;
-        try
-        {
+        try {
             inputAsFloat = Integer.parseInt(input);
-        }
-        catch(Exception exc)
-        {
+        } catch (Exception exc) {
             ChatUtils.msgError(getP(), input + " is not a valid number.");
             return false;
         }
 
-        if(value.equalsIgnoreCase("red"))
+        if (value.equalsIgnoreCase("red"))
             particleData.setColorRed(inputAsFloat);
-        else if(value.equalsIgnoreCase("green"))
+        else if (value.equalsIgnoreCase("green"))
             particleData.setColorGreen(inputAsFloat);
-        else if(value.equalsIgnoreCase("blue"))
+        else if (value.equalsIgnoreCase("blue"))
             particleData.setColorBlue(inputAsFloat);
-        else if(value.equalsIgnoreCase("size"))
+        else if (value.equalsIgnoreCase("size"))
             particleData.setSize(inputAsFloat);
 
         ChatUtils.msgSuccess(getP(), "Successfully set " + value + " to " + input + ".");
