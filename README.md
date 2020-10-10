@@ -1,3 +1,10 @@
+#### IntelliJ Recommended!
+
+# How to compile in IntelliJ directly
+1. File->New->Project from version control, input repo git url
+2. Once project is loaded simply press the "Maven" section on the right side
+3. Output is in Project/target/
+
 # How to compile
 1. Clone this repo
 2. Open the folder in the terminal

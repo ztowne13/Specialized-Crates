@@ -1,7 +1,7 @@
-name: SpecializedCrates
-author: Ztowne13
+name: ${project.name}
+author: ${project.author}
 version: ${project.version}
-main: me.ztowne13.customcrates.SpecializedCrates
+main: ${project.mainClass}
 api-version: 1.13
 description: A 100% customizable crate plugin for your server.
 softdepend: [HolographicDisplays,IndividualHolograms,Holograms,Citizens,CMI,PlaceholderAPI,Multiverse-Core,Vault]
