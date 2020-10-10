@@ -1,31 +1,8 @@
-Note: I used IntelliJ, so sorry for Eclipse users who this may be a bit confusing.
-
-# Compile Settings
-
-Project SDK: Java 8
-Project language level: 8
-
-Libraries (All are needed for compile, even if not being used on the server) - all of the resources can be found in the Resources/ folder but may need to be updated to newer versions: 
-* Citizens
-* CMI
-* Holograms by SaintX
-* HolographicDisplays
-* IndividualHolograms
-* PlaceholderAPI
-* Spigot (whichever version you want to compile to, currently 1.16.0)
-
-Artifacts needed to build SpecializedCrates.jar
-* 'Custom Crates' compile output
-* CrateConfig.yml
-* Messages.yml
-* plugin.yml
-* ActiveCrates.db
-* Animations.yml
-* Rewards.yml
-* config.yml
-* Crates/
-* PluginData.db
-* SQL.yml
+# How to compile
+1. Clone this repo
+2. Open the folder in the terminal
+3. Type `mvn clean package`
+4. Get the final file in `/target/`
 
 # Other notes
 
