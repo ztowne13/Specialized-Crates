@@ -30,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 
 // TODO: Use XMaterial from XSeries
+@Deprecated
 public enum DynamicMaterial {
     PLAYER_HEAD(3, "SKULL_ITEM", "SKULL"),
 
