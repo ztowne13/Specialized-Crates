@@ -1,9 +1,9 @@
 package me.ztowne13.customcrates.interfaces.igc;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,14 +13,14 @@ import java.util.List;
 public class IGCListSelector extends IGCMenu {
     int page;
     String header;
-    DynamicMaterial displayItem;
+    XMaterial displayItem;
     List values;
     List<ItemBuilder> builders = null;
     List<String> descriptors = null;
     boolean reopen = true;
 
     public IGCListSelector(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header,
-                           List values, DynamicMaterial displayItem, int page, List<String> descriptors, boolean reopen) {
+                           List values, XMaterial displayItem, int page, List<String> descriptors, boolean reopen) {
         super(cc, p, lastMenu, "&7&l> &6&l" + header + " PG" + page);
         this.header = header;
         this.values = values;
@@ -31,12 +31,12 @@ public class IGCListSelector extends IGCMenu {
     }
 
     public IGCListSelector(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header,
-                           List values, DynamicMaterial displayItem, int page, List<String> descriptors) {
+                           List values, XMaterial displayItem, int page, List<String> descriptors) {
         this(cc, p, lastMenu, header, values, displayItem, page, descriptors, true);
     }
 
     public IGCListSelector(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header,
-                           List values, DynamicMaterial displayItem, int page, List<String> descriptors,
+                           List values, XMaterial displayItem, int page, List<String> descriptors,
                            List<ItemBuilder> builders) {
         this(cc, p, lastMenu, header, values, displayItem, page, descriptors);
         this.builders = builders;
@@ -79,7 +79,7 @@ public class IGCListSelector extends IGCMenu {
             ItemBuilder item;
 
             if (builders == null) {
-                item = new ItemBuilder(displayItem, 1).setName("&a" + val);
+                item = new ItemBuilder(displayItem, 1).setDisplayName("&a" + val);
 
                 if (descriptors != null)
                     item.addAutomaticLore("&f", 30, descriptors.get(added));
@@ -104,11 +104,11 @@ public class IGCListSelector extends IGCMenu {
         }
 
         if (page != 1) {
-            ib.setItem(2, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo back a page"));
+            ib.setItem(2, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo back a page"));
         }
 
         if (((values.size() / 28) + (values.size() % 28 == 0 ? 0 : 1) != page) && values.size() != 0) {
-            ib.setItem(6, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo forward a page"));
+            ib.setItem(6, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo forward a page"));
         }
 
         ib.open();

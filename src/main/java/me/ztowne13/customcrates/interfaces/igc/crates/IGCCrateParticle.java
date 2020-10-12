@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
@@ -12,12 +13,10 @@ import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import me.ztowne13.customcrates.utils.VersionUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -45,20 +44,20 @@ public class IGCCrateParticle extends IGCTierMenu {
         InventoryBuilder ib = createDefault(pd.getParticleAnimationEffect() == null ? 36 : 27);
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
-        ib.setItem(8, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&cDelete this particle")
+        ib.setItem(8, new ItemBuilder(XMaterial.RED_CARPET).setDisplayName("&cDelete this particle")
                 .setLore("&7NOTE: This action cannot").addLore("&7be undone!"));
 
-        ib.setItem(10, new ItemBuilder(Material.BEACON, 1, 0).setName("&aParticle Animation")
+        ib.setItem(10, new ItemBuilder(XMaterial.BEACON).setDisplayName("&aParticle Animation")
                 .addLore("&7Current value: ")
                 .addLore("&7" + (pd.getParticleAnimationEffect() == null ? "none" :
                         PEAnimationType.getFromParticleAnimationEffect(pd.getParticleAnimationEffect()).name())).addLore("")
                 .addAutomaticLore("&f", 30,
                         "&fThe animation type of the particle. Set this value to 'none' to have no animation."));
-        ib.setItem(11, new ItemBuilder(Material.NETHER_STAR, 1, 0).setName("&aParticle Type").setLore("&7Current value: ")
+        ib.setItem(11, new ItemBuilder(XMaterial.NETHER_STAR).setDisplayName("&aParticle Type").setLore("&7Current value: ")
                 .addLore("&7" + pd.getParticleName()).addLore("")
                 .addAutomaticLore("&f", 30, "The particle type that this particle will display."));
 
-        ItemBuilder colorEditor = new ItemBuilder(DynamicMaterial.LIME_DYE, 1);
+        ItemBuilder colorEditor = new ItemBuilder(XMaterial.LIME_DYE, 1);
         colorEditor.setDisplayName("&aEdit the color of the particle");
 
         for (String s : colorableParticles)
@@ -67,28 +66,28 @@ public class IGCCrateParticle extends IGCTierMenu {
 
         if (pd.getParticleAnimationEffect() == null) {
             ib.setItem(12,
-                    new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aX Range")
+                    new ItemBuilder(XMaterial.BLAZE_ROD).setDisplayName("&aX Range")
                             .addLore("&7Current value: ")
                             .addLore("&7" + pd.getRangeX()).addLore("")
                             .addAutomaticLore("&f", 30, "Range particles will spawn in the X direction."));
             ib.setItem(13,
-                    new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aY Range")
+                    new ItemBuilder(XMaterial.BLAZE_ROD).setDisplayName("&aY Range")
                             .addLore("&7Current value: ")
                             .addLore("&7" + pd.getRangeY()).addLore("")
                             .addAutomaticLore("&f", 30, "Range particles will spawn in the Y direction."));
             ib.setItem(14,
-                    new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aZ Range")
+                    new ItemBuilder(XMaterial.BLAZE_ROD).setDisplayName("&aZ Range")
                             .addLore("&7Current value: ")
                             .addLore("&7" + pd.getRangeZ()).addLore("")
                             .addAutomaticLore("&f", 30, "Range particles will spawn in the Z direction."));
-            ib.setItem(15, new ItemBuilder(Material.SUGAR, 1, 0).setName("&aParticle speed").setLore("&7Current value: ")
+            ib.setItem(15, new ItemBuilder(XMaterial.SUGAR).setDisplayName("&aParticle speed").setLore("&7Current value: ")
                     .addLore("&7" + pd.getSpeed()).addLore("").addAutomaticLore("&f", 30,
                             "The speed the particles will move around at. For some particles, this changes their color."));
-            ib.setItem(16, new ItemBuilder(Material.BUCKET, 1, 0).setName("&aParticle amount").setLore("&7Current value: ")
+            ib.setItem(16, new ItemBuilder(XMaterial.BUCKET).setDisplayName("&aParticle amount").setLore("&7Current value: ")
                     .addLore("&7" + pd.getAmount()).addLore("")
                     .addAutomaticLore("&f", 30, "The amount of particles that will be displayed every tick."));
 
-            ItemBuilder xCenter = new ItemBuilder(DynamicMaterial.BLAZE_POWDER, 1);
+            ItemBuilder xCenter = new ItemBuilder(XMaterial.BLAZE_POWDER);
             xCenter.setDisplayName("&aCenter Offset X");
             xCenter.addLore("&7Current Value:");
             xCenter.addLore("&7" + pd.getCenterX());
@@ -96,7 +95,7 @@ public class IGCCrateParticle extends IGCTierMenu {
             xCenter.addAutomaticLore("&f", 30,
                     "The x offset for the middle of where all the particles will spawn. This is useful if the particles spawn in a compact area and that area is off-centered.");
 
-            ItemBuilder yCenter = new ItemBuilder(DynamicMaterial.BLAZE_POWDER, 1);
+            ItemBuilder yCenter = new ItemBuilder(XMaterial.BLAZE_POWDER);
             yCenter.setDisplayName("&aCenter Offset Y");
             yCenter.addLore("&7Current Value:");
             yCenter.addLore("&7" + pd.getCenterY());
@@ -104,7 +103,7 @@ public class IGCCrateParticle extends IGCTierMenu {
             yCenter.addAutomaticLore("&f", 30,
                     "The y offset for the middle of where all the particles will spawn. This is useful if the particles spawn in a compact area and that area is off-centered.");
 
-            ItemBuilder zCenter = new ItemBuilder(DynamicMaterial.BLAZE_POWDER, 1);
+            ItemBuilder zCenter = new ItemBuilder(XMaterial.BLAZE_POWDER);
             zCenter.setDisplayName("&aCenter Offset Z");
             zCenter.addLore("&7Current Value:");
             zCenter.addLore("&7" + pd.getCenterZ());
@@ -119,14 +118,14 @@ public class IGCCrateParticle extends IGCTierMenu {
 
         } else {
             ib.setItem(12,
-                    new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aRadius")
+                    new ItemBuilder(XMaterial.BLAZE_ROD).setDisplayName("&aRadius")
                             .addAutomaticLore("&f", 30,
                                     "What radius (how 'large') the effect will have. Ideally should be around 1-2.")
                             .addLore("")
                             .addLore("&7Current value: ")
                             .addLore("&7" + pd.getRangeX()));
             ib.setItem(13,
-                    new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aY Offset")
+                    new ItemBuilder(XMaterial.BLAZE_ROD).setDisplayName("&aY Offset")
                             .addAutomaticLore("&f", 30,
                                     "The Y-Offset to center the animation on. Negative numbers make it go down, positive numbers make it go up. Decimals are OK.")
                             .addLore("")
@@ -136,24 +135,24 @@ public class IGCCrateParticle extends IGCTierMenu {
             if (pd.getParticleAnimationEffect() instanceof TiltedRingsPA ||
                     pd.getParticleAnimationEffect() instanceof OffsetTiltedRingsPA) {
                 ib.setItem(14,
-                        new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aRotation")
+                        new ItemBuilder(XMaterial.BLAZE_ROD).setDisplayName("&aRotation")
                                 .addAutomaticLore("&f", 30,
                                         "The rotation (in degrees) of the animation. This helps if the animation is playing sideways. Setting it to 90 will rotate it a quarter turn.")
                                 .addLore("").addLore("&7Current value: ")
                                 .addLore("&7" + pd.getRangeZ()));
             } else {
                 ib.setItem(14,
-                        new ItemBuilder(Material.BLAZE_ROD, 1, 0).setName("&aHeight")
+                        new ItemBuilder(XMaterial.BLAZE_ROD).setDisplayName("&aHeight")
                                 .addAutomaticLore("&f", 30,
                                         "How high up and down the animation will go. A value of 1 to 3 will keep it around the crate.")
                                 .addLore("").addLore("&7Current value: ")
                                 .addLore("&7" + pd.getRangeZ()));
             }
 
-            ib.setItem(15, new ItemBuilder(Material.SUGAR, 1, 0).setName("&aAnimation Speed")
+            ib.setItem(15, new ItemBuilder(XMaterial.SUGAR).setDisplayName("&aAnimation Speed")
                     .addAutomaticLore("&f", 30, "The speed of the animation. A value of 20 is a fairly reasonable speed.")
                     .addLore("").addLore("&7Current value: ").addLore("&7" + pd.getSpeed()));
-            ib.setItem(16, new ItemBuilder(Material.BUCKET, 1, 0).setName("&aParticle amount")
+            ib.setItem(16, new ItemBuilder(XMaterial.BUCKET).setDisplayName("&aParticle amount")
                     .addAutomaticLore("&f", 30,
                             "The amount of particles per animation tick. A value of 3 will create a full/filled looking animation.")
                     .addLore("").addLore("&7Current value: ")
@@ -176,15 +175,15 @@ public class IGCCrateParticle extends IGCTierMenu {
                 break;
             case 10:
                 new IGCListSelector(getCc(), getP(), this, "Particle Animation", Arrays.asList(PEAnimationType.values()),
-                        DynamicMaterial.BEACON, 1, null).open();
+                        XMaterial.BEACON, 1, null).open();
                 break;
             case 11:
                 if (VersionUtils.Version.v1_9.isServerVersionOrEarlier())
                     new IGCListSelector(getCc(), getP(), this, "Particle Type", Arrays.asList(ParticleEffect.values()),
-                            DynamicMaterial.NETHER_STAR, 1, null).open();
+                            XMaterial.NETHER_STAR, 1, null).open();
                 else
                     new IGCListSelector(getCc(), getP(), this, "Particle Type", Arrays.asList(org.bukkit.Particle.values()),
-                            DynamicMaterial.NETHER_STAR, 1, null).open();
+                            XMaterial.NETHER_STAR, 1, null).open();
                 break;
             case 12:
                 new InputMenu(getCc(), getP(), "x range", pd.getRangeX() + "",

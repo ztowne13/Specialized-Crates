@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
@@ -7,10 +8,8 @@ import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -64,11 +63,11 @@ public class IGCTierSelector extends IGCMenuCrate {
                 i += 4;
             }
 
-            ItemBuilder button = new ItemBuilder(DynamicMaterial.STONE_BUTTON);
+            ItemBuilder button = new ItemBuilder(XMaterial.STONE_BUTTON);
             button.setDisplayName("&a" + tier);
             if (tier.equalsIgnoreCase("PLAY")) {
                 ItemBuilder play = button.clone();
-                play.getStack().setType(Material.EMERALD);
+                play.getStack().setType(XMaterial.EMERALD.parseMaterial());
                 play.addAutomaticLore("&7", 30, "These are the values run while the crate is sitting, idle.");
                 play.addLore("");
                 play.addAutomaticLore("&e", 30,
@@ -112,7 +111,7 @@ public class IGCTierSelector extends IGCMenuCrate {
     public void handleClick(int slot) {
         if (slot == 9) {
             up();
-        } else if (getIb().getInv().getItem(slot) != null && !getIb().getInv().getItem(slot).getType().equals(Material.AIR)) {
+        } else if (getIb().getInv().getItem(slot) != null && !XMaterial.AIR.isSimilar(getIb().getInv().getItem(slot))) {
             String tier = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
             igcTierMenu.setTier(tier);
             igcTierMenu.open();

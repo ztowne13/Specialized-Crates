@@ -1,11 +1,11 @@
 package me.ztowne13.customcrates.crates.options.rewards;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
@@ -52,7 +52,7 @@ public class Reward implements Comparable<Reward> {
         needsMoreConfig = true;
         this.cc = cc;
         setRewardName(rewardName);
-        saveBuilder = new SaveableItemBuilder(DynamicMaterial.STONE, 1);
+        saveBuilder = new SaveableItemBuilder(XMaterial.STONE, 1);
         saveBuilder.setDisplayName(rewardName);
         displayBuilder = new ItemBuilder(saveBuilder);
         giveDisplayItem = true;
@@ -109,9 +109,9 @@ public class Reward implements Comparable<Reward> {
 
             try {
                 if (!isGiveDisplayItemLore()) {
-                    ItemMeta im = stack.im();
+                    ItemMeta im = stack.getItemMeta();
                     im.setLore(null);
-                    stack.setIm(im);
+                    stack.setItemMeta(im);
                 }
             } catch (Exception exc) {
             }
@@ -120,7 +120,7 @@ public class Reward implements Comparable<Reward> {
                 stack.removeDisplayName();
             }
 
-            Utils.addItemAndDropRest(p, stack.get());
+            Utils.addItemAndDropRest(p, stack.getStack());
         }
 
         for (String command : getCommands()) {

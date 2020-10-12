@@ -1,13 +1,14 @@
 package me.ztowne13.customcrates.interfaces.files;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.Sound;
+
+import java.util.Optional;
 
 /**
  * Created by ztowne13 on 7/7/16.
@@ -30,9 +31,7 @@ public class FileDataLoader {
     }
 
     public ItemBuilder loadItem(String path, ItemBuilder defValue, StatusLogger statusLogger, StatusLoggerEvent pathDoesntExist,
-                                StatusLoggerEvent invalidMaterial,
-                                StatusLoggerEvent invalidByte,
-                                StatusLoggerEvent invalid, StatusLoggerEvent success) {
+                                StatusLoggerEvent invalid) {
         if (!fileHandler.get().contains(path)) {
             pathDoesntExist.log(statusLogger, new String[]{path});
             return defValue;
@@ -40,28 +39,10 @@ public class FileDataLoader {
 
         String value = fileHandler.get().getString(path);
 
-        String[] args = value.split(";");
-        try {
-            Material m = null;
-            try {
-                m = DynamicMaterial.fromString(args[0].toUpperCase()).parseMaterial();
-            } catch (Exception exc) {
-                invalidMaterial.log(statusLogger, new String[]{args[0]});
-                return defValue;
-            }
-
-            short byt = 0;
-            if (value.contains(";")) {
-                if (Utils.isInt(args[1])) {
-                    byt = Short.valueOf(args[1]);
-                } else {
-                    invalidByte.log(statusLogger, new String[]{args[1]});
-                }
-            }
-            success.log(statusLogger, new String[]{value});
-            DynamicMaterial dynMat = DynamicMaterial.fromString(value);
-            return new ItemBuilder(dynMat, 1);
-        } catch (Exception exc) {
+        Optional<XMaterial> optional = XMaterial.matchXMaterial(value.replace(";", ":"));
+        if (optional.isPresent()) {
+            return new ItemBuilder(optional.get(), 1);
+        } else {
             invalid.log(statusLogger, new String[]{value});
         }
         return defValue;

@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.items;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.items.attributes.CompressedEnchantment;
 import me.ztowne13.customcrates.interfaces.items.attributes.RGBColor;
@@ -8,13 +9,13 @@ import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
 import me.ztowne13.customcrates.utils.VersionUtils;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
     public SaveableItemBuilder(ItemBuilder builder) {
@@ -25,7 +26,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
         super(fromStack);
     }
 
-    public SaveableItemBuilder(DynamicMaterial m, int amnt) {
+    public SaveableItemBuilder(XMaterial m, int amnt) {
         super(m, amnt);
     }
 
@@ -34,17 +35,17 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
         FileConfiguration fc = fileHandler.get();
         short durability = getStack().getDurability();
         try {
-            DynamicMaterial dynMat = DynamicMaterial.fromItemStack(getStack());
+            XMaterial dynMat = XMaterial.matchXMaterial(getStack());
             fc.set(prefix + ".material", dynMat.name());
             fc.set(prefix + ".damage",
                     durability == 0 ||
-                            dynMat.data != 0 ||
+                            dynMat.getData() != 0 ||
                             VersionUtils.Version.v1_13.isServerVersionOrLater()
                             ? null : durability);
         } catch (Exception exc) {
             if (VersionUtils.Version.v1_12.isServerVersionOrEarlier()) {
                 getStack().setDurability((short) 0);
-                fc.set(prefix + ".material", DynamicMaterial.fromItemStack(getStack()).name());
+                fc.set(prefix + ".material", XMaterial.matchXMaterial(getStack()).name());
                 fc.set(prefix + ".damage", durability);
             } else {
                 exc.printStackTrace();
@@ -54,8 +55,8 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
         fc.set(prefix + ".glow", isGlowing());
         fc.set(prefix + ".amount", getStack().getAmount());
         fc.set(prefix + ".player-head-name", getPlayerHeadName());
-        if (VersionUtils.Version.v1_13.isServerVersionOrLater() && im() instanceof Damageable) {
-            fc.set(prefix + ".damage", ((Damageable) im()).getDamage());
+        if (VersionUtils.Version.v1_13.isServerVersionOrLater() && getItemMeta() instanceof Damageable) {
+            fc.set(prefix + ".damage", ((Damageable) getItemMeta()).getDamage());
         }
 
         if (!hasDisplayName()) {
@@ -141,15 +142,17 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
         } else {
             String mat = fc.getString(prefix + ".material");
 
-            try {
-                DynamicMaterial dynamicMaterial = DynamicMaterial.fromString(mat);
-                foundMaterialDurability = (short) dynamicMaterial.data;
+            Optional<XMaterial> optional = XMaterial.matchXMaterial(mat.replace(";", ":"));
+
+            if (optional.isPresent()) {
+                XMaterial dynamicMaterial = optional.get();
+                foundMaterialDurability = dynamicMaterial.getData();
                 setStack(dynamicMaterial.parseItem());
 
-                if (dynamicMaterial.equals(DynamicMaterial.AIR)) {
+                if (dynamicMaterial.equals(XMaterial.AIR)) {
                     return true;
                 }
-            } catch (Exception exc) {
+            } else {
                 if (itemFailure != null)
                     itemFailure.log(statusLogger, new String[]{mat + " is not a valid material."});
                 return false;
@@ -289,24 +292,25 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
         FileConfiguration fc = fileHandler.get();
 
         if (fc.contains(prefix)) {
-            if (!(fc.get(prefix) instanceof MemorySection)) {
+            if (!fc.isConfigurationSection(prefix)) {
                 ChatUtils.log("Converting old item format to new item format...");
 
-                try {
-                    String original = fc.getString(prefix);
-                    String[] args = original.split(";");
+                String original = fc.getString(prefix);
+                String[] args = original.split(";");
 
-                    String materialName = args[0].toUpperCase();
-                    String byteName = args.length > 1 ? args[1] : "0";
+                String materialName = args[0].toUpperCase();
+                String byteName = args.length > 1 ? args[1] : "0";
 
-                    DynamicMaterial m = DynamicMaterial.fromString(materialName + ";" + byteName);
+                Optional<XMaterial> optional = XMaterial.matchXMaterial(materialName + ":" + byteName);
+
+                if (optional.isPresent()) {
+                    XMaterial m = optional.get();
 
                     SaveableItemBuilder newItem = new SaveableItemBuilder(m, 1);
                     newItem.saveItem(fileHandler, prefix, true);
                     ChatUtils.log("Successfully converted " + original);
                     fileHandler.save();
-                } catch (Exception exc) {
-                    exc.printStackTrace();
+                } else {
                     ChatUtils.log("Failed to convert " + fc.getString(prefix) + ", it is likely not a proper material.");
                 }
             }

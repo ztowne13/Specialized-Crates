@@ -1,11 +1,11 @@
 package me.ztowne13.customcrates.interfaces.igc.items;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.EditableItem;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.items.attributes.RGBColor;
@@ -27,15 +27,15 @@ public class IGCColoredArmour extends IGCMenu {
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
-        ItemBuilder red = new ItemBuilder(DynamicMaterial.RED_DYE, 1);
+        ItemBuilder red = new ItemBuilder(XMaterial.RED_DYE, 1);
         red.setDisplayName("&cEdit the RED of RGB");
         red.addLore("").addLore("&7Current value: ").addLore("&f" + item.getColor().getR());
 
-        ItemBuilder green = new ItemBuilder(DynamicMaterial.LIME_DYE, 1);
+        ItemBuilder green = new ItemBuilder(XMaterial.LIME_DYE, 1);
         green.setDisplayName("&aEdit the GREEN of RGB");
         green.addLore("").addLore("&7Current value: ").addLore("&f" + item.getColor().getG());
 
-        ItemBuilder blue = new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1);
+        ItemBuilder blue = new ItemBuilder(XMaterial.LIGHT_BLUE_DYE, 1);
         blue.setDisplayName("&bEdit the BLUE of RGB");
         blue.addLore("").addLore("&7Current value: ").addLore("&f" + item.getColor().getB());
 

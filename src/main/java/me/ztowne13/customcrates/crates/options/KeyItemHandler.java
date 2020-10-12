@@ -1,12 +1,12 @@
 package me.ztowne13.customcrates.crates.options;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerDataManager;
@@ -22,7 +22,7 @@ public class KeyItemHandler extends CSetting {
     public KeyItemHandler(Crate crates, SpecializedCrates cc) {
         super(crates, cc);
 
-        keyItem = new SaveableItemBuilder(DynamicMaterial.REDSTONE_TORCH, 1);
+        keyItem = new SaveableItemBuilder(XMaterial.REDSTONE_TORCH, 1);
         keyItem.setDisplayName("&4Please set me!");
     }
 
@@ -50,7 +50,7 @@ public class KeyItemHandler extends CSetting {
     }
 
     public ItemStack getItem(int amount) {
-        ItemStack stack = keyItem.get().clone();
+        ItemStack stack = keyItem.getStack().clone();
         stack.setAmount(amount);
         return stack;
     }

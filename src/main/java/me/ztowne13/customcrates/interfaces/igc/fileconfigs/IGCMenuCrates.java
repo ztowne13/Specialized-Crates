@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
@@ -7,10 +8,8 @@ import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCCratesMain;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -40,14 +39,14 @@ public class IGCMenuCrates extends IGCMenu {
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4, values, page), 18);
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
         ib.setItem(8,
-                new ItemBuilder(Material.PAPER, 1, 0).setName("&aCreate a new crate").setLore("&7Please set the crate and")
+                new ItemBuilder(XMaterial.PAPER).setDisplayName("&aCreate a new crate").setLore("&7Please set the crate and")
                         .addLore("&7key once you are done configuring").addLore("&7for it to save properly."));
 
-        ItemBuilder nextPage = new ItemBuilder(DynamicMaterial.ARROW, 1);
+        ItemBuilder nextPage = new ItemBuilder(XMaterial.ARROW);
         nextPage.setDisplayName("&aNext Page");
         nextPage.addLore("").addAutomaticLore("&7", 30, "Click to go to the next page of crates.");
 
-        ItemBuilder lastPage = new ItemBuilder(DynamicMaterial.ARROW, 1);
+        ItemBuilder lastPage = new ItemBuilder(XMaterial.ARROW);
         lastPage.setDisplayName("&aPrevious Page");
         lastPage.addLore("").addAutomaticLore("&7", 30, "Click to go to the previous page of crates.");
 
@@ -76,7 +75,7 @@ public class IGCMenuCrates extends IGCMenu {
                 skipped++;
             } else {
                 Crate crate = Crate.getLoadedCrates().get(crateName);
-                ib.setItem(i, new ItemBuilder(Material.CHEST, 1, 0).setName((crate.isEnabled() ? "&a" : "&c") + crateName)
+                ib.setItem(i, new ItemBuilder(XMaterial.CHEST).setDisplayName((crate.isEnabled() ? "&a" : "&c") + crateName)
                         .setLore("&7Placed crates: &f" + crate.getPlacedCount()).addLore(
                                 "&7Errors: " + (crate.getSettings().getStatusLogger().getFailures() == 0 ? "&f" : "&c") +
                                         crate.getSettings().getStatusLogger().getFailures()));
@@ -98,7 +97,7 @@ public class IGCMenuCrates extends IGCMenu {
             new IGCMenuCrates(getCc(), getP(), getLastMenu(), page - 1).open();
         else if (slot == 18)
             new IGCMenuCrates(getCc(), getP(), getLastMenu(), page + 1).open();
-        else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType() == Material.CHEST) {
+        else if (getIb().getInv().getItem(slot) != null && XMaterial.CHEST.isSimilar(getIb().getInv().getItem(slot))) {
             String name = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
             new IGCCratesMain(getCc(), getP(), this, Crate.getCrate(getCc(), name)).open();
         }

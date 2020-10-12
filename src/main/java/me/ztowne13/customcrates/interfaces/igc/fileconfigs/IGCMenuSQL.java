@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
@@ -8,7 +9,6 @@ import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -32,15 +32,15 @@ public class IGCMenuSQL extends IGCMenu {
         ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
         ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
 
-        ib.setItem(11, new ItemBuilder(Material.PAPER, 1, 0).setName("&aDatabase Name").addLore("&7Current Value:")
+        ib.setItem(11, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aDatabase Name").addLore("&7Current Value:")
                 .addLore("&7" + fc.getString("database.name")));
-        ib.setItem(12, new ItemBuilder(Material.PAPER, 1, 0).setName("&aDatabase IP").addLore("&7Current Value:")
+        ib.setItem(12, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aDatabase IP").addLore("&7Current Value:")
                 .addLore("&7" + fc.getString("database.ip")));
-        ib.setItem(13, new ItemBuilder(Material.PAPER, 1, 0).setName("&aDatabase Port").addLore("&7Current Value:")
+        ib.setItem(13, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aDatabase Port").addLore("&7Current Value:")
                 .addLore("&7" + fc.getString("database.port")));
-        ib.setItem(14, new ItemBuilder(Material.PAPER, 1, 0).setName("&aDatabase Username").addLore("&7Current Value:")
+        ib.setItem(14, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aDatabase Username").addLore("&7Current Value:")
                 .addLore("&7" + fc.getString("database.username")));
-        ib.setItem(15, new ItemBuilder(Material.PAPER, 1, 0).setName("&aDatabase Password").addLore("&7Current Value:")
+        ib.setItem(15, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aDatabase Password").addLore("&7Current Value:")
                 .addLore("&7" + fc.getString("database.password")));
 
         ib.open();

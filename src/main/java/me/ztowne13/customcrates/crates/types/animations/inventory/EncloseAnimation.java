@@ -1,12 +1,12 @@
 package me.ztowne13.customcrates.crates.types.animations.inventory;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.crates.types.animations.AnimationDataHolder;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
@@ -140,12 +140,10 @@ public class EncloseAnimation extends InventoryCrateAnimation {
         }
 
         fillerItem = fu.getFileDataLoader()
-                .loadItem(prefix + "fill-block", new ItemBuilder(DynamicMaterial.PURPLE_STAINED_GLASS_PANE),
+                .loadItem(prefix + "fill-block", new ItemBuilder(XMaterial.PURPLE_STAINED_GLASS_PANE),
                         getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
-                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID_MATERIAL,
-                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID_BYTE,
-                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID,
-                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_SUCCESS);
+                        StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID
+                );
         fillerItem.setDisplayName("&f");
 
         tickSound = fu.getFileDataLoader()

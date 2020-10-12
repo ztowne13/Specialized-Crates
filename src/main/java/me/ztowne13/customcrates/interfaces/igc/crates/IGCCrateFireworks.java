@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.particles.FireworkData;
@@ -8,10 +9,8 @@ import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -32,7 +31,7 @@ public class IGCCrateFireworks extends IGCTierMenu {
                 9, 18);
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
-        ib.setItem(17, new ItemBuilder(Material.PAPER, 1, 0).setName("&aAdd a new firework")
+        ib.setItem(17, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aAdd a new firework")
                 .setLore("&7Please hold the firework in").addLore("&7your hand. Type 'add' to")
                 .addLore("&7add a firework and 'done'").addLore("&7to finish editing and return")
                 .addLore("&7to this menu."));
@@ -46,8 +45,8 @@ public class IGCCrateFireworks extends IGCTierMenu {
                     i += 4;
                 }
 
-                ib.setItem(i, new ItemBuilder(DynamicMaterial.FIREWORK_ROCKET.parseMaterial(), 1, 0)
-                        .setName("&6&lFirework ID: &e" + fd.getId())
+                ib.setItem(i, new ItemBuilder(XMaterial.FIREWORK_ROCKET)
+                        .setDisplayName("&6&lFirework ID: &e" + fd.getId())
                         .addAutomaticLore("&7", 31, "&aColors: &7" + fd.getColors())
                         .addAutomaticLore("&7", 31, "&aFade Colors: &7" + fd.getFadeColors())
                         .addLore("&aPower: &7" + fd.getPower()).addLore("&aFlicker: &7" + fd.isFlicker())
@@ -73,7 +72,7 @@ public class IGCCrateFireworks extends IGCTierMenu {
                     "Please hold whatever fireworks in your hand you want to add and type 'add'.",
                     String.class, this, true);
         } else if (getIb().getInv().getItem(slot) != null &&
-                DynamicMaterial.FIREWORK_ROCKET.isSameMaterial(getIb().getInv().getItem(slot))) {
+                XMaterial.FIREWORK_ROCKET.isSimilar(getIb().getInv().getItem(slot))) {
             if (deleteMode) {
                 cs.getFireworks().removeFireworks(tier, cs.getFireworks().getByItemStack(tier, getIb().getInv().getItem(slot)));
                 open();
@@ -86,7 +85,7 @@ public class IGCCrateFireworks extends IGCTierMenu {
         if (value.equalsIgnoreCase("add firework")) {
             if (input.equalsIgnoreCase("add")) {
                 if (getP().getItemInHand() != null &&
-                        getP().getItemInHand().getType().equals(DynamicMaterial.FIREWORK_ROCKET.parseMaterial())) {
+                        XMaterial.FIREWORK_ROCKET.isSimilar(getP().getItemInHand())) {
                     FireworkData fd = new FireworkData(getCc(), cs);
                     boolean result = fd.loadFromFirework(getP().getItemInHand());
                     if (!result) {
@@ -109,12 +108,12 @@ public class IGCCrateFireworks extends IGCTierMenu {
     }
 
     void updateDeleteModeItem() {
-        ItemBuilder deleteModeItem = new ItemBuilder(DynamicMaterial.RED_CARPET, 1);
+        ItemBuilder deleteModeItem = new ItemBuilder(XMaterial.RED_CARPET);
         if (!deleteMode) {
-            getIb().setItem(8, deleteModeItem.setName("&aEnable 'delete' mode").setLore("&7By enabling 'delete' mode")
+            getIb().setItem(8, deleteModeItem.setDisplayName("&aEnable 'delete' mode").setLore("&7By enabling 'delete' mode")
                     .addLore("&7you can just click on fireworks").addLore("&7to remove them"));
         } else {
-            getIb().setItem(8, deleteModeItem.setName("&cDisable 'delete' mode").setLore("&7This will stop you from")
+            getIb().setItem(8, deleteModeItem.setDisplayName("&cDisable 'delete' mode").setLore("&7This will stop you from")
                     .addLore("&7removing fireworks"));
         }
     }

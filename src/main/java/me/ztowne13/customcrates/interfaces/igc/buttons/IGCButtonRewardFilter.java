@@ -1,8 +1,8 @@
 package me.ztowne13.customcrates.interfaces.igc.buttons;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 
 public class IGCButtonRewardFilter implements IGCButton {
@@ -10,7 +10,7 @@ public class IGCButtonRewardFilter implements IGCButton {
 
     @Override
     public ItemBuilder getButtonItem() {
-        ItemBuilder button = new ItemBuilder(DynamicMaterial.HOPPER);
+        ItemBuilder button = new ItemBuilder(XMaterial.HOPPER);
         button.setDisplayName("&6Sorting the Rewards by");
         button.addLore("&e" + sortType.getNiceName());
         button.addLore("");

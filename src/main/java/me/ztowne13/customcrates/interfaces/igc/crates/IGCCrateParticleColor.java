@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
@@ -7,7 +8,6 @@ import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.entity.Player;
@@ -27,23 +27,23 @@ public class IGCCrateParticleColor extends IGCTierMenu {
 
         ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
 
-        ItemBuilder red = new ItemBuilder(DynamicMaterial.RED_DYE, 1);
+        ItemBuilder red = new ItemBuilder(XMaterial.RED_DYE, 1);
         red.setDisplayName("&cEdit the RED of RGB");
         red.addLore("").addLore("&7Current value: ").addLore("&f" + particleData.getColorRed());
 
-        ItemBuilder green = new ItemBuilder(DynamicMaterial.LIME_DYE, 1);
+        ItemBuilder green = new ItemBuilder(XMaterial.LIME_DYE, 1);
         green.setDisplayName("&aEdit the GREEN of RGB");
         green.addLore("").addLore("&7Current value: ").addLore("&f" + particleData.getColorGreen());
 
-        ItemBuilder blue = new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1);
+        ItemBuilder blue = new ItemBuilder(XMaterial.LIGHT_BLUE_DYE, 1);
         blue.setDisplayName("&bEdit the BLUE of RGB");
         blue.addLore("").addLore("&7Current value: ").addLore("&f" + particleData.getColorBlue());
 
-        ItemBuilder size = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        ItemBuilder size = new ItemBuilder(XMaterial.PAPER, 1);
         size.setDisplayName("&aEdit the SIZE of the redstone dust");
         size.addLore("").addLore("&7Current value: ").addLore("&f" + particleData.getSize());
 
-        ItemBuilder colorEnabled = new ItemBuilder(particleData.isColorEnabled() ? DynamicMaterial.LIME_WOOL : DynamicMaterial.RED_WOOL, 1);
+        ItemBuilder colorEnabled = new ItemBuilder(particleData.isColorEnabled() ? XMaterial.LIME_WOOL : XMaterial.RED_WOOL, 1);
         colorEnabled.setDisplayName("&aEdit if color is enabled");
         colorEnabled.addLore("&7Current value: ").addLore("&f" + particleData.isColorEnabled());
         colorEnabled.addLore("").addAutomaticLore("&7", 30, "If this is enabled, the particle will" +

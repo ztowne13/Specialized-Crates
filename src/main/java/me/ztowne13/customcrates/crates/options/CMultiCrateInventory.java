@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.crates.options;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.crates.Crate;
@@ -8,7 +9,6 @@ import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.crateaction.CrateAction;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
@@ -75,7 +75,7 @@ public class CMultiCrateInventory extends CSetting {
                             cause = "The crate name to set the object to is invalid";
                             cratesWithID.put(s, Crate.getCrate(cc, value));
                         } else {
-                            SaveableItemBuilder item = new SaveableItemBuilder(DynamicMaterial.STONE, 1);
+                            SaveableItemBuilder item = new SaveableItemBuilder(XMaterial.STONE, 1);
                             item.setDisplayName("&cThis item was configured improperly");
                             item.loadItem(getFileHandler(), "gui.objects." + s, csb.getStatusLogger(),
                                     StatusLoggerEvent.MULTICRATE_ITEM_FAILURE,
@@ -145,13 +145,13 @@ public class CMultiCrateInventory extends CSetting {
         for (int i = 0; i < inv.getSize(); i++) {
             SaveableItemBuilder stack;
             if (inv.getItem(i) == null) {
-                stack = new SaveableItemBuilder(DynamicMaterial.AIR, 1);
+                stack = new SaveableItemBuilder(XMaterial.AIR, 1);
             } else {
                 stack = new SaveableItemBuilder(inv.getItem(i));
             }
 
             // If the item is not a crate
-            if (CrateUtils.searchByCrate(stack.get()) == null) {
+            if (CrateUtils.searchByCrate(stack.getStack()) == null) {
                 boolean itemDoesntAlreadyExist = true;
                 for (ItemBuilder alreadyExistingItem : materialsWithID.values()) {
                     if (alreadyExistingItem.equals(stack)) {
@@ -166,7 +166,7 @@ public class CMultiCrateInventory extends CSetting {
             }
             // The item is a crate
             else {
-                Crate crate = CrateUtils.searchByCrate(stack.get());
+                Crate crate = CrateUtils.searchByCrate(stack.getStack());
                 boolean createDoesntAlreadyExist = true;
                 for (Crate alreadyExistingCrate : cratesWithID.values()) {
                     if (alreadyExistingCrate.equals(crate)) {
@@ -187,13 +187,13 @@ public class CMultiCrateInventory extends CSetting {
         for (int i = 0; i < inv.getSize(); i++) {
             ItemBuilder stack;
             if (inv.getItem(i) == null) {
-                stack = new ItemBuilder(DynamicMaterial.AIR);
+                stack = new ItemBuilder(XMaterial.AIR);
             } else {
                 stack = new ItemBuilder(inv.getItem(i));
             }
 
             // The item isn't a crate
-            if (CrateUtils.searchByCrate(stack.get()) == null) {
+            if (CrateUtils.searchByCrate(stack.getStack()) == null) {
 
                 for (Map.Entry<String, SaveableItemBuilder> entry : materialsWithID.entrySet()) {
                     String s = entry.getKey();
@@ -220,7 +220,7 @@ public class CMultiCrateInventory extends CSetting {
                     }
                 }
             } else {
-                Crate cs = CrateUtils.searchByCrate(stack.get());
+                Crate cs = CrateUtils.searchByCrate(stack.getStack());
                 for (Map.Entry<String, Crate> entry : cratesWithID.entrySet()) {
                     String s = entry.getKey();
                     try {

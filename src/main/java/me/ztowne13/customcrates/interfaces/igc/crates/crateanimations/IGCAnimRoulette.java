@@ -1,20 +1,20 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by ztowne13 on 7/6/16.
@@ -48,37 +48,37 @@ public class IGCAnimRoulette extends IGCAnimation {
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
         ib.setItem(2,
-                new ItemBuilder(Material.BOOK, 1, 0).setName("&ainv-name").addLore(getcVal())
+                new ItemBuilder(XMaterial.BOOK).setDisplayName("&ainv-name").addLore(getcVal())
                         .addLore("&7" + getString("inv-name")).addLore("").addAutomaticLore("&f", 30,
                         "The name of the inventory when the animation runs. This is overwritten by the crate's 'inv-name' value, if it exists."));
-        ib.setItem(4, new ItemBuilder(Material.PAPER, 1, 0).setName("&atick-speed-per-run")
+        ib.setItem(4, new ItemBuilder(XMaterial.PAPER).setDisplayName("&atick-speed-per-run")
                 .addLore(getcVal()).addLore("&7" + getString("tick-speed-per-run")).addLore("")
                 .addAutomaticLore("&f", 30,
                         "The rate at which the rolling items will slow down. A lower value will make the speed of the roll" +
                                 " take longer to slow down while a higher value will make the roll slow down much quicker."));
-        ib.setItem(5, new ItemBuilder(Material.PAPER, 1, 0).setName("&afinal-crate-tick-length")
+        ib.setItem(5, new ItemBuilder(XMaterial.PAPER).setDisplayName("&afinal-crate-tick-length")
                 .addLore(getcVal()).addLore("&7" + getString("final-crate-tick-length")).addLore("")
                 .addAutomaticLore("&f", 30,
                         "The speed the animation must reach to end. A lower value will result in the animation ending while" +
                                 " the roll is still moving quickly, and a higher value will make it end when it is rolling slower."));
-        ib.setItem(6, new ItemBuilder(Material.PAPER, 1, 0).setName("&atile-update-ticks")
+        ib.setItem(6, new ItemBuilder(XMaterial.PAPER).setDisplayName("&atile-update-ticks")
                 .addLore(getcVal()).addLore("&7" + getString("tile-update-ticks")).addLore("").addAutomaticLore("&f", 30,
                         "The delay between when the random-blocks update. A lower will make the random-blocks update very " +
                                 "quickly, and a higher value update slowly."));
-        ib.setItem(11, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&atick-sound")
+        ib.setItem(11, new ItemBuilder(XMaterial.NOTE_BLOCK).setDisplayName("&atick-sound")
                 .addLore(getcVal()).addLore("&7" + getString("tick-sound")).addLore("")
                 .addAutomaticLore("&f", 30,
                         "The sound that is played every time the inventory updates. Set to 'none' to have no sound."));
 
         ItemBuilder fillerBlocks =
-                new ItemBuilder(Material.ENDER_CHEST, 1, 0).setName("&aAdd new random-blocks").setLore("&7Current values: ");
+                new ItemBuilder(XMaterial.ENDER_CHEST).setDisplayName("&aAdd new random-blocks").setLore("&7Current values: ");
         for (String s : fc.getStringList(getPath("random-blocks"))) {
             fillerBlocks.addLore("&7- " + s);
         }
 
         fillerBlocks.addLore("").addAutomaticLore("&f", 30, "The blocks that will fill empty space in the animation. Formatted Material;Data");
         ib.setItem(14, fillerBlocks);
-        ib.setItem(15, fillerBlocks.setName("&aRemove existing random-blocks"));
+        ib.setItem(15, fillerBlocks.setDisplayName("&aRemove existing random-blocks"));
 
         getIb().open();
         putInMenu();
@@ -143,16 +143,17 @@ public class IGCAnimRoulette extends IGCAnimation {
             }
         } else {
             if (value.equalsIgnoreCase("add random-blocks")) {
-                try {
-                    DynamicMaterial dm = DynamicMaterial.fromString(input);
+                Optional<XMaterial> optional = XMaterial.matchXMaterial(input.replace(";", ":"));
+                if (optional.isPresent()) {
+                    XMaterial dm = optional.get();
                     List<String> currentList =
                             fc.contains(getPath(value.substring(4))) ? fc.getStringList(getPath(value.substring(4))) :
                                     new ArrayList<>();
                     currentList.add(dm.name());
                     fc.set(getPath(value.substring(4)), currentList);
                     return true;
-                } catch (Exception exc) {
-                    ChatUtils.msgError(getP(), input + " does not have a valid material/data value or is not formatted MATERIAL;DATA");
+                } else {
+                    ChatUtils.msgError(getP(), input + " does not have a valid material or is not formatted MATERIAL;DATA");
                 }
             } else if (value.equalsIgnoreCase("remove random-blocks")) {
                 if (fc.contains(getPath(value.substring(7)))) {

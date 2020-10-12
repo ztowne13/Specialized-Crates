@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.CHolograms;
@@ -10,7 +11,6 @@ import me.ztowne13.customcrates.interfaces.igc.IGCListEditor;
 import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
@@ -38,8 +38,8 @@ public class IGCCrateHolograms extends IGCMenuCrate {
 
         // Reward Hologram
         String rewardHolo = cholo.getRewardHologram();
-        ItemBuilder rewardHologram = new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1);
-        rewardHologram.setName("&aEdit the reward-hologram");
+        ItemBuilder rewardHologram = new ItemBuilder(XMaterial.LIGHT_BLUE_DYE, 1);
+        rewardHologram.setDisplayName("&aEdit the reward-hologram");
         rewardHologram.addLore("&7Current value:")
                 .addLore(ChatUtils.toChatColor(rewardHolo) == "" ? "&7&oNot in use" : rewardHolo).addLore("");
         rewardHologram.addAutomaticLore("&f", 30,
@@ -48,15 +48,15 @@ public class IGCCrateHolograms extends IGCMenuCrate {
         ib.setItem(2, rewardHologram);
 
         //Reward Hologram duration
-        ItemBuilder rewardHoloDuration = new ItemBuilder(DynamicMaterial.PAPER, 1);
-        rewardHoloDuration.setName("&aEdit the reward-hologram duration");
+        ItemBuilder rewardHoloDuration = new ItemBuilder(XMaterial.PAPER, 1);
+        rewardHoloDuration.setDisplayName("&aEdit the reward-hologram duration");
         rewardHoloDuration.addLore("&7Current value:").addLore("&7" + cholo.getRewardHoloDuration()).addLore("");
         rewardHoloDuration.addAutomaticLore("&f", 30, "This is the length, in ticks, the reward hologram will remain up");
         ib.setItem(11, rewardHoloDuration);
 
         //Reward Hologram yoffset
-        ItemBuilder rewardHoloYOffset = new ItemBuilder(DynamicMaterial.BLAZE_ROD, 1);
-        rewardHoloYOffset.setName("&aEdit the reward-hologram Y-Offset");
+        ItemBuilder rewardHoloYOffset = new ItemBuilder(XMaterial.BLAZE_ROD, 1);
+        rewardHoloYOffset.setDisplayName("&aEdit the reward-hologram Y-Offset");
         rewardHoloYOffset.addLore("&7Current value:").addLore("&7" + cholo.getRewardHoloYOffset()).addLore("");
         rewardHoloYOffset
                 .addAutomaticLore("&f", 30, "This is the amount up or down from the crate the REWARD-hologram will appear.");
@@ -66,8 +66,8 @@ public class IGCCrateHolograms extends IGCMenuCrate {
         ib.setItem(20, rewardHoloYOffset);
 
         //Hologram Lines
-        ItemBuilder hologramLines = new ItemBuilder(DynamicMaterial.BOOK, 1);
-        hologramLines.setName("&aEdit the hologram");
+        ItemBuilder hologramLines = new ItemBuilder(XMaterial.BOOK, 1);
+        hologramLines.setDisplayName("&aEdit the hologram");
         hologramLines.addLore("&7Current value:");
         for (String line : cholo.getLines()) {
             hologramLines.addLore(line);
@@ -78,9 +78,9 @@ public class IGCCrateHolograms extends IGCMenuCrate {
 
         // Green block
         boolean usingDefault = (cholo.getHat() == null || cholo.getHat().equals(HoloAnimType.NONE));
-        ItemBuilder usingDefaultOrAnimate = new ItemBuilder(usingDefault ? DynamicMaterial.GREEN_WOOL :
-                DynamicMaterial.RED_WOOL, 1);
-        usingDefaultOrAnimate.setName("&aStatus: ");
+        ItemBuilder usingDefaultOrAnimate = new ItemBuilder(usingDefault ? XMaterial.GREEN_WOOL :
+                XMaterial.RED_WOOL, 1);
+        usingDefaultOrAnimate.setDisplayName("&aStatus: ");
         usingDefaultOrAnimate.addLore(usingDefault ? "&eUsing the normal hologram" : "&eUsing the animated hologram");
         usingDefaultOrAnimate.addLore("").addAutomaticLore("&f", 30, usingDefault ?
                 "To use animated holograms, change the hologram animation type to something other than NONE." :
@@ -88,8 +88,8 @@ public class IGCCrateHolograms extends IGCMenuCrate {
         ib.setItem(9, usingDefaultOrAnimate);
 
         // Animated Hologram
-        ItemBuilder animatedHolo = new ItemBuilder(DynamicMaterial.WRITABLE_BOOK, 1);
-        animatedHolo.setName("&aEdit the animated hologram frames");
+        ItemBuilder animatedHolo = new ItemBuilder(XMaterial.WRITABLE_BOOK, 1);
+        animatedHolo.setDisplayName("&aEdit the animated hologram frames");
         animatedHolo.addLore("&7Frames: " + cholo.getPrefixes().size()).addLore("");
         animatedHolo.addAutomaticLore("&f", 30,
                 "Each frame will play, one after the other every (whatever speed you set) ticks.")
@@ -98,23 +98,23 @@ public class IGCCrateHolograms extends IGCMenuCrate {
         ib.setItem(6, animatedHolo);
 
         // Animated hologram type
-        ItemBuilder animatedHoloType = new ItemBuilder(DynamicMaterial.BEACON, 1);
-        animatedHoloType.setName("&aEdit the hologram animation type");
+        ItemBuilder animatedHoloType = new ItemBuilder(XMaterial.BEACON, 1);
+        animatedHoloType.setDisplayName("&aEdit the hologram animation type");
         animatedHoloType.addLore("&7Current value:").addLore("&7" + cholo.getHat().name()).addLore("");
         animatedHoloType.addAutomaticLore("&f", 30,
                 "Change the hologram animation type (there is currently only 1). Set to NONE to use the default holograms.");
         ib.setItem(15, animatedHoloType);
 
         // Animated hologram speed
-        ItemBuilder animatedHoloSpeed = new ItemBuilder(DynamicMaterial.SUGAR, 1);
-        animatedHoloSpeed.setName("&aEdit the animated hologram speed");
+        ItemBuilder animatedHoloSpeed = new ItemBuilder(XMaterial.SUGAR, 1);
+        animatedHoloSpeed.setDisplayName("&aEdit the animated hologram speed");
         animatedHoloSpeed.addLore("&7Current value:").addLore("&7" + cholo.getSpeed()).addLore("");
         animatedHoloSpeed.addAutomaticLore("&f", 30,
                 "This is the delay between frame updates. The lower the value, the faster the frames cycle. A value of 10 is a frame update every second.");
         ib.setItem(24, animatedHoloSpeed);
 
         // Hologram offset
-        ItemBuilder hologramOffset = new ItemBuilder(DynamicMaterial.BLAZE_ROD, 1);
+        ItemBuilder hologramOffset = new ItemBuilder(XMaterial.BLAZE_ROD, 1);
         hologramOffset.setDisplayName("&aEdit the hologram Y-Offset");
         hologramOffset.addLore("&7Current value:").addLore("&7" + cs.getHologramOffset());
         hologramOffset.addLore("").addAutomaticLore("&f", 30,
@@ -145,11 +145,11 @@ public class IGCCrateHolograms extends IGCMenuCrate {
                     crates.getSettings().getHologram().getRewardHoloYOffset() + "", Double.class, this);
         } else if (slot == 4) {
             new IGCListEditor(getCc(), getP(), this, "Hologram Editor", "Line", cs.getHologram().getLines(),
-                    DynamicMaterial.BOOK,
+                    XMaterial.BOOK,
                     1).open();
         } else if (slot == 6) {
             new IGCListEditor(getCc(), getP(), this, "Animation Editor", "Frame", cs.getHologram().getPrefixes(),
-                    DynamicMaterial.BOOK,
+                    XMaterial.BOOK,
                     1).open();
         } else if (slot == 13) {
             new InputMenu(getCc(), getP(), "hologram-offset",
@@ -158,7 +158,7 @@ public class IGCCrateHolograms extends IGCMenuCrate {
 //            new InputMenu(getCc(), getP(), "hologram.animation.type", crates.getCs().getCholoCopy().getHat().toString(),
 //                    "Animation types: " + Arrays.toString(HoloAnimType.values()), String.class, this, true);
             new IGCListSelector(getCc(), getP(), this, "Holo Animation Type", Arrays.asList(HoloAnimType.values()),
-                    DynamicMaterial.PAPER, 1, HoloAnimType.descriptors()).open();
+                    XMaterial.PAPER, 1, HoloAnimType.descriptors()).open();
         } else if (slot == 24) {
             new InputMenu(getCc(), getP(), "hologram.animation.speed",
                     crates.getSettings().getHologram().getSpeed() + "", Integer.class, this);

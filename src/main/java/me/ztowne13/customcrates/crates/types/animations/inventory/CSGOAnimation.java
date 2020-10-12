@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.crates.types.animations.inventory;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
@@ -8,13 +9,13 @@ import me.ztowne13.customcrates.crates.types.animations.AnimationDataHolder;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimation;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -196,13 +197,11 @@ public class CSGOAnimation extends InventoryCrateAnimation {
                         StatusLoggerEvent.ANIMATION_CSGO_TICKSOUND_PITCH_INVALID);
 
         identifierBlock = fu.getFileDataLoader()
-                .loadItem(prefix + "identifier-block", new ItemBuilder(DynamicMaterial.AIR), getStatusLogger(),
+                .loadItem(prefix + "identifier-block", new ItemBuilder(XMaterial.AIR), getStatusLogger(),
                         StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
-                        StatusLoggerEvent.ANIMATION_CSGO_IDBLOCK_INVALID_MATERIAL,
-                        StatusLoggerEvent.ANIMATION_CSGO_IDBLOCK_INVALID_BYTE,
-                        StatusLoggerEvent.ANIMATION_CSGO_IDBLOCK_INVALID,
-                        StatusLoggerEvent.ANIMATION_CSGO_IDBLOCK_SUCCESS);
-        identifierBlock.setName("&f");
+                        StatusLoggerEvent.ANIMATION_CSGO_IDBLOCK_INVALID
+                );
+        identifierBlock.setDisplayName("&f");
 
         finalTickLength = fu.getFileDataLoader()
                 .loadDouble(prefix + "final-crate-tick-length", 7, getStatusLogger(),
@@ -227,15 +226,13 @@ public class CSGOAnimation extends InventoryCrateAnimation {
             for (String unParsed : getFileHandler().get().getStringList("CrateType.Inventory.CSGO.filler-blocks")) {
                 String[] args = unParsed.split(";");
                 try {
-                    DynamicMaterial m;
-                    try {
-                        m = DynamicMaterial.fromString(unParsed.toUpperCase());
-                    } catch (Exception exc) {
+                    Optional<XMaterial> optional = XMaterial.matchXMaterial(unParsed);
+                    if (!optional.isPresent()) {
                         StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_MATERIAL_INVALID
                                 .log(getStatusLogger(), new String[]{args[0]});
                         continue;
                     }
-                    getFillerBlocks().add(new ItemBuilder(m, 1).setName("&f"));
+                    getFillerBlocks().add(new ItemBuilder(optional.get(), 1).setDisplayName("&f"));
 
                     StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_MATERIAL_SUCCESS
                             .log(getStatusLogger(), new String[]{unParsed});

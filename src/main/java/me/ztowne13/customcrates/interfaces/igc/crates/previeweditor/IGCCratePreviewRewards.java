@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.previeweditor;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.CRewards;
@@ -13,7 +14,6 @@ import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCMenuCrate;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class IGCCratePreviewRewards extends IGCMenuCrate {
     @Override
     public void openMenu() {
 
-        int slots = 0;
+        int slots;
 
         CRewards.loadAll(getCc(), getP());
 
@@ -78,7 +78,7 @@ public class IGCCratePreviewRewards extends IGCMenuCrate {
             ItemBuilder newR;
 
             if (!r.isNeedsMoreConfig())
-                newR = new ItemBuilder(r.getDisplayBuilder().getStack()).setName("&a" + r.getRewardName());
+                newR = new ItemBuilder(r.getDisplayBuilder().getStack()).setDisplayName("&a" + r.getRewardName());
             else
                 continue;
 
@@ -90,11 +90,11 @@ public class IGCCratePreviewRewards extends IGCMenuCrate {
         }
 
         if (page != 1) {
-            ib.setItem(2, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo back a page"));
+            ib.setItem(2, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo back a page"));
         }
 
         if ((CRewards.getAllRewards().size() / 28) + (CRewards.getAllRewards().size() % 28 == 0 ? 0 : 1) != page) {
-            ib.setItem(6, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo forward a page"));
+            ib.setItem(6, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo forward a page"));
         }
 
         ib.open();
@@ -103,10 +103,10 @@ public class IGCCratePreviewRewards extends IGCMenuCrate {
 
     @Override
     public void handleClick(int slot) {
-        if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
+        if (slot == 2 && XMaterial.ARROW.isSimilar(getIb().getInv().getItem(slot))) {
             page--;
             open();
-        } else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
+        } else if (slot == 6 && XMaterial.ARROW.isSimilar(getIb().getInv().getItem(slot))) {
             page++;
             open();
         } else if (slot == 0) {

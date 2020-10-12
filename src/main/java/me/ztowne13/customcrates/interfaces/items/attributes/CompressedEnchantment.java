@@ -26,15 +26,15 @@ public class CompressedEnchantment {
     }
 
     public void applyTo(ItemBuilder itemBuilder) {
-        if (itemBuilder.im() instanceof EnchantmentStorageMeta) {
-            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemBuilder.im();
+        if (itemBuilder.getItemMeta() instanceof EnchantmentStorageMeta) {
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemBuilder.getItemMeta();
             meta.addStoredEnchant(enchantment, level, true);
 
-            itemBuilder.setIm(meta);
+            itemBuilder.setItemMeta(meta);
             return;
         }
 
-        itemBuilder.get().addUnsafeEnchantment(enchantment, level);
+        itemBuilder.getStack().addUnsafeEnchantment(enchantment, level);
     }
 
     @Override

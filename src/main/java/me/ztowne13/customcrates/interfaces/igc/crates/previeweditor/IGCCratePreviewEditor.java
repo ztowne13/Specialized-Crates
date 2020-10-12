@@ -65,7 +65,7 @@ public class IGCCratePreviewEditor extends IGCMenuCrate {
                 page.getRewards()[x][y] = null;
                 msg("REWARD removed.");
             } else {
-                getP().getInventory().addItem(page.getBuilders()[x][y].get());
+                getP().getInventory().addItem(page.getBuilders()[x][y].getStack());
                 page.getBuilders()[x][y] = null;
                 msg("ITEM returned.");
             }

@@ -1,10 +1,10 @@
 package me.ztowne13.customcrates.interfaces.igc;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.ReflectionUtilities;
@@ -18,14 +18,14 @@ public class IGCListEditor extends IGCMenu {
     int page;
     String header;
     String identifier;
-    DynamicMaterial displayItem;
+    XMaterial displayItem;
     List values;
     boolean deleteMode = false;
     Class<?> clazz = null;
     String methodName, errorMsg;
 
     public IGCListEditor(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header, String identifier,
-                         List values, DynamicMaterial displayItem, int page) {
+                         List values, XMaterial displayItem, int page) {
         super(cc, p, lastMenu, "&7&l> &6&l" + header + " PG" + page);
         this.header = header;
         this.values = values;
@@ -35,7 +35,7 @@ public class IGCListEditor extends IGCMenu {
     }
 
     public IGCListEditor(SpecializedCrates cc, Player p, IGCMenu lastMenu, String header, String identifier,
-                         List values, DynamicMaterial displayItem, int page, Class<?> clazz, String methodName, String errorMsg) {
+                         List values, XMaterial displayItem, int page, Class<?> clazz, String methodName, String errorMsg) {
         this(cc, p, lastMenu, header, identifier, values, displayItem, page);
         this.clazz = clazz;
         this.methodName = methodName;
@@ -61,8 +61,8 @@ public class IGCListEditor extends IGCMenu {
         InventoryBuilder ib = createDefault(slots, 18);
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
-        ib.setItem(8, new ItemBuilder(DynamicMaterial.PAPER, 1)
-                .setName("&aAdd a new " + ChatUtils.removeColor(identifier).toLowerCase())
+        ib.setItem(8, new ItemBuilder(XMaterial.PAPER)
+                .setDisplayName("&aAdd a new " + ChatUtils.removeColor(identifier).toLowerCase())
                 .setLore("&7Reminder: you must save for").addLore("&7any changes to take effect."));
 
         updateDeleteMode();
@@ -84,7 +84,7 @@ public class IGCListEditor extends IGCMenu {
             }
 
             itemNum++;
-            ItemBuilder item = new ItemBuilder(displayItem, 1).setName("&a" + identifier + " " + itemNum);
+            ItemBuilder item = new ItemBuilder(displayItem).setDisplayName("&a" + identifier + " " + itemNum);
 
             item.addLore("&f" + val.toString());
             item.addLore("")
@@ -97,11 +97,11 @@ public class IGCListEditor extends IGCMenu {
         }
 
         if (page != 1) {
-            ib.setItem(2, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo back a page"));
+            ib.setItem(2, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo back a page"));
         }
 
-        if (((values.size() / 28) + (values.size() % 28 == 0 ? 0 : 1) != page) && values.size() != 0) {
-            ib.setItem(6, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo forward a page"));
+        if (((values.size() / 28) + (values.size() % 28 == 0 ? 0 : 1) != page) && values.isEmpty()) {
+            ib.setItem(6, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo forward a page"));
         }
 
         ib.open();
@@ -132,7 +132,7 @@ public class IGCListEditor extends IGCMenu {
                 open();
             } else {
                 new InputMenu(getCc(), getP(), ChatUtils.removeColor(clickedItem.getName(true)),
-                        clickedItem.im().getLore().get(0), String.class, this);
+                        clickedItem.getItemMeta().getLore().get(0), String.class, this);
             }
         }
     }
@@ -167,13 +167,13 @@ public class IGCListEditor extends IGCMenu {
 
     public void updateDeleteMode() {
         if (!deleteMode) {
-            getIb().setItem(17, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&aEnable 'remove' mode")
+            getIb().setItem(17, new ItemBuilder(XMaterial.RED_CARPET).setDisplayName("&aEnable 'remove' mode")
                     .setLore("&7By enabling 'remove' mode")
                     .addLore("&7you can just click on " + ChatUtils.removeColor(identifier) + "s")
                     .addLore("&7to remove them").addLore("").addLore("&fDelete every item to use the")
                     .addLore("&fdefault lore in the config.yml"));
         } else {
-            getIb().setItem(17, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&cDisable 'remove' mode")
+            getIb().setItem(17, new ItemBuilder(XMaterial.RED_CARPET).setDisplayName("&cDisable 'remove' mode")
                     .setLore("&7This will stop you from").addLore("&7removing " + ChatUtils.removeColor(identifier) + "s")
                     .addLore("").addLore("&fDelete every item to use the").addLore("&fdefault lore in the config.yml"));
         }

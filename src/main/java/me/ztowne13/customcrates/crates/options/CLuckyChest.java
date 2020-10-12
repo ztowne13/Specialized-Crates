@@ -1,9 +1,9 @@
 package me.ztowne13.customcrates.crates.options;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -13,6 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -94,10 +95,10 @@ public class CLuckyChest extends CSetting {
             if (csb.hasV("lucky-chest.block-list")) {
                 try {
                     for (String mat : fc.getStringList("lucky-chest.block-list")) {
-                        try {
-                            DynamicMaterial m = DynamicMaterial.fromString(mat.toUpperCase());
-                            getWhiteList().add(m.parseMaterial());
-                        } catch (Exception exc) {
+                        Optional<XMaterial> optional = XMaterial.matchXMaterial(mat);
+                        if (optional.isPresent()) {
+                            getWhiteList().add(optional.get().parseMaterial());
+                        } else {
                             StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALIDBLOCK.log(getCrate(), new String[]{mat});
                         }
                     }

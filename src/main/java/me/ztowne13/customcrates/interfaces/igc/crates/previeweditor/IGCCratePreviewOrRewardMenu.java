@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.previeweditor;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
@@ -7,7 +8,6 @@ import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCCrateRewards;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCMenuCrate;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import org.bukkit.entity.Player;
 
@@ -21,12 +21,12 @@ public class IGCCratePreviewOrRewardMenu extends IGCMenuCrate {
         InventoryBuilder ib = createDefault(9);
 
         // Reward Editor
-        ItemBuilder rewardEditor = new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1);
+        ItemBuilder rewardEditor = new ItemBuilder(XMaterial.LIGHT_BLUE_DYE, 1);
         rewardEditor.setDisplayName("&aReward Editor");
         rewardEditor.addAutomaticLore("&7", 30, "Add, remove, and edit the rewards for this crate.");
 
         // Reward Preview Editor
-        ItemBuilder rewardPreview = new ItemBuilder(DynamicMaterial.CHEST, 1);
+        ItemBuilder rewardPreview = new ItemBuilder(XMaterial.CHEST, 1);
         rewardPreview.setDisplayName("&aReward Preview Menu Editor");
         rewardPreview.addAutomaticLore("&7", 30, "Edit the reward preview menu and everything related to it.");
 

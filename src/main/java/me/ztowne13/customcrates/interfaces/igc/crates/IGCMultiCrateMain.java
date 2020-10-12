@@ -1,16 +1,15 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -27,15 +26,15 @@ public class IGCMultiCrateMain extends IGCMenuCrate {
         InventoryBuilder ib = createDefault(9);
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
-        ib.setItem(2, new ItemBuilder(Material.PAPER, 1, 0).setName("&aEdit the current GUI").addLore("")
+        ib.setItem(2, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aEdit the current GUI").addLore("")
                 .addAutomaticLore("&f", 30,
                         "Design the multicrate inventory in the inventory that opens. Put the actual crates in for the crates, and normal blocks for filler blocks."));
         ib.setItem(4,
-                new ItemBuilder(Material.BOOK, 1, 0).setName("&aEdit the amount of rows").setLore("&7Current value:")
+                new ItemBuilder(XMaterial.BOOK).setDisplayName("&aEdit the amount of rows").setLore("&7Current value:")
                         .addLore("&7" + (crates.getSettings().getMultiCrateSettings().getInventory(getP(), "", false).getInv().getSize() / 9))
                         .addLore("")
                         .addAutomaticLore("&f", 30, "Set the size (in amount of rows) of the multicrate's inventory."));
-        ib.setItem(6, new ItemBuilder(DynamicMaterial.RED_WOOL, 1).setName("&aClear the inventory")
+        ib.setItem(6, new ItemBuilder(XMaterial.RED_WOOL).setDisplayName("&aClear the inventory")
                 .setLore("&4&lWARNING: &cThis clears the entire").addLore("&cinventory."));
 
         getIb().open();
@@ -72,8 +71,7 @@ public class IGCMultiCrateMain extends IGCMenuCrate {
                 InventoryBuilder oldIb = crates.getSettings().getMultiCrateSettings().getInventory(getP(), "", false);
                 InventoryBuilder newIb = new InventoryBuilder(getP(), Integer.parseInt(input) * 9, oldIb.getName());
 
-                for (int i = 0; i < (oldIb.getInv().getSize() < newIb.getInv().getSize() ? oldIb.getInv().getSize() :
-                        newIb.getInv().getSize()); i++) {
+                for (int i = 0; i < Math.min(oldIb.getInv().getSize(), newIb.getInv().getSize()); i++) {
                     if (!(oldIb.getInv().getItem(i) == null)) {
                         newIb.setItem(i, oldIb.getInv().getItem(i));
                     }

@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.previeweditor;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayType;
@@ -10,7 +11,6 @@ import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCMenuCrate;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -32,18 +32,18 @@ public class IGCCratePreviewMenu extends IGCMenuCrate {
     public void openMenu() {
         InventoryBuilder ib = createDefault(18);
 
-        ItemBuilder nameEditor = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        ItemBuilder nameEditor = new ItemBuilder(XMaterial.PAPER, 1);
         nameEditor.setDisplayName("&aInventory Name");
         nameEditor.addLore("&7Current Value:").addLore("&f" + getCrates().getSettings().getDisplayer().getInvName());
         nameEditor.addLore("").addAutomaticLore("&7", 30, "Edit the name of the reward preview menu.");
 
-        ItemBuilder typeEditor = new ItemBuilder(DynamicMaterial.BEACON, 1);
+        ItemBuilder typeEditor = new ItemBuilder(XMaterial.BEACON, 1);
         typeEditor.setDisplayName("&aPreview Menu Type");
         typeEditor.addLore("&7Current Value:").addLore("&f" + getCrates().getSettings().getRewardDisplayType().name());
         typeEditor.addLore("").addAutomaticLore("&7", 30,
                 "Edit the type of display the reward preview menu will be: from sorted to completely custom made!");
 
-        ItemBuilder requirePermissions = new ItemBuilder(DynamicMaterial.BOOK);
+        ItemBuilder requirePermissions = new ItemBuilder(XMaterial.BOOK);
         requirePermissions.setDisplayName("&aRequire Permission");
         requirePermissions.addLore("&7Current Value:");
         requirePermissions.addLore("&f" + getCrates().getSettings().getDisplayer().isRequirePermForPreview());
@@ -51,10 +51,10 @@ public class IGCCratePreviewMenu extends IGCMenuCrate {
                 "Should the permission that is required to open the crate ALSO be required to open the reward preview menu? You would set this to 'true' " +
                         "if you want players who don't have the correct permission for the crate also to not be able to preview the rewards in the crate.");
 
-        ItemBuilder forward = new ItemBuilder(DynamicMaterial.ARROW, 1);
-        ItemBuilder backward = new ItemBuilder(DynamicMaterial.ARROW, 1);
+        ItemBuilder forward = new ItemBuilder(XMaterial.ARROW, 1);
+        ItemBuilder backward = new ItemBuilder(XMaterial.ARROW, 1);
 
-        ItemBuilder customEditor = new ItemBuilder(isCustom ? DynamicMaterial.LADDER : DynamicMaterial.RED_DYE, 1);
+        ItemBuilder customEditor = new ItemBuilder(isCustom ? XMaterial.LADDER : XMaterial.RED_DYE, 1);
         customEditor.setDisplayName((isCustom ? "&a" : "&4") + "Edit the Reward Preview");
         if (isCustom) {
             customEditor.addAutomaticLore("&7", 30, "Edit the reward preview menu to be exactly how you want!");
@@ -117,7 +117,7 @@ public class IGCCratePreviewMenu extends IGCMenuCrate {
                 break;
             case 4:
                 new IGCListSelector(getCc(), getP(), this, "preview menu type", Arrays.asList(RewardDisplayType.values()),
-                        DynamicMaterial.PAPER, 1, RewardDisplayType.descriptions()).open();
+                        XMaterial.PAPER, 1, RewardDisplayType.descriptions()).open();
                 break;
             case 6:
             case 15:
@@ -166,12 +166,12 @@ public class IGCCratePreviewMenu extends IGCMenuCrate {
                         ChatUtils.msg(getP(), "&c&l!! &6&lPLEASE READ THE MESSAGE ABOVE. &c&l!!");
                     } else if (slot == 15) {
                         new IGCListSelector(getCc(), getP(), this, "Forward Button",
-                                new ArrayList<>(cdr.getItems().keySet()), DynamicMaterial.PAPER, 1,
+                                new ArrayList<>(cdr.getItems().keySet()), XMaterial.PAPER, 1,
                                 cdr.getDescriptors(), new ArrayList<>(cdr.getItems().values())).open();
                     } else if (slot == 16) {
                         new IGCListSelector(getCc(), getP(), this, "Backwards Button",
                                 new ArrayList<>(cdr.getItems().keySet()),
-                                DynamicMaterial.PAPER, 1,
+                                XMaterial.PAPER, 1,
                                 cdr.getDescriptors(), new ArrayList<>(cdr.getItems().values())).open();
                     }
                 } else {

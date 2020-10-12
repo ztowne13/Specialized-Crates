@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
@@ -9,10 +10,8 @@ import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.*;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCMenuRewards;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.players.data.SQLDataHandler;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -26,11 +25,11 @@ public class IGCMenuMain extends IGCMenu {
     @Override
     public void openMenu() {
         InventoryBuilder ib = createDefault(36);
-        ib.setItem(0, new ItemBuilder(IGCDefaultItems.SAVE_ONLY_BUTTON.getIb()).setName("&aSave every file/crate"));
+        ib.setItem(0, new ItemBuilder(IGCDefaultItems.SAVE_ONLY_BUTTON.getIb()).setDisplayName("&aSave every file/crate"));
         ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
         ib.setItem(27, IGCDefaultItems.EXIT_BUTTON.getIb());
 
-        ItemBuilder paper = new ItemBuilder(Material.PAPER, 1, 0);
+        ItemBuilder paper = new ItemBuilder(XMaterial.PAPER);
 
         paper.setDisplayName("&aConfig.YML");
         paper.setLore("").addLore("&6&lEdit various plugin features").addLore("")
@@ -53,18 +52,18 @@ public class IGCMenuMain extends IGCMenu {
         ib.setItem(14, paper);
 
         ib.setItem(16,
-                new ItemBuilder(Material.CHEST, 1, 0).setName("&aCrates").setLore("").addLore("&6&lCreate / edit crates")
+                new ItemBuilder(XMaterial.CHEST).setDisplayName("&aCrates").setLore("").addLore("&6&lCreate / edit crates")
                         .addLore("")
                         .addLore("&7Amount: &f" + Crate.getLoadedCrates().keySet().size())
                         .addLore("&7Amount Placed: &f" + PlacedCrate.getPlacedCrates().keySet().size()));
 
-        ItemBuilder sqlYml = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        ItemBuilder sqlYml = new ItemBuilder(XMaterial.PAPER);
         sqlYml.setDisplayName("&aSQL.YML");
         sqlYml.addLore("").addLore("&6&lEdit the MySQL database info").addLore("").addLore("&7Amount of values: &f5");
         ib.setItem(20, sqlYml);
 
         boolean dbStatus = (SQLDataHandler.sql == null || !SQLDataHandler.sql.getSqlc().isOpen());
-        ItemBuilder sqlStatus = new ItemBuilder(dbStatus ? DynamicMaterial.RED_DYE : DynamicMaterial.GREEN_DYE, 1);
+        ItemBuilder sqlStatus = new ItemBuilder(dbStatus ? XMaterial.RED_DYE : XMaterial.GREEN_DYE);
         sqlStatus.setDisplayName("&eMySQL Database Status");
         sqlStatus.addLore("").addLore(dbStatus ? "&c&lNot Connected" : "&a&lConnected!");
         sqlStatus.addLore("")
