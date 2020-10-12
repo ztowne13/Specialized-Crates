@@ -519,16 +519,13 @@ public class ItemBuilder implements EditableItem {
             loreEquals = false;
         }
 
-        boolean equal =
-                !(!compare.hasDisplayName() && hasDisplayName())
-                        && !(compare.hasDisplayName() && !hasDisplayName())
-                        && ((!compare.hasDisplayName() && !hasDisplayName()) ||
-                        (compare.getDisplayName(false).equals(getDisplayName(false))))
-                        && loreEquals
-                        && compare.getStack().getType().equals(getStack().getType())
-                        && compare.getStack().getAmount() == getStack().getAmount();
-
-        return equal;
+        return !(!compare.hasDisplayName() && hasDisplayName())
+                && !(compare.hasDisplayName() && !hasDisplayName())
+                && ((!compare.hasDisplayName() && !hasDisplayName()) ||
+                (compare.getDisplayName(false).equals(getDisplayName(false))))
+                && loreEquals
+                && compare.getStack().getType().equals(getStack().getType())
+                && compare.getStack().getAmount() == getStack().getAmount();
     }
 
     public ItemBuilder clone() {

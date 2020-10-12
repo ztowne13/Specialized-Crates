@@ -120,9 +120,6 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
         return loadItem(fileHandler, prefix, null, null, null, null, null, null, null);
     }
 
-    /*
-     * TODO: Add status logger event for 'damage'
-     */
     @Override
     public boolean loadItem(FileHandler fileHandler, String prefix, StatusLogger statusLogger, StatusLoggerEvent itemFailure,
                             StatusLoggerEvent improperEnchant, StatusLoggerEvent improperPotion,
