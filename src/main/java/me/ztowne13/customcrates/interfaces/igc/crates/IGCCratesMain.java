@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.ObtainType;
@@ -9,10 +10,8 @@ import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.buttons.IGCButtonType;
 import me.ztowne13.customcrates.interfaces.igc.crates.previeweditor.IGCCratePreviewOrRewardMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
@@ -42,38 +41,38 @@ public class IGCCratesMain extends IGCMenuCrate {
         ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
         ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
         ib.setItem(crates.isMultiCrate() ? 27 : 36, IGCDefaultItems.EXIT_BUTTON.getIb());
-        ib.setItem(3, new ItemBuilder(DynamicMaterial.RED_DYE, 1).setName("&4&lDelete this crate")
+        ib.setItem(3, new ItemBuilder(XMaterial.RED_DYE).setDisplayName("&4&lDelete this crate")
                 .setLore("&cThis action CANNOT be undone.").addLore("&e&oNote: This does not delete rewards").addLore("")
                 .addLore("&7This will delete the entire").addLore("&7file for this crate and will")
                 .addLore("&7erase all data for it."));
 
-        ItemBuilder rename = new ItemBuilder(DynamicMaterial.WRITABLE_BOOK, 1);
-        rename.setName("&aRename this crate");
+        ItemBuilder rename = new ItemBuilder(XMaterial.WRITABLE_BOOK);
+        rename.setDisplayName("&aRename this crate");
         rename.addLore("&7Current Value:").addLore("&7" + getCrates().getName());
         rename.addLore("").addAutomaticLore("&f", 30,
                 "This WILL reload the plugin when finished, please make sure all changes are saved.");
 
         ib.setItem(4, rename);
 
-        ib.setItem(8, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&aDelete all placed instances")
+        ib.setItem(8, new ItemBuilder(XMaterial.RED_CARPET).setDisplayName("&aDelete all placed instances")
                 .setLore("&7Click this runs the command:").addLore("&7/ccrates delallcratetype " + crates.getName())
                 .addLore("").addLore("&7It deletes all crates").addLore("&7of this type that have been")
                 .addLore("&7placed."));
 
         int errors = crates.getSettings().getStatusLogger().getFailures();
-        ib.setItem(5, new ItemBuilder(DynamicMaterial.REDSTONE_BLOCK, 1)
-                .setName(errors == 0 ? "&aThis crate has no errors!" : "&c&lClick to view ERRORS")
+        ib.setItem(5, new ItemBuilder(XMaterial.REDSTONE_BLOCK)
+                .setDisplayName(errors == 0 ? "&aThis crate has no errors!" : "&c&lClick to view ERRORS")
                 .addLore("&7Errors: " + errors));
 
-        ib.setItem(10, new ItemBuilder(Material.STONE_BUTTON, 1, 0).setName("&aThe &lEssentials")
+        ib.setItem(10, new ItemBuilder(XMaterial.STONE_BUTTON).setDisplayName("&aThe &lEssentials")
                 .setLore("&7This includes things such as").addLore("&7crate / key material,")
                 .addLore("&7crate-animation, obtain methods").addLore("&7and more"));
         ib.setItem(16,
-                new ItemBuilder(Material.NETHER_STAR, 1, 0).setName("&a&lParticles").setLore("&7Modify particles for play")
+                new ItemBuilder(XMaterial.NETHER_STAR).setDisplayName("&a&lParticles").setLore("&7Modify particles for play")
                         .addLore("&7and open use."));
-        ib.setItem(21, new ItemBuilder(Material.BOOK, 1, 0).setName("&a&lHolograms").setLore("&7Modify the holograms."));
+        ib.setItem(21, new ItemBuilder(XMaterial.BOOK).setDisplayName("&a&lHolograms").setLore("&7Modify the holograms."));
 
-        ItemBuilder sounds = new ItemBuilder(DynamicMaterial.NOTE_BLOCK);
+        ItemBuilder sounds = new ItemBuilder(XMaterial.NOTE_BLOCK);
         sounds.setDisplayName("&a&lSounds");
         if (crates.isMultiCrate()) {
             sounds.addAutomaticLore("&7", 30, "Edit the sounds played when the multicrate is opened initially.");
@@ -83,24 +82,24 @@ public class IGCCratesMain extends IGCMenuCrate {
         ib.setItem(23, sounds);
 
         if (!crates.isMultiCrate()) {
-            ib.setItem(28, new ItemBuilder(DynamicMaterial.FIREWORK_ROCKET, 1).setName("&a&lFireworks")
+            ib.setItem(28, new ItemBuilder(XMaterial.FIREWORK_ROCKET).setDisplayName("&a&lFireworks")
                     .setLore("&7Modify the fireworks."));
             ib.setItem(34,
-                    new ItemBuilder(Material.PAPER, 1, 0).setName("&a&lActions").setLore("&7Modify messages, broadcasts,")
+                    new ItemBuilder(XMaterial.PAPER).setDisplayName("&a&lActions").setLore("&7Modify messages, broadcasts,")
                             .addLore("&7titles, subtitles, and").addLore("&7actionbars."));
 
-            ItemBuilder rewards = new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1);
+            ItemBuilder rewards = new ItemBuilder(XMaterial.LIGHT_BLUE_DYE);
             rewards.setDisplayName("&a&lRewards");
             rewards.addAutomaticLore("&7", 30, "Edit the rewards and edit the reward preview menu.");
 
             ib.setItem(40, rewards);
         } else {
-            ib.setItem(34, new ItemBuilder(Material.LADDER, 1, 0).setName("&aMultiCrate Values")
+            ib.setItem(34, new ItemBuilder(XMaterial.LADDER).setDisplayName("&aMultiCrate Values")
                     .setLore("&7Modify the multicrate inventory and").addLore("&7other values."));
         }
 
         if (cs.getObtainType().equals(ObtainType.LUCKYCHEST)) {
-            ib.setItem(crates.isMultiCrate() ? 35 : 44, new ItemBuilder(Material.ENDER_CHEST, 1, 0).setName("&aMine Chest")
+            ib.setItem(crates.isMultiCrate() ? 35 : 44, new ItemBuilder(XMaterial.ENDER_CHEST).setDisplayName("&aMine Chest")
                     .setLore("&7Config all values for the").addLore("&7mine chest."));
         }
 
@@ -119,7 +118,7 @@ public class IGCCratesMain extends IGCMenuCrate {
                 if (!crates.isMultiCrate() &&
                         (cs.getRewards().getCrateRewards() == null || cs.getRewards().getCrateRewards().length == 0)) {
                     getIb().setItem(slot,
-                            new ItemBuilder(getIb().getInv().getItem(slot)).setName("&cPlease add some rewards")
+                            new ItemBuilder(getIb().getInv().getItem(slot)).setDisplayName("&cPlease add some rewards")
                                     .setLore("&cbefore saving!"));
                 } else {
                     try {
@@ -134,7 +133,7 @@ public class IGCCratesMain extends IGCMenuCrate {
             case 3:
                 if (ChatUtils.removeColor(getIb().getInv().getItem(3).getItemMeta().getDisplayName())
                         .equalsIgnoreCase("Delete this crate")) {
-                    getIb().setItem(3, new ItemBuilder(DynamicMaterial.RED_DYE, 1).setName("&6CONFIRM DELETE")
+                    getIb().setItem(3, new ItemBuilder(XMaterial.RED_DYE).setDisplayName("&6CONFIRM DELETE")
                             .setLore("&4&lTHIS CANNOT BE UNDONE!"));
                 } else {
                     getP().closeInventory();
@@ -174,7 +173,7 @@ public class IGCCratesMain extends IGCMenuCrate {
                 new IGCCratesEssentials(getCc(), getP(), this, crates).open();
                 break;
             case 16:
-                Set<String> blankParticles = new HashSet<String>();
+                Set<String> blankParticles = new HashSet<>();
                 blankParticles.add("PLAY");
                 if (!crates.isMultiCrate()) {
                     blankParticles.add("OPEN");
@@ -186,13 +185,13 @@ public class IGCCratesMain extends IGCMenuCrate {
                 new IGCCrateHolograms(getCc(), getP(), this, crates).open();
                 break;
             case 23:
-                Set<String> blankSounds = new HashSet<String>();
+                Set<String> blankSounds = new HashSet<>();
                 blankSounds.add("OPEN");
                 new IGCTierSelector(getCc(), getP(), this, crates, blankSounds,
                         new IGCCrateSounds(getCc(), getP(), this, crates, "")).open();
                 break;
             case 28:
-                Set<String> blankFireworks = new HashSet<String>();
+                Set<String> blankFireworks = new HashSet<>();
                 blankFireworks.add("OPEN");
                 new IGCTierSelector(getCc(), getP(), this, crates, blankFireworks,
                         new IGCCrateFireworks(getCc(), getP(), this, crates, "")).open();
@@ -201,7 +200,7 @@ public class IGCCratesMain extends IGCMenuCrate {
                 if (crates.isMultiCrate()) {
                     new IGCMultiCrateMain(getCc(), getP(), this, crates).open();
                 } else {
-                    Set<String> blankActions = new HashSet<String>();
+                    Set<String> blankActions = new HashSet<>();
                     blankActions.add("DEFAULT");
                     new IGCTierSelector(getCc(), getP(), this, crates, blankActions,
                             new IGCCrateActions(getCc(), getP(), this, crates, "")).open();

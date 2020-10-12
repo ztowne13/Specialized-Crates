@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc;
 
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 
 /**
@@ -8,16 +8,16 @@ import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
  */
 public enum IGCDefaultItems {
     EXIT_BUTTON(
-            new ItemBuilder(DynamicMaterial.GRAY_DYE, 1).setName("&cExit").setLore("&4&oNOTE: THIS DOES NOT SAVE CHANGES")
+            new ItemBuilder(XMaterial.GRAY_DYE, 1).setDisplayName("&cExit").setLore("&4&oNOTE: THIS DOES NOT SAVE CHANGES")
                     .addLore("").addLore("&7Exit or return to the previous menu.")),
 
-    SAVE_BUTTON(new ItemBuilder(DynamicMaterial.LIME_DYE, 1).setName("&aSave and reload").addLore("")
+    SAVE_BUTTON(new ItemBuilder(XMaterial.LIME_DYE, 1).setDisplayName("&aSave and reload").addLore("")
             .addLore("&7Save your current changes and reload the plugin.")),
 
-    SAVE_ONLY_BUTTON(new ItemBuilder(DynamicMaterial.LIME_DYE, 1).setName("&aSave").setLore("&7Note: click reload to")
+    SAVE_ONLY_BUTTON(new ItemBuilder(XMaterial.LIME_DYE, 1).setDisplayName("&aSave").setLore("&7Note: click reload to")
             .addLore("&7see the changes.")),
 
-    RELOAD_BUTTON(new ItemBuilder(DynamicMaterial.PINK_DYE, 1).setName("&aReload").setLore("&7This reloads the plugin")
+    RELOAD_BUTTON(new ItemBuilder(XMaterial.PINK_DYE, 1).setDisplayName("&aReload").setLore("&7This reloads the plugin")
             .addLore("&4&lMAKE SURE YOU SAVE FIRST!"));
 
     ItemBuilder ib;

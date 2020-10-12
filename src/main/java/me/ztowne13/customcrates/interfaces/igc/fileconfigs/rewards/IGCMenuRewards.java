@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
@@ -9,10 +10,8 @@ import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.buttons.IGCButtonType;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -34,17 +33,11 @@ public class IGCMenuRewards extends IGCMenu {
 
     @Override
     public void openMenu() {
-        int slots = 0;
-
         boolean newValues = false;
 
         CRewards.loadAll(getCc(), getP());
 
-        if (CRewards.getAllRewards().size() - ((page - 1) * 28) >= 28) {
-            slots = 28;
-        } else {
-            slots = CRewards.getAllRewards().size() - ((page - 1) * 28);
-        }
+        int slots = Math.min(CRewards.getAllRewards().size() - ((page - 1) * 28), 28);
 
         slots = InventoryUtils.getRowsFor(2, slots) + 9;
 
@@ -56,10 +49,10 @@ public class IGCMenuRewards extends IGCMenu {
         ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
         ib.setItem(ib.getInv().getSize() - 9, IGCDefaultItems.EXIT_BUTTON.getIb());
         ib.setItem(4,
-                new ItemBuilder(Material.PAPER, 1, 0).setName("&aCreate a new Reward").setLore("&7Click me to create a new")
+                new ItemBuilder(XMaterial.PAPER).setDisplayName("&aCreate a new Reward").setLore("&7Click me to create a new")
                         .addLore("&7reward."));
 
-        ItemBuilder dragAndDrop = new ItemBuilder(DynamicMaterial.CHEST_MINECART, 1);
+        ItemBuilder dragAndDrop = new ItemBuilder(XMaterial.CHEST_MINECART);
         dragAndDrop.setDisplayName("&aDrag and Drop Rewards");
         dragAndDrop.addLore("").addAutomaticLore("&f", 30,
                 "Create up to 54 rewards at once! Add display names, lores, enchants, potion effects, amounts, and nbt-tags beforehand and have it all save at once!");
@@ -86,10 +79,10 @@ public class IGCMenuRewards extends IGCMenu {
             ItemBuilder newR;
 
             if (r.isNeedsMoreConfig())
-                newR = new ItemBuilder(DynamicMaterial.BARRIER, 1).setName("&4&l" + rName)
+                newR = new ItemBuilder(XMaterial.BARRIER).setDisplayName("&4&l" + rName)
                         .setLore("&cThis reward isn't fully configured,").addLore("&cplease fix it and reload the plugin.");
             else
-                newR = new ItemBuilder(r.getDisplayBuilder().getStack()).setName("&a" + rName);
+                newR = new ItemBuilder(r.getDisplayBuilder().getStack()).setDisplayName("&a" + rName);
 
             newR.addLore("").addLore("&7Used by crates:").addLore("");
             for (String s : r.delete(false).replace("[", "").replace("]", "").split(", ")) {
@@ -104,11 +97,11 @@ public class IGCMenuRewards extends IGCMenu {
         }
 
         if (page != 1) {
-            ib.setItem(2, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo back a page"));
+            ib.setItem(2, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo back a page"));
         }
 
         if ((CRewards.getAllRewards().size() / 28) + (CRewards.getAllRewards().size() % 28 == 0 ? 0 : 1) != page) {
-            ib.setItem(6, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo forward a page"));
+            ib.setItem(6, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo forward a page"));
         }
 
         ib.open();
@@ -122,10 +115,10 @@ public class IGCMenuRewards extends IGCMenu {
             getCc().getRewardsFile().save();
             ChatUtils.msgSuccess(getP(), "Saved the Rewards.YML file.");
             //getCc().reload();
-        } else if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
+        } else if (slot == 2 && XMaterial.ARROW.isSimilar(getIb().getInv().getItem(slot))) {
             page--;
             open();
-        } else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
+        } else if (slot == 6 && XMaterial.ARROW.isSimilar(getIb().getInv().getItem(slot))) {
             page++;
             open();
         } else if (slot == 9) {

@@ -1,11 +1,11 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Material;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * Created by ztowne13 on 3/11/16.
  */
 public class IGCMenuConfig extends IGCMenu {
-    ArrayList<Integer> slotsWithBoolean = new ArrayList<Integer>();
+    ArrayList<Integer> slotsWithBoolean = new ArrayList<>();
 
     ItemBuilder red;
     ItemBuilder green;
@@ -26,8 +26,8 @@ public class IGCMenuConfig extends IGCMenu {
     public IGCMenuConfig(SpecializedCrates cc, Player p, IGCMenu lastMenu) {
         super(cc, p, lastMenu, "&7&l> &6&lConfig.YML");
 
-        red = new ItemBuilder(DynamicMaterial.RED_WOOL, 1);
-        green = new ItemBuilder(DynamicMaterial.LIME_WOOL, 1);
+        red = new ItemBuilder(XMaterial.RED_WOOL, 1);
+        green = new ItemBuilder(XMaterial.LIME_WOOL, 1);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class IGCMenuConfig extends IGCMenu {
                 slotCounter += 3;
             }
 
-            ItemBuilder builder = new ItemBuilder(DynamicMaterial.BOOK);
+            ItemBuilder builder = new ItemBuilder(XMaterial.BOOK);
             builder.setDisplayName("&a" + category.getTitle());
             builder.addAutomaticLore("&7", 30, category.getDescription()[0]);
             builder.addLore("");

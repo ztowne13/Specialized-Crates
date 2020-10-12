@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
@@ -8,7 +9,6 @@ import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.Bukkit;
@@ -62,18 +62,18 @@ public class IGCCrateActions extends IGCTierMenu {
         );
 
         builders = Arrays.asList(
-                new ItemBuilder(DynamicMaterial.PAPER),
-                new ItemBuilder(DynamicMaterial.BEACON),
-                new ItemBuilder(DynamicMaterial.WRITTEN_BOOK),
-                new ItemBuilder(DynamicMaterial.BOOK),
-                new ItemBuilder(DynamicMaterial.IRON_INGOT),
-                new ItemBuilder(DynamicMaterial.COMMAND_BLOCK),
-                new ItemBuilder(DynamicMaterial.PAPER),
-                new ItemBuilder(DynamicMaterial.BEACON),
-                new ItemBuilder(DynamicMaterial.WRITTEN_BOOK),
-                new ItemBuilder(DynamicMaterial.BOOK),
-                new ItemBuilder(DynamicMaterial.IRON_INGOT),
-                new ItemBuilder(DynamicMaterial.COMMAND_BLOCK)
+                new ItemBuilder(XMaterial.PAPER),
+                new ItemBuilder(XMaterial.BEACON),
+                new ItemBuilder(XMaterial.WRITTEN_BOOK),
+                new ItemBuilder(XMaterial.BOOK),
+                new ItemBuilder(XMaterial.IRON_INGOT),
+                new ItemBuilder(XMaterial.COMMAND_BLOCK),
+                new ItemBuilder(XMaterial.PAPER),
+                new ItemBuilder(XMaterial.BEACON),
+                new ItemBuilder(XMaterial.WRITTEN_BOOK),
+                new ItemBuilder(XMaterial.BOOK),
+                new ItemBuilder(XMaterial.IRON_INGOT),
+                new ItemBuilder(XMaterial.COMMAND_BLOCK)
         );
     }
 
@@ -92,15 +92,15 @@ public class IGCCrateActions extends IGCTierMenu {
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
         if (!deleteMode) {
             getIb().setItem(8,
-                    new ItemBuilder(DynamicMaterial.RED_CARPET.parseMaterial(), 1, 14).setName("&aEnable 'delete' mode")
+                    new ItemBuilder(XMaterial.RED_CARPET).setDisplayName("&aEnable 'delete' mode")
                             .setLore("&7By enabling 'delete' mode").addLore("&7you can just click on actions")
                             .addLore("&7to remove "));
         } else {
             getIb().setItem(8,
-                    new ItemBuilder(DynamicMaterial.RED_CARPET.parseMaterial(), 1, 14).setName("&cDisable 'delete' mode")
+                    new ItemBuilder(XMaterial.RED_CARPET).setDisplayName("&cDisable 'delete' mode")
                             .setLore("&7This will stop you from").addLore("&7removing actions"));
         }
-        ib.setItem(17, new ItemBuilder(Material.PAPER, 1, 0).setName("&aAdd a new action"));
+        ib.setItem(17, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aAdd a new action"));
 
         int i = 2;
         if (cs.getActions().getActions().containsKey(tier)) {
@@ -110,7 +110,7 @@ public class IGCCrateActions extends IGCTierMenu {
                         i += 4;
                     }
 
-                    ib.setItem(i, new ItemBuilder(Material.BOOK, 1, 0).setName("&a" + actionType).setLore(actionMSG));
+                    ib.setItem(i, new ItemBuilder(XMaterial.BOOK).setDisplayName("&a" + actionType).setLore(actionMSG));
                     i++;
                 }
             }
@@ -128,18 +128,18 @@ public class IGCCrateActions extends IGCTierMenu {
             deleteMode = !deleteMode;
             if (!deleteMode) {
                 getIb().setItem(8,
-                        new ItemBuilder(DynamicMaterial.RED_CARPET.parseMaterial(), 1, 14).setName("&aEnable 'delete' mode")
+                        new ItemBuilder(XMaterial.RED_CARPET).setDisplayName("&aEnable 'delete' mode")
                                 .setLore("&7By enabling 'delete' mode").addLore("&7you can just click on rewards")
                                 .addLore("&7to remove "));
             } else {
                 getIb().setItem(8,
-                        new ItemBuilder(DynamicMaterial.RED_CARPET.parseMaterial(), 1, 14).setName("&cDisable 'delete' mode")
+                        new ItemBuilder(XMaterial.RED_CARPET).setDisplayName("&cDisable 'delete' mode")
                                 .setLore("&7This will stop you from").addLore("&7removing rewards"));
             }
         } else if (slot == 17) {
 //            new InputMenu(getCc(), getP(), "new action - type", "null", "Valid action types: " + actionTypes.toString(),
 //                    String.class, this, true);
-            new IGCListSelector(getCc(), getP(), this, "Actions", actionTypes, DynamicMaterial.PAPER, 1, descriptors, builders).open();
+            new IGCListSelector(getCc(), getP(), this, "Actions", actionTypes, XMaterial.PAPER, 1, descriptors, builders).open();
         } else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType().equals(Material.BOOK)) {
             if (deleteMode) {
                 ItemMeta im = getIb().getInv().getItem(slot).getItemMeta();

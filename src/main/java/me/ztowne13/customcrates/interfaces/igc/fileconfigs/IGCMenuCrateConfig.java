@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
@@ -7,16 +8,15 @@ import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.crates.crateanimations.*;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by ztowne13 on 3/20/16.
@@ -28,10 +28,6 @@ public class IGCMenuCrateConfig extends IGCMenu {
 
     @Override
     public void openMenu() {
-
-        FileHandler fu = getCc().getCrateConfigFile();
-        FileConfiguration fc = fu.get();
-
         InventoryBuilder ib = createDefault(27);
 
         ib.setItem(18, IGCDefaultItems.EXIT_BUTTON.getIb());
@@ -39,21 +35,21 @@ public class IGCMenuCrateConfig extends IGCMenu {
         ib.setItem(9, IGCDefaultItems.RELOAD_BUTTON.getIb());
 
         ib.setItem(11,
-                new ItemBuilder(Material.PAPER, 1, 0).setName("&aCSGO Animation").setLore("&7Animation name: &fINV_CSGO")
+                new ItemBuilder(XMaterial.PAPER).setDisplayName("&aCSGO Animation").setLore("&7Animation name: &fINV_CSGO")
                         .addLore("").addLore("&7Used by crates: &f" + CrateAnimationType.INV_CSGO.getUses()));
-        ib.setItem(12, new ItemBuilder(Material.PAPER, 1, 0).setName("&aRoulette Animation")
+        ib.setItem(12, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aRoulette Animation")
                 .setLore("&7Animation name: &fINV_ROULETTE").addLore("")
                 .addLore("&7Used by crates: &f" + CrateAnimationType.INV_ROULETTE.getUses()));
         ib.setItem(13,
-                new ItemBuilder(Material.PAPER, 1, 0).setName("&aMenu Animation").setLore("&7Animation name: &fINV_MENU")
+                new ItemBuilder(XMaterial.PAPER).setDisplayName("&aMenu Animation").setLore("&7Animation name: &fINV_MENU")
                         .addLore("").addLore("&7Used by crates: &f" + CrateAnimationType.INV_MENU.getUses()));
-        ib.setItem(14, new ItemBuilder(Material.PAPER, 1, 0).setName("&aEnclose Animation")
+        ib.setItem(14, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aEnclose Animation")
                 .setLore("&7Animation name: &fINV_ENCLOSE").addLore("")
                 .addLore("&7Used by crates: &f" + CrateAnimationType.INV_ENCLOSE.getUses()));
-        ib.setItem(15, new ItemBuilder(Material.PAPER, 1, 0).setName("&aDiscover Animation")
+        ib.setItem(15, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aDiscover Animation")
                 .setLore("&7Animation name: &fINV_DISCOVER").addLore("")
                 .addLore("&7Used by crates: &f" + CrateAnimationType.INV_DISCOVER.getUses()));
-        ib.setItem(16, new ItemBuilder(Material.PAPER, 1, 0).setName("&aOpen Chest Animation")
+        ib.setItem(16, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aOpen Chest Animation")
                 .setLore("&7Animation name: &fBLOCK_CRATEOPEN").addLore("")
                 .addLore("&7Used by crates: &f" + CrateAnimationType.BLOCK_CRATEOPEN.getUses()));
 
@@ -117,21 +113,17 @@ public class IGCMenuCrateConfig extends IGCMenu {
             }
         } else {
             if (value.equalsIgnoreCase("add Roulette.random-blocks") || value.equalsIgnoreCase("add CSGO.filler-blocks")) {
-                try {
-                    String[] split = input.split(";");
-                    DynamicMaterial m = DynamicMaterial.fromString(input.toUpperCase());
-                    if (Utils.isInt(split[1])) {
-                        int id = Integer.parseInt(split[1]);
-                        List<String> currentList = getCc().getCrateConfigFile().get().contains(getPath(value.substring(4))) ?
-                                getCc().getCrateConfigFile().get().getStringList(getPath(value.substring(4))) :
-                                new ArrayList<String>();
-                        currentList.add(m.name() + ";" + id);
-                        getCc().getCrateConfigFile().get().set(getPath(value.substring(4)), currentList);
-                        return true;
-                    } else {
-                        ChatUtils.msgError(getP(), split[1] + " is not a valid number.");
-                    }
-                } catch (Exception exc) {
+                Optional<XMaterial> optional = XMaterial.matchXMaterial(input.replace(";", ":"));
+                if (optional.isPresent()) {
+                    XMaterial dm = optional.get();
+                    List<String> currentList =
+                            getCc().getCrateConfigFile().get().contains(getPath(value.substring(4)))
+                                    ? getCc().getCrateConfigFile().get().getStringList(getPath(value.substring(4)))
+                                    : new ArrayList<>();
+                    currentList.add(dm.name());
+                    getCc().getCrateConfigFile().get().set(getPath(value.substring(4)), currentList);
+                    return true;
+                } else {
                     ChatUtils.msgError(getP(), input + " does not have a valid material or is not formatted MATERIAL;DATA");
                 }
             } else if (value.equalsIgnoreCase("remove Roulette.random-blocks") ||

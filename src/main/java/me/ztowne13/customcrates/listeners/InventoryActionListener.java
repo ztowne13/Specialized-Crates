@@ -112,7 +112,7 @@ public class InventoryActionListener implements Listener {
             if (e.getInventory().getItem(2) != null) {
                 ItemBuilder builder = new ItemBuilder(e.getInventory().getItem(2));
                 if (builder.hasDisplayName()) {
-                    if (CrateUtils.searchByCrate(builder.get()) != null || CrateUtils.searchByKey(builder.get()) != null) {
+                    if (CrateUtils.searchByCrate(builder.getStack()) != null || CrateUtils.searchByKey(builder.getStack()) != null) {
                         e.setCancelled(true);
                         e.getWhoClicked().closeInventory();
                         Messages.CANT_CRAFT_KEYS.msgSpecified(cc, (Player) e.getWhoClicked());

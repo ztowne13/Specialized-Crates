@@ -91,7 +91,7 @@ public class Debug extends SubCommand {
                             ItemBuilder builder = new ItemBuilder(player.getItemInHand());
                             builder.setGlowing(true);
                             ItemBuilder dupedBuilder = new ItemBuilder(builder);
-                            player.setItemInHand(dupedBuilder.get());
+                            player.setItemInHand(dupedBuilder.getStack());
                             cmds.msg("Added glow effect via itembuilder");
                         }
                     } else {

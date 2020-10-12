@@ -1,10 +1,10 @@
 package me.ztowne13.customcrates.crates.options.rewards.displaymenu.custom;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayer;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.players.PlayerManager;
@@ -56,7 +56,7 @@ public class CustomRewardDisplayer extends RewardDisplayer {
             configSection = fc.getConfigurationSection(PREFIX);
 
             for (String key : configSection.getKeys(false)) {
-                SaveableItemBuilder itemBuilder = new SaveableItemBuilder(DynamicMaterial.STONE, 1);
+                SaveableItemBuilder itemBuilder = new SaveableItemBuilder(XMaterial.STONE, 1);
                 boolean successLoadItem =
                         itemBuilder.loadItem(
                                 getCrate().getSettings().getFileHandler(), PREFIX + "." + key, getCrate().getSettings().getStatusLogger(),

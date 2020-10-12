@@ -1,6 +1,6 @@
 package me.ztowne13.customcrates.interfaces;
 
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.Bukkit;
@@ -36,7 +36,7 @@ public class InventoryBuilder {
 
     public void clear() {
         for (int i = 0; i < inv.getSize(); i++)
-            setItem(i, new ItemBuilder(DynamicMaterial.AIR, 1));
+            setItem(i, new ItemBuilder(XMaterial.AIR, 1));
     }
 
     public int getSize() {
@@ -52,7 +52,7 @@ public class InventoryBuilder {
     }
 
     public void setItem(int slot, ItemBuilder builder) {
-        getInv().setItem(slot, builder.get());
+        getInv().setItem(slot, builder.getStack());
     }
 
     public void open() {

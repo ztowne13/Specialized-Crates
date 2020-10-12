@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.items;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.interfaces.items.attributes.BukkitGlowEffect;
 import me.ztowne13.customcrates.interfaces.items.attributes.CompressedEnchantment;
 import me.ztowne13.customcrates.interfaces.items.attributes.RGBColor;
@@ -8,7 +9,6 @@ import me.ztowne13.customcrates.utils.VersionUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -46,16 +46,11 @@ public class ItemBuilder implements EditableItem {
         updateFromItem();
     }
 
-    @Deprecated
-    public ItemBuilder(Material m, int amnt, int byt) {
-        create(DynamicMaterial.fromString(m.name() + ";" + byt), amnt);
-    }
-
-    public ItemBuilder(DynamicMaterial material) {
+    public ItemBuilder(XMaterial material) {
         create(material, 1);
     }
 
-    public ItemBuilder(DynamicMaterial m, int amnt) {
+    public ItemBuilder(XMaterial m, int amnt) {
         create(m, amnt);
     }
 
@@ -75,8 +70,8 @@ public class ItemBuilder implements EditableItem {
 
         // Enchantments
         Map<Enchantment, Integer> enchants;
-        if (im() instanceof EnchantmentStorageMeta) {
-            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) im();
+        if (getItemMeta() instanceof EnchantmentStorageMeta) {
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) getItemMeta();
             enchants = meta.getStoredEnchants();
         } else {
             enchants = stack.getEnchantments();
@@ -86,8 +81,8 @@ public class ItemBuilder implements EditableItem {
         }
 
         // Potion Effects
-        if (stack.hasItemMeta() && im() instanceof PotionMeta) {
-            PotionMeta pm = (PotionMeta) im();
+        if (stack.hasItemMeta() && getItemMeta() instanceof PotionMeta) {
+            PotionMeta pm = (PotionMeta) getItemMeta();
 
             if (VersionUtils.Version.v1_9.isServerVersionOrLater()) {
                 PotionData baseData = pm.getBasePotionData();
@@ -145,53 +140,52 @@ public class ItemBuilder implements EditableItem {
         }
 
         // Coloured Armor
-        if (im() instanceof LeatherArmorMeta) {
-            LeatherArmorMeta meta = (LeatherArmorMeta) im();
+        if (getItemMeta() instanceof LeatherArmorMeta) {
+            LeatherArmorMeta meta = (LeatherArmorMeta) getItemMeta();
             RGBColor newColor =
                     new RGBColor(meta.getColor().getRed(), meta.getColor().getGreen(), meta.getColor().getBlue());
             setColor(newColor);
         }
     }
 
-    public void create(DynamicMaterial m, int amnt) {
+    private void create(XMaterial m, int amnt) {
         stack = m.parseItem();
         stack.setAmount(amnt);
-        if (m.preProgrammedNBTTag && VersionUtils.Version.v1_12.isServerVersionOrEarlier())
-            addNBTTag("EntityTag " + m.nbtTag);
+        if (m.name().endsWith("_SPAWN_EGG") && VersionUtils.Version.v1_12.isServerVersionOrEarlier())
+            addNBTTag("EntityTag " + m.name().replace("_SPAWN_EGG", ""));
     }
 
-    public ItemMeta im() {
+    public ItemMeta getItemMeta() {
         if (getStack().getItemMeta() == null) {
             return Bukkit.getItemFactory().getItemMeta(getStack().getType());
         }
         return getStack().getItemMeta();
     }
 
-    public void setIm(ItemMeta im) {
+    public void setItemMeta(ItemMeta im) {
         getStack().setItemMeta(im);
     }
 
-    @Deprecated
-    public ItemBuilder setName(String name) {
-        setDisplayName(name);
+    @Override
+    public ItemBuilder setDisplayName(String name) {
+        ItemMeta im = getItemMeta();
+        if (im != null) {
+            if (name == null) {
+                im.setDisplayName(null);
+            } else {
+                im.setDisplayName(ChatUtils.toChatColor(name));
+            }
+            setItemMeta(im);
+        }
         return this;
     }
 
-    @Override
-    public void setDisplayName(String name) {
-        ItemMeta im = im();
-        if (name == null) {
-            im.setDisplayName(null);
-        } else {
-            im.setDisplayName(ChatUtils.toChatColor(name));
-        }
-        setIm(im);
-    }
-
     public void removeDisplayName() {
-        ItemMeta im = im();
-        im.setDisplayName(null);
-        setIm(im);
+        ItemMeta im = getItemMeta();
+        if (im != null) {
+            im.setDisplayName(null);
+            setItemMeta(im);
+        }
     }
 
     public String getDisplayNameFromChatColor(boolean useMaterialWhenNull) {
@@ -201,21 +195,21 @@ public class ItemBuilder implements EditableItem {
     @Override
     public String getDisplayName(boolean useMaterialWhenNull) {
         if (useMaterialWhenNull) {
-            return hasDisplayName() ? im().getDisplayName() :
-                    WordUtils.capitalizeFully(get().getType().name().replaceAll("_", " "));
+            return hasDisplayName() ? getItemMeta().getDisplayName() :
+                    WordUtils.capitalizeFully(getStack().getType().name().replaceAll("_", " "));
         }
 
-        return im().getDisplayName();
+        return getItemMeta().getDisplayName();
     }
 
     public boolean hasDisplayName() {
-        return im() != null &&
+        return getItemMeta() != null &&
                 getDisplayName(false) != null &&
                 !getDisplayName(false).equalsIgnoreCase("");
     }
 
     public String getName(boolean strippedOfColor) {
-        return strippedOfColor ? ChatUtils.removeColor(im().getDisplayName()) : im().getDisplayName();
+        return strippedOfColor ? ChatUtils.removeColor(getItemMeta().getDisplayName()) : getItemMeta().getDisplayName();
     }
 
     public ItemBuilder addLore(String s) {
@@ -231,21 +225,21 @@ public class ItemBuilder implements EditableItem {
     public ItemBuilder addAutomaticLore(String lineColor, int charLength, boolean maintainColor, String lore) {
         String[] split = lore.split(" ");
         int lineSize = 0;
-        String currentLine = "";
+        StringBuilder currentLine = new StringBuilder();
         String lastLine = "";
 
         for (String word : split) {
             int wordLength = word.length();
             if (lineSize + wordLength <= charLength) {
                 lineSize += wordLength + 1;
-                currentLine += word + " ";
+                currentLine.append(word).append(" ");
             } else {
                 if (maintainColor) {
                     lineColor = ChatUtils.lastChatColor(lastLine);
                 }
                 String line = lineColor + currentLine.substring(0, currentLine.length() - 1);
                 addLore(line);
-                currentLine = word + " ";
+                currentLine = new StringBuilder(word + " ");
                 lineSize = wordLength;
                 lastLine = line;
 
@@ -274,7 +268,6 @@ public class ItemBuilder implements EditableItem {
         return lore;
     }
 
-    @Deprecated
     public ItemBuilder setLore(String s) {
         clearLore();
         addLore(s);
@@ -284,14 +277,14 @@ public class ItemBuilder implements EditableItem {
 
     @Override
     public void reapplyLore() {
-        ItemMeta im = im();
+        ItemMeta im = getItemMeta();
 
         ArrayList<String> colorizedLore = new ArrayList<>();
         for (String line : getLore())
             colorizedLore.add(ChatUtils.toChatColor(line));
 
         im.setLore(colorizedLore);
-        setIm(im);
+        setItemMeta(im);
     }
 
     public void addEnchantment(Enchantment enchantment, int level) {
@@ -336,8 +329,8 @@ public class ItemBuilder implements EditableItem {
 
     @Override
     public String getPlayerHeadName() {
-        if (DynamicMaterial.fromItemStack(getStack()).equals(DynamicMaterial.PLAYER_HEAD)) {
-            SkullMeta skullMeta = (SkullMeta) im();
+        if (XMaterial.PLAYER_HEAD.isSimilar(getStack())) {
+            SkullMeta skullMeta = (SkullMeta) getItemMeta();
             return skullMeta.getOwner();
         }
 
@@ -346,9 +339,9 @@ public class ItemBuilder implements EditableItem {
 
     @Override
     public void setPlayerHeadName(String name) {
-        if (DynamicMaterial.fromItemStack(getStack()).equals(DynamicMaterial.PLAYER_HEAD)) {
+        if (XMaterial.PLAYER_HEAD.isSimilar(getStack())) {
             if (Character.isLetterOrDigit(name.charAt(0))) {
-                SkullMeta skullMeta = (SkullMeta) im();
+                SkullMeta skullMeta = (SkullMeta) getItemMeta();
                 try {
                     UUID uuid = UUID.fromString(name);
                     OfflinePlayer op = Bukkit.getOfflinePlayer(uuid);
@@ -357,7 +350,7 @@ public class ItemBuilder implements EditableItem {
                     skullMeta.setOwner(name);
 
                 }
-                setIm(skullMeta);
+                setItemMeta(skullMeta);
             }
         }
     }
@@ -402,7 +395,7 @@ public class ItemBuilder implements EditableItem {
 
     @Override
     public void reapplyItemFlags() {
-        ItemStack stack = get();
+        ItemStack stack = getStack();
         ItemMeta im = stack.getItemMeta();
 
         im.getItemFlags().clear();
@@ -425,7 +418,7 @@ public class ItemBuilder implements EditableItem {
     @Override
     public void reapplyEnchantments() {
         for (Enchantment enchantment : stack.getEnchantments().keySet())
-            im().removeEnchant(enchantment);
+            getItemMeta().removeEnchant(enchantment);
 
         for (CompressedEnchantment compressedEnchantment : getEnchantments()) {
             compressedEnchantment.applyTo(this);
@@ -445,7 +438,7 @@ public class ItemBuilder implements EditableItem {
         boolean first = true;
 
         if (stack.getItemMeta() instanceof PotionMeta) {
-            PotionMeta pm = (PotionMeta) im();
+            PotionMeta pm = (PotionMeta) getItemMeta();
             pm.clearCustomEffects();
 
             if (!getPotionEffects().isEmpty()) {
@@ -460,7 +453,7 @@ public class ItemBuilder implements EditableItem {
                     pm.setBasePotionData(potionData);
                 } else {
                     Potion pot = new Potion(PotionType.getByEffect(firstVal.getType()), firstVal.getAmplifier() == 0 ? 1 : 2,
-                            stack.getType().equals(DynamicMaterial.SPLASH_POTION.parseMaterial()));
+                            XMaterial.SPLASH_POTION.isSimilar(stack));
                     pot.apply(stack);
                     first = false;
                 }
@@ -479,9 +472,9 @@ public class ItemBuilder implements EditableItem {
     @Override
     public void reapplyColor() {
         if (isColorable() && getColor() != null) {
-            LeatherArmorMeta meta = (LeatherArmorMeta) im();
+            LeatherArmorMeta meta = (LeatherArmorMeta) getItemMeta();
             meta.setColor(Color.fromRGB(getColor().getR(), getColor().getG(), getColor().getB()));
-            setIm(meta);
+            setItemMeta(meta);
         }
     }
 
@@ -505,7 +498,7 @@ public class ItemBuilder implements EditableItem {
 
     @Override
     public boolean isColorable() {
-        return im() instanceof LeatherArmorMeta;
+        return getItemMeta() instanceof LeatherArmorMeta;
     }
 
     @Override
@@ -526,16 +519,13 @@ public class ItemBuilder implements EditableItem {
             loreEquals = false;
         }
 
-        boolean equal =
-                !(!compare.hasDisplayName() && hasDisplayName())
-                        && !(compare.hasDisplayName() && !hasDisplayName())
-                        && ((!compare.hasDisplayName() && !hasDisplayName()) ||
-                        (compare.getDisplayName(false).equals(getDisplayName(false))))
-                        && loreEquals
-                        && compare.getStack().getType().equals(getStack().getType())
-                        && compare.getStack().getAmount() == getStack().getAmount();
-
-        return equal;
+        return !(!compare.hasDisplayName() && hasDisplayName())
+                && !(compare.hasDisplayName() && !hasDisplayName())
+                && ((!compare.hasDisplayName() && !hasDisplayName()) ||
+                (compare.getDisplayName(false).equals(getDisplayName(false))))
+                && loreEquals
+                && compare.getStack().getType().equals(getStack().getType())
+                && compare.getStack().getAmount() == getStack().getAmount();
     }
 
     public ItemBuilder clone() {
@@ -544,11 +534,11 @@ public class ItemBuilder implements EditableItem {
 
     @Override
     public int getDamage() {
-        if (VersionUtils.Version.v1_13.isServerVersionOrLater() && im() instanceof Damageable) {
-            Damageable meta = (Damageable) im();
+        if (VersionUtils.Version.v1_13.isServerVersionOrLater() && getItemMeta() instanceof Damageable) {
+            Damageable meta = (Damageable) getItemMeta();
             return meta.getDamage();
         } else if (VersionUtils.Version.v1_12.isServerVersionOrEarlier()) {
-            return get().getDurability();
+            return getStack().getDurability();
         }
         return 0;
     }
@@ -559,24 +549,21 @@ public class ItemBuilder implements EditableItem {
             return;
         }
 
-        if (VersionUtils.Version.v1_13.isServerVersionOrLater() && im() instanceof Damageable) {
-            Damageable meta = (Damageable) im();
+        if (VersionUtils.Version.v1_13.isServerVersionOrLater() && getItemMeta() instanceof Damageable) {
+            Damageable meta = (Damageable) getItemMeta();
             meta.setDamage(damage);
-            setIm((ItemMeta) meta);
+            setItemMeta((ItemMeta) meta);
         } else if (VersionUtils.Version.v1_12.isServerVersionOrEarlier()) {
             getStack().setDurability((short) damage);
         }
-    }
-
-    public ItemStack get() {
-        return getStack();
     }
 
     public ItemStack getStack() {
         return stack;
     }
 
-    public void setStack(ItemStack stack) {
+    public ItemBuilder setStack(ItemStack stack) {
         this.stack = stack;
+        return this;
     }
 }

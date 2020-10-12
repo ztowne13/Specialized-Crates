@@ -1,16 +1,15 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -36,28 +35,28 @@ public class IGCAnimOpenChest extends IGCAnimation {
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
-        ib.setItem(3, new ItemBuilder(Material.PAPER, 1, 0).setName("&achest-open-duration")
+        ib.setItem(3, new ItemBuilder(XMaterial.PAPER).setDisplayName("&achest-open-duration")
                 .addLore(getcVal()).addLore("&7" + getString("chest-open-duration")).addLore("")
                 .addAutomaticLore("&f", 30, "How long the chest will appear to be open for"));
-        ib.setItem(4, new ItemBuilder(DynamicMaterial.REDSTONE, 1).setName("&aearly-reward-hologram")
+        ib.setItem(4, new ItemBuilder(XMaterial.REDSTONE).setDisplayName("&aearly-reward-hologram")
                 .addLore(getcVal()).addLore("&7" + getString("early-reward-hologram"))
                 .addLore("")
                 .addAutomaticLore("&f", 30, "Should the reward-hologram play early with the animation for added effect?")
                 .addLore("").addAutomaticLore("&e", 30, "Has no effect if reward-holo-attach-to-item is set to TRUE."));
-        ib.setItem(5, new ItemBuilder(DynamicMaterial.REPEATER, 1).setName("&areward-hologram-delay")
+        ib.setItem(5, new ItemBuilder(XMaterial.REPEATER).setDisplayName("&areward-hologram-delay")
                 .addLore(getcVal()).addLore("&7" + getString("reward-hologram-delay"))
                 .addLore("").addAutomaticLore("&f", 30,
                         "If displaying the early-reward-hologram, how long to wait for it to appear? Setting this to a value of 9 plays about when the item falls down.")
                 .addLore("").addAutomaticLore("&e", 30, "Has no effect if reward-holo-attach-to-item is set to TRUE."));
 
-        ItemBuilder attachTo = new ItemBuilder(DynamicMaterial.DIAMOND, 1);
+        ItemBuilder attachTo = new ItemBuilder(XMaterial.DIAMOND);
         attachTo.setDisplayName("&areward-holo-attach-to-item");
         attachTo.addLore("&7Current value:").addLore("&7" + getString("reward-holo-attach-to-item"));
         attachTo.addLore("").addAutomaticLore("&f", 30,
                 "Instead of just playing the reward hologram early or normally, have it attach to the actual item to have a nice bounce effect.");
         ib.setItem(6, attachTo);
 
-        ItemBuilder earlyActions = new ItemBuilder(DynamicMaterial.FIREWORK_ROCKET, 1);
+        ItemBuilder earlyActions = new ItemBuilder(XMaterial.FIREWORK_ROCKET);
         earlyActions.setDisplayName("&aearly-open-actions");
         earlyActions.addLore("&7Current value:").addLore("&7" + getString("early-open-actions"));
         earlyActions.addLore("").addAutomaticLore("&f", 30,

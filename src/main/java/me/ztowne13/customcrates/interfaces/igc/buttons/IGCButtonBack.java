@@ -1,13 +1,13 @@
 package me.ztowne13.customcrates.interfaces.igc.buttons;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 
 public class IGCButtonBack implements IGCButton {
     @Override
     public ItemBuilder getButtonItem() {
-        ItemBuilder button = new ItemBuilder(DynamicMaterial.GRAY_DYE, 1);
+        ItemBuilder button = new ItemBuilder(XMaterial.GRAY_DYE, 1);
         button.setDisplayName("&cExit");
         button.addLore("&4&oNOTE: THIS DOES NOT SAVE CHANGES");
         button.addLore("");

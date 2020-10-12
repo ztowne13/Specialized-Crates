@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
@@ -14,7 +15,6 @@ import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCCratesMain;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
@@ -32,12 +32,12 @@ public class IGCMenuCrateOrMulticrate extends IGCMenu {
         InventoryBuilder ib = createDefault(9);
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
-        ItemBuilder normalCrate = new ItemBuilder(DynamicMaterial.BOOK, 1);
+        ItemBuilder normalCrate = new ItemBuilder(XMaterial.BOOK, 1);
         normalCrate.setDisplayName("&aClassic Crate");
         normalCrate.addLore("")
                 .addAutomaticLore("&f", 30, "This is your normal or average crate that you're probably looking for!");
 
-        ItemBuilder multiCrate = new ItemBuilder(DynamicMaterial.BOOKSHELF, 1);
+        ItemBuilder multiCrate = new ItemBuilder(XMaterial.BOOKSHELF, 1);
         multiCrate.setDisplayName("&aMulti Crate");
         multiCrate.addLore("")
                 .addAutomaticLore("&f", 30, "This is a crate that is an inventory and has multiple crates in it!");
@@ -81,7 +81,7 @@ public class IGCMenuCrateOrMulticrate extends IGCMenu {
                         cs.setDisplayer(new SimpleRewardDisplayer(newCrate));
                     }
 
-                    SaveableItemBuilder builder = new SaveableItemBuilder(DynamicMaterial.CHEST, 1);
+                    SaveableItemBuilder builder = new SaveableItemBuilder(XMaterial.CHEST, 1);
                     builder.setDisplayName(input);
 
                     cs.getCrateItemHandler().setItem(builder);

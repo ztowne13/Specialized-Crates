@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.items;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
@@ -8,7 +9,6 @@ import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.CompressedPotionEffect;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.EditableItem;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.items.attributes.CompressedEnchantment;
@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class IGCItemEditor extends IGCMenu {
 
@@ -47,7 +48,7 @@ public class IGCItemEditor extends IGCMenu {
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
         // Lore
-        ItemBuilder lore = new ItemBuilder(DynamicMaterial.WRITABLE_BOOK, 1);
+        ItemBuilder lore = new ItemBuilder(XMaterial.WRITABLE_BOOK, 1);
         lore.setDisplayName("&aEdit the lore");
         lore.addLore("&7Current value:");
         for (String loreLine : editableItem.getLore())
@@ -56,13 +57,13 @@ public class IGCItemEditor extends IGCMenu {
                 "Edit the lore of the display item. Remove all lines and leave the lore blank to use the default lore in the config.yml");
 
         // Display name
-        ItemBuilder displayName = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        ItemBuilder displayName = new ItemBuilder(XMaterial.PAPER, 1);
         displayName.setDisplayName("&aEdit the display name");
         displayName.addLore("&7Current value:").addLore("&7" + editableItem.getDisplayName(false));
         displayName.addLore("").addAutomaticLore("&f", 30, "Set the display name of the display item.");
 
         // Enchantments
-        ItemBuilder enchantments = new ItemBuilder(DynamicMaterial.ENCHANTING_TABLE, 1);
+        ItemBuilder enchantments = new ItemBuilder(XMaterial.ENCHANTING_TABLE, 1);
         enchantments.setDisplayName("&aEdit the enchantments");
         enchantments.addLore("&7Current value:");
         for (CompressedEnchantment enchantment : editableItem.getEnchantments())
@@ -71,7 +72,7 @@ public class IGCItemEditor extends IGCMenu {
                 .addAutomaticLore("&f", 30, "Edit the enchantments of the display item. FORMATTED: enchantment;level");
 
         // NBT Tags
-        ItemBuilder nbtTags = new ItemBuilder(DynamicMaterial.NAME_TAG, 1);
+        ItemBuilder nbtTags = new ItemBuilder(XMaterial.NAME_TAG, 1);
         nbtTags.setDisplayName("&aEdit the nbt-tags");
         nbtTags.addLore("&7Current value:");
         for (String tag : editableItem.getNBTTags())
@@ -81,23 +82,18 @@ public class IGCItemEditor extends IGCMenu {
 
         // Glow
         ItemBuilder glow =
-                new ItemBuilder(editableItem.isGlowing() ? DynamicMaterial.NETHER_STAR : DynamicMaterial.QUARTZ, 1);
+                new ItemBuilder(editableItem.isGlowing() ? XMaterial.NETHER_STAR : XMaterial.QUARTZ, 1);
         glow.setDisplayName("&aEdit if the item is glowing");
         glow.addLore("&7Current value:").addLore("&7" + editableItem.isGlowing());
         glow.addLore("").addAutomaticLore("&f", 30,
                 "This will toggle whether or not the display item will have a glowing effect. For enchanted items, if this value is true, the enchantments will be hidden.");
         glow.addLore("").addAutomaticLore("&e&l", 30, "Same as HIDE ENCHANTS");
 
-        DynamicMaterial editableItemDM;
-        try {
-            editableItemDM = DynamicMaterial.fromItemStack(editableItem.getStack());
-        } catch (Exception exc) {
-            editableItemDM = DynamicMaterial.fromString(editableItem.getStack().getType() + ";0");
-        }
+        XMaterial editableItemDM = XMaterial.matchXMaterial(editableItem.getStack());
 
         // Player head
-        ItemBuilder playerHead = new ItemBuilder(DynamicMaterial.PLAYER_HEAD, 1);
-        if (editableItemDM.equals(DynamicMaterial.PLAYER_HEAD)) {
+        ItemBuilder playerHead = new ItemBuilder(XMaterial.PLAYER_HEAD, 1);
+        if (editableItemDM.equals(XMaterial.PLAYER_HEAD)) {
             playerHead.setDisplayName("&aEdit the player-head's name.");
             playerHead.addLore("&7Current value:").addLore("&7" + editableItem.getPlayerHeadName());
             playerHead.addLore("")
@@ -108,7 +104,7 @@ public class IGCItemEditor extends IGCMenu {
         }
 
         // Potion
-        ItemBuilder potion = new ItemBuilder(DynamicMaterial.POTION, 1);
+        ItemBuilder potion = new ItemBuilder(XMaterial.POTION, 1);
         if (editableItemDM.name().contains("POTION")) {
             potion.setDisplayName("&aEdit the potion effects");
             potion.addLore("&7Current value:");
@@ -122,7 +118,7 @@ public class IGCItemEditor extends IGCMenu {
         }
 
         // Amount
-        ItemBuilder amount = new ItemBuilder(DynamicMaterial.STONE_BUTTON, 1);
+        ItemBuilder amount = new ItemBuilder(XMaterial.STONE_BUTTON, 1);
         amount.setDisplayName("&aEdit the amount.");
         amount.addLore("&7Current value:");
         amount.addLore("&7" + editableItem.getStack().getAmount());
@@ -145,7 +141,7 @@ public class IGCItemEditor extends IGCMenu {
                 "else will be updated: name, lore, enchants, etc. Therefore, everything will be overwritten!");
 
         // Edit attributes
-        ItemBuilder attributes = new ItemBuilder(DynamicMaterial.REDSTONE, 1);
+        ItemBuilder attributes = new ItemBuilder(XMaterial.REDSTONE, 1);
         attributes.setDisplayName("&aEdit the Item Flags");
         attributes.addLore("").addAutomaticLore("&f", 30, "Edit the attributes of the item such as HIDE_ENCHANTS, " +
                 "HIDE_ATTRIBUTES, etc.");
@@ -153,7 +149,7 @@ public class IGCItemEditor extends IGCMenu {
                 " be true unless glow: false.");
 
         // Edit color
-        ItemBuilder color = new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1);
+        ItemBuilder color = new ItemBuilder(XMaterial.LIGHT_BLUE_DYE, 1);
         if (item.isColorable()) {
             color.setDisplayName("&aEdit the armour Color");
             color.addLore("&7Current Value:")
@@ -165,7 +161,7 @@ public class IGCItemEditor extends IGCMenu {
         }
 
         // Damage
-        ItemBuilder damage = new ItemBuilder(DynamicMaterial.GOLDEN_AXE);
+        ItemBuilder damage = new ItemBuilder(XMaterial.GOLDEN_AXE);
         damage.setDamage(20);
         damage.setDisplayName("&aEdit the item damage");
         damage.addLore("&7Current Value: ");
@@ -217,18 +213,18 @@ public class IGCItemEditor extends IGCMenu {
                 break;
             case 11:
                 new InputMenu(getCc(), getP(), "item material",
-                        DynamicMaterial.fromItemStack(editableItem.getStack()).toString(), Material.class, this);
+                        XMaterial.matchXMaterial(editableItem.getStack()).toString(), Material.class, this);
                 break;
             case 13:
                 new InputMenu(getCc(), getP(), "displayname", editableItem.getDisplayName(false), String.class, this);
                 break;
             case 14:
-                new IGCListEditor(getCc(), getP(), this, "Lore", "Line", editableItem.getLore(), DynamicMaterial.PAPER, 1)
+                new IGCListEditor(getCc(), getP(), this, "Lore", "Line", editableItem.getLore(), XMaterial.PAPER, 1)
                         .open();
                 break;
             case 15:
                 new IGCListEditor(getCc(), getP(), this, "Enchantments", "Enchantment", editableItem.getEnchantments(),
-                        DynamicMaterial.ENCHANTED_BOOK, 1, CompressedEnchantment.class, "fromString",
+                        XMaterial.ENCHANTED_BOOK, 1, CompressedEnchantment.class, "fromString",
                         "That is not formatted ENCHANTMENT;LEVEL or either the enchantment name is wrong or the level is not a number.")
                         .open();
                 break;
@@ -238,15 +234,15 @@ public class IGCItemEditor extends IGCMenu {
                 break;
             case 22:
                 new IGCListEditor(getCc(), getP(), this, "NBT Tags", "Tag", editableItem.getNBTTags(),
-                        DynamicMaterial.NAME_TAG, 1).open();
+                        XMaterial.NAME_TAG, 1).open();
                 break;
             case 23:
                 new InputMenu(getCc(), getP(), "amount", editableItem.getStack().getAmount() + "", Integer.class, this);
                 break;
             case 24:
-                if (DynamicMaterial.fromItemStack(editableItem.getStack()).name().contains("POTION"))
+                if (XMaterial.matchXMaterial(editableItem.getStack()).name().contains("POTION"))
                     new IGCListEditor(getCc(), getP(), this, "Potion Effects", "Potion", editableItem.getPotionEffects(),
-                            DynamicMaterial.GLASS_BOTTLE, 1, CompressedPotionEffect.class, "fromString",
+                            XMaterial.GLASS_BOTTLE, 1, CompressedPotionEffect.class, "fromString",
                             "That is not formatted POTIONTYPE;DURATION;AMPLIFIER or either the potion effect name " +
                                     "is incorrect, or either the duration or amplifier aren't numbers.").open();
                 else
@@ -258,16 +254,16 @@ public class IGCItemEditor extends IGCMenu {
                 for (ItemFlag flag : ItemFlag.values()) {
                     descriptors.add("");
                     if (editableItem.getItemFlags().contains(flag))
-                        builders.add(new ItemBuilder(DynamicMaterial.LIME_WOOL, 1));
+                        builders.add(new ItemBuilder(XMaterial.LIME_WOOL, 1));
                     else
-                        builders.add(new ItemBuilder(DynamicMaterial.RED_WOOL, 1));
+                        builders.add(new ItemBuilder(XMaterial.RED_WOOL, 1));
                 }
                 new IGCListSelector(getCc(), getP(), this, "Item Flags", Arrays.asList(ItemFlag.values()),
-                        DynamicMaterial.PAPER, 1,
+                        XMaterial.PAPER, 1,
                         descriptors, builders).open();
                 break;
             case 31:
-                if (DynamicMaterial.fromItemStack(editableItem.getStack()).equals(DynamicMaterial.PLAYER_HEAD))
+                if (XMaterial.PLAYER_HEAD.isSimilar(editableItem.getStack()))
                     new InputMenu(getCc(), getP(), "player-head-name", editableItem.getPlayerHeadName(), String.class,
                             this, true);
                 else
@@ -289,14 +285,13 @@ public class IGCItemEditor extends IGCMenu {
     @Override
     public boolean handleInput(String value, String input) {
         if (value.equalsIgnoreCase("item material")) {
-            try {
-                DynamicMaterial dynamicMaterial = DynamicMaterial.fromString(input.toUpperCase());
-                editableItem.getStack().setType(dynamicMaterial.parseMaterial());
-                if (VersionUtils.Version.v1_12.isServerVersionOrEarlier())
-                    editableItem.getStack().setDurability(dynamicMaterial.parseItem().getDurability());
+            Optional<XMaterial> optional = XMaterial.matchXMaterial(input);
+            if (optional.isPresent()) {
+                XMaterial dynamicMaterial = optional.get();
+                dynamicMaterial.setType(editableItem.getStack());
                 ChatUtils.msgSuccess(getP(), "Set the " + value + " to " + input);
                 return true;
-            } catch (Exception exc) {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid material name.");
             }
         } else if (value.equalsIgnoreCase("displayname")) {

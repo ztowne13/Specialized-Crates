@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
@@ -9,7 +10,6 @@ import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -35,25 +35,25 @@ public class IGCAnimEnclose extends IGCAnimation {
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
         ib.setItem(2,
-                new ItemBuilder(Material.BOOK, 1, 0).setName("&ainv-name").addLore(getcVal() + getString("inv-name"))
+                new ItemBuilder(XMaterial.BOOK).setDisplayName("&ainv-name").addLore(getcVal() + getString("inv-name"))
                         .addLore("").addAutomaticLore("&f", 30,
                         "The name of the inventory when the animation runs. This is overwritten by the crate's 'inv-name' value, if it exists."));
-        ib.setItem(4, new ItemBuilder(Material.PAPER, 1, 0).setName("&ainventory-rows")
+        ib.setItem(4, new ItemBuilder(XMaterial.PAPER).setDisplayName("&ainventory-rows")
                 .addLore(getcVal()).addLore("&7" + getString("inventory-rows")).addLore("")
                 .addAutomaticLore("&f", 30,
                         "The amount of rows in addition to the center row, both top and bottom. Meaning, to have 3 rows TOTAL, this value would be 1: 1 row up + 1 row down + center row."));
-        ib.setItem(5, new ItemBuilder(Material.PAPER, 1, 0).setName("&aupdate-speed")
+        ib.setItem(5, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aupdate-speed")
                 .addLore(getcVal()).addLore("&7" + getString("update-speed")).addLore("")
                 .addAutomaticLore("&f", 30,
                         "The delay between each frame (the speed at which the animation will update and play)."));
-        ib.setItem(6, new ItemBuilder(Material.PAPER, 1, 0).setName("&areward-amount")
+        ib.setItem(6, new ItemBuilder(XMaterial.PAPER).setDisplayName("&areward-amount")
                 .addLore(getcVal()).addLore("&7" + getString("reward-amount")).addLore("")
                 .addAutomaticLore("&f", 30,
                         "The amount of rewards that the player will receive from the crate. Must be an odd number of rewards, otherwise it will be rounded up."));
-        ib.setItem(11, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&atick-sound")
+        ib.setItem(11, new ItemBuilder(XMaterial.NOTE_BLOCK).setDisplayName("&atick-sound")
                 .addLore(getcVal()).addLore("&7" + getString("tick-sound")).addLore("").addAutomaticLore("&f", 30,
                         "The sound that is played every time the inventory updates. Set to 'none' to have no sound."));
-        ib.setItem(14, new ItemBuilder(Material.ENDER_CHEST, 1, 0).setName("&afill-block")
+        ib.setItem(14, new ItemBuilder(XMaterial.ENDER_CHEST).setDisplayName("&afill-block")
                 .addLore(getcVal()).addLore("&7" + getString("fill-block")).addLore("")
                 .addAutomaticLore("&f", 30, "The block that will fill the empty space in the animation."));
 

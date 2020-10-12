@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.crates.types.animations.inventory;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
@@ -7,7 +8,6 @@ import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.crates.types.animations.AnimationDataHolder;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
@@ -88,7 +88,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation {
 
     @Override
     public ItemBuilder getFiller() {
-        return new ItemBuilder(DynamicMaterial.AIR);
+        return new ItemBuilder(XMaterial.AIR);
     }
 
     @Override
@@ -155,7 +155,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation {
             } else {
                 uncoverBlockIb.setDisplayName(coverBlockName.replace("%number%", (i + 1) + ""));
                 if (count) {
-                    uncoverBlockIb.get().setAmount(i + 1);
+                    uncoverBlockIb.getStack().setAmount(i + 1);
                 }
                 inventoryBuilder.setItem(i, uncoverBlockIb);
             }
@@ -265,12 +265,10 @@ public class DiscoverAnimation extends InventoryCrateAnimation {
                         StatusLoggerEvent.ANIMATION_DISCOVER_RANDDISPLAYLOCATION_INVALID);
 
         uncoverBlock =
-                fu.getFileDataLoader().loadItem(prefix + "cover-block", new ItemBuilder(DynamicMaterial.CHEST), sl,
+                fu.getFileDataLoader().loadItem(prefix + "cover-block", new ItemBuilder(XMaterial.CHEST), sl,
                         StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
-                        StatusLoggerEvent.ANIMATION_DISCOVER_COVERBLOCK_MATERIAL_INVALID,
-                        StatusLoggerEvent.ANIMATION_DISCOVER_COVERBLOCK_DURABILITY_INVALID,
-                        StatusLoggerEvent.ANIMATION_DISCOVER_COVERBLOCK_INVALID,
-                        StatusLoggerEvent.ANIMATION_DISCOVER_COVERBLOCK_SUCCESS);
+                        StatusLoggerEvent.ANIMATION_DISCOVER_COVERBLOCK_INVALID
+                );
 
         count = fu.getFileDataLoader().loadBoolean(prefix + "count", true, sl, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_DISCOVER_COUNT_SUCCESS,
@@ -307,12 +305,10 @@ public class DiscoverAnimation extends InventoryCrateAnimation {
                         StatusLoggerEvent.ANIMATION_DISCOVER_UNCOVERSOUND_PITCH_INVALID);
 
         rewardBlock = fu.getFileDataLoader()
-                .loadItem(prefix + "reward-block", new ItemBuilder(DynamicMaterial.GREEN_STAINED_GLASS_PANE), sl,
+                .loadItem(prefix + "reward-block", new ItemBuilder(XMaterial.GREEN_STAINED_GLASS_PANE), sl,
                         StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
-                        StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_MATERIAL_INVALID,
-                        StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_DURABILITY_INVALID,
-                        StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_INVALID,
-                        StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_SUCCESS);
+                        StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_INVALID
+                );
         rewardBlock.setDisplayName("");
 
         coverBlockName = fu.getFileDataLoader()

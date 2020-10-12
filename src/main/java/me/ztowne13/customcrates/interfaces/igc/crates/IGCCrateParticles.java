@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.particles.BukkitParticleEffect;
@@ -13,7 +14,6 @@ import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
@@ -46,7 +46,7 @@ public class IGCCrateParticles extends IGCTierMenu {
 
         ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
         ib.setItem(8,
-                new ItemBuilder(Material.PAPER, 1, 0).setName("&aCreate a new particle").setLore("&7Make sure you save")
+                new ItemBuilder(XMaterial.PAPER).setDisplayName("&aCreate a new particle").setLore("&7Make sure you save")
                         .addLore("&7when you're done."));
 
         if (crates.getSettings().getParticles().getParticles().containsKey(tier)) {
@@ -57,7 +57,7 @@ public class IGCCrateParticles extends IGCTierMenu {
                 }
 
                 slots.put(i, pd);
-                ib.setItem(i, new ItemBuilder(Material.NETHER_STAR, 1, 0).setName("&a" + pd.getParticleName()).
+                ib.setItem(i, new ItemBuilder(XMaterial.NETHER_STAR).setDisplayName("&a" + pd.getParticleName()).
                         setLore("&7X Range: &f" + pd.getRangeX()).addLore("&7Y Range:&f " + pd.getRangeY())
                         .addLore("&7Z Range:&f " + pd.getRangeZ())
                         .
@@ -81,10 +81,10 @@ public class IGCCrateParticles extends IGCTierMenu {
         } else if (slot == 8) {
             if (VersionUtils.Version.v1_9.isServerVersionOrEarlier())
                 new IGCListSelector(getCc(), getP(), this, "particle type", Arrays.asList(ParticleEffect.values()),
-                        DynamicMaterial.NETHER_STAR, 1, null).open();
+                        XMaterial.NETHER_STAR, 1, null).open();
             else
                 new IGCListSelector(getCc(), getP(), this, "particle type", Arrays.asList(org.bukkit.Particle.values()),
-                        DynamicMaterial.NETHER_STAR, 1, null).open();
+                        XMaterial.NETHER_STAR, 1, null).open();
         } else if (getIb().getInv().getItem(slot) != null &&
                 getIb().getInv().getItem(slot).getType().equals(Material.NETHER_STAR)) {
             ParticleData pd = slots.get(slot);

@@ -10,9 +10,9 @@ import java.util.List;
 public interface EditableItem {
     ItemStack getStack();
 
-    void setStack(ItemStack stack);
+    EditableItem setStack(ItemStack stack);
 
-    void setDisplayName(String displayName);
+    EditableItem setDisplayName(String displayName);
 
     String getDisplayName(boolean useMaterialWhenNull);
 

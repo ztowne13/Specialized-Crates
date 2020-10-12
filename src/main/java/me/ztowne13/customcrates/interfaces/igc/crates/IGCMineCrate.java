@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
@@ -7,7 +8,6 @@ import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCListEditor;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
@@ -15,6 +15,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
+import java.util.Optional;
 
 /**
  * Created by ztowne13 on 4/5/16.
@@ -31,16 +33,16 @@ public class IGCMineCrate extends IGCMenuCrate {
 
         ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
 
-        ib.setItem(11, new ItemBuilder(Material.FISHING_ROD, 1, 0).setName("&aChance").setLore("&7Current value: ")
+        ib.setItem(11, new ItemBuilder(XMaterial.FISHING_ROD).setDisplayName("&aChance").setLore("&7Current value: ")
                 .addLore("&7" + cs.getLuckyChestSettings().getChance() + "/" + cs.getLuckyChestSettings().getOutOfChance())
                 .addLore("")
                 .addAutomaticLore("&f", 30,
                         "These are the odds that a crate will appear while mining. Formatted 'number/number'."));
-        ib.setItem(12, new ItemBuilder(DynamicMaterial.LIGHT_GRAY_DYE, 1).setName("&aWhitelist")
+        ib.setItem(12, new ItemBuilder(XMaterial.LIGHT_GRAY_DYE).setDisplayName("&aWhitelist")
                 .addLore("&7Current value: ").addLore("&7" + cs.getLuckyChestSettings().isBLWL() + "").addLore("")
                 .addAutomaticLore("&f", 30, "Set whether the block-list is a whitelist or not."));
         ItemBuilder bList =
-                new ItemBuilder(Material.STONE, 1, 0).setName("&aEdit the block-list").setLore("&7Current values: ");
+                new ItemBuilder(XMaterial.STONE).setDisplayName("&aEdit the block-list").setLore("&7Current values: ");
 
         for (Material m : cs.getLuckyChestSettings().getWhiteList()) {
             bList.addLore("&7" + m.name());
@@ -49,7 +51,7 @@ public class IGCMineCrate extends IGCMenuCrate {
         ib.setItem(13, bList);
 
         ItemBuilder wList =
-                new ItemBuilder(DynamicMaterial.PURPLE_DYE, 1).setName("&aEdit the worlds").setLore("&7Current values: ");
+                new ItemBuilder(XMaterial.PURPLE_DYE, 1).setDisplayName("&aEdit the worlds").setLore("&7Current values: ");
         for (String w : cs.getLuckyChestSettings().getWorldsRaw()) {
             wList.addLore("&7" + w);
         }
@@ -57,7 +59,7 @@ public class IGCMineCrate extends IGCMenuCrate {
                 "These are the worlds where mine crates can be found. Remove all the worlds for ALL worlds to be allowed.");
         ib.setItem(14, wList);
 
-        ItemBuilder requirePermission = new ItemBuilder(DynamicMaterial.BOOK);
+        ItemBuilder requirePermission = new ItemBuilder(XMaterial.BOOK);
         requirePermission.setDisplayName("&aRequire Permission to Find");
         requirePermission.addLore("&7Current Value:")
                 .addLore("&7" + crates.getSettings().getLuckyChestSettings().isRequirePermission());
@@ -86,12 +88,12 @@ public class IGCMineCrate extends IGCMenuCrate {
                 break;
             case 13:
                 new IGCListEditor(getCc(), getP(), this, "Block List", "Block", cs.getLuckyChestSettings().getWhiteList(),
-                        DynamicMaterial.STONE, 1, Material.class, "valueOf", "That is not a valid block name. Try STONE.")
+                        XMaterial.STONE, 1, XMaterial.class, "valueOf", "That is not a valid block name. Try STONE.")
                         .open();
                 break;
             case 14:
                 new IGCListEditor(getCc(), getP(), this, "Worlds List", "World", cs.getLuckyChestSettings().getWorldsRaw(),
-                        DynamicMaterial.MAP, 1).open();
+                        XMaterial.MAP, 1).open();
                 break;
             case 15:
                 cs.getLuckyChestSettings().setRequirePermission(!cs.getLuckyChestSettings().isRequirePermission());
@@ -111,8 +113,8 @@ public class IGCMineCrate extends IGCMenuCrate {
                 String[] split = input.split("/");
                 if (Utils.isInt(split[0])) {
                     if (Utils.isInt(split[1])) {
-                        cs.getLuckyChestSettings().setChance(Double.valueOf(split[0]));
-                        cs.getLuckyChestSettings().setOutOfChance(Double.valueOf(split[1]));
+                        cs.getLuckyChestSettings().setChance(Double.parseDouble(split[0]));
+                        cs.getLuckyChestSettings().setOutOfChance(Double.parseDouble(split[1]));
                         ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                         return true;
                     } else {
@@ -125,8 +127,9 @@ public class IGCMineCrate extends IGCMenuCrate {
                 ChatUtils.msgError(getP(), input + " is not formatted 'number/number' or 'chance/out of chance'");
             }
         } else if (value.equalsIgnoreCase("remove block-list")) {
-            try {
-                Material m = DynamicMaterial.fromString(input.toUpperCase()).parseMaterial();
+            Optional<XMaterial> optional = XMaterial.matchXMaterial(input);
+            if (optional.isPresent()) {
+                Material m = optional.get().parseMaterial();
                 if (cs.getLuckyChestSettings().getWhiteList().contains(m)) {
                     cs.getLuckyChestSettings().getWhiteList().remove(m);
                     ChatUtils.msgSuccess(getP(), "Removed the " + input + " value from the whitelist / blacklist");
@@ -134,7 +137,7 @@ public class IGCMineCrate extends IGCMenuCrate {
                 } else {
                     ChatUtils.msgError(getP(), input + " does not exist in the blacklist / whitelist.");
                 }
-            } catch (Exception exc) {
+            } else {
                 ChatUtils.msgError(getP(), input + " is not a valid material.");
             }
         } else if (value.equalsIgnoreCase("add worlds")) {

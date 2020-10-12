@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
@@ -7,10 +8,8 @@ import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -32,15 +31,15 @@ public class IGCCrateAnimation extends IGCMenuCrate {
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
         ib.setItem(13,
-                new ItemBuilder(DynamicMaterial.BIRCH_FENCE_GATE, 1).setName("&aSet auto-close").setLore("&7Current value: ")
+                new ItemBuilder(XMaterial.BIRCH_FENCE_GATE).setDisplayName("&aSet auto-close").setLore("&7Current value: ")
                         .addLore("&7" + cs.isAutoClose()).addLore("").addAutomaticLore("&f", 30,
                         "If the crate is in an inventory, should it automatically close when it is done?"));
 
-        ib.setItem(11, new ItemBuilder(Material.ITEM_FRAME, 1, 0).setName("&aSet the crate animation")
+        ib.setItem(11, new ItemBuilder(XMaterial.ITEM_FRAME).setDisplayName("&aSet the crate animation")
                 .setLore("&7Current Value: ").addLore("&7" + cs.getCrateType().name()).addLore("")
                 .addAutomaticLore("&f", 30, "This is the animation that will play when the crate is opened."));
 
-        ItemBuilder skipAnimation = new ItemBuilder(DynamicMaterial.GUNPOWDER);
+        ItemBuilder skipAnimation = new ItemBuilder(XMaterial.GUNPOWDER);
         skipAnimation.setDisplayName("&aSet allow-skip-animation");
         skipAnimation.addLore("&7Current Value:").addLore("&7" + cs.isCanFastTrack());
         skipAnimation.addLore("").addAutomaticLore("&f", 30,
@@ -65,7 +64,7 @@ public class IGCCrateAnimation extends IGCMenuCrate {
                 break;
             case 11:
                 new IGCListSelector(getCc(), getP(), this, "Animation Type", Arrays.asList(CrateAnimationType.values()),
-                        DynamicMaterial.PAPER, 1, null).open();
+                        XMaterial.PAPER, 1, null).open();
                 break;
             case 15:
                 cs.setCanFastTrack(!cs.isCanFastTrack());

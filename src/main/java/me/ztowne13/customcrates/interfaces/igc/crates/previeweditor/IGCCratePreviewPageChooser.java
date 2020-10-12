@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.previeweditor;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.custom.CustomRewardDisplayer;
@@ -9,10 +10,8 @@ import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.crates.IGCMenuCrate;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -37,12 +36,7 @@ public class IGCCratePreviewPageChooser extends IGCMenuCrate {
     @Override
     public void openMenu() {
 
-        int slots;
-
-        if (values.size() - ((page - 1) * 28) > 28)
-            slots = 28;
-        else
-            slots = values.size() - ((page - 1) * 28);
+        int slots = Math.min(values.size() - ((page - 1) * 28), 28);
 
         slots = InventoryUtils.getRowsFor(2, slots) + 9;
 
@@ -52,7 +46,7 @@ public class IGCCratePreviewPageChooser extends IGCMenuCrate {
         ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
         ib.setItem(0, IGCDefaultItems.SAVE_ONLY_BUTTON.getIb());
 
-        ItemBuilder builder = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        ItemBuilder builder = new ItemBuilder(XMaterial.PAPER);
         builder.setDisplayName("&aAdd a page");
 
         ib.setItem(8, builder);
@@ -77,7 +71,7 @@ public class IGCCratePreviewPageChooser extends IGCMenuCrate {
             itemNum++;
             ItemBuilder item;
 
-            item = new ItemBuilder(DynamicMaterial.BOOK, 1).setName("&a" + val);
+            item = new ItemBuilder(XMaterial.BOOK, 1).setDisplayName("&a" + val);
 
             item.addLore("")
                     .addLore("&7&oClick to edit this page.");
@@ -90,11 +84,11 @@ public class IGCCratePreviewPageChooser extends IGCMenuCrate {
         }
 
         if (page != 1) {
-            ib.setItem(2, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo back a page"));
+            ib.setItem(2, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo back a page"));
         }
 
         if (((values.size() / 28) + (values.size() % 28 == 0 ? 0 : 1) != page) && values.size() != 0) {
-            ib.setItem(6, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo forward a page"));
+            ib.setItem(6, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo forward a page"));
         }
 
         ib.open();
@@ -108,10 +102,10 @@ public class IGCCratePreviewPageChooser extends IGCMenuCrate {
             ChatUtils.msgSuccess(getP(), "Saved!");
         } else if (slot == 9) {
             up();
-        } else if (slot == 2 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
+        } else if (slot == 2 && XMaterial.ARROW.isSimilar(getIb().getInv().getItem(slot))) {
             page--;
             open();
-        } else if (slot == 6 && getIb().getInv().getItem(slot).getType() == Material.ARROW) {
+        } else if (slot == 6 && XMaterial.ARROW.isSimilar(getIb().getInv().getItem(slot))) {
             page++;
             open();
         } else if (slot == 8) {

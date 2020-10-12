@@ -1,12 +1,12 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.entity.Player;
@@ -29,7 +29,7 @@ public class IGCMenuFallbackReward extends IGCMenu {
 
         getIb().setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
-        ItemBuilder fallbackPerm = new ItemBuilder(DynamicMaterial.BOOK);
+        ItemBuilder fallbackPerm = new ItemBuilder(XMaterial.BOOK);
         fallbackPerm.setDisplayName("&aPermission");
         fallbackPerm.addLore("&7Current Value:");
         fallbackPerm.addLore("&7" + reward.getFallbackPermission());
@@ -39,7 +39,7 @@ public class IGCMenuFallbackReward extends IGCMenu {
         fallbackPerm.addAutomaticLore("&f", 30, "If a player has this permission and wins this reward," +
                 " they will be given the specified fallback reward instead of this reward.");
 
-        ItemBuilder fallbackReward = new ItemBuilder(DynamicMaterial.DIAMOND);
+        ItemBuilder fallbackReward = new ItemBuilder(XMaterial.DIAMOND);
         fallbackReward.setDisplayName("&aReward");
         fallbackReward.addLore("&7Current Value:");
         fallbackReward.addLore("&7" + reward.getFallbackRewardName());

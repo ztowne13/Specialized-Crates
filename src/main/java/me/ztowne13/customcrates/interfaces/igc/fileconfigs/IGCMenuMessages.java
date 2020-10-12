@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
@@ -7,7 +8,6 @@ import me.ztowne13.customcrates.interfaces.InventoryUtils;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import org.bukkit.entity.Player;
@@ -50,7 +50,7 @@ public class IGCMenuMessages extends IGCMenu {
 //                    properMsg.substring(0, properMsg.length() > msgLoreLength ? msgLoreLength : properMsg.length()) +
 //                            (properMsg.length() > msgLoreLength ? "..." : "")));
 
-            ib.setItem(i, new ItemBuilder(DynamicMaterial.BOOK, 1).setName("&a" + msg.toString().toLowerCase())
+            ib.setItem(i, new ItemBuilder(XMaterial.BOOK, 1).setDisplayName("&a" + msg.toString().toLowerCase())
                     .addAutomaticLore("&f", 30, true, properMsg).addLore("").addLore("")
                     .addAutomaticLore("&f", 30, "Set to 'none' to remove the message."));
             i++;

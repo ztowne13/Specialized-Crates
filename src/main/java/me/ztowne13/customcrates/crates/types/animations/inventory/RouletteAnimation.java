@@ -1,12 +1,12 @@
 package me.ztowne13.customcrates.crates.types.animations.inventory;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.animations.AnimationDataHolder;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -153,15 +154,14 @@ public class RouletteAnimation extends InventoryCrateAnimation {
         try {
             for (String s : fu.get().getStringList("CrateType.Inventory.Roulette.random-blocks")) {
                 try {
-                    DynamicMaterial m;
-                    try {
-                        m = DynamicMaterial.fromString(s.toUpperCase());
-                    } catch (Exception exc) {
+                    Optional<XMaterial> optional = XMaterial.matchXMaterial(s);
+                    if (!optional.isPresent()) {
                         StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_NONEXISTENT
                                 .log(getStatusLogger(), new String[]{s});
                         continue;
                     }
-                    getItems().add(new ItemBuilder(m, 1).setName("&f"));
+
+                    getItems().add(new ItemBuilder(optional.get(), 1).setDisplayName("&f"));
                     StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_SUCCESS
                             .log(getStatusLogger(), new String[]{s});
                 } catch (Exception exc) {

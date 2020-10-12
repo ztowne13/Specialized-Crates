@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
@@ -11,7 +12,6 @@ import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
@@ -35,7 +35,7 @@ public class IGCCrateSounds extends IGCTierMenu {
                         0) + 9));
 
         ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
-        ib.setItem(8, new ItemBuilder(Material.PAPER, 1, 0).setName("&aCreate a new sound").setLore("&7Make sure you save")
+        ib.setItem(8, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aCreate a new sound").setLore("&7Make sure you save")
                 .addLore("&7when you're done."));
 
         if (crates.getSettings().getSounds().getSounds().containsKey(tier)) {
@@ -45,7 +45,7 @@ public class IGCCrateSounds extends IGCTierMenu {
                     i += 4;
                 }
 
-                ib.setItem(i, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&a" + sd.getSound().name())
+                ib.setItem(i, new ItemBuilder(XMaterial.NOTE_BLOCK).setDisplayName("&a" + sd.getSound().name())
                         .setLore("&7Pitch: &f" + sd.getPitch()).addLore("&7Volume: &f" + sd.getVolume()));
                 slots.put(i, sd);
                 i++;
@@ -63,8 +63,7 @@ public class IGCCrateSounds extends IGCTierMenu {
         } else if (slot == 8) {
             new InputMenu(getCc(), getP(), "sound type", "null",
                     "Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/", String.class, this, true);
-        } else if (getIb().getInv().getItem(slot) != null &&
-                getIb().getInv().getItem(slot).getType().equals(Material.NOTE_BLOCK)) {
+        } else if (getIb().getInv().getItem(slot) != null && XMaterial.NOTE_BLOCK.isSimilar(getIb().getInv().getItem(slot))) {
             //SoundData sd = crates.getCs().getCs().getSoundFromName(tier, Sound.valueOf(ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName()).toUpperCase()));
             SoundData sd = slots.get(slot);
             new IGCCrateSound(getCc(), getP(), this, crates, sd, tier).open();
@@ -85,7 +84,7 @@ public class IGCCrateSounds extends IGCTierMenu {
             }
         } else if (value.equalsIgnoreCase("sound pitch")) {
             if (Utils.isInt(input)) {
-                sd.setPitch(Integer.valueOf(input));
+                sd.setPitch(Integer.parseInt(input));
                 new InputMenu(getCc(), getP(), "sound volume", "null", "The volume the sound will play at.", Integer.class,
                         this);
             } else {
@@ -93,7 +92,7 @@ public class IGCCrateSounds extends IGCTierMenu {
             }
         } else if (value.equalsIgnoreCase("sound volume")) {
             if (Utils.isInt(input)) {
-                sd.setVolume(Integer.valueOf(input));
+                sd.setVolume(Integer.parseInt(input));
 
                 cs.getSounds().addSound(tier, sd);
 

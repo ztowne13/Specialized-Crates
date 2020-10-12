@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.options.CRewards;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
@@ -9,7 +10,6 @@ import me.ztowne13.customcrates.interfaces.igc.IGCListEditor;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.igc.items.IGCItemEditor;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
@@ -40,24 +40,24 @@ public class IGCMenuReward extends IGCMenu {
 
         InventoryBuilder ib = createDefault(45);
 
-        getIb().setItem(0, IGCDefaultItems.SAVE_BUTTON.getIb().setName("&aSave the reward to file")
+        getIb().setItem(0, IGCDefaultItems.SAVE_BUTTON.getIb().setDisplayName("&aSave the reward to file")
                 .setLore("&7Save your current changes"));
         getIb().setItem(36, IGCDefaultItems.EXIT_BUTTON.getIb());
 
-        ib.setItem(4, new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1).setName("&a" + reward.getRewardName()).addLore("")
+        ib.setItem(4, new ItemBuilder(XMaterial.LIGHT_BLUE_DYE, 1).setDisplayName("&a" + reward.getRewardName()).addLore("")
                 .addAutomaticLore("&e", 40,
                         "The &6&ldisplay &6&lname &6&levery &6&lplayer &6&lsees &e is not NOT the reward name " +
                                 "- that is only an identifier to add rewards to crates. To edit the actual reward display name, please do so in the " +
                                 "display-item editor."));
         ib.setItem(8,
-                new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&cDelete this reward")
+                new ItemBuilder(XMaterial.RED_CARPET, 1).setDisplayName("&cDelete this reward")
                         .addAutomaticLore("&7", 30, "You will have to confirm before deleting."));
 
         //Commands
         ItemBuilder commands =
-                new ItemBuilder(reward.getCommands() == null || reward.getCommands().isEmpty() ? DynamicMaterial.RED_DYE :
-                        DynamicMaterial.COMMAND_BLOCK, 1)
-                        .setName("&aEdit the commands")
+                new ItemBuilder(reward.getCommands() == null || reward.getCommands().isEmpty() ? XMaterial.RED_DYE :
+                        XMaterial.COMMAND_BLOCK, 1)
+                        .setDisplayName("&aEdit the commands")
                         .setLore("&7Current value: ");
         if (reward.getCommands() != null && !reward.getCommands().isEmpty()) {
             for (String cmds : reward.getCommands()) {
@@ -82,23 +82,23 @@ public class IGCMenuReward extends IGCMenu {
         // Chance
         ib.setItem(23,
                 new ItemBuilder(
-                        reward.getChance() == null || reward.getChance() == 0 ? DynamicMaterial.RED_DYE :
-                                DynamicMaterial.FISHING_ROD,
+                        reward.getChance() == null || reward.getChance() == 0 ? XMaterial.RED_DYE :
+                                XMaterial.FISHING_ROD,
                         1)
-                        .setName("&aEdit the chance").setLore("&7Current value: ")
+                        .setDisplayName("&aEdit the chance").setLore("&7Current value: ")
                         .addLore("&7" + getName(reward.getChance() == 0 ? null : (reward.getChance() + ""))).addLore("")
                         .addAutomaticLore("&f", 30, "This is the actual chance of the lore."));
 
         // Rarity Level (Tier)
         ib.setItem(24,
-                new ItemBuilder(DynamicMaterial.DIAMOND_BLOCK, 1)
-                        .setName("&aEdit the rarity level")
+                new ItemBuilder(XMaterial.DIAMOND_BLOCK, 1)
+                        .setDisplayName("&aEdit the rarity level")
                         .setLore("&7Current value: ")
                         .addLore("&7" + getName(reward.getRarity())).addLore("").addAutomaticLore("&f", 30,
                         "This is the 'tier' of the reward. If you aren't using tiers, ignore this."));
 
         // Give display item
-        ItemBuilder giveDisplayItem = new ItemBuilder(DynamicMaterial.ITEM_FRAME, 1);
+        ItemBuilder giveDisplayItem = new ItemBuilder(XMaterial.ITEM_FRAME, 1);
         giveDisplayItem.setDisplayName("&aGive the Display Item");
         giveDisplayItem.addLore("&7Current value: ");
         giveDisplayItem.addLore("&7" + reward.isGiveDisplayItem());
@@ -108,7 +108,7 @@ public class IGCMenuReward extends IGCMenu {
         ib.setItem(31, giveDisplayItem);
 
         // Give display item lore
-        ItemBuilder giveDisplayItemLore = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        ItemBuilder giveDisplayItemLore = new ItemBuilder(XMaterial.PAPER, 1);
         giveDisplayItemLore.setDisplayName("&aGive the Display Item with Lore");
         giveDisplayItemLore.addLore("&7Current value: ");
         giveDisplayItemLore.addLore("&7" + reward.isGiveDisplayItemLore());
@@ -118,7 +118,7 @@ public class IGCMenuReward extends IGCMenu {
         ib.setItem(32, giveDisplayItemLore);
 
         // Give display item name
-        ItemBuilder giveDisplayItemName = new ItemBuilder(DynamicMaterial.BOOK, 1);
+        ItemBuilder giveDisplayItemName = new ItemBuilder(XMaterial.BOOK, 1);
         giveDisplayItemName.setDisplayName("&aGive the Display Item with its Name");
         giveDisplayItemName.addLore("&7Current value: ");
         giveDisplayItemName.addLore("&7" + reward.isGiveDisplayItemName());
@@ -128,7 +128,7 @@ public class IGCMenuReward extends IGCMenu {
         ib.setItem(33, giveDisplayItemName);
 
         // Fallback reward
-        ItemBuilder fallbackReward = new ItemBuilder(DynamicMaterial.DIAMOND);
+        ItemBuilder fallbackReward = new ItemBuilder(XMaterial.DIAMOND);
         fallbackReward.setDisplayName("&aFallback Reward Settings");
         fallbackReward.addLore("");
         fallbackReward.addAutomaticLore("&f", 30, "Specify the fallback reward permission and" +
@@ -149,7 +149,7 @@ public class IGCMenuReward extends IGCMenu {
                 up();
             } else {
                 try {
-                    ItemBuilder builder = new ItemBuilder(getIb().getInv().getItem(slot)).setName("&cConfirm deletion")
+                    ItemBuilder builder = new ItemBuilder(getIb().getInv().getItem(slot)).setDisplayName("&cConfirm deletion")
                             .setLore("&7Crates that use this reward:");
                     boolean none = true;
                     for (String s : reward.delete(false).replace("[", "").replace("]", "").split(", ")) {
@@ -166,7 +166,7 @@ public class IGCMenuReward extends IGCMenu {
             }
         } else if (slot == 22) {
             new IGCListEditor(getCc(), getP(), this, "Commands Editor", "Command", reward.getCommands(),
-                    DynamicMaterial.COMMAND_BLOCK, 1).open();
+                    XMaterial.COMMAND_BLOCK, 1).open();
         } else if (slot == 11) {
             new IGCItemEditor(getCc(), getP(), this, reward.getSaveBuilder()).open();
         } else if (slot == 23) {
@@ -186,7 +186,7 @@ public class IGCMenuReward extends IGCMenu {
             new IGCMenuFallbackReward(getCc(), getP(), this, reward).open();
         } else if (slot == 0) {
             ItemBuilder b = new ItemBuilder(getIb().getInv().getItem(slot));
-            b.setName("&4&lERROR! &cPlease configure the");
+            b.setDisplayName("&4&lERROR! &cPlease configure the");
             if (reward.getRewardName() == null) {
                 b.setLore("&creward name.");
             } else if (reward.getSaveBuilder() == null) {
@@ -196,7 +196,7 @@ public class IGCMenuReward extends IGCMenu {
             } else if (reward.getRarity() == null) {
                 b.setLore("&crarity.");
             } else {
-                b.setName("&2SUCCESS");
+                b.setDisplayName("&2SUCCESS");
                 b.setLore("&7Please reload the plugin for").addLore("&7these changes to take effect.");
                 reward.writeToFile();
             }
@@ -208,7 +208,7 @@ public class IGCMenuReward extends IGCMenu {
                     .equalsIgnoreCase("Are you sure?")) {
                 up();
             } else {
-                getIb().setItem(27, new ItemBuilder(getIb().getInv().getItem(slot)).setName("&4Are you sure?")
+                getIb().setItem(27, new ItemBuilder(getIb().getInv().getItem(slot)).setDisplayName("&4Are you sure?")
                         .setLore("&cYou have unsaved changes.").addLore("&7The changes will only be")
                         .addLore("&7temporary if not saved later").addLore("&7and will delete upon reload."));
             }

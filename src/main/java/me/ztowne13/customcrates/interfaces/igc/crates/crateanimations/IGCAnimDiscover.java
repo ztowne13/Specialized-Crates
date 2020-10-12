@@ -1,16 +1,15 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -29,22 +28,22 @@ public class IGCAnimDiscover extends IGCAnimation {
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 
         ib.setItem(2,
-                new ItemBuilder(Material.BOOK, 1, 0).setName("&ainv-name").setLore(getcVal() + getString("inv-name"))
+                new ItemBuilder(XMaterial.BOOK).setDisplayName("&ainv-name").setLore(getcVal() + getString("inv-name"))
                         .addLore("").addAutomaticLore("&f", 30,
                         "The name of the inventory when the animation runs. This is overwritten by the crate's 'inv-name' value, if it exists."));
-        ib.setItem(4, new ItemBuilder(Material.PAPER, 1, 0).setName("&ainventory-rows")
+        ib.setItem(4, new ItemBuilder(XMaterial.PAPER).setDisplayName("&ainventory-rows")
                 .setLore(getcVal()).addLore("&7" + getString("inventory-rows")).addLore("")
                 .addAutomaticLore("&f", 30,
                         "The amount of rows in the inventory."));
-        ib.setItem(5, new ItemBuilder(Material.PAPER, 1, 0).setName("&aminimum-rewards")
+        ib.setItem(5, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aminimum-rewards")
                 .setLore(getcVal()).addLore("&7" + getString("minimum-rewards")).addLore("")
                 .addAutomaticLore("&f", 30,
                         "The minimum amount of rewards that could appear in the menu. Set to the same amount as the maximum-rewards for it to be the same amount every time."));
-        ib.setItem(6, new ItemBuilder(Material.PAPER, 1, 0).setName("&amaximum-rewards")
+        ib.setItem(6, new ItemBuilder(XMaterial.PAPER).setDisplayName("&amaximum-rewards")
                 .setLore(getcVal()).addLore("&7" + getString("maximum-rewards")).addLore("")
                 .addAutomaticLore("&f", 30,
                         "The maximum amount of rewards that could appear in the menu. Set to the same amount as the minimum-rewards for it to be the same amount every time."));
-        ib.setItem(7, new ItemBuilder(Material.PAPER, 1, 0).setName("&arandom-display-duration")
+        ib.setItem(7, new ItemBuilder(XMaterial.PAPER).setDisplayName("&arandom-display-duration")
                 .setLore(getcVal()).addLore("&7" + getString("random-display-duration")).addLore("")
                 .addAutomaticLore("&f", 30, "The duration in which the 'shuffling' animation will play for."));
 
@@ -54,52 +53,52 @@ public class IGCAnimDiscover extends IGCAnimation {
         } catch (Exception exc) {
 
         }
-        ib.setItem(11, new ItemBuilder(b ? DynamicMaterial.LIME_WOOL : DynamicMaterial.RED_WOOL, 1).setName("&acount")
+        ib.setItem(11, new ItemBuilder(b ? XMaterial.LIME_WOOL : XMaterial.RED_WOOL).setDisplayName("&acount")
                 .setLore(getcVal()).addLore("&7" + b).addLore("")
                 .addAutomaticLore("&f", 30,
                         "Whether or not the cover-block's should display numbers. (i.e. whether they should be stacked items)."));
-        ib.setItem(12, new ItemBuilder(Material.ENDER_CHEST, 1, 0).setName("&acover-block")
+        ib.setItem(12, new ItemBuilder(XMaterial.ENDER_CHEST).setDisplayName("&acover-block")
                 .setLore(getcVal()).addLore("&7" + getString("cover-block")).addLore("")
                 .addAutomaticLore("&f", 30,
                         "The block that the player will have to click to chose the random reward."));
 
-        ib.setItem(14, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&atick-sound")
+        ib.setItem(14, new ItemBuilder(XMaterial.NOTE_BLOCK).setDisplayName("&atick-sound")
                 .setLore(getcVal()).addLore("&7" + getString("tick-sound")).addLore("").addAutomaticLore("&f", 30,
                         "The sound that is played every time the inventory updates. Set to 'none' to have no sound."));
-        ib.setItem(15, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&aclick-sound")
+        ib.setItem(15, new ItemBuilder(XMaterial.NOTE_BLOCK).setDisplayName("&aclick-sound")
                 .setLore(getcVal()).addLore("&7" + getString("click-sound")).addLore("").addAutomaticLore("&f", 30,
                         "The sound that is played every time the player click's a cover block. Set to 'none' to have no sound."));
-        ib.setItem(16, new ItemBuilder(Material.NOTE_BLOCK, 1, 0).setName("&auncover-sound")
+        ib.setItem(16, new ItemBuilder(XMaterial.NOTE_BLOCK).setDisplayName("&auncover-sound")
                 .setLore(getcVal()).addLore("&7" + getString("uncover-sound")).addLore("").addAutomaticLore("&f", 30,
                         "The sound that is played every time the player uncovers a reward. Set to 'none' to have no sound."));
 
         // cover-block-name
-        ItemBuilder coverBlockName = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        ItemBuilder coverBlockName = new ItemBuilder(XMaterial.PAPER, 1);
         coverBlockName.setDisplayName("&acover-block-name");
         coverBlockName.addLore(getcVal()).addLore("&7" + getString("cover-block-name")).addLore("");
         coverBlockName.addAutomaticLore("&f", 30, "The name of all the blocks before the user clicks anything. Use %number% for the number reward it is.");
 
-        ItemBuilder coverBlockLore = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        ItemBuilder coverBlockLore = new ItemBuilder(XMaterial.PAPER, 1);
         coverBlockLore.setDisplayName("&acover-block-lore");
         coverBlockLore.addLore(getcVal()).addLore("&7" + getString("cover-block-lore")).addLore("");
         coverBlockLore.addAutomaticLore("&f", 30, "The lore of all the blocks before the user clicks them. Use %remaining-clicks% for the number of rewards remaining for the player to choose.");
 
-        ItemBuilder rewardBlock = new ItemBuilder(DynamicMaterial.LIME_STAINED_GLASS, 1);
+        ItemBuilder rewardBlock = new ItemBuilder(XMaterial.LIME_STAINED_GLASS, 1);
         rewardBlock.setDisplayName("&areward-block");
         rewardBlock.addLore(getcVal()).addLore("&7" + getString("reward-block")).addLore("");
         rewardBlock.addAutomaticLore("&f", 30, "The block that will be shown when a cover block is clicked.");
 
-        ItemBuilder rewardBlockName = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        ItemBuilder rewardBlockName = new ItemBuilder(XMaterial.PAPER, 1);
         rewardBlockName.setDisplayName("&areward-block-name");
         rewardBlockName.addLore(getcVal()).addLore("&7" + getString("reward-block-name")).addLore("");
         rewardBlockName.addAutomaticLore("&f", 30, "The name of the reward block when it's shuffling.");
 
-        ItemBuilder rewardBlockWaitingName = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        ItemBuilder rewardBlockWaitingName = new ItemBuilder(XMaterial.PAPER, 1);
         rewardBlockWaitingName.setDisplayName("&areward-block-waiting-name");
         rewardBlockWaitingName.addLore(getcVal()).addLore("&7" + getString("reward-block-waiting-name")).addLore("");
         rewardBlockWaitingName.addAutomaticLore("&f", 30, "The name of the reward block while it's waiting for the player to select all their rewards.");
 
-        ItemBuilder rewardBlockUnlockName = new ItemBuilder(DynamicMaterial.PAPER, 1);
+        ItemBuilder rewardBlockUnlockName = new ItemBuilder(XMaterial.PAPER, 1);
         rewardBlockUnlockName.setDisplayName("&areward-block-unlock-name");
         rewardBlockUnlockName.addLore(getcVal()).addLore("&7" + getString("reward-block-unlock-name")).addLore("");
         rewardBlockUnlockName.addAutomaticLore("&f", 30, "The name of the reward block when the user is supposed to get their final reward.");
@@ -143,7 +142,7 @@ public class IGCAnimDiscover extends IGCAnimation {
                 boolean b = !Boolean.parseBoolean(getString("count"));
                 fc.set(getPath("count"), b);
                 getIb().setItem(20,
-                        new ItemBuilder(b ? DynamicMaterial.LIME_WOOL : DynamicMaterial.RED_WOOL, 1).setName("&acount")
+                        new ItemBuilder(b ? XMaterial.LIME_WOOL : XMaterial.RED_WOOL, 1).setDisplayName("&acount")
                                 .setLore(getcVal() + b).addLore("").addLore("&7Do the 'cover-block's display numbers?"));
                 break;
             case 12:

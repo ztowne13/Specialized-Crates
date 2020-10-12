@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.Settings;
 import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
@@ -11,7 +12,6 @@ import me.ztowne13.customcrates.interfaces.igc.IGCListEditor;
 import me.ztowne13.customcrates.interfaces.igc.IGCListSelector;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
@@ -38,8 +38,8 @@ public class IGCMenuConfigCategory extends IGCMenu {
         super(cc, p, lastMenu, "&7&l> &6&l" + category.getShortTitle());
 
         this.category = category;
-        red = new ItemBuilder(DynamicMaterial.RED_WOOL, 1);
-        green = new ItemBuilder(DynamicMaterial.LIME_WOOL, 1);
+        red = new ItemBuilder(XMaterial.RED_WOOL, 1);
+        green = new ItemBuilder(XMaterial.LIME_WOOL, 1);
     }
 
     @Override
@@ -113,13 +113,13 @@ public class IGCMenuConfigCategory extends IGCMenu {
                 slotsWithBoolean.add(i);
             } else {
                 boolean isCollection = val instanceof Collection;
-                DynamicMaterial material;
+                XMaterial material;
                 if (val instanceof Collection) {
-                    material = DynamicMaterial.LIGHT_BLUE_WOOL;
+                    material = XMaterial.LIGHT_BLUE_WOOL;
                 } else if (settingsValue.getListValues() != null) {
-                    material = DynamicMaterial.MAGENTA_WOOL;
+                    material = XMaterial.MAGENTA_WOOL;
                 } else {
-                    material = DynamicMaterial.ORANGE_WOOL;
+                    material = XMaterial.ORANGE_WOOL;
                 }
 
                 ItemBuilder newBuilder = new ItemBuilder(material);
@@ -166,26 +166,26 @@ public class IGCMenuConfigCategory extends IGCMenu {
             if (VersionUtils.Version.v1_12.isServerVersionOrEarlier()) {
                 item.getStack().setDurability((byte) (item.getStack().getDurability() == 5 ? 14 : 5));
             } else {
-                if (DynamicMaterial.RED_WOOL.isSameMaterial(item.getStack()))
-                    item.getStack().setType(DynamicMaterial.LIME_WOOL.parseMaterial());
+                if (XMaterial.RED_WOOL.isSimilar(item.getStack()))
+                    item.getStack().setType(XMaterial.LIME_WOOL.parseMaterial());
                 else
-                    item.getStack().setType(DynamicMaterial.RED_WOOL.parseMaterial());
+                    item.getStack().setType(XMaterial.RED_WOOL.parseMaterial());
             }
 
             getIb().setItem(slot, item);
 
-            sv.setValue(getCc(), item.getStack().getDurability() == 5 || DynamicMaterial.LIME_WOOL.isSameMaterial(item.getStack()));
+            sv.setValue(getCc(), item.getStack().getDurability() == 5 || XMaterial.LIME_WOOL.isSimilar(item.getStack()));
 
             open();
-        } else if (DynamicMaterial.ORANGE_WOOL.isSameMaterial(inv.getItem(slot))) {
+        } else if (XMaterial.ORANGE_WOOL.isSimilar(inv.getItem(slot))) {
             SettingsValue sv = SettingsValue.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(1));
 
             new InputMenu(getCc(), getP(), sv.getPath(), sv.getValue(getCc()).toString(), sv.getObj(), this, !sv.isWithColor());
-        } else if (DynamicMaterial.LIGHT_BLUE_WOOL.isSameMaterial(inv.getItem(slot))) {
+        } else if (XMaterial.LIGHT_BLUE_WOOL.isSimilar(inv.getItem(slot))) {
             SettingsValue sv = SettingsValue.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(1));
             new IGCListEditor(getCc(), getP(), this, "inv-reward-item-lore", "Line", (List<String>) sv.getValue(getCc()),
-                    DynamicMaterial.BOOK, 1).open();
-        } else if (DynamicMaterial.MAGENTA_WOOL.isSameMaterial(inv.getItem(slot))) {
+                    XMaterial.BOOK, 1).open();
+        } else if (XMaterial.MAGENTA_WOOL.isSimilar(inv.getItem(slot))) {
             SettingsValue sv = SettingsValue.getByPath(ChatUtils.removeColorFrom(item.getLore()).get(1));
 
             List<String> values;
@@ -195,8 +195,8 @@ public class IGCMenuConfigCategory extends IGCMenu {
                 values = Arrays.asList(sv.getListValues());
                 descriptors = Arrays.asList(sv.getListValueDescriptors());
             } else {
-                values = new ArrayList<String>();
-                descriptors = new ArrayList<String>();
+                values = new ArrayList<>();
+                descriptors = new ArrayList<>();
                 for (Crate crate : Crate.getLoadedCrates().values()) {
                     if (crate.isMultiCrate()) {
                         values.add(crate.getName());
@@ -206,7 +206,7 @@ public class IGCMenuConfigCategory extends IGCMenu {
             }
 
             new IGCListSelector(getCc(), getP(), this, sv.getPath(), values,
-                    DynamicMaterial.BOOK, 1, descriptors).open();
+                    XMaterial.BOOK, 1, descriptors).open();
         } else {
             if (slot == getIb().getInv().getSize() - 9) {
                 up();

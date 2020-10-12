@@ -1,8 +1,8 @@
 package me.ztowne13.customcrates.crates.options.rewards;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.items.CompressedPotionEffect;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class RewardConverter {
     Reward reward;
@@ -39,18 +40,20 @@ public class RewardConverter {
         boolean success = true;
         reward.needsMoreConfig = false;
 
-        try {
-            String unsplitMat = reward.getFc().getString(reward.getPath("item"));
-            DynamicMaterial m = DynamicMaterial.fromString(unsplitMat);
+        String unsplitMat = reward.getFc().getString(reward.getPath("item"));
+        Optional<XMaterial> optional = XMaterial.matchXMaterial(unsplitMat);
 
-            if (m.equals(DynamicMaterial.AIR)) {
+        if (optional.isPresent()) {
+            XMaterial m = optional.get();
+
+            if (m.equals(XMaterial.AIR)) {
                 StatusLoggerEvent.REWARD_ITEM_AIR.log(reward.getCr().getCrate(), new String[]{this.toString()});
                 return false;
             }
 
             reward.saveBuilder = new SaveableItemBuilder(m, 1);
-        } catch (Exception exc) {
-            exc.printStackTrace();
+        } else {
+            // TODO: Something here to indicate that the material is invalid
             return false;
         }
 

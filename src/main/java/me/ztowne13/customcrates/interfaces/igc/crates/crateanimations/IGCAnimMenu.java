@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates.crateanimations;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
@@ -9,7 +10,6 @@ import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -33,18 +33,18 @@ public class IGCAnimMenu extends IGCAnimation {
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
         ib.setItem(2,
-                new ItemBuilder(Material.BOOK, 1, 0).setName("&ainv-name").addLore(getcVal() + getString("inv-name"))
+                new ItemBuilder(XMaterial.BOOK).setDisplayName("&ainv-name").addLore(getcVal() + getString("inv-name"))
                         .addLore("").addAutomaticLore("&f", 30,
                         "The name of the inventory when the animation runs. This is overwritten by the crate's 'inv-name' value, if it exists."));
-        ib.setItem(4, new ItemBuilder(Material.PAPER, 1, 0).setName("&ainventory-rows")
+        ib.setItem(4, new ItemBuilder(XMaterial.PAPER).setDisplayName("&ainventory-rows")
                 .addLore(getcVal()).addLore("&7" + getString("inventory-rows")).addLore("")
                 .addAutomaticLore("&f", 30,
                         "The amount of rows that the inventory will have for random items to spawn on."));
-        ib.setItem(5, new ItemBuilder(Material.PAPER, 1, 0).setName("&aminimum-rewards")
+        ib.setItem(5, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aminimum-rewards")
                 .addLore(getcVal()).addLore("&7" + getString("minimum-rewards")).addLore("")
                 .addAutomaticLore("&f", 30,
                         "The minimum amount of rewards that could appear in the menu. Set to the same amount as the maximum-rewards for it to be the same amount every time."));
-        ib.setItem(6, new ItemBuilder(Material.PAPER, 1, 0).setName("&amaximum-rewards")
+        ib.setItem(6, new ItemBuilder(XMaterial.PAPER).setDisplayName("&amaximum-rewards")
                 .addLore(getcVal()).addLore("&7" + getString("maximum-rewards")).addLore("")
                 .addAutomaticLore("&f", 30,
                         "The maximum amount of rewards that could appear in the menu. Set to the same amount as the minimum-rewards for it to be the same amount every time."));

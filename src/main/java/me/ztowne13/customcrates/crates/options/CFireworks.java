@@ -87,7 +87,7 @@ public class CFireworks extends CSetting {
         ItemBuilder ib = new ItemBuilder(stack);
 
         String lastLine = "";
-        for (String line : ib.im().getLore())
+        for (String line : ib.getItemMeta().getLore())
             lastLine = line;
 
         for (FireworkData fd : getFireworks().get(tier)) {

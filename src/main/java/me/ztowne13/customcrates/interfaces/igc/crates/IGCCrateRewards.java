@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
@@ -9,10 +10,8 @@ import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCMenuAddReward;
 import me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards.IGCMenuRewards;
-import me.ztowne13.customcrates.interfaces.items.DynamicMaterial;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -33,7 +32,7 @@ public class IGCCrateRewards extends IGCMenuCrate {
 
         int slots = 0;
 
-        if (!(cs.getRewards().getCrateRewards() == null)) {
+        if (cs.getRewards().getCrateRewards() != null) {
             if (cs.getRewards().getCrateRewards().length - ((page - 1) * 30) > 30) {
                 slots = 54;
             } else {
@@ -50,16 +49,16 @@ public class IGCCrateRewards extends IGCMenuCrate {
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
         if (!deleteMode) {
-            getIb().setItem(8, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&aEnable 'remove' mode")
+            getIb().setItem(8, new ItemBuilder(XMaterial.RED_CARPET).setDisplayName("&aEnable 'remove' mode")
                     .setLore("&7By enabling 'remove' mode").addLore("&7you can just click on rewards")
                     .addLore("&7to remove "));
         } else {
-            getIb().setItem(8, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&cDisable 'remove' mode")
+            getIb().setItem(8, new ItemBuilder(XMaterial.RED_CARPET).setDisplayName("&cDisable 'remove' mode")
                     .setLore("&7This will stop you from").addLore("&7removing rewards"));
         }
-        ib.setItem(17, new ItemBuilder(Material.PAPER, 1, 0).setName("&aAdd a reward to this crate")
+        ib.setItem(17, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aAdd a reward to this crate")
                 .setLore("&7Reminder: you must save for").addLore("&7any changes to take effect."));
-        ib.setItem(26, new ItemBuilder(DynamicMaterial.LIGHT_BLUE_DYE, 1).setName("&aGo to the reward editor")
+        ib.setItem(26, new ItemBuilder(XMaterial.LIGHT_BLUE_DYE).setDisplayName("&aGo to the reward editor")
                 .setLore("&7This is a shortcut to the reward").addLore("&7menu so you can create rewards")
                 .addLore("&7without jumping around the menus."));
 
@@ -79,7 +78,7 @@ public class IGCCrateRewards extends IGCMenuCrate {
                     i += 4;
                 }
 
-                ib.setItem(i, new ItemBuilder(r.getDisplayBuilder()).setName("&a" + r.getRewardName())
+                ib.setItem(i, new ItemBuilder(r.getDisplayBuilder()).setDisplayName("&a" + r.getRewardName())
                         .setLore("&7- " + r.getDisplayName(true)).addLore("&7- " + r.getChance())
                         .addLore("&7- " + r.getRarity()));
                 i++;
@@ -87,11 +86,11 @@ public class IGCCrateRewards extends IGCMenuCrate {
             }
 
             if (page != 1) {
-                ib.setItem(9, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo up a page"));
+                ib.setItem(9, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo up a page"));
             }
 
             if ((cs.getRewards().getCrateRewards().length / 30) + 1 != page) {
-                ib.setItem(18, new ItemBuilder(Material.ARROW, 1, 0).setName("&aGo down a page"));
+                ib.setItem(18, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo down a page"));
             }
 
         }
@@ -115,11 +114,11 @@ public class IGCCrateRewards extends IGCMenuCrate {
         } else if (slot == 8) {
             deleteMode = !deleteMode;
             if (!deleteMode) {
-                getIb().setItem(8, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&aEnable 'remove' mode")
+                getIb().setItem(8, new ItemBuilder(XMaterial.RED_CARPET).setDisplayName("&aEnable 'remove' mode")
                         .setLore("&7By enabling 'remove' mode").addLore("&7you can just click on rewards")
                         .addLore("&7to remove "));
             } else {
-                getIb().setItem(8, new ItemBuilder(DynamicMaterial.RED_CARPET, 1).setName("&cDisable 'remove' mode")
+                getIb().setItem(8, new ItemBuilder(XMaterial.RED_CARPET).setDisplayName("&cDisable 'remove' mode")
                         .setLore("&7This will stop you from").addLore("&7removing rewards"));
             }
         } else if (slot == 17) {
