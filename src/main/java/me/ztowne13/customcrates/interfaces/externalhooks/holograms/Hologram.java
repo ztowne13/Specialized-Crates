@@ -17,8 +17,6 @@ public abstract class Hologram {
 
     public abstract void setLine(int i, String line);
 
-    public abstract void update();
-
     public abstract void delete();
 
     public SpecializedCrates getCustomCrates() {

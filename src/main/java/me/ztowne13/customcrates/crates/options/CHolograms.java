@@ -213,26 +213,6 @@ public class CHolograms extends CSetting {
     }
 
     public DynamicHologram getLoadedInstance(PlacedCrate cm) {
-        // TODO: Remove this comment and create more HologramManager
-//        if(getCc().isOnlyUseBuildInHolograms())
-//        {
-//            Utils.addToInfoLog(getCc(), "Hologram Plugin", "Built in hologram support");
-//            return new NativeHologram(getCc(),cm);
-//        }
-//        if (Utils.isPLInstalled("HolographicDisplays")) {
-//            Utils.addToInfoLog(getSc(), "Hologram Plugin", "HolographicDisplays");
-//            return new HolographicDisplaysHologram(getSc(), cm);
-//        } else if (Utils.isPLInstalled("Holograms")) {
-//            Utils.addToInfoLog(getSc(), "Hologram Plugin", "Holograms");
-//            return new SaintXHologram(getSc(), cm);
-//        } else if (Utils.isPLInstalled("CMI")) {
-//            Utils.addToInfoLog(getSc(), "Hologram Plugin", "CMI");
-//            return new ZripsHologram(getSc(), cm);
-//        }
-//
-//
-//        Utils.addToInfoLog(getSc(), "Hologram Plugin", "None");
-//        return new NoHologram(getSc(), cm);
         return new DynamicHologram(getSc(), cm);
     }
 

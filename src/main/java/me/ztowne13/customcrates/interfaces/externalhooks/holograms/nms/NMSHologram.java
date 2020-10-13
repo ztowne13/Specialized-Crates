@@ -33,7 +33,7 @@ import java.util.List;
  * <p>
  * Thank you! o/
  */
-public class HologramNMS extends Hologram {
+public class NMSHologram extends Hologram {
 
     private static Class<?> craftWorld;
     private static Class<?> entityClass;
@@ -60,7 +60,7 @@ public class HologramNMS extends Hologram {
     private final double offset = 0.23D;
     private List<String> lines = new ArrayList<>();
 
-    public HologramNMS(SpecializedCrates cc, Location location) {
+    public NMSHologram(SpecializedCrates cc, Location location) {
         super(cc, location);
     }
 
@@ -177,12 +177,12 @@ public class HologramNMS extends Hologram {
     private void spawnHologram(String text, Location location) {
         try {
             // The ArmorStand
-            Object craftWorld = HologramNMS.craftWorld.cast(location.getWorld());
-            Object entityObject = armorStand.getConstructor(nmsWorld).newInstance(HologramNMS.craftWorld.getMethod("getHandle").invoke(craftWorld));
+            Object craftWorld = NMSHologram.craftWorld.cast(location.getWorld());
+            Object entityObject = armorStand.getConstructor(nmsWorld).newInstance(NMSHologram.craftWorld.getMethod("getHandle").invoke(craftWorld));
 
             configureHologram(entityObject, text, location);
 
-            HologramNMS.craftWorld.getMethod("addEntity", entityClass, CreatureSpawnEvent.SpawnReason.class).invoke(craftWorld, entityObject, CreatureSpawnEvent.SpawnReason.CUSTOM);
+            NMSHologram.craftWorld.getMethod("addEntity", entityClass, CreatureSpawnEvent.SpawnReason.class).invoke(craftWorld, entityObject, CreatureSpawnEvent.SpawnReason.CUSTOM);
 
             entities.add(entityObject);
         } catch (Exception ex) {
@@ -200,9 +200,9 @@ public class HologramNMS extends Hologram {
 
     private void removeEntity(Object entity) {
         try {
-            Object craftWorld = HologramNMS.craftWorld.cast(location.getWorld());
+            Object craftWorld = NMSHologram.craftWorld.cast(location.getWorld());
 
-            nmsWorld.getMethod("removeEntity", entityClass).invoke(HologramNMS.craftWorld.getMethod("getHandle").invoke(craftWorld), entity);
+            nmsWorld.getMethod("removeEntity", entityClass).invoke(NMSHologram.craftWorld.getMethod("getHandle").invoke(craftWorld), entity);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

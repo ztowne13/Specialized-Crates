@@ -6,28 +6,28 @@ import org.bukkit.Location;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class HologramManager<T extends Hologram> {
+public abstract class HologramManager {
     private final SpecializedCrates customCrates;
 
-    protected List<T> holograms;
+    protected List<Hologram> holograms;
 
     public HologramManager(SpecializedCrates customCrates) {
         this.customCrates = customCrates;
         holograms = new ArrayList<>();
     }
 
-    public abstract T createHologram(Location location);
+    public abstract Hologram createHologram(Location location);
 
-    public void deleteHologram(T hologram) {
-        holograms.remove(hologram);
+    public void deleteHologram(Hologram hologram) {
         hologram.delete();
+        holograms.remove(hologram);
     }
 
     protected SpecializedCrates getCustomCrates() {
         return customCrates;
     }
 
-    public List<T> getHolograms() {
+    public List<Hologram> getHolograms() {
         return holograms;
     }
 }

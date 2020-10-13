@@ -5,6 +5,7 @@ import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.holograms.animations.HoloAnimType;
 import me.ztowne13.customcrates.crates.options.holograms.animations.HoloAnimation;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.Hologram;
+import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Location;
 
 import java.util.UUID;
@@ -32,6 +33,8 @@ public class DynamicHologram {
     }
 
     public void create(Location l) {
+        l.setY(l.getY() + getCm().getHologram().getHologramOffset() - 1);
+        l = LocationUtils.getLocationCentered(l);
         this.hologram = getCc().getHologramManager().createHologram(l);
     }
 
@@ -49,13 +52,13 @@ public class DynamicHologram {
     }
 
     public void teleport(Location l) {
-        this.hologram.setLocation(l);
+        l.setY(l.getY() + getCm().getHologram().getHologramOffset());
+        this.hologram.setLocation(LocationUtils.getLocationCentered(l));
     }
 
     public void tick() {
-        if (getHa() != null) {
-            if (!cm.getHologram().getPrefixes().isEmpty())
-                getHa().tick();
+        if (getHa() != null && !cm.getHologram().getPrefixes().isEmpty()) {
+            getHa().tick();
         }
     }
 
