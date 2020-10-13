@@ -18,7 +18,6 @@ import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramManag
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramManagerNMS;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.sql.SQLQueryThread;
-import me.ztowne13.customcrates.interfaces.verification.AntiFraudSQLHandler;
 import me.ztowne13.customcrates.listeners.*;
 import me.ztowne13.customcrates.players.PlayerDataManager;
 import me.ztowne13.customcrates.players.PlayerManager;
@@ -47,12 +46,10 @@ public class SpecializedCrates extends JavaPlugin {
     FileHandler dataFile;
     FileHandler sqlFile;
     Settings settings;
-    //UpdateChecker updateChecker;
     HologramManager hologramManager;
     DataHandler dataHandler;
     EconomyHandler economyHandler;
     CommandCrate commandCrate;
-    AntiFraudSQLHandler antiFraudSQLHandler;
     BukkitTask br;
     MetricsLite metricsLite = null;
     PlaceHolderAPIHandler placeHolderAPIHandler = null;
@@ -95,8 +92,6 @@ public class SpecializedCrates extends JavaPlugin {
         setSettings(new Settings(this));
         getSettings().load();
 
-        //updateChecker = new UpdateChecker(this);
-
         registerCommands();
         if (register) {
             registerAll();
@@ -115,8 +110,6 @@ public class SpecializedCrates extends JavaPlugin {
 
         dataHandler.loadFromFile();
         allowTick = true;
-
-        antiFraudSQLHandler = new AntiFraudSQLHandler(this);
 
         getSettings().getInfoToLog().put("Metrics", metricsLite == null ? "&cdisabled" : "&aenabled");
 
@@ -303,9 +296,6 @@ public class SpecializedCrates extends JavaPlugin {
     }
 
     public void tick() {
-        if (!antiFraudSQLHandler.isAuthenticated())
-            return;
-
         if (allowTick) {
             for (PlacedCrate cm : new ArrayList<>(PlacedCrate.getPlacedCrates().values())) {
                 if (cm.isCratesEnabled()) {
@@ -455,11 +445,6 @@ public class SpecializedCrates extends JavaPlugin {
         return alreadyUpdated;
     }
 
-//    public UpdateChecker getUpdateChecker()
-//    {
-//        return updateChecker;
-//    }
-
     public HologramManager getHologramManager() {
         return hologramManager;
     }
@@ -494,10 +479,6 @@ public class SpecializedCrates extends JavaPlugin {
 
     public void setSqlFile(FileHandler sqlFile) {
         this.sqlFile = sqlFile;
-    }
-
-    public AntiFraudSQLHandler getAntiFraudSQLHandler() {
-        return antiFraudSQLHandler;
     }
 
     public EconomyHandler getEconomyHandler() {

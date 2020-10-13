@@ -28,14 +28,6 @@ public class CommandKey extends Commands implements CommandExecutor {
         setCmdSender(commandSender);
 
         if (canExecute(false, true, "customcrates.keys", "specializedcrates.keys")) {
-            if (!cc.getAntiFraudSQLHandler().isAuthenticated()) {
-                msgError("This plugin has been blacklisted because it has been assumed to be on more servers than just the" +
-                        "person who purchased this plugin. If you believe this is in error, please try re-downloading the plugin" +
-                        " (this does not mean deleting the plugin files, just the .jar) and try again. If the issue persists and" +
-                        "you still believe it is in error, please contact the plugin author, Ztowne13.");
-                return false;
-            }
-
             Player p = (Player) commandSender;
             PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
             msg("&7&l> &b&lVirtual &f&lKeys / Crates");
