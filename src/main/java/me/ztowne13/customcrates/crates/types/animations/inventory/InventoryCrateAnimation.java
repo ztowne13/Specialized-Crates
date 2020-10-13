@@ -7,6 +7,7 @@ import me.ztowne13.customcrates.crates.types.animations.CrateAnimation;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
+import org.bukkit.Sound;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
@@ -119,8 +120,11 @@ public abstract class InventoryCrateAnimation extends CrateAnimation {
 
     public void playSound(InventoryAnimationDataHolder dataHolder) {
         if (getTickSound() != null && !dataHolder.isFastTrack()) {
-            dataHolder.getPlayer().playSound(dataHolder.getLocation(), getTickSound().getSound(), getTickSound().getVolume(),
-                    getTickSound().getPitch());
+            Sound sound = getTickSound().getSound().parseSound();
+            if (sound != null) {
+                dataHolder.getPlayer().playSound(dataHolder.getLocation(), sound, getTickSound().getVolume(),
+                        getTickSound().getPitch());
+            }
         }
     }
 

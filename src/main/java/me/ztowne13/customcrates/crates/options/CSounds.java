@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.crates.options;
 
+import com.cryptomorin.xseries.XSound;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
@@ -10,10 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CSounds extends CSetting {
     Map<String, List<SoundData>> sounds = new HashMap<>();
@@ -57,25 +55,24 @@ public class CSounds extends CSetting {
             try {
                 String[] args = sound.replace(" ", "").split(",");
 
-                Sound soundFormatted;
+                SoundData sd;
 
-                try {
-                    soundFormatted = Sound.valueOf(args[0].toUpperCase());
-                } catch (Exception exc) {
+                Optional<XSound> optional = XSound.matchXSound(args[0]);
+                if (optional.isPresent()) {
+                    sd = new SoundData(optional.get());
+                } else {
                     StatusLoggerEvent.SOUND_NONEXISTENT.log(getCrate(), new String[]{sound, args[0]});
                     continue;
                 }
 
-                SoundData sd = new SoundData(soundFormatted);
-
                 try {
-                    Integer pitch = Integer.valueOf(args[1]);
+                    int pitch = Integer.parseInt(args[1]);
                     sd.setPitch(pitch);
                 } catch (Exception exc) {
                     if (args.length > 0) {
-                        StatusLoggerEvent.SOUND_PITCH_INVALID.log(getCrate(), new String[]{soundFormatted.name(), args[1]});
+                        StatusLoggerEvent.SOUND_PITCH_INVALID.log(getCrate(), new String[]{sd.getSound().name(), args[1]});
                     } else {
-                        StatusLoggerEvent.SOUND_PITCH_NONEXISTENT.log(getCrate(), new String[]{soundFormatted.name()});
+                        StatusLoggerEvent.SOUND_PITCH_NONEXISTENT.log(getCrate(), new String[]{sd.getSound().name()});
                     }
                     continue;
                 }
@@ -86,15 +83,15 @@ public class CSounds extends CSetting {
                 } catch (Exception exc) {
                     if (args.length > 1) {
                         StatusLoggerEvent.SOUND_VOLUME_INVALID
-                                .log(getCrate(), new String[]{soundFormatted.name(), args[2]});
+                                .log(getCrate(), new String[]{sd.getSound().name(), args[2]});
                     } else {
-                        StatusLoggerEvent.SOUND_VOLUME_NONEXISTENT.log(getCrate(), new String[]{soundFormatted.name()});
+                        StatusLoggerEvent.SOUND_VOLUME_NONEXISTENT.log(getCrate(), new String[]{sd.getSound().name()});
                     }
                     continue;
                 }
 
                 addSound(id, sd);
-                StatusLoggerEvent.SOUND_ADD_SUCCESS.log(getCrate(), new String[]{soundFormatted.name()});
+                StatusLoggerEvent.SOUND_ADD_SUCCESS.log(getCrate(), new String[]{sd.getSound().name()});
             } catch (Exception exc) {
                 StatusLoggerEvent.SOUND_ADD_IMPROPER_SETUP.log(getCrate(), new String[]{sound});
                 exc.printStackTrace();

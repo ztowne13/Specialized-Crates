@@ -1,32 +1,36 @@
 package me.ztowne13.customcrates.crates.options.sounds;
 
+import com.cryptomorin.xseries.XSound;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class SoundData {
-    Sound sound;
+    XSound sound;
     int volume;
     int pitch = 5;
 
-    public SoundData(Sound sound) {
+    public SoundData(XSound sound) {
         this(sound, 5);
     }
 
-    public SoundData(Sound sound, int volume) {
+    public SoundData(XSound sound, int volume) {
         setSound(sound);
         this.volume = volume;
     }
 
     public void playTo(Player p, Location l) {
-        p.playSound(l, getSound(), getVolume(), getPitch());
+        Sound parsedSound = getSound().parseSound();
+        if (parsedSound != null) {
+            p.playSound(l, parsedSound, volume, pitch);
+        }
     }
 
-    public Sound getSound() {
+    public XSound getSound() {
         return sound;
     }
 
-    public void setSound(Sound sound) {
+    public void setSound(XSound sound) {
         this.sound = sound;
     }
 
