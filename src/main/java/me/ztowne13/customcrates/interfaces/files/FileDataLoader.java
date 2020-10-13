@@ -1,12 +1,12 @@
 package me.ztowne13.customcrates.interfaces.files;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLogger;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Sound;
 
 import java.util.Optional;
 
@@ -58,17 +58,16 @@ public class FileDataLoader {
                                StatusLoggerEvent pitchInvalid) {
         if (!fileHandler.get().contains(path)) {
             pathDoesntExist.log(statusLogger, new String[]{path});
-            return new SoundData(Sound.values()[0], 0);
+            return new SoundData(XSound.values()[0], 0);
         }
 
         String value = fileHandler.get().getString(path);
 
-        try {
+        String[] args = value.replaceAll("\\s+", "").split(",");
 
-            String[] args = value.replaceAll("\\s+", "").split(",");
-
-            SoundData sd = new SoundData(Sound.valueOf(args[0].toUpperCase()));
-
+        Optional<XSound> optional = XSound.matchXSound(args[0]);
+        if (optional.isPresent()) {
+            SoundData sd = new SoundData(optional.get());
             soundSuccess.log(statusLogger);
 
             if (args.length >= 2) {
@@ -98,11 +97,11 @@ public class FileDataLoader {
             }
 
             return sd;
-        } catch (Exception exc) {
+        } else {
             soundFailure.log(statusLogger);
         }
 
-        return new SoundData(Sound.values()[0], 0);
+        return new SoundData(XSound.values()[0], 0);
     }
 
     public int loadInt(String path, int defValue, StatusLogger statusLogger, StatusLoggerEvent pathDoesntExist,

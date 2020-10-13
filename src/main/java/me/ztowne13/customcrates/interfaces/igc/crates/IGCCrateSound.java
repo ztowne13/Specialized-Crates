@@ -1,6 +1,7 @@
 package me.ztowne13.customcrates.interfaces.igc.crates;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
@@ -11,8 +12,9 @@ import me.ztowne13.customcrates.interfaces.igc.inputmenus.InputMenu;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.Utils;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+
+import java.util.Optional;
 
 /**
  * Created by ztowne13 on 4/2/16.
@@ -85,12 +87,12 @@ public class IGCCrateSound extends IGCTierMenu {
     @Override
     public boolean handleInput(String value, String input) {
         if (value.equalsIgnoreCase("sound type")) {
-            try {
-                Sound s = Sound.valueOf(input.toUpperCase());
-                sd.setSound(s);
+            Optional<XSound> optional = XSound.matchXSound(input);
+            if (optional.isPresent()) {
+                sd.setSound(optional.get());
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input + ".");
                 return true;
-            } catch (Exception exc) {
+            } else {
                 ChatUtils.msgError(getP(), input +
                         " is not a valid sound. Click for a list of sounds -> https://www.spigotmc.org/wiki/cc-sounds-list/");
             }
