@@ -1,18 +1,20 @@
 package me.ztowne13.customcrates.crates.options.holograms;
 
 import com.Zrips.CMI.CMI;
+import com.Zrips.CMI.Containers.CMILocation;
+import com.Zrips.CMI.Modules.Holograms.CMIHologram;
 import com.Zrips.CMI.Modules.Holograms.HologramManager;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Location;
 
-public class CMIHologram extends DynamicHologram {
+public class ZripsHologram extends DynamicHologram {
     HologramManager hologramManager;
     Location l;
-    private com.Zrips.CMI.Modules.Holograms.CMIHologram cmiHologram;
+    private CMIHologram cmiHologram;
 
-    public CMIHologram(SpecializedCrates customCrates, PlacedCrate placedCrate) {
+    public ZripsHologram(SpecializedCrates customCrates, PlacedCrate placedCrate) {
         super(customCrates, placedCrate);
         hologramManager = CMI.getInstance().getHologramManager();
     }
@@ -27,9 +29,9 @@ public class CMIHologram extends DynamicHologram {
             this.l = l;
 
             this.cmiHologram =
-                    new com.Zrips.CMI.Modules.Holograms.CMIHologram(
+                    new CMIHologram(
                             "Crate(" + l.getWorld().getName() + "," + l.getBlockX() + "," + l.getBlockY() + "," +
-                                    l.getBlockZ(), l);
+                                    l.getBlockZ(), new CMILocation(l));
 
             CMI.getInstance().getHologramManager().addHologram(this.cmiHologram);
             this.cmiHologram.update();

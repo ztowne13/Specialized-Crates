@@ -62,9 +62,9 @@
         <dependency>
             <groupId>com.Zrips</groupId>
             <artifactId>CMI</artifactId>
-            <version>8.5.6.1</version>
+            <version>8.7.8.2</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/CMI.jar</systemPath>
+            <systemPath>${project.basedir}/lib/CMI-API.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.sainttx.holograms</groupId>

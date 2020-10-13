@@ -227,7 +227,7 @@ public class CHolograms extends CSetting {
             return new SaintXHologram(getSc(), cm);
         } else if (Utils.isPLInstalled("CMI")) {
             Utils.addToInfoLog(getSc(), "Hologram Plugin", "CMI");
-            return new CMIHologram(getSc(), cm);
+            return new ZripsHologram(getSc(), cm);
         }
 
 
