@@ -15,6 +15,7 @@ import java.util.UUID;
 /**
  * Created by ztowne13 on 2/14/16.
  */
+@Deprecated
 public class SaintXHologram extends DynamicHologram {
     HologramManager hm;
     Hologram hologram;

@@ -1,11 +1,10 @@
 package me.ztowne13.customcrates.crates.options;
 
 import me.ztowne13.customcrates.crates.*;
-import me.ztowne13.customcrates.crates.options.holograms.*;
+import me.ztowne13.customcrates.crates.options.holograms.DynamicHologram;
 import me.ztowne13.customcrates.crates.options.holograms.animations.HoloAnimType;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.ChatUtils;
-import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -214,25 +213,27 @@ public class CHolograms extends CSetting {
     }
 
     public DynamicHologram getLoadedInstance(PlacedCrate cm) {
+        // TODO: Remove this comment and create more HologramManager
 //        if(getCc().isOnlyUseBuildInHolograms())
 //        {
 //            Utils.addToInfoLog(getCc(), "Hologram Plugin", "Built in hologram support");
 //            return new NativeHologram(getCc(),cm);
 //        }
-        if (Utils.isPLInstalled("HolographicDisplays")) {
-            Utils.addToInfoLog(getSc(), "Hologram Plugin", "HolographicDisplays");
-            return new HolographicDisplaysHologram(getSc(), cm);
-        } else if (Utils.isPLInstalled("Holograms")) {
-            Utils.addToInfoLog(getSc(), "Hologram Plugin", "Holograms");
-            return new SaintXHologram(getSc(), cm);
-        } else if (Utils.isPLInstalled("CMI")) {
-            Utils.addToInfoLog(getSc(), "Hologram Plugin", "CMI");
-            return new ZripsHologram(getSc(), cm);
-        }
-
-
-        Utils.addToInfoLog(getSc(), "Hologram Plugin", "None");
-        return new NoHologram(getSc(), cm);
+//        if (Utils.isPLInstalled("HolographicDisplays")) {
+//            Utils.addToInfoLog(getSc(), "Hologram Plugin", "HolographicDisplays");
+//            return new HolographicDisplaysHologram(getSc(), cm);
+//        } else if (Utils.isPLInstalled("Holograms")) {
+//            Utils.addToInfoLog(getSc(), "Hologram Plugin", "Holograms");
+//            return new SaintXHologram(getSc(), cm);
+//        } else if (Utils.isPLInstalled("CMI")) {
+//            Utils.addToInfoLog(getSc(), "Hologram Plugin", "CMI");
+//            return new ZripsHologram(getSc(), cm);
+//        }
+//
+//
+//        Utils.addToInfoLog(getSc(), "Hologram Plugin", "None");
+//        return new NoHologram(getSc(), cm);
+        return new DynamicHologram(getSc(), cm);
     }
 
     public List<String> getLines() {

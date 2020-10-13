@@ -1,6 +1,7 @@
-package me.ztowne13.customcrates.interfaces.externalhooks.holograms;
+package me.ztowne13.customcrates.interfaces.externalhooks.holograms.nms;
 
 import me.ztowne13.customcrates.SpecializedCrates;
+import me.ztowne13.customcrates.interfaces.externalhooks.holograms.Hologram;
 import me.ztowne13.customcrates.utils.ReflectionUtilities;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -59,8 +60,8 @@ public class HologramNMS extends Hologram {
     private final double offset = 0.23D;
     private List<String> lines = new ArrayList<>();
 
-    public HologramNMS(SpecializedCrates cc, String name, Location location) {
-        super(cc, name, location);
+    public HologramNMS(SpecializedCrates cc, Location location) {
+        super(cc, location);
     }
 
     /**
@@ -120,8 +121,9 @@ public class HologramNMS extends Hologram {
         update();
     }
 
-    public void teleport(Location loc) {
-        update();
+    @Override
+    public void delete() {
+        remove();
     }
 
     /**

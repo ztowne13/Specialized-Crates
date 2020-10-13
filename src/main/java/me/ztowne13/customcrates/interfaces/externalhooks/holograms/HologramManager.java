@@ -2,30 +2,32 @@ package me.ztowne13.customcrates.interfaces.externalhooks.holograms;
 
 import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class HologramManager {
-    SpecializedCrates cc;
+public abstract class HologramManager<T extends Hologram> {
+    private final SpecializedCrates customCrates;
 
-    List<Hologram> holograms;
+    protected List<T> holograms;
 
-    public HologramManager(SpecializedCrates cc) {
-        this.cc = cc;
+    public HologramManager(SpecializedCrates customCrates) {
+        this.customCrates = customCrates;
         holograms = new ArrayList<>();
     }
 
-    public abstract boolean isHologramEntity(ArmorStand stand);
+    public abstract T createHologram(Location location);
 
-    public abstract Hologram createHologram(String name, Location location);
+    public void deleteHologram(T hologram) {
+        holograms.remove(hologram);
+        hologram.delete();
+    }
 
-    public abstract void deleteHologram(Hologram hologram);
+    protected SpecializedCrates getCustomCrates() {
+        return customCrates;
+    }
 
-    abstract SpecializedCrates getCc();
-
-    public List<Hologram> getHolograms() {
+    public List<T> getHolograms() {
         return holograms;
     }
 }

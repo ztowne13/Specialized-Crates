@@ -4,16 +4,18 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.holograms.animations.HoloAnimType;
 import me.ztowne13.customcrates.crates.options.holograms.animations.HoloAnimation;
+import me.ztowne13.customcrates.interfaces.externalhooks.holograms.Hologram;
 import org.bukkit.Location;
 
 import java.util.UUID;
 
-public abstract class DynamicHologram {
+public class DynamicHologram {
     UUID uuid;
 
     SpecializedCrates cc;
     PlacedCrate cm;
 
+    Hologram hologram;
     HoloAnimation ha;
 
     boolean displayingRewardHologram = false;
@@ -29,15 +31,26 @@ public abstract class DynamicHologram {
         }
     }
 
-    public abstract void create(Location l);
+    public void create(Location l) {
+        this.hologram = getCc().getHologramManager().createHologram(l);
+    }
 
-    public abstract void addLine(String line);
+    public void addLine(String line) {
+        this.hologram.addLine(line);
+    }
 
-    public abstract void setLine(int lineNum, String line);
+    public void setLine(int lineNum, String line) {
+        this.hologram.setLine(lineNum, line);
+    }
 
-    public abstract void delete();
+    public void delete() {
+        getCc().getHologramManager().deleteHologram(this.hologram);
+        this.hologram = null;
+    }
 
-    public abstract void teleport(Location l);
+    public void teleport(Location l) {
+        this.hologram.setLocation(l);
+    }
 
     public void tick() {
         if (getHa() != null) {

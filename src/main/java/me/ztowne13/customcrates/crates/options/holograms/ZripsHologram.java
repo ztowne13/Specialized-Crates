@@ -9,6 +9,7 @@ import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Location;
 
+@Deprecated
 public class ZripsHologram extends DynamicHologram {
     HologramManager hologramManager;
     Location l;

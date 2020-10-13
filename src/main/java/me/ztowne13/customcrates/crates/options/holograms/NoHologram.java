@@ -7,6 +7,7 @@ import org.bukkit.Location;
 /**
  * Created by ztowne13 on 2/14/16.
  */
+@Deprecated
 public class NoHologram extends DynamicHologram {
     public NoHologram(SpecializedCrates cc, PlacedCrate cm) {
         super(cc, cm);

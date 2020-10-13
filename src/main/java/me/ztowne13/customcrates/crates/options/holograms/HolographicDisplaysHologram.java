@@ -10,6 +10,7 @@ import org.bukkit.Location;
 
 import java.util.HashMap;
 
+@Deprecated
 public class HolographicDisplaysHologram extends DynamicHologram {
     Hologram h;
     HashMap<Integer, TextLine> lines = new HashMap<>();

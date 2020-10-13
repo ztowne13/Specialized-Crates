@@ -13,9 +13,8 @@ import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.animations.block.OpenChestAnimation;
 import me.ztowne13.customcrates.interfaces.externalhooks.EconomyHandler;
 import me.ztowne13.customcrates.interfaces.externalhooks.PlaceHolderAPIHandler;
-import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramInteractListener;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramManager;
-import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramManagerNMS;
+import me.ztowne13.customcrates.interfaces.externalhooks.holograms.nms.HologramManagerNMS;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.sql.SQLQueryThread;
 import me.ztowne13.customcrates.listeners.*;
@@ -240,7 +239,6 @@ public class SpecializedCrates extends JavaPlugin {
         rl(new PlayerConnectionListener(this));
         rl(new CommandPreprocessListener(this));
         rl(new ChatListener(this));
-        rl(new HologramInteractListener(this));
         rl(new PluginEnableListener(this));
         rl(new DamageListener(this));
 
