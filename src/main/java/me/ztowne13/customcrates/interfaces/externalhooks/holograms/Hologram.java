@@ -10,7 +10,6 @@ public abstract class Hologram {
 
     public Hologram(SpecializedCrates customCrates, Location location) {
         this.customCrates = customCrates;
-        this.name = name;
         this.location = location;
     }
 
