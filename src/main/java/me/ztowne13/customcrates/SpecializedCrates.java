@@ -14,6 +14,8 @@ import me.ztowne13.customcrates.crates.types.animations.block.OpenChestAnimation
 import me.ztowne13.customcrates.interfaces.externalhooks.EconomyHandler;
 import me.ztowne13.customcrates.interfaces.externalhooks.PlaceHolderAPIHandler;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramManager;
+import me.ztowne13.customcrates.interfaces.externalhooks.holograms.cmi.ZripsHologramManager;
+import me.ztowne13.customcrates.interfaces.externalhooks.holograms.holograms.SaintXHologramManager;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.holographicdisplays.HDHologramManager;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.nms.NMSHologramManager;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
@@ -85,35 +87,15 @@ public class SpecializedCrates extends JavaPlugin {
         saveDefaultConfig();
         loadFiles();
 
-        // TODO: Remove this comment and create more HologramManager
-//        if(getCc().isOnlyUseBuildInHolograms())
-//        {
-//            Utils.addToInfoLog(getCc(), "Hologram Plugin", "Built in hologram support");
-//            return new NativeHologram(getCc(),cm);
-//        }
-//        if (Utils.isPLInstalled("HolographicDisplays")) {
-//            Utils.addToInfoLog(getSc(), "Hologram Plugin", "HolographicDisplays");
-//            return new HolographicDisplaysHologram(getSc(), cm);
-//        } else if (Utils.isPLInstalled("Holograms")) {
-//            Utils.addToInfoLog(getSc(), "Hologram Plugin", "Holograms");
-//            return new SaintXHologram(getSc(), cm);
-//        } else if (Utils.isPLInstalled("CMI")) {
-//            Utils.addToInfoLog(getSc(), "Hologram Plugin", "CMI");
-//            return new ZripsHologram(getSc(), cm);
-//        }
-//
-//
-//        Utils.addToInfoLog(getSc(), "Hologram Plugin", "None");
-//        return new NoHologram(getSc(), cm);
         if (Utils.isPLInstalled("HolographicDisplays")) {
             Utils.addToInfoLog(this, "Hologram Plugin", "HolographicDisplays");
             this.hologramManager = new HDHologramManager(this);
         } else if (Utils.isPLInstalled("Holograms")) {
             Utils.addToInfoLog(this, "Hologram Plugin", "Holograms");
-            // TODO: Add SainttX HologramManager
+            this.hologramManager = new SaintXHologramManager(this);
         } else if (Utils.isPLInstalled("CMI")) {
             Utils.addToInfoLog(this, "Hologram Plugin", "CMI");
-            // TODO: Add CMI HologramManager
+            this.hologramManager = new ZripsHologramManager(this);
         } else {
             Utils.addToInfoLog(this, "Hologram Plugin", "None");
             this.hologramManager = new NMSHologramManager(this);

@@ -9,8 +9,8 @@ import org.bukkit.Location;
 import java.util.HashMap;
 
 public class HDHologram extends Hologram {
-    com.gmail.filoghost.holographicdisplays.api.Hologram hologram;
-    HashMap<Integer, TextLine> lines = new HashMap<>();
+    private final com.gmail.filoghost.holographicdisplays.api.Hologram hologram;
+    private final HashMap<Integer, TextLine> lines = new HashMap<>();
 
     public HDHologram(SpecializedCrates customCrates, Location location) {
         super(customCrates, location);
