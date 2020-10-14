@@ -11,15 +11,15 @@ import org.bukkit.Location;
 import java.util.UUID;
 
 public class DynamicHologram {
-    UUID uuid;
+    private final UUID uuid;
 
-    SpecializedCrates cc;
-    PlacedCrate cm;
+    private final SpecializedCrates cc;
+    private PlacedCrate cm;
 
-    Hologram hologram;
-    HoloAnimation ha;
+    private Hologram hologram;
+    private HoloAnimation ha;
 
-    boolean displayingRewardHologram = false;
+    private boolean displayingRewardHologram = false;
 
     public DynamicHologram(SpecializedCrates cc, PlacedCrate cm) {
         this.uuid = UUID.randomUUID();
@@ -80,10 +80,6 @@ public class DynamicHologram {
 
     public SpecializedCrates getCc() {
         return cc;
-    }
-
-    public void setCc(SpecializedCrates cc) {
-        this.cc = cc;
     }
 
     public boolean getDisplayingRewardHologram() {

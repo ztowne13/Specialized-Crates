@@ -91,7 +91,6 @@ public class SpecializedCrates extends JavaPlugin {
         this.economyHandler = new EconomyHandler(this);
 
         setSettings(new Settings(this));
-        getSettings().load();
 
         if (Utils.isPLInstalled("HolographicDisplays")) {
             Utils.addToInfoLog(this, "Hologram Plugin", "HolographicDisplays");
@@ -106,6 +105,8 @@ public class SpecializedCrates extends JavaPlugin {
             Utils.addToInfoLog(this, "Hologram Plugin", "None");
             this.hologramManager = new NMSHologramManager(this);
         }
+
+        getSettings().load();
 
         registerCommands();
         if (register) {
@@ -460,7 +461,7 @@ public class SpecializedCrates extends JavaPlugin {
     }
 
     public HologramManager getHologramManager() {
-        return hologramManager;
+        return this.hologramManager;
     }
 
     public boolean isOnlyUseBuildInHolograms() {
