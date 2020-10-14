@@ -10,7 +10,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -58,7 +57,7 @@ public class NMSHologram extends Hologram {
     private final List<Integer> ids = new ArrayList<>();
     private final List<Object> entities = new ArrayList<>();
     private final double offset = 0.23D;
-    private List<String> lines = new ArrayList<>();
+    private final List<String> lines = new ArrayList<>();
 
     public NMSHologram(SpecializedCrates cc, Location location) {
         super(cc, location);
@@ -76,48 +75,19 @@ public class NMSHologram extends Hologram {
     }
 
     /**
-     * Returns a List of the lines the hologram is displaying.
-     *
-     * @return
-     */
-    public List<String> getLines() {
-        return lines;
-    }
-
-    /**
-     * Sets the hologram lines, removing any currently lines previously added.
-     *
-     * @param text
-     */
-    public void setLines(String... text) {
-        lines = Arrays.asList(text);
-        update();
-    }
-
-    /**
-     * Return the current stored location of the Hologram.
-     *
-     * @return - The current hologram location.
-     */
-    @Override
-    public Location getLocation() {
-        return location;
-    }
-
-    /**
      * Set the location of the hologram.
      *
      * @param location - The location to set.
      */
     @Override
     public void setLocation(Location location) {
-        this.location = location;
+        super.setLocation(location);
         update();
     }
 
     @Override
     public void setLine(int index, String line) {
-        getLines().set(index, line);
+        lines.set(index, line);
         update();
     }
 
