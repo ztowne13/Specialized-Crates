@@ -15,7 +15,7 @@ import me.ztowne13.customcrates.interfaces.externalhooks.EconomyHandler;
 import me.ztowne13.customcrates.interfaces.externalhooks.PlaceHolderAPIHandler;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramManager;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.cmi.ZripsHologramManager;
-import me.ztowne13.customcrates.interfaces.externalhooks.holograms.holograms.SaintXHologramManager;
+import me.ztowne13.customcrates.interfaces.externalhooks.holograms.holograms.SainttXHologramManager;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.holographicdisplays.HDHologramManager;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.nms.NMSHologramManager;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
@@ -98,7 +98,7 @@ public class SpecializedCrates extends JavaPlugin {
             this.hologramManager = new HDHologramManager(this);
         } else if (Utils.isPLInstalled("Holograms")) {
             Utils.addToInfoLog(this, "Hologram Plugin", "Holograms");
-            this.hologramManager = new SaintXHologramManager(this);
+            this.hologramManager = new SainttXHologramManager(this);
         } else if (Utils.isPLInstalled("CMI")) {
             Utils.addToInfoLog(this, "Hologram Plugin", "CMI");
             this.hologramManager = new ZripsHologramManager(this);
