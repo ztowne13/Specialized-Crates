@@ -17,7 +17,7 @@ import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramManag
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.cmi.ZripsHologramManager;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.holograms.SainttXHologramManager;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.holographicdisplays.HDHologramManager;
-import me.ztowne13.customcrates.interfaces.externalhooks.holograms.nms.NMSHologramManager;
+import me.ztowne13.customcrates.interfaces.externalhooks.holograms.nohologram.NoHologramManager;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.sql.SQLQueryThread;
 import me.ztowne13.customcrates.listeners.*;
@@ -103,7 +103,7 @@ public class SpecializedCrates extends JavaPlugin {
             this.hologramManager = new ZripsHologramManager(this);
         } else {
             Utils.addToInfoLog(this, "Hologram Plugin", "None");
-            this.hologramManager = new NMSHologramManager(this);
+            this.hologramManager = new NoHologramManager(this);
         }
 
         getSettings().load();
