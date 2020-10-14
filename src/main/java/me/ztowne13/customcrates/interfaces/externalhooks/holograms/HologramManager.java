@@ -16,7 +16,13 @@ public abstract class HologramManager {
         holograms = new ArrayList<>();
     }
 
-    public abstract Hologram createHologram(Location location);
+    public Hologram createHologram(Location location) {
+        Hologram hologram = newHologram(location);
+        holograms.add(hologram);
+        return hologram;
+    }
+
+    public abstract Hologram newHologram(Location location);
 
     public void deleteHologram(Hologram hologram) {
         hologram.delete();

@@ -11,9 +11,7 @@ public class NMSHologramManager extends HologramManager {
     }
 
     @Override
-    public Hologram createHologram(Location location) {
-        NMSHologram hologram = new NMSHologram(getCustomCrates(), location);
-        getHolograms().add(hologram);
-        return hologram;
+    public Hologram newHologram(Location location) {
+        return new NMSHologram(getCustomCrates(), location);
     }
 }

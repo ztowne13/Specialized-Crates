@@ -11,9 +11,7 @@ public class HDHologramManager extends HologramManager {
     }
 
     @Override
-    public Hologram createHologram(Location location) {
-        HDHologram hdHologram = new HDHologram(getCustomCrates(), location);
-        holograms.add(hdHologram);
-        return hdHologram;
+    public Hologram newHologram(Location location) {
+        return new HDHologram(getCustomCrates(), location);
     }
 }
