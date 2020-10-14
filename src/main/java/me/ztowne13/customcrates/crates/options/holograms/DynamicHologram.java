@@ -4,19 +4,22 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.options.holograms.animations.HoloAnimType;
 import me.ztowne13.customcrates.crates.options.holograms.animations.HoloAnimation;
+import me.ztowne13.customcrates.interfaces.externalhooks.holograms.Hologram;
+import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Location;
 
 import java.util.UUID;
 
-public abstract class DynamicHologram {
-    UUID uuid;
+public class DynamicHologram {
+    private final UUID uuid;
 
-    SpecializedCrates cc;
-    PlacedCrate cm;
+    private final SpecializedCrates cc;
+    private PlacedCrate cm;
 
-    HoloAnimation ha;
+    private Hologram hologram;
+    private HoloAnimation ha;
 
-    boolean displayingRewardHologram = false;
+    private boolean displayingRewardHologram = false;
 
     public DynamicHologram(SpecializedCrates cc, PlacedCrate cm) {
         this.uuid = UUID.randomUUID();
@@ -29,20 +32,33 @@ public abstract class DynamicHologram {
         }
     }
 
-    public abstract void create(Location l);
+    public void create(Location l) {
+        l.setY(l.getY() + getCm().getHologram().getHologramOffset() - 1);
+        l = LocationUtils.getLocationCentered(l);
+        this.hologram = getCc().getHologramManager().createHologram(l);
+    }
 
-    public abstract void addLine(String line);
+    public void addLine(String line) {
+        this.hologram.addLine(line);
+    }
 
-    public abstract void setLine(int lineNum, String line);
+    public void setLine(int lineNum, String line) {
+        this.hologram.setLine(lineNum, line);
+    }
 
-    public abstract void delete();
+    public void delete() {
+        getCc().getHologramManager().deleteHologram(this.hologram);
+        this.hologram = null;
+    }
 
-    public abstract void teleport(Location l);
+    public void teleport(Location l) {
+        l.setY(l.getY() + getCm().getHologram().getHologramOffset());
+        this.hologram.setLocation(LocationUtils.getLocationCentered(l));
+    }
 
     public void tick() {
-        if (getHa() != null) {
-            if (!cm.getHologram().getPrefixes().isEmpty())
-                getHa().tick();
+        if (getHa() != null && !cm.getHologram().getPrefixes().isEmpty()) {
+            getHa().tick();
         }
     }
 
@@ -64,10 +80,6 @@ public abstract class DynamicHologram {
 
     public SpecializedCrates getCc() {
         return cc;
-    }
-
-    public void setCc(SpecializedCrates cc) {
-        this.cc = cc;
     }
 
     public boolean getDisplayingRewardHologram() {

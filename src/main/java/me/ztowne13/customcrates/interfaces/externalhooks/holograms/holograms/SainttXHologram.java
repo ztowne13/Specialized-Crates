@@ -1,40 +1,29 @@
-package me.ztowne13.customcrates.crates.options.holograms;
+package me.ztowne13.customcrates.interfaces.externalhooks.holograms.holograms;
 
 import com.sainttx.holograms.HologramPlugin;
-import com.sainttx.holograms.api.Hologram;
 import com.sainttx.holograms.api.HologramManager;
 import com.sainttx.holograms.api.line.TextLine;
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.PlacedCrate;
+import me.ztowne13.customcrates.interfaces.externalhooks.holograms.Hologram;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
-/**
- * Created by ztowne13 on 2/14/16.
- */
-public class SaintXHologram extends DynamicHologram {
-    HologramManager hm;
-    Hologram hologram;
-    double defaultYOffSet = -.2;
-    Location l;
+public class SainttXHologram extends Hologram {
+    private final HologramManager hm;
+    private final com.sainttx.holograms.api.Hologram hologram;
+    private double defaultYOffSet = -.2;
 
-    public SaintXHologram(SpecializedCrates cc, PlacedCrate cm) {
-        super(cc, cm);
-
+    public SainttXHologram(SpecializedCrates customCrates, Location location) {
+        super(customCrates, location);
         this.hm = JavaPlugin.getPlugin(HologramPlugin.class).getHologramManager();
-    }
-
-    @Override
-    public void create(Location l) {
-        this.l = l;
         UUID uuid = UUID.randomUUID();
-        this.hologram = new Hologram(uuid.toString(), l);
+        this.hologram = new com.sainttx.holograms.api.Hologram(uuid.toString(), location);
         hm.addActiveHologram(hologram);
         this.hologram.spawn();
-        teleport(l);
+        setLocation(location);
     }
 
     @Override
@@ -46,6 +35,12 @@ public class SaintXHologram extends DynamicHologram {
     }
 
     @Override
+    public void setLine(int i, String line) {
+        hologram.removeLine(hologram.getLine(i));
+        hologram.addLine(new TextLine(hologram, line), i);
+    }
+
+    @Override
     public void delete() {
         if (hologram != null && hm != null) {
             hm.removeActiveHologram(hologram);
@@ -54,15 +49,10 @@ public class SaintXHologram extends DynamicHologram {
     }
 
     @Override
-    public void teleport(Location l) {
-        l.setY(l.getY() + getDefaultYOffSet() + getCm().getHologram().getHologramOffset());
-        hologram.teleport(LocationUtils.getLocationCentered(l));
-    }
-
-    @Override
-    public void setLine(int lineNum, String line) {
-        hologram.removeLine(hologram.getLine(lineNum));
-        hologram.addLine(new TextLine(hologram, line), lineNum);
+    public void setLocation(Location l) {
+        l.setY(l.getY() + getDefaultYOffSet());
+        super.setLocation(LocationUtils.getLocationCentered(l));
+        hologram.teleport(location);
     }
 
     public double getDefaultYOffSet() {

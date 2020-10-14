@@ -4,14 +4,12 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Location;
 
 public abstract class Hologram {
-    SpecializedCrates customCrates;
+    private final SpecializedCrates customCrates;
 
-    String name;
-    Location location;
+    protected Location location;
 
-    public Hologram(SpecializedCrates cc, String name, Location location) {
-        this.customCrates = cc;
-        this.name = name;
+    public Hologram(SpecializedCrates customCrates, Location location) {
+        this.customCrates = customCrates;
         this.location = location;
     }
 
@@ -19,14 +17,10 @@ public abstract class Hologram {
 
     public abstract void setLine(int i, String line);
 
-    public abstract void update();
+    public abstract void delete();
 
     public SpecializedCrates getCustomCrates() {
         return customCrates;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Location getLocation() {

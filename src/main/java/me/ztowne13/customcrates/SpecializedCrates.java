@@ -13,9 +13,11 @@ import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.animations.block.OpenChestAnimation;
 import me.ztowne13.customcrates.interfaces.externalhooks.EconomyHandler;
 import me.ztowne13.customcrates.interfaces.externalhooks.PlaceHolderAPIHandler;
-import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramInteractListener;
 import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramManager;
-import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramManagerNMS;
+import me.ztowne13.customcrates.interfaces.externalhooks.holograms.cmi.ZripsHologramManager;
+import me.ztowne13.customcrates.interfaces.externalhooks.holograms.holograms.SainttXHologramManager;
+import me.ztowne13.customcrates.interfaces.externalhooks.holograms.holographicdisplays.HDHologramManager;
+import me.ztowne13.customcrates.interfaces.externalhooks.holograms.nohologram.NoHologramManager;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.sql.SQLQueryThread;
 import me.ztowne13.customcrates.listeners.*;
@@ -85,11 +87,25 @@ public class SpecializedCrates extends JavaPlugin {
         saveDefaultConfig();
         loadFiles();
 
-        this.hologramManager = new HologramManagerNMS(this);
         this.dataHandler = new DataHandler(this, dataFile);
         this.economyHandler = new EconomyHandler(this);
 
         setSettings(new Settings(this));
+
+        if (Utils.isPLInstalled("HolographicDisplays")) {
+            Utils.addToInfoLog(this, "Hologram Plugin", "HolographicDisplays");
+            this.hologramManager = new HDHologramManager(this);
+        } else if (Utils.isPLInstalled("Holograms")) {
+            Utils.addToInfoLog(this, "Hologram Plugin", "Holograms");
+            this.hologramManager = new SainttXHologramManager(this);
+        } else if (Utils.isPLInstalled("CMI")) {
+            Utils.addToInfoLog(this, "Hologram Plugin", "CMI");
+            this.hologramManager = new ZripsHologramManager(this);
+        } else {
+            Utils.addToInfoLog(this, "Hologram Plugin", "None");
+            this.hologramManager = new NoHologramManager(this);
+        }
+
         getSettings().load();
 
         registerCommands();
@@ -240,7 +256,6 @@ public class SpecializedCrates extends JavaPlugin {
         rl(new PlayerConnectionListener(this));
         rl(new CommandPreprocessListener(this));
         rl(new ChatListener(this));
-        rl(new HologramInteractListener(this));
         rl(new PluginEnableListener(this));
         rl(new DamageListener(this));
 
@@ -446,7 +461,7 @@ public class SpecializedCrates extends JavaPlugin {
     }
 
     public HologramManager getHologramManager() {
-        return hologramManager;
+        return this.hologramManager;
     }
 
     public boolean isOnlyUseBuildInHolograms() {

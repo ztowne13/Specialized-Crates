@@ -132,7 +132,7 @@ public class PlayerManager {
     public void setConfirming(final boolean confirming) {
         this.confirming = confirming;
         if (confirming) {
-            confirmingTask = Bukkit.getScheduler().runTaskLater(cc, () -> setConfirming(false), 20 * (long) SettingsValue.CONFIRM_TIMEOUT.getValue(cc));
+            confirmingTask = Bukkit.getScheduler().runTaskLater(cc, () -> setConfirming(false), 20L * (int) SettingsValue.CONFIRM_TIMEOUT.getValue(cc));
         } else {
             if (confirmingTask != null) {
                 confirmingTask.cancel();
