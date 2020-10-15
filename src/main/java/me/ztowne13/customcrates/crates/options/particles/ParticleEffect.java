@@ -1,12 +1,14 @@
 package me.ztowne13.customcrates.crates.options.particles;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.utils.*;
+import me.ztowne13.customcrates.utils.ReflectionUtilities;
+import me.ztowne13.customcrates.utils.Utils;
+import me.ztowne13.customcrates.utils.VersionUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
+import java.lang.reflect.Method;
 
 public enum ParticleEffect {
 
@@ -138,13 +140,27 @@ public enum ParticleEffect {
 
     MOB_APPEARANCE;
 
-    public static final Class<?> nmsPacketPlayOutParticle = ReflectionUtilities.getNMSClass("PacketPlayOutWorldParticles");
-    private static final HashMap<String, Enum<?>> cachedEnums = new HashMap<>();
+    private static final Class<?> nmsPacketPlayOutParticle;
+    private static final Class<?> nmsEnumParticle;
+    private static final Method nmsEnumParticleMethod;
+    private static Constructor<?> cachedConstructor = null;
+
+    static {
+        nmsEnumParticle = ReflectionUtilities.getNMSClass("EnumParticle");
+        nmsPacketPlayOutParticle = ReflectionUtilities.getNMSClass("PacketPlayOutWorldParticles");
+        nmsEnumParticleMethod = ReflectionUtilities.getMethod(nmsEnumParticle, "valueOf", String.class);
+        try {
+            cachedConstructor = nmsPacketPlayOutParticle.getConstructor(
+                    nmsEnumParticle, Boolean.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE,
+                    Float.TYPE, Float.TYPE, Float.TYPE, Integer.TYPE, int[].class);
+        } catch (NoSuchMethodException e) {
+            // IGNORED
+        }
+    }
+
     private final String particleName;
-    protected String enumValue;
-    private Class<?> nmsEnumParticle;
-    //    public static int particleRange = 25;
-    private Constructor<?> cachedConstructor = null;
+    private final String enumValue;
+    private Object cachedEnum;
 
     ParticleEffect(String particleName, String enumValue) {
         this.particleName = particleName;
@@ -159,37 +175,6 @@ public enum ParticleEffect {
         this(null, null);
     }
 
-    private static Enum<?> getEnum(String enumFullName) {
-        if (DebugUtils.LOG_CACHED_INFO) {
-            ChatUtils.log("Cached enums: " + cachedEnums.size());
-        }
-
-        Enum<?> val = cachedEnums.get(enumFullName);
-        if (val != null) {
-            return val;
-        }
-
-        String[] x = enumFullName.split("\\.(?=[^\\.]+$)");
-        if (x.length == 2) {
-            String enumClassName = x[0];
-            String enumName = x[1];
-            try {
-                Class cl = Class.forName(enumClassName);
-
-                Enum<?> enumm = Enum.valueOf(cl, enumName);
-
-                if (DebugUtils.ENABLE_CACHING) {
-                    cachedEnums.put(enumFullName, enumm);
-                }
-
-                return enumm;
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
     public String getName() {
         return this.particleName;
     }
@@ -201,18 +186,10 @@ public enum ParticleEffect {
         }
         if (!VersionUtils.getServerVersion().contains("v1_7")) {
             try {
-                if (nmsEnumParticle == null) {
-                    nmsEnumParticle = ReflectionUtilities.getNMSClass("EnumParticle");
+                if (cachedEnum != null) {
+                    cachedEnum = nmsEnumParticleMethod.invoke(null, this.enumValue != null ? this.enumValue : name());
                 }
-
-                if (cachedConstructor == null) {
-                    cachedConstructor = nmsPacketPlayOutParticle.getConstructor(
-                            nmsEnumParticle, Boolean.TYPE, Float.TYPE, Float.TYPE, Float.TYPE, Float.TYPE,
-                            Float.TYPE, Float.TYPE, Float.TYPE, Integer.TYPE, int[].class);
-                }
-
-                Object packet = cachedConstructor.newInstance(getEnum(nmsEnumParticle.getName() + "." +
-                                (this.enumValue != null ? this.enumValue : name())), true,
+                Object packet = cachedConstructor.newInstance(cachedEnum, true,
                         (float) location.getX(), (float) location.getY(), (float) location.getZ(), offsetX, offsetY,
                         offsetZ, speed, count, new int[0]);
                 Object handle = ReflectionUtilities.getHandle(player);
