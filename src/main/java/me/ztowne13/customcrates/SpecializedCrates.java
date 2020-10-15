@@ -39,8 +39,6 @@ import java.util.List;
 
 public class SpecializedCrates extends JavaPlugin {
 
-    public static double total = 0;
-    public static double count = 0;
     FileHandler messageFile;
     FileHandler rewardsFile;
     FileHandler activeCratesFile;
@@ -364,15 +362,17 @@ public class SpecializedCrates extends JavaPlugin {
         IndividualFileDataHandler.toSave.clear();
     }
 
+    private long total = 0;
+    private long count = 0;
     public void run() {
         setBr(Bukkit.getScheduler().runTaskTimer(this, () -> {
             if (DebugUtils.OUTPUT_AVERAGE_TICK) {
-                double curTimeMillis = System.currentTimeMillis();
+                long curTimeMillis = System.currentTimeMillis();
                 tick();
-                double dif = (System.currentTimeMillis() - curTimeMillis);
+                long dif = (System.currentTimeMillis() - curTimeMillis);
                 total += dif;
                 count++;
-                double solved = total / count;
+                long solved = total / count;
 
                 ChatUtils.log("Average: " + solved);
             } else {
