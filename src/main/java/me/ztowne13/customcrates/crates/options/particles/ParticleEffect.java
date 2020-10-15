@@ -195,17 +195,11 @@ public enum ParticleEffect {
     }
 
     public void sendToPlayer(SpecializedCrates sc, Player player, Location location, float offsetX, float offsetY, float offsetZ, float speed,
-                             int count) throws Exception {
+                             int count) {
         if (!Utils.isPlayerInRange(sc, player, location)) {
             return;
         }
         if (!VersionUtils.getServerVersion().contains("v1_7")) {
-
-            if (VersionUtils.getServerVersion().contains("v1_8_R3")) {
-                ParticleEffect188.sendToPlayer(sc, this, player, location, offsetX, offsetY, offsetZ, speed, count);
-                return;
-            }
-
             try {
                 if (nmsEnumParticle == null) {
                     nmsEnumParticle = ReflectionUtilities.getNMSClass("EnumParticle");
