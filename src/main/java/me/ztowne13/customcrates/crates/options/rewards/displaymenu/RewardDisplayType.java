@@ -12,7 +12,7 @@ public enum RewardDisplayType {
 
     CUSTOM("You custom design the entire reward preview menu with any items and any rewards. This supports multiple pages of rewards too!");
 
-    String description;
+    private final String description;
 
     RewardDisplayType(String description) {
         this.description = description;

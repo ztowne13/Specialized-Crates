@@ -19,13 +19,13 @@ import java.util.List;
 public class DisplayPage {
     public static final String PREFIX = "reward-display.custom-display.pages";
 
-    CustomRewardDisplayer customRewardDisplayer;
-    int pageNum;
-    int slots;
+    private final CustomRewardDisplayer customRewardDisplayer;
+    private final int pageNum;
+    private int slots;
 
-    String[][] unformattedInv;
-    Reward[][] rewards;
-    SaveableItemBuilder[][] builders;
+    private String[][] unformattedInv;
+    private Reward[][] rewards;
+    private SaveableItemBuilder[][] builders;
 
     public DisplayPage(CustomRewardDisplayer customRewardDisplayer, int pageNum) {
         this.customRewardDisplayer = customRewardDisplayer;
@@ -99,13 +99,7 @@ public class DisplayPage {
             return false;
         }
 
-        List<String> values = null;
-        try {
-            values = (List<String>) fc.getList(PREFIX + "." + pageNum);
-        } catch (Exception exc) {
-            exc.printStackTrace();
-            return false;
-        }
+        List<String> values = fc.getStringList(PREFIX + "." + pageNum);
 
         slots = values.size() * 9;
 
@@ -134,7 +128,7 @@ public class DisplayPage {
         return buildInventoryBuilder(player, forceMaxSlots, "", null, true);
     }
 
-    public InventoryBuilder buildInventoryBuilder(final Player player, boolean forceMaxSlots, String invNameOverride, InventoryBuilder builder, boolean open) {
+    public InventoryBuilder buildInventoryBuilder(Player player, boolean forceMaxSlots, String invNameOverride, InventoryBuilder builder, boolean open) {
         InventoryBuilder ib;
 
         if (builder == null)
@@ -143,27 +137,27 @@ public class DisplayPage {
         else
             ib = builder;
 
-        if (rewards != null && builders != null) {
-            for (int x = 0; x < (forceMaxSlots ? 6 : unformattedInv.length); x++) {
-                for (int y = 0; y < (forceMaxSlots ? 9 : unformattedInv[0].length); y++) {
-                    int slot = (x * 9) + y;
-
-                    if (builders[x][y] == null) {
-                        if (rewards[x][y] != null)
-                            ib.setItem(slot, rewards[x][y].getDisplayBuilder());
-                    } else {
-                        ib.setItem(slot, builders[x][y]);
-                    }
-                }
-            }
-        } else {
+        if (rewards == null || builders == null) {
             buildFormat();
             return buildInventoryBuilder(player, forceMaxSlots, invNameOverride, builder, open);
         }
 
+        for (int x = 0; x < (forceMaxSlots ? 6 : unformattedInv.length); x++) {
+            for (int y = 0; y < (forceMaxSlots ? 9 : unformattedInv[0].length); y++) {
+                int slot = (x * 9) + y;
+
+                if (builders[x][y] == null) {
+                    if (rewards[x][y] != null)
+                        ib.setItem(slot, rewards[x][y].getDisplayBuilder());
+                } else {
+                    ib.setItem(slot, builders[x][y]);
+                }
+            }
+        }
+
         if (builder == null && open) {
             final PlayerManager pm = PlayerManager.get(customRewardDisplayer.getCrate().getCc(), player);
-            pm.setNextPageInventoryCloseGrace(pm.getCc().getTotalTicks() + 2);
+            pm.setNextPageInventoryCloseGrace(pm.getCc().getTotalTicks() + 2L);
 
             final Inventory inv = ib.getInv();
             final DisplayPage thisPage = this;

@@ -13,7 +13,7 @@ public class RewardLimitEvent extends DataEvent {
     int totalUses;
 
     public RewardLimitEvent(Reward r, int currentUses, int addedUses) {
-        super(r.getCc());
+        super(r.getInstance());
         this.r = r;
         this.addedUses = addedUses;
         this.currentUses = currentUses;

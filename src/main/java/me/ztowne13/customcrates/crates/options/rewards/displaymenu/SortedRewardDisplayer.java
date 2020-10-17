@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class SortedRewardDisplayer extends RewardDisplayer {
-    boolean lowToHigh;
+    private final boolean lowToHigh;
 
     public SortedRewardDisplayer(Crate crate, boolean lowToHigh) {
         super(crate);
@@ -20,27 +20,27 @@ public class SortedRewardDisplayer extends RewardDisplayer {
     }
 
     @Override
-    public void open(Player p) {
-        p.openInventory(createInventory(p).getInv());
-        PlayerManager.get(getCrate().getCc(), p).setInRewardMenu(true);
+    public void open(Player player) {
+        player.openInventory(createInventory(player).getInv());
+        PlayerManager.get(getCrate().getCc(), player).setInRewardMenu(true);
     }
 
     @Override
-    public InventoryBuilder createInventory(Player p) {
-        CRewards cr = getCrate().getSettings().getRewards();
-        int amount = cr.getCrateRewards().length;
+    public InventoryBuilder createInventory(Player player) {
+        CRewards rewards = getCrate().getSettings().getRewards();
+        int amount = rewards.getCrateRewards().length;
         int rows = amount % 9 == 0 ? amount / 9 : (amount / 9) + 1;
-        InventoryBuilder ib = new InventoryBuilder(p, rows * 9, getInvName());
-        Reward[] crewards = cr.getCrateRewards();
+        InventoryBuilder inventoryBuilder = new InventoryBuilder(player, rows * 9, getInvName());
+        Reward[] crateRewards = rewards.getCrateRewards();
         int i = 0;
-        for (Reward r : sortedRewards(crewards)) {
+        for (Reward reward : sortedRewards(crateRewards)) {
             if (i >= 54) {
                 break;
             }
-            ib.setItem(i, r.getDisplayBuilder());
+            inventoryBuilder.setItem(i, reward.getDisplayBuilder());
             i++;
         }
-        return ib;
+        return inventoryBuilder;
     }
 
     public List<Reward> sortedRewards(Reward[] rewards) {

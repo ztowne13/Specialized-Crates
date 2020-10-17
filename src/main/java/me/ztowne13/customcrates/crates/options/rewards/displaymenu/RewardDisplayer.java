@@ -10,38 +10,33 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public abstract class RewardDisplayer {
-    Crate crate;
-    String name = null;
-    //    boolean multiplePages = false;
-    boolean requirePermForPreview = false;
-
-    FileHandler fileHandler;
+    private final Crate crate;
+    private final FileHandler fileHandler;
+    private String name = null;
+    private boolean requirePermForPreview = false;
 
     public RewardDisplayer(Crate crate) {
         this.crate = crate;
         this.fileHandler = crate.getSettings().getFileHandler();
     }
 
-    public abstract void open(Player p);
+    public abstract void open(Player player);
 
-    public abstract InventoryBuilder createInventory(Player p);
+    public abstract InventoryBuilder createInventory(Player player);
 
     public abstract void load();
 
     public void openFor(Player player) {
-        if (isRequirePermForPreview()) {
-            if (!player.hasPermission(getCrate().getSettings().getPermission())) {
-                Messages.NO_PERMISSION_CRATE.msgSpecified(crate.getCc(), player);
-                return;
-            }
+        if (isRequirePermForPreview() && !player.hasPermission(getCrate().getSettings().getPermission())) {
+            Messages.NO_PERMISSION_CRATE.msgSpecified(crate.getCc(), player);
+            return;
         }
 
-        if (!(this instanceof CustomRewardDisplayer) && crate.getSettings().getRewards().getCrateRewards().length > 54) {
-            if (player.hasPermission("customcrates.admin") || player.hasPermission("specializedcrates.admin")) {
-                ChatUtils.msgHey(player,
-                        "Just a heads up: you have more than 54 rewards in this crate, but only the &lCUSTOM &ereward display" +
-                                " type supports multiple pages, so not all rewards are shown &o(note: only admins can see this message).");
-            }
+        if (!(this instanceof CustomRewardDisplayer) && crate.getSettings().getRewards().getCrateRewards().length > 54
+                && (player.hasPermission("customcrates.admin") || player.hasPermission("specializedcrates.admin"))) {
+            ChatUtils.msgHey(player,
+                    "Just a heads up: you have more than 54 rewards in this crate, but only the &lCUSTOM &ereward display" +
+                            " type supports multiple pages, so not all rewards are shown &o(note: only admins can see this message).");
         }
 
         open(player);
@@ -67,7 +62,7 @@ public abstract class RewardDisplayer {
             try {
                 this.requirePermForPreview = fc.getBoolean("reward-display.require-permission");
             } catch (Exception exc) {
-
+                // IGNORED
             }
         }
     }
@@ -80,10 +75,6 @@ public abstract class RewardDisplayer {
 
     public Crate getCrate() {
         return crate;
-    }
-
-    public void setCrate(Crate crate) {
-        this.crate = crate;
     }
 
     public String getName() {
