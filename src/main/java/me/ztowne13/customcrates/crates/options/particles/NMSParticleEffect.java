@@ -40,7 +40,7 @@ public class NMSParticleEffect extends ParticleData {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 particleEffect.sendToPlayer(sc, p, centered, offX, offY, offZ, speed, amnt);
             }
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             ChatUtils.log(new String[]{"Error loading particle: " + particleEffect.name()});
         }
     }
