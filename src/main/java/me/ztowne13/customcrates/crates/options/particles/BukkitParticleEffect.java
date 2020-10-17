@@ -14,8 +14,8 @@ import java.util.Random;
  * Created by ztowne13 on 6/24/16.
  */
 public class BukkitParticleEffect extends ParticleData {
-    Particle particle;
-    Random random;
+    private Particle particle;
+    private final Random random;
 
     public BukkitParticleEffect(SpecializedCrates sc, String particleName, String name, boolean hasAnimation) {
         this(sc, Particle.valueOf(particleName.toUpperCase()), name, hasAnimation);
@@ -85,7 +85,7 @@ public class BukkitParticleEffect extends ParticleData {
     public void spawnParticle(Location centeredLoc, int amnt, double offX, double offY, double offZ, float speed) {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (Utils.isPlayerInRange(sc, player, centeredLoc)) {
+            if (Utils.isPlayerInRange(instance, player, centeredLoc)) {
                 if (particle.equals(Particle.REDSTONE)) {
                     player.spawnParticle(particle, centeredLoc, amnt, offX, offY, offZ, speed, getDustOptions());
                 } else {

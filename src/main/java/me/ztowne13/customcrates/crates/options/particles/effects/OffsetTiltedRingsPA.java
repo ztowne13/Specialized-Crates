@@ -8,10 +8,10 @@ import org.bukkit.Location;
  * Created by ztowne13 on 6/27/16.
  */
 public class OffsetTiltedRingsPA extends ParticleAnimationEffect {
-    int updatesPerSec;
+    private final int updatesPerSec;
 
-    public OffsetTiltedRingsPA(SpecializedCrates cc, ParticleData particleData) {
-        super(cc, particleData);
+    public OffsetTiltedRingsPA(SpecializedCrates instance, ParticleData particleData) {
+        super(instance, particleData);
         this.updatesPerSec = (int) particleData.getSpeed();
     }
 

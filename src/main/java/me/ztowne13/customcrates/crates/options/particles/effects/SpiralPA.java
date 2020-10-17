@@ -8,13 +8,13 @@ import org.bukkit.Location;
  * Created by ztowne13 on 6/25/16.
  */
 public class SpiralPA extends ParticleAnimationEffect {
-    int updatesPerSec;
+    private final int updatesPerSec;
 
-    double toChangeHeight = 0;
-    double currentYOffset = 0;
+    private double toChangeHeight = 0;
+    private double currentYOffset = 0;
 
-    public SpiralPA(SpecializedCrates cc, ParticleData particleData) {
-        super(cc, particleData);
+    public SpiralPA(SpecializedCrates instance, ParticleData particleData) {
+        super(instance, particleData);
         this.updatesPerSec = (int) particleData.getSpeed();
     }
 

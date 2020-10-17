@@ -21,24 +21,24 @@ import java.util.List;
 import java.util.UUID;
 
 public class FireworkData {
-    SpecializedCrates cc;
-    CrateSettings cs;
+    private final SpecializedCrates instance;
+    private CrateSettings crateSettings;
 
-    String unLoaded;
-    String id;
+    private String unLoaded;
+    private String id;
 
-    Builder effect;
-    int power = 1;
+    private Builder effect;
+    private int power = 1;
 
-    List<String> colors = new ArrayList<>();
-    List<String> fadeColors = new ArrayList<>();
-    boolean trail = false;
-    boolean flicker = false;
-    FireworkEffect.Type feType = FireworkEffect.Type.BALL_LARGE;
+    private List<String> colors = new ArrayList<>();
+    private List<String> fadeColors = new ArrayList<>();
+    private boolean trail = false;
+    private boolean flicker = false;
+    private FireworkEffect.Type feType = FireworkEffect.Type.BALL_LARGE;
 
-    public FireworkData(SpecializedCrates cc, CrateSettings cs) {
-        this.cc = cc;
-        this.cs = cs;
+    public FireworkData(SpecializedCrates instance, CrateSettings crateSettings) {
+        this.instance = instance;
+        this.crateSettings = crateSettings;
         this.id = UUID.randomUUID().toString().substring(0, 8);
     }
 
@@ -102,7 +102,7 @@ public class FireworkData {
                     }
                 } catch (Exception exc) {
                     StatusLoggerEvent.FIREWORK_DATA_INVALIDCOLOR
-                            .log(getCs().getCrate(), new String[]{s, colorUnParsed, "color"});
+                            .log(getCrateSettings().getCrate(), new String[]{s, colorUnParsed, "color"});
                 }
             }
 
@@ -123,7 +123,7 @@ public class FireworkData {
                     }
                 } catch (Exception exc) {
                     StatusLoggerEvent.FIREWORK_DATA_INVALIDCOLOR
-                            .log(getCs().getCrate(), new String[]{s, colorUnParsed, "fade"});
+                            .log(getCrateSettings().getCrate(), new String[]{s, colorUnParsed, "fade"});
                 }
             }
 
@@ -152,12 +152,12 @@ public class FireworkData {
                 cause = args[5] + " is not a valid number / power.";
                 setPower(Integer.valueOf(args[5]));
 
-                StatusLoggerEvent.FIREWORK_DATA_SUCCESS.log(getCs().getCrate(), new String[]{s});
+                StatusLoggerEvent.FIREWORK_DATA_SUCCESS.log(getCrateSettings().getCrate(), new String[]{s});
             } catch (Exception exc) {
-                StatusLoggerEvent.FIREWORK_DATA_PARTIALSUCCESS.log(getCs().getCrate(), new String[]{s, cause});
+                StatusLoggerEvent.FIREWORK_DATA_PARTIALSUCCESS.log(getCrateSettings().getCrate(), new String[]{s, cause});
             }
         } catch (Exception exc) {
-            StatusLoggerEvent.FIREWORK_DATA_FAILURE.log(getCs().getCrate(), new String[]{s});
+            StatusLoggerEvent.FIREWORK_DATA_FAILURE.log(getCrateSettings().getCrate(), new String[]{s});
         }
 
     }
@@ -172,7 +172,7 @@ public class FireworkData {
         fw.setFireworkMeta(fm);
 
         if (getPower() == 0) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), fw::detonate, 2);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(instance, fw::detonate, 2);
         }
     }
 
@@ -213,20 +213,12 @@ public class FireworkData {
         return unLoaded;
     }
 
-    public SpecializedCrates getCc() {
-        return cc;
+    public CrateSettings getCrateSettings() {
+        return crateSettings;
     }
 
-    public void setCc(SpecializedCrates cc) {
-        this.cc = cc;
-    }
-
-    public CrateSettings getCs() {
-        return cs;
-    }
-
-    public void setCs(CrateSettings cs) {
-        this.cs = cs;
+    public void setCrateSettings(CrateSettings crateSettings) {
+        this.crateSettings = crateSettings;
     }
 
     public Builder getEffect() {
