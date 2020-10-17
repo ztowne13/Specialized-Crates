@@ -13,29 +13,29 @@ import java.util.UUID;
 public class DynamicHologram {
     private final UUID uuid;
 
-    private final SpecializedCrates cc;
-    private PlacedCrate cm;
+    private final SpecializedCrates instance;
+    private PlacedCrate placedCrate;
 
     private Hologram hologram;
-    private HoloAnimation ha;
+    private HoloAnimation holoAnimation;
 
     private boolean displayingRewardHologram = false;
 
-    public DynamicHologram(SpecializedCrates cc, PlacedCrate cm) {
+    public DynamicHologram(SpecializedCrates instance, PlacedCrate placedCrate) {
         this.uuid = UUID.randomUUID();
 
-        this.cc = cc;
-        this.cm = cm;
+        this.instance = instance;
+        this.placedCrate = placedCrate;
 
-        if (cm.getHologram().getHat() != null && cm.getHologram().getHat() != HoloAnimType.NONE) {
-            setHa(cm.getHologram().getHat().getAsHoloAnimation(cc, this));
+        if (placedCrate.getHologram().getHat() != null && placedCrate.getHologram().getHat() != HoloAnimType.NONE) {
+            setHoloAnimation(placedCrate.getHologram().getHat().getAsHoloAnimation(instance, this));
         }
     }
 
-    public void create(Location l) {
-        l.setY(l.getY() + getCm().getHologram().getHologramOffset() - 1);
-        l = LocationUtils.getLocationCentered(l);
-        this.hologram = getCc().getHologramManager().createHologram(l);
+    public void create(Location location) {
+        location.setY(location.getY() + getPlacedCrate().getHologram().getHologramOffset() - 1);
+        location = LocationUtils.getLocationCentered(location);
+        this.hologram = instance.getHologramManager().createHologram(location);
     }
 
     public void addLine(String line) {
@@ -47,39 +47,35 @@ public class DynamicHologram {
     }
 
     public void delete() {
-        getCc().getHologramManager().deleteHologram(this.hologram);
+        instance.getHologramManager().deleteHologram(this.hologram);
         this.hologram = null;
     }
 
-    public void teleport(Location l) {
-        l.setY(l.getY() + getCm().getHologram().getHologramOffset());
-        this.hologram.setLocation(LocationUtils.getLocationCentered(l));
+    public void teleport(Location location) {
+        location.setY(location.getY() + getPlacedCrate().getHologram().getHologramOffset());
+        this.hologram.setLocation(LocationUtils.getLocationCentered(location));
     }
 
     public void tick() {
-        if (getHa() != null && !cm.getHologram().getPrefixes().isEmpty()) {
-            getHa().tick();
+        if (getHoloAnimation() != null && !placedCrate.getHologram().getPrefixes().isEmpty()) {
+            getHoloAnimation().tick();
         }
     }
 
-    public PlacedCrate getCm() {
-        return cm;
+    public PlacedCrate getPlacedCrate() {
+        return placedCrate;
     }
 
-    public void setCm(PlacedCrate cm) {
-        this.cm = cm;
+    public void setPlacedCrate(PlacedCrate placedCrate) {
+        this.placedCrate = placedCrate;
     }
 
-    public HoloAnimation getHa() {
-        return ha;
+    public HoloAnimation getHoloAnimation() {
+        return holoAnimation;
     }
 
-    public void setHa(HoloAnimation ha) {
-        this.ha = ha;
-    }
-
-    public SpecializedCrates getCc() {
-        return cc;
+    public void setHoloAnimation(HoloAnimation holoAnimation) {
+        this.holoAnimation = holoAnimation;
     }
 
     public boolean getDisplayingRewardHologram() {

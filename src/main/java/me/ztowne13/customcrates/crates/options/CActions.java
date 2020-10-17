@@ -269,8 +269,8 @@ public class CActions extends CSetting {
                     pm.setLastOpenedPlacedCrate(null);
                     dynamicHologram.setDisplayingRewardHologram(false);
 
-                    if (!(dynamicHologram.getHa() == null)) {
-                        dynamicHologram.getHa().update(true);
+                    if (!(dynamicHologram.getHoloAnimation() == null)) {
+                        dynamicHologram.getHoloAnimation().update(true);
                     }
 
                 }, attach ? openDuration : getCrate().getSettings().getHologram().getRewardHoloDuration());

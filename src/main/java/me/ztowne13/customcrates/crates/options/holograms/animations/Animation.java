@@ -6,10 +6,10 @@ import me.ztowne13.customcrates.SpecializedCrates;
  * Class that is the superclass to all non-crate open animations eg. holograms / particles
  */
 public abstract class Animation {
-    protected SpecializedCrates cc;
+    protected final SpecializedCrates instance;
 
-    public Animation(SpecializedCrates cc) {
-        this.cc = cc;
+    public Animation(SpecializedCrates instance) {
+        this.instance = instance;
     }
 
     public abstract void update(boolean force);
