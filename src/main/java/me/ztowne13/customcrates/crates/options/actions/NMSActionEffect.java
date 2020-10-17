@@ -15,10 +15,10 @@ import org.bukkit.entity.Player;
  * Created by ztowne13 on 2/14/2017.
  */
 public class NMSActionEffect extends ActionEffect {
-    Title title;
+    private Title title;
 
-    public NMSActionEffect(SpecializedCrates cc) {
-        super(cc);
+    public NMSActionEffect(SpecializedCrates instance) {
+        super(instance);
     }
 
     public ActionBar getActionBarExecutor() {
@@ -31,14 +31,14 @@ public class NMSActionEffect extends ActionEffect {
     public void newTitle() {
         if (VersionUtils.Version.v1_10.isServerVersionOrEarlier()) {
             title = new TitleV1_7_8_9_10("", "",
-                    (Integer.parseInt(SettingsValue.CA_FADE_IN.getValue(cc).toString())),
-                    (Integer.parseInt(SettingsValue.CA_STAY.getValue(cc).toString())),
-                    (Integer.parseInt(SettingsValue.CA_FADE_OUT.getValue(cc).toString())));
+                    (Integer.parseInt(SettingsValue.CA_FADE_IN.getValue(instance).toString())),
+                    (Integer.parseInt(SettingsValue.CA_STAY.getValue(instance).toString())),
+                    (Integer.parseInt(SettingsValue.CA_FADE_OUT.getValue(instance).toString())));
         } else {
             title = new TitleV1_11("", "",
-                    (Integer.parseInt(SettingsValue.CA_FADE_IN.getValue(cc).toString())),
-                    (Integer.parseInt(SettingsValue.CA_STAY.getValue(cc).toString())),
-                    (Integer.parseInt(SettingsValue.CA_FADE_OUT.getValue(cc).toString())));
+                    (Integer.parseInt(SettingsValue.CA_FADE_IN.getValue(instance).toString())),
+                    (Integer.parseInt(SettingsValue.CA_STAY.getValue(instance).toString())),
+                    (Integer.parseInt(SettingsValue.CA_FADE_OUT.getValue(instance).toString())));
         }
     }
 
