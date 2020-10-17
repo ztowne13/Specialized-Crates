@@ -28,7 +28,7 @@ public class Edit extends SubCommand {
             if (args.length == 1) {
                 TreeSet<Material> set = new TreeSet<>();
                 set.add(Material.AIR);
-                if (!(p.getTargetBlock(set, 20) == null)) {
+                if (p.getTargetBlock(set, 20) != null) {
                     Block b = p.getTargetBlock(set, 20);
                     if (PlacedCrate.crateExistsAt(cc, b.getLocation())) {
                         PlacedCrate pc = PlacedCrate.get(cc, b.getLocation());

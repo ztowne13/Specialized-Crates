@@ -14,6 +14,7 @@ public class ForceOpen extends SubCommand {
         super("forceopen", 3, "Usage: /scrates forceopen [crate] {[player], all}", new String[]{"force", "fopen"});
     }
 
+    @SuppressWarnings("deprecated")
     @Override
     public boolean run(SpecializedCrates cc, Commands cmds, String[] args) {
         if (args.length == 3) {
@@ -29,7 +30,7 @@ public class ForceOpen extends SubCommand {
                         UUID uuid = UUID.fromString(playerName);
                         offlinePlayer = Bukkit.getOfflinePlayer(uuid);
                     } catch (Exception exc) {
-
+                        // IGNORED
                     }
                 }
 

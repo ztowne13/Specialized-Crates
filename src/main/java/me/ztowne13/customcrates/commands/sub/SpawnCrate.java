@@ -22,20 +22,20 @@ public class SpawnCrate extends SubCommand {
 
             if (world == null) {
                 cmds.msgError(args[2] + " is not a valid world.");
-                return true;
+                return false;
             }
 
             if (!Utils.isInt(args[5])) {
                 cmds.msgError(args[5] + " is not a valid number.");
-                return true;
+                return false;
             }
             if (!Utils.isInt(args[3])) {
                 cmds.msgError(args[3] + " is not a valid number.");
-                return true;
+                return false;
             }
             if (!Utils.isInt(args[4])) {
                 cmds.msgError(args[4] + " is not a valid number.");
-                return true;
+                return false;
             }
 
             int x = Integer.parseInt(args[3]);

@@ -11,46 +11,48 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by ztowne13 on 7/30/16.
  */
 public class CommandKey extends Commands implements CommandExecutor {
-    SpecializedCrates cc;
+    private final SpecializedCrates instance;
 
-    public CommandKey(SpecializedCrates cc) {
+    public CommandKey(SpecializedCrates instance) {
         super("keys");
-        this.cc = cc;
+        this.instance = instance;
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, String[] strings) {
         setCmdSender(commandSender);
 
-        if (canExecute(false, true, "customcrates.keys", "specializedcrates.keys")) {
-            Player p = (Player) commandSender;
-            PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
-            msg("&7&l> &b&lVirtual &f&lKeys / Crates");
-            for (VirtualCrateData vcd : pdm.getVirtualCrateData().values()) {
-                Crate crate = vcd.getCrate();
-                if (vcd.getKeys() > 0 || vcd.getCrates() > 0) {
-                    msg("&b" + vcd.getCrate().getName() + " &f( " + crate.getSettings().getCrateInventoryName() + "&f ) ");
-                    msg(" &8- Crates: &7" + vcd.getCrates());
-                    msg(" &8- Keys: &7" + vcd.getKeys());
-                }
-            }
-        } else {
+        if (!canExecute(false, true, "customcrates.keys", "specializedcrates.keys")) {
             if (commandSender instanceof ConsoleCommandSender) {
                 msg("This command cannot be run from console. To give virtual crates / keys simply add a -v to the end of the /scrates givekey command.");
                 return false;
             }
-            msg(Messages.NO_PERMISSIONS.getFromConf(cc).replace("%permission%", "specializedcrates.keys"));
+            msg(Messages.NO_PERMISSIONS.getFromConf(instance).replace("%permission%", "specializedcrates.keys"));
+            return false;
         }
-        return false;
+
+        Player p = (Player) commandSender;
+        PlayerDataManager pdm = PlayerManager.get(instance, p).getPdm();
+        msg("&7&l> &b&lVirtual &f&lKeys / Crates");
+        for (VirtualCrateData vcd : pdm.getVirtualCrateData().values()) {
+            Crate crate = vcd.getCrate();
+            if (vcd.getKeys() > 0 || vcd.getCrates() > 0) {
+                msg("&b" + vcd.getCrate().getName() + " &f( " + crate.getSettings().getCrateInventoryName() + "&f ) ");
+                msg(" &8- Crates: &7" + vcd.getCrates());
+                msg(" &8- Keys: &7" + vcd.getKeys());
+            }
+        }
+        return true;
     }
 
     @Override
     public void msgPage(int page) {
-
+        // EMPTY
     }
 }

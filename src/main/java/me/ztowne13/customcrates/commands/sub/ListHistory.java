@@ -20,7 +20,7 @@ public class ListHistory extends SubCommand {
         Player p = Bukkit.getPlayer(args[1]);
         if (p != null) {
             if (Utils.isInt(args[2])) {
-                int showEntries = Integer.valueOf(args[2]);
+                int showEntries = Integer.parseInt(args[2]);
                 HistoryEvent.listFor(cc, cmds.getCmdSender(), p, showEntries);
             } else {
                 cmds.msgError(args[2] + " is not a valid ");

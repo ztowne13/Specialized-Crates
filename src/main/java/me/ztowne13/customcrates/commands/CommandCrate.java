@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,19 +19,20 @@ import java.util.List;
  * All commands for the plugin
  */
 public class CommandCrate extends Commands implements CommandExecutor {
-    SpecializedCrates cc;
-    VirtualCrates vcSubCommand;
-    Claim claimSubCommand;
-    ArrayList<SubCommand> subCommands;
+    private final SpecializedCrates instance;
+    private final VirtualCrates vcSubCommand;
+    private final Claim claimSubCommand;
+    private final ArrayList<SubCommand> subCommands;
 
-    public CommandCrate(SpecializedCrates cc) {
+    public CommandCrate(SpecializedCrates instance) {
         super("scrates");
-        this.cc = cc;
+        this.instance = instance;
 
         vcSubCommand = new VirtualCrates();
         claimSubCommand = new Claim();
 
-        subCommands = new ArrayList<>(Arrays.asList(new Config(),
+        subCommands = new ArrayList<>(Arrays.asList(
+                new Config(),
                 new DelAllCrateType(),
                 new DeleteCrate(),
                 new GiveCrate(),
@@ -48,59 +50,54 @@ public class CommandCrate extends Commands implements CommandExecutor {
                 new ToggleParticles(),
                 new SpawnCrate(),
                 claimSubCommand,
-                vcSubCommand));
+                vcSubCommand
+        ));
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, Command cmd, String cmdLabel, String[] args) {
         setCmdSender(sender);
 
-        if (canExecute(true, true, "customcrates.admin", "specializedcrates.admin")) {
-            if (args.length > 0) {
-                for (SubCommand subCommand : subCommands) {
-                    if (subCommand.isCommand(args[0])) {
-                        if (subCommand.checkProperUsage(sender, args)) {
-                            return subCommand.run(cc, this, args);
-                        }
-                        return false;
+        if (args.length > 0 && canExecute(true, true, "customcrates.admin", "specializedcrates.admin")) {
+            for (SubCommand subCommand : subCommands) {
+                if (subCommand.isCommand(args[0])) {
+                    if (subCommand.checkProperUsage(sender, args)) {
+                        return subCommand.run(instance, this, args);
                     }
+                    return false;
                 }
             }
         }
 
-        if (args.length >= 1 && args[0].equalsIgnoreCase("luckychest")) {
+        if (args.length > 0 && args[0].equalsIgnoreCase("luckychest")) {
             if (canExecute(false, true, "customcrates.luckychestcommand", "specializedcrates.luckychestcommand")) {
-                PlayerDataManager pdm = PlayerManager.get(cc, (Player) sender).getPdm();
+                PlayerDataManager pdm = PlayerManager.get(instance, (Player) sender).getPdm();
                 pdm.setActivatedLuckyChests(!pdm.isActivatedLuckyChests());
-                Messages.TOGGLE_LUCKYCRATE.msgSpecified(cc, (Player) sender, new String[]{"%state%"},
+                Messages.TOGGLE_LUCKYCRATE.msgSpecified(instance, (Player) sender, new String[]{"%state%"},
                         new String[]{pdm.isActivatedLuckyChests() + ""});
             } else {
-                msg(Messages.NO_PERMISSIONS.getFromConf(cc)
+                msg(Messages.NO_PERMISSIONS.getFromConf(instance)
                         .replace("%permission%", "specializedcrates.luckychestcommand"));
             }
             return true;
-        } else if (args.length >= 1 && args[0].equalsIgnoreCase("claim")) {
+        } else if (args.length > 0 && args[0].equalsIgnoreCase("claim")) {
             if (canExecute(false, true, "customcrates.claim", "specializedcrates.claim")) {
-                claimSubCommand.run(cc, this, args);
+                claimSubCommand.run(instance, this, args);
             } else {
-                msg(Messages.NO_PERMISSIONS.getFromConf(cc)
+                msg(Messages.NO_PERMISSIONS.getFromConf(instance)
                         .replace("%permission%", "specializedcrates.claim"));
             }
             return true;
         } else if (!canExecute(false, true, "customcrates.admin", "specializedcrates.admin")) {
-            if (vcSubCommand.run(cc, this, args)) {
+            if (vcSubCommand.run(instance, this, args)) {
                 return true;
             } else if (args.length == 0) {
-                msg(Messages.NO_PERMISSIONS.getFromConf(cc)
+                msg(Messages.NO_PERMISSIONS.getFromConf(instance)
                         .replace("%permission%", "specializedcrates.crates (for users) or specializedcrates.admin (for admins)"));
-//                msg("&7&l>> &3&m                    ");
-//                msg("&c" + cc.getDescription().getName() + " &fV" + cc.getDescription().getVersion());
-//                msg("&6By &e" + cc.getDescription().getAuthors().get(0));
-//                msg("&7&l>> &3&m                    ");
                 return true;
             }
 
-            msg(Messages.NO_PERMISSIONS.getFromConf(cc)
+            msg(Messages.NO_PERMISSIONS.getFromConf(instance)
                     .replace("%permission%", "specializedcrates.admin"));
         } else {
             msgPage(1);
@@ -110,6 +107,7 @@ public class CommandCrate extends Commands implements CommandExecutor {
         return false;
     }
 
+    @Override
     public void msgPage(int page) {
         msg("");
         msg("");

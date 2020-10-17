@@ -23,6 +23,7 @@ public class GiveCrate extends SubCommand {
                 new String[]{"gcrate", "gc", "crategive", "crate"});
     }
 
+    @SuppressWarnings("deprecated")
     @Override
     public boolean run(SpecializedCrates cc, Commands cmds, String[] args) {
         if (Crate.exists(args[1])) {
@@ -70,15 +71,13 @@ public class GiveCrate extends SubCommand {
             try {
                 op2 = Bukkit.getPlayer(UUID.fromString(args[2]));
             } catch (Exception exc) {
-                //exc.printStackTrace();
+                // IGNORED
             }
 
             boolean foundPlayer = true;
 
-            if (op == null && op2 == null) {
-                if (!args[2].equalsIgnoreCase("ALL")) {
-                    foundPlayer = false;
-                }
+            if (op == null && op2 == null && !args[2].equalsIgnoreCase("ALL")) {
+                foundPlayer = false;
             }
 
             if (!foundPlayer) {
@@ -89,7 +88,7 @@ public class GiveCrate extends SubCommand {
                 DataHandler dataHandler = cc.getDataHandler();
                 try {
                     DataHandler.QueuedGiveCommand queuedGiveCommand = dataHandler.new QueuedGiveCommand(
-                            offlinePlayer == null ? UUID.fromString(args[2]) : offlinePlayer.getUniqueId(), false, isVirtual,
+                            offlinePlayer.getUniqueId(), false, isVirtual,
                             amount, crate);
 
                     dataHandler.addQueuedGiveCommand(queuedGiveCommand);

@@ -11,9 +11,9 @@ import org.bukkit.entity.Player;
  * Created by ztowne13 on 8/3/16.
  */
 public class VirtualCrates extends SubCommand {
-    boolean tryLoad = false;
-    boolean successfulLoad = false;
-    Crate crate;
+    private boolean tryLoad = false;
+    private boolean successfulLoad = false;
+    private Crate crate;
 
     public VirtualCrates() {
         super("virtualcrates", 1, "");

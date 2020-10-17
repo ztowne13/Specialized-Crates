@@ -18,51 +18,51 @@ public class AttemptKeyUseAction extends CrateAction {
 
     @Override
     public boolean run() {
-        PlayerManager pm = PlayerManager.get(cc, player);
+        PlayerManager pm = PlayerManager.get(instance, player);
 
-        if (PlacedCrate.crateExistsAt(cc, location)) {
-            long curTime = System.currentTimeMillis();
-            if (curTime - pm.getLastClickedCrateTime() < 500) {
-                return true;
-            }
-            pm.setLastClickedCrateTime(System.currentTimeMillis());
-
-            // For SQL, to make sure the player data is loaded
-            if (!pm.getPdm().isLoaded()) {
-                Messages.LOADING_FROM_DATABASE.msgSpecified(cc, player);
-                return true;
-            }
-
-            PlacedCrate cm = PlacedCrate.get(cc, location);
-            Crate crate = cm.getCrate();
-
-            if (crate.isMultiCrate() && !CrateUtils.isCrateUsable(cm)) {
-                Messages.CRATE_DISABLED.msgSpecified(cc, player);
-                if (player.hasPermission("customcrates.admin") || player.isOp()) {
-                    Messages.CRATE_DISABLED_ADMIN.msgSpecified(cc, player);
-                }
-                return true;
-            }
-
-            Crate crates = cm.getCrate();
-
-            if (crates.isMultiCrate()) {
-                if (pm.isInCrate()) {
-                    return true;
-                }
-
-                crate.getSettings().getMultiCrateSettings().openFor(player, cm);
-                return true;
-            } else if (!player.getGameMode().equals(GameMode.CREATIVE) ||
-                    (Boolean) cc.getSettings().getConfigValues().get("open-creative")) {
-                useCrate(pm, cm, player.isSneaking() && (Boolean) SettingsValue.SHIFT_CLICK_OPEN_ALL.getValue(cc));
-                return true;
-            } else {
-                crate.getSettings().getAnimation().playFailToOpen(player, false, true);
-                Messages.DENY_CREATIVE_MODE.msgSpecified(cc, player);
-                return true;
-            }
+        if (!PlacedCrate.crateExistsAt(instance, location)) {
+            return false;
         }
-        return false;
+
+        long curTime = System.currentTimeMillis();
+        if (curTime - pm.getLastClickedCrateTime() < 500) {
+            return true;
+        }
+        pm.setLastClickedCrateTime(System.currentTimeMillis());
+
+        // For SQL, to make sure the player data is loaded
+        if (!pm.getPdm().isLoaded()) {
+            Messages.LOADING_FROM_DATABASE.msgSpecified(instance, player);
+            return true;
+        }
+
+        PlacedCrate cm = PlacedCrate.get(instance, location);
+        Crate crate = cm.getCrate();
+
+        if (crate.isMultiCrate() && !CrateUtils.isCrateUsable(cm)) {
+            Messages.CRATE_DISABLED.msgSpecified(instance, player);
+            if (player.hasPermission("customcrates.admin") || player.isOp()) {
+                Messages.CRATE_DISABLED_ADMIN.msgSpecified(instance, player);
+            }
+            return true;
+        }
+
+        Crate crates = cm.getCrate();
+
+        if (crates.isMultiCrate()) {
+            if (pm.isInCrate()) {
+                return true;
+            }
+
+            crate.getSettings().getMultiCrateSettings().openFor(player, cm);
+            return true;
+        } else if (!player.getGameMode().equals(GameMode.CREATIVE) || instance.getSettings().getConfigValues().get("open-creative").equals(Boolean.TRUE)) {
+            useCrate(pm, cm, player.isSneaking() && (Boolean) SettingsValue.SHIFT_CLICK_OPEN_ALL.getValue(instance));
+            return true;
+        } else {
+            crate.getSettings().getAnimation().playFailToOpen(player, false, true);
+            Messages.DENY_CREATIVE_MODE.msgSpecified(instance, player);
+            return true;
+        }
     }
 }

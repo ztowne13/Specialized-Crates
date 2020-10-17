@@ -25,6 +25,7 @@ public class GiveKey extends SubCommand {
                 new String[]{"gkey", "gk", "key"});
     }
 
+    @SuppressWarnings("deprecated")
     @Override
     public boolean run(SpecializedCrates cc, Commands cmds, String[] args) {
         if (Crate.exists(args[1])) {
@@ -46,7 +47,7 @@ public class GiveKey extends SubCommand {
                     Player p = (Player) cmds.getCmdSender();
                     cmds.msgSuccess("Given key for crate: " + args[1]);
 
-                    Boolean toNotDrop = (Boolean) SettingsValue.VIRTUAL_KEY_INSTEAD_OF_DROP.getValue(cc);
+                    boolean toNotDrop = SettingsValue.VIRTUAL_KEY_INSTEAD_OF_DROP.getValue(cc).equals(Boolean.TRUE);
                     int count = Utils.addItemAndDropRest(p, toAdd, !toNotDrop);
 
                     if (toNotDrop) {
@@ -90,15 +91,13 @@ public class GiveKey extends SubCommand {
             try {
                 op2 = Bukkit.getPlayer(UUID.fromString(args[2]));
             } catch (Exception exc) {
-                //exc.printStackTrace();
+                // IGNORED
             }
 
             boolean foundPlayer = true;
 
-            if (op == null && op2 == null) {
-                if (!args[2].equalsIgnoreCase("ALL")) {
-                    foundPlayer = false;
-                }
+            if (op == null && op2 == null && !args[2].equalsIgnoreCase("ALL")) {
+                foundPlayer = false;
             }
 
             if (!foundPlayer) {
@@ -109,7 +108,7 @@ public class GiveKey extends SubCommand {
                 DataHandler dataHandler = cc.getDataHandler();
                 try {
                     DataHandler.QueuedGiveCommand queuedGiveCommand = dataHandler.new QueuedGiveCommand(
-                            offlinePlayer == null ? UUID.fromString(args[2]) : offlinePlayer.getUniqueId(), true, isVirtual,
+                            offlinePlayer.getUniqueId(), true, isVirtual,
                             amount, crate);
 
                     dataHandler.addQueuedGiveCommand(queuedGiveCommand);
@@ -127,7 +126,7 @@ public class GiveKey extends SubCommand {
                 cmds.msgSuccess("Given virtual key for crate: " + args[1]);
                 Messages.RECEIVED_VIRTUAL_KEY.msgSpecified(cc, toGive, new String[]{"%crate%", "%amount%"}, new String[]{crate.getDisplayName(), "" + amount});
             } else {
-                Boolean toNotDrop = (Boolean) SettingsValue.VIRTUAL_KEY_INSTEAD_OF_DROP.getValue(cc);
+                Boolean toNotDrop = SettingsValue.VIRTUAL_KEY_INSTEAD_OF_DROP.getValue(cc).equals(Boolean.TRUE);
                 int count = Utils.addItemAndDropRest(toGive, toAdd, !toNotDrop);
 
                 if (toNotDrop) {

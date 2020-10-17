@@ -12,11 +12,11 @@ import java.util.Map;
  * Created by ztowne13 on 6/23/16.
  */
 public abstract class SubCommand {
-    static HashMap<String, String> mappedAliases = new HashMap<>();
-    String[] aliases;
-    int minimumArgs;
-    String commandTitle;
-    String usageMessage;
+    private static final HashMap<String, String> mappedAliases = new HashMap<>();
+    private final String[] aliases;
+    private final int minimumArgs;
+    private final String commandTitle;
+    private final String usageMessage;
 
     public SubCommand(String commandTitle, int minimumArgs, String usageMessage) {
         this(commandTitle, minimumArgs, usageMessage, new String[]{});
