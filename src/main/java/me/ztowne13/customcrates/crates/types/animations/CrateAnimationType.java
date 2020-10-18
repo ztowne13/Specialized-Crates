@@ -65,7 +65,7 @@ public enum CrateAnimationType {
                 ch = new GiveKeyAnimation(crates);
         }
 
-        crates.getSettings().setAnimation(ch);
+        crates.getSettings().setCrateAnimation(ch);
     }
 
     public AnimationDataHolder newDataHolderInstance(Player player, Location location, CrateAnimation crateAnimation) {

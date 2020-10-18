@@ -24,7 +24,7 @@ public class BlockRemoveListener implements Listener {
     public void onBlockChange(BlockExplodeEvent e) {
         if (cc.isAllowTick())
             if ((Boolean) SettingsValue.EXPLODE_DYNAMIC.getValue(cc))
-                e.blockList().removeIf(b -> PlacedCrate.crateExistsAt(cc, b.getLocation()));
+                e.blockList().removeIf(b -> PlacedCrate.crateExistsAt(b.getLocation()));
     }
 
     @EventHandler
@@ -37,15 +37,15 @@ public class BlockRemoveListener implements Listener {
     public void onEntityExplode(EntityExplodeEvent e) {
         if (cc.isAllowTick())
             if ((Boolean) SettingsValue.EXPLODE_DYNAMIC.getValue(cc))
-                e.blockList().removeIf(b -> PlacedCrate.crateExistsAt(cc, b.getLocation()));
+                e.blockList().removeIf(b -> PlacedCrate.crateExistsAt(b.getLocation()));
     }
 
     public boolean shouldCancel(List<Block> blocks, BlockFace bf) {
         boolean shouldCancel = false;
         if ((Boolean) SettingsValue.EXPLODE_DYNAMIC.getValue(cc)) {
             for (Block b : blocks) {
-                if (PlacedCrate.crateExistsAt(cc, b.getLocation()) ||
-                        PlacedCrate.crateExistsAt(cc, b.getRelative(bf).getLocation())) {
+                if (PlacedCrate.crateExistsAt(b.getLocation()) ||
+                        PlacedCrate.crateExistsAt(b.getRelative(bf).getLocation())) {
                     shouldCancel = true;
                     break;
                 }

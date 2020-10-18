@@ -15,7 +15,7 @@ public class CrateCooldownEvent extends DataEvent {
     boolean start;
 
     public CrateCooldownEvent(Crate crates, long startTime, boolean start) {
-        super(crates.getCc());
+        super(crates.getInstance());
 
         this.crates = crates;
         this.startTime = startTime;
@@ -74,7 +74,7 @@ public class CrateCooldownEvent extends DataEvent {
     }
 
     public void playFailure(PlayerDataManager pdm) {
-        crates.getSettings().getAnimation().playFailToOpen(pdm.getPm().getP(), false, true);
+        crates.getSettings().getCrateAnimation().playFailToOpen(pdm.getPm().getP(), false, true);
         int seconds = Math.round(isCooldownOver());
         String[] values = Utils.convertSecondToHHMMString(seconds);
         pdm.getPm().getP().sendMessage(Messages.CRATE_ON_COOLDOWN.getFromConf(cc).replace("%crate%", crates.getDisplayName())

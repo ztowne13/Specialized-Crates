@@ -7,6 +7,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 
 public class SettingsConverter {
+    private SettingsConverter() {
+        // EMPTY
+    }
+
     public static void convertParticles(FileHandler fileHandler, String path) {
         FileConfiguration fc = fileHandler.get();
         boolean isSet = !fc.getStringList(path).isEmpty();

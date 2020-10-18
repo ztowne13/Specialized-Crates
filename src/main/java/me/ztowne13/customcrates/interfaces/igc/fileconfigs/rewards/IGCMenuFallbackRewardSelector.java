@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards;
 
 import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.options.CRewards;
+import me.ztowne13.customcrates.crates.options.CReward;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
@@ -29,9 +29,9 @@ public class IGCMenuFallbackRewardSelector extends IGCMenu {
 
         int slots;
 
-        CRewards.loadAll(getCc(), getP());
+        CReward.loadAll(getCc(), getP());
 
-        Map<String, Reward> rewards = CRewards.getAllRewards();
+        Map<String, Reward> rewards = CReward.getAllRewards();
         rewards.remove(reward.getRewardName());
 
         slots = Math.min(rewards.size() - ((page - 1) * 28), 28);
@@ -90,7 +90,7 @@ public class IGCMenuFallbackRewardSelector extends IGCMenu {
             ib.setItem(2, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo back a page"));
         }
 
-        if ((CRewards.getAllRewards().size() / 28) + (CRewards.getAllRewards().size() % 28 == 0 ? 0 : 1) != page) {
+        if ((CReward.getAllRewards().size() / 28) + (CReward.getAllRewards().size() % 28 == 0 ? 0 : 1) != page) {
             ib.setItem(6, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo forward a page"));
         }
 

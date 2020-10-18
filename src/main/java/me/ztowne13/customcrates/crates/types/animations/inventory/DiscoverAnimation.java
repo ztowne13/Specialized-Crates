@@ -221,7 +221,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation {
     public void updateWinningTiles(DiscoverAnimationDataHolder dadh) {
         for (int slot : dadh.getClickedSlots()) {
             if (dadh.getAlreadyChosenSlots().contains(slot) && !dadh.getAlreadyDisplayedRewards().containsKey(slot)) {
-                Reward newR = getCrate().getSettings().getRewards().getRandomReward();
+                Reward newR = getCrate().getSettings().getReward().getRandomReward();
 
                 if (uncoverSound != null)
                     uncoverSound.playTo(dadh.getPlayer(), dadh.getLocation());

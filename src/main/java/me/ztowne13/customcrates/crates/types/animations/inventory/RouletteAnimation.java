@@ -86,7 +86,7 @@ public class RouletteAnimation extends InventoryCrateAnimation {
     }
 
     public void updateReward(RouletteAnimationDataHolder rdh) {
-        Reward r = getCrate().getSettings().getRewards().getRandomReward();
+        Reward r = getCrate().getSettings().getReward().getRandomReward();
         rdh.setLastShownReward(r);
     }
 

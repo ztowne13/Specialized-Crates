@@ -5,7 +5,7 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
-import me.ztowne13.customcrates.crates.types.display.EntityTypes;
+import me.ztowne13.customcrates.crates.types.display.EntityType;
 import me.ztowne13.customcrates.crates.types.display.MaterialPlaceholder;
 import me.ztowne13.customcrates.crates.types.display.npcs.Citizens2NPCPlaceHolder;
 import me.ztowne13.customcrates.crates.types.display.npcs.MobPlaceholder;
@@ -147,10 +147,10 @@ public class IGCCratesEssentials extends IGCMenuCrate {
                     new InputMenu(getCc(), getP(),
                             "display." + (cs.getPlaceholder().toString().equalsIgnoreCase("mob") ? "creature" : "name"),
                             cs.getPlaceholder().getType(), cs.getPlaceholder().toString().equalsIgnoreCase("mob") ?
-                            "Available mob types: " + EntityTypes.enumValues().toString() : "Use a player's name",
+                            "Available mob types: " + EntityType.enumValues().toString() : "Use a player's name",
                             String.class, this, true);
                 } else if (cs.getPlaceholder().toString().equalsIgnoreCase("mob")) {
-                    new IGCListSelector(getCc(), getP(), this, "Mob Type", EntityTypes.enumValues(),
+                    new IGCListSelector(getCc(), getP(), this, "Mob Type", EntityType.enumValues(),
                             XMaterial.PAPER, 1, null).open();
                 }
                 break;
@@ -254,12 +254,12 @@ public class IGCCratesEssentials extends IGCMenuCrate {
             }
         } else if (value.equalsIgnoreCase("Mob Type")) {
             try {
-                EntityTypes et = EntityTypes.getEnum(input.toUpperCase());
+                EntityType et = EntityType.getEnum(input.toUpperCase());
                 cs.getPlaceholder().setType(et.name());
                 ChatUtils.msgSuccess(getP(), "Set mob type to " + input);
                 return true;
             } catch (Exception exc) {
-                ChatUtils.msgError(getP(), input + " is not a valid entity type: " + EntityTypes.enumValues().toString());
+                ChatUtils.msgError(getP(), input + " is not a valid entity type: " + EntityType.enumValues().toString());
             }
         } else if (value.equalsIgnoreCase("display.name")) {
             cs.getPlaceholder().setType(input);

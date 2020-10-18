@@ -4,7 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettings;
-import me.ztowne13.customcrates.crates.options.CRewards;
+import me.ztowne13.customcrates.crates.options.CReward;
 import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.RewardDisplayType;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SimpleRewardDisplayer;
@@ -89,8 +89,8 @@ public class IGCMenuCrateOrMulticrate extends IGCMenu {
                     newCrate.setEnabled(true);
                     newCrate.setCanBeEnabled(false);
 
-                    if (!multicrate && !CRewards.getAllRewards().isEmpty()) {
-                        cs.getRewards().addReward(CRewards.getAllRewards().values().iterator().next().getRewardName());
+                    if (!multicrate && !CReward.getAllRewards().isEmpty()) {
+                        cs.getReward().addReward(CReward.getAllRewards().values().iterator().next().getRewardName());
                     }
 
                     cs.saveAll();

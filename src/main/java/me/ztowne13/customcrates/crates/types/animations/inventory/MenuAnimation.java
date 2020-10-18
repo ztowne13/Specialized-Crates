@@ -80,7 +80,7 @@ public class MenuAnimation extends InventoryCrateAnimation {
             int slot = Utils.getRandomNumberExcluding((getInventoryRows() * 9) - 1, mdh.getUsedNumbers());
             mdh.getUsedNumbers().add(slot);
 
-            Reward reward = getCrate().getSettings().getRewards().getRandomReward();
+            Reward reward = getCrate().getSettings().getReward().getRandomReward();
             mdh.getDisplayedRewards().add(reward);
 
             mdh.getInventoryBuilder().setItem(slot, reward.getDisplayBuilder());

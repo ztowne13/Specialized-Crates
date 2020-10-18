@@ -22,23 +22,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CParticles extends CSetting {
+public class CParticle extends CSetting {
     private Map<String, List<ParticleData>> particles = new HashMap<>();
 
-    public CParticles(Crate crates) {
-        super(crates, crates.getCc());
+    public CParticle(Crate crate) {
+        super(crate, crate.getInstance());
     }
 
     @Override
     public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
-        if (crateSettingsBuilder.hasV(crateState.name().toLowerCase() + ".particles")) {
+        if (crateSettingsBuilder.hasValue(crateState.name().toLowerCase() + ".particles")) {
             parseAndAddParticles(crateState.name().toUpperCase(),
                     crateState.name().toLowerCase() + ".particles");
         }
 
-        if (crateState.equals(CrateState.OPEN) && crateSettingsBuilder.hasV("open.crate-tiers")) {
-            for (String id : getCrate().getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false)) {
-                if (crateSettingsBuilder.hasV("open.crate-tiers." + id + ".particles")) {
+        if (crateState.equals(CrateState.OPEN) && crateSettingsBuilder.hasValue("open.crate-tiers")) {
+            for (String id : getCrate().getSettings().getFileConfiguration().getConfigurationSection("open.crate-tiers").getKeys(false)) {
+                if (crateSettingsBuilder.hasValue("open.crate-tiers." + id + ".particles")) {
                     parseAndAddParticles(id, "open.crate-tiers." + id + ".particles");
                 }
             }

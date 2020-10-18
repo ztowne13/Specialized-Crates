@@ -11,14 +11,14 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class CRewards extends CSetting {
+public class CReward extends CSetting {
     private static final Map<String, Reward> allRewards = new HashMap<>();
 
     private Reward[] crateRewards;
     private final Random random = new Random();
 
-    public CRewards(Crate crates) {
-        super(crates, crates.getCc());
+    public CReward(Crate crate) {
+        super(crate, crate.getInstance());
     }
 
     public static void loadAll(SpecializedCrates instance, Player player) {
@@ -136,15 +136,15 @@ public class CRewards extends CSetting {
     }
 
     public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
-        if (crateSettingsBuilder.hasV("rewards")) {
+        if (crateSettingsBuilder.hasValue("rewards")) {
             int slot = 0;
 
-            setCrateRewards(new Reward[getCrate().getSettings().getFc().getStringList("rewards").size()]);
+            setCrateRewards(new Reward[getCrate().getSettings().getFileConfiguration().getStringList("rewards").size()]);
 
-            List<String> unparsedRewards = getCrate().getSettings().getFc().getStringList("rewards");
+            List<String> unparsedRewards = getCrate().getSettings().getFileConfiguration().getStringList("rewards");
 
             for (String s : unparsedRewards) {
-                Reward reward = new Reward(getCrate().getCc(), this, s);
+                Reward reward = new Reward(getCrate().getInstance(), this, s);
 
                 setReward(slot, reward);
 

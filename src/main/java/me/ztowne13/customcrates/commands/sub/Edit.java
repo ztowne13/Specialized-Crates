@@ -30,7 +30,7 @@ public class Edit extends SubCommand {
                 set.add(Material.AIR);
                 if (p.getTargetBlock(set, 20) != null) {
                     Block b = p.getTargetBlock(set, 20);
-                    if (PlacedCrate.crateExistsAt(cc, b.getLocation())) {
+                    if (PlacedCrate.crateExistsAt(b.getLocation())) {
                         PlacedCrate pc = PlacedCrate.get(cc, b.getLocation());
                         new IGCCratesMain(cc, p, null, pc.getCrate()).open();
                         ChatUtils.msgSuccess(p, "Opening config menu for crate: " + pc.getCrate().getName());

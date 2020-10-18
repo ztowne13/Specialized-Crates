@@ -17,7 +17,7 @@ public class LeftClickAction extends CrateAction {
 
     @Override
     public boolean run() {
-        if (!PlacedCrate.crateExistsAt(instance, location)) {
+        if (!PlacedCrate.crateExistsAt(location)) {
             return false;
         }
 

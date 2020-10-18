@@ -44,8 +44,8 @@ public class CMultiCrateInventory extends CSetting {
 
     private InventoryBuilder inventoryBuilder;
 
-    public CMultiCrateInventory(Crate crates) {
-        super(crates, crates.getCc());
+    public CMultiCrateInventory(Crate crate) {
+        super(crate, crate.getInstance());
     }
 
     public void updateCrateSpots() {
@@ -63,8 +63,8 @@ public class CMultiCrateInventory extends CSetting {
 
     @Override
     public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
-        FileConfiguration fc = getCrate().getSettings().getFc();
-        if (crateSettingsBuilder.hasV("gui")) {
+        FileConfiguration fc = getCrate().getSettings().getFileConfiguration();
+        if (crateSettingsBuilder.hasValue("gui")) {
             try {
                 for (String s : fc.getConfigurationSection("gui.objects").getValues(false).keySet()) {
                     s = s.toLowerCase();
@@ -231,7 +231,7 @@ public class CMultiCrateInventory extends CSetting {
                     } catch (Exception exc) {
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (p.isOp()) {
-                                ChatUtils.msgError(p, "Failed to save multicrate " + crates.getName() + " with value " + s);
+                                ChatUtils.msgError(p, "Failed to save multicrate " + crate.getName() + " with value " + s);
                             }
                         }
                         exc.printStackTrace();
@@ -360,7 +360,7 @@ public class CMultiCrateInventory extends CSetting {
                 ClickType.LEFT : ClickType.RIGHT) && SettingsValue.REWARD_DISPLAY_ENABLED.getValue(instance).equals(Boolean.TRUE)) {
             clickedCrate.getSettings().getDisplayer().openFor(player);
             // Set last open crate back to multicrate so that closing the reward previewer reopens the multicrate
-            final Crate cachedMulticrate = this.crates;
+            final Crate cachedMulticrate = this.crate;
             Bukkit.getScheduler().runTaskLater(instance, () -> playerManager.openCrate(cachedMulticrate), 2);
             return;
         }
@@ -375,7 +375,7 @@ public class CMultiCrateInventory extends CSetting {
         // Inventory check
         if (!CrateAction.isInventoryTooEmpty(instance, player)) {
             Messages.INVENTORY_TOO_FULL.msgSpecified(instance, player);
-            clickedCrate.getSettings().getAnimation().playFailToOpen(player, false, true);
+            clickedCrate.getSettings().getCrateAnimation().playFailToOpen(player, false, true);
 
             invCheck(player, playerManager);
             return;
@@ -385,7 +385,7 @@ public class CMultiCrateInventory extends CSetting {
         if (!player.hasPermission(clickedCrate.getSettings().getPermission()) &&
                 !clickedCrate.getSettings().getPermission().equalsIgnoreCase("no permission")) {
             Messages.NO_PERMISSION_CRATE.msgSpecified(instance, player);
-            clickedCrate.getSettings().getAnimation().playFailToOpen(player, false, true);
+            clickedCrate.getSettings().getCrateAnimation().playFailToOpen(player, false, true);
             invCheck(player, playerManager);
             return;
         }
@@ -407,7 +407,7 @@ public class CMultiCrateInventory extends CSetting {
 
         // Economy check
         if (!instance.getEconomyHandler().handleCheck(player, clickedCrate.getSettings().getCost(), true)) {
-            crate.getSettings().getAnimation().playFailToOpen(player, false, true);
+            crate.getSettings().getCrateAnimation().playFailToOpen(player, false, true);
             invCheck(player, playerManager);
             return;
         }
@@ -420,7 +420,7 @@ public class CMultiCrateInventory extends CSetting {
             Bukkit.getScheduler().runTaskLater(instance, () -> clickedCrate.getSettings().setCanFastTrack(true), 2L);
         }
 
-        if (!clickedCrate.getSettings().getAnimation()
+        if (!clickedCrate.getSettings().getCrateAnimation()
                 .startAnimation(player, playerManager.getLastOpenCrate(), false, false)) {
             invCheck(player, playerManager);
             instance.getEconomyHandler().failSoReturn(player, clickedCrate.getSettings().getCost());
@@ -432,7 +432,7 @@ public class CMultiCrateInventory extends CSetting {
         if (playerManager.isUseVirtualCrate()) {
             playerManager.getPdm().setVirtualCrateCrates(clickedCrate,
                     playerManager.getPdm().getVCCrateData(clickedCrate).getCrates() - 1);
-        } else if (!crates.getSettings().getObtainType().equals(ObtainType.STATIC)) {
+        } else if (!this.crate.getSettings().getObtainType().equals(ObtainType.STATIC)) {
             try {
                 PlacedCrate pc = PlacedCrate.get(instance, playerManager.getLastOpenCrate());
                 pc.delete();
@@ -444,13 +444,13 @@ public class CMultiCrateInventory extends CSetting {
 
     public void openFor(Player player, PlacedCrate placedCrate) {
         PlayerManager pm = PlayerManager.get(instance, player);
-        crates.getSettings().getMultiCrateSettings()
-                .getInventory(player, crates.getSettings().getCrateInventoryName() == null ? crates.getName() :
-                        crates.getSettings().getCrateInventoryName(), true).open();
-        pm.setLastOpenCrate(placedCrate.getL());
+        crate.getSettings().getMultiCrateSettings()
+                .getInventory(player, crate.getSettings().getCrateInventoryName() == null ? crate.getName() :
+                        crate.getSettings().getCrateInventoryName(), true).open();
+        pm.setLastOpenCrate(placedCrate.getLocation());
         pm.setLastOpenedPlacedCrate(placedCrate);
-        pm.openCrate(crates);
-        getCrate().getSettings().getSounds().runAll(player, placedCrate.getL(), new ArrayList<>());
+        pm.openCrate(crate);
+        getCrate().getSettings().getSound().runAll(player, placedCrate.getLocation(), new ArrayList<>());
     }
 
     public void invCheck(Player player, PlayerManager playerManager) {

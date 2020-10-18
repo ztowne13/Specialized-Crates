@@ -31,20 +31,20 @@ public class CLuckyChest extends CSetting {
     private List<String> worldsRaw = new ArrayList<>();
     private boolean allWorlds = true;
 
-    public CLuckyChest(Crate crates) {
-        super(crates, crates.getCc());
+    public CLuckyChest(Crate crate) {
+        super(crate, crate.getInstance());
     }
 
     @Override
     public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
-        FileConfiguration fc = getSettings().getFc();
+        FileConfiguration fc = getSettings().getFileConfiguration();
 
-        if (!crateSettingsBuilder.hasV("lucky-chest")) {
+        if (!crateSettingsBuilder.hasValue("lucky-chest")) {
             StatusLoggerEvent.LUCKYCHEST_NOVALUES.log(getCrate());
             return;
         }
 
-        if (crateSettingsBuilder.hasV("lucky-chest.chance")) {
+        if (crateSettingsBuilder.hasValue("lucky-chest.chance")) {
             String unParsedChance = fc.getString("lucky-chest.chance");
             String[] args = unParsedChance.split("/");
             try {
@@ -59,7 +59,7 @@ public class CLuckyChest extends CSetting {
             StatusLoggerEvent.LUCKYCHEST_CHANCE_NONEXISTENT.log(getCrate());
         }
 
-        if (crateSettingsBuilder.hasV("lucky-chest.is-block-list-whitelist")) {
+        if (crateSettingsBuilder.hasValue("lucky-chest.is-block-list-whitelist")) {
             try {
                 setBLWL(fc.getBoolean("lucky-chest.is-block-list-whitelist"));
             } catch (Exception exc) {
@@ -70,7 +70,7 @@ public class CLuckyChest extends CSetting {
             StatusLoggerEvent.LUCKYCHEST_BLWL_NONEXISTENT.log(getCrate());
         }
 
-        if (crateSettingsBuilder.hasV("lucky-chest.require-permission")) {
+        if (crateSettingsBuilder.hasValue("lucky-chest.require-permission")) {
             try {
                 requirePermission = fc.getBoolean("lucky-chest.require-permission");
             } catch (Exception exc) {
@@ -81,7 +81,7 @@ public class CLuckyChest extends CSetting {
             StatusLoggerEvent.LUCKYCHEST_REQUIRE_PERMISSION_NONEXISTENT.log(getCrate());
         }
 
-        if (crateSettingsBuilder.hasV("lucky-chest.worlds")) {
+        if (crateSettingsBuilder.hasValue("lucky-chest.worlds")) {
             worldsRaw = fc.getStringList("lucky-chest.worlds");
 
             for (String s : fc.getStringList("lucky-chest.worlds")) {
@@ -95,7 +95,7 @@ public class CLuckyChest extends CSetting {
             }
         }
 
-        if (crateSettingsBuilder.hasV("lucky-chest.block-list")) {
+        if (crateSettingsBuilder.hasValue("lucky-chest.block-list")) {
             try {
                 for (String mat : fc.getStringList("lucky-chest.block-list")) {
                     Optional<XMaterial> optional = XMaterial.matchXMaterial(mat);

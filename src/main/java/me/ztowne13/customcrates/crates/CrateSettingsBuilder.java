@@ -8,7 +8,7 @@ import me.ztowne13.customcrates.crates.options.rewards.displaymenu.SortedRewardD
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.custom.CustomRewardDisplayer;
 import me.ztowne13.customcrates.crates.types.animations.CrateAnimationType;
 import me.ztowne13.customcrates.crates.types.display.CrateDisplayType;
-import me.ztowne13.customcrates.crates.types.display.EntityTypes;
+import me.ztowne13.customcrates.crates.types.display.EntityType;
 import me.ztowne13.customcrates.crates.types.display.MaterialPlaceholder;
 import me.ztowne13.customcrates.crates.types.display.npcs.Citizens2NPCPlaceHolder;
 import me.ztowne13.customcrates.crates.types.display.npcs.MobPlaceholder;
@@ -19,31 +19,31 @@ import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class CrateSettingsBuilder {
-    CrateSettings settings;
-    FileConfiguration fc;
-    SpecializedCrates cc;
+    private final SpecializedCrates instance;
+    private CrateSettings settings;
+    private FileConfiguration fileConfiguration;
 
     public CrateSettingsBuilder(CrateSettings settings) {
         this.settings = settings;
-        this.fc = settings.getFc();
-        this.cc = settings.getCrate().getCc();
+        this.fileConfiguration = settings.getFileConfiguration();
+        this.instance = settings.getCrate().getInstance();
     }
 
-    public boolean hasV(String path) {
-        return getFc().contains((path));
+    public boolean hasValue(String path) {
+        return getFileConfiguration().contains((path));
     }
 
     public void setupAutoClose() {
-        if (hasV("auto-close")) {
-            getSettings().setAutoClose(Boolean.parseBoolean(getFc().getString("auto-close")));
+        if (hasValue("auto-close")) {
+            getSettings().setAutoClose(Boolean.parseBoolean(getFileConfiguration().getString("auto-close")));
             StatusLoggerEvent.SETTINGS_AUTOCLOSE_SUCCESS.log(getStatusLogger());
         }
     }
 
     public void setupHologramOffset() {
-        if (hasV("hologram-offset")) {
-            if (Utils.isDouble(fc.getString("hologram-offset"))) {
-                getSettings().setHologramOffset(fc.getDouble("hologram-offset"));
+        if (hasValue("hologram-offset")) {
+            if (Utils.isDouble(fileConfiguration.getString("hologram-offset"))) {
+                getSettings().setHologramOffset(fileConfiguration.getDouble("hologram-offset"));
                 StatusLoggerEvent.SETTINGS_HOLOGRAMOFFSET_SUCCESS.log(getStatusLogger());
                 return;
             }
@@ -52,8 +52,8 @@ public class CrateSettingsBuilder {
     }
 
     public void setupRequireKey() {
-        if (hasV("key.require")) {
-            getSettings().setRequireKey(getFc().getBoolean(("key.require")));
+        if (hasValue("key.require")) {
+            getSettings().setRequireKey(getFileConfiguration().getBoolean(("key.require")));
         } else {
             StatusLoggerEvent.SETTINGS_KEY_REQUIRE_NONEXISTENT.log(getStatusLogger());
         }
@@ -61,14 +61,14 @@ public class CrateSettingsBuilder {
 
     public void setupObtainMethod() {
 
-        if (hasV("obtain-method")) {
+        if (hasValue("obtain-method")) {
             try {
-                ObtainType ot = ObtainType.valueOf(getFc().getString("obtain-method").toUpperCase());
+                ObtainType ot = ObtainType.valueOf(getFileConfiguration().getString("obtain-method").toUpperCase());
                 getSettings().setObtainType(ot);
                 StatusLoggerEvent.SETTINGS_OBTAINMETHOD_SUCCESS.log(getStatusLogger());
             } catch (Exception exc) {
                 StatusLoggerEvent.SETTINGS_OBTAINMETHOD_INVALID
-                        .log(getStatusLogger(), new String[]{getFc().getString("obtain-method")});
+                        .log(getStatusLogger(), new String[]{getFileConfiguration().getString("obtain-method")});
             }
             return;
         }
@@ -97,14 +97,14 @@ public class CrateSettingsBuilder {
 	}*/
 
     public void setupCrateAnimation() {
-        if (hasV("open.crate-animation")) {
+        if (hasValue("open.crate-animation")) {
             try {
-                getSettings().setCrateType(CrateAnimationType.valueOf(getFc().getString(("open.crate-animation"))));
+                getSettings().setCrateType(CrateAnimationType.valueOf(getFileConfiguration().getString(("open.crate-animation"))));
                 StatusLoggerEvent.SETTINGS_ANIMATION_SUCCESS.log(getStatusLogger());
             } catch (Exception exc) {
                 getSettings().setCrateType(CrateAnimationType.BLOCK_CRATEOPEN);
                 StatusLoggerEvent.SETTINGS_ANIMATION_INVALID
-                        .log(getStatusLogger(), new String[]{getFc().getString("open.crate-animation")});
+                        .log(getStatusLogger(), new String[]{getFileConfiguration().getString("open.crate-animation")});
             }
             return;
         }
@@ -112,10 +112,10 @@ public class CrateSettingsBuilder {
         StatusLoggerEvent.SETTINGS_ANIMATION_NONEXISTENT.log(getStatusLogger());
     }
 
-    public void setupCooldowns() {
-        if (hasV("cooldown")) {
+    public void setupCooldown() {
+        if (hasValue("cooldown")) {
             try {
-                getSettings().setCooldown(getFc().getInt("cooldown"));
+                getSettings().setCooldown(getFileConfiguration().getInt("cooldown"));
                 StatusLoggerEvent.SETTINGS_COOLDOWN_SUCCESS.log(getStatusLogger());
             } catch (Exception exc) {
                 StatusLoggerEvent.SETTINGS_COOLDOWN_INVALID.log(getStatusLogger());
@@ -123,13 +123,13 @@ public class CrateSettingsBuilder {
             return;
         }
 
-        getFc().set("cooldown", 0);
+        getFileConfiguration().set("cooldown", 0);
     }
 
     public void setupCost() {
-        if (hasV("cost")) {
+        if (hasValue("cost")) {
             try {
-                getSettings().setCost(getFc().getInt("cost"));
+                getSettings().setCost(getFileConfiguration().getInt("cost"));
                 StatusLoggerEvent.SETTINGS_COST_SUCCESS.log(getStatusLogger());
             } catch (Exception exc) {
                 StatusLoggerEvent.SETTINGS_COST_INVALID.log(getStatusLogger());
@@ -137,13 +137,13 @@ public class CrateSettingsBuilder {
             return;
         }
 
-        getFc().set("cost", -1);
+        getFileConfiguration().set("cost", -1);
     }
 
     public void setupAllowSkipAnimation() {
-        if (hasV("allow-skip-animation")) {
+        if (hasValue("allow-skip-animation")) {
             try {
-                getSettings().setCanFastTrack(getFc().getBoolean("allow-skip-animation"));
+                getSettings().setCanFastTrack(getFileConfiguration().getBoolean("allow-skip-animation"));
                 StatusLoggerEvent.SETTINGS_FASTTRACK_SUCCESS.log(getStatusLogger());
             } catch (Exception exc) {
                 StatusLoggerEvent.SETTINGS_FASTTRACK_INVALID.log(getStatusLogger());
@@ -151,20 +151,20 @@ public class CrateSettingsBuilder {
             return;
         }
 
-        getFc().set("allow-skip-animation", false);
+        getFileConfiguration().set("allow-skip-animation", false);
     }
 
     public void setupDisplay() {
-        if (hasV("display")) {
+        if (hasValue("display")) {
             CrateDisplayType cdt = CrateDisplayType.BLOCK;
 
-            if (hasV("display.type")) {
+            if (hasValue("display.type")) {
                 try {
-                    cdt = CrateDisplayType.valueOf(getFc().getString("display.type").toUpperCase());
+                    cdt = CrateDisplayType.valueOf(getFileConfiguration().getString("display.type").toUpperCase());
                     StatusLoggerEvent.SETTINGS_DISPLAYTYPE_SUCCESS.log(getStatusLogger());
                 } catch (Exception exc) {
                     StatusLoggerEvent.SETTINGS_DISPLAYTYPE_INVALID
-                            .log(getStatusLogger(), new String[]{getFc().getString("display.type")});
+                            .log(getStatusLogger(), new String[]{getFileConfiguration().getString("display.type")});
                 }
             }
 
@@ -176,10 +176,10 @@ public class CrateSettingsBuilder {
             getSettings().setCrateDisplayType(cdt);
 
             if (cdt == CrateDisplayType.MOB) {
-                getSettings().setPlaceholder(new MobPlaceholder(getCc()));
-                if (hasV("display.creature")) {
+                getSettings().setPlaceholder(new MobPlaceholder(instance));
+                if (hasValue("display.creature")) {
                     try {
-                        EntityTypes ent = EntityTypes.getEnum(getFc().getString("display.creature").toUpperCase());
+                        EntityType ent = EntityType.getEnum(getFileConfiguration().getString("display.creature").toUpperCase());
                         getSettings().getPlaceholder().setType(ent.toString());
 
                         StatusLoggerEvent.SETTINGS_DISPLAYTYPE_CREATURE_SUCCESS.log(getStatusLogger());
@@ -187,15 +187,15 @@ public class CrateSettingsBuilder {
                     } catch (Exception exc) {
                         exc.printStackTrace();
                         StatusLoggerEvent.SETTINGS_DISPLAYTYPE_CREATURETYPE_INVALID
-                                .log(getStatusLogger(), new String[]{getFc().getString("display.creature")});
+                                .log(getStatusLogger(), new String[]{getFileConfiguration().getString("display.creature")});
                     }
                 } else {
                     StatusLoggerEvent.SETTINGS_DISPLAYTYPE_CREATURETYPE_NONEXISTENT.log(getStatusLogger());
                 }
             } else if (cdt == CrateDisplayType.NPC) {
-                getSettings().setPlaceholder(new Citizens2NPCPlaceHolder(getCc()));
-                if (hasV("display.name")) {
-                    getSettings().getPlaceholder().setType(getFc().getString("display.name"));
+                getSettings().setPlaceholder(new Citizens2NPCPlaceHolder(instance));
+                if (hasValue("display.name")) {
+                    getSettings().getPlaceholder().setType(getFileConfiguration().getString("display.name"));
 
                     StatusLoggerEvent.SETTINGS_DISPLAYTYPE_DISPLAYNAME_SUCCESS.log(getStatusLogger());
                     return;
@@ -203,19 +203,19 @@ public class CrateSettingsBuilder {
                 StatusLoggerEvent.SETTINGS_DISPLAYTYPE_DISPLAYNAME_NONEXISTENT.log(getStatusLogger());
             }
 
-            getSettings().setPlaceholder(new MaterialPlaceholder(getCc()));
+            getSettings().setPlaceholder(new MaterialPlaceholder(instance));
             return;
         }
 
         StatusLoggerEvent.SETTINGS_DISPLAYTYPE_NONEXISTENT.log(getStatusLogger());
-        getFc().set("display.type", "block");
+        getFileConfiguration().set("display.type", "block");
         getSettings().getFileHandler().save();
         setupDisplay();
     }
 
     public void setupCrateInventoryName() {
-        if (hasV("inventory-name")) {
-            String invName = getFc().getString("inventory-name");
+        if (hasValue("inventory-name")) {
+            String invName = getFileConfiguration().getString("inventory-name");
             if (invName.length() < 33) {
                 getSettings().setCrateInventoryName(invName);
                 StatusLoggerEvent.SETTINGS_INVENTORYNAME_SUCCESS.log(getStatusLogger());
@@ -230,8 +230,8 @@ public class CrateSettingsBuilder {
     }
 
     public void setupPermission() {
-        if (hasV("permission")) {
-            getSettings().setPermission(getFc().getString("permission"));
+        if (hasValue("permission")) {
+            getSettings().setPermission(getFileConfiguration().getString("permission"));
             StatusLoggerEvent.SETTINGS_PERMISSION_SUCCESS.log(getStatusLogger());
             return;
         }
@@ -240,8 +240,8 @@ public class CrateSettingsBuilder {
     }
 
     public void setupDisplayer() {
-        if (hasV("reward-display.type")) {
-            String displayerString = getFc().getString("reward-display.type").toUpperCase();
+        if (hasValue("reward-display.type")) {
+            String displayerString = getFileConfiguration().getString("reward-display.type").toUpperCase();
 
             try {
                 RewardDisplayType rewardDisplayType = RewardDisplayType.valueOf(displayerString);
@@ -296,19 +296,11 @@ public class CrateSettingsBuilder {
         this.settings = settings;
     }
 
-    public FileConfiguration getFc() {
-        return fc;
+    public FileConfiguration getFileConfiguration() {
+        return fileConfiguration;
     }
 
-    public void setFc(FileConfiguration fc) {
-        this.fc = fc;
-    }
-
-    public SpecializedCrates getCc() {
-        return cc;
-    }
-
-    public void setCc(SpecializedCrates cc) {
-        this.cc = cc;
+    public void setFileConfiguration(FileConfiguration fileConfiguration) {
+        this.fileConfiguration = fileConfiguration;
     }
 }

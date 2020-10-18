@@ -3,7 +3,7 @@ package me.ztowne13.customcrates.interfaces.igc.crates;
 import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
-import me.ztowne13.customcrates.crates.options.CHolograms;
+import me.ztowne13.customcrates.crates.options.CHologram;
 import me.ztowne13.customcrates.crates.options.holograms.animations.HoloAnimType;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
@@ -32,7 +32,7 @@ public class IGCCrateHolograms extends IGCMenuCrate {
     public void openMenu() {
 
         InventoryBuilder ib = createDefault(27);
-        CHolograms cholo = crates.getSettings().getHologram();
+        CHologram cholo = crates.getSettings().getHologram();
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
 

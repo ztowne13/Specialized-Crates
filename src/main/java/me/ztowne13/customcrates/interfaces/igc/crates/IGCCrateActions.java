@@ -81,9 +81,9 @@ public class IGCCrateActions extends IGCTierMenu {
     public void openMenu() {
 
         int count = 0;
-        if (cs.getActions().getActions().containsKey(tier)) {
-            for (String actionType : cs.getActions().getActions().get(tier).keySet()) {
-                count += cs.getActions().getActions().get(tier).get(actionType).size();
+        if (cs.getAction().getActions().containsKey(tier)) {
+            for (String actionType : cs.getAction().getActions().get(tier).keySet()) {
+                count += cs.getAction().getActions().get(tier).get(actionType).size();
             }
         }
 
@@ -103,9 +103,9 @@ public class IGCCrateActions extends IGCTierMenu {
         ib.setItem(17, new ItemBuilder(XMaterial.PAPER).setDisplayName("&aAdd a new action"));
 
         int i = 2;
-        if (cs.getActions().getActions().containsKey(tier)) {
-            for (String actionType : cs.getActions().getActions().get(tier).keySet()) {
-                for (String actionMSG : cs.getActions().getActions().get(tier).get(actionType)) {
+        if (cs.getAction().getActions().containsKey(tier)) {
+            for (String actionType : cs.getAction().getActions().get(tier).keySet()) {
+                for (String actionMSG : cs.getAction().getActions().get(tier).get(actionType)) {
                     if (i % 9 == 7) {
                         i += 4;
                     }
@@ -143,7 +143,7 @@ public class IGCCrateActions extends IGCTierMenu {
         } else if (getIb().getInv().getItem(slot) != null && getIb().getInv().getItem(slot).getType().equals(Material.BOOK)) {
             if (deleteMode) {
                 ItemMeta im = getIb().getInv().getItem(slot).getItemMeta();
-                cs.getActions().removeEntry(ChatUtils.removeColor(im.getDisplayName()), im.getLore().get(0), tier);
+                cs.getAction().removeEntry(ChatUtils.removeColor(im.getDisplayName()), im.getLore().get(0), tier);
                 open();
             }
         }
@@ -162,7 +162,7 @@ public class IGCCrateActions extends IGCTierMenu {
                 ChatUtils.msgError(getP(), input + " is not a valid action type: " + actionTypes.toString());
             }
         } else if (value.equalsIgnoreCase("new action - message")) {
-            cs.getActions().addEntry(actionType, input, tier);
+            cs.getAction().addEntry(actionType, input, tier);
             ChatUtils.msgSuccess(getP(),
                     "Added a new action with action type '" + actionType + "' and message '" + input + "'");
             return true;

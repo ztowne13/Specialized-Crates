@@ -11,7 +11,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CHolograms extends CSetting {
+public class CHologram extends CSetting {
     private DynamicHologram dynamicHologram = null;
     private List<String> lines = new ArrayList<>();
     private int lineCount = 0;
@@ -27,8 +27,8 @@ public class CHolograms extends CSetting {
 
     private boolean createdByPlayer = true;
 
-    public CHolograms(Crate crates) {
-        super(crates, crates.getCc());
+    public CHologram(Crate crate) {
+        super(crate, crate.getInstance());
     }
 
     public static void deleteAll() {
@@ -41,14 +41,14 @@ public class CHolograms extends CSetting {
     }
 
     public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
-        FileConfiguration fc = getCrate().getSettings().getFc();
+        FileConfiguration fc = getCrate().getSettings().getFileConfiguration();
 
-        if (crateSettingsBuilder.hasV("hologram.reward-hologram")) {
+        if (crateSettingsBuilder.hasValue("hologram.reward-hologram")) {
             rewardHologram = fc.getString("hologram.reward-hologram");
             StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM.log(getCrate(), new String[]{rewardHologram});
         }
 
-        if (crateSettingsBuilder.hasV("hologram.reward-hologram-duration")) {
+        if (crateSettingsBuilder.hasValue("hologram.reward-hologram-duration")) {
             try {
                 rewardHoloDuration = Integer.parseInt(fc.getString("hologram.reward-hologram-duration"));
                 StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_DURATION_SUCCESS.log(getCrate());
@@ -57,7 +57,7 @@ public class CHolograms extends CSetting {
             }
         }
 
-        if (crateSettingsBuilder.hasV("hologram.reward-hologram-yoffset")) {
+        if (crateSettingsBuilder.hasValue("hologram.reward-hologram-yoffset")) {
             try {
                 rewardHoloYOffset = Double.parseDouble(fc.getString("hologram.reward-hologram-yoffset"));
                 StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_YOFFSET_SUCCESS.log(getCrate());
@@ -66,19 +66,19 @@ public class CHolograms extends CSetting {
             }
         }
 
-        if (crateSettingsBuilder.hasV("hologram.lines")) {
+        if (crateSettingsBuilder.hasValue("hologram.lines")) {
             for (String s : fc.getStringList("hologram.lines")) {
                 setLineCount(getLineCount() + 1);
                 addLine(s);
             }
         }
 
-        if (crateSettingsBuilder.hasV("hologram.animation")) {
+        if (crateSettingsBuilder.hasValue("hologram.animation")) {
             try {
                 HoloAnimType hat = HoloAnimType.valueOf(fc.getString("hologram.animation.type").toUpperCase());
                 setHoloAnimType(hat);
             } catch (Exception exc) {
-                if (!crateSettingsBuilder.hasV("hologram.animation.type")) {
+                if (!crateSettingsBuilder.hasValue("hologram.animation.type")) {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_TYPE_FAILURE_NONEXISTENT.log(getCrate());
                 } else {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_TYPE_FAILURE_INVALID
@@ -91,7 +91,7 @@ public class CHolograms extends CSetting {
                 setSpeed(fc.getInt("hologram.animation.speed"));
             } catch (Exception exc) {
                 setSpeed(10);
-                if (!crateSettingsBuilder.hasV("hologram.animation.speed")) {
+                if (!crateSettingsBuilder.hasValue("hologram.animation.speed")) {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_SPEED_FAILURE_NONEXISTENT.log(getCrate());
                 } else {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_SPEED_FAILURE_INVALID
@@ -107,7 +107,7 @@ public class CHolograms extends CSetting {
             } catch (Exception exc) {
                 setHoloAnimType(null);
                 StatusLoggerEvent.HOLOGRAM_ANIMATION_PREFIXES_DISABLED.log(getCrate());
-                if (!crateSettingsBuilder.hasV("hologram.animation.prefixes")) {
+                if (!crateSettingsBuilder.hasValue("hologram.animation.prefixes")) {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_PREFIXES_NONEXISTENT.log(getCrate());
                 } else {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_PREFIXES_MISFORMATTED.log(getCrate());
@@ -154,8 +154,8 @@ public class CHolograms extends CSetting {
         return hologramOffset + getCrate().getSettings().getHologramOffset();
     }
 
-    public CHolograms clone() {
-        CHolograms ch = new CHolograms(getCrate());
+    public CHologram clone() {
+        CHologram ch = new CHologram(getCrate());
         ch.setLineCount(getLineCount());
         ch.setLines(getLines());
         ch.setHoloAnimType(getHoloAnimType());

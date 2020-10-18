@@ -145,7 +145,7 @@ public class CSGOAnimation extends InventoryCrateAnimation {
             }
         }
 
-        Reward r = getCrate().getSettings().getRewards().getRandomReward();
+        Reward r = getCrate().getSettings().getReward().getRandomReward();
         cdh.getDisplayedRewards()[cdh.getDisplayedRewards().length - 1] = r;
     }
 

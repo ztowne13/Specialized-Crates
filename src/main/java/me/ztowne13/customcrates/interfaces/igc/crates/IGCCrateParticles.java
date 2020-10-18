@@ -41,17 +41,17 @@ public class IGCCrateParticles extends IGCTierMenu {
     public void openMenu() {
 
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4,
-                (crates.getSettings().getParticles().getParticles().containsKey(tier) ?
-                        crates.getSettings().getParticles().getParticles().get(tier).size() : 0) + 9));
+                (crates.getSettings().getParticle().getParticles().containsKey(tier) ?
+                        crates.getSettings().getParticle().getParticles().get(tier).size() : 0) + 9));
 
         ib.setItem(9, IGCDefaultItems.EXIT_BUTTON.getIb());
         ib.setItem(8,
                 new ItemBuilder(XMaterial.PAPER).setDisplayName("&aCreate a new particle").setLore("&7Make sure you save")
                         .addLore("&7when you're done."));
 
-        if (crates.getSettings().getParticles().getParticles().containsKey(tier)) {
+        if (crates.getSettings().getParticle().getParticles().containsKey(tier)) {
             int i = 2;
-            for (ParticleData pd : crates.getSettings().getParticles().getParticles().get(tier)) {
+            for (ParticleData pd : crates.getSettings().getParticle().getParticles().get(tier)) {
                 if (i % 9 == 7) {
                     i += 4;
                 }
@@ -159,9 +159,9 @@ public class IGCCrateParticles extends IGCTierMenu {
         } else if (value.equalsIgnoreCase("amount")) {
             if (Utils.isInt(input)) {
                 pd.setAmount(Integer.valueOf(input));
-                pd.save(cs.getFileHandler(), cs.getParticles().getPath(tier));
+                pd.save(cs.getFileHandler(), cs.getParticle().getPath(tier));
 
-                cs.getParticles().addParticle(pd, tier);
+                cs.getParticle().addParticle(pd, tier);
 
                 ChatUtils.msgSuccess(getP(), "Successfully set all particle values.");
                 new IGCCrateParticle(getCc(), getP(), this, crates, pd, tier).open();

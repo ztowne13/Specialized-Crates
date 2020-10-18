@@ -36,13 +36,13 @@ public class NPCUtils {
                     if (npc.hasTrait(IdentifierTrait.class) && npc.getTrait(IdentifierTrait.class).isCrate()) {
                         if (!b) {
                             b = true;
-                            for (NPC npck : MobPlaceholder.getMobs().values()) {
+                            for (NPC npck : MobPlaceholder.getNpcMap().values()) {
                                 if (npck.getUniqueId().equals(npc.getUniqueId())) {
                                     b = false;
                                 }
                             }
 
-                            for (NPC npck : Citizens2NPCPlaceHolder.getNpcs().values()) {
+                            for (NPC npck : Citizens2NPCPlaceHolder.getNpcMap().values()) {
                                 if (npck.getUniqueId().equals(npc.getUniqueId())) {
                                     b = false;
                                 }
@@ -76,7 +76,7 @@ public class NPCUtils {
                     //if (npc.hasTrait(IdentifierTrait.class) && npc.getTrait(IdentifierTrait.class).isCrate())
                     {
                         Location storedLoc = npc.getStoredLocation();
-                        Location crateLoc = LocationUtils.getLocationCentered(placedCrate.getL());
+                        Location crateLoc = LocationUtils.getLocationCentered(placedCrate.getLocation());
                         if (Math.abs(storedLoc.getX() - crateLoc.getX()) < .3 &&
                                 Math.abs(storedLoc.getY() - crateLoc.getY()) < 2 &&
                                 Math.abs(storedLoc.getZ() - crateLoc.getZ()) < .3 &&

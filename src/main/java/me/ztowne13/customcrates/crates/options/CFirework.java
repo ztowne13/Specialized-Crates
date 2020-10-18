@@ -16,22 +16,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CFireworks extends CSetting {
+public class CFirework extends CSetting {
     private Map<String, List<FireworkData>> fireworks = new HashMap<>();
 
-    public CFireworks(Crate crates) {
-        super(crates, crates.getCc());
+    public CFirework(Crate crate) {
+        super(crate, crate.getInstance());
     }
 
     @Override
     public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
-        if (crateSettingsBuilder.hasV("open.fireworks")) {
-            addFireworks("OPEN", crateSettingsBuilder.getSettings().getFc().getStringList("open.fireworks"));
+        if (crateSettingsBuilder.hasValue("open.fireworks")) {
+            addFireworks("OPEN", crateSettingsBuilder.getSettings().getFileConfiguration().getStringList("open.fireworks"));
         }
-        if (crateSettingsBuilder.hasV("open.crate-tiers")) {
-            for (String id : getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false)) {
-                if (crateSettingsBuilder.hasV("open.crate-tiers." + id + ".fireworks")) {
-                    addFireworks(id, getSettings().getFc().getStringList("open.crate-tiers." + id + ".fireworks"));
+        if (crateSettingsBuilder.hasValue("open.crate-tiers")) {
+            for (String id : getSettings().getFileConfiguration().getConfigurationSection("open.crate-tiers").getKeys(false)) {
+                if (crateSettingsBuilder.hasValue("open.crate-tiers." + id + ".fireworks")) {
+                    addFireworks(id, getSettings().getFileConfiguration().getStringList("open.crate-tiers." + id + ".fireworks"));
                 }
             }
         }

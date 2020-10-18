@@ -14,8 +14,8 @@ public class CrateItemHandler extends CSetting {
 
     private SaveableItemBuilder crateItem;
 
-    public CrateItemHandler(Crate crates) {
-        super(crates, crates.getCc());
+    public CrateItemHandler(Crate crate) {
+        super(crate, crate.getInstance());
 
         crateItem = new SaveableItemBuilder(XMaterial.RED_WOOL, 1);
         crateItem.setDisplayName("&4Please set me!");

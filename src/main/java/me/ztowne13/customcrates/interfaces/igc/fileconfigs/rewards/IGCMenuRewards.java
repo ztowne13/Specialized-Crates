@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards;
 
 import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.options.CRewards;
+import me.ztowne13.customcrates.crates.options.CReward;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
@@ -35,9 +35,9 @@ public class IGCMenuRewards extends IGCMenu {
     public void openMenu() {
         boolean newValues = false;
 
-        CRewards.loadAll(getCc(), getP());
+        CReward.loadAll(getCc(), getP());
 
-        int slots = Math.min(CRewards.getAllRewards().size() - ((page - 1) * 28), 28);
+        int slots = Math.min(CReward.getAllRewards().size() - ((page - 1) * 28), 28);
 
         slots = InventoryUtils.getRowsFor(2, slots) + 9;
 
@@ -63,7 +63,7 @@ public class IGCMenuRewards extends IGCMenu {
         int skipped = 0;
         int displayedRewards = 0;
 
-        for (Reward r : CRewards.getAllRewardsSorted(getCc(), (CRewards.RewardSortType) getButtons()[0].getValue()).values()) {
+        for (Reward r : CReward.getAllRewardsSorted(getCc(), (CReward.RewardSortType) getButtons()[0].getValue()).values()) {
             String rName = r.getRewardName();
 
             if (toSkip > skipped || displayedRewards >= 28) {
@@ -100,7 +100,7 @@ public class IGCMenuRewards extends IGCMenu {
             ib.setItem(2, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo back a page"));
         }
 
-        if ((CRewards.getAllRewards().size() / 28) + (CRewards.getAllRewards().size() % 28 == 0 ? 0 : 1) != page) {
+        if ((CReward.getAllRewards().size() / 28) + (CReward.getAllRewards().size() % 28 == 0 ? 0 : 1) != page) {
             ib.setItem(6, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo forward a page"));
         }
 
@@ -142,7 +142,7 @@ public class IGCMenuRewards extends IGCMenu {
         if (value.equalsIgnoreCase("rewardName")) {
             if (!input.contains(" ")) {
 
-                if (!CRewards.rewardNameExists(getCc(), input)) {
+                if (!CReward.rewardNameExists(getCc(), input)) {
                     new IGCMenuReward(getCc(), getP(), this, input).open();
                 } else {
                     ChatUtils.msgError(getP(),

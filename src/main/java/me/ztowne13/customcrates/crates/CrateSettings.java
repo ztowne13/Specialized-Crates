@@ -16,58 +16,51 @@ import me.ztowne13.customcrates.utils.CrateUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class CrateSettings {
-    SpecializedCrates cc;
-    Crate crates;
-    StatusLogger sl;
+    private final SpecializedCrates instance;
+    private final CrateSettingsBuilder crateSettingsBuilder;
+    private boolean requireKey;
+    private boolean tiersOverrideDefaults = true;
+    private ObtainType obtainType;
+    private int cooldown = 0;
+    private int cost = -1;
+    private double hologramOffset = 0;
+    private KeyItemHandler keyItemHandler;
+    private CrateItemHandler crateItemHandler;
+    private CrateDisplayType crateDisplayType = CrateDisplayType.BLOCK;
+    private DynamicCratePlaceholder dynamicCratePlaceholder;
+    private RewardDisplayer displayer;
+    private RewardDisplayType rewardDisplayType;
+    private CrateAnimation crateAnimation;
+    private CrateAnimationType crateAnimationType;
+    private boolean canFastTrack = false;
+    private boolean autoClose = true;
+    private CHologram hologram;
+    private CParticle particle;
+    private CSound sound;
+    private CAction action;
+    private CFirework firework;
+    private CLuckyChest luckyChest;
+    private CReward reward;
+    private CMultiCrateInventory multiCrateInventory;
+    private Crate crate;
+    private StatusLogger statusLogger;
+    private String name;
+    private String crateInventoryName = "";
+    private String permission = "no permission";
+    private FileConfiguration fileConfiguration;
+    private FileHandler fileHandler;
 
-    String name;
-    String crateInventoryName = "";
-    String permission = "no permission";
-    FileConfiguration fc;
-    FileHandler fu;
-    CrateSettingsBuilder csb;
+    public CrateSettings(SpecializedCrates instance, Crate crate, boolean newFile) {
+        this.instance = instance;
+        this.crate = crate;
+        this.name = crate.getName();
+        this.statusLogger = new StatusLogger(instance);
 
-    boolean requireKey;
-    boolean tiersOverrideDefaults = true;
-
-    ObtainType ot;
-    int cooldown = 0;
-    int cost = -1;
-    double hologramOffset = 0;
-
-    KeyItemHandler keyItemHandler;
-    CrateItemHandler crateItemHandler;
-
-    CrateDisplayType cdt = CrateDisplayType.BLOCK;
-    DynamicCratePlaceholder dcp;
-    RewardDisplayer displayer;
-    RewardDisplayType rewardDisplayType;
-
-    CrateAnimation ch;
-    CrateAnimationType ct;
-    boolean canFastTrack = false;
-    boolean autoClose = true;
-
-    CHolograms choloCopy;
-    CParticles cp;
-    CSounds cs;
-    CActions ca;
-    CFireworks cf;
-    CLuckyChest clc;
-    CRewards cr;
-    CMultiCrateInventory cmci;
-
-    public CrateSettings(SpecializedCrates cc, Crate crates, boolean newFile) {
-        this.cc = cc;
-        this.crates = crates;
-        this.name = crates.getName();
-        this.sl = new StatusLogger(cc);
-
-        this.fu = new FileHandler(cc, crates.getName() + (crates.isMultiCrate() ? ".multicrate" : ".crate"), "/Crates", true,
+        this.fileHandler = new FileHandler(instance, crate.getName() + (crate.isMultiCrate() ? ".multicrate" : ".crate"), "/Crates", true,
                 true, newFile);
-        this.fc = fu.get();
+        this.fileConfiguration = fileHandler.get();
 
-        this.csb = new CrateSettingsBuilder(this);
+        this.crateSettingsBuilder = new CrateSettingsBuilder(this);
     }
 
     public void saveAll() {
@@ -80,13 +73,13 @@ public class CrateSettings {
             getLuckyChestSettings().saveToFile();
         }
         getHologram().saveToFile();
-        getParticles().saveToFile();
-        getSounds().saveToFile();
+        getParticle().saveToFile();
+        getSound().saveToFile();
 
         if (!getCrate().isMultiCrate()) {
-            getRewards().saveToFile();
-            getActions().saveToFile();
-            getFireworks().saveToFile();
+            getReward().saveToFile();
+            getAction().saveToFile();
+            getFirework().saveToFile();
             getDisplayer().saveToFile();
         } else {
             getMultiCrateSettings().saveToFile();
@@ -97,50 +90,50 @@ public class CrateSettings {
 
 
     public void saveIndividualValues() {
-        fc.set("enabled", crates.isEnabled());
-        fc.set("cooldown", getCooldown());
-        fc.set("obtain-method", getObtainType().name());
-        fc.set("display.type", getPlaceholder().toString());
-        fc.set("hologram-offset", getHologramOffset());
-        fc.set("auto-close", isAutoClose());
-        fc.set("key.require", isRequireKey());
-        fc.set("cost", getCost());
-        fc.set("allow-skip-animation", isCanFastTrack());
+        fileConfiguration.set("enabled", crate.isEnabled());
+        fileConfiguration.set("cooldown", getCooldown());
+        fileConfiguration.set("obtain-method", getObtainType().name());
+        fileConfiguration.set("display.type", getPlaceholder().toString());
+        fileConfiguration.set("hologram-offset", getHologramOffset());
+        fileConfiguration.set("auto-close", isAutoClose());
+        fileConfiguration.set("key.require", isRequireKey());
+        fileConfiguration.set("cost", getCost());
+        fileConfiguration.set("allow-skip-animation", isCanFastTrack());
 
-        fc.set("permission", getPermission().equalsIgnoreCase("no permission") ? null : getPermission());
+        fileConfiguration.set("permission", getPermission().equalsIgnoreCase("no permission") ? null : getPermission());
 
         if (!getPlaceholder().toString().equalsIgnoreCase("block")) {
-            fc.set("display." + (getPlaceholder().toString().equalsIgnoreCase("mob") ? "creature" : "name"), getPlaceholder().getType());
+            fileConfiguration.set("display." + (getPlaceholder().toString().equalsIgnoreCase("mob") ? "creature" : "name"), getPlaceholder().getType());
         }
 
         if (getCrateInventoryName() != null) {
-            fc.set("inventory-name", ChatUtils.fromChatColor(getCrateInventoryName()));
+            fileConfiguration.set("inventory-name", ChatUtils.fromChatColor(getCrateInventoryName()));
         }
 
         if (!getCrate().isMultiCrate()) {
-            fc.set("open.crate-animation", getCrateType().name());
+            fileConfiguration.set("open.crate-animation", getCrateType().name());
         }
 
     }
 
     public void loadAll() {
-        cc.getDu().log("loadAll() - CALL");
+        instance.getDu().log("loadAll() - CALL");
         // Crate Loging
-        String toLog = SettingsValue.LOG_SUCCESSES.getValue(getCrate().getCc()).toString();
-        cc.getDu().log("loadAll() - Preparing to load notice.");
+        String toLog = SettingsValue.LOG_SUCCESSES.getValue(getCrate().getInstance()).toString();
+        instance.getDu().log("loadAll() - Preparing to load notice.");
         loadNotice(toLog);
-        cc.getDu().log("loadAll() - Loaded notice.");
+        instance.getDu().log("loadAll() - Loaded notice.");
 
-        setParticles(new CParticles(getCrate()));
-        setHologram(new CHolograms(getCrate()));
+        setParticle(new CParticle(getCrate()));
+        setHologram(new CHologram(getCrate()));
         setKeyItemHandler(new KeyItemHandler(getCrate()));
         setCrateItemHandler(new CrateItemHandler(getCrate()));
-        setSounds(new CSounds(getCrate()));
+        setSound(new CSound(getCrate()));
 
         if (!getCrate().isMultiCrate()) {
-            setRewards(new CRewards(getCrate()));
-            setActions(new CActions(getCrate()));
-            setFireworks(new CFireworks(getCrate()));
+            setReward(new CReward(getCrate()));
+            setAction(new CAction(getCrate()));
+            setFirework(new CFirework(getCrate()));
             setLuckyChestSettings(new CLuckyChest(getCrate()));
         } else {
             setMultiCrateSettings(new CMultiCrateInventory(getCrate()));
@@ -150,7 +143,7 @@ public class CrateSettings {
             // Base Settings
 
             getCrateItemHandler().loadFor(getSettingsBuilder(), null);
-            getSettingsBuilder().setupCooldowns();
+            getSettingsBuilder().setupCooldown();
             getSettingsBuilder().setupDisplay();
             getSettingsBuilder().setupObtainMethod();
             getSettingsBuilder().setupCrateInventoryName();
@@ -168,14 +161,14 @@ public class CrateSettings {
             }
 
             // Particles
-            getParticles().loadFor(getSettingsBuilder(), CrateState.PLAY);
-            getParticles().loadFor(getSettingsBuilder(), CrateState.OPEN);
+            getParticle().loadFor(getSettingsBuilder(), CrateState.PLAY);
+            getParticle().loadFor(getSettingsBuilder(), CrateState.OPEN);
 
             // Holograms
             getHologram().loadFor(getSettingsBuilder(), CrateState.PLAY);
 
             // Sounds
-            getSounds().loadFor(getSettingsBuilder(), CrateState.OPEN);
+            getSound().loadFor(getSettingsBuilder(), CrateState.OPEN);
 
             // Lucky Chest
             if (getObtainType().equals(ObtainType.LUCKYCHEST)) {
@@ -184,16 +177,16 @@ public class CrateSettings {
 
             if (!getCrate().isMultiCrate()) {
                 // Rewards
-                getRewards().loadFor(getSettingsBuilder(), CrateState.OPEN);
+                getReward().loadFor(getSettingsBuilder(), CrateState.OPEN);
 
                 // Actions
-                getActions().loadFor(getSettingsBuilder(), CrateState.OPEN);
+                getAction().loadFor(getSettingsBuilder(), CrateState.OPEN);
 
                 // Fireworks
-                getFireworks().loadFor(getSettingsBuilder(), CrateState.OPEN);
+                getFirework().loadFor(getSettingsBuilder(), CrateState.OPEN);
 
-                getCrate().getSettings().getCrateType().setupFor(crates);
-                getAnimation().loadDataValues(getStatusLogger());
+                getCrate().getSettings().getCrateType().setupFor(crate);
+                getCrateAnimation().loadDataValues(getStatusLogger());
             } else {
                 getMultiCrateSettings().loadFor(getSettingsBuilder(), CrateState.OPEN);
             }
@@ -203,8 +196,8 @@ public class CrateSettings {
                 getStatusLogger().logAll();
             }
         } else {
-            crates.setEnabled(false);
-            crates.setCanBeEnabled(false);
+            crate.setEnabled(false);
+            crate.setCanBeEnabled(false);
         }
     }
 
@@ -228,11 +221,11 @@ public class CrateSettings {
     }
 
     public Crate getCrate() {
-        return crates;
+        return crate;
     }
 
-    public void setCrates(Crate crates) {
-        this.crates = crates;
+    public void setCrate(Crate crate) {
+        this.crate = crate;
     }
 
     public String getName() {
@@ -243,60 +236,60 @@ public class CrateSettings {
         this.name = name;
     }
 
-    public FileConfiguration getFc() {
-        return fc;
+    public FileConfiguration getFileConfiguration() {
+        return fileConfiguration;
     }
 
-    public void setFc(FileConfiguration fc) {
-        this.fc = fc;
+    public void setFileConfiguration(FileConfiguration fileConfiguration) {
+        this.fileConfiguration = fileConfiguration;
     }
 
-    public CParticles getParticles() {
-        return cp;
+    public CParticle getParticle() {
+        return particle;
     }
 
-    public void setParticles(CParticles cp) {
-        this.cp = cp;
+    public void setParticle(CParticle particle) {
+        this.particle = particle;
     }
 
-    public CRewards getRewards() {
-        return cr;
+    public CReward getReward() {
+        return reward;
     }
 
-    public void setRewards(CRewards cr) {
-        this.cr = cr;
+    public void setReward(CReward reward) {
+        this.reward = reward;
     }
 
-    public CHolograms getHologram() {
-        return choloCopy;
+    public CHologram getHologram() {
+        return hologram;
     }
 
-    public void setHologram(CHolograms choloCopy) {
-        this.choloCopy = choloCopy;
+    public void setHologram(CHologram holograms) {
+        this.hologram = holograms;
     }
 
     public ObtainType getObtainType() {
-        return ot;
+        return obtainType;
     }
 
-    public void setObtainType(ObtainType ot) {
-        this.ot = ot;
+    public void setObtainType(ObtainType obtainType) {
+        this.obtainType = obtainType;
     }
 
     public CrateAnimationType getCrateType() {
-        return ct;
+        return crateAnimationType;
     }
 
-    public void setCrateType(CrateAnimationType ct) {
-        this.ct = ct;
+    public void setCrateType(CrateAnimationType crateType) {
+        this.crateAnimationType = crateType;
     }
 
     public StatusLogger getStatusLogger() {
-        return sl;
+        return statusLogger;
     }
 
-    public void setStatusLogger(StatusLogger sl) {
-        this.sl = sl;
+    public void setStatusLogger(StatusLogger statusLogger) {
+        this.statusLogger = statusLogger;
     }
 
     public boolean isTiersOverrideDefaults() {
@@ -308,19 +301,19 @@ public class CrateSettings {
     }
 
     public CrateSettingsBuilder getSettingsBuilder() {
-        return csb;
+        return crateSettingsBuilder;
     }
 
     public CLuckyChest getLuckyChestSettings() {
-        return clc;
+        return luckyChest;
     }
 
-    public void setLuckyChestSettings(CLuckyChest clc) {
-        this.clc = clc;
+    public void setLuckyChestSettings(CLuckyChest luckyChest) {
+        this.luckyChest = luckyChest;
     }
 
     public boolean luckyChestSettingsExists() {
-        return clc != null;
+        return luckyChest != null;
     }
 
     public int getCooldown() {
@@ -331,8 +324,8 @@ public class CrateSettings {
         this.cooldown = cooldown;
     }
 
-    public SpecializedCrates getSc() {
-        return cc;
+    public SpecializedCrates getInstance() {
+        return instance;
     }
 
     public KeyItemHandler getKeyItemHandler() {
@@ -352,51 +345,51 @@ public class CrateSettings {
     }
 
     public DynamicCratePlaceholder getPlaceholder() {
-        return dcp;
+        return dynamicCratePlaceholder;
     }
 
-    public void setPlaceholder(DynamicCratePlaceholder dcp) {
-        this.dcp = dcp;
+    public void setPlaceholder(DynamicCratePlaceholder dynamicCratePlaceholder) {
+        this.dynamicCratePlaceholder = dynamicCratePlaceholder;
     }
 
-    public CSounds getSounds() {
-        return cs;
+    public CSound getSound() {
+        return sound;
     }
 
-    public void setSounds(CSounds cs) {
-        this.cs = cs;
+    public void setSound(CSound sound) {
+        this.sound = sound;
     }
 
-    public CActions getActions() {
-        return ca;
+    public CAction getAction() {
+        return action;
     }
 
-    public void setActions(CActions ca) {
-        this.ca = ca;
+    public void setAction(CAction action) {
+        this.action = action;
     }
 
-    public CFireworks getFireworks() {
-        return cf;
+    public CFirework getFirework() {
+        return firework;
     }
 
-    public void setFireworks(CFireworks cf) {
-        this.cf = cf;
+    public void setFirework(CFirework firework) {
+        this.firework = firework;
     }
 
     public CrateDisplayType getCrateDisplayType() {
-        return cdt;
+        return crateDisplayType;
     }
 
-    public void setCrateDisplayType(CrateDisplayType cdt) {
-        this.cdt = cdt;
+    public void setCrateDisplayType(CrateDisplayType crateDisplayType) {
+        this.crateDisplayType = crateDisplayType;
     }
 
     public FileHandler getFileHandler() {
-        return fu;
+        return fileHandler;
     }
 
-    public void setFileHandler(FileHandler fu) {
-        this.fu = fu;
+    public void setFileHandler(FileHandler fileHandler) {
+        this.fileHandler = fileHandler;
     }
 
     public String getCrateInventoryName() {
@@ -407,12 +400,12 @@ public class CrateSettings {
         this.crateInventoryName = crateInventoryName;
     }
 
-    public CrateAnimation getAnimation() {
-        return ch;
+    public CrateAnimation getCrateAnimation() {
+        return crateAnimation;
     }
 
-    public void setAnimation(CrateAnimation ch) {
-        this.ch = ch;
+    public void setCrateAnimation(CrateAnimation crateAnimation) {
+        this.crateAnimation = crateAnimation;
     }
 
     public String getPermission() {
@@ -432,11 +425,11 @@ public class CrateSettings {
     }
 
     public CMultiCrateInventory getMultiCrateSettings() {
-        return cmci;
+        return multiCrateInventory;
     }
 
-    public void setMultiCrateSettings(CMultiCrateInventory cmci) {
-        this.cmci = cmci;
+    public void setMultiCrateSettings(CMultiCrateInventory multiCrateInventory) {
+        this.multiCrateInventory = multiCrateInventory;
     }
 
     public double getHologramOffset() {

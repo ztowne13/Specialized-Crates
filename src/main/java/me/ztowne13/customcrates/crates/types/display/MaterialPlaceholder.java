@@ -14,27 +14,26 @@ public class MaterialPlaceholder extends DynamicCratePlaceholder {
         super(cc);
     }
 
-    public void place(PlacedCrate cm) {
-        Material m = cm.getCrate().getSettings().getCrateItemHandler().getItem(1).getType();
-        if (cm.getCrate().isEnabled()) {
-            if (!cm.getCrate().getSettings().getCrateItemHandler().crateMatchesBlock(cm.getL().getBlock().getType())) {
-                try {
-                    if (((boolean) SettingsValue.KEEP_CRATE_BLOCK_CONSISTENT.getValue(cc)) ||
-                            cm.getL().getBlock().getType().equals(Material.AIR)) {
-                        cm.getL().getBlock().setType(m);
-                    }
-                } catch (Exception exc) {
-                    StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(cm.getCrate().getSettings().getStatusLogger(),
-                            new String[]{m.toString() + " is not a block and therefore cannot be used as a crate type!"});
-                    cm.getCrate().setDisabledByError(false);
-                    cm.setCratesEnabled(false);
+    public void place(PlacedCrate placedCrate) {
+        Material m = placedCrate.getCrate().getSettings().getCrateItemHandler().getItem(1).getType();
+        if (placedCrate.getCrate().isEnabled()
+                && !placedCrate.getCrate().getSettings().getCrateItemHandler().crateMatchesBlock(placedCrate.getLocation().getBlock().getType())) {
+            try {
+                if (SettingsValue.KEEP_CRATE_BLOCK_CONSISTENT.getValue(instance).equals(Boolean.TRUE) ||
+                        placedCrate.getLocation().getBlock().getType().equals(Material.AIR)) {
+                    placedCrate.getLocation().getBlock().setType(m);
                 }
+            } catch (Exception exc) {
+                StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(placedCrate.getCrate().getSettings().getStatusLogger(),
+                        new String[]{m.toString() + " is not a block and therefore cannot be used as a crate type!"});
+                placedCrate.getCrate().setDisabledByError(false);
+                placedCrate.setCratesEnabled(false);
             }
         }
     }
 
-    public void remove(PlacedCrate cm) {
-        cm.getL().getBlock().setType(Material.AIR);
+    public void remove(PlacedCrate placedCrate) {
+        placedCrate.getLocation().getBlock().setType(Material.AIR);
     }
 
     public String getType() {
@@ -42,11 +41,11 @@ public class MaterialPlaceholder extends DynamicCratePlaceholder {
     }
 
     public void setType(Object obj) {
-
+        // EMPTY
     }
 
-    public void fixHologram(PlacedCrate cm) {
-
+    public void fixHologram(PlacedCrate placedCrate) {
+        // EMPTY
     }
 
     public String toString() {

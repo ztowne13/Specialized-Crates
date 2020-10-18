@@ -76,14 +76,14 @@ public class AttemptCrateUseAction extends CrateAction {
         }
 
         // Check if a crate already exists
-        if (PlacedCrate.crateExistsAt(instance, location)) {
+        if (PlacedCrate.crateExistsAt(location)) {
             ChatUtils.msgError(player, "There is, somehow, already a crate placed here.");
             return bypass;
         }
 
         // Check Creative rules
         if (player.getGameMode().equals(GameMode.CREATIVE) && instance.getSettings().getConfigValues().get("place-creative").equals(Boolean.FALSE)) {
-            crates.getSettings().getAnimation().playFailToOpen(player, false, true);
+            crates.getSettings().getCrateAnimation().playFailToOpen(player, false, true);
             Messages.DENY_CREATIVE_MODE.msgSpecified(instance, player);
             return true;
         }

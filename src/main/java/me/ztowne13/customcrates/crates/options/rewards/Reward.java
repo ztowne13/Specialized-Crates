@@ -4,7 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
-import me.ztowne13.customcrates.crates.options.CRewards;
+import me.ztowne13.customcrates.crates.options.CReward;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
@@ -26,7 +26,7 @@ public class Reward implements Comparable<Reward> {
     private final SpecializedCrates instance;
     private final Random random;
     private FileConfiguration fileConfiguration;
-    private CRewards rewards;
+    private CReward rewards;
     private String rewardName;
     private String rarity = "default";
     private boolean giveDisplayItem;
@@ -58,7 +58,7 @@ public class Reward implements Comparable<Reward> {
         this.random = new Random();
     }
 
-    public Reward(SpecializedCrates instance, CRewards rewards, String rewardName) {
+    public Reward(SpecializedCrates instance, CReward rewards, String rewardName) {
         this(instance, rewardName);
         init();
         this.rewards = rewards;
@@ -83,7 +83,7 @@ public class Reward implements Comparable<Reward> {
         if (!fallbackRewardName.equalsIgnoreCase("") && !fallbackPermission.equalsIgnoreCase("") &&
                 p.hasPermission(fallbackPermission)) {
             if (!p.hasPermission("customcrates.admin") && !p.hasPermission("specializedcrates.admin")) {
-                Reward fallbackReward = CRewards.getAllRewards().get(fallbackRewardName);
+                Reward fallbackReward = CReward.getAllRewards().get(fallbackRewardName);
                 if (fallbackReward == null) {
                     ChatUtils.msgError(p, "The reward " + rewardName + " has the fallback reward " + fallbackRewardName +
                             ", but that reward does not exist. This message is not configurable. If you would like there to be no reward" +
@@ -210,7 +210,7 @@ public class Reward implements Comparable<Reward> {
             ArrayList<String> cratesThatUse = new ArrayList<>();
             for (Crate crate : Crate.getLoadedCrates().values()) {
                 if (!crate.isMultiCrate() && crate.isLoadedProperly()) {
-                    for (Reward r : crate.getSettings().getRewards().getCrateRewards()) {
+                    for (Reward r : crate.getSettings().getReward().getCrateRewards()) {
                         if (r.equals(this)) {
                             cratesThatUse.add(crate.getName());
                             break;
@@ -223,10 +223,10 @@ public class Reward implements Comparable<Reward> {
         } else {
             for (Crate crate : Crate.getLoadedCrates().values()) {
                 if (!crate.isMultiCrate() && crate.isLoadedProperly()) {
-                    for (Reward r : crate.getSettings().getRewards().getCrateRewards()) {
+                    for (Reward r : crate.getSettings().getReward().getCrateRewards()) {
                         if (r.equals(this)) {
-                            crate.getSettings().getRewards().removeReward(r.getRewardName());
-                            crate.getSettings().getRewards().saveToFile();
+                            crate.getSettings().getReward().removeReward(r.getRewardName());
+                            crate.getSettings().getReward().saveToFile();
                             crate.getSettings().getFileHandler().save();
                             break;
                         }
@@ -236,7 +236,7 @@ public class Reward implements Comparable<Reward> {
 
             getInstance().getRewardsFile().get().set(getRewardName(), null);
             getInstance().getRewardsFile().save();
-            CRewards.getAllRewards().remove(getRewardName());
+            CReward.getAllRewards().remove(getRewardName());
         }
         return "";
     }
@@ -492,11 +492,11 @@ public class Reward implements Comparable<Reward> {
         this.fileConfiguration = fileConfiguration;
     }
 
-    public CRewards getRewards() {
+    public CReward getRewards() {
         return rewards;
     }
 
-    public void setRewards(CRewards rewards) {
+    public void setRewards(CReward rewards) {
         this.rewards = rewards;
     }
 

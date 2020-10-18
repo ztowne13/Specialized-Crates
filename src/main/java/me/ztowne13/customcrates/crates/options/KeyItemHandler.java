@@ -18,8 +18,8 @@ public class KeyItemHandler extends CSetting {
 
     private SaveableItemBuilder keyItem;
 
-    public KeyItemHandler(Crate crates) {
-        super(crates, crates.getCc());
+    public KeyItemHandler(Crate crate) {
+        super(crate, crate.getInstance());
 
         keyItem = new SaveableItemBuilder(XMaterial.REDSTONE_TORCH, 1);
         keyItem.setDisplayName("&4Please set me!");

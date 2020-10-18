@@ -63,7 +63,7 @@ public abstract class CrateAction {
         PlayerDataManager playerDataManager = playerManager.getPdm();
         Crate crate = placedCrate.getCrate();
         CrateSettings crateSettings = crate.getSettings();
-        Location placedCrateLocation = placedCrate.getL();
+        Location placedCrateLocation = placedCrate.getLocation();
 
         if (crate.isNeedsReload()) {
             ChatUtils.msgInfo(p,
@@ -78,14 +78,14 @@ public abstract class CrateAction {
         // Check permissions
         if (!p.hasPermission(crateSettings.getPermission()) && !crateSettings.getPermission().equalsIgnoreCase("no permission")) {
             Messages.NO_PERMISSION_CRATE.msgSpecified(instance, p);
-            crate.getSettings().getAnimation().playFailToOpen(p, false, true);
+            crate.getSettings().getCrateAnimation().playFailToOpen(p, false, true);
             return false;
         }
 
         // Check inventory spaces (defined by value in Config.YML)
         if (!isInventoryTooEmpty(instance, p)) {
             Messages.INVENTORY_TOO_FULL.msgSpecified(instance, p);
-            crate.getSettings().getAnimation().playFailToOpen(p, false, true);
+            crate.getSettings().getCrateAnimation().playFailToOpen(p, false, true);
             return false;
         }
         // Check cooldown
@@ -107,9 +107,9 @@ public abstract class CrateAction {
                 return false;
             }
 
-            if (!crateSettings.getAnimation().canExecuteFor(p, !crate.isMultiCrate())) {
+            if (!crateSettings.getCrateAnimation().canExecuteFor(p, !crate.isMultiCrate())) {
                 if (!hasSkipped)
-                    crate.getSettings().getAnimation().playFailToOpen(p, true, true);
+                    crate.getSettings().getCrateAnimation().playFailToOpen(p, true, true);
                 return false;
             }
 
@@ -117,7 +117,7 @@ public abstract class CrateAction {
                 return false;
             }
 
-            Reward reward = crateSettings.getRewards().getRandomReward();
+            Reward reward = crateSettings.getReward().getRandomReward();
             ArrayList<Reward> rewards = new ArrayList<>();
             rewards.add(reward);
             reward.giveRewardToPlayer(p);
@@ -145,11 +145,11 @@ public abstract class CrateAction {
         }
 
         if (!instance.getEconomyHandler().handleCheck(p, crateSettings.getCost(), true)) {
-            crateSettings.getAnimation().playFailToOpen(p, false, true);
+            crateSettings.getCrateAnimation().playFailToOpen(p, false, true);
             return false;
         }
 
-        if (!crateSettings.getAnimation().startAnimation(p, placedCrateLocation, !crate.isMultiCrate(), false)) {
+        if (!crateSettings.getCrateAnimation().startAnimation(p, placedCrateLocation, !crate.isMultiCrate(), false)) {
             instance.getEconomyHandler().failSoReturn(p, crateSettings.getCost());
             playerManager.setLastOpenedPlacedCrate(null);
             return false;

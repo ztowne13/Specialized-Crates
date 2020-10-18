@@ -26,27 +26,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CActions extends CSetting {
+public class CAction extends CSetting {
     private Map<String, Map<String, List<String>>> actions = new HashMap<>();
 
-    public CActions(Crate crates) {
-        super(crates, crates.getCc());
+    public CAction(Crate crate) {
+        super(crate, crate.getInstance());
     }
 
     @Override
     public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
-        if (crateSettingsBuilder.hasV("open.actions")) {
-            List<String> list = getCrate().getSettings().getFc().getStringList("open.actions");
+        if (crateSettingsBuilder.hasValue("open.actions")) {
+            List<String> list = getCrate().getSettings().getFileConfiguration().getStringList("open.actions");
             for (String s : list) {
                 addEntryByString("DEFAULT", s);
             }
         }
 
-        if (crateSettingsBuilder.hasV("open.crate-tiers")) {
-            for (String tier : getCrate().getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false)) {
-                if (crateSettingsBuilder.hasV("open.crate-tiers." + tier + ".actions")) {
+        if (crateSettingsBuilder.hasValue("open.crate-tiers")) {
+            for (String tier : getCrate().getSettings().getFileConfiguration().getConfigurationSection("open.crate-tiers").getKeys(false)) {
+                if (crateSettingsBuilder.hasValue("open.crate-tiers." + tier + ".actions")) {
                     List<String> list =
-                            getCrate().getSettings().getFc().getStringList("open.crate-tiers." + tier + ".actions");
+                            getCrate().getSettings().getFileConfiguration().getStringList("open.crate-tiers." + tier + ".actions");
                     for (String s : list) {
                         addEntryByString(tier, s);
                     }
@@ -201,10 +201,10 @@ public class CActions extends CSetting {
         }
 
         if (!pre) {
-            if (!crates.getSettings().getCrateType().equals(CrateAnimationType.BLOCK_CRATEOPEN) ||
-                    !((OpenChestAnimation) crates.getSettings().getAnimation()).isEarlyRewardHologram()) {
-                if (crates.getSettings().getObtainType().isStatic() ||
-                        crates.getSettings().getCrateType().isSpecialDynamicHandling())
+            if (!crate.getSettings().getCrateType().equals(CrateAnimationType.BLOCK_CRATEOPEN) ||
+                    !((OpenChestAnimation) crate.getSettings().getCrateAnimation()).isEarlyRewardHologram()) {
+                if (crate.getSettings().getObtainType().isStatic() ||
+                        crate.getSettings().getCrateType().isSpecialDynamicHandling())
                     playRewardHologram(player, rewardsAsDisplayname);
             }
         }
@@ -247,7 +247,7 @@ public class CActions extends CSetting {
         dynamicHologram.setDisplayingRewardHologram(true);
         dynamicHologram.delete();
 
-        Location rewardLoc = placedCrate.getL().clone();
+        Location rewardLoc = placedCrate.getLocation().clone();
         rewardLoc.setY(rewardLoc.getY() - .3 + getCrate().getSettings().getHologram().getRewardHoloYOffset() +
                 additionalYOffset);
         dynamicHologram.create(rewardLoc);
@@ -260,7 +260,7 @@ public class CActions extends CSetting {
         Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () -> {
             dynamicHologram.delete();
 
-            final Location cloneY = placedCrate.getL().clone();
+            final Location cloneY = placedCrate.getLocation().clone();
             cloneY.setY(cloneY.getY() + .5);
 
             if (placedCrate.getCrate().getSettings().getObtainType().equals(ObtainType.STATIC)) {

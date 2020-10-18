@@ -51,7 +51,7 @@ public class IGCTierSelector extends IGCMenuCrate {
         int i = 2;
 
         ArrayList<String> allTiers = new ArrayList<>(tiers);
-        for (Reward reward : crates.getSettings().getRewards().getCrateRewards()) {
+        for (Reward reward : crates.getSettings().getReward().getCrateRewards()) {
             String tier = reward.getRarity().toUpperCase();
             if (!tier.equalsIgnoreCase("DEFAULT") && !allTiers.contains(tier)) {
                 allTiers.add(tier);
@@ -77,7 +77,7 @@ public class IGCTierSelector extends IGCMenuCrate {
                 button.addLore("&7Rewards in this tier:");
                 int listedRewards = 0;
                 int remaining = 0;
-                for (Reward reward : crates.getSettings().getRewards().getCrateRewards()) {
+                for (Reward reward : crates.getSettings().getReward().getCrateRewards()) {
                     if (!reward.getRarity().equalsIgnoreCase(tier) &&
                             !(reward.getRarity().equalsIgnoreCase("DEFAULT") && tier.equalsIgnoreCase("OPEN"))) {
                         continue;

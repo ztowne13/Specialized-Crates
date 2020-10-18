@@ -3,7 +3,7 @@ package me.ztowne13.customcrates.interfaces.igc.crates.previeweditor;
 import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
-import me.ztowne13.customcrates.crates.options.CRewards;
+import me.ztowne13.customcrates.crates.options.CReward;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.custom.CustomRewardDisplayer;
 import me.ztowne13.customcrates.crates.options.rewards.displaymenu.custom.DisplayPage;
@@ -40,7 +40,7 @@ public class IGCCratePreviewRewards extends IGCMenuCrate {
 
         int slots;
 
-        CRewards.loadAll(getCc(), getP());
+        CReward.loadAll(getCc(), getP());
 
         List<Reward> rewards = getUnusedRewards();
 
@@ -93,7 +93,7 @@ public class IGCCratePreviewRewards extends IGCMenuCrate {
             ib.setItem(2, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo back a page"));
         }
 
-        if ((CRewards.getAllRewards().size() / 28) + (CRewards.getAllRewards().size() % 28 == 0 ? 0 : 1) != page) {
+        if ((CReward.getAllRewards().size() / 28) + (CReward.getAllRewards().size() % 28 == 0 ? 0 : 1) != page) {
             ib.setItem(6, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo forward a page"));
         }
 
@@ -124,9 +124,9 @@ public class IGCCratePreviewRewards extends IGCMenuCrate {
     }
 
     public List<Reward> getUnusedRewards() {
-        CRewards cRewards = crate.getSettings().getRewards();
+        CReward cReward = crate.getSettings().getReward();
 
-        List<Reward> rewardsL = Arrays.asList(cRewards.getCrateRewards());
+        List<Reward> rewardsL = Arrays.asList(cReward.getCrateRewards());
         ArrayList<Reward> rewards = new ArrayList<>(rewardsL);
 
         ArrayList<Reward> toCompareRewards = new ArrayList<>();

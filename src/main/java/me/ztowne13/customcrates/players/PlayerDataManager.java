@@ -119,7 +119,7 @@ public class PlayerDataManager {
                     if (CrateUtils.isCrateUsable(crates)) {
                         ArrayList<Reward> rewards = new ArrayList<>();
                         for (String s : split[2].replace("[", "").replace("]", "").split("%newReward% ")) {
-                            Reward r = crates.getSettings().getRewards().getByName(s);
+                            Reward r = crates.getSettings().getReward().getByName(s);
 
                             rewards.add(r);
                         }

@@ -33,7 +33,7 @@ public class CustomRewardDisplayer extends RewardDisplayer {
     @Override
     public void open(Player player) {
         createInventory(player);
-        PlayerManager.get(getCrate().getCc(), player).setInRewardMenu(true);
+        PlayerManager.get(getCrate().getInstance(), player).setInRewardMenu(true);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.crates.options.rewards.displaymenu;
 
 import me.ztowne13.customcrates.crates.Crate;
-import me.ztowne13.customcrates.crates.options.CRewards;
+import me.ztowne13.customcrates.crates.options.CReward;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.players.PlayerManager;
@@ -22,12 +22,12 @@ public class SortedRewardDisplayer extends RewardDisplayer {
     @Override
     public void open(Player player) {
         player.openInventory(createInventory(player).getInv());
-        PlayerManager.get(getCrate().getCc(), player).setInRewardMenu(true);
+        PlayerManager.get(getCrate().getInstance(), player).setInRewardMenu(true);
     }
 
     @Override
     public InventoryBuilder createInventory(Player player) {
-        CRewards rewards = getCrate().getSettings().getRewards();
+        CReward rewards = getCrate().getSettings().getReward();
         int amount = rewards.getCrateRewards().length;
         int rows = amount % 9 == 0 ? amount / 9 : (amount / 9) + 1;
         InventoryBuilder inventoryBuilder = new InventoryBuilder(player, rows * 9, getInvName());

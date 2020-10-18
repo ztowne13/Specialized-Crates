@@ -83,7 +83,7 @@ public class InventoryActionListener implements Listener {
                 }
                 // Handle discover animation click
                 else if (pm.isInCrate()) {
-                    pm.getOpenCrate().getSettings().getAnimation().handleClick(pm.getCurrentAnimation(), slot);
+                    pm.getOpenCrate().getSettings().getCrateAnimation().handleClick(pm.getCurrentAnimation(), slot);
                 }
             }
         }

@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.crates;
 
 import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.options.CHolograms;
+import me.ztowne13.customcrates.crates.options.CHologram;
 import me.ztowne13.customcrates.crates.options.ObtainType;
 import me.ztowne13.customcrates.utils.ChatUtils;
 import me.ztowne13.customcrates.utils.CrateUtils;
@@ -16,28 +16,28 @@ import java.util.Map;
  * Manages individual placed crates.
  */
 public class PlacedCrate {
-    static Map<Location, PlacedCrate> placedCrates = new HashMap<>();
+    private static Map<Location, PlacedCrate> placedCrates = new HashMap<>();
 
-    SpecializedCrates cc;
-    Crate crates;
+    private final SpecializedCrates instance;
+    private Crate crate;
 
-    boolean isCratesEnabled;
-    boolean deleted = false;
+    private boolean isCratesEnabled;
+    private boolean deleted = false;
 
-    CHolograms cholo;
+    private CHologram hologram;
 
-    Location l;
-    Long placedTime;
-    boolean used = false;
+    private Location location;
+    private Long placedTime;
+    private boolean used = false;
 
-    public PlacedCrate(SpecializedCrates cc, Location l) {
-        this.cc = cc;
-        this.l = l;
+    public PlacedCrate(SpecializedCrates instance, Location location) {
+        this.instance = instance;
+        this.location = location;
 
-        getPlacedCrates().put(l, this);
+        getPlacedCrates().put(location, this);
     }
 
-    public static boolean crateExistsAt(SpecializedCrates cc, Location l) {
+    public static boolean crateExistsAt(Location l) {
         return getPlacedCrates().containsKey(l.getBlock().getLocation());
     }
 
@@ -67,23 +67,23 @@ public class PlacedCrate {
     }
 
     public void delete() {
-        getCc().getActiveCratesFile().get().set(LocationUtils.locToString(getL()), null);
-        getCc().getActiveCratesFile().save();
+        instance.getActiveCratesFile().get().set(LocationUtils.locToString(getLocation()), null);
+        instance.getActiveCratesFile().save();
         getHologram().getDynamicHologram().delete();
         getCrate().getSettings().getPlaceholder().remove(this);
-        getPlacedCrates().remove(getL());
+        getPlacedCrates().remove(getLocation());
         deleted = true;
     }
 
     public void writeToFile() {
-        getCc().getActiveCratesFile().get().set(LocationUtils.locToString(getL()) + ".crate", getCrate().getName());
-        getCc().getActiveCratesFile().get().set(LocationUtils.locToString(getL()) + ".placedTime", getPlacedTime());
-        getCc().getActiveCratesFile().save();
+        instance.getActiveCratesFile().get().set(LocationUtils.locToString(getLocation()) + ".crate", getCrate().getName());
+        instance.getActiveCratesFile().get().set(LocationUtils.locToString(getLocation()) + ".placedTime", getPlacedTime());
+        instance.getActiveCratesFile().save();
     }
 
     public void rename(String newCrateName) {
-        getCc().getActiveCratesFile().get().set(LocationUtils.locToString(getL()) + ".crate", newCrateName);
-        getCc().getActiveCratesFile().save();
+        instance.getActiveCratesFile().get().set(LocationUtils.locToString(getLocation()) + ".crate", newCrateName);
+        instance.getActiveCratesFile().save();
     }
 
     public void setup(Crate crates, boolean writeToFile) {
@@ -91,7 +91,7 @@ public class PlacedCrate {
     }
 
     public void setup(Crate crates, boolean writeToFile, boolean createdByPlayer) {
-        this.crates = crates;
+        this.crate = crates;
         crates.setPlacedCount(crates.getPlacedCount() + 1);
         setCratesEnabled(CrateUtils.isCrateUsable(crates));
 
@@ -113,61 +113,53 @@ public class PlacedCrate {
     }
 
     public void setupHolo(Crate crates, boolean createdByPlayer) {
-        setCholo(crates.getSettings().getHologram().clone());
+        setHologram(crates.getSettings().getHologram().clone());
         if (!createdByPlayer) {
             getHologram().setCreatedByPlayer(false);
         }
 
-        Location dupeLoc = getL().clone();
+        Location dupeLoc = getLocation().clone();
         dupeLoc.setY(dupeLoc.getY() + .5);
         getHologram().setDynamicHologram(getHologram().createHologram(this, dupeLoc));
     }
 
     public void tick(CrateState cs) {
         if (isCratesEnabled()) {
-            getCrate().tick(getL(), cs, null, null);
+            getCrate().tick(getLocation(), cs, null, null);
             //getCrates().getCs().getCh().tick(null, getL(), cs, !getCrates().isMultiCrate());
             getHologram().getDynamicHologram().tick();
         }
 
-        if (crates.getSettings().getObtainType().equals(ObtainType.LUCKYCHEST)) {
-            int num = (int) cc.getSettings().getConfigValues().get(SettingsValue.LUCKYCHEST_DESPAWN.getPath()) * 60;
+        if (crate.getSettings().getObtainType().equals(ObtainType.LUCKYCHEST)) {
+            int num = (int) instance.getSettings().getConfigValues().get(SettingsValue.LUCKYCHEST_DESPAWN.getPath()) * 60;
             if (num > 0 && ((System.currentTimeMillis() - getPlacedTime()) / 1000) > num) {
                 delete();
             }
         }
     }
 
-    public CHolograms getHologram() {
-        return cholo;
+    public CHologram getHologram() {
+        return hologram;
     }
 
-    public void setCholo(CHolograms cholo) {
-        this.cholo = cholo;
-    }
-
-    public SpecializedCrates getCc() {
-        return cc;
-    }
-
-    public void setCc(SpecializedCrates cc) {
-        this.cc = cc;
+    public void setHologram(CHologram hologram) {
+        this.hologram = hologram;
     }
 
     public Crate getCrate() {
-        return crates;
+        return crate;
     }
 
-    public void setCh(Crate crates) {
-        this.crates = crates;
+    public void setCrate(Crate crate) {
+        this.crate = crate;
     }
 
-    public Location getL() {
-        return l;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setL(Location l) {
-        this.l = l;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public boolean isUsed() {
@@ -192,10 +184,6 @@ public class PlacedCrate {
 
     public void setPlacedTime(Long placedTime) {
         this.placedTime = placedTime;
-    }
-
-    public void setCrates(Crate crates) {
-        this.crates = crates;
     }
 
     public boolean isDeleted() {

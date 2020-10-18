@@ -28,11 +28,11 @@ public abstract class RewardDisplayer {
 
     public void openFor(Player player) {
         if (isRequirePermForPreview() && !player.hasPermission(getCrate().getSettings().getPermission())) {
-            Messages.NO_PERMISSION_CRATE.msgSpecified(crate.getCc(), player);
+            Messages.NO_PERMISSION_CRATE.msgSpecified(crate.getInstance(), player);
             return;
         }
 
-        if (!(this instanceof CustomRewardDisplayer) && crate.getSettings().getRewards().getCrateRewards().length > 54
+        if (!(this instanceof CustomRewardDisplayer) && crate.getSettings().getReward().getCrateRewards().length > 54
                 && (player.hasPermission("customcrates.admin") || player.hasPermission("specializedcrates.admin"))) {
             ChatUtils.msgHey(player,
                     "Just a heads up: you have more than 54 rewards in this crate, but only the &lCUSTOM &ereward display" +
@@ -45,7 +45,7 @@ public abstract class RewardDisplayer {
     public String getInvName() {
         if (name == null)
             return ChatUtils.toChatColor(
-                    getCrate().getCc().getSettings().getConfigValues().get("inv-reward-display-name").toString()
+                    getCrate().getInstance().getSettings().getConfigValues().get("inv-reward-display-name").toString()
                             .replace("%crate%", getCrate().getDisplayName()));
         else
             return ChatUtils.toChatColor(name);

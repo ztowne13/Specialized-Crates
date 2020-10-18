@@ -35,7 +35,7 @@ public abstract class CrateAnimation {
         this.animationType = animationType;
         this.prefix = animationType.getPrefixDotted();
         this.crate = crate;
-        this.instance = crate.getCc();
+        this.instance = crate.getInstance();
         this.fileHandler = instance.getCrateConfigFile();
     }
 
@@ -151,11 +151,11 @@ public abstract class CrateAnimation {
             if (getCrate().getSettings().getCrateType().getCategory().equals(CrateAnimationType.Category.CHEST)) {
                 Bukkit.getScheduler().runTaskLater(instance, () -> {
                     placedCrate.delete();
-                    placedCrate.getL().getBlock().setType(Material.AIR);
+                    placedCrate.getLocation().getBlock().setType(Material.AIR);
                 }, 20);
             } else {
                 placedCrate.delete();
-                placedCrate.getL().getBlock().setType(Material.AIR);
+                placedCrate.getLocation().getBlock().setType(Material.AIR);
             }
         }
     }
@@ -219,7 +219,7 @@ public abstract class CrateAnimation {
             crateSettings.getKeyItemHandler().takeKeyFromPlayer(p, fromInv);
         }
 
-        crateSettings.getActions().playAll(p, true);
+        crateSettings.getAction().playAll(p, true);
     }
 
     public double getRandomTickTime(double basedOff) {

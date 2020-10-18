@@ -12,22 +12,22 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class CSounds extends CSetting {
+public class CSound extends CSetting {
     private Map<String, List<SoundData>> sounds = new HashMap<>();
 
-    public CSounds(Crate crates) {
-        super(crates, crates.getCc());
+    public CSound(Crate crate) {
+        super(crate, crate.getInstance());
     }
 
     @Override
     public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
-        if (crateSettingsBuilder.hasV("open.sounds")) {
-            addSoundsFromList("OPEN", crateSettingsBuilder.getSettings().getFc().getStringList("open.sounds"));
+        if (crateSettingsBuilder.hasValue("open.sounds")) {
+            addSoundsFromList("OPEN", crateSettingsBuilder.getSettings().getFileConfiguration().getStringList("open.sounds"));
         }
-        if (crateSettingsBuilder.hasV("open.crate-tiers")) {
-            for (String id : getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false)) {
-                if (crateSettingsBuilder.hasV("open.crate-tiers." + id + ".sounds")) {
-                    addSoundsFromList(id.toUpperCase(), getSettings().getFc().getStringList("open.crate-tiers." + id + ".sounds"));
+        if (crateSettingsBuilder.hasValue("open.crate-tiers")) {
+            for (String id : getSettings().getFileConfiguration().getConfigurationSection("open.crate-tiers").getKeys(false)) {
+                if (crateSettingsBuilder.hasValue("open.crate-tiers." + id + ".sounds")) {
+                    addSoundsFromList(id.toUpperCase(), getSettings().getFileConfiguration().getStringList("open.crate-tiers." + id + ".sounds"));
                 }
             }
         }

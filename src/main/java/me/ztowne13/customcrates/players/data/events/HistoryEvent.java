@@ -23,7 +23,7 @@ public class HistoryEvent extends DataEvent {
     String currentTime;
 
     public HistoryEvent(String currentTime, Crate crates, List<Reward> rewards, boolean success) {
-        super(crates.getCc());
+        super(crates.getInstance());
         this.crates = crates;
         this.rewards = rewards;
         this.success = success;

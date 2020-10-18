@@ -156,7 +156,7 @@ public class DisplayPage {
         }
 
         if (builder == null && open) {
-            final PlayerManager pm = PlayerManager.get(customRewardDisplayer.getCrate().getCc(), player);
+            final PlayerManager pm = PlayerManager.get(customRewardDisplayer.getCrate().getInstance(), player);
             pm.setNextPageInventoryCloseGrace(pm.getCc().getTotalTicks() + 2L);
 
             final Inventory inv = ib.getInv();
@@ -183,7 +183,7 @@ public class DisplayPage {
                     if (customRewardDisplayer.getItems().containsKey(symbol)) {
                         builders[x][y] = customRewardDisplayer.getItems().get(symbol);
                     } else {
-                        Reward reward = customRewardDisplayer.getCrate().getSettings().getRewards().getByName(symbol);
+                        Reward reward = customRewardDisplayer.getCrate().getSettings().getReward().getByName(symbol);
                         if (reward != null)
                             rewards[x][y] = reward;
                     }
@@ -193,7 +193,7 @@ public class DisplayPage {
     }
 
     public void handleInput(Player player, int slot) {
-        SpecializedCrates sc = customRewardDisplayer.getCrate().getCc();
+        SpecializedCrates sc = customRewardDisplayer.getCrate().getInstance();
         int x = slot / 9;
         sc.getDu().log("handleInput() - x: " + x, getClass());
         int y = slot % 9;

@@ -98,7 +98,7 @@ public class EncloseAnimation extends InventoryCrateAnimation {
         for (int i = 0; i < size; i++) {
             if (i >= midPoint - eadh.getCurrentTicksIn() - 1 - rewardAmount &&
                     i < midPoint + eadh.getCurrentTicksIn() + rewardAmount) {
-                Reward r = getCrate().getSettings().getRewards().getRandomReward();
+                Reward r = getCrate().getSettings().getReward().getRandomReward();
                 eadh.getLastDisplayRewards().add(r);
             }
         }

@@ -6,8 +6,8 @@ import me.ztowne13.customcrates.commands.CommandRewards;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.crates.PlacedCrate;
-import me.ztowne13.customcrates.crates.options.CHolograms;
-import me.ztowne13.customcrates.crates.options.CRewards;
+import me.ztowne13.customcrates.crates.options.CHologram;
+import me.ztowne13.customcrates.crates.options.CReward;
 import me.ztowne13.customcrates.crates.options.particles.ParticleData;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.types.animations.block.OpenChestAnimation;
@@ -162,7 +162,7 @@ public class SpecializedCrates extends JavaPlugin {
 
         dataHandler.saveToFile();
 
-        CHolograms.deleteAll();
+        CHologram.deleteAll();
         NPCUtils.checkUncheckMobs(true);
         OpenChestAnimation.removeAllItems();
         Messages.clearCache();
@@ -222,7 +222,7 @@ public class SpecializedCrates extends JavaPlugin {
 
         setBr(null);
 
-        CRewards.getAllRewards().clear();
+        CReward.getAllRewards().clear();
         SettingsValue.valuesCache.clear();
 
 //        ChatUtils.log("Enabling, wait 1 second...");
@@ -266,14 +266,14 @@ public class SpecializedCrates extends JavaPlugin {
         boolean newValues = false;
 
         for (String rName : getRewardsFile().get().getKeys(false)) {
-            if (!CRewards.getAllRewards().containsKey(rName)) {
+            if (!CReward.getAllRewards().containsKey(rName)) {
                 if (!newValues) {
                     newValues = true;
                 }
                 Reward r = new Reward(this, rName);
                 r.loadFromConfig();
                 r.loadChance();
-                CRewards.getAllRewards().put(rName, r);
+                CReward.getAllRewards().put(rName, r);
             }
         }
     }

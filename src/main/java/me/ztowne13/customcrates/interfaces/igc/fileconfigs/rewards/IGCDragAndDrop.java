@@ -1,7 +1,7 @@
 package me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards;
 
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.options.CRewards;
+import me.ztowne13.customcrates.crates.options.CReward;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
@@ -109,7 +109,7 @@ public class IGCDragAndDrop extends IGCMenu {
         int i = 0;
         while (true) {
             String name = rewardName + (i == 0 ? "" : i);
-            if (!CRewards.rewardNameExists(getCc(), name)) {
+            if (!CReward.rewardNameExists(getCc(), name)) {
 
                 return name;
             }

@@ -26,7 +26,7 @@ public class GiveKeyAnimation extends CrateAnimation {
     public void endAnimation(AnimationDataHolder dataHolder) {
         Player player = dataHolder.getPlayer();
 
-        Reward r = getCrate().getSettings().getRewards().getRandomReward();
+        Reward r = getCrate().getSettings().getReward().getRandomReward();
         ArrayList<Reward> rewards = new ArrayList<>();
         rewards.add(r);
 

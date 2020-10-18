@@ -81,7 +81,7 @@ public class OpenChestAnimation extends CrateAnimation {
     }
 
     public void playAnimation(final Player player, final Location location) {
-        Reward reward = getCrate().getSettings().getRewards().getRandomReward();
+        Reward reward = getCrate().getSettings().getReward().getRandomReward();
         final ArrayList<String> rewards = new ArrayList<>();
         rewards.add(reward.getDisplayName(true));
         rewardMap.put(player, reward);
@@ -104,9 +104,9 @@ public class OpenChestAnimation extends CrateAnimation {
         }
 
         if (attachTo) {
-            crate.getSettings().getActions().playRewardHologram(player, rewards, .6, true, item, openDuration);
+            crate.getSettings().getAction().playRewardHologram(player, rewards, .6, true, item, openDuration);
         } else if (isEarlyRewardHologram()) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () -> crate.getSettings().getActions().playRewardHologram(player, rewards, .6), rewardHoloDelay);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () -> crate.getSettings().getAction().playRewardHologram(player, rewards, .6), rewardHoloDelay);
         }
 
         new NMSChestState().playChestAction(location.getBlock(), true);

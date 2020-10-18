@@ -61,7 +61,7 @@ public class IGCCrateSound extends IGCTierMenu {
     public void handleClick(int slot) {
         switch (slot) {
             case 8:
-                cs.getSounds().getSounds().get(tier).remove(sd);
+                cs.getSound().getSounds().get(tier).remove(sd);
             case 9:
                 up();
                 break;

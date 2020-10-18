@@ -3,7 +3,7 @@ package me.ztowne13.customcrates.crates.types.display.npcs;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.types.display.DynamicCratePlaceholder;
-import me.ztowne13.customcrates.crates.types.display.EntityTypes;
+import me.ztowne13.customcrates.crates.types.display.EntityType;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import me.ztowne13.customcrates.utils.NPCUtils;
 import net.citizensnpcs.api.CitizensAPI;
@@ -12,7 +12,6 @@ import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,58 +20,58 @@ import java.util.Map;
  * Created by ztowne13 on 2/25/16.
  */
 public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder {
-    static Map<PlacedCrate, NPC> npcs = new HashMap<>();
+    private static Map<PlacedCrate, NPC> npcMap = new HashMap<>();
 
-    String name;
+    private String name;
 
-    public Citizens2NPCPlaceHolder(SpecializedCrates cc) {
-        super(cc);
+    public Citizens2NPCPlaceHolder(SpecializedCrates instance) {
+        super(instance);
     }
 
-    public static Map<PlacedCrate, NPC> getNpcs() {
-        return npcs;
+    public static Map<PlacedCrate, NPC> getNpcMap() {
+        return npcMap;
     }
 
-    public static void setNpcs(Map<PlacedCrate, NPC> npcs) {
-        Citizens2NPCPlaceHolder.npcs = npcs;
+    public static void setNpcMap(Map<PlacedCrate, NPC> npcMap) {
+        Citizens2NPCPlaceHolder.npcMap = npcMap;
     }
 
-    public void place(final PlacedCrate cm) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), () -> {
-            LocationUtils.removeDubBlocks(cm.getL());
+    public void place(final PlacedCrate placedCrate) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () -> {
+            LocationUtils.removeDubBlocks(placedCrate.getLocation());
 
             NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
             NPC npc;
 
-            if (NPCUtils.npcExists(cm)) {
-                npc = NPCUtils.getNpcForCrate(cm);
-                if (npc.getEntity().getType().equals(EntityType.PLAYER)) {
-                    getNpcs().put(cm, npc);
+            if (NPCUtils.npcExists(placedCrate)) {
+                npc = NPCUtils.getNpcForCrate(placedCrate);
+                if (npc.getEntity().getType().equals(org.bukkit.entity.EntityType.PLAYER)) {
+                    getNpcMap().put(placedCrate, npc);
                     return;
                 } else {
                     npc.destroy();
                 }
             }
 
-            npc = npcRegistry.createNPC(EntityType.PLAYER, "Specialized Crate - Crate");
+            npc = npcRegistry.createNPC(org.bukkit.entity.EntityType.PLAYER, "Specialized Crate - Crate");
             //npc.addTrait(new IdentifierTrait());
 
             npc.data().setPersistent(NPC.PLAYER_SKIN_UUID_METADATA, name);
             //npc.data().setPersistent(NPC.PLAYER_SKIN_USE_LATEST, false);
 
-            npc.spawn(LocationUtils.getLocationCentered(cm.getL()));
+            npc.spawn(LocationUtils.getLocationCentered(placedCrate.getLocation()));
 
             NPCUtils.applyDefaultInfo(npc);
 
             //applySkin(npc, getName());
 
-            getNpcs().put(cm, npc);
+            getNpcMap().put(placedCrate, npc);
         }, 20);
 
     }
 
-    public void remove(PlacedCrate cm) {
-        getNpcs().get(cm).destroy();
+    public void remove(PlacedCrate placedCrate) {
+        getNpcMap().get(placedCrate).destroy();
     }
 
     public String getType() {
@@ -83,10 +82,10 @@ public class Citizens2NPCPlaceHolder extends DynamicCratePlaceholder {
         setName(obj.toString());
     }
 
-    public void fixHologram(PlacedCrate cm) {
-        Location l = cm.getL().clone();
-        l.setY(l.getY() + EntityTypes.PLAYER.getHeight() - .8);
-        cm.getHologram().getDynamicHologram().teleport(l);
+    public void fixHologram(PlacedCrate placedCrate) {
+        Location l = placedCrate.getLocation().clone();
+        l.setY(l.getY() + EntityType.PLAYER.getHeight() - .8);
+        placedCrate.getHologram().getDynamicHologram().teleport(l);
     }
 
     public void applySkin(NPC npc, String name) {

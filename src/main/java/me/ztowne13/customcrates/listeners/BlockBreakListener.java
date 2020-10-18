@@ -27,7 +27,7 @@ public class BlockBreakListener implements Listener {
         Player p = e.getPlayer();
         Location l = e.getBlock().getLocation();
 
-        if (PlacedCrate.crateExistsAt(cc, l)) {
+        if (PlacedCrate.crateExistsAt(l)) {
             PlacedCrate cm = PlacedCrate.get(cc, l);
             Crate crates = cm.getCrate();
 

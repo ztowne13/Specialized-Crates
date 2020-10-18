@@ -20,7 +20,7 @@ public class AttemptKeyUseAction extends CrateAction {
     public boolean run() {
         PlayerManager pm = PlayerManager.get(instance, player);
 
-        if (!PlacedCrate.crateExistsAt(instance, location)) {
+        if (!PlacedCrate.crateExistsAt(location)) {
             return false;
         }
 
@@ -60,7 +60,7 @@ public class AttemptKeyUseAction extends CrateAction {
             useCrate(pm, cm, player.isSneaking() && (Boolean) SettingsValue.SHIFT_CLICK_OPEN_ALL.getValue(instance));
             return true;
         } else {
-            crate.getSettings().getAnimation().playFailToOpen(player, false, true);
+            crate.getSettings().getCrateAnimation().playFailToOpen(player, false, true);
             Messages.DENY_CREATIVE_MODE.msgSpecified(instance, player);
             return true;
         }
