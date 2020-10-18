@@ -8,26 +8,25 @@ import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.crates.options.sounds.SoundData;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.*;
 
 public class CSounds extends CSetting {
-    Map<String, List<SoundData>> sounds = new HashMap<>();
+    private Map<String, List<SoundData>> sounds = new HashMap<>();
 
     public CSounds(Crate crates) {
         super(crates, crates.getCc());
     }
 
     @Override
-    public void loadFor(CrateSettingsBuilder csb, CrateState cs) {
-        if (csb.hasV("open.sounds")) {
-            addSoundsFromList("OPEN", csb.getSettings().getFc().getStringList("open.sounds"));
+    public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
+        if (crateSettingsBuilder.hasV("open.sounds")) {
+            addSoundsFromList("OPEN", crateSettingsBuilder.getSettings().getFc().getStringList("open.sounds"));
         }
-        if (csb.hasV("open.crate-tiers")) {
+        if (crateSettingsBuilder.hasV("open.crate-tiers")) {
             for (String id : getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false)) {
-                if (csb.hasV("open.crate-tiers." + id + ".sounds")) {
+                if (crateSettingsBuilder.hasV("open.crate-tiers." + id + ".sounds")) {
                     addSoundsFromList(id.toUpperCase(), getSettings().getFc().getStringList("open.crate-tiers." + id + ".sounds"));
                 }
             }
@@ -99,30 +98,30 @@ public class CSounds extends CSetting {
         }
     }
 
-    public void addSound(String id, SoundData s) {
+    public void addSound(String id, SoundData soundData) {
         id = id.toUpperCase();
         List<SoundData> list = getSounds().getOrDefault(id, new ArrayList<>());
-        list.add(s);
+        list.add(soundData);
         getSounds().put(id, list);
     }
 
-    public void runAll(Player p, Location l, List<Reward> rewards) {
+    public void runAll(Player player, Location location, List<Reward> rewards) {
         for (String tier : getSounds().keySet()) {
             if ((tier.equalsIgnoreCase("OPEN") && (!getSettings().isTiersOverrideDefaults() || rewards.isEmpty() ||
                     !getSounds().containsKey(rewards.get(0).getRarity().toUpperCase()))) ||
                     (!rewards.isEmpty() && rewards.get(0).getRarity().equalsIgnoreCase(tier))) {
                 for (SoundData sd : getSounds().get(tier)) {
-                    sd.playTo(p, l);
+                    sd.playTo(player, location);
                 }
             }
         }
     }
 
-    public SoundData getSoundFromName(String tier, Sound s) {
+    public SoundData getSoundFromName(String tier, XSound sound) {
         SoundData sd = null;
 
         for (SoundData soundData : getSounds().get(tier)) {
-            if (soundData.getSound().equals(s)) {
+            if (soundData.getSound().equals(sound)) {
                 sd = soundData;
                 break;
             }

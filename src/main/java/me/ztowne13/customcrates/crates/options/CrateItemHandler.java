@@ -1,7 +1,6 @@
 package me.ztowne13.customcrates.crates.options;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
 import me.ztowne13.customcrates.crates.CrateSettingsBuilder;
 import me.ztowne13.customcrates.crates.CrateState;
@@ -13,25 +12,25 @@ import org.bukkit.inventory.ItemStack;
 
 public class CrateItemHandler extends CSetting {
 
-    SaveableItemBuilder crateItem;
+    private SaveableItemBuilder crateItem;
 
-    public CrateItemHandler(Crate crates, SpecializedCrates cc) {
-        super(crates, cc);
+    public CrateItemHandler(Crate crates) {
+        super(crates, crates.getCc());
 
         crateItem = new SaveableItemBuilder(XMaterial.RED_WOOL, 1);
         crateItem.setDisplayName("&4Please set me!");
     }
 
     @Override
-    public void loadFor(CrateSettingsBuilder csb, CrateState cs) {
+    public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
         boolean result = crateItem
-                .loadItem(getCrate().getSettings().getFileHandler(), "crate", csb.getStatusLogger(),
+                .loadItem(getCrate().getSettings().getFileHandler(), "crate", crateSettingsBuilder.getStatusLogger(),
                         StatusLoggerEvent.SETTINGS_CRATE_FAILURE,
                         StatusLoggerEvent.SETTINGS_CRATE_ENCHANTMENT_ADD_FAILURE,
                         StatusLoggerEvent.SETTINGS_CRATE_POTION_ADD_FAILURE, StatusLoggerEvent.SETTINGS_CRATE_GLOW_FAILURE,
                         StatusLoggerEvent.SETTINGS_CRATE_AMOUNT_FAILURE, StatusLoggerEvent.SETTINGS_CRATE_FLAG_FAILURE);
         if (!result) {
-            StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(csb.getStatusLogger());
+            StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(crateSettingsBuilder.getStatusLogger());
         }
     }
 

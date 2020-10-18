@@ -14,32 +14,32 @@ import java.util.*;
 public class CRewards extends CSetting {
     private static final Map<String, Reward> allRewards = new HashMap<>();
 
-    Reward[] crateRewards;
-    Random r = new Random();
+    private Reward[] crateRewards;
+    private final Random random = new Random();
 
     public CRewards(Crate crates) {
         super(crates, crates.getCc());
     }
 
-    public static void loadAll(SpecializedCrates specializedCrates, Player player) {
+    public static void loadAll(SpecializedCrates instance, Player player) {
         boolean newValues = false;
 
-        for (String rName : specializedCrates.getRewardsFile().get().getKeys(false)) {
+        for (String rName : instance.getRewardsFile().get().getKeys(false)) {
             if (!getAllRewards().containsKey(rName)) {
                 if (!newValues) {
                     newValues = true;
                     ChatUtils.msgInfo(player, "It can take a while to load all of the rewards for the first time...");
                 }
-                Reward r = new Reward(specializedCrates, rName);
-                r.loadFromConfig();
-                r.loadChance();
-                allRewards.put(rName, r);
+                Reward reward = new Reward(instance, rName);
+                reward.loadFromConfig();
+                reward.loadChance();
+                allRewards.put(rName, reward);
             }
         }
     }
 
-    public static boolean rewardNameExists(SpecializedCrates cc, String name) {
-        for (String s : cc.getRewardsFile().get().getKeys(false)) {
+    public static boolean rewardNameExists(SpecializedCrates instance, String name) {
+        for (String s : instance.getRewardsFile().get().getKeys(false)) {
             if (s.equalsIgnoreCase(name)) {
                 return true;
             }
@@ -122,7 +122,9 @@ public class CRewards extends CSetting {
                 Reward[] newRewards =
                         new Reward[(crateRewards == null || crateRewards.length == 0 ? 0 : crateRewards.length) + 1];
 
-                System.arraycopy(crateRewards, 0, newRewards, 0, newRewards.length - 1);
+                if (crateRewards != null) {
+                    System.arraycopy(crateRewards, 0, newRewards, 0, newRewards.length - 1);
+                }
 
                 newRewards[newRewards.length - 1] = toAdd;
 
@@ -133,8 +135,8 @@ public class CRewards extends CSetting {
         return false;
     }
 
-    public void loadFor(CrateSettingsBuilder csb, CrateState cs) {
-        if (csb.hasV("rewards")) {
+    public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
+        if (crateSettingsBuilder.hasV("rewards")) {
             int slot = 0;
 
             setCrateRewards(new Reward[getCrate().getSettings().getFc().getStringList("rewards").size()]);
@@ -154,9 +156,9 @@ public class CRewards extends CSetting {
 
             Reward[] updatedRewards = new Reward[getCrateRewards().length];
             int count = 0;
-            for (Reward r : getCrateRewards().clone()) {
-                if (r.loadFromConfig()) {
-                    updatedRewards[count] = r;
+            for (Reward reward : getCrateRewards().clone()) {
+                if (reward.loadFromConfig()) {
+                    updatedRewards[count] = reward;
                     count++;
                 }
             }
@@ -207,7 +209,7 @@ public class CRewards extends CSetting {
     }
 
     public Double getRandomNumber(double outOfOdds) {
-        return outOfOdds * r.nextDouble();
+        return outOfOdds * random.nextDouble();
     }
 
     public Double getTotalOdds() {

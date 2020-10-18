@@ -133,8 +133,8 @@ public class CrateSettings {
 
         setParticles(new CParticles(getCrate()));
         setHologram(new CHolograms(getCrate()));
-        setKeyItemHandler(new KeyItemHandler(getCrate(), getSc()));
-        setCrateItemHandler(new CrateItemHandler(getCrate(), getSc()));
+        setKeyItemHandler(new KeyItemHandler(getCrate()));
+        setCrateItemHandler(new CrateItemHandler(getCrate()));
         setSounds(new CSounds(getCrate()));
 
         if (!getCrate().isMultiCrate()) {
