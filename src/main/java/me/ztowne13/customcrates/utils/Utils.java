@@ -220,7 +220,7 @@ public class Utils {
         return count;
     }
 
-    public static String[] convertSecondToHHMMString(int secondTime) {
+    public static String[] convertSecondToHHMMString(long secondTime) {
         TimeZone tz = TimeZone.getTimeZone("UTC");
         SimpleDateFormat df = new SimpleDateFormat("dd:HH:mm:ss");
         df.setTimeZone(tz);

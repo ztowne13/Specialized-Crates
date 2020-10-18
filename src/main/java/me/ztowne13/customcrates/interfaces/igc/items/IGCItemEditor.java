@@ -153,7 +153,7 @@ public class IGCItemEditor extends IGCMenu {
         if (item.isColorable()) {
             color.setDisplayName("&aEdit the armour Color");
             color.addLore("&7Current Value:")
-                    .addLore("&7" + item.getColor().getR() + ", " + item.getColor().getG() + ", " + item.getColor().getB());
+                    .addLore("&7" + item.getColor().getRed() + ", " + item.getColor().getGreen() + ", " + item.getColor().getBlue());
             color.addLore("").addAutomaticLore("&f", 30, "Edit the red, green, and blue values of the colored armour.");
         } else {
             color.setDisplayName("&cEdit the armour Color");

@@ -14,7 +14,7 @@ import java.util.Optional;
  * Created by ztowne13 on 7/7/16.
  */
 public class FileDataLoader {
-    FileHandler fileHandler;
+    private final FileHandler fileHandler;
 
     public FileDataLoader(FileHandler fileHandler) {
         this.fileHandler = fileHandler;

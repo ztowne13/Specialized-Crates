@@ -5,8 +5,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 public class CompressedEnchantment {
-    Enchantment enchantment;
-    int level;
+    private final Enchantment enchantment;
+    private final int level;
 
     public CompressedEnchantment(Enchantment enchantment, int level) {
         this.enchantment = enchantment;

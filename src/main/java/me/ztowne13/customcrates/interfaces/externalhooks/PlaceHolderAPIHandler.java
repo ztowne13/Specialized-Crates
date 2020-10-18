@@ -11,12 +11,13 @@ import me.ztowne13.customcrates.players.PlayerManager;
 import me.ztowne13.customcrates.players.data.VirtualCrateData;
 import me.ztowne13.customcrates.utils.Utils;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class PlaceHolderAPIHandler extends PlaceholderExpansion {
-    SpecializedCrates cc;
+    private final SpecializedCrates instance;
 
-    public PlaceHolderAPIHandler(SpecializedCrates cc) {
-        this.cc = cc;
+    public PlaceHolderAPIHandler(SpecializedCrates instance) {
+        this.instance = instance;
     }
 
     public static String setPlaceHolders(Player player, String message) {
@@ -34,22 +35,22 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion {
     }
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "specializedcrates";
     }
 
     @Override
-    public String getAuthor() {
-        return cc.getDescription().getAuthors().toString();
+    public @NotNull String getAuthor() {
+        return instance.getDescription().getAuthors().toString();
     }
 
     @Override
-    public String getVersion() {
-        return cc.getDescription().getVersion();
+    public @NotNull String getVersion() {
+        return instance.getDescription().getVersion();
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, String identifier) {
+    public String onPlaceholderRequest(Player player, @NotNull String identifier) {
         // %specializedcrates_virtual_keys_[cratename]%
         // %specializedcrates_total_virtual_keys%
         // %specializedcrates_virtual_crates_[cratename]%
@@ -60,7 +61,7 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion {
         // %specializedcrates_last_player_[cratename]%
         // %specializedcrates_last_reward_[cratename]%
 
-        if (!cc.isAllowTick())
+        if (!instance.isAllowTick())
             return "";
 
         if (player == null)
@@ -68,7 +69,7 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion {
 
         String[] args = identifier.split("_");
 
-        PlayerManager playerManager = PlayerManager.get(cc, player);
+        PlayerManager playerManager = PlayerManager.get(instance, player);
         PlayerDataManager playerDataManager = playerManager.getPdm();
 
         if (args.length == 1) {
@@ -82,12 +83,12 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion {
                     if (!Crate.exists(args[1]))
                         return "[" + args[1] + " is an invalid crate]";
 
-                    Crate crate = Crate.getCrate(cc, args[1]);
+                    Crate crate = Crate.getCrate(instance, args[1]);
 
                     if (playerDataManager.getCrateCooldownEventByCrates(crate) == null)
                         return "-";
 
-                    int seconds = Math.round(playerDataManager.getCrateCooldownEventByCrates(crate).isCooldownOver());
+                    long seconds = playerDataManager.getCrateCooldownEventByCrates(crate).isCooldownOver();
 
                     String[] values = Utils.convertSecondToHHMMString(seconds);
                     String formatted = "";
@@ -118,7 +119,7 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion {
                 if (!Crate.exists(args[2]))
                     return "[" + args[2] + " is an invalid crate]";
 
-                Crate crate = Crate.getCrate(cc, args[2]);
+                Crate crate = Crate.getCrate(instance, args[2]);
 
                 // specializedcrates_virtual_keys_[cratename]
                 if (args[1].equalsIgnoreCase("keys")) {
@@ -126,6 +127,7 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion {
                     try {
                         value = "" + playerDataManager.getVirtualCrateData().get(crate).getKeys();
                     } catch (Exception exc) {
+                        // IGNORED
                     }
 
                     return value;
@@ -137,6 +139,7 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion {
                     try {
                         value = playerDataManager.getVirtualCrateData().get(crate).getCrates() + "";
                     } catch (Exception exc) {
+                        // IGNORED
                     }
 
                     return value;
@@ -153,7 +156,7 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion {
                 if (!Crate.exists(args[2]))
                     return "[" + args[2] + " is an invalid crate]";
 
-                Crate crate = Crate.getCrate(cc, args[2]);
+                Crate crate = Crate.getCrate(instance, args[2]);
 
                 if (args[1].equalsIgnoreCase("player"))
                     return crate.getLastOpenedName();
@@ -168,17 +171,16 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion {
 
                 return total + "";
             }
-        } else if (args.length == 4) {
-            if (args[0].equalsIgnoreCase("last") && args[1].equalsIgnoreCase("crate") &&
-                    args[2].equalsIgnoreCase("opened") && args[3].equalsIgnoreCase("rewards")) {
-                if (!playerDataManager.getHistoryEvents().isEmpty()) {
-                    String rewards =
-                            playerDataManager.getHistoryEvents().get(playerDataManager.getHistoryEvents().size() - 1)
-                                    .getRewards().toString();
-                    return rewards.substring(1, rewards.length() - 1);
-                } else {
-                    return "None";
-                }
+        } else if (args.length == 4 &&
+                args[0].equalsIgnoreCase("last") && args[1].equalsIgnoreCase("crate") &&
+                args[2].equalsIgnoreCase("opened") && args[3].equalsIgnoreCase("rewards")) {
+            if (!playerDataManager.getHistoryEvents().isEmpty()) {
+                String rewards =
+                        playerDataManager.getHistoryEvents().get(playerDataManager.getHistoryEvents().size() - 1)
+                                .getRewards().toString();
+                return rewards.substring(1, rewards.length() - 1);
+            } else {
+                return "None";
             }
         }
         return null;

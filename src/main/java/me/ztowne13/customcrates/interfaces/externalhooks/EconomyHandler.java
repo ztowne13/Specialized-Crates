@@ -7,28 +7,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class EconomyHandler {
-    SpecializedCrates specializedCrates;
+    private final SpecializedCrates instance;
+    private final boolean enabled;
+    private Economy economy;
 
-    boolean enabled = false;
-
-    Economy economy;
-
-    public EconomyHandler(SpecializedCrates specializedCrates) {
-        this.specializedCrates = specializedCrates;
-
-        if (specializedCrates.getServer().getPluginManager().isPluginEnabled("Vault"))
-            if (setupEconomy())
-                enabled = true;
+    public EconomyHandler(SpecializedCrates instance) {
+        this.instance = instance;
+        this.enabled = instance.getServer().getPluginManager().isPluginEnabled("Vault") && setupEconomy();
     }
 
     private boolean setupEconomy() {
         RegisteredServiceProvider<Economy> economyProvider =
-                specializedCrates.getServer().getServicesManager().getRegistration(Economy.class);
+                instance.getServer().getServicesManager().getRegistration(Economy.class);
         if (economyProvider != null) {
             economy = economyProvider.getProvider();
         }
 
-        return (economy != null);
+        return economy != null;
     }
 
     public boolean handleCheck(Player p, int cost, boolean withMessage) {
@@ -38,7 +33,7 @@ public class EconomyHandler {
             if (bal < cost) {
                 if (withMessage)
                     Messages.ECONOMY_NOT_ENOUGH_MONEY
-                            .msgSpecified(specializedCrates, p, new String[]{"%amount%", "%short%"}, new String[]{cost + "", (cost - bal) + ""});
+                            .msgSpecified(instance, p, new String[]{"%amount%", "%short%"}, new String[]{cost + "", (cost - bal) + ""});
                 return false;
             }
 

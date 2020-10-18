@@ -315,7 +315,7 @@ public class CMultiCrateInventory extends CSetting {
             }
         }
 
-        inventoryBuilder.setP(player);
+        inventoryBuilder.setPlayer(player);
         return inventoryBuilder;
     }
 

@@ -6,30 +6,33 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class SQL {
-    public SQLConnection sqlc;
-    SpecializedCrates sc;
-    int attempts = 0;
+    private final SQLConnection connection;
+    private final SpecializedCrates instance;
+    private int attempts = 0;
 
-    public SQL(SpecializedCrates sc, String databaseIP, String database, String port, String username, String password) {
-        this.sc = sc;
-        sqlc = new SQLConnection(this, databaseIP, port, database, username, password);
+    public SQL(SpecializedCrates instance, String databaseIP, String database, String port, String username, String password) {
+        this.instance = instance;
+        connection = new SQLConnection(this, databaseIP, port, database, username, password);
+    }
+
+    public SpecializedCrates getInstance() {
+        return instance;
     }
 
     public Object get(String table, String where, String whereResult,
                       String sec) {
-        sc.getDu().log("get() - CALL : Object", getClass(), false);
-        if (sqlc.isOpen()) {
+        instance.getDu().log("get() - CALL : Object", getClass(), false);
+        if (connection.isOpen()) {
             try {
                 attempts = 0;
-                PreparedStatement sql = getSqlc().get().prepareStatement(
+                PreparedStatement sql = getConnection().get().prepareStatement(
                         "SELECT * FROM `" + table + "` WHERE " + where + "='"
                                 + whereResult + "';");
                 ResultSet result = sql.executeQuery();
                 result.next();
-                ResultSet set = result;
-                return set.getObject(sec).toString();
+                return result.getObject(sec).toString();
             } catch (Exception exc) {
-                sc.getDu().log("get() - Exception handling request", getClass());
+                instance.getDu().log("get() - Exception handling request", getClass());
 //                exc.printStackTrace();
 //                new SQLLog("Unsuccessfuly retrieved something from database");
                 return null;
@@ -38,10 +41,10 @@ public class SQL {
         } else {
             attempts++;
             if (attempts <= 10) {
-                sqlc.open();
+                connection.open();
                 return get(table, where, whereResult, sec);
             } else {
-                sc.getDu().log("get() - Attempt limit reached");
+                instance.getDu().log("get() - Attempt limit reached");
 //                new SQLLog("ERROR: SQL CONNECTION ATTEMPT LIMIT REACHED");
             }
         }
@@ -49,19 +52,19 @@ public class SQL {
     }
 
     public ResultSet get(String table, String where, String whereResult) {
-        sc.getDu().log("get() - CALL : ResultSet", getClass());
+        instance.getDu().log("get() - CALL : ResultSet", getClass());
 
-        if (sqlc.isOpen()) {
+        if (connection.isOpen()) {
             try {
                 attempts = 0;
-                PreparedStatement sql = getSqlc().get().prepareStatement(
+                PreparedStatement sql = getConnection().get().prepareStatement(
                         "SELECT * FROM `" + table + "` WHERE " + where + "='"
                                 + whereResult + "';");
                 ResultSet result = sql.executeQuery();
                 result.next();
                 return result;
             } catch (Exception exc) {
-                sc.getDu().log("get() - Exception handling request", getClass());
+                instance.getDu().log("get() - Exception handling request", getClass());
 //                exc.printStackTrace();
 //                new SQLLog("Unsuccessfuly retrieved something from database");
                 return null;
@@ -70,10 +73,10 @@ public class SQL {
         } else {
             attempts++;
             if (attempts <= 10) {
-                sqlc.open();
+                connection.open();
                 return get(table, where, whereResult);
             } else {
-                sc.getDu().log("get() - Attempt limit reached");
+                instance.getDu().log("get() - Attempt limit reached");
 //                new SQLLog("ERROR: SQL CONNECTION ATTEMPT LIMIT REACHED");
             }
         }
@@ -81,9 +84,9 @@ public class SQL {
     }
 
     public void write(final String table, final String set_where, final String where_value, final String set_path, final String set_value) {
-        sc.getDu().log("write() - CALL", getClass(), true);
+        instance.getDu().log("write() - CALL", getClass(), true);
 
-        if (sqlc.isOpen()) {
+        if (connection.isOpen()) {
             String pat = "";
             if (!isInt(set_value)) {
                 pat = "'" + set_value + "'";
@@ -96,54 +99,53 @@ public class SQL {
         } else {
             attempts++;
             if (attempts <= 10) {
-                sqlc.open();
+                connection.open();
                 write(table, set_where, where_value, set_path, set_value);
             } else {
-                sc.getDu().log("get() - Attempt limit reached");
+                instance.getDu().log("get() - Attempt limit reached");
 //                new SQLLog("ERROR: SQL CONNECTION ATTEMPT LIMIT REACHED");
             }
         }
     }
 
     public void create(String table, String format, boolean uniqueUuid) {
-        sc.getDu().log("create() - CALL", getClass());
+        instance.getDu().log("create() - CALL", getClass());
 
         //format (name format(len), name int)
-        if (sqlc.isOpen()) {
+        if (connection.isOpen()) {
             try {
-                sc.getDu().log("create() - Creating table...", getClass());
+                instance.getDu().log("create() - Creating table...", getClass());
                 long curTime = System.currentTimeMillis();
 
                 String createQuery = "CREATE TABLE IF NOT EXISTS " + table + " (" + format + ")";
-                sqlc.get().prepareStatement(createQuery).executeUpdate();
+                connection.get().prepareStatement(createQuery).executeUpdate();
 
-                sc.getDu().log("create() - Finished creating table in " + (System.currentTimeMillis() - curTime) + "ms.", getClass());
+                instance.getDu().log("create() - Finished creating table in " + (System.currentTimeMillis() - curTime) + "ms.", getClass());
                 if (uniqueUuid) {
-                    sc.getDu().log("create() - Updating unique uuid...", getClass());
-                    long curTimeUuid = System.currentTimeMillis();
+                    instance.getDu().log("create() - Updating unique uuid...", getClass());
 
                     try {
                         String uniqueQuery = "ALTER TABLE " + table + " ADD CONSTRAINT UQ_UUID UNIQUE (uuid)";
-                        sqlc.get().prepareStatement(uniqueQuery).executeUpdate();
+                        connection.get().prepareStatement(uniqueQuery).executeUpdate();
                     } catch (Exception exc) {
-
+                        // IGNORED
                     }
 
-                    sc.getDu().log("create() - Finished updating unique id in " + (System.currentTimeMillis() - curTime) +
+                    instance.getDu().log("create() - Finished updating unique id in " + (System.currentTimeMillis() - curTime) +
                             "ms.", getClass());
                 }
             } catch (Exception exc) {
                 exc.printStackTrace();
-                sc.getDu().log("create() - FAILED TO CREATE TABLE!", getClass());
+                instance.getDu().log("create() - FAILED TO CREATE TABLE!", getClass());
             }
         } else {
-            sc.getDu().log("create() - ISSUE: SQLConnection is not open.", getClass());
+            instance.getDu().log("create() - ISSUE: SQLConnection is not open.", getClass());
             attempts++;
             if (attempts <= 10) {
-                sqlc.open();
+                connection.open();
                 create(table, format, uniqueUuid);
             } else {
-                sc.getDu().log("get() - Attempt limit reached");
+                instance.getDu().log("get() - Attempt limit reached");
 //                new SQLLog("ERROR: SQL CONNECTION ATTEMPT LIMIT REACHED");
             }
         }
@@ -155,44 +157,44 @@ public class SQL {
      * @param ignore whether or not to ignore duplicates
      */
     public void insert(final String table, final String toSet, final boolean ignore) {
-        if (sqlc.isOpen()) {
+        if (connection.isOpen()) {
             try {
-                sc.getDu().log("insert() - CALL", getClass());
+                instance.getDu().log("insert() - CALL", getClass());
 
                 String query = "INSERT " + (ignore ? "IGNORE" : "") + " INTO " + table + " SET " + toSet;
-                sqlc.get().prepareStatement(query).executeUpdate();
+                connection.get().prepareStatement(query).executeUpdate();
             } catch (Exception exc) {
                 exc.printStackTrace();
             }
         } else {
             attempts++;
             if (attempts <= 10) {
-                sqlc.open();
+                connection.open();
                 insert(table, toSet, ignore);
             } else {
-                sc.getDu().log("insert() - Attempt limit reached");
+                instance.getDu().log("insert() - Attempt limit reached");
 //                new SQLLog("ERROR: SQL CONNECTION ATTEMPT LIMIT REACHED");
             }
         }
     }
 
     public void replace(final String table, final String values, final String toSetValues) {
-        if (sqlc.isOpen()) {
+        if (connection.isOpen()) {
             try {
-                sc.getDu().log("replace() - CALL", getClass());
+                instance.getDu().log("replace() - CALL", getClass());
 
                 String query = "REPLACE INTO " + table + "(" + values + ") VALUES(" + toSetValues + ")";
-                sqlc.get().prepareStatement(query).executeUpdate();
+                connection.get().prepareStatement(query).executeUpdate();
             } catch (Exception exc) {
                 exc.printStackTrace();
             }
         } else {
             attempts++;
             if (attempts <= 10) {
-                sqlc.open();
+                connection.open();
                 replace(table, values, toSetValues);
             } else {
-                sc.getDu().log("replace() - Attempt limit reached");
+                instance.getDu().log("replace() - Attempt limit reached");
 //                new SQLLog("ERROR: SQL CONNECTION ATTEMPT LIMIT REACHED");
             }
         }
@@ -207,8 +209,8 @@ public class SQL {
         return false;
     }
 
-    public SQLConnection getSqlc() {
-        return sqlc;
+    public SQLConnection getConnection() {
+        return connection;
     }
 
     public int getAttempts() {

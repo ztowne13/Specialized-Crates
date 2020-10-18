@@ -30,8 +30,8 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
         super(material);
     }
 
-    public SaveableItemBuilder(XMaterial m, int amnt) {
-        super(m, amnt);
+    public SaveableItemBuilder(XMaterial material, int amount) {
+        super(material, amount);
     }
 
     @Override
@@ -113,9 +113,9 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
 
         // Leather armour color
         if (isColorable() && getColor() != null) {
-            fc.set(prefix + ".color.red", getColor().getR());
-            fc.set(prefix + ".color.green", getColor().getG());
-            fc.set(prefix + ".color.blue", getColor().getB());
+            fc.set(prefix + ".color.red", getColor().getRed());
+            fc.set(prefix + ".color.green", getColor().getGreen());
+            fc.set(prefix + ".color.blue", getColor().getBlue());
         }
 
     }

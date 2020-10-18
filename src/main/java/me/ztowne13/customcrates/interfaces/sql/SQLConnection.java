@@ -7,19 +7,19 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class SQLConnection {
-    static int queries = 0;
-    Connection connection;
-    String dbIP;
-    String db;
-    String user;
-    String pass;
-    String port;
-    SQL sql;
-    boolean saidOnce = false;
+    private static int queries = 0;
+    private final String host;
+    private final String database;
+    private final String user;
+    private final String pass;
+    private final String port;
+    private final SQL sql;
+    private Connection connection;
+    private boolean saidOnce = false;
 
-    public SQLConnection(SQL sql, String dbIP, String dbPort, String db, String user, String pass) {
-        this.dbIP = dbIP;
-        this.db = db;
+    public SQLConnection(SQL sql, String host, String dbPort, String database, String user, String pass) {
+        this.host = host;
+        this.database = database;
         this.user = user;
         this.pass = pass;
         this.sql = sql;
@@ -37,7 +37,7 @@ public class SQLConnection {
     public Connection open(boolean log) {
         try {
             Connection c = connection =
-                    DriverManager.getConnection("jdbc:mysql://" + this.dbIP + ":" + port + "/" + this.db + "?autoReconnect=true&useSSL=false", this.user, this.pass);
+                    DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + port + "/" + this.database + "?autoReconnect=true&useSSL=false", this.user, this.pass);
             if (log)
                 ChatUtils.log("[SpecializedCrates] Connection to the SQL database was completed successfuly.");
             return c;
@@ -55,6 +55,7 @@ public class SQLConnection {
         try {
             return (connection != null) && (!connection.isClosed());
         } catch (SQLException e) {
+            // IGNORED
         }
 
         return false;
@@ -75,7 +76,7 @@ public class SQLConnection {
                 open();
             }
         } catch (Exception exc) {
-
+            // IGNORED
         }
 
         queries++;
@@ -86,12 +87,12 @@ public class SQLConnection {
         return connection;
     }
 
-    public String getDbIP() {
-        return dbIP;
+    public String getHost() {
+        return host;
     }
 
-    public String getDb() {
-        return db;
+    public String getDatabase() {
+        return database;
     }
 
     public String getUser() {

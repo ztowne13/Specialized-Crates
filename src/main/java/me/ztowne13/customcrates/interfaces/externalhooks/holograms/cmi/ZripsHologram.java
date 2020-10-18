@@ -12,8 +12,8 @@ public class ZripsHologram extends Hologram {
     private final HologramManager hologramManager;
     private final CMIHologram cmiHologram;
 
-    public ZripsHologram(SpecializedCrates customCrates, Location location) {
-        super(customCrates, location);
+    public ZripsHologram(SpecializedCrates instance, Location location) {
+        super(instance, location);
         hologramManager = CMI.getInstance().getHologramManager();
         this.cmiHologram =
                 new CMIHologram(
@@ -49,9 +49,9 @@ public class ZripsHologram extends Hologram {
     }
 
     @Override
-    public void setLocation(Location l) {
-        super.setLocation(l);
-        cmiHologram.setLoc(l);
+    public void setLocation(Location location) {
+        super.setLocation(location);
+        cmiHologram.setLoc(location);
         cmiHologram.refresh();
     }
 }

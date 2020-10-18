@@ -6,12 +6,12 @@ import me.ztowne13.customcrates.interfaces.externalhooks.holograms.HologramManag
 import org.bukkit.Location;
 
 public class SainttXHologramManager extends HologramManager {
-    public SainttXHologramManager(SpecializedCrates customCrates) {
-        super(customCrates);
+    public SainttXHologramManager(SpecializedCrates instance) {
+        super(instance);
     }
 
     @Override
     public Hologram newHologram(Location location) {
-        return new SainttXHologram(getCustomCrates(), location);
+        return new SainttXHologram(instance, location);
     }
 }

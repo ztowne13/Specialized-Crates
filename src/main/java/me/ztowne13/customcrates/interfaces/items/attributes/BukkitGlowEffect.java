@@ -10,7 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
  * Created by ztown on 2/17/2017.
  */
 public class BukkitGlowEffect {
-    ItemStack stack;
+    private final ItemStack stack;
 
     public BukkitGlowEffect(ItemStack stack) {
         this.stack = stack;

@@ -62,7 +62,7 @@ public class IGCMenuMain extends IGCMenu {
         sqlYml.addLore("").addLore("&6&lEdit the MySQL database info").addLore("").addLore("&7Amount of values: &f5");
         ib.setItem(20, sqlYml);
 
-        boolean dbStatus = (SQLDataHandler.sql == null || !SQLDataHandler.sql.getSqlc().isOpen());
+        boolean dbStatus = (SQLDataHandler.sql == null || !SQLDataHandler.sql.getConnection().isOpen());
         ItemBuilder sqlStatus = new ItemBuilder(dbStatus ? XMaterial.RED_DYE : XMaterial.GREEN_DYE);
         sqlStatus.setDisplayName("&eMySQL Database Status");
         sqlStatus.addLore("").addLore(dbStatus ? "&c&lNot Connected" : "&a&lConnected!");

@@ -6,4 +6,8 @@ package me.ztowne13.customcrates.interfaces.files;
 public class FileSettings {
     public static final String SPLITTER_1 = ",";
     public static final String SPLITTER_2 = ";";
+
+    private FileSettings() {
+        // EMPTY
+    }
 }

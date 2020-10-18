@@ -16,8 +16,8 @@ public class SainttXHologram extends Hologram {
     private final com.sainttx.holograms.api.Hologram hologram;
     private double defaultYOffSet = -.2;
 
-    public SainttXHologram(SpecializedCrates customCrates, Location location) {
-        super(customCrates, location);
+    public SainttXHologram(SpecializedCrates instance, Location location) {
+        super(instance, location);
         this.hm = JavaPlugin.getPlugin(HologramPlugin.class).getHologramManager();
         UUID uuid = UUID.randomUUID();
         this.hologram = new com.sainttx.holograms.api.Hologram(uuid.toString(), location);
@@ -49,10 +49,10 @@ public class SainttXHologram extends Hologram {
     }
 
     @Override
-    public void setLocation(Location l) {
-        l.setY(l.getY() + getDefaultYOffSet());
-        super.setLocation(LocationUtils.getLocationCentered(l));
-        hologram.teleport(location);
+    public void setLocation(Location location) {
+        location.setY(location.getY() + getDefaultYOffSet());
+        super.setLocation(LocationUtils.getLocationCentered(location));
+        hologram.teleport(this.location);
     }
 
     public double getDefaultYOffSet() {
