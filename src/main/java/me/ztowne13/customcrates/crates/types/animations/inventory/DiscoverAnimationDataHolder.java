@@ -10,13 +10,12 @@ import java.util.*;
  * Created by ztowne13 on 7/7/16.
  */
 public class DiscoverAnimationDataHolder extends InventoryAnimationDataHolder {
-    int remainingClicks;
-    int currentSequence = 1;
-    int sequence2Ticks;
-
-    ArrayList<Integer> alreadyChosenSlots = new ArrayList<>();
-    HashMap<Integer, Reward> alreadyDisplayedRewards = new HashMap<>();
-    ArrayList<Integer> shufflingTiles = new ArrayList<>();
+    private final ArrayList<Integer> alreadyChosenSlots = new ArrayList<>();
+    private final HashMap<Integer, Reward> alreadyDisplayedRewards = new HashMap<>();
+    private final ArrayList<Integer> shufflingTiles = new ArrayList<>();
+    private int remainingClicks;
+    private int currentSequence = 1;
+    private int sequence2Ticks;
 
     public DiscoverAnimationDataHolder(Player player, Location location, DiscoverAnimation crateAnimation) {
         super(player, location, crateAnimation, crateAnimation.getInvRows() * 9);

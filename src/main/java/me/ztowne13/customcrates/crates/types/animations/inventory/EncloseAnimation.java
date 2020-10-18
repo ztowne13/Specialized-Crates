@@ -15,10 +15,10 @@ import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
  * Created by ztowne13 on 7/5/16.
  */
 public class EncloseAnimation extends InventoryCrateAnimation {
-    int inventoryRows;
-    int updateSpeed;
-    int rewardAmount;
-    ItemBuilder fillerItem;
+    private int inventoryRows;
+    private int updateSpeed;
+    private int rewardAmount;
+    private ItemBuilder fillerItem;
 
     public EncloseAnimation(Crate crate) {
         super(crate, CrateAnimationType.INV_ENCLOSE);
@@ -28,15 +28,13 @@ public class EncloseAnimation extends InventoryCrateAnimation {
     public void tickInventory(InventoryAnimationDataHolder dataHolder, boolean update) {
         EncloseAnimationDataHolder eadh = (EncloseAnimationDataHolder) dataHolder;
 
-        switch (eadh.getCurrentState()) {
-            case PLAYING:
-                if (update) {
-                    playSound(eadh);
-                    updateRewards(eadh);
-                }
-                drawFillers(eadh, 1);
-                drawRewards(eadh);
-                break;
+        if (eadh.getCurrentState() == AnimationDataHolder.State.PLAYING) {
+            if (update) {
+                playSound(eadh);
+                updateRewards(eadh);
+            }
+            drawFillers(eadh, 1);
+            drawRewards(eadh);
         }
     }
 
@@ -53,11 +51,15 @@ public class EncloseAnimation extends InventoryCrateAnimation {
                 if (dataHolder.getWaitingTicks() == 50) {
                     dataHolder.setCurrentState(AnimationDataHolder.State.COMPLETED);
                 }
+                break;
+            default:
+                break;
         }
     }
 
     @Override
-    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh) {
+    public void drawIdentifierBlocks(InventoryAnimationDataHolder inventoryAnimationDataHolder) {
+        // EMPTY
     }
 
     @Override
@@ -79,6 +81,9 @@ public class EncloseAnimation extends InventoryCrateAnimation {
                 break;
             case ENDING:
                 dataHolder.setWaitingTicks(dataHolder.getWaitingTicks() + 1);
+                break;
+            default:
+                break;
         }
 
         return false;
@@ -120,17 +125,17 @@ public class EncloseAnimation extends InventoryCrateAnimation {
     public void endAnimation(AnimationDataHolder dataHolder) {
         EncloseAnimationDataHolder edh = (EncloseAnimationDataHolder) dataHolder;
 
-        finishAnimation(edh.getPlayer(), edh.getLastDisplayRewards(), false, null);
+        finishAnimation(edh.getPlayer(), edh.getLastDisplayRewards(), null);
         getCrate().tick(edh.getLocation(), CrateState.OPEN, edh.getPlayer(), edh.getLastDisplayRewards());
     }
 
     @Override
-    public void loadDataValues(StatusLogger sl) {
-        invName = fu.getFileDataLoader()
+    public void loadDataValues(StatusLogger statusLogger) {
+        invName = fileHandler.getFileDataLoader()
                 .loadString(prefix + "inv-name", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVNAME_SUCCESS);
 
-        inventoryRows = fu.getFileDataLoader()
+        inventoryRows = fileHandler.getFileDataLoader()
                 .loadInt(prefix + "inventory-rows", 2, getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVROWS_SUCCESS,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_INVROWS_INVALID);
@@ -139,14 +144,14 @@ public class EncloseAnimation extends InventoryCrateAnimation {
             setInventoryRows(2);
         }
 
-        fillerItem = fu.getFileDataLoader()
+        fillerItem = fileHandler.getFileDataLoader()
                 .loadItem(prefix + "fill-block", new ItemBuilder(XMaterial.PURPLE_STAINED_GLASS_PANE),
                         getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_FILLBLOCK_INVALID
                 );
         fillerItem.setDisplayName("&f");
 
-        tickSound = fu.getFileDataLoader()
+        tickSound = fileHandler.getFileDataLoader()
                 .loadSound(prefix + "tick-sound", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_SOUND_SUCCESS,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_SOUND_FAILURE,
@@ -156,12 +161,12 @@ public class EncloseAnimation extends InventoryCrateAnimation {
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_SUCCESS,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_TICKSOUND_PITCH_INVALID);
 
-        updateSpeed = fu.getFileDataLoader()
+        updateSpeed = fileHandler.getFileDataLoader()
                 .loadInt(prefix + "update-speed", 2, getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_UPDATESPEED_SUCCESS,
                         StatusLoggerEvent.ANIMATION_ENCLOSEMENT_UPDATESPEED_INVALID);
 
-        rewardAmount = fu.getFileDataLoader().loadInt(prefix + "reward-amount", 1, getStatusLogger(),
+        rewardAmount = fileHandler.getFileDataLoader().loadInt(prefix + "reward-amount", 1, getStatusLogger(),
                 StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT, StatusLoggerEvent.ANIMATION_ENCLOSEMENT_REWARDAMOUNT_SUCCESS,
                 StatusLoggerEvent.ANIMATION_ENCLOSEMENT_REWARDAMOUNT_INVALID);
 

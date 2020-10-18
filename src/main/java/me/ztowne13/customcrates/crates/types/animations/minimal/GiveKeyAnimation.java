@@ -19,7 +19,7 @@ public class GiveKeyAnimation extends CrateAnimation {
 
     @Override
     public void tickAnimation(AnimationDataHolder dataHolder, boolean update) {
-
+        // EMPTY
     }
 
     @Override
@@ -30,7 +30,7 @@ public class GiveKeyAnimation extends CrateAnimation {
         ArrayList<Reward> rewards = new ArrayList<>();
         rewards.add(r);
 
-        finishAnimation(player, rewards, false, null);
+        finishAnimation(player, rewards, null);
         getCrate().tick(dataHolder.getLocation(), CrateState.OPEN, player, rewards);
     }
 
@@ -47,8 +47,8 @@ public class GiveKeyAnimation extends CrateAnimation {
     }
 
     @Override
-    public void loadDataValues(StatusLogger sl) {
-
+    public void loadDataValues(StatusLogger statusLogger) {
+        // EMPTY
     }
 
 }

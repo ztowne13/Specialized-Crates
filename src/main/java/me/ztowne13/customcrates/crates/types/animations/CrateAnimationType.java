@@ -25,9 +25,9 @@ public enum CrateAnimationType {
 
     GIVE_KEY("", Category.NONE, true);
 
-    String prefix;
-    Category category;
-    boolean canFastTrackOnReload;
+    private final String prefix;
+    private final Category category;
+    private final boolean canFastTrackOnReload;
 
     CrateAnimationType(String prefix, Category category, boolean canFastTrackOnReload) {
         this.prefix = prefix;
@@ -91,10 +91,8 @@ public enum CrateAnimationType {
     public int getUses() {
         int uses = 0;
         for (Crate crate : Crate.getLoadedCrates().values()) {
-            if (!crate.isMultiCrate()) {
-                if (crate.getSettings().getCrateType().equals(this)) {
-                    uses++;
-                }
+            if (!crate.isMultiCrate() && crate.getSettings().getCrateType().equals(this)) {
+                uses++;
             }
         }
 

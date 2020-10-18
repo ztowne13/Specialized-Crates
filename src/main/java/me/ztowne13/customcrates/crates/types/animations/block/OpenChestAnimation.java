@@ -22,16 +22,14 @@ import java.util.List;
 
 public class OpenChestAnimation extends CrateAnimation {
     private static final List<Item> items = new ArrayList<>();
-
-    int openDuration;
-    boolean earlyRewardHologram;
-    boolean attachTo = true;
-    boolean earlyEffects = false;
-    long rewardHoloDelay;
-
-    Location loc;
-    HashMap<Player, Reward> rewardMap = new HashMap<>();
-    HashMap<Player, PlacedCrate> placedCrateMap = new HashMap<>();
+    private final HashMap<Player, Reward> rewardMap = new HashMap<>();
+    private final HashMap<Player, PlacedCrate> placedCrateMap = new HashMap<>();
+    private int openDuration;
+    private boolean earlyRewardHologram;
+    private boolean attachTo = true;
+    private boolean earlyEffects = false;
+    private long rewardHoloDelay;
+    private Location loc;
 
     public OpenChestAnimation(Crate crate) {
         super(crate, CrateAnimationType.BLOCK_CRATEOPEN);
@@ -44,12 +42,12 @@ public class OpenChestAnimation extends CrateAnimation {
 
     @Override
     public void tickAnimation(AnimationDataHolder dataHolder, boolean update) {
-
+        // EMPTY
     }
 
     @Override
     public void endAnimation(AnimationDataHolder dataHolder) {
-
+        // EMPTY
     }
 
     @Override
@@ -59,41 +57,41 @@ public class OpenChestAnimation extends CrateAnimation {
 
     @Override
     public void checkStateChange(AnimationDataHolder dataHolder, boolean update) {
-
+        // EMPTY
     }
 
     @Override
-    public boolean startAnimation(Player p, Location l, boolean requireKeyInHand, boolean force) {
-        this.loc = l;
+    public boolean startAnimation(Player player, Location location, boolean requireKeyInHand, boolean force) {
+        this.loc = location;
 
-        if (force || canExecuteFor(p, requireKeyInHand)) {
+        if (force || canExecuteFor(player, requireKeyInHand)) {
             if (getCrate().getSettings().getCrateType().isSpecialDynamicHandling() && !getCrate().getSettings().getObtainType().isStatic()) {
-                PlacedCrate placedCrate = PlayerManager.get(cc, p).getLastOpenedPlacedCrate();
+                PlacedCrate placedCrate = PlayerManager.get(instance, player).getLastOpenedPlacedCrate();
                 placedCrate.setCratesEnabled(false);
 
-                placedCrateMap.put(p, placedCrate);
+                placedCrateMap.put(player, placedCrate);
             }
-            playAnimation(p, l);
-            playRequiredOpenActions(p, !requireKeyInHand, force);
+            playAnimation(player, location);
+            playRequiredOpenActions(player, !requireKeyInHand, force);
             return true;
         }
 
-        playFailToOpen(p, true, !PlayerManager.get(cc, p).isInCrate());
+        playFailToOpen(player, true, !PlayerManager.get(instance, player).isInCrate());
         return false;
     }
 
-    public void playAnimation(final Player p, final Location l) {
+    public void playAnimation(final Player player, final Location location) {
         Reward reward = getCrate().getSettings().getRewards().getRandomReward();
         final ArrayList<String> rewards = new ArrayList<>();
         rewards.add(reward.getDisplayName(true));
-        rewardMap.put(p, reward);
+        rewardMap.put(player, reward);
 
-        Location upOne = l.clone();
+        Location upOne = location.clone();
         upOne.setY(upOne.getY() + 1);
         upOne.setX(upOne.getX() + .5);
         upOne.setZ(upOne.getZ() + .5);
 
-        final Item item = l.getWorld().dropItem(upOne, reward.getDisplayBuilder().getStack());
+        final Item item = location.getWorld().dropItem(upOne, reward.getDisplayBuilder().getStack());
         item.setPickupDelay(100000);
         item.setVelocity(new Vector(0, item.getVelocity().getY(), 0));
         items.add(item);
@@ -102,48 +100,48 @@ public class OpenChestAnimation extends CrateAnimation {
         rewardsStr.add(reward);
 
         if (earlyEffects) {
-            getCrate().tick(loc, CrateState.OPEN, p, rewardsStr);
+            getCrate().tick(this.loc, CrateState.OPEN, player, rewardsStr);
         }
 
         if (attachTo) {
-            crate.getSettings().getActions().playRewardHologram(p, rewards, .6, true, item, openDuration);
+            crate.getSettings().getActions().playRewardHologram(player, rewards, .6, true, item, openDuration);
         } else if (isEarlyRewardHologram()) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(cc, () -> crate.getSettings().getActions().playRewardHologram(p, rewards, .6), rewardHoloDelay);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () -> crate.getSettings().getActions().playRewardHologram(player, rewards, .6), rewardHoloDelay);
         }
 
-        new NMSChestState().playChestAction(l.getBlock(), true);
+        new NMSChestState().playChestAction(location.getBlock(), true);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(cc, () -> {
-            new NMSChestState().playChestAction(l.getBlock(), false);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () -> {
+            new NMSChestState().playChestAction(location.getBlock(), false);
             items.remove(item);
             item.remove();
-            endAnimation(p);
+            endAnimation(player);
         }, openDuration);
     }
 
     @Override
-    public void loadDataValues(StatusLogger sl) {
-        openDuration = fu.getFileDataLoader().loadInt(prefix + "chest-open-duration", 80, sl,
+    public void loadDataValues(StatusLogger statusLogger) {
+        openDuration = fileHandler.getFileDataLoader().loadInt(prefix + "chest-open-duration", 80, statusLogger,
                 StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_CHEST_OPEN_DURATION_INVALID);
 
-        earlyRewardHologram = fu.getFileDataLoader().loadBoolean(prefix + "early-reward-hologram", true, sl,
+        earlyRewardHologram = fileHandler.getFileDataLoader().loadBoolean(prefix + "early-reward-hologram", true, statusLogger,
                 StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_REWARD_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_REWARD_INVALID);
 
-        rewardHoloDelay = fu.getFileDataLoader().loadLong(prefix + "reward-hologram-delay", 0, sl,
+        rewardHoloDelay = fileHandler.getFileDataLoader().loadLong(prefix + "reward-hologram-delay", 0, statusLogger,
                 StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_REWARD_HOLO_DELAY_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_REWARD_HOLO_DELAY_INVALID);
 
-        attachTo = fu.getFileDataLoader().loadBoolean(prefix + "reward-holo-attach-to-item", true, sl,
+        attachTo = fileHandler.getFileDataLoader().loadBoolean(prefix + "reward-holo-attach-to-item", true, statusLogger,
                 StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_ATTACH_TO_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_ATTACH_TO_INVALID);
 
-        earlyEffects = fu.getFileDataLoader().loadBoolean(prefix + "early-open-actions", false, sl,
+        earlyEffects = fileHandler.getFileDataLoader().loadBoolean(prefix + "early-open-actions", false, statusLogger,
                 StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_OPEN_ACTIONS_SUCCESS,
                 StatusLoggerEvent.ANIMATION_OPENCHEST_EARLY_OPEN_ACTIONS_INVALID);
@@ -152,18 +150,18 @@ public class OpenChestAnimation extends CrateAnimation {
             earlyRewardHologram = true;
     }
 
-    public void endAnimation(Player p) {
-        Reward reward = rewardMap.get(p);
-        rewardMap.remove(p);
-        PlacedCrate placedCrate = placedCrateMap.get(p);
-        placedCrateMap.remove(p);
+    public void endAnimation(Player player) {
+        Reward reward = rewardMap.get(player);
+        rewardMap.remove(player);
+        PlacedCrate placedCrate = placedCrateMap.get(player);
+        placedCrateMap.remove(player);
 
         ArrayList<Reward> rewards = new ArrayList<>();
         rewards.add(reward);
 
-        finishAnimation(p, rewards, false, placedCrate);
+        finishAnimation(player, rewards, placedCrate);
         if (!earlyEffects)
-            getCrate().tick(loc, CrateState.OPEN, p, rewards);
+            getCrate().tick(loc, CrateState.OPEN, player, rewards);
     }
 
     public boolean isEarlyRewardHologram() {

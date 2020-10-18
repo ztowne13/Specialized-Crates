@@ -36,9 +36,9 @@ public abstract class InventoryCrateAnimation extends CrateAnimation {
      * This function is responsible for drawing any static blocks that remain in the menu for
      * the whole animation.
      *
-     * @param cdh The data holder that stores the player's animation runtime information.
+     * @param inventoryAnimationDataHolder The data holder that stores the player's animation runtime information.
      */
-    public abstract void drawIdentifierBlocks(InventoryAnimationDataHolder cdh);
+    public abstract void drawIdentifierBlocks(InventoryAnimationDataHolder inventoryAnimationDataHolder);
 
     /**
      * This information returns the filler block(s) that are displayed in drawFillers()
@@ -60,10 +60,8 @@ public abstract class InventoryCrateAnimation extends CrateAnimation {
     public void handleKeyPress(AnimationDataHolder dataHolder, KeyType type) {
         super.handleKeyPress(dataHolder, type);
 
-        if (type.equals(KeyType.ESC)) {
-            if (crate.getSettings().isCanFastTrack()) {
-                dataHolder.setFastTrack(true, false);
-            }
+        if (type.equals(KeyType.ESC) && crate.getSettings().isCanFastTrack()) {
+            dataHolder.setFastTrack(true, false);
         }
     }
 

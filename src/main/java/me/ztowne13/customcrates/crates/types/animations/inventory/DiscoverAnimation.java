@@ -31,21 +31,21 @@ import java.util.Random;
  * uncover-block: CHEST;0
  */
 public class DiscoverAnimation extends InventoryCrateAnimation {
-    SoundData clickSound;
-    SoundData uncoverSound;
-    int minRewards;
-    int maxRewards;
-    int shuffleDisplayDuration;
-    int invRows;
-    String coverBlockName = "&aReward #%numbetsorr%";
-    String coverBlockLore = "&7You have &f%remaining-clicks% rewards to chose from.";
-    String rewardBlockName = "&aReward";
-    String rewardBlockUnlockName = "&aClick me to unlock your reward.";
-    String rewardBlockWaitingName = "&aUncover all rewards to unlock";
-    ItemBuilder uncoverBlock;
-    ItemBuilder rewardBlock;
-    boolean count;
-    Random r = new Random();
+    private final Random random = new Random();
+    private SoundData clickSound;
+    private SoundData uncoverSound;
+    private int minRewards;
+    private int maxRewards;
+    private int shuffleDisplayDuration;
+    private int invRows;
+    private String coverBlockName = "&aReward #%numbetsorr%";
+    private String coverBlockLore = "&7You have &f%remaining-clicks% rewards to chose from.";
+    private String rewardBlockName = "&aReward";
+    private String rewardBlockUnlockName = "&aClick me to unlock your reward.";
+    private String rewardBlockWaitingName = "&aUncover all rewards to unlock";
+    private ItemBuilder uncoverBlock;
+    private ItemBuilder rewardBlock;
+    private boolean count;
 
     public DiscoverAnimation(Crate crate) {
         super(crate, CrateAnimationType.INV_DISCOVER);
@@ -78,12 +78,15 @@ public class DiscoverAnimation extends InventoryCrateAnimation {
             case ENDING:
                 drawFillers(dadh, 1);
                 drawWinningTiles(dadh);
+                break;
+            default:
+                break;
         }
     }
 
     @Override
-    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh) {
-
+    public void drawIdentifierBlocks(InventoryAnimationDataHolder inventoryAnimationDataHolder) {
+        // EMPTY
     }
 
     @Override
@@ -102,6 +105,9 @@ public class DiscoverAnimation extends InventoryCrateAnimation {
                 break;
             case SHUFFLING:
                 dadh.setShuffleTicks(dadh.getShuffleTicks() + (int) BASE_SPEED);
+                break;
+            default:
+                break;
         }
 
         return false;
@@ -137,6 +143,8 @@ public class DiscoverAnimation extends InventoryCrateAnimation {
                 if (dadh.getWaitingTicks() == 50) {
                     dadh.setCurrentState(AnimationDataHolder.State.COMPLETED);
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -189,7 +197,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation {
         dadh.getShufflingTiles().clear();
 
         for (int i = 0; i < dadh.getInventoryBuilder().getSize(); i++) {
-            if (r.nextInt(7) == 1) {
+            if (random.nextInt(7) == 1) {
                 dadh.getShufflingTiles().add(i);
             }
         }
@@ -212,15 +220,13 @@ public class DiscoverAnimation extends InventoryCrateAnimation {
 
     public void updateWinningTiles(DiscoverAnimationDataHolder dadh) {
         for (int slot : dadh.getClickedSlots()) {
-            if (dadh.getAlreadyChosenSlots().contains(slot)) {
-                if (!dadh.getAlreadyDisplayedRewards().containsKey(slot)) {
-                    Reward newR = getCrate().getSettings().getRewards().getRandomReward();
+            if (dadh.getAlreadyChosenSlots().contains(slot) && !dadh.getAlreadyDisplayedRewards().containsKey(slot)) {
+                Reward newR = getCrate().getSettings().getRewards().getRandomReward();
 
-                    if (uncoverSound != null)
-                        uncoverSound.playTo(dadh.getPlayer(), dadh.getLocation());
+                if (uncoverSound != null)
+                    uncoverSound.playTo(dadh.getPlayer(), dadh.getLocation());
 
-                    dadh.getAlreadyDisplayedRewards().put(slot, newR);
-                }
+                dadh.getAlreadyDisplayedRewards().put(slot, newR);
             }
         }
 
@@ -234,48 +240,48 @@ public class DiscoverAnimation extends InventoryCrateAnimation {
 
         ArrayList<Reward> rewards = new ArrayList<>(dadh.getAlreadyDisplayedRewards().values());
 
-        finishAnimation(player, rewards, false, null);
+        finishAnimation(player, rewards, null);
         getCrate().tick(dadh.getLocation(), CrateState.OPEN, player, rewards);
     }
 
     @Override
-    public void loadDataValues(StatusLogger sl) {
+    public void loadDataValues(StatusLogger statusLogger) {
         FileConfiguration fc = getFileHandler().get();
 
         invName = fc.getString(prefix + "inv-name");
 
-        invRows = fu.getFileDataLoader()
-                .loadInt(prefix + "inventory-rows", 3, sl, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
+        invRows = fileHandler.getFileDataLoader()
+                .loadInt(prefix + "inventory-rows", 3, statusLogger, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_DISCOVER_INVROWS_SUCCESS,
                         StatusLoggerEvent.ANIMATION_DISCOVER_INVROWS_INVALID);
 
-        minRewards = fu.getFileDataLoader()
-                .loadInt(prefix + "minimum-rewards", 1, sl, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
+        minRewards = fileHandler.getFileDataLoader()
+                .loadInt(prefix + "minimum-rewards", 1, statusLogger, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_DISCOVER_MINREWARDS_SUCCESS,
                         StatusLoggerEvent.ANIMATION_DISCOVER_MINREWARDS_INVALID);
 
-        maxRewards = fu.getFileDataLoader()
-                .loadInt(prefix + "maximum-rewards", 1, sl, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
+        maxRewards = fileHandler.getFileDataLoader()
+                .loadInt(prefix + "maximum-rewards", 1, statusLogger, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_DISCOVER_MAXREWARDS_SUCCESS,
                         StatusLoggerEvent.ANIMATION_DISCOVER_MAXREWARDS_INVALID);
 
-        shuffleDisplayDuration = fu.getFileDataLoader()
-                .loadInt(prefix + "random-display-duration", 1, sl, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
+        shuffleDisplayDuration = fileHandler.getFileDataLoader()
+                .loadInt(prefix + "random-display-duration", 1, statusLogger, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_DISCOVER_RANDDISPLAYLOCATION_SUCCESS,
                         StatusLoggerEvent.ANIMATION_DISCOVER_RANDDISPLAYLOCATION_INVALID);
 
         uncoverBlock =
-                fu.getFileDataLoader().loadItem(prefix + "cover-block", new ItemBuilder(XMaterial.CHEST), sl,
+                fileHandler.getFileDataLoader().loadItem(prefix + "cover-block", new ItemBuilder(XMaterial.CHEST), statusLogger,
                         StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_DISCOVER_COVERBLOCK_INVALID
                 );
 
-        count = fu.getFileDataLoader().loadBoolean(prefix + "count", true, sl, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
+        count = fileHandler.getFileDataLoader().loadBoolean(prefix + "count", true, statusLogger, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_DISCOVER_COUNT_SUCCESS,
                 StatusLoggerEvent.ANIMATION_DISCOVER_COUNT_INVALID);
 
         tickSound =
-                fu.getFileDataLoader().loadSound(prefix + "tick-sound", sl, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
+                fileHandler.getFileDataLoader().loadSound(prefix + "tick-sound", statusLogger, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_DISCOVER_TICKSOUND_SOUND_SUCCESS,
                         StatusLoggerEvent.ANIMATION_DISCOVER_TICKSOUND_SOUND_FAILURE,
                         StatusLoggerEvent.ANIMATION_DISCOVER_TICKSOUND_VOLUME_SUCCESS,
@@ -285,7 +291,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation {
                         StatusLoggerEvent.ANIMATION_DISCOVER_TICKSOUND_PITCH_INVALID);
 
         clickSound =
-                fu.getFileDataLoader().loadSound(prefix + "click-sound", sl, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
+                fileHandler.getFileDataLoader().loadSound(prefix + "click-sound", statusLogger, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_DISCOVER_CLICKSOUND_SOUND_SUCCESS,
                         StatusLoggerEvent.ANIMATION_DISCOVER_CLICKSOUND_SOUND_FAILURE,
                         StatusLoggerEvent.ANIMATION_DISCOVER_CLICKSOUND_VOLUME_SUCCESS,
@@ -295,7 +301,7 @@ public class DiscoverAnimation extends InventoryCrateAnimation {
                         StatusLoggerEvent.ANIMATION_DISCOVER_CLICKSOUND_PITCH_INVALID);
 
         uncoverSound =
-                fu.getFileDataLoader().loadSound(prefix + "uncover-sound", sl, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
+                fileHandler.getFileDataLoader().loadSound(prefix + "uncover-sound", statusLogger, StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_DISCOVER_UNCOVERSOUND_SOUND_SUCCESS,
                         StatusLoggerEvent.ANIMATION_DISCOVER_UNCOVERSOUND_SOUND_FAILURE,
                         StatusLoggerEvent.ANIMATION_DISCOVER_UNCOVERSOUND_VOLUME_SUCCESS,
@@ -304,30 +310,30 @@ public class DiscoverAnimation extends InventoryCrateAnimation {
                         StatusLoggerEvent.ANIMATION_DISCOVER_UNCOVERSOUND_PITCH_SUCCESS,
                         StatusLoggerEvent.ANIMATION_DISCOVER_UNCOVERSOUND_PITCH_INVALID);
 
-        rewardBlock = fu.getFileDataLoader()
-                .loadItem(prefix + "reward-block", new ItemBuilder(XMaterial.GREEN_STAINED_GLASS_PANE), sl,
+        rewardBlock = fileHandler.getFileDataLoader()
+                .loadItem(prefix + "reward-block", new ItemBuilder(XMaterial.GREEN_STAINED_GLASS_PANE), statusLogger,
                         StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_DISCOVER_REWARDBLOCK_INVALID
                 );
         rewardBlock.setDisplayName("");
 
-        coverBlockName = fu.getFileDataLoader()
+        coverBlockName = fileHandler.getFileDataLoader()
                 .loadString(prefix + "cover-block-name", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_DISCOVER_COVER_BLOCK_NAME_SUCCESS);
 
-        coverBlockLore = fu.getFileDataLoader()
+        coverBlockLore = fileHandler.getFileDataLoader()
                 .loadString(prefix + "cover-block-lore", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_DISCOVER_COVER_BLOCK_LORE_SUCCESS);
 
-        rewardBlockName = fu.getFileDataLoader()
+        rewardBlockName = fileHandler.getFileDataLoader()
                 .loadString(prefix + "reward-block-name", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_DISCOVER_REWARD_BLOCK_NAME_SUCCESS);
 
-        rewardBlockUnlockName = fu.getFileDataLoader().loadString(prefix + "reward-block-unlock-name", getStatusLogger(),
+        rewardBlockUnlockName = fileHandler.getFileDataLoader().loadString(prefix + "reward-block-unlock-name", getStatusLogger(),
                 StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_DISCOVER_REWARD_BLOCK_UNBLOCK_NAME_SUCCESS);
 
-        rewardBlockWaitingName = fu.getFileDataLoader().loadString(prefix + "reward-block-waiting-name", getStatusLogger(),
+        rewardBlockWaitingName = fileHandler.getFileDataLoader().loadString(prefix + "reward-block-waiting-name", getStatusLogger(),
                 StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_DISCOVER_REWARD_BLOCK_WAITING_NAME_SUCCESS);
     }

@@ -9,17 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AnimationDataHolder {
-    Player player;
-    Location location;
-    CrateAnimation crateAnimation;
-    boolean fastTrack = false;
-    boolean fastTrackWaitTick = false;
-    long totalTickTime;
-    int totalTicks = 0;
-    int individualTicks = 0;
-    int waitingTicks = 0;
-    State currentState = State.PLAYING;
-    ArrayList<CrateAnimation.KeyType> clickedKeys;
+    private final Player player;
+    private final Location location;
+    private final CrateAnimation crateAnimation;
+    private final List<CrateAnimation.KeyType> clickedKeys;
+    private boolean fastTrack = false;
+    private boolean fastTrackWaitTick = false;
+    private long totalTickTime;
+    private int totalTicks = 0;
+    private int individualTicks = 0;
+    private int waitingTicks = 0;
+    private State currentState = State.PLAYING;
 
     public AnimationDataHolder(Player player, Location location, CrateAnimation crateAnimation) {
         this.player = player;

@@ -12,8 +12,8 @@ import java.util.List;
  * Created by ztowne13 on 3/6/16.
  */
 public class MenuAnimationDataHolder extends InventoryAnimationDataHolder {
-    ArrayList<Reward> displayedRewards;
-    ArrayList<Integer> usedNumbers;
+    private final List<Reward> displayedRewards;
+    private final List<Integer> usedNumbers;
 
     public MenuAnimationDataHolder(Player player, Location location, MenuAnimation crateAnimation) {
         super(player, location, crateAnimation, crateAnimation.getInventoryRows() * 9);
