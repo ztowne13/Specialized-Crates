@@ -9,7 +9,6 @@ import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.logging.StatusLoggerEvent;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -18,20 +17,20 @@ import java.util.List;
 import java.util.Map;
 
 public class CFireworks extends CSetting {
-    Map<String, List<FireworkData>> fireworks = new HashMap<>();
+    private Map<String, List<FireworkData>> fireworks = new HashMap<>();
 
     public CFireworks(Crate crates) {
         super(crates, crates.getCc());
     }
 
     @Override
-    public void loadFor(CrateSettingsBuilder csb, CrateState cs) {
-        if (csb.hasV("open.fireworks")) {
-            addFireworks("OPEN", csb.getSettings().getFc().getStringList("open.fireworks"));
+    public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
+        if (crateSettingsBuilder.hasV("open.fireworks")) {
+            addFireworks("OPEN", crateSettingsBuilder.getSettings().getFc().getStringList("open.fireworks"));
         }
-        if (csb.hasV("open.crate-tiers")) {
+        if (crateSettingsBuilder.hasV("open.crate-tiers")) {
             for (String id : getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false)) {
-                if (csb.hasV("open.crate-tiers." + id + ".fireworks")) {
+                if (crateSettingsBuilder.hasV("open.crate-tiers." + id + ".fireworks")) {
                     addFireworks(id, getSettings().getFc().getStringList("open.crate-tiers." + id + ".fireworks"));
                 }
             }
@@ -44,24 +43,6 @@ public class CFireworks extends CSetting {
                 String tier = entry.getKey();
                 ArrayList<String> toSetList = new ArrayList<>();
                 for (FireworkData fd : entry.getValue()) {
-//                    String serializedFw = "";
-//                    for (String color : fd.getColors())
-//                    {
-//                        serializedFw += color + ";";
-//                    }
-//
-//                    serializedFw = serializedFw.substring(0, serializedFw.length() - 1) + ", ";
-//
-//                    for (String color : fd.getFadeColors())
-//                    {
-//                        serializedFw += color + ";";
-//                    }
-//
-//                    serializedFw = serializedFw.substring(0, serializedFw.length() - 1);
-//                    serializedFw += ", " + fd.isTrail();
-//                    serializedFw += ", " + fd.isFlicker();
-//                    serializedFw += ", " + fd.getFeType().name();
-//                    serializedFw += ", " + fd.getPower();
                     toSetList.add(fd.toString());
                 }
 
@@ -73,7 +54,7 @@ public class CFireworks extends CSetting {
 
     public void addFireworks(String id, List<String> list) {
         for (String firework : list) {
-            FireworkData fd = new FireworkData(cc, getSettings());
+            FireworkData fd = new FireworkData(instance, getSettings());
             fd.load(firework);
             addFirework(id, fd);
         }
@@ -113,13 +94,13 @@ public class CFireworks extends CSetting {
         getFireworks().put(id, list);
     }
 
-    public void runAll(Player p, Location l, List<Reward> rewards) {
+    public void runAll(Location location, List<Reward> rewards) {
         for (String tier : getFireworks().keySet()) {
             if ((tier.equalsIgnoreCase("OPEN") && (!getSettings().isTiersOverrideDefaults() || rewards.isEmpty() ||
                     !getFireworks().containsKey(rewards.get(0).getRarity().toUpperCase()))) ||
                     (!rewards.isEmpty() && rewards.get(0).getRarity().equalsIgnoreCase(tier))) {
                 for (FireworkData fd : getFireworks().get(tier)) {
-                    fd.play(LocationUtils.getLocationCentered(l));
+                    fd.play(LocationUtils.getLocationCentered(location));
                 }
             }
         }

@@ -85,7 +85,7 @@ public class MobPlaceholder extends DynamicCratePlaceholder {
     public void fixHologram(PlacedCrate cm) {
         Location l = cm.getL().clone();
         l.setY(l.getY() + getEnt().getHeight() - .5);
-        cm.getHologram().getDh().teleport(l);
+        cm.getHologram().getDynamicHologram().teleport(l);
 
     }
 

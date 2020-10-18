@@ -30,18 +30,16 @@ public class CParticles extends CSetting {
     }
 
     @Override
-    public void loadFor(CrateSettingsBuilder csb, CrateState cstate) {
-        if (csb.hasV(cstate.name().toLowerCase() + ".particles")) {
-            parseAndAddParticles(cstate.name().toUpperCase(),
-                    cstate.name().toLowerCase() + ".particles");
+    public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
+        if (crateSettingsBuilder.hasV(crateState.name().toLowerCase() + ".particles")) {
+            parseAndAddParticles(crateState.name().toUpperCase(),
+                    crateState.name().toLowerCase() + ".particles");
         }
 
-        if (cstate.equals(CrateState.OPEN)) {
-            if (csb.hasV("open.crate-tiers")) {
-                for (String id : getCrate().getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false)) {
-                    if (csb.hasV("open.crate-tiers." + id + ".particles")) {
-                        parseAndAddParticles(id, "open.crate-tiers." + id + ".particles");
-                    }
+        if (crateState.equals(CrateState.OPEN) && crateSettingsBuilder.hasV("open.crate-tiers")) {
+            for (String id : getCrate().getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false)) {
+                if (crateSettingsBuilder.hasV("open.crate-tiers." + id + ".particles")) {
+                    parseAndAddParticles(id, "open.crate-tiers." + id + ".particles");
                 }
             }
         }
@@ -54,15 +52,15 @@ public class CParticles extends CSetting {
                     pd.save(getFileHandler(), getPath(entry.getKey()));
     }
 
-    public void deleteParticle(String tier, ParticleData pd) {
-        getParticles().get(tier).remove(pd);
-        getFileHandler().get().set(getPath(tier) + "." + pd.getName(), null);
+    public void deleteParticle(String tier, ParticleData particleData) {
+        getParticles().get(tier).remove(particleData);
+        getFileHandler().get().set(getPath(tier) + "." + particleData.getName(), null);
     }
 
-    public void addParticle(ParticleData pd, String s) {
+    public void addParticle(ParticleData particleData, String s) {
         List<ParticleData> plist = getParticles().getOrDefault(s, new ArrayList<>());
-        plist.add(pd);
-        StatusLoggerEvent.PARTICLE_ADD_SUCCESS.log(getCrate(), new String[]{pd.getParticleName()});
+        plist.add(particleData);
+        StatusLoggerEvent.PARTICLE_ADD_SUCCESS.log(getCrate(), new String[]{particleData.getParticleName()});
         getParticles().put(s, plist);
     }
 
@@ -100,10 +98,10 @@ public class CParticles extends CSetting {
                             StatusLoggerEvent.PARTICLE_INVALID.log(getCrate(), new String[]{parent, particleTypeAS});
                             continue;
                         }
-                        pd = new NMSParticleEffect(getSc(), pe, parent, false);
+                        pd = new NMSParticleEffect(instance, pe, parent, false);
                     } else {
                         try {
-                            pd = new BukkitParticleEffect(getSc(), particleTypeAS, parent, false);
+                            pd = new BukkitParticleEffect(instance, particleTypeAS, parent, false);
                         } catch (Exception exc) {
                             StatusLoggerEvent.PARTICLE_INVALID.log(getCrate(), new String[]{parent, particleTypeAS});
                             continue;
@@ -124,18 +122,21 @@ public class CParticles extends CSetting {
                     try {
                         pd.setCenterX(Float.parseFloat(centerXAS));
                     } catch (Exception exc) {
+                        // IGNORED
                     }
 
                     // center y
                     try {
                         pd.setCenterY(Float.parseFloat(centerYAS));
                     } catch (Exception exc) {
+                        // IGNORED
                     }
 
                     // center z
                     try {
                         pd.setCenterZ(Float.parseFloat(centerZAS));
                     } catch (Exception exc) {
+                        // IGNORED
                     }
 
                     // colors
@@ -202,7 +203,7 @@ public class CParticles extends CSetting {
                                 pd.setAmount(1);
                             }
 
-                            pd.setParticleAnimationEffect(peAnimationType.getAnimationEffectInstance(cc, pd));
+                            pd.setParticleAnimationEffect(peAnimationType.getAnimationEffectInstance(instance, pd));
                             pd.setHasAnimation(true);
                         }
                     } catch (Exception exc) {
@@ -220,42 +221,38 @@ public class CParticles extends CSetting {
         }
     }
 
-    public void runAll(Location l, CrateState cs, List<Reward> rewards) {
-        List<ParticleData> alreadyUpdatedAnimations = cc.getAlreadyUpdated();
+    public void runAll(Location location, CrateState crateState, List<Reward> rewards) {
+        List<ParticleData> alreadyUpdatedAnimations = instance.getAlreadyUpdated();
         for (String id : getParticles().keySet()) {
-            if (cs.equals(CrateState.PLAY)) {
-                if (cs.name().toUpperCase().equalsIgnoreCase(id)) {
+            if (crateState.equals(CrateState.PLAY)) {
+                if (crateState.name().toUpperCase().equalsIgnoreCase(id)) {
                     for (ParticleData pd : getParticles().get(id)) {
                         if (pd.isHasAnimation()) {
-                            //PEAnimationType peAnimationType = PEAnimationType.getFromParticleAnimationEffect(pd.getParticleAnimationEffect());
                             if (!alreadyUpdatedAnimations.contains(pd)) {
                                 pd.getParticleAnimationEffect().update();
                                 alreadyUpdatedAnimations.add(pd);
                             }
-                            //System.out.println("has animation");
-                            pd.getParticleAnimationEffect().display(l);
+                            pd.getParticleAnimationEffect().display(location);
                         } else {
-                            //System.out.println("does not have an animation");
-                            pd.display(l);
+                            pd.display(location);
                         }
                     }
                 }
                 continue;
             }
 
-            if ((id.equalsIgnoreCase(cs.name().toUpperCase()) && (!getSettings().isTiersOverrideDefaults() || rewards.isEmpty() ||
+            if ((id.equalsIgnoreCase(crateState.name().toUpperCase()) && (!getSettings().isTiersOverrideDefaults() || rewards.isEmpty() ||
                     !getParticles().containsKey(rewards.get(0).getRarity().toUpperCase()))) ||
                     (!rewards.isEmpty() && rewards.get(0).getRarity().equalsIgnoreCase(id))) {
                 for (ParticleData pd : getParticles().get(id)) {
                     if (pd.isHasAnimation()) {
-                        //PEAnimationType peAnimationType = PEAnimationType.getFromParticleAnimationEffect(pd.getParticleAnimationEffect());
                         if (!alreadyUpdatedAnimations.contains(pd)) {
                             pd.getParticleAnimationEffect().update();
                             alreadyUpdatedAnimations.add(pd);
                         }
-                        pd.getParticleAnimationEffect().display(l);
+                        pd.getParticleAnimationEffect().display(location);
                     } else {
-                        pd.display(l);
+                        pd.display(location);
                     }
                 }
             }

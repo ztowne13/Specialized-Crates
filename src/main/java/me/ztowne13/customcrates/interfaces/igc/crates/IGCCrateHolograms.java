@@ -77,7 +77,7 @@ public class IGCCrateHolograms extends IGCMenuCrate {
         ib.setItem(4, hologramLines);
 
         // Green block
-        boolean usingDefault = (cholo.getHat() == null || cholo.getHat().equals(HoloAnimType.NONE));
+        boolean usingDefault = (cholo.getHoloAnimType() == null || cholo.getHoloAnimType().equals(HoloAnimType.NONE));
         ItemBuilder usingDefaultOrAnimate = new ItemBuilder(usingDefault ? XMaterial.GREEN_WOOL :
                 XMaterial.RED_WOOL, 1);
         usingDefaultOrAnimate.setDisplayName("&aStatus: ");
@@ -100,7 +100,7 @@ public class IGCCrateHolograms extends IGCMenuCrate {
         // Animated hologram type
         ItemBuilder animatedHoloType = new ItemBuilder(XMaterial.BEACON, 1);
         animatedHoloType.setDisplayName("&aEdit the hologram animation type");
-        animatedHoloType.addLore("&7Current value:").addLore("&7" + cholo.getHat().name()).addLore("");
+        animatedHoloType.addLore("&7Current value:").addLore("&7" + cholo.getHoloAnimType().name()).addLore("");
         animatedHoloType.addAutomaticLore("&f", 30,
                 "Change the hologram animation type (there is currently only 1). Set to NONE to use the default holograms.");
         ib.setItem(15, animatedHoloType);
@@ -205,7 +205,7 @@ public class IGCCrateHolograms extends IGCMenuCrate {
         } else if (value.equalsIgnoreCase("Holo Animation Type")) {
             try {
                 HoloAnimType newHoloAnim = HoloAnimType.valueOf(input.toUpperCase());
-                cs.getHologram().setHat(newHoloAnim);
+                cs.getHologram().setHoloAnimType(newHoloAnim);
                 ChatUtils.msgSuccess(getP(), "Set hologram.animation.type to " + input);
                 return true;
             } catch (Exception exc) {

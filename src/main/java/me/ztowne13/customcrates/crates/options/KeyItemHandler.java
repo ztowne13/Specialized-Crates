@@ -71,7 +71,7 @@ public class KeyItemHandler extends CSetting {
     public boolean hasKeyInInventory(Player player) {
         for (ItemStack stack : player.getInventory().getContents()) {
             if (keyMatchesToStack(stack, true)) {
-                cc.getDu().log("hasKeyInInventory() - return true", getClass());
+                instance.getDu().log("hasKeyInInventory() - return true", getClass());
                 return true;
             }
         }
@@ -82,7 +82,7 @@ public class KeyItemHandler extends CSetting {
         if (!getItem(1).hasItemMeta() || !getItem(1).getItemMeta().hasLore()) {
             return true;
         }
-        if ((Boolean) SettingsValue.REQUIRE_KEY_LORE.getValue(getSc())) {
+        if ((Boolean) SettingsValue.REQUIRE_KEY_LORE.getValue(instance)) {
             if (stack.hasItemMeta()) {
                 if (stack.getItemMeta().hasLore()) {
                     for (int i = 0; i < getItem(1).getItemMeta().getLore().size(); i++) {
@@ -114,14 +114,14 @@ public class KeyItemHandler extends CSetting {
         CrateSettings settings = getCrate().getSettings();
         boolean passesKeyTest = !settings.isRequireKey() ||
                 (requireKeyInHand ? keyMatchesToStack(player.getItemInHand(), true) : hasKeyInInventory(player)) ||
-                PlayerManager.get(cc, player).getPdm().getVCCrateData(getCrate()).getKeys() > 0;
+                PlayerManager.get(instance, player).getPdm().getVCCrateData(getCrate()).getKeys() > 0;
 
-        cc.getDu().log("playerPasseysKeyTest() - return " + passesKeyTest);
+        instance.getDu().log("playerPasseysKeyTest() - return " + passesKeyTest);
         return passesKeyTest;
     }
 
     public void takeKeyFromPlayer(Player p, boolean fromInv) {
-        boolean prioritzePhysical = (boolean) cc.getSettings().getConfigValues().get("prioritize-physical-key");
+        boolean prioritzePhysical = (boolean) instance.getSettings().getConfigValues().get("prioritize-physical-key");
         if (!takeKeyFromPlayer(p, fromInv, prioritzePhysical)) {
             takeKeyFromPlayer(p, fromInv, !prioritzePhysical);
         }
@@ -161,7 +161,7 @@ public class KeyItemHandler extends CSetting {
                 }
             }
         } else {
-            PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
+            PlayerDataManager pdm = PlayerManager.get(instance, p).getPdm();
             if (pdm.getVCCrateData(getCrate()).getKeys() > 0) {
                 pdm.setVirtualCrateKeys(getCrate(), pdm.getVCCrateData(getCrate()).getKeys() - 1);
                 return true;

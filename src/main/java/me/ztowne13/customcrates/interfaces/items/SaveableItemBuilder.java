@@ -26,6 +26,10 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
         super(fromStack);
     }
 
+    public SaveableItemBuilder(XMaterial material) {
+        super(material);
+    }
+
     public SaveableItemBuilder(XMaterial m, int amnt) {
         super(m, amnt);
     }

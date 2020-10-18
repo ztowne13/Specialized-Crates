@@ -8,12 +8,12 @@ import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
 
 public abstract class CSetting {
-    Crate crates;
-    SpecializedCrates cc;
+    protected Crate crates;
+    protected final SpecializedCrates instance;
 
-    public CSetting(Crate crates, SpecializedCrates cc) {
+    public CSetting(Crate crates, SpecializedCrates instance) {
         this.crates = crates;
-        this.cc = cc;
+        this.instance = instance;
     }
 
     public abstract void loadFor(CrateSettingsBuilder csb, CrateState cs);
@@ -35,9 +35,5 @@ public abstract class CSetting {
 
     public void setCrates(Crate crates) {
         this.crates = crates;
-    }
-
-    public SpecializedCrates getSc() {
-        return cc;
     }
 }

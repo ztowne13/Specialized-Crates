@@ -27,8 +27,8 @@ public class DynamicHologram {
         this.instance = instance;
         this.placedCrate = placedCrate;
 
-        if (placedCrate.getHologram().getHat() != null && placedCrate.getHologram().getHat() != HoloAnimType.NONE) {
-            setHoloAnimation(placedCrate.getHologram().getHat().getAsHoloAnimation(instance, this));
+        if (placedCrate.getHologram().getHoloAnimType() != null && placedCrate.getHologram().getHoloAnimType() != HoloAnimType.NONE) {
+            setHoloAnimation(placedCrate.getHologram().getHoloAnimType().getAsHoloAnimation(instance, this));
         }
     }
 

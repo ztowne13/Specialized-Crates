@@ -69,7 +69,7 @@ public class PlacedCrate {
     public void delete() {
         getCc().getActiveCratesFile().get().set(LocationUtils.locToString(getL()), null);
         getCc().getActiveCratesFile().save();
-        getHologram().getDh().delete();
+        getHologram().getDynamicHologram().delete();
         getCrate().getSettings().getPlaceholder().remove(this);
         getPlacedCrates().remove(getL());
         deleted = true;
@@ -120,14 +120,14 @@ public class PlacedCrate {
 
         Location dupeLoc = getL().clone();
         dupeLoc.setY(dupeLoc.getY() + .5);
-        getHologram().setDh(getHologram().createHologram(this, dupeLoc));
+        getHologram().setDynamicHologram(getHologram().createHologram(this, dupeLoc));
     }
 
     public void tick(CrateState cs) {
         if (isCratesEnabled()) {
             getCrate().tick(getL(), cs, null, null);
             //getCrates().getCs().getCh().tick(null, getL(), cs, !getCrates().isMultiCrate());
-            getHologram().getDh().tick();
+            getHologram().getDynamicHologram().tick();
         }
 
         if (crates.getSettings().getObtainType().equals(ObtainType.LUCKYCHEST)) {

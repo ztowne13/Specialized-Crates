@@ -104,7 +104,7 @@ public class Crate {
         getSettings().getParticles().runAll(l, cstate, rewards);
         if (cstate.equals(CrateState.OPEN) && CrateUtils.isCrateUsable(this)) {
             getSettings().getSounds().runAll(p, l, rewards);
-            getSettings().getFireworks().runAll(p, l, rewards);
+            getSettings().getFireworks().runAll(l, rewards);
             if (rewards != null && !rewards.isEmpty()) {
                 getSettings().getActions().playAll(p, placedCrate, rewards, false);
             }
