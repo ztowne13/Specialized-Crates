@@ -22,7 +22,7 @@ public class FileDataLoader {
 
     public String loadString(String path, StatusLogger statusLogger, StatusLoggerEvent pathDoesntExist, StatusLoggerEvent success) {
         if (!fileHandler.get().contains(path)) {
-            pathDoesntExist.log(statusLogger, new String[]{path});
+            pathDoesntExist.log(statusLogger, path);
             return "";
         }
 
@@ -33,7 +33,7 @@ public class FileDataLoader {
     public ItemBuilder loadItem(String path, ItemBuilder defValue, StatusLogger statusLogger, StatusLoggerEvent pathDoesntExist,
                                 StatusLoggerEvent invalid) {
         if (!fileHandler.get().contains(path)) {
-            pathDoesntExist.log(statusLogger, new String[]{path});
+            pathDoesntExist.log(statusLogger, path);
             return defValue;
         }
 
@@ -43,7 +43,7 @@ public class FileDataLoader {
         if (optional.isPresent()) {
             return new ItemBuilder(optional.get(), 1);
         } else {
-            invalid.log(statusLogger, new String[]{value});
+            invalid.log(statusLogger, value);
         }
         return defValue;
     }
@@ -57,7 +57,7 @@ public class FileDataLoader {
                                StatusLoggerEvent pitchSuccess,
                                StatusLoggerEvent pitchInvalid) {
         if (!fileHandler.get().contains(path)) {
-            pathDoesntExist.log(statusLogger, new String[]{path});
+            pathDoesntExist.log(statusLogger, path);
             return new SoundData(XSound.values()[0], 0);
         }
 
@@ -76,7 +76,7 @@ public class FileDataLoader {
                     volumeSuccess.log(statusLogger);
                 } else {
                     sd.setVolume(5);
-                    volumeInvalid.log(statusLogger, new String[]{args[1]});
+                    volumeInvalid.log(statusLogger, args[1]);
                 }
 
                 if (args.length >= 3) {
@@ -85,7 +85,7 @@ public class FileDataLoader {
                         pitchSuccess.log(statusLogger);
                     } else {
                         sd.setPitch(5);
-                        pitchInvalid.log(statusLogger, new String[]{args[2]});
+                        pitchInvalid.log(statusLogger, args[2]);
                     }
                 } else {
                     sd.setPitch(5);
@@ -107,7 +107,7 @@ public class FileDataLoader {
     public int loadInt(String path, int defValue, StatusLogger statusLogger, StatusLoggerEvent pathDoesntExist,
                        StatusLoggerEvent success, StatusLoggerEvent invalid) {
         if (!fileHandler.get().contains(path)) {
-            pathDoesntExist.log(statusLogger, new String[]{path});
+            pathDoesntExist.log(statusLogger, path);
             return defValue;
         }
 
@@ -126,7 +126,7 @@ public class FileDataLoader {
                              StatusLoggerEvent success,
                              StatusLoggerEvent invalid) {
         if (!fileHandler.get().contains(path)) {
-            pathDoesntExist.log(statusLogger, new String[]{path});
+            pathDoesntExist.log(statusLogger, path);
             return defValue;
         }
 
@@ -145,7 +145,7 @@ public class FileDataLoader {
                          StatusLoggerEvent success,
                          StatusLoggerEvent invalid) {
         if (!fileHandler.get().contains(path)) {
-            pathDoesntExist.log(statusLogger, new String[]{path});
+            pathDoesntExist.log(statusLogger, path);
             return defValue;
         }
 
@@ -164,7 +164,7 @@ public class FileDataLoader {
                                StatusLoggerEvent success,
                                StatusLoggerEvent invalid) {
         if (!fileHandler.get().contains(path)) {
-            pathDoesntExist.log(statusLogger, new String[]{path});
+            pathDoesntExist.log(statusLogger, path);
             return defValue;
         }
 

@@ -138,7 +138,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
         // material
         if (!fc.contains(prefix + ".material")) {
             if (itemFailure != null)
-                itemFailure.log(statusLogger, new String[]{"The '" + prefix + ".material' value does not exist."});
+                itemFailure.log(statusLogger, "The '" + prefix + ".material' value does not exist.");
             return false;
         } else {
             String mat = fc.getString(prefix + ".material");
@@ -155,7 +155,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
                 }
             } else {
                 if (itemFailure != null)
-                    itemFailure.log(statusLogger, new String[]{mat + " is not a valid material."});
+                    itemFailure.log(statusLogger, mat + " is not a valid material.");
                 return false;
             }
         }
@@ -187,8 +187,8 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
                     addEnchantment(compressedEnchantment);
                 } catch (Exception exc) {
                     if (improperEnchant != null)
-                        improperEnchant.log(statusLogger, new String[]{unparsedEnchant +
-                                " is not formatted enchant;level or either the enchant is not a valid enchantment or the level is not a number."});
+                        improperEnchant.log(statusLogger, unparsedEnchant +
+                                " is not formatted enchant;level or either the enchant is not a valid enchantment or the level is not a number.");
                 }
             }
         }
@@ -201,7 +201,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
                 setGlowing(Boolean.parseBoolean(unparsedGlow));
             else if (improperGlow != null)
                 improperGlow
-                        .log(statusLogger, new String[]{"The '" + prefix + ".glow' value is not a proper true/false value"});
+                        .log(statusLogger, "The '" + prefix + ".glow' value is not a proper true/false value");
         }
 
         // Potion Effects
@@ -213,8 +213,8 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
                 } catch (Exception exc) {
                     exc.printStackTrace();
                     if (improperPotion != null)
-                        improperPotion.log(statusLogger, new String[]{unparsedPotion +
-                                " is not formatted potiontype;duration;amplifier or either the potion is not a valid potion type or the duration/amplifier is not a number."});
+                        improperPotion.log(statusLogger, unparsedPotion +
+                                " is not formatted potiontype;duration;amplifier or either the potion is not a valid potion type or the duration/amplifier is not a number.");
                 }
             }
         }
@@ -232,7 +232,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
                     addItemFlag(flag);
                 } catch (Exception exc) {
                     if (invalidItemFlag != null)
-                        invalidItemFlag.log(statusLogger, new String[]{line + " is an invalid flag."});
+                        invalidItemFlag.log(statusLogger, line + " is an invalid flag.");
                 }
             }
         }
@@ -244,7 +244,7 @@ public class SaveableItemBuilder extends ItemBuilder implements SaveableItem {
             if (Utils.isInt(unparsedAmount))
                 getStack().setAmount(Integer.parseInt(unparsedAmount));
             else if (improperAmount != null)
-                improperAmount.log(statusLogger, new String[]{"The '" + prefix + ".amount' value is not a valid number."});
+                improperAmount.log(statusLogger, "The '" + prefix + ".amount' value is not a valid number.");
         }
 
         // Player Head Name
