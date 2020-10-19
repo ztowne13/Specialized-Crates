@@ -23,26 +23,26 @@ public class InteractListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInteract(PlayerInteractEvent e) {
-        cc.getDu().log("onInteract - CALL", this.getClass());
-        cc.getDu().log("onInteract - (cancelled: " + e.isCancelled() + ")", getClass());
+        cc.getDebugUtils().log("onInteract - CALL", this.getClass());
+        cc.getDebugUtils().log("onInteract - (cancelled: " + e.isCancelled() + ")", getClass());
 
         Player p = e.getPlayer();
 
         // Handle crate left or right click
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-            cc.getDu().log("onInteract - Click block", this.getClass());
+            cc.getDebugUtils().log("onInteract - Click block", this.getClass());
 
             CrateAction action;
             if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 action = new AttemptKeyUseAction(cc, p, e.getClickedBlock().getLocation());
-                cc.getDu().log("onInteract - is right click block", getClass());
+                cc.getDebugUtils().log("onInteract - is right click block", getClass());
             } else {
                 action = new LeftClickAction(cc, p, e.getClickedBlock().getLocation());
             }
 
             boolean result = action.run();
             if (result) {
-                cc.getDu().log("onInteract - Cancelling", getClass());
+                cc.getDebugUtils().log("onInteract - Cancelling", getClass());
                 e.setCancelled(true);
             }
         }

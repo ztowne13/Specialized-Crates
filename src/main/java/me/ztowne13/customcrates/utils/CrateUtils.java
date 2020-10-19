@@ -5,12 +5,14 @@ import me.ztowne13.customcrates.crates.PlacedCrate;
 import org.bukkit.inventory.ItemStack;
 
 public class CrateUtils {
+    private CrateUtils() {
+        // EMPTY
+    }
+
     public static Crate searchByKey(ItemStack stack) {
-        for (Crate crates : Crate.getLoadedCrates().values()) {
-            if (isCrateUsable(crates)) {
-                if (crates.getSettings().getKeyItemHandler().keyMatchesToStack(stack, false)) {
-                    return crates;
-                }
+        for (Crate crate : Crate.getLoadedCrates().values()) {
+            if (isCrateUsable(crate) && crate.getSettings().getKeyItemHandler().keyMatchesToStack(stack, false)) {
+                return crate;
             }
         }
         return null;
@@ -21,21 +23,19 @@ public class CrateUtils {
     }
 
     public static Crate searchByCrate(ItemStack stack, boolean includeDisabled) {
-        for (Crate crates : Crate.getLoadedCrates().values()) {
-            if (isCrateUsable(crates) || includeDisabled) {
-                if (crates.getSettings().getCrateItemHandler().crateMatchesToStack(stack)) {
-                    return crates;
-                }
+        for (Crate crate : Crate.getLoadedCrates().values()) {
+            if ((isCrateUsable(crate) || includeDisabled) && crate.getSettings().getCrateItemHandler().crateMatchesToStack(stack)) {
+                return crate;
             }
         }
         return null;
     }
 
-    public static boolean isCrateUsable(Crate crates) {
-        return crates != null && crates.isEnabled() && !crates.isDisabledByError();
+    public static boolean isCrateUsable(Crate crate) {
+        return crate != null && crate.isEnabled() && !crate.isDisabledByError();
     }
 
-    public static boolean isCrateUsable(PlacedCrate cm) {
-        return cm.isCratesEnabled() && cm.getCrate() != null && cm.getCrate().isEnabled() && !cm.getCrate().isDisabledByError();
+    public static boolean isCrateUsable(PlacedCrate placedCrate) {
+        return placedCrate.isCratesEnabled() && placedCrate.getCrate() != null && placedCrate.getCrate().isEnabled() && !placedCrate.getCrate().isDisabledByError();
     }
 }

@@ -11,44 +11,44 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CHolograms extends CSetting {
-    DynamicHologram dh = null;
-    List<String> lines = new ArrayList<>();
-    int lineCount = 0;
+public class CHologram extends CSetting {
+    private DynamicHologram dynamicHologram = null;
+    private List<String> lines = new ArrayList<>();
+    private int lineCount = 0;
 
-    String rewardHologram = "";
-    int rewardHoloDuration = 60;
-    double rewardHoloYOffset = 0;
+    private String rewardHologram = "";
+    private int rewardHoloDuration = 60;
+    private double rewardHoloYOffset = 0;
 
-    HoloAnimType hat = HoloAnimType.NONE;
-    int speed = 20;
-    List<String> prefixes = new ArrayList<>();
-    double hologramOffset = -123.123;
+    private HoloAnimType holoAnimType = HoloAnimType.NONE;
+    private int speed = 20;
+    private List<String> prefixes = new ArrayList<>();
+    private double hologramOffset = -123.123;
 
-    boolean createdByPlayer = true;
+    private boolean createdByPlayer = true;
 
-    public CHolograms(Crate crates) {
-        super(crates, crates.getCc());
+    public CHologram(Crate crate) {
+        super(crate, crate.getInstance());
     }
 
     public static void deleteAll() {
-        for (PlacedCrate cm : PlacedCrate.getPlacedCrates().values()) {
-            if (cm.getHologram() != null) {
-                cm.getHologram().getDh().delete();
+        for (PlacedCrate placedCrate : PlacedCrate.getPlacedCrates().values()) {
+            if (placedCrate.getHologram() != null) {
+                placedCrate.getHologram().getDynamicHologram().delete();
             }
         }
 
     }
 
-    public void loadFor(CrateSettingsBuilder csb, CrateState cs) {
-        FileConfiguration fc = getCrate().getSettings().getFc();
+    public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
+        FileConfiguration fc = getCrate().getSettings().getFileConfiguration();
 
-        if (csb.hasV("hologram.reward-hologram")) {
+        if (crateSettingsBuilder.hasValue("hologram.reward-hologram")) {
             rewardHologram = fc.getString("hologram.reward-hologram");
-            StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM.log(getCrate(), new String[]{rewardHologram});
+            StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM.log(getCrate(), rewardHologram);
         }
 
-        if (csb.hasV("hologram.reward-hologram-duration")) {
+        if (crateSettingsBuilder.hasValue("hologram.reward-hologram-duration")) {
             try {
                 rewardHoloDuration = Integer.parseInt(fc.getString("hologram.reward-hologram-duration"));
                 StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_DURATION_SUCCESS.log(getCrate());
@@ -57,7 +57,7 @@ public class CHolograms extends CSetting {
             }
         }
 
-        if (csb.hasV("hologram.reward-hologram-yoffset")) {
+        if (crateSettingsBuilder.hasValue("hologram.reward-hologram-yoffset")) {
             try {
                 rewardHoloYOffset = Double.parseDouble(fc.getString("hologram.reward-hologram-yoffset"));
                 StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM_YOFFSET_SUCCESS.log(getCrate());
@@ -66,30 +66,23 @@ public class CHolograms extends CSetting {
             }
         }
 
-        if (csb.hasV("hologram.lines")) {
+        if (crateSettingsBuilder.hasValue("hologram.lines")) {
             for (String s : fc.getStringList("hologram.lines")) {
                 setLineCount(getLineCount() + 1);
                 addLine(s);
             }
         }
 
-        if (csb.hasV("hologram.animation")) {
+        if (crateSettingsBuilder.hasValue("hologram.animation")) {
             try {
                 HoloAnimType hat = HoloAnimType.valueOf(fc.getString("hologram.animation.type").toUpperCase());
-                setHat(hat);
-
-                // If there is a holog
-                /*if(getLineCount() == 0 && hat != HoloAnimType.NONE)
-                {
-                    setLineCount(getLineCount() + 1);
-                    addLine("");
-                }*/
+                setHoloAnimType(hat);
             } catch (Exception exc) {
-                if (!csb.hasV("hologram.animation.type")) {
+                if (!crateSettingsBuilder.hasValue("hologram.animation.type")) {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_TYPE_FAILURE_NONEXISTENT.log(getCrate());
                 } else {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_TYPE_FAILURE_INVALID
-                            .log(getCrate(), new String[]{fc.getString("hologram.animation.type")});
+                            .log(getCrate(), fc.getString("hologram.animation.type"));
                 }
                 return;
             }
@@ -98,11 +91,11 @@ public class CHolograms extends CSetting {
                 setSpeed(fc.getInt("hologram.animation.speed"));
             } catch (Exception exc) {
                 setSpeed(10);
-                if (!csb.hasV("hologram.animation.speed")) {
+                if (!crateSettingsBuilder.hasValue("hologram.animation.speed")) {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_SPEED_FAILURE_NONEXISTENT.log(getCrate());
                 } else {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_SPEED_FAILURE_INVALID
-                            .log(getCrate(), new String[]{fc.getString("hologram.animation.speed")});
+                            .log(getCrate(), fc.getString("hologram.animation.speed"));
                 }
                 return;
             }
@@ -112,9 +105,9 @@ public class CHolograms extends CSetting {
                     getPrefixes().add(s);
                 }
             } catch (Exception exc) {
-                setHat(null);
+                setHoloAnimType(null);
                 StatusLoggerEvent.HOLOGRAM_ANIMATION_PREFIXES_DISABLED.log(getCrate());
-                if (!csb.hasV("hologram.animation.prefixes")) {
+                if (!crateSettingsBuilder.hasValue("hologram.animation.prefixes")) {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_PREFIXES_NONEXISTENT.log(getCrate());
                 } else {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_PREFIXES_MISFORMATTED.log(getCrate());
@@ -128,7 +121,7 @@ public class CHolograms extends CSetting {
             try {
                 lines.set(i, ChatUtils.fromChatColor(lines.get(i)));
             } catch (Exception exc) {
-
+                // IGNORED
             }
         }
         getFileHandler().get().set("hologram.lines", lines);
@@ -137,11 +130,11 @@ public class CHolograms extends CSetting {
             try {
                 prefixes.set(i, ChatUtils.fromChatColor(prefixes.get(i)));
             } catch (Exception exc) {
-
+                // IGNORED
             }
         }
         getFileHandler().get().set("hologram.animation.prefixes", prefixes);
-        getFileHandler().get().set("hologram.animation.type", getHat().name());
+        getFileHandler().get().set("hologram.animation.type", getHoloAnimType().name());
         getFileHandler().get().set("hologram.animation.speed", getSpeed());
 
         getFileHandler().get().set("hologram.reward-hologram", getRewardHologram());
@@ -152,7 +145,7 @@ public class CHolograms extends CSetting {
     public double getHologramOffset() {
         if (hologramOffset == -123.123) {
             try {
-                hologramOffset = Double.parseDouble(getSc().getSettings().getConfigValues().get("hologram-offset").toString());
+                hologramOffset = Double.parseDouble(instance.getSettings().getConfigValues().get("hologram-offset").toString());
             } catch (Exception exc) {
                 ChatUtils.log("hologram-offset in the config.yml file is not a valid double (number) value.");
                 hologramOffset = 0;
@@ -161,11 +154,11 @@ public class CHolograms extends CSetting {
         return hologramOffset + getCrate().getSettings().getHologramOffset();
     }
 
-    public CHolograms clone() {
-        CHolograms ch = new CHolograms(getCrate());
+    public CHologram clone() {
+        CHologram ch = new CHologram(getCrate());
         ch.setLineCount(getLineCount());
         ch.setLines(getLines());
-        ch.setHat(getHat());
+        ch.setHoloAnimType(getHoloAnimType());
         ch.setColors(getPrefixes());
         ch.setSpeed(getSpeed());
         return ch;
@@ -176,7 +169,7 @@ public class CHolograms extends CSetting {
             lines.add(line);
         } catch (Exception exc) {
             StatusLoggerEvent.HOLOGRAM_ADDLINE_FAIL_TOMANY
-                    .log(getCrate(), new String[]{line, (getLines().size() + 1) + ""});
+                    .log(getCrate(), line, (getLines().size() + 1) + "");
         }
     }
 
@@ -184,36 +177,36 @@ public class CHolograms extends CSetting {
         lines.remove(lineNum - 1);
     }
 
-    public DynamicHologram createHologram(Location l, DynamicHologram h) {
-        h.create(l);
+    public DynamicHologram createHologram(Location location, DynamicHologram dynamicHologram) {
+        dynamicHologram.create(location);
 
         CrateSettings settings = getCrate().getSettings();
         // This is a dynamic hologram and doesn't need them created when placed
         if (settings.getObtainType().equals(ObtainType.DYNAMIC) && !settings.isRequireKey() && createdByPlayer) {
-            return h;
+            return dynamicHologram;
         }
 
         if (!lines.isEmpty()) {
             for (String s : getLines()) {
                 try {
                     s = ChatUtils.toChatColor(s);
-                    h.addLine(s);
+                    dynamicHologram.addLine(s);
                 } catch (Exception exc) {
                     break;
                 }
             }
 
-            h.teleport(l);
+            dynamicHologram.teleport(location);
         }
-        return h;
+        return dynamicHologram;
     }
 
-    public DynamicHologram createHologram(PlacedCrate cm, Location l) {
-        return createHologram(l, getLoadedInstance(cm));
+    public DynamicHologram createHologram(PlacedCrate placedCrate, Location location) {
+        return createHologram(location, getLoadedInstance(placedCrate));
     }
 
-    public DynamicHologram getLoadedInstance(PlacedCrate cm) {
-        return new DynamicHologram(getSc(), cm);
+    public DynamicHologram getLoadedInstance(PlacedCrate placedCrate) {
+        return new DynamicHologram(instance, placedCrate);
     }
 
     public List<String> getLines() {
@@ -240,12 +233,12 @@ public class CHolograms extends CSetting {
         this.rewardHoloYOffset = rewardHoloYOffset;
     }
 
-    public HoloAnimType getHat() {
-        return hat;
+    public HoloAnimType getHoloAnimType() {
+        return holoAnimType;
     }
 
-    public void setHat(HoloAnimType hat) {
-        this.hat = hat;
+    public void setHoloAnimType(HoloAnimType holoAnimType) {
+        this.holoAnimType = holoAnimType;
     }
 
     public int getSpeed() {
@@ -264,12 +257,12 @@ public class CHolograms extends CSetting {
         this.prefixes = prefixes;
     }
 
-    public DynamicHologram getDh() {
-        return dh;
+    public DynamicHologram getDynamicHologram() {
+        return dynamicHologram;
     }
 
-    public void setDh(DynamicHologram dh) {
-        this.dh = dh;
+    public void setDynamicHologram(DynamicHologram dynamicHologram) {
+        this.dynamicHologram = dynamicHologram;
     }
 
     public int getLineCount() {

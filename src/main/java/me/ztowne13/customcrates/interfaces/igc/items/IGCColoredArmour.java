@@ -29,15 +29,15 @@ public class IGCColoredArmour extends IGCMenu {
 
         ItemBuilder red = new ItemBuilder(XMaterial.RED_DYE, 1);
         red.setDisplayName("&cEdit the RED of RGB");
-        red.addLore("").addLore("&7Current value: ").addLore("&f" + item.getColor().getR());
+        red.addLore("").addLore("&7Current value: ").addLore("&f" + item.getColor().getRed());
 
         ItemBuilder green = new ItemBuilder(XMaterial.LIME_DYE, 1);
         green.setDisplayName("&aEdit the GREEN of RGB");
-        green.addLore("").addLore("&7Current value: ").addLore("&f" + item.getColor().getG());
+        green.addLore("").addLore("&7Current value: ").addLore("&f" + item.getColor().getGreen());
 
         ItemBuilder blue = new ItemBuilder(XMaterial.LIGHT_BLUE_DYE, 1);
         blue.setDisplayName("&bEdit the BLUE of RGB");
-        blue.addLore("").addLore("&7Current value: ").addLore("&f" + item.getColor().getB());
+        blue.addLore("").addLore("&7Current value: ").addLore("&f" + item.getColor().getBlue());
 
         ib.setItem(11, red);
         ib.setItem(13, green);
@@ -54,15 +54,15 @@ public class IGCColoredArmour extends IGCMenu {
                 up();
                 break;
             case 11:
-                new InputMenu(getCc(), getP(), "red", item.getColor().getR() + "",
+                new InputMenu(getCc(), getP(), "red", item.getColor().getRed() + "",
                         "The RED of RGB.", Float.class, this);
                 break;
             case 13:
-                new InputMenu(getCc(), getP(), "green", item.getColor().getG() + "",
+                new InputMenu(getCc(), getP(), "green", item.getColor().getGreen() + "",
                         "The GREEN of RGB.", Float.class, this);
                 break;
             case 15:
-                new InputMenu(getCc(), getP(), "blue", item.getColor().getB() + "",
+                new InputMenu(getCc(), getP(), "blue", item.getColor().getBlue() + "",
                         "The BLUE of RGB.", Float.class, this);
                 break;
         }
@@ -81,11 +81,11 @@ public class IGCColoredArmour extends IGCMenu {
         RGBColor rgbColor = item.getColor();
 
         if (value.equalsIgnoreCase("red"))
-            rgbColor.setR(inputAsFloat);
+            rgbColor.setRed(inputAsFloat);
         else if (value.equalsIgnoreCase("green"))
-            rgbColor.setG(inputAsFloat);
+            rgbColor.setGreen(inputAsFloat);
         else if (value.equalsIgnoreCase("blue"))
-            rgbColor.setB(inputAsFloat);
+            rgbColor.setBlue(inputAsFloat);
 
         item.setColor(rgbColor);
 

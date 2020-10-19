@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.Map;
 
 public class Settings {
-    SpecializedCrates cc;
+    private final SpecializedCrates instance;
 
-    HashMap<String, String> infoToLog = new HashMap<>();
-    HashMap<String, Object> configValues = new HashMap<>();
+    private final HashMap<String, String> infoToLog = new HashMap<>();
+    private final HashMap<String, Object> configValues = new HashMap<>();
 
-    ArrayList<String> failedPlacedCrate = new ArrayList<>();
+    private final ArrayList<String> failedPlacedCrate = new ArrayList<>();
 
-    public Settings(SpecializedCrates cc) {
-        this.cc = cc;
+    public Settings(SpecializedCrates instance) {
+        this.instance = instance;
     }
 
 
@@ -37,15 +37,15 @@ public class Settings {
     }
 
     public void loadCrates(boolean multiCrate) {
-        cc.getDu().log("loadCrates - CALL", getClass());
-        File folder = new File(getCc().getDataFolder().getPath() + "/Crates");
+        instance.getDebugUtils().log("loadCrates - CALL", getClass());
+        File folder = new File(instance.getDataFolder().getPath() + "/Crates");
         File[] listOfFiles = folder.listFiles();
 
-        cc.getDu().log("loadCrates - Beginning loop", getClass());
+        instance.getDebugUtils().log("loadCrates - Beginning loop", getClass());
         for (int i = 0; i < listOfFiles.length; i++) {
-            cc.getDu().log("loadCrates - Looping " + i, getClass());
+            instance.getDebugUtils().log("loadCrates - Looping " + i, getClass());
             if (listOfFiles[i].isFile()) {
-                cc.getDu().log("loadCrates - Is file " + i, getClass());
+                instance.getDebugUtils().log("loadCrates - Is file " + i, getClass());
                 File f = listOfFiles[i];
 
                 if (f.getName().contains(";") || f.getName().contains(",")) {
@@ -54,37 +54,37 @@ public class Settings {
                     continue;
                 }
 
-                cc.getDu().log("loadCrates - Attempting load", getClass());
+                instance.getDebugUtils().log("loadCrates - Attempting load", getClass());
                 if (f.getName().endsWith(".crate") && !multiCrate) {
-                    cc.getDu().log("loadCrates - Loading " + f.getName() + " is .crate", getClass());
+                    instance.getDebugUtils().log("loadCrates - Loading " + f.getName() + " is .crate", getClass());
                     String crateName = f.getName().replace(".crate", "");
-                    Crate.getCrate(getCc(), crateName);
-                    cc.getDu().log("loadCrates - Done", getClass());
+                    Crate.getCrate(instance, crateName);
+                    instance.getDebugUtils().log("loadCrates - Done", getClass());
                 } else if (f.getName().endsWith(".multicrate") && multiCrate) {
-                    cc.getDu().log("loadCrates - Loading " + f.getName() + " is .multicrate", getClass());
+                    instance.getDebugUtils().log("loadCrates - Loading " + f.getName() + " is .multicrate", getClass());
                     String crateName = f.getName().replace(".multicrate", "");
-                    Crate.getCrate(getCc(), crateName, true);
-                    cc.getDu().log("loadCrates - Done", getClass());
+                    Crate.getCrate(instance, crateName, true);
+                    instance.getDebugUtils().log("loadCrates - Done", getClass());
                 }
             }
         }
     }
 
     public void loadPlacedCrates() {
-        for (String s : getCc().getActiveCratesFile().get().getKeys(false))
+        for (String s : instance.getActiveCratesFile().get().getKeys(false))
             if (!loadCrateFromFile(s))
                 failedPlacedCrate.add(s);
     }
 
     public boolean loadCrateFromFile(String s) {
-        FileHandler activeCrates = getCc().getActiveCratesFile();
+        FileHandler activeCrates = instance.getActiveCratesFile();
         String crateName = activeCrates.get().getString(s + ".crate");
         Location l = LocationUtils.stringToLoc(s);
 
         if (Crate.exists(crateName)) {
-            Crate crates = Crate.getCrate(getCc(), crateName);
+            Crate crates = Crate.getCrate(instance, crateName);
 
-            PlacedCrate cm = PlacedCrate.get(getCc(), l);
+            PlacedCrate cm = PlacedCrate.get(instance, l);
             if (cm == null) {
                 ChatUtils.log("location: " + s);
                 return false;
@@ -110,13 +110,13 @@ public class Settings {
 
     public void loadSettings() {
         for (SettingsValue sv : SettingsValue.values()) {
-            getConfigValues().put(sv.getPath(), getCc().getConfig().get(sv.getPath()));
+            getConfigValues().put(sv.getPath(), instance.getConfig().get(sv.getPath()));
         }
     }
 
     public void loadInfo() {
-        Utils.addToInfoLog(cc, "Server version", VersionUtils.getServerVersion());
-        Utils.addToInfoLog(cc, "Citizens Installed",
+        Utils.addToInfoLog(instance, "Server version", VersionUtils.getServerVersion());
+        Utils.addToInfoLog(instance, "Citizens Installed",
                 (NPCUtils.isCitizensInstalled() ? "" : "&c") + Utils.isPLInstalled("Citizens") + "");
 
         int enabled = 0;
@@ -129,15 +129,15 @@ public class Settings {
             }
         }
 
-        Utils.addToInfoLog(cc, "Crates loaded", enabled + " enabled &4/ &c" + disabled + " disabled");
-        Utils.addToInfoLog(cc, "Crates placed", PlacedCrate.getPlacedCrates().keySet().size() + "");
+        Utils.addToInfoLog(instance, "Crates loaded", enabled + " enabled &4/ &c" + disabled + " disabled");
+        Utils.addToInfoLog(instance, "Crates placed", PlacedCrate.getPlacedCrates().keySet().size() + "");
 
-        Utils.addToInfoLog(cc, "Plugin version", cc.getDescription().getVersion());
+        Utils.addToInfoLog(instance, "Plugin version", instance.getDescription().getVersion());
 
     }
 
     public void writeSettingsValues() {
-        FileHandler fu = new FileHandler(cc, "config.yml", true, true);
+        FileHandler fu = new FileHandler(instance, "config.yml", true, true);
         for (String s : getConfigValues().keySet()) {
             fu.get().set(s, getConfigValues().get(s));
         }
@@ -151,14 +151,6 @@ public class Settings {
 
     public Map<String, Object> getConfigValues() {
         return configValues;
-    }
-
-    public SpecializedCrates getCc() {
-        return cc;
-    }
-
-    public void setCc(SpecializedCrates cc) {
-        this.cc = cc;
     }
 
     public Map<String, String> getInfoToLog() {

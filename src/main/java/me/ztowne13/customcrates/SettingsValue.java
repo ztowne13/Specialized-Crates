@@ -431,18 +431,23 @@ public enum SettingsValue {
                             "faster, putting less of a load on server resources."
             });
 
-    static EnumMap<SettingsValue, Object> valuesCache = new EnumMap<>(SettingsValue.class);
-    String easyName;
-    String path;
-    String[] descriptor;
-    Object obj;
-    Object defaultVal;
-    boolean withColor;
-    Category category;
-    String[] listValues = null;
-    String[] listValueDescriptors = null;
+    private static final EnumMap<SettingsValue, Object> valuesCache = new EnumMap<>(SettingsValue.class);
+    private final String easyName;
+    private final String path;
+    private final String[] descriptor;
+    private final Object obj;
+    private final Object defaultVal;
+    private final boolean withColor;
+    private final Category category;
+    private final String[] listValues;
+    private final String[] listValueDescriptors;
 
     SettingsValue(String path, Category category, Object obj, boolean withColor, Object defaultVal, String easyName,
+                  String[] descriptor) {
+        this(path, category, obj, null, null, withColor, defaultVal, easyName, descriptor);
+    }
+
+    SettingsValue(String path, Category category, Object obj, String[] listValues, String[] listValueDescriptors, boolean withColor, Object defaultVal, String easyName,
                   String[] descriptor) {
         this.category = category;
         this.easyName = easyName;
@@ -451,13 +456,12 @@ public enum SettingsValue {
         this.obj = obj;
         this.defaultVal = defaultVal;
         this.withColor = withColor;
-    }
-
-    SettingsValue(String path, Category category, Object obj, String[] listValues, String[] listValueDescriptors, boolean withColor, Object defaultVal, String easyName,
-                  String[] descriptor) {
-        this(path, category, obj, withColor, defaultVal, easyName, descriptor);
         this.listValueDescriptors = listValueDescriptors;
         this.listValues = listValues;
+    }
+
+    public static void clearCache() {
+        valuesCache.clear();
     }
 
     public static SettingsValue getByPath(String s) {
@@ -492,32 +496,16 @@ public enum SettingsValue {
         return path;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-
     public String[] getDescriptor() {
         return descriptor;
-    }
-
-    public void setDescriptor(String[] descriptor) {
-        this.descriptor = descriptor;
     }
 
     public Object getObj() {
         return obj;
     }
 
-    public void setObj(Object obj) {
-        this.obj = obj;
-    }
-
     public boolean isWithColor() {
         return withColor;
-    }
-
-    public void setWithColor(boolean withColor) {
-        this.withColor = withColor;
     }
 
     public String getEasyName() {
@@ -561,9 +549,9 @@ public enum SettingsValue {
                 "These settings still work but are no longer the recommended way to perform these functions",
                 "Most of these functionalities have been moved to the /scrates edit (crate) menu and are editable per-crate instead of globally.");
 
-        String title;
-        String shortTitle;
-        String[] description;
+        private final String title;
+        private final String shortTitle;
+        private final String[] description;
 
         Category(String shortTitle, String title, String... description) {
             this.shortTitle = shortTitle;
@@ -584,14 +572,14 @@ public enum SettingsValue {
         }
 
         public List<SettingsValue> getAssociatedValues() {
-            ArrayList<SettingsValue> vals = new ArrayList<>();
+            ArrayList<SettingsValue> values = new ArrayList<>();
             for (SettingsValue value : SettingsValue.values()) {
                 if (value.category == this) {
-                    vals.add(value);
+                    values.add(value);
                 }
             }
 
-            return vals;
+            return values;
         }
     }
 }

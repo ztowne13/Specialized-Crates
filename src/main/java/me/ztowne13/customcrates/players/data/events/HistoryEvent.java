@@ -17,26 +17,26 @@ import java.util.List;
  * Created by ztowne13 on 8/5/15.
  */
 public class HistoryEvent extends DataEvent {
-    Crate crates;
-    List<Reward> rewards;
-    boolean success;
-    String currentTime;
+    private final Crate crate;
+    private final List<Reward> rewards;
+    private boolean success;
+    private String currentTime;
 
-    public HistoryEvent(String currentTime, Crate crates, List<Reward> rewards, boolean success) {
-        super(crates.getCc());
-        this.crates = crates;
+    public HistoryEvent(String currentTime, Crate crate, List<Reward> rewards, boolean success) {
+        super(crate.getInstance());
+        this.crate = crate;
         this.rewards = rewards;
         this.success = success;
         this.currentTime = currentTime;
     }
 
-    public static void listFor(SpecializedCrates cc, CommandSender sender, Player toDisplay, int amount) {
+    public static void listFor(SpecializedCrates instance, CommandSender sender, Player toDisplay, int amount) {
         ChatUtils.msg(sender, "&6TIME &7- &9CRATE &7- &cREWARD\n\n" +
                 "&aOldest Entries\n" +
                 "      to\n" +
                 "&aNewest Entries\n\n");
 
-        ArrayList<HistoryEvent> hevents = new ArrayList<>(PlayerManager.get(cc, toDisplay).getPdm().getHistoryEvents());
+        ArrayList<HistoryEvent> hevents = new ArrayList<>(PlayerManager.get(instance, toDisplay).getPlayerDataManager().getHistoryEvents());
 
         Collections.reverse(hevents);
 
@@ -48,28 +48,28 @@ public class HistoryEvent extends DataEvent {
             String[] split = he.getFormatted().split(";");
             String rewardName = split[2].replace("%newReward%", ",");
             ChatUtils
-                    .msg(sender, "&6" + he.getCurrentTime() + " &7- &9" + he.getCrates().getName() + " &7- &c" + rewardName);
+                    .msg(sender, "&6" + he.getCurrentTime() + " &7- &9" + he.getCrate().getName() + " &7- &c" + rewardName);
         }
     }
 
     @Override
-    public void addTo(PlayerDataManager pdm) {
-        pdm.addHistory(this, pdm.addStringToList(getFormatted(), pdm.getHistory()));
+    public void addTo(PlayerDataManager playerDataManager) {
+        playerDataManager.addHistory(this, playerDataManager.addStringToList(getFormatted(), playerDataManager.getHistory()));
     }
 
     @Override
     public String getFormatted() {
         String rewardName = getRewards() == null || getRewards().isEmpty() ? "none" :
                 getRewards().toString().replace(",", "%newReward%");
-        return getCurrentTime() + ";" + getCrates().getName() + ";" + rewardName + ";" + isSuccess();
+        return getCurrentTime() + ";" + getCrate().getName() + ";" + rewardName + ";" + isSuccess();
     }
 
-    public boolean matches(HistoryEvent he) {
+    public boolean matches(HistoryEvent historyEvent) {
         boolean matches =
-                getCrates().getName().equalsIgnoreCase(he.getCrates().getName()) && isSuccess() == he.isSuccess() &&
-                        getCurrentTime().equals(he.getCurrentTime());
+                getCrate().getName().equalsIgnoreCase(historyEvent.getCrate().getName()) && isSuccess() == historyEvent.isSuccess() &&
+                        getCurrentTime().equals(historyEvent.getCurrentTime());
         for (int i = 0; i < getRewards().size(); i++) {
-            if (!getRewards().get(i).getDisplayName(false).equalsIgnoreCase(he.getRewards().get(i).getDisplayName(false))) {
+            if (!getRewards().get(i).getDisplayName(false).equalsIgnoreCase(historyEvent.getRewards().get(i).getDisplayName(false))) {
                 matches = false;
                 break;
             }
@@ -77,20 +77,12 @@ public class HistoryEvent extends DataEvent {
         return matches;
     }
 
-    public Crate getCrates() {
-        return crates;
-    }
-
-    public void setCrates(Crate crates) {
-        this.crates = crates;
+    public Crate getCrate() {
+        return crate;
     }
 
     public List<Reward> getRewards() {
         return rewards;
-    }
-
-    public void setRewards(List<Reward> reward) {
-        this.rewards = reward;
     }
 
     public boolean isSuccess() {

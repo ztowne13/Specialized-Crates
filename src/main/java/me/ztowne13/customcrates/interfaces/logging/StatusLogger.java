@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.Map;
 
 public class StatusLogger {
-    SpecializedCrates cc;
+    private final SpecializedCrates instance;
 
-    int failures;
+    private int failures;
 
-    Map<String, List<String>> completedEvents = new HashMap<>();
-    Map<String, List<String>> failedEvents = new HashMap<>();
+    private Map<String, List<String>> completedEvents = new HashMap<>();
+    private Map<String, List<String>> failedEvents = new HashMap<>();
 
-    public StatusLogger(SpecializedCrates cc) {
-        this.cc = cc;
+    public StatusLogger(SpecializedCrates instance) {
+        this.instance = instance;
     }
 
     public void addEvent(boolean success, String section, String event, String cause) {
@@ -53,14 +53,14 @@ public class StatusLogger {
         }
 
         if (getFailedEvents().isEmpty() &&
-                SettingsValue.LOG_SUCCESSES.getValue(getCc()).toString().equalsIgnoreCase("FAILURES")) {
+                SettingsValue.LOG_SUCCESSES.getValue(instance).toString().equalsIgnoreCase("FAILURES")) {
             ChatUtils.log("  &a+&f Success: there were no issues.");
         }
     }
 
     public void logSection(CommandSender sender, String section, boolean forceOnlyFailures) {
         boolean hasLoggedHeader = false;
-        String toLog = SettingsValue.LOG_SUCCESSES.getValue(getCc()).toString();
+        String toLog = SettingsValue.LOG_SUCCESSES.getValue(instance).toString();
 
         if (!toLog.equalsIgnoreCase("NOTHING") || forceOnlyFailures) {
             if (!toLog.equalsIgnoreCase("FAILURES") && !forceOnlyFailures) {
@@ -124,14 +124,6 @@ public class StatusLogger {
 
     public void setFailedEvents(Map<String, List<String>> failedEvents) {
         this.failedEvents = failedEvents;
-    }
-
-    public SpecializedCrates getCc() {
-        return cc;
-    }
-
-    public void setCc(SpecializedCrates cc) {
-        this.cc = cc;
     }
 
     public int getFailures() {

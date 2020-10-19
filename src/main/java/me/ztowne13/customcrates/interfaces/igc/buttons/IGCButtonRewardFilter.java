@@ -1,12 +1,12 @@
 package me.ztowne13.customcrates.interfaces.igc.buttons;
 
 import com.cryptomorin.xseries.XMaterial;
-import me.ztowne13.customcrates.crates.options.CRewards;
+import me.ztowne13.customcrates.crates.options.CReward;
 import me.ztowne13.customcrates.interfaces.igc.IGCMenu;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 
 public class IGCButtonRewardFilter implements IGCButton {
-    CRewards.RewardSortType sortType = CRewards.RewardSortType.CREATED_ORDER;
+    CReward.RewardSortType sortType = CReward.RewardSortType.CREATED_ORDER;
 
     @Override
     public ItemBuilder getButtonItem() {
@@ -27,7 +27,7 @@ public class IGCButtonRewardFilter implements IGCButton {
     }
 
     @Override
-    public CRewards.RewardSortType getValue() {
+    public CReward.RewardSortType getValue() {
         return sortType;
     }
 }

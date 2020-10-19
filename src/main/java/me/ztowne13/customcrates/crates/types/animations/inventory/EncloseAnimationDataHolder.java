@@ -11,9 +11,9 @@ import java.util.List;
  * Created by ztowne13 on 7/5/16.
  */
 public class EncloseAnimationDataHolder extends InventoryAnimationDataHolder {
-    int currentTicksIn;
+    private int currentTicksIn;
 
-    List<Reward> lastDisplayRewards = new ArrayList<>();
+    private List<Reward> lastDisplayRewards = new ArrayList<>();
 
     public EncloseAnimationDataHolder(Player player, Location location, EncloseAnimation crateAnimation) {
         super(player, location, crateAnimation, ((crateAnimation.getInventoryRows()) * 9 * 2) + 9);

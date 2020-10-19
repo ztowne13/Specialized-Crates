@@ -22,15 +22,15 @@ public enum PEAnimationType {
     NONE(null);
 
 
-    Class<? extends ParticleAnimationEffect> particleAnimationEffect;
+    private final Class<? extends ParticleAnimationEffect> particleAnimationEffect;
 
     PEAnimationType(Class<? extends ParticleAnimationEffect> particleAnimationEffect) {
         this.particleAnimationEffect = particleAnimationEffect;
     }
 
-    public static PEAnimationType getFromParticleAnimationEffect(ParticleAnimationEffect pae) {
+    public static PEAnimationType getFromParticleAnimationEffect(ParticleAnimationEffect particleAnimationEffect) {
         for (PEAnimationType peAnimationType : values()) {
-            if (pae.getClass() == peAnimationType.particleAnimationEffect) {
+            if (particleAnimationEffect.getClass() == peAnimationType.particleAnimationEffect) {
                 return peAnimationType;
             }
         }
@@ -51,7 +51,8 @@ public enum PEAnimationType {
                 return new TiltedRingsPA(cc, particleData);
             case OFFSET_TILTED_RINGS:
                 return new OffsetTiltedRingsPA(cc, particleData);
+            default:
+                return null;
         }
-        return null;
     }
 }

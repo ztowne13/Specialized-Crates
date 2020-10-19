@@ -14,20 +14,20 @@ import java.nio.charset.StandardCharsets;
  * Created by ztowne13 on 7/7/16.
  */
 public class UpdateChecker {
-    SpecializedCrates cc;
-    String latestVersion;
-    boolean needsUpdate = false;
+    private final SpecializedCrates instance;
+    private String latestVersion;
+    private boolean needsUpdate = false;
 
-    public UpdateChecker(SpecializedCrates cc) {
-        this.cc = cc;
+    public UpdateChecker(SpecializedCrates instance) {
+        this.instance = instance;
 
-        if (Boolean.parseBoolean(cc.getSettings().getConfigValues().get("notify-updates").toString())) {
+        if (Boolean.parseBoolean(instance.getSettings().getConfigValues().get("notify-updates").toString())) {
             updateMostRecentVersion();
         }
     }
 
     public void updateMostRecentVersion() {
-        Bukkit.getScheduler().runTaskAsynchronously(cc, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(instance, () -> {
             try {
                 HttpURLConnection con =
                         (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
@@ -49,7 +49,7 @@ public class UpdateChecker {
     }
 
     public void updateNeedsUpdate() {
-        String thisVersion = cc.getDescription().getVersion();
+        String thisVersion = instance.getDescription().getVersion();
 
         String[] splitCurrent = latestVersion.split("\\.");
         String[] splitThis = thisVersion.split("\\.");

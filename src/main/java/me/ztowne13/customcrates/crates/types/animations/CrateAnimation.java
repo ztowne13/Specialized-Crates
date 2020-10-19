@@ -24,19 +24,19 @@ import java.util.Random;
 
 public abstract class CrateAnimation {
     public static final long BASE_SPEED = 1;
-    protected SpecializedCrates cc;
-    protected Crate crate;
-    protected FileHandler fu;
+    protected final SpecializedCrates instance;
+    protected final Crate crate;
+    protected final FileHandler fileHandler;
+    protected final CrateAnimationType animationType;
+    private final Random random = new Random();
     protected String prefix;
-    CrateAnimationType animationType;
-    Random r = new Random();
 
     public CrateAnimation(Crate crate, CrateAnimationType animationType) {
         this.animationType = animationType;
         this.prefix = animationType.getPrefixDotted();
         this.crate = crate;
-        this.cc = crate.getCc();
-        this.fu = cc.getCrateConfigFile();
+        this.instance = crate.getInstance();
+        this.fileHandler = instance.getCrateConfigFile();
     }
 
     /**
@@ -57,9 +57,9 @@ public abstract class CrateAnimation {
     /**
      * This function is responsible for loading and animation-based config values.
      *
-     * @param sl The status logger to log any errors or successes to.
+     * @param statusLogger The status logger to log any errors or successes to.
      */
-    public abstract void loadDataValues(StatusLogger sl);
+    public abstract void loadDataValues(StatusLogger statusLogger);
 
     /**
      * This function is responsible for calculating any tick updates. It is intended for
@@ -102,7 +102,7 @@ public abstract class CrateAnimation {
             AnimationDataHolder dataHolder = getAnimationType().newDataHolderInstance(p, l, this);
             timer(dataHolder);
             playRequiredOpenActions(p, !requireKeyInHand, force);
-            PlayerManager.get(getSc(), p).setCurrentAnimation(dataHolder);
+            PlayerManager.get(instance, p).setCurrentAnimation(dataHolder);
             return true;
         }
 
@@ -126,14 +126,13 @@ public abstract class CrateAnimation {
         dataHolder.updateTickTime(startTime);
     }
 
-    public void finishAnimation(Player p, List<Reward> rewards, boolean overrideAutoClose,
-                                final PlacedCrate placedCrate) {
-        PlayerManager pm = PlayerManager.get(getSc(), p);
+    public void finishAnimation(Player p, List<Reward> rewards, final PlacedCrate placedCrate) {
+        PlayerManager pm = PlayerManager.get(instance, p);
         pm.setInRewardMenu(false);
         pm.setCurrentAnimation(null);
 
         new HistoryEvent(Utils.currentTimeParsed(), getCrate(), rewards, true)
-                .addTo(PlayerManager.get(getSc(), p).getPdm());
+                .addTo(PlayerManager.get(instance, p).getPlayerDataManager());
 
         for (Reward r : rewards) {
             r.giveRewardToPlayer(p);
@@ -150,13 +149,13 @@ public abstract class CrateAnimation {
         if (getCrate().getSettings().getCrateType().isSpecialDynamicHandling() &&
                 !getCrate().getSettings().getObtainType().isStatic()) {
             if (getCrate().getSettings().getCrateType().getCategory().equals(CrateAnimationType.Category.CHEST)) {
-                Bukkit.getScheduler().runTaskLater(cc, () -> {
+                Bukkit.getScheduler().runTaskLater(instance, () -> {
                     placedCrate.delete();
-                    placedCrate.getL().getBlock().setType(Material.AIR);
+                    placedCrate.getLocation().getBlock().setType(Material.AIR);
                 }, 20);
             } else {
                 placedCrate.delete();
-                placedCrate.getL().getBlock().setType(Material.AIR);
+                placedCrate.getLocation().getBlock().setType(Material.AIR);
             }
         }
     }
@@ -171,14 +170,14 @@ public abstract class CrateAnimation {
                 return;
             }
 
-            Bukkit.getScheduler().scheduleSyncDelayedTask(getSc(), () -> timer(dataHolder), BASE_SPEED);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () -> timer(dataHolder), BASE_SPEED);
         } else {
             endAnimation(dataHolder);
         }
     }
 
     public boolean canExecuteFor(Player p, boolean requireKeyInHand) {
-        PlayerManager playerManager = PlayerManager.get(getSc(), p);
+        PlayerManager playerManager = PlayerManager.get(instance, p);
         CrateSettings crateSettings = getCrate().getSettings();
 
         boolean hasPropperOpeningTools =
@@ -190,27 +189,27 @@ public abstract class CrateAnimation {
 
     public void playFailToOpen(Player p, boolean playMessage, boolean failOpen) {
         if (p != null) {
-            if ((Boolean) SettingsValue.PUSHBACK.getValue(getSc()) && !getCrate().isMultiCrate()) {
+            if (SettingsValue.PUSHBACK.getValue(instance).equals(Boolean.TRUE) && !getCrate().isMultiCrate()) {
                 p.setVelocity(p.getLocation().getDirection().multiply(-1));
             }
             if (playMessage) {
                 if (failOpen)
-                    Messages.FAIL_OPEN.msgSpecified(cc, p, new String[]{"%crate%", "%key%"},
+                    Messages.FAIL_OPEN.msgSpecified(instance, p, new String[]{"%crate%", "%key%"},
                             new String[]{crate.getDisplayName(),
                                     crate.getSettings().getKeyItemHandler().getItem().getDisplayName(false)});
                 else
-                    Messages.ALREADY_OPENING_CRATE.msgSpecified(cc, p);
+                    Messages.ALREADY_OPENING_CRATE.msgSpecified(instance, p);
             }
         }
     }
 
     public void playRequiredOpenActions(Player p, boolean fromInv, boolean force) {
-        PlayerManager pm = PlayerManager.get(cc, p);
+        PlayerManager pm = PlayerManager.get(instance, p);
         CrateSettings crateSettings = getCrate().getSettings();
 
         if (pm.getOpenCrate() != null && pm.getOpenCrate().isMultiCrate() &&
                 !crateSettings.getObtainType().equals(ObtainType.STATIC)) {
-            PlacedCrate pc = PlacedCrate.get(cc, pm.getLastOpenCrate());
+            PlacedCrate pc = PlacedCrate.get(instance, pm.getLastOpenCrate());
             pc.delete();
         }
 
@@ -220,11 +219,11 @@ public abstract class CrateAnimation {
             crateSettings.getKeyItemHandler().takeKeyFromPlayer(p, fromInv);
         }
 
-        crateSettings.getActions().playAll(p, true);
+        crateSettings.getAction().playAll(p, true);
     }
 
     public double getRandomTickTime(double basedOff) {
-        return basedOff + r.nextInt(3) - r.nextInt(3);
+        return basedOff + random.nextInt(3) - random.nextInt(3);
     }
 
     public StatusLogger getStatusLogger() {
@@ -235,12 +234,8 @@ public abstract class CrateAnimation {
         return crate;
     }
 
-    public SpecializedCrates getSc() {
-        return cc;
-    }
-
     public FileHandler getFileHandler() {
-        return fu;
+        return fileHandler;
     }
 
     public CrateAnimationType getAnimationType() {

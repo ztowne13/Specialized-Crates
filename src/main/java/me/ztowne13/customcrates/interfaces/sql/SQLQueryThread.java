@@ -2,29 +2,40 @@ package me.ztowne13.customcrates.interfaces.sql;
 
 import me.ztowne13.customcrates.players.data.SQLDataHandler;
 
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SQLQueryThread extends Thread {
-    public static volatile CopyOnWriteArrayList<String> sql_query = new CopyOnWriteArrayList<>();
-    public static volatile CopyOnWriteArrayList<Runnable> task_query = new CopyOnWriteArrayList<>();
+    private static final Queue<String> sql_query = new ConcurrentLinkedQueue<>();
+    private static final Queue<Runnable> task_query = new ConcurrentLinkedQueue<>();
+    private static boolean stopped = false;
 
-    SQL sql;
+    private final SQL sql;
 
     public SQLQueryThread(SQL sql) {
         this.sql = sql;
         start();
         setName("SpecializedCrates-SQL");
 
-        sql.sc.getDu().log("SQLQueryThread() - Opening connection...", getClass());
+        sql.getInstance().getDebugUtils().log("SQLQueryThread() - Opening connection...", getClass());
         long curTime = System.currentTimeMillis();
 
-        sql.getSqlc().open();
+        sql.getConnection().open();
 
-        sql.sc.getDu().log("SQLQueryThread() - Completed opening connection in " + (System.currentTimeMillis() - curTime) + "ms.", getClass());
+        sql.getInstance().getDebugUtils().log("SQLQueryThread() - Completed opening connection in " + (System.currentTimeMillis() - curTime) + "ms.", getClass());
     }
 
     public static void addQuery(String query) {
         sql_query.add(query);
+    }
+
+    public static void stopRun() {
+        stopped = true;
+    }
+
+    public static void clearQuery() {
+        sql_query.clear();
+        task_query.clear();
     }
 
     public static void addQuery(Runnable runnable) {
@@ -34,43 +45,39 @@ public class SQLQueryThread extends Thread {
     @Override
     public void run() {
         boolean tryReconnect = false;
-        while (true) {
+        while (!stopped) {
             try {
                 Thread.sleep(250);
             } catch (InterruptedException exc) {
-
+                Thread.currentThread().interrupt();
             }
 
-            if (!SQLDataHandler.loaded) {
+            if (!SQLDataHandler.isLoaded()) {
                 continue;
             }
 
-            for (String query : sql_query) {
-                sql.sc.getDu().log("run() - query: " + query, getClass());
+            while (!sql_query.isEmpty()) {
+                String query = sql_query.remove();
+                sql.getInstance().getDebugUtils().log("run() - query: " + query, getClass());
                 try {
-                    sql.getSqlc().get().prepareStatement(query).executeUpdate();
+                    sql.getConnection().get().prepareStatement(query).executeUpdate();
                     tryReconnect = false;
                 } catch (Exception exc) {
-                    //new SQLLog("Failed query: " + query);
-                    //exc.printStackTrace();
                     if (!tryReconnect) {
                         tryReconnect = true;
-                        sql.getSqlc().open();
-                        sql.sc.getDu().log("Trying to reconnect to SQL servers.");
+                        sql.getConnection().open();
+                        sql.getInstance().getDebugUtils().log("Trying to reconnect to SQL servers.");
                     } else {
-                        sql.sc.getDu().log("Failed to reconnect to SQL servers.");
+                        sql.getInstance().getDebugUtils().log("Failed to reconnect to SQL servers.");
                         exc.printStackTrace();
                     }
                 }
-
-                sql_query.remove(query);
             }
 
-            for (Runnable query : task_query) {
-                sql.sc.getDu().log("run() - query: " + query.toString(), getClass());
-
+            while (!task_query.isEmpty()) {
+                Runnable query = task_query.remove();
+                sql.getInstance().getDebugUtils().log("run() - query: " + query.toString(), getClass());
                 query.run();
-                task_query.remove(query);
             }
         }
     }

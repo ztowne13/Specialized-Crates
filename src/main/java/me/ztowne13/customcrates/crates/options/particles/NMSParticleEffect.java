@@ -11,10 +11,10 @@ import org.bukkit.entity.Player;
  * Created by ztowne13 on 6/24/16.
  */
 public class NMSParticleEffect extends ParticleData {
-    ParticleEffect particleEffect;
+    private ParticleEffect particleEffect;
 
-    public NMSParticleEffect(SpecializedCrates sc, ParticleEffect particleEffect, String name, boolean hasAnimation) {
-        super(sc, name, hasAnimation);
+    public NMSParticleEffect(SpecializedCrates instance, ParticleEffect particleEffect, String name, boolean hasAnimation) {
+        super(instance, name, hasAnimation);
         this.particleEffect = particleEffect;
     }
 
@@ -38,7 +38,7 @@ public class NMSParticleEffect extends ParticleData {
             }
 
             for (Player p : Bukkit.getOnlinePlayers()) {
-                particleEffect.sendToPlayer(sc, p, centered, offX, offY, offZ, speed, amnt);
+                particleEffect.sendToPlayer(instance, p, centered, offX, offY, offZ, speed, amnt);
             }
         } catch (IllegalArgumentException e) {
             ChatUtils.log(new String[]{"Error loading particle: " + particleEffect.name()});

@@ -9,31 +9,31 @@ import org.bukkit.Particle;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public abstract class ParticleData {
-    SpecializedCrates sc;
+    protected final SpecializedCrates instance;
 
-    String name;
-    float rangeX;
-    float rangeY;
-    float rangeZ;
-    float centerX;
-    float centerY;
-    float centerZ;
-    float speed;
-    boolean hasAnimation;
-    boolean hasColor;
-    int amount;
-    int colorRed;
-    int colorGreen;
-    int colorBlue;
-    float size;
-    boolean colorEnabled;
+    private String name;
+    private float rangeX;
+    private float rangeY;
+    private float rangeZ;
+    private float centerX;
+    private float centerY;
+    private float centerZ;
+    private float speed;
+    private boolean hasAnimation;
+    private boolean hasColor;
+    private int amount;
+    private int colorRed;
+    private int colorGreen;
+    private int colorBlue;
+    private float size;
+    private boolean colorEnabled;
 
-    Particle.DustOptions dustOptions;
+    private Particle.DustOptions dustOptions;
 
-    ParticleAnimationEffect particleAnimationEffect;
+    private ParticleAnimationEffect particleAnimationEffect;
 
-    public ParticleData(SpecializedCrates sc, String name, boolean hasAnimation) {
-        this.sc = sc;
+    public ParticleData(SpecializedCrates instance, String name, boolean hasAnimation) {
+        this.instance = instance;
         this.name = name;
         this.hasAnimation = hasAnimation;
 

@@ -8,11 +8,11 @@ import org.bukkit.entity.Player;
  * Created by ztowne13 on 3/6/16.
  */
 public class RouletteAnimationDataHolder extends InventoryAnimationDataHolder {
-    double displayAmount;
-    double currentTicks = 1.1;
-    double updates = 0;
+    private final double displayAmount;
+    private double currentTicks = 1.1;
+    private double updates = 0;
 
-    Reward lastShownReward;
+    private Reward lastShownReward;
 
     public RouletteAnimationDataHolder(Player player, Location location, RouletteAnimation crateAnimation) {
         super(player, location, crateAnimation, 27);

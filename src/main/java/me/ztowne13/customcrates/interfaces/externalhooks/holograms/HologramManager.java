@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class HologramManager {
-    private final SpecializedCrates customCrates;
+    protected final SpecializedCrates instance;
 
     protected List<Hologram> holograms;
 
-    public HologramManager(SpecializedCrates customCrates) {
-        this.customCrates = customCrates;
+    public HologramManager(SpecializedCrates instance) {
+        this.instance = instance;
         holograms = new ArrayList<>();
     }
 
@@ -27,10 +27,6 @@ public abstract class HologramManager {
     public void deleteHologram(Hologram hologram) {
         hologram.delete();
         holograms.remove(hologram);
-    }
-
-    protected SpecializedCrates getCustomCrates() {
-        return customCrates;
     }
 
     public List<Hologram> getHolograms() {

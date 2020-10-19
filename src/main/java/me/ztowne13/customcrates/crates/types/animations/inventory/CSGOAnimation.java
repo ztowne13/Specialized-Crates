@@ -22,14 +22,13 @@ import java.util.Random;
  * Created by ztowne13 on 6/30/16.
  */
 public class CSGOAnimation extends InventoryCrateAnimation {
-    protected double finalTickLength;
-    protected double tickIncrease;
-    protected int glassUpdateTicks = 2;
-    protected int closeSpeed = -1;
-
-    protected ItemBuilder identifierBlock = null;
-    protected ArrayList<ItemBuilder> fillerBlocks = new ArrayList<>();
-    Random r = new Random();
+    private final ArrayList<ItemBuilder> fillerBlocks = new ArrayList<>();
+    private final Random random = new Random();
+    private double finalTickLength;
+    private double tickIncrease;
+    private int glassUpdateTicks = 2;
+    private int closeSpeed = -1;
+    private ItemBuilder identifierBlock = null;
 
     public CSGOAnimation(Crate crate) {
         super(crate, CrateAnimationType.INV_CSGO);
@@ -61,8 +60,8 @@ public class CSGOAnimation extends InventoryCrateAnimation {
                 }
                 drawRewards(cdh, cdh.getAnimatedCloseTicks());
                 break;
-            case COMPLETED:
-                return;
+            default:
+                break;
         }
     }
 
@@ -93,6 +92,9 @@ public class CSGOAnimation extends InventoryCrateAnimation {
                 if (cdh.getWaitingTicks() == 50) {
                     cdh.setCurrentState(AnimationDataHolder.State.COMPLETED);
                 }
+                break;
+            default:
+                break;
         }
     }
 
@@ -125,6 +127,9 @@ public class CSGOAnimation extends InventoryCrateAnimation {
             case WAITING:
             case ENDING:
                 cdh.setWaitingTicks(cdh.getWaitingTicks() + 1);
+                break;
+            default:
+                break;
         }
 
         return false;
@@ -140,7 +145,7 @@ public class CSGOAnimation extends InventoryCrateAnimation {
             }
         }
 
-        Reward r = getCrate().getSettings().getRewards().getRandomReward();
+        Reward r = getCrate().getSettings().getReward().getRandomReward();
         cdh.getDisplayedRewards()[cdh.getDisplayedRewards().length - 1] = r;
     }
 
@@ -157,8 +162,8 @@ public class CSGOAnimation extends InventoryCrateAnimation {
     }
 
     @Override
-    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh) {
-        InventoryBuilder inv = cdh.getInventoryBuilder();
+    public void drawIdentifierBlocks(InventoryAnimationDataHolder inventoryAnimationDataHolder) {
+        InventoryBuilder inv = inventoryAnimationDataHolder.getInventoryBuilder();
 
         inv.setItem(4, getIdentifierBlock());
         inv.setItem(22, getIdentifierBlock());
@@ -166,7 +171,7 @@ public class CSGOAnimation extends InventoryCrateAnimation {
 
     @Override
     public ItemBuilder getFiller() {
-        return getFillerBlocks().get(r.nextInt(getFillerBlocks().size()));
+        return getFillerBlocks().get(random.nextInt(getFillerBlocks().size()));
     }
 
     @Override
@@ -176,17 +181,17 @@ public class CSGOAnimation extends InventoryCrateAnimation {
         ArrayList<Reward> rewards = new ArrayList<>();
         rewards.add(cdh.getDisplayedRewards()[cdh.getDisplayedRewards().length / 2]);
 
-        finishAnimation(dataHolder.getPlayer(), rewards, false, null);
+        finishAnimation(dataHolder.getPlayer(), rewards, null);
         getCrate().tick(cdh.getLocation(), CrateState.OPEN, dataHolder.getPlayer(), rewards);
     }
 
     @Override
-    public void loadDataValues(StatusLogger sl) {
-        invName = fu.getFileDataLoader()
+    public void loadDataValues(StatusLogger statusLogger) {
+        invName = fileHandler.getFileDataLoader()
                 .loadString(prefix + "inv-name", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_CSGO_INVNAME_SUCCESS);
 
-        tickSound = fu.getFileDataLoader()
+        tickSound = fileHandler.getFileDataLoader()
                 .loadSound(prefix + "tick-sound", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_CSGO_TICKSOUND_SOUND_SUCCESS,
                         StatusLoggerEvent.ANIMATION_CSGO_TICKSOUND_SOUND_FAILURE,
@@ -196,29 +201,29 @@ public class CSGOAnimation extends InventoryCrateAnimation {
                         StatusLoggerEvent.ANIMATION_CSGO_TICKSOUND_PITCH_SUCCESS,
                         StatusLoggerEvent.ANIMATION_CSGO_TICKSOUND_PITCH_INVALID);
 
-        identifierBlock = fu.getFileDataLoader()
+        identifierBlock = fileHandler.getFileDataLoader()
                 .loadItem(prefix + "identifier-block", new ItemBuilder(XMaterial.AIR), getStatusLogger(),
                         StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_CSGO_IDBLOCK_INVALID
                 );
         identifierBlock.setDisplayName("&f");
 
-        finalTickLength = fu.getFileDataLoader()
+        finalTickLength = fileHandler.getFileDataLoader()
                 .loadDouble(prefix + "final-crate-tick-length", 7, getStatusLogger(),
                         StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_CSGO_FINALTICKLENGTH_SUCCESS,
                         StatusLoggerEvent.ANIMATION_CSGO_FINALTICKLENGTH_INVALID);
 
-        glassUpdateTicks = fu.getFileDataLoader().loadInt(prefix + "tile-update-ticks", 2, getStatusLogger(),
+        glassUpdateTicks = fileHandler.getFileDataLoader().loadInt(prefix + "tile-update-ticks", 2, getStatusLogger(),
                 StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT, StatusLoggerEvent.ANIMATION_CSGO_GLASSUPDATE_SUCCESS,
                 StatusLoggerEvent.ANIMATION_CSGO_GLASSUPDATE_INVALID);
 
-        closeSpeed = fu.getFileDataLoader()
+        closeSpeed = fileHandler.getFileDataLoader()
                 .loadInt(prefix + "close-speed", -1, getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_CSGO_CLOSESPEED_SUCCESS,
                         StatusLoggerEvent.ANIMATION_CSGO_CLOSESPEED_INVALID);
 
-        tickIncrease = fu.getFileDataLoader().loadDouble(prefix + "tick-speed-per-run", 0.4, getStatusLogger(),
+        tickIncrease = fileHandler.getFileDataLoader().loadDouble(prefix + "tick-speed-per-run", 0.4, getStatusLogger(),
                 StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                 StatusLoggerEvent.ANIMATION_CSGO_TICKSPEED_SUCCESS, StatusLoggerEvent.ANIMATION_CSGO_TICKSPEED_INVALID);
 
@@ -229,15 +234,15 @@ public class CSGOAnimation extends InventoryCrateAnimation {
                     Optional<XMaterial> optional = XMaterial.matchXMaterial(unParsed);
                     if (!optional.isPresent()) {
                         StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_MATERIAL_INVALID
-                                .log(getStatusLogger(), new String[]{args[0]});
+                                .log(getStatusLogger(), args[0]);
                         continue;
                     }
                     getFillerBlocks().add(new ItemBuilder(optional.get(), 1).setDisplayName("&f"));
 
                     StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_MATERIAL_SUCCESS
-                            .log(getStatusLogger(), new String[]{unParsed});
+                            .log(getStatusLogger(), unParsed);
                 } catch (Exception exc) {
-                    StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_ITEM_INVALID.log(getStatusLogger(), new String[]{unParsed});
+                    StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_ITEM_INVALID.log(getStatusLogger(), unParsed);
                 }
             }
         } catch (Exception exc) {

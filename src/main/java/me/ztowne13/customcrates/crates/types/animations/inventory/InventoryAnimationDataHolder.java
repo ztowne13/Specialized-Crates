@@ -11,15 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class InventoryAnimationDataHolder extends AnimationDataHolder {
-    BukkitRunnable runnable;
-    InventoryBuilder inventoryBuilder;
-
-    ArrayList<Integer> clickedSlots;
+    private final ArrayList<Integer> clickedSlots;
+    private BukkitRunnable runnable;
+    private InventoryBuilder inventoryBuilder;
 
     public InventoryAnimationDataHolder(Player player, Location location, CrateAnimation crateAnimation, int slots) {
         super(player, location, crateAnimation);
 
-        String inventoryName = getPropperInventoryName(crateAnimation);
+        String inventoryName = getProperInventoryName(crateAnimation);
         setInventoryBuilder(new InventoryBuilder(player, slots, inventoryName));
 
         clickedSlots = new ArrayList<>();
@@ -30,7 +29,7 @@ public abstract class InventoryAnimationDataHolder extends AnimationDataHolder {
         return (InventoryCrateAnimation) super.getCrateAnimation();
     }
 
-    public String getPropperInventoryName(CrateAnimation crateAnimation) {
+    public String getProperInventoryName(CrateAnimation crateAnimation) {
         String inventoryName;
         if (getCrateAnimation().getCrate().getSettings().getCrateInventoryName() == null) {
             inventoryName = getCrateAnimation().getInvName();
@@ -38,7 +37,7 @@ public abstract class InventoryAnimationDataHolder extends AnimationDataHolder {
             inventoryName = getCrateAnimation().getCrate().getSettings().getCrateInventoryName();
         }
 
-        inventoryName.replace("%crate%", crateAnimation.getCrate().getDisplayName());
+        inventoryName = inventoryName.replace("%crate%", crateAnimation.getCrate().getDisplayName());
 
         if (inventoryName.length() > 31) {
             inventoryName = inventoryName.substring(0, 31);

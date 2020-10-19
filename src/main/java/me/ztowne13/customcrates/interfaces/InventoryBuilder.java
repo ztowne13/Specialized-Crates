@@ -13,25 +13,25 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class InventoryBuilder {
-    String invName;
-    Inventory inv;
-    Player p;
-    int minimumSlots;
+    protected final int minimumSlots;
+    private final String invName;
+    private Inventory inv;
+    private Player player;
 
-    public InventoryBuilder(Player p, int slots, String invName) {
-        this(p, slots, invName, 0);
+    public InventoryBuilder(Player player, int slots, String invName) {
+        this(player, slots, invName, 0);
     }
 
-    public InventoryBuilder(Player p, int slots, String invName, int minimumSlots) {
+    public InventoryBuilder(Player player, int slots, String invName, int minimumSlots) {
         this.invName = invName;
         this.minimumSlots = minimumSlots;
-        this.p = p;
+        this.player = player;
 
         String title = ChatColor.translateAlternateColorCodes('&', invName);
         if (VersionUtils.Version.v1_12.isServerVersionOrEarlier() && title.length() > 31) {
             title = title.substring(0, 32);
         }
-        setInv(Bukkit.createInventory(p, min(54, max(minimumSlots, slots)), title));
+        setInv(Bukkit.createInventory(player, min(54, max(minimumSlots, slots)), title));
     }
 
     public void clear() {
@@ -56,7 +56,7 @@ public class InventoryBuilder {
     }
 
     public void open() {
-        getP().openInventory(getInv());
+        getPlayer().openInventory(getInv());
     }
 
     public Inventory getInv() {
@@ -67,11 +67,11 @@ public class InventoryBuilder {
         this.inv = inv;
     }
 
-    public Player getP() {
-        return p;
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setP(Player p) {
-        this.p = p;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

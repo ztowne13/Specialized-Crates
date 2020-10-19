@@ -5,8 +5,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public abstract class Commands {
-    String commandName;
-    CommandSender cmdSender;
+    protected final String commandName;
+    private CommandSender cmdSender;
 
     public Commands(String commandName) {
         this.commandName = commandName;
@@ -27,7 +27,6 @@ public abstract class Commands {
         if (getCmdSender() instanceof Player) {
             ChatUtils.msg((Player) getCmdSender(), s);
         } else {
-//            ChatUtils.log(ChatUtils.removeColor(s));
             ChatUtils.log(s);
         }
     }

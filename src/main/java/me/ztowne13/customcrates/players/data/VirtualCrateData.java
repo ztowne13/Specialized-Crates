@@ -6,9 +6,9 @@ import me.ztowne13.customcrates.crates.Crate;
  * Created by ztowne13 on 7/24/16.
  */
 public class VirtualCrateData {
-    Crate crate;
-    int crates;
-    int keys;
+    private final Crate crate;
+    private int crates;
+    private int keys;
 
     public VirtualCrateData(Crate crate, int crates, int keys) {
         this.crate = crate;
@@ -22,10 +22,6 @@ public class VirtualCrateData {
 
     public Crate getCrate() {
         return crate;
-    }
-
-    public void setCrate(Crate crate) {
-        this.crate = crate;
     }
 
     public int getCrates() {

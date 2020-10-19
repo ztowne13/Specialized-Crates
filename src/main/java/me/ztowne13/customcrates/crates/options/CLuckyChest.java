@@ -21,95 +21,95 @@ import java.util.Random;
  */
 public class CLuckyChest extends CSetting {
 
-    double chance;
-    double outOfChance;
-    boolean isBLWL;
-    boolean requirePermission = true;
-    List<Material> whiteList = new ArrayList<>();
-    List<World> worlds = new ArrayList<>();
+    private final Random random = new Random();
+    private double chance;
+    private double outOfChance;
+    private boolean isBLWL;
+    private boolean requirePermission = true;
+    private List<Material> whiteList = new ArrayList<>();
+    private List<World> worlds = new ArrayList<>();
+    private List<String> worldsRaw = new ArrayList<>();
+    private boolean allWorlds = true;
 
-    List<String> worldsRaw = new ArrayList<>();
-    boolean allWorlds = true;
-    Random r = new Random();
-
-    public CLuckyChest(Crate crates) {
-        super(crates, crates.getCc());
+    public CLuckyChest(Crate crate) {
+        super(crate, crate.getInstance());
     }
 
     @Override
-    public void loadFor(CrateSettingsBuilder csb, CrateState cs) {
-        FileConfiguration fc = getSettings().getFc();
+    public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
+        FileConfiguration fc = getSettings().getFileConfiguration();
 
-        if (csb.hasV("lucky-chest")) {
-            if (csb.hasV("lucky-chest.chance")) {
-                String unParsedChance = fc.getString("lucky-chest.chance");
-                String[] args = unParsedChance.split("/");
-                try {
-                    setChance(Integer.parseInt(args[0]));
-                    setOutOfChance(Integer.parseInt(args[1]));
-                } catch (Exception exc) {
-                    StatusLoggerEvent.LUCKYCHEST_CHANCE_MISFORMATTED.log(getCrate());
-                }
-            } else {
-                chance = 1;
-                outOfChance = 100;
-                StatusLoggerEvent.LUCKYCHEST_CHANCE_NONEXISTENT.log(getCrate());
-            }
+        if (!crateSettingsBuilder.hasValue("lucky-chest")) {
+            StatusLoggerEvent.LUCKYCHEST_NOVALUES.log(getCrate());
+            return;
+        }
 
-            if (csb.hasV("lucky-chest.is-block-list-whitelist")) {
-                try {
-                    setBLWL(fc.getBoolean("lucky-chest.is-block-list-whitelist"));
-                } catch (Exception exc) {
-                    StatusLoggerEvent.LUCKYCHEST_BLWL_INVALID.log(getCrate());
-                }
-            } else {
-                setBLWL(true);
-                StatusLoggerEvent.LUCKYCHEST_BLWL_NONEXISTENT.log(getCrate());
-            }
-
-            if (csb.hasV("lucky-chest.require-permission")) {
-                try {
-                    requirePermission = fc.getBoolean("lucky-chest.require-permission");
-                } catch (Exception exc) {
-                    StatusLoggerEvent.LUCKYCHEST_REQUIRE_PERMISSION_INVALID.log(getCrate());
-                }
-            } else {
-                requirePermission = true;
-                StatusLoggerEvent.LUCKYCHEST_REQUIRE_PERMISSION_NONEXISTENT.log(getCrate());
-            }
-
-            if (csb.hasV("lucky-chest.worlds")) {
-                worldsRaw = fc.getStringList("lucky-chest.worlds");
-
-                for (String s : fc.getStringList("lucky-chest.worlds")) {
-                    setAllWorlds(false);
-                    World w = Bukkit.getWorld(s);
-                    if (w != null) {
-                        getWorlds().add(w);
-                    } else {
-                        StatusLoggerEvent.LUCKYCHEST_WORLD_INVALID.log(getCrate(), new String[]{s});
-                    }
-                }
-            }
-
-            if (csb.hasV("lucky-chest.block-list")) {
-                try {
-                    for (String mat : fc.getStringList("lucky-chest.block-list")) {
-                        Optional<XMaterial> optional = XMaterial.matchXMaterial(mat);
-                        if (optional.isPresent()) {
-                            getWhiteList().add(optional.get().parseMaterial());
-                        } else {
-                            StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALIDBLOCK.log(getCrate(), new String[]{mat});
-                        }
-                    }
-                } catch (Exception exc) {
-                    StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALID.log(getCrate());
-                }
-            } else {
-                StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_NONEXISTENT.log(getCrate());
+        if (crateSettingsBuilder.hasValue("lucky-chest.chance")) {
+            String unParsedChance = fc.getString("lucky-chest.chance");
+            String[] args = unParsedChance.split("/");
+            try {
+                setChance(Integer.parseInt(args[0]));
+                setOutOfChance(Integer.parseInt(args[1]));
+            } catch (Exception exc) {
+                StatusLoggerEvent.LUCKYCHEST_CHANCE_MISFORMATTED.log(getCrate());
             }
         } else {
-            StatusLoggerEvent.LUCKYCHEST_NOVALUES.log(getCrate());
+            chance = 1;
+            outOfChance = 100;
+            StatusLoggerEvent.LUCKYCHEST_CHANCE_NONEXISTENT.log(getCrate());
+        }
+
+        if (crateSettingsBuilder.hasValue("lucky-chest.is-block-list-whitelist")) {
+            try {
+                setBLWL(fc.getBoolean("lucky-chest.is-block-list-whitelist"));
+            } catch (Exception exc) {
+                StatusLoggerEvent.LUCKYCHEST_BLWL_INVALID.log(getCrate());
+            }
+        } else {
+            setBLWL(true);
+            StatusLoggerEvent.LUCKYCHEST_BLWL_NONEXISTENT.log(getCrate());
+        }
+
+        if (crateSettingsBuilder.hasValue("lucky-chest.require-permission")) {
+            try {
+                requirePermission = fc.getBoolean("lucky-chest.require-permission");
+            } catch (Exception exc) {
+                StatusLoggerEvent.LUCKYCHEST_REQUIRE_PERMISSION_INVALID.log(getCrate());
+            }
+        } else {
+            requirePermission = true;
+            StatusLoggerEvent.LUCKYCHEST_REQUIRE_PERMISSION_NONEXISTENT.log(getCrate());
+        }
+
+        if (crateSettingsBuilder.hasValue("lucky-chest.worlds")) {
+            worldsRaw = fc.getStringList("lucky-chest.worlds");
+
+            for (String s : fc.getStringList("lucky-chest.worlds")) {
+                setAllWorlds(false);
+                World w = Bukkit.getWorld(s);
+                if (w != null) {
+                    getWorlds().add(w);
+                } else {
+                    StatusLoggerEvent.LUCKYCHEST_WORLD_INVALID.log(getCrate(), s);
+                }
+            }
+        }
+
+        if (crateSettingsBuilder.hasValue("lucky-chest.block-list")) {
+            try {
+                for (String mat : fc.getStringList("lucky-chest.block-list")) {
+                    Optional<XMaterial> optional = XMaterial.matchXMaterial(mat);
+                    if (optional.isPresent()) {
+                        getWhiteList().add(optional.get().parseMaterial());
+                    } else {
+                        StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALIDBLOCK.log(getCrate(), mat);
+                    }
+                }
+            } catch (Exception exc) {
+                StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALID.log(getCrate());
+            }
+        } else {
+            StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_NONEXISTENT.log(getCrate());
         }
     }
 
@@ -135,19 +135,20 @@ public class CLuckyChest extends CSetting {
         }
     }
 
-    public boolean canRunForBlock(Block b) {
-        if (isAllWorlds() || getWorlds().contains(b.getWorld())) {
-            if (getWhiteList().isEmpty()) {
-                return true;
-            }
-
-            return isBLWL() == getWhiteList().contains(b.getType());
+    public boolean canRunForBlock(Block block) {
+        if (!isAllWorlds() && !getWorlds().contains(block.getWorld())) {
+            return false;
         }
-        return false;
+
+        if (getWhiteList().isEmpty()) {
+            return true;
+        }
+
+        return isBLWL() == getWhiteList().contains(block.getType());
     }
 
     public boolean runChance() {
-        return (r.nextInt(((int) getOutOfChance())) + 1) <= getChance();
+        return (random.nextInt(((int) getOutOfChance())) + 1) <= getChance();
     }
 
     public boolean checkRun(Block b) {

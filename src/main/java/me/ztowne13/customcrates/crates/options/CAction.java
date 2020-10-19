@@ -26,27 +26,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CActions extends CSetting {
-    Map<String, Map<String, List<String>>> actions = new HashMap<>();
+public class CAction extends CSetting {
+    private Map<String, Map<String, List<String>>> actions = new HashMap<>();
 
-    public CActions(Crate crates) {
-        super(crates, crates.getCc());
+    public CAction(Crate crate) {
+        super(crate, crate.getInstance());
     }
 
     @Override
-    public void loadFor(CrateSettingsBuilder csb, CrateState cs) {
-        if (csb.hasV("open.actions")) {
-            List<String> list = getCrate().getSettings().getFc().getStringList("open.actions");
+    public void loadFor(CrateSettingsBuilder crateSettingsBuilder, CrateState crateState) {
+        if (crateSettingsBuilder.hasValue("open.actions")) {
+            List<String> list = getCrate().getSettings().getFileConfiguration().getStringList("open.actions");
             for (String s : list) {
                 addEntryByString("DEFAULT", s);
             }
         }
 
-        if (csb.hasV("open.crate-tiers")) {
-            for (String tier : getCrate().getSettings().getFc().getConfigurationSection("open.crate-tiers").getKeys(false)) {
-                if (csb.hasV("open.crate-tiers." + tier + ".actions")) {
+        if (crateSettingsBuilder.hasValue("open.crate-tiers")) {
+            for (String tier : getCrate().getSettings().getFileConfiguration().getConfigurationSection("open.crate-tiers").getKeys(false)) {
+                if (crateSettingsBuilder.hasValue("open.crate-tiers." + tier + ".actions")) {
                     List<String> list =
-                            getCrate().getSettings().getFc().getStringList("open.crate-tiers." + tier + ".actions");
+                            getCrate().getSettings().getFileConfiguration().getStringList("open.crate-tiers." + tier + ".actions");
                     for (String s : list) {
                         addEntryByString(tier, s);
                     }
@@ -81,7 +81,7 @@ public class CActions extends CSetting {
         list.add(action);
         map.put(type, list);
 
-        StatusLoggerEvent.ACTION_ADD.log(getCrate(), new String[]{action, tier});
+        StatusLoggerEvent.ACTION_ADD.log(getCrate(), action, tier);
         getActions().put(tier, map);
     }
 
@@ -116,22 +116,22 @@ public class CActions extends CSetting {
         addEntry(type, action, crateTier);
     }
 
-    public void playAll(Player p, boolean pre) {
-        playAll(p, new ArrayList<>(), pre);
+    public void playAll(Player player, boolean pre) {
+        playAll(player, new ArrayList<>(), pre);
     }
 
-    public void playAll(Player p, List<Reward> rewards, boolean pre) {
-        playAll(p, null, rewards, pre);
+    public void playAll(Player player, List<Reward> rewards, boolean pre) {
+        playAll(player, null, rewards, pre);
     }
 
-    public void playAll(Player p, PlacedCrate placedCrate, List<Reward> rewards, boolean pre) {
-        cc.getDu().log("playAll() - CALL (pre: " + pre + ")", getClass());
+    public void playAll(Player player, PlacedCrate placedCrate, List<Reward> rewards, boolean pre) {
+        instance.getDebugUtils().log("playAll() - CALL (pre: " + pre + ")", getClass());
 
         if (rewards.isEmpty() && !pre)
             return;
 
         ActionEffect actionEffect =
-                VersionUtils.Version.v1_12.isServerVersionOrLater() ? new BukkitActionEffect(cc) : new NMSActionEffect(cc);
+                VersionUtils.Version.v1_12.isServerVersionOrLater() ? new BukkitActionEffect(instance) : new NMSActionEffect(instance);
         actionEffect.newTitle();
         boolean toRunTitle = false;
 
@@ -162,23 +162,21 @@ public class CActions extends CSetting {
                         String rewardsAsString = rewardsAsDisplayname.toString();
                         rewardsAsString = rewardsAsString.substring(1, rewardsAsString.length() - 1);
 
-                        msg = msg.replace("%player%", p.getName()).replace("%name%", p.getName());
-                        msg = msg.replace("%displayname%", p.getDisplayName()).replace("%nickname%", p.getDisplayName())
-                                .replace("%nick%", p.getDisplayName());
+                        msg = msg.replace("%player%", player.getName()).replace("%name%", player.getName());
+                        msg = msg.replace("%displayname%", player.getDisplayName()).replace("%nickname%", player.getDisplayName())
+                                .replace("%nick%", player.getDisplayName());
                         msg = msg.replace("%crate%", getCrate().getName()).replace("%cratename%", getCrate().getDisplayName());
                         msg = msg.replace("%reward%", rewardsAsString).replace("%rewards%", rewardsAsString);
                         msg = ChatUtils.toChatColor(msg);
 
                         if (s.equalsIgnoreCase("MESSAGE")) {
-                            p.sendMessage(msg);
+                            player.sendMessage(msg);
                         } else if (s.equalsIgnoreCase("BROADCAST")) {
                             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                                 onlinePlayer.sendMessage(msg);
                             }
-
-                            //Bukkit.broadcastMessage(msg);
                         } else if (s.equalsIgnoreCase("ACTIONBAR")) {
-                            actionEffect.getActionBarExecutor().play(p, msg);
+                            actionEffect.getActionBarExecutor().play(player, msg);
                         } else if (s.equalsIgnoreCase("TITLE")) {
                             actionEffect.setDisplayTitle(msg);
                             toRunTitle = true;
@@ -199,84 +197,84 @@ public class CActions extends CSetting {
         }
 
         if (toRunTitle) {
-            actionEffect.playTitle(p);
+            actionEffect.playTitle(player);
         }
 
         if (!pre) {
-            if (!crates.getSettings().getCrateType().equals(CrateAnimationType.BLOCK_CRATEOPEN) ||
-                    !((OpenChestAnimation) crates.getSettings().getAnimation()).isEarlyRewardHologram()) {
-                if (crates.getSettings().getObtainType().isStatic() ||
-                        crates.getSettings().getCrateType().isSpecialDynamicHandling())
-                    playRewardHologram(p, rewardsAsDisplayname);
+            if (!crate.getSettings().getCrateType().equals(CrateAnimationType.BLOCK_CRATEOPEN) ||
+                    !((OpenChestAnimation) crate.getSettings().getCrateAnimation()).isEarlyRewardHologram()) {
+                if (crate.getSettings().getObtainType().isStatic() ||
+                        crate.getSettings().getCrateType().isSpecialDynamicHandling())
+                    playRewardHologram(player, rewardsAsDisplayname);
             }
         }
     }
 
-    public void playRewardHologram(Player p, List<String> rewards, double additionalYOffset) {
-        playRewardHologram(p, rewards, additionalYOffset, false, null, -1);
+    public void playRewardHologram(Player player, List<String> rewards, double additionalYOffset) {
+        playRewardHologram(player, rewards, additionalYOffset, false, null, -1);
     }
 
-    public void playRewardHologram(Player p, List<String> rewards) {
-        playRewardHologram(p, rewards, 0, false, null, -1);
+    public void playRewardHologram(Player player, List<String> rewards) {
+        playRewardHologram(player, rewards, 0, false, null, -1);
     }
 
-    public void playRewardHologram(Player p, List<String> rewards, double additionalYOffset, boolean attach, Item item,
+    public void playRewardHologram(Player player, List<String> rewards, double additionalYOffset, boolean attach, Item item,
                                    int openDuration) {
         if (rewards.isEmpty())
             return;
 
-        final PlayerManager pm = PlayerManager.get(cc, p);
-        if (pm.getLastOpenedPlacedCrate() != null) {
-            final PlacedCrate placedCrate = pm.getLastOpenedPlacedCrate();
-            String msg = placedCrate.getCrate().getSettings().getHologram().getRewardHologram();
-            if (!msg.equalsIgnoreCase("")) {
-//                msg = ChatUtils.toChatColor(msg.replace("%reward%", rewards.toString().replace("[", "").replace("]", ""))).replace("%player%", p.getName()));
-
-                String rewardsAsString = rewards.toString().substring(1, rewards.toString().length() - 1);
-                msg = msg.replace("%player%", p.getName()).replace("%name%", p.getName());
-                msg = msg.replace("%displayname%", p.getDisplayName()).replace("%nickname%", p.getDisplayName())
-                        .replace("%nick%", p.getDisplayName());
-                msg = msg.replace("%crate%", getCrate().getName()).replace("%cratename%", getCrate().getDisplayName());
-                msg = msg.replace("%reward%", rewardsAsString).replace("%rewards%", rewardsAsString);
-
-                msg = ChatUtils.toChatColor(msg);
-
-
-                final DynamicHologram dynamicHologram = placedCrate.getHologram().getDh();
-                dynamicHologram.setDisplayingRewardHologram(true);
-                dynamicHologram.delete();
-
-                Location rewardLoc = placedCrate.getL().clone();
-                rewardLoc.setY(rewardLoc.getY() - .3 + getCrate().getSettings().getHologram().getRewardHoloYOffset() +
-                        additionalYOffset);
-                dynamicHologram.create(rewardLoc);
-                dynamicHologram.addLine(msg);
-
-                if (attach) {
-                    attachTo(item, msg);
-                }
-
-                Bukkit.getScheduler().scheduleSyncDelayedTask(cc, () -> {
-                    dynamicHologram.delete();
-
-                    final Location cloneY = placedCrate.getL().clone();
-                    cloneY.setY(cloneY.getY() + .5);
-
-                    if (placedCrate.getCrate().getSettings().getObtainType().equals(ObtainType.STATIC)) {
-                        placedCrate.getCrate().getSettings().getHologram().createHologram(cloneY, dynamicHologram);
-                    }
-
-                    pm.setLastOpenedPlacedCrate(null);
-                    dynamicHologram.setDisplayingRewardHologram(false);
-
-                    if (!(dynamicHologram.getHa() == null)) {
-                        dynamicHologram.getHa().update(true);
-                    }
-
-                }, attach ? openDuration : getCrate().getSettings().getHologram().getRewardHoloDuration());
-
-            }
+        final PlayerManager playerManager = PlayerManager.get(instance, player);
+        final PlacedCrate placedCrate = playerManager.getLastOpenedPlacedCrate();
+        if (placedCrate == null) {
+            return;
         }
+
+        String msg = placedCrate.getCrate().getSettings().getHologram().getRewardHologram();
+        if (msg.isEmpty()) {
+            return;
+        }
+
+        String rewardsAsString = rewards.toString().substring(1, rewards.toString().length() - 1);
+        msg = msg.replace("%player%", player.getName()).replace("%name%", player.getName());
+        msg = msg.replace("%displayname%", player.getDisplayName()).replace("%nickname%", player.getDisplayName())
+                .replace("%nick%", player.getDisplayName());
+        msg = msg.replace("%crate%", getCrate().getName()).replace("%cratename%", getCrate().getDisplayName());
+        msg = msg.replace("%reward%", rewardsAsString).replace("%rewards%", rewardsAsString);
+
+        msg = ChatUtils.toChatColor(msg);
+
+        final DynamicHologram dynamicHologram = placedCrate.getHologram().getDynamicHologram();
+        dynamicHologram.setDisplayingRewardHologram(true);
+        dynamicHologram.delete();
+
+        Location rewardLoc = placedCrate.getLocation().clone();
+        rewardLoc.setY(rewardLoc.getY() - .3 + getCrate().getSettings().getHologram().getRewardHoloYOffset() +
+                additionalYOffset);
+        dynamicHologram.create(rewardLoc);
+        dynamicHologram.addLine(msg);
+
+        if (attach) {
+            attachTo(item, msg);
+        }
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () -> {
+            dynamicHologram.delete();
+
+            final Location cloneY = placedCrate.getLocation().clone();
+            cloneY.setY(cloneY.getY() + .5);
+
+            if (placedCrate.getCrate().getSettings().getObtainType().equals(ObtainType.STATIC)) {
+                placedCrate.getCrate().getSettings().getHologram().createHologram(cloneY, dynamicHologram);
+            }
+
+            playerManager.setLastOpenedPlacedCrate(null);
+            dynamicHologram.setDisplayingRewardHologram(false);
+
+            if (dynamicHologram.getHoloAnimation() != null) {
+                dynamicHologram.getHoloAnimation().update(true);
+            }
+
+        }, attach ? openDuration : getCrate().getSettings().getHologram().getRewardHoloDuration());
     }
 
     public void attachTo(Item item, String rewardName) {

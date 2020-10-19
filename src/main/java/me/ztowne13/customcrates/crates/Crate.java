@@ -11,43 +11,41 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
 public class Crate {
-    static Map<String, Crate> loadedCrates = new HashMap<>();
+    private static Map<String, Crate> loadedCrates = new HashMap<>();
 
-    SpecializedCrates cc;
-    String name;
+    private final SpecializedCrates instance;
+    private final boolean loadedProperly;
+    private String name;
+    private int placedCount = 0;
+    private String lastOpenedName = "Nobody";
+    private String lastOpenedReward = "Nothing";
+    private boolean enabled = true;
+    private boolean disabledByError = false;
+    private boolean canBeEnabled = true;
+    private boolean isMultiCrate;
+    private boolean isUsedForCratesCommand = false;
+    private boolean needsReload = false;
 
-    int placedCount = 0;
-    String lastOpenedName = "Nobody";
-    String lastOpenedReward = "Nothing";
+    private CrateSettings crateSettings;
 
-
-    boolean enabled = true;
-    boolean disabledByError = false;
-    boolean canBeEnabled = true;
-    boolean isMultiCrate;
-    boolean isUsedForCratesCommand = false;
-    boolean loadedProperly = false;
-    boolean needsReload = false;
-
-    CrateSettings cs;
-
-    public Crate(SpecializedCrates cc, String name, boolean newFile) {
-        this(cc, name, newFile, false);
+    public Crate(SpecializedCrates instance, String name, boolean newFile) {
+        this(instance, name, newFile, false);
     }
 
-    public Crate(SpecializedCrates cc, String name, boolean newFile, boolean isMultiCrate) {
-        cc.getDu().log("Crate() - new", getClass());
-        this.cc = cc;
+    public Crate(SpecializedCrates instance, String name, boolean newFile, boolean isMultiCrate) {
+        instance.getDebugUtils().log("Crate() - new", getClass());
+        this.instance = instance;
         this.name = name;
 
         this.isMultiCrate = isMultiCrate;
-        this.cs = new CrateSettings(cc, this, newFile);
+        this.crateSettings = new CrateSettings(instance, this, newFile);
 
-        setEnabled(!getSettings().getSettingsBuilder().hasV("enabled") || cs.getFc().getBoolean("enabled"));
+        setEnabled(!getSettings().getSettingsBuilder().hasValue("enabled") || crateSettings.getFileConfiguration().getBoolean("enabled"));
 
         getLoadedCrates().put(name, this);
 
@@ -95,18 +93,17 @@ public class Crate {
         Crate.loadedCrates = loadedCrates;
     }
 
-    @Deprecated
     public void tick(Location l, CrateState cstate, Player p, List<Reward> rewards) {
         tick(l, null, cstate, p, rewards);
     }
 
     public void tick(Location l, PlacedCrate placedCrate, CrateState cstate, Player p, List<Reward> rewards) {
-        getSettings().getParticles().runAll(l, cstate, rewards);
+        getSettings().getParticle().runAll(l, cstate, rewards);
         if (cstate.equals(CrateState.OPEN) && CrateUtils.isCrateUsable(this)) {
-            getSettings().getSounds().runAll(p, l, rewards);
-            getSettings().getFireworks().runAll(p, l, rewards);
+            getSettings().getSound().runAll(p, l, rewards);
+            getSettings().getFirework().runAll(l, rewards);
             if (rewards != null && !rewards.isEmpty()) {
-                getSettings().getActions().playAll(p, placedCrate, rewards, false);
+                getSettings().getAction().playAll(p, placedCrate, rewards, false);
             }
         }
     }
@@ -114,16 +111,16 @@ public class Crate {
     public boolean rename(String newName) {
 
         if (newName.contains(".")) {
-            newName = newName.split(".")[0];
+            newName = newName.split("\\.")[0];
         }
 
-        if (FileHandler.getMap().containsKey(newName + ".crate") |
+        if (FileHandler.getMap().containsKey(newName + ".crate") ||
                 FileHandler.getMap().containsKey(newName + ".multicrate")) {
             return false;
         }
 
         FileHandler newFile =
-                new FileHandler(getCc(), newName + (isMultiCrate() ? ".multicrate" : ".crate"),
+                new FileHandler(getInstance(), newName + (isMultiCrate() ? ".multicrate" : ".crate"),
                         "/Crates", true, true, true);
         newFile.reload();
 
@@ -153,26 +150,27 @@ public class Crate {
 
         Path path = getSettings().getFileHandler().getDataFile().toPath();
 
-        if (getSettings().getFileHandler().getDataFile().delete()) {
+        try {
+            Files.deleteIfExists(path);
             ChatUtils.log("Successfully deleted file " + path);
-        } else {
-            return "File nonexistent, please try reloading or contacting the plugin author.";
+        } catch (Exception e) {
+            return "An I/O error occurred, please try reloading or contacting the plugin author.";
         }
 
-        for (UUID id : cc.getDataHandler().getQueuedGiveCommands().keySet()) {
-            List<DataHandler.QueuedGiveCommand> cmds = cc.getDataHandler().getQueuedGiveCommands().get(id);
+        for (UUID id : instance.getDataHandler().getQueuedGiveCommands().keySet()) {
+            List<DataHandler.QueuedGiveCommand> cmds = instance.getDataHandler().getQueuedGiveCommands().get(id);
             for (DataHandler.QueuedGiveCommand cmd : cmds) {
                 if (cmd.getCrate().equals(this)) {
                     cmds.remove(cmd);
-                    cc.getDataHandler().getQueuedGiveCommands().remove(id);
-                    cc.getDataHandler().getQueuedGiveCommands().put(id, cmds);
+                    instance.getDataHandler().getQueuedGiveCommands().remove(id);
+                    instance.getDataHandler().getQueuedGiveCommands().put(id, cmds);
                 }
             }
         }
 
-        cc.getDataHandler().saveToFile();
+        instance.getDataHandler().saveToFile();
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(cc, () -> cc.reload(), 20);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(instance, instance::reload, 20);
         return path.toString();
     }
 
@@ -191,12 +189,8 @@ public class Crate {
         return deleted;
     }
 
-    public SpecializedCrates getCc() {
-        return cc;
-    }
-
-    public void setCc(SpecializedCrates cc) {
-        this.cc = cc;
+    public SpecializedCrates getInstance() {
+        return instance;
     }
 
     public String getName() {
@@ -208,11 +202,11 @@ public class Crate {
     }
 
     public CrateSettings getSettings() {
-        return cs;
+        return crateSettings;
     }
 
     public void setSettings(CrateSettings cs) {
-        this.cs = cs;
+        this.crateSettings = cs;
     }
 
     public boolean isEnabled() {
@@ -276,10 +270,9 @@ public class Crate {
     }
 
     public String getDisplayName() {
-        if ((boolean) SettingsValue.USE_CRATE_NAME_FOR_DISPLAY.getValue(getCc())) {
-            if (getSettings().getCrateItemHandler().getItem().hasDisplayName()) {
-                return getSettings().getCrateItemHandler().getItem().getDisplayName(true);
-            }
+        if (SettingsValue.USE_CRATE_NAME_FOR_DISPLAY.getValue(getInstance()).equals(Boolean.TRUE)
+                && getSettings().getCrateItemHandler().getItem().hasDisplayName()) {
+            return getSettings().getCrateItemHandler().getItem().getDisplayName(true);
         }
         return getName();
     }

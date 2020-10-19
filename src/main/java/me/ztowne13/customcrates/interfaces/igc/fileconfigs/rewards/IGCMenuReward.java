@@ -2,7 +2,7 @@ package me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards;
 
 import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
-import me.ztowne13.customcrates.crates.options.CRewards;
+import me.ztowne13.customcrates.crates.options.CReward;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.igc.IGCDefaultItems;
@@ -25,13 +25,13 @@ public class IGCMenuReward extends IGCMenu {
     public IGCMenuReward(SpecializedCrates cc, Player p, IGCMenu lastMenu, String rName) {
         super(cc, p, lastMenu, "&7&l> &6&l" + rName);
 
-        if (CRewards.getAllRewards().containsKey(rName)) {
-            reward = CRewards.getAllRewards().get(rName);
+        if (CReward.getAllRewards().containsKey(rName)) {
+            reward = CReward.getAllRewards().get(rName);
         } else {
             reward = new Reward(getCc(), rName);
             reward.loadFromConfig();
             reward.loadChance();
-            CRewards.getAllRewards().put(rName, reward);
+            CReward.getAllRewards().put(rName, reward);
         }
     }
 

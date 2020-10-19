@@ -102,9 +102,9 @@ public enum Messages {
 
     FOOTER("&3&l>> &7&m----------------------------------------------&3&l <<");
 
-    static EnumMap<Messages, String> cachedMessages = new EnumMap<>(Messages.class);
-    String msg;
-    String defaultMsg;
+    private static final EnumMap<Messages, String> CACHED_MESSAGES = new EnumMap<>(Messages.class);
+    private final String msg;
+    private final String defaultMsg;
 
     Messages() {
         this("");
@@ -120,31 +120,31 @@ public enum Messages {
     }
 
     public static void clearCache() {
-        cachedMessages.clear();
+        CACHED_MESSAGES.clear();
     }
 
-    public String getFromConf(SpecializedCrates cc) {
-        if (cachedMessages.containsKey(this))
-            return cachedMessages.get(this);
+    public String getFromConf(SpecializedCrates instance) {
+        if (CACHED_MESSAGES.containsKey(this))
+            return CACHED_MESSAGES.get(this);
 
         try {
-            String val = cc.getMessageFile().get().getString(nameFormatted());
+            String val = instance.getMessageFile().get().getString(nameFormatted());
 
             if (val == null)
                 throw new Exception();
 
-            cachedMessages.put(this, ChatUtils.toChatColor(val));
+            CACHED_MESSAGES.put(this, ChatUtils.toChatColor(val));
             return ChatUtils.toChatColor(val);
         } catch (Exception exc) {
             if (defaultMsg.equalsIgnoreCase("")) {
-                cachedMessages.put(this, ChatUtils.toChatColor(
+                CACHED_MESSAGES.put(this, ChatUtils.toChatColor(
                         "&eThis value isn't set, please tell the server operator to configure the " + name() + " value."));
             } else {
-                cachedMessages.put(this, ChatUtils.toChatColor(defaultMsg));
-                cc.getMessageFile().get().set(nameFormatted(), defaultMsg);
-                cc.getMessageFile().save();
+                CACHED_MESSAGES.put(this, ChatUtils.toChatColor(defaultMsg));
+                instance.getMessageFile().get().set(nameFormatted(), defaultMsg);
+                instance.getMessageFile().save();
             }
-            return cachedMessages.get(this);
+            return CACHED_MESSAGES.get(this);
         }
     }
 
@@ -152,12 +152,12 @@ public enum Messages {
         return name().toLowerCase().replace("_", "-");
     }
 
-    public void msgSpecified(SpecializedCrates cc, Player p) {
-        msgSpecified(cc, p, new String[]{}, new String[]{});
+    public void msgSpecified(SpecializedCrates instance, Player player) {
+        msgSpecified(instance, player, new String[]{}, new String[]{});
     }
 
-    public void msgSpecified(SpecializedCrates cc, Player p, String[] replaceValue, String[] setValue) {
-        String correctMSG = getPropperMsg(cc);
+    public void msgSpecified(SpecializedCrates instance, Player player, String[] replaceValue, String[] setValue) {
+        String correctMSG = getProperMsg(instance);
         if (correctMSG.equalsIgnoreCase("none")
                 || correctMSG.equalsIgnoreCase("")
                 || correctMSG.equalsIgnoreCase("&f")) {
@@ -168,22 +168,18 @@ public enum Messages {
             correctMSG = correctMSG.replace(replaceValue[i], setValue[i]);
         }
 
-        p.sendMessage(correctMSG);
+        player.sendMessage(correctMSG);
     }
 
-    public void writeValue(SpecializedCrates cc, String value) {
-        cc.getMessageFile().get().set(name().toLowerCase().replace("_", "-").toLowerCase(), value);
+    public void writeValue(SpecializedCrates instance, String value) {
+        instance.getMessageFile().get().set(name().toLowerCase().replace("_", "-").toLowerCase(), value);
     }
 
-    public String getPropperMsg(SpecializedCrates cc) {
-        return ChatUtils.toChatColor(getMsg().equalsIgnoreCase("") ? getFromConf(cc) : getMsg());
+    public String getProperMsg(SpecializedCrates instance) {
+        return ChatUtils.toChatColor(getMsg().equalsIgnoreCase("") ? getFromConf(instance) : getMsg());
     }
 
     public String getMsg() {
         return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
     }
 }

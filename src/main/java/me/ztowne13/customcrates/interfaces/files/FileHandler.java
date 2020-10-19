@@ -16,27 +16,23 @@ import java.util.logging.Level;
 
 public class FileHandler {
 
-    static Map<String, FileHandler> map = new HashMap<>();
-
-    String name;
-    String directory = "";
-    String loaded;
-    SpecializedCrates cc;
-
-    boolean canBeEdited;
-    boolean saveWithCustomSave;
-
-    boolean properLoad = false;
-    boolean newFile;
-
-    FileDataLoader fileDataLoader;
+    private static Map<String, FileHandler> map = new HashMap<>();
+    private final SpecializedCrates instance;
+    private final FileDataLoader fileDataLoader;
+    private String name;
+    private String directory = "";
+    private String loaded;
+    private boolean canBeEdited;
+    private boolean saveWithCustomSave;
+    private boolean properLoad = false;
+    private boolean newFile;
     private FileConfiguration data = null;
     private File dataFile = null;
 
-    public FileHandler(SpecializedCrates cc, String name, String directory, boolean canBeEdited, boolean saveWithCustomSave,
+    public FileHandler(SpecializedCrates instance, String name, String directory, boolean canBeEdited, boolean saveWithCustomSave,
                        boolean newFile) {
         this.name = name;
-        this.cc = cc;
+        this.instance = instance;
         this.directory = directory;
         this.canBeEdited = canBeEdited;
         this.saveWithCustomSave = saveWithCustomSave;
@@ -47,10 +43,10 @@ public class FileHandler {
         map.put(name, this);
     }
 
-    public FileHandler(SpecializedCrates cc, String name, boolean canBeEdited, boolean saveWithCustomSave) {
+    public FileHandler(SpecializedCrates instance, String name, boolean canBeEdited, boolean saveWithCustomSave) {
         this.name = name;
         this.canBeEdited = canBeEdited;
-        this.cc = cc;
+        this.instance = instance;
         this.saveWithCustomSave = saveWithCustomSave;
 
         this.fileDataLoader = new FileDataLoader(this);
@@ -72,28 +68,25 @@ public class FileHandler {
     }
 
     public void loadFile() {
-        cc.getDu().log("loadFile() - CALL", getClass(), false);
+        instance.getDebugUtils().log("loadFile() - CALL", getClass(), false);
 
         if (getDataFile() == null) {
-            setDataFile(new File(new File(getCc().getDataFolder().getPath() + getDirectory()), getName()));
+            setDataFile(new File(new File(instance.getDataFolder().getPath() + getDirectory()), getName()));
 
-            if (getName().equalsIgnoreCase("Messages.yml")) {
-                if (!folderExists("Crates")) {
-                    new File(getCc().getDataFolder().getPath() + getDirectory()).mkdir();
+            if (getName().equalsIgnoreCase("Messages.yml") && !folderExists("Crates")) {
+                new File(instance.getDataFolder().getPath() + getDirectory()).mkdir();
 
-                    try {
-                        getCc().firstLoadFiles();
-                    } catch (Exception exc) {
-                        exc.printStackTrace();
-                    }
-
+                try {
+                    instance.firstLoadFiles();
+                } catch (Exception exc) {
+                    exc.printStackTrace();
                 }
             }
         }
     }
 
     public void reload() {
-        cc.getDu().log("reload() - CALL", getClass(), false);
+        instance.getDebugUtils().log("reload() - CALL", getClass(), false);
 
         loadFile();
 
@@ -101,9 +94,9 @@ public class FileHandler {
             data = YamlConfiguration.loadConfiguration(getDataFile());
 
             if (canBeEdited) {
-                if (data.saveToString() != null &&
-                        (name.equalsIgnoreCase("Rewards.YML") || !data.saveToString().equalsIgnoreCase(""))) {
-                    File defConfigFile = new File(getCc().getDataFolder(), getName());
+                data.saveToString();
+                if (name.equalsIgnoreCase("Rewards.YML") || !data.saveToString().equalsIgnoreCase("")) {
+                    File defConfigFile = new File(instance.getDataFolder(), getName());
                     if (defConfigFile.exists()) {
                         YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigFile);
                         getData().setDefaults(defConfig);
@@ -132,7 +125,7 @@ public class FileHandler {
     }
 
     private void loadByByte() {
-        cc.getDu().log("loadByByte() - CALL", getClass(), false);
+        instance.getDebugUtils().log("loadByByte() - CALL", getClass(), false);
 
         if (saveWithCustomSave) {
             try {
@@ -148,26 +141,26 @@ public class FileHandler {
 
                 getData().loadFromString(getLoaded());
             } catch (Exception exc) {
-
+                // IGNORED
             }
         }
     }
 
     public boolean folderExists(String path) {
         try {
-            for (File file : getCc().getDataFolder().listFiles()) {
+            for (File file : instance.getDataFolder().listFiles()) {
                 if (file.isDirectory() && file.getName().equalsIgnoreCase(path.replace("/", ""))) {
                     return true;
                 }
             }
         } catch (Exception exc) {
-
+            // IGNORED
         }
         return false;
     }
 
     public void save() {
-        cc.getDu().log("save() - CALL", getClass(), false);
+        instance.getDebugUtils().log("save() - CALL", getClass(), false);
         long curTime = System.currentTimeMillis();
 
         if (getData() == null || getDataFile() == null) {
@@ -186,16 +179,16 @@ public class FileHandler {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            getCc().getLogger().log(Level.SEVERE, ex, () -> "Could not save config to " + getDataFile());
+            instance.getLogger().log(Level.SEVERE, ex, () -> "Could not save config to " + getDataFile());
         }
-        cc.getDu().log("save() - Time to complete: " + (System.currentTimeMillis() - curTime), getClass());
+        instance.getDebugUtils().log("save() - Time to complete: " + (System.currentTimeMillis() - curTime), getClass());
         if (DebugUtils.OUTPUT_FILE_SAVE_TIME) {
             ChatUtils.log("Time to save " + name + ": " + (System.currentTimeMillis() - curTime));
         }
     }
 
     private void saveByByte() {
-        cc.getDu().log("saveByByte() - CALL", getClass(), false);
+        instance.getDebugUtils().log("saveByByte() - CALL", getClass(), false);
         ArrayList<String> bukkitLoad = new ArrayList<>();
         for (String s : getData().saveToString().split("\n")) {
             if (!isCommentLine(s)) {
@@ -272,7 +265,7 @@ public class FileHandler {
     }
 
     public FileConfiguration get() {
-        cc.getDu().log("get() - CALL", getClass(), false);
+        instance.getDebugUtils().log("get() - CALL", getClass(), false);
         if (getData() == null) {
             reload();
         }
@@ -283,7 +276,7 @@ public class FileHandler {
         loadFile();
 
         if (!dataFile.exists()) {
-            cc.saveResource(directory + name, false);
+            instance.saveResource(directory + name, false);
         }
 
         if (dataFile == null) {
@@ -319,16 +312,8 @@ public class FileHandler {
         this.loaded = loaded;
     }
 
-    public SpecializedCrates getCc() {
-        return cc;
-    }
-
-    public void setCc(SpecializedCrates cc) {
-        this.cc = cc;
-    }
-
     public FileConfiguration getData() {
-        cc.getDu().log("getData() - CALL", getClass(), false);
+        instance.getDebugUtils().log("getData() - CALL", getClass(), false);
 
         return data;
     }

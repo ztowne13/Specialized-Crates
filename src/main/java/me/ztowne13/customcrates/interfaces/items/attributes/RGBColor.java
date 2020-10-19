@@ -1,41 +1,41 @@
 package me.ztowne13.customcrates.interfaces.items.attributes;
 
 public class RGBColor {
-    int r;
-    int g;
-    int b;
+    private int red;
+    private int green;
+    private int blue;
 
     public RGBColor() {
         this(0, 0, 0);
     }
 
-    public RGBColor(int r, int g, int b) {
-        this.r = r;
-        this.b = b;
-        this.g = g;
+    public RGBColor(int red, int green, int blue) {
+        this.red = red;
+        this.blue = blue;
+        this.green = green;
     }
 
-    public int getR() {
-        return r;
+    public int getRed() {
+        return red;
     }
 
-    public void setR(int r) {
-        this.r = r;
+    public void setRed(int red) {
+        this.red = red;
     }
 
-    public int getG() {
-        return g;
+    public int getGreen() {
+        return green;
     }
 
-    public void setG(int g) {
-        this.g = g;
+    public void setGreen(int green) {
+        this.green = green;
     }
 
-    public int getB() {
-        return b;
+    public int getBlue() {
+        return blue;
     }
 
-    public void setB(int b) {
-        this.b = b;
+    public void setBlue(int blue) {
+        this.blue = blue;
     }
 }

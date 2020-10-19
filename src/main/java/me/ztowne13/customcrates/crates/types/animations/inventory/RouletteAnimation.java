@@ -21,10 +21,11 @@ import java.util.Random;
  * Created by ztowne13 on 6/30/16.
  */
 public class RouletteAnimation extends InventoryCrateAnimation {
-    protected double finalTickLength, tickIncrease;
-    protected int glassUpdateTicks = 2;
-    protected List<ItemBuilder> items;
-    Random r = new Random();
+    private final Random random = new Random();
+    private double finalTickLength;
+    private double tickIncrease;
+    private int glassUpdateTicks = 2;
+    private List<ItemBuilder> items;
 
     public RouletteAnimation(Crate crate) {
         super(crate, CrateAnimationType.INV_ROULETTE);
@@ -63,6 +64,8 @@ public class RouletteAnimation extends InventoryCrateAnimation {
             case ENDING:
                 rdh.setWaitingTicks(rdh.getWaitingTicks() + 1);
                 break;
+            default:
+                break;
         }
 
         return false;
@@ -71,21 +74,19 @@ public class RouletteAnimation extends InventoryCrateAnimation {
     @Override
     public void checkStateChange(AnimationDataHolder dataHolder, boolean update) {
         RouletteAnimationDataHolder rdh = (RouletteAnimationDataHolder) dataHolder;
+        AnimationDataHolder.State state = rdh.getCurrentState();
 
-        switch (rdh.getCurrentState()) {
-            case PLAYING:
-                if (rdh.getCurrentTicks() > getFinalTickLength()) {
-                    rdh.setCurrentState(AnimationDataHolder.State.ENDING);
-                }
-            case ENDING:
-                if (rdh.getWaitingTicks() == 50) {
-                    rdh.setCurrentState(CSGOAnimationDataHolder.State.COMPLETED);
-                }
+        if (state == AnimationDataHolder.State.PLAYING && rdh.getCurrentTicks() > getFinalTickLength()) {
+            rdh.setCurrentState(AnimationDataHolder.State.ENDING);
+        }
+
+        if (state == AnimationDataHolder.State.ENDING && rdh.getWaitingTicks() == 50) {
+            rdh.setCurrentState(AnimationDataHolder.State.COMPLETED);
         }
     }
 
     public void updateReward(RouletteAnimationDataHolder rdh) {
-        Reward r = getCrate().getSettings().getRewards().getRandomReward();
+        Reward r = getCrate().getSettings().getReward().getRandomReward();
         rdh.setLastShownReward(r);
     }
 
@@ -96,13 +97,13 @@ public class RouletteAnimation extends InventoryCrateAnimation {
     }
 
     @Override
-    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh) {
-
+    public void drawIdentifierBlocks(InventoryAnimationDataHolder inventoryAnimationDataHolder) {
+        // EMPTY
     }
 
     @Override
     public ItemBuilder getFiller() {
-        return getItems().get(r.nextInt(getItems().size()));
+        return getItems().get(random.nextInt(getItems().size()));
     }
 
     @Override
@@ -113,17 +114,17 @@ public class RouletteAnimation extends InventoryCrateAnimation {
         ArrayList<Reward> rewards = new ArrayList<>();
         rewards.add(rdh.getLastShownReward());
 
-        finishAnimation(player, rewards, false, null);
+        finishAnimation(player, rewards, null);
         getCrate().tick(rdh.getLocation(), CrateState.OPEN, player, rewards);
     }
 
     @Override
-    public void loadDataValues(StatusLogger sl) {
-        invName = fu.getFileDataLoader()
+    public void loadDataValues(StatusLogger statusLogger) {
+        invName = fileHandler.getFileDataLoader()
                 .loadString(prefix + "inv-name", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_ROULETTE_INVNAME_SUCCESS);
 
-        tickSound = fu.getFileDataLoader()
+        tickSound = fileHandler.getFileDataLoader()
                 .loadSound(prefix + "tick-sound", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_SOUND_SUCCESS,
                         StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_SOUND_FAILURE,
@@ -133,16 +134,16 @@ public class RouletteAnimation extends InventoryCrateAnimation {
                         StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_PITCH_SUCCESS,
                         StatusLoggerEvent.ANIMATION_ROULETTE_TICKSOUND_PITCH_INVALID);
 
-        finalTickLength = fu.getFileDataLoader().loadDouble(prefix + "final-crate-tick-length", 7, getStatusLogger(),
+        finalTickLength = fileHandler.getFileDataLoader().loadDouble(prefix + "final-crate-tick-length", 7, getStatusLogger(),
                 StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT, StatusLoggerEvent.ANIMATION_ROULETTE_FINALTICKLENGTH_SUCCESS,
                 StatusLoggerEvent.ANIMATION_ROULETTE_FINALTICKLENGTH_INVALID);
 
-        glassUpdateTicks = fu.getFileDataLoader()
+        glassUpdateTicks = fileHandler.getFileDataLoader()
                 .loadInt(prefix + "tile-update-ticks", 2, getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_ROULETTE_GLASSUPDATE_SUCCESS,
                         StatusLoggerEvent.ANIMATION_ROULETTE_GLASSUPDATE_INVALID);
 
-        tickIncrease = fu.getFileDataLoader()
+        tickIncrease = fileHandler.getFileDataLoader()
                 .loadDouble(prefix + "tick-speed-per-run", 0.4, getStatusLogger(),
                         StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_ROULETTE_TICKSPEED_SUCCESS,
@@ -152,20 +153,20 @@ public class RouletteAnimation extends InventoryCrateAnimation {
         setItems(new ArrayList<>());
 
         try {
-            for (String s : fu.get().getStringList("CrateType.Inventory.Roulette.random-blocks")) {
+            for (String s : fileHandler.get().getStringList("CrateType.Inventory.Roulette.random-blocks")) {
                 try {
                     Optional<XMaterial> optional = XMaterial.matchXMaterial(s);
                     if (!optional.isPresent()) {
                         StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_NONEXISTENT
-                                .log(getStatusLogger(), new String[]{s});
+                                .log(getStatusLogger(), s);
                         continue;
                     }
 
                     getItems().add(new ItemBuilder(optional.get(), 1).setDisplayName("&f"));
                     StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_SUCCESS
-                            .log(getStatusLogger(), new String[]{s});
+                            .log(getStatusLogger(), s);
                 } catch (Exception exc) {
-                    StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_ITEM_INVALID.log(getStatusLogger(), new String[]{s});
+                    StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_ITEM_INVALID.log(getStatusLogger(), s);
                 }
             }
         } catch (Exception exc) {

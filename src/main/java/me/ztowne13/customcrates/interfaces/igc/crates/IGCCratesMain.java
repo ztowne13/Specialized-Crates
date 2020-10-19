@@ -116,7 +116,7 @@ public class IGCCratesMain extends IGCMenuCrate {
         switch (slot) {
             case 0:
                 if (!crates.isMultiCrate() &&
-                        (cs.getRewards().getCrateRewards() == null || cs.getRewards().getCrateRewards().length == 0)) {
+                        (cs.getReward().getCrateRewards() == null || cs.getReward().getCrateRewards().length == 0)) {
                     getIb().setItem(slot,
                             new ItemBuilder(getIb().getInv().getItem(slot)).setDisplayName("&cPlease add some rewards")
                                     .setLore("&cbefore saving!"));

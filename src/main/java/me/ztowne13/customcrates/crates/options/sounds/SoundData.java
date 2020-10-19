@@ -6,9 +6,9 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class SoundData {
-    XSound sound;
-    int volume;
-    int pitch = 5;
+    private XSound sound;
+    private int volume;
+    private int pitch = 5;
 
     public SoundData(XSound sound) {
         this(sound, 5);
@@ -19,10 +19,10 @@ public class SoundData {
         this.volume = volume;
     }
 
-    public void playTo(Player p, Location l) {
+    public void playTo(Player player, Location location) {
         Sound parsedSound = getSound().parseSound();
         if (parsedSound != null) {
-            p.playSound(l, parsedSound, volume, pitch);
+            player.playSound(location, parsedSound, volume, pitch);
         }
     }
 

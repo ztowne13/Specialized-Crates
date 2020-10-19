@@ -76,7 +76,7 @@ public class IGCMultiCrateMain extends IGCMenuCrate {
                         newIb.setItem(i, oldIb.getInv().getItem(i));
                     }
                 }
-                crates.getSettings().getMultiCrateSettings().setIb(newIb);
+                crates.getSettings().getMultiCrateSettings().setInventoryBuilder(newIb);
                 ChatUtils.msgSuccess(getP(), "Set " + value + " to " + input);
                 return true;
             } else {

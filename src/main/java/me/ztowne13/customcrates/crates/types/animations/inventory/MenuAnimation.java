@@ -14,10 +14,10 @@ import org.bukkit.entity.Player;
 import java.util.Random;
 
 public class MenuAnimation extends InventoryCrateAnimation {
-    protected int minRewards;
-    protected int maxRewards;
-    protected int inventoryRows = 0;
-    Random r = new Random();
+    private final Random random = new Random();
+    private int minRewards;
+    private int maxRewards;
+    private int inventoryRows = 0;
 
     public MenuAnimation(Crate crate) {
         super(crate, CrateAnimationType.INV_MENU);
@@ -32,7 +32,8 @@ public class MenuAnimation extends InventoryCrateAnimation {
     }
 
     @Override
-    public void drawIdentifierBlocks(InventoryAnimationDataHolder cdh) {
+    public void drawIdentifierBlocks(InventoryAnimationDataHolder inventoryAnimationDataHolder) {
+        // IGNORED
     }
 
     @Override
@@ -61,22 +62,25 @@ public class MenuAnimation extends InventoryCrateAnimation {
                 if (dataHolder.getWaitingTicks() == 100) {
                     dataHolder.setCurrentState(AnimationDataHolder.State.COMPLETED);
                 }
+                break;
+            default:
+                break;
         }
     }
 
     public void updateAndDrawRewards(MenuAnimationDataHolder mdh) {
-        int random = 0;
+        int randomNumber = 0;
         if (getMaxRewards() > getMinRewards()) {
-            random = r.nextInt(getMaxRewards() - getMinRewards());
+            randomNumber = this.random.nextInt(getMaxRewards() - getMinRewards());
         }
 
-        int amountOfRewards = random + getMinRewards();
+        int amountOfRewards = randomNumber + getMinRewards();
 
         for (int i = 0; i < amountOfRewards; i++) {
             int slot = Utils.getRandomNumberExcluding((getInventoryRows() * 9) - 1, mdh.getUsedNumbers());
             mdh.getUsedNumbers().add(slot);
 
-            Reward reward = getCrate().getSettings().getRewards().getRandomReward();
+            Reward reward = getCrate().getSettings().getReward().getRandomReward();
             mdh.getDisplayedRewards().add(reward);
 
             mdh.getInventoryBuilder().setItem(slot, reward.getDisplayBuilder());
@@ -88,27 +92,27 @@ public class MenuAnimation extends InventoryCrateAnimation {
         MenuAnimationDataHolder mdh = (MenuAnimationDataHolder) dataHolder;
         Player player = mdh.getPlayer();
 
-        finishAnimation(player, mdh.getDisplayedRewards(), true, null);
+        finishAnimation(player, mdh.getDisplayedRewards(), null);
         getCrate().tick(mdh.getLocation(), CrateState.OPEN, player, mdh.getDisplayedRewards());
     }
 
     @Override
-    public void loadDataValues(StatusLogger sl) {
-        invName = fu.getFileDataLoader()
+    public void loadDataValues(StatusLogger statusLogger) {
+        invName = fileHandler.getFileDataLoader()
                 .loadString(prefix + "inv-name", getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_MENU_INVNAME_SUCCESS);
 
-        minRewards = fu.getFileDataLoader()
+        minRewards = fileHandler.getFileDataLoader()
                 .loadInt(prefix + "minimum-rewards", 1, getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_MENU_MINIMUM_REWARDS_SUCCESS,
                         StatusLoggerEvent.ANIMATION_MENU_MINIMUM_REWARDS_INVALID);
 
-        maxRewards = fu.getFileDataLoader()
+        maxRewards = fileHandler.getFileDataLoader()
                 .loadInt(prefix + "maximum-rewards", 4, getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_MENU_MAXIMUM_REWARDS_SUCCESS,
                         StatusLoggerEvent.ANIMATION_MENU_MAXIMUM_REWARDS_INVALID);
 
-        inventoryRows = fu.getFileDataLoader()
+        inventoryRows = fileHandler.getFileDataLoader()
                 .loadInt(prefix + "inventory-rows", 3, getStatusLogger(), StatusLoggerEvent.ANIMATION_VALUE_NONEXISTENT,
                         StatusLoggerEvent.ANIMATION_MENU_INVENTORY_ROWS_SUCCESS,
                         StatusLoggerEvent.ANIMATION_MENU_INVENTORY_ROWS_INVALID);

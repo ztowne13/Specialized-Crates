@@ -94,7 +94,7 @@ public class IGCCratePreviewEditor extends IGCMenuCrate {
             if (args[0].equalsIgnoreCase("set") && args[1].equalsIgnoreCase("reward")) {
                 Integer slot = Integer.parseInt(args[2]);
 
-                Reward reward = getCs().getRewards().getByName(input);
+                Reward reward = getCs().getReward().getByName(input);
 
                 int x = slot / 9;
                 int y = slot % 9;

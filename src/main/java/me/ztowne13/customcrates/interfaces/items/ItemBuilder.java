@@ -25,15 +25,15 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ItemBuilder implements EditableItem {
-    ItemStack stack;
+    private ItemStack stack;
 
-    boolean glowing = false;
-    RGBColor rgbColor;
-    List<CompressedEnchantment> enchantments = null;
-    List<CompressedPotionEffect> potionEffects = null;
-    List<String> nbtTags = null;
-    List<String> lore;
-    List<ItemFlag> flags = null;
+    private boolean glowing = false;
+    private RGBColor rgbColor;
+    private List<CompressedEnchantment> enchantments = null;
+    private List<CompressedPotionEffect> potionEffects = null;
+    private List<String> nbtTags = null;
+    private List<String> lore;
+    private List<ItemFlag> flags = null;
 
     public ItemBuilder(EditableItem builder) {
         glowing = builder.isGlowing();
@@ -50,8 +50,8 @@ public class ItemBuilder implements EditableItem {
         create(material, 1);
     }
 
-    public ItemBuilder(XMaterial m, int amnt) {
-        create(m, amnt);
+    public ItemBuilder(XMaterial material, int amount) {
+        create(material, amount);
     }
 
     public void reset() {
@@ -76,9 +76,7 @@ public class ItemBuilder implements EditableItem {
         } else {
             enchants = stack.getEnchantments();
         }
-        for (Enchantment enchantment : enchants.keySet()) {
-            addEnchantment(enchantment, enchants.get(enchantment));
-        }
+        enchants.forEach(this::addEnchantment);
 
         // Potion Effects
         if (stack.hasItemMeta() && getItemMeta() instanceof PotionMeta) {
@@ -103,7 +101,7 @@ public class ItemBuilder implements EditableItem {
                     toClearPot.getEffects().clear();
                     toClearPot.apply(stack);
                 } catch (Exception exc) {
-
+                    // IGNORED
                 }
 
                 if (pot != null && pot.getType() != null) {
@@ -148,11 +146,11 @@ public class ItemBuilder implements EditableItem {
         }
     }
 
-    private void create(XMaterial m, int amnt) {
-        stack = m.parseItem();
-        stack.setAmount(amnt);
-        if (m.name().endsWith("_SPAWN_EGG") && VersionUtils.Version.v1_12.isServerVersionOrEarlier())
-            addNBTTag("EntityTag " + m.name().replace("_SPAWN_EGG", ""));
+    private void create(XMaterial material, int amount) {
+        stack = material.parseItem();
+        stack.setAmount(amount);
+        if (material.name().endsWith("_SPAWN_EGG") && VersionUtils.Version.v1_12.isServerVersionOrEarlier())
+            addNBTTag("EntityTag " + material.name().replace("_SPAWN_EGG", ""));
     }
 
     public ItemMeta getItemMeta() {
@@ -162,8 +160,8 @@ public class ItemBuilder implements EditableItem {
         return getStack().getItemMeta();
     }
 
-    public void setItemMeta(ItemMeta im) {
-        getStack().setItemMeta(im);
+    public void setItemMeta(ItemMeta itemMeta) {
+        getStack().setItemMeta(itemMeta);
     }
 
     @Override
@@ -196,7 +194,7 @@ public class ItemBuilder implements EditableItem {
     public String getDisplayName(boolean useMaterialWhenNull) {
         if (useMaterialWhenNull) {
             return hasDisplayName() ? getItemMeta().getDisplayName() :
-                    WordUtils.capitalizeFully(getStack().getType().name().replaceAll("_", " "));
+                    WordUtils.capitalizeFully(getStack().getType().name().replace("_", " "));
         }
 
         return getItemMeta().getDisplayName();
@@ -339,19 +337,17 @@ public class ItemBuilder implements EditableItem {
 
     @Override
     public void setPlayerHeadName(String name) {
-        if (XMaterial.PLAYER_HEAD.isSimilar(getStack())) {
-            if (Character.isLetterOrDigit(name.charAt(0))) {
-                SkullMeta skullMeta = (SkullMeta) getItemMeta();
-                try {
-                    UUID uuid = UUID.fromString(name);
-                    OfflinePlayer op = Bukkit.getOfflinePlayer(uuid);
-                    skullMeta.setOwningPlayer(op);
-                } catch (Exception exc) {
-                    skullMeta.setOwner(name);
+        if (XMaterial.PLAYER_HEAD.isSimilar(getStack()) && Character.isLetterOrDigit(name.charAt(0))) {
+            SkullMeta skullMeta = (SkullMeta) getItemMeta();
+            try {
+                UUID uuid = UUID.fromString(name);
+                OfflinePlayer op = Bukkit.getOfflinePlayer(uuid);
+                skullMeta.setOwningPlayer(op);
+            } catch (Exception exc) {
+                skullMeta.setOwner(name);
 
-                }
-                setItemMeta(skullMeta);
             }
+            setItemMeta(skullMeta);
         }
     }
 
@@ -473,7 +469,7 @@ public class ItemBuilder implements EditableItem {
     public void reapplyColor() {
         if (isColorable() && getColor() != null) {
             LeatherArmorMeta meta = (LeatherArmorMeta) getItemMeta();
-            meta.setColor(Color.fromRGB(getColor().getR(), getColor().getG(), getColor().getB()));
+            meta.setColor(Color.fromRGB(getColor().getRed(), getColor().getGreen(), getColor().getBlue()));
             setItemMeta(meta);
         }
     }
@@ -482,8 +478,8 @@ public class ItemBuilder implements EditableItem {
     public RGBColor getColor() {
         if (isColorable()) {
             if (rgbColor == null) {
-                RGBColor rgbColor = new RGBColor(160, 101, 64);
-                setColor(rgbColor);
+                RGBColor newRGBColor = new RGBColor(160, 101, 64);
+                setColor(newRGBColor);
             }
             return rgbColor;
         }

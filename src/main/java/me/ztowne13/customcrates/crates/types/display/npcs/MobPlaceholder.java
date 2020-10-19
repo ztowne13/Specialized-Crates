@@ -3,7 +3,7 @@ package me.ztowne13.customcrates.crates.types.display.npcs;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.PlacedCrate;
 import me.ztowne13.customcrates.crates.types.display.DynamicCratePlaceholder;
-import me.ztowne13.customcrates.crates.types.display.EntityTypes;
+import me.ztowne13.customcrates.crates.types.display.EntityType;
 import me.ztowne13.customcrates.utils.LocationUtils;
 import me.ztowne13.customcrates.utils.NPCUtils;
 import net.citizensnpcs.api.CitizensAPI;
@@ -19,82 +19,82 @@ import java.util.Map;
  * Created by ztowne13 on 2/24/16.
  */
 public class MobPlaceholder extends DynamicCratePlaceholder {
-    static Map<PlacedCrate, NPC> mobs = new HashMap<>();
+    private static Map<PlacedCrate, NPC> npcMap = new HashMap<>();
 
-    EntityTypes ent;
+    private EntityType entityType;
 
-    public MobPlaceholder(SpecializedCrates cc) {
-        super(cc);
+    public MobPlaceholder(SpecializedCrates instance) {
+        super(instance);
     }
 
-    public static Map<PlacedCrate, NPC> getMobs() {
-        return mobs;
+    public static Map<PlacedCrate, NPC> getNpcMap() {
+        return npcMap;
     }
 
-    public static void setMobs(Map<PlacedCrate, NPC> mobs) {
-        MobPlaceholder.mobs = mobs;
+    public static void setNpcMap(Map<PlacedCrate, NPC> npcMap) {
+        MobPlaceholder.npcMap = npcMap;
     }
 
-    public void place(final PlacedCrate cm) {
-        Bukkit.getScheduler().runTaskLater(getCc(), () -> {
-            LocationUtils.removeDubBlocks(cm.getL());
+    public void place(final PlacedCrate placedCrate) {
+        Bukkit.getScheduler().runTaskLater(instance, () -> {
+            LocationUtils.removeDubBlocks(placedCrate.getLocation());
 
             NPCRegistry npcRegistry = CitizensAPI.getNPCRegistry();
             NPC npc;
 
-            if (NPCUtils.npcExists(cm)) {
-                npc = NPCUtils.getNpcForCrate(cm);
+            if (NPCUtils.npcExists(placedCrate)) {
+                npc = NPCUtils.getNpcForCrate(placedCrate);
 
-                if (npc.getEntity().getType().equals(getEnt().getEt())) {
-                    getMobs().put(cm, npc);
+                if (npc.getEntity().getType().equals(getEntityType().getBukkitEntityType())) {
+                    getNpcMap().put(placedCrate, npc);
                     return;
                 } else {
                     npc.destroy();
                 }
             }
 
-            npc = npcRegistry.createNPC(ent.getEt(), "Specialized Crate - Crate");
+            npc = npcRegistry.createNPC(entityType.getBukkitEntityType(), "Specialized Crate - Crate");
 
             //npc.addTrait(new IdentifierTrait());
 
             NPCUtils.applyDefaultInfo(npc);
 
-            npc.spawn(LocationUtils.getLocationCentered(cm.getL()).add(0, -1, 0));
+            npc.spawn(LocationUtils.getLocationCentered(placedCrate.getLocation()).add(0, -1, 0));
 
-            getMobs().put(cm, npc);
+            getNpcMap().put(placedCrate, npc);
         }, 20);
 
     }
 
-    public void remove(PlacedCrate cm) {
-        getMobs().get(cm).destroy();
+    public void remove(PlacedCrate placedCrate) {
+        getNpcMap().get(placedCrate).destroy();
     }
 
-    public boolean existsAt(Location l) {
+    public boolean existsAt(Location location) {
         return true;
     }
 
     public String getType() {
-        return ent == null ? "null" : ent.name();
+        return entityType == null ? "null" : entityType.name();
     }
 
     public void setType(Object obj) {
-        setEnt(EntityTypes.getEnum(obj.toString()));
+        setEntityType(EntityType.getEnum(obj.toString()));
     }
 
-    public void fixHologram(PlacedCrate cm) {
-        Location l = cm.getL().clone();
-        l.setY(l.getY() + getEnt().getHeight() - .5);
-        cm.getHologram().getDh().teleport(l);
+    public void fixHologram(PlacedCrate placedCrate) {
+        Location l = placedCrate.getLocation().clone();
+        l.setY(l.getY() + getEntityType().getHeight() - .5);
+        placedCrate.getHologram().getDynamicHologram().teleport(l);
 
     }
 
-    public EntityTypes getEnt() {
-        return ent;
+    public EntityType getEntityType() {
+        return entityType;
     }
 
-    public void setEnt(EntityTypes ent) {
-        this.ent = ent;
+    public void setEntityType(EntityType entityType) {
+        this.entityType = entityType;
     }
 
     public String toString() {

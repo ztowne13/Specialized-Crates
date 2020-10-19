@@ -3,7 +3,7 @@ package me.ztowne13.customcrates.interfaces.igc.fileconfigs.rewards;
 import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
-import me.ztowne13.customcrates.crates.options.CRewards;
+import me.ztowne13.customcrates.crates.options.CReward;
 import me.ztowne13.customcrates.crates.options.rewards.Reward;
 import me.ztowne13.customcrates.interfaces.InventoryBuilder;
 import me.ztowne13.customcrates.interfaces.InventoryUtils;
@@ -37,9 +37,9 @@ public class IGCMenuAddReward extends IGCMenu {
     public void openMenu() {
         int slots;
 
-        CRewards.loadAll(getCc(), getP());
+        CReward.loadAll(getCc(), getP());
 
-        HashMap<String, Reward> rewards = getUnusedRewards((CRewards.RewardSortType) getButtons()[0].getValue());
+        HashMap<String, Reward> rewards = getUnusedRewards((CReward.RewardSortType) getButtons()[0].getValue());
 
         slots = Math.min(rewards.size() - ((page - 1) * 28), 28);
 
@@ -97,7 +97,7 @@ public class IGCMenuAddReward extends IGCMenu {
             ib.setItem(2, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo back a page"));
         }
 
-        if ((CRewards.getAllRewards().size() / 28) + (CRewards.getAllRewards().size() % 28 == 0 ? 0 : 1) != page) {
+        if ((CReward.getAllRewards().size() / 28) + (CReward.getAllRewards().size() % 28 == 0 ? 0 : 1) != page) {
             ib.setItem(6, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo forward a page"));
         }
 
@@ -117,7 +117,7 @@ public class IGCMenuAddReward extends IGCMenu {
             up();
         } else if (getIb().getInv().getItem(slot) != null) {
             String rName = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
-            if (crate.getSettings().getRewards().addReward(rName)) {
+            if (crate.getSettings().getReward().addReward(rName)) {
                 ChatUtils.msgSuccess(getP(), "Added " + rName);
                 open();
             } else {
@@ -131,12 +131,12 @@ public class IGCMenuAddReward extends IGCMenu {
         return false;
     }
 
-    public HashMap<String, Reward> getUnusedRewards(CRewards.RewardSortType sortType) {
-        CRewards cRewards = crate.getSettings().getRewards();
+    public HashMap<String, Reward> getUnusedRewards(CReward.RewardSortType sortType) {
+        CReward cReward = crate.getSettings().getReward();
 
-        HashMap<String, Reward> rewards = (HashMap<String, Reward>) CRewards.getAllRewardsSorted(getCc(), sortType);
+        HashMap<String, Reward> rewards = (HashMap<String, Reward>) CReward.getAllRewardsSorted(getCc(), sortType);
 
-        for (Reward reward : cRewards.getCrateRewards()) {
+        for (Reward reward : cReward.getCrateRewards()) {
             rewards.remove(reward.getRewardName());
         }
 

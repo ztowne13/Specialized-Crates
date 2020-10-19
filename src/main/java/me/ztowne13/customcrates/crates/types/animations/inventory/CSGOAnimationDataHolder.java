@@ -8,12 +8,11 @@ import org.bukkit.entity.Player;
  * Created by ztowne13 on 3/6/16.
  */
 public class CSGOAnimationDataHolder extends InventoryAnimationDataHolder {
-    double currentTicks = 1.1;
-    double updates = 0;
-    int animatedCloseTicks = 0;
-    boolean updateAnimatedClose = false;
-
-    Reward[] displayedRewards = new Reward[7];
+    private final Reward[] displayedRewards = new Reward[7];
+    private double currentTicks = 1.1;
+    private double updates = 0;
+    private int animatedCloseTicks = 0;
+    private boolean updateAnimatedClose = false;
 
     public CSGOAnimationDataHolder(Player player, Location location, CSGOAnimation crateAnimation) {
         super(player, location, crateAnimation, 27);

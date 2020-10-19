@@ -28,9 +28,9 @@ public class Edit extends SubCommand {
             if (args.length == 1) {
                 TreeSet<Material> set = new TreeSet<>();
                 set.add(Material.AIR);
-                if (!(p.getTargetBlock(set, 20) == null)) {
+                if (p.getTargetBlock(set, 20) != null) {
                     Block b = p.getTargetBlock(set, 20);
-                    if (PlacedCrate.crateExistsAt(cc, b.getLocation())) {
+                    if (PlacedCrate.crateExistsAt(b.getLocation())) {
                         PlacedCrate pc = PlacedCrate.get(cc, b.getLocation());
                         new IGCCratesMain(cc, p, null, pc.getCrate()).open();
                         ChatUtils.msgSuccess(p, "Opening config menu for crate: " + pc.getCrate().getName());

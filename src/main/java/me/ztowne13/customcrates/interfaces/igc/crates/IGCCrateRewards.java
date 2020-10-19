@@ -32,11 +32,11 @@ public class IGCCrateRewards extends IGCMenuCrate {
 
         int slots = 0;
 
-        if (cs.getRewards().getCrateRewards() != null) {
-            if (cs.getRewards().getCrateRewards().length - ((page - 1) * 30) > 30) {
+        if (cs.getReward().getCrateRewards() != null) {
+            if (cs.getReward().getCrateRewards().length - ((page - 1) * 30) > 30) {
                 slots = 54;
             } else {
-                slots = InventoryUtils.getRowsFor(4, cs.getRewards().getCrateRewards().length - ((page - 1) * 30));
+                slots = InventoryUtils.getRowsFor(4, cs.getReward().getCrateRewards().length - ((page - 1) * 30));
             }
         }
         if (slots < 27) {
@@ -66,9 +66,9 @@ public class IGCCrateRewards extends IGCMenuCrate {
         int skipped = 0;
         int displayedRewards = 0;
 
-        if (cs.getRewards().getCrateRewards() != null && cs.getRewards().getCrateRewards().length != 0) {
+        if (cs.getReward().getCrateRewards() != null && cs.getReward().getCrateRewards().length != 0) {
             int i = 2;
-            for (Reward r : crates.getSettings().getRewards().getCrateRewards()) {
+            for (Reward r : crates.getSettings().getReward().getCrateRewards()) {
                 if (toSkip > skipped || displayedRewards >= 30) {
                     skipped++;
                     continue;
@@ -89,7 +89,7 @@ public class IGCCrateRewards extends IGCMenuCrate {
                 ib.setItem(9, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo up a page"));
             }
 
-            if ((cs.getRewards().getCrateRewards().length / 30) + 1 != page) {
+            if ((cs.getReward().getCrateRewards().length / 30) + 1 != page) {
                 ib.setItem(18, new ItemBuilder(XMaterial.ARROW).setDisplayName("&aGo down a page"));
             }
 
@@ -128,7 +128,7 @@ public class IGCCrateRewards extends IGCMenuCrate {
         } else if (getIb().getInv().getItem(slot) != null) {
             if (deleteMode) {
                 String rName = ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName());
-                cs.getRewards().removeReward(rName);
+                cs.getReward().removeReward(rName);
                 open();
             }
         }
@@ -137,7 +137,7 @@ public class IGCCrateRewards extends IGCMenuCrate {
     @Override
     public boolean handleInput(String value, String input) {
         if (value.equalsIgnoreCase("add reward")) {
-            if (cs.getRewards().addReward(input)) {
+            if (cs.getReward().addReward(input)) {
                 ChatUtils.msgSuccess(getP(), "Added the reward " + input);
                 return true;
             }

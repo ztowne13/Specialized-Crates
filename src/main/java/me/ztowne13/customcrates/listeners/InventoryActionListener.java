@@ -34,13 +34,13 @@ public class InventoryActionListener implements Listener {
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent e) {
-        cc.getDu().log("onInventoryDrag - CALL", getClass());
+        cc.getDebugUtils().log("onInventoryDrag - CALL", getClass());
 
         Player player = (Player) e.getWhoClicked();
         PlayerManager playerManager = PlayerManager.get(cc, player);
 
         if (playerManager.isInCrate() || playerManager.isInRewardMenu()) {
-            cc.getDu().log("onInventoryDrag - CANCELLED");
+            cc.getDebugUtils().log("onInventoryDrag - CANCELLED");
             e.setCancelled(true);
         } else if (playerManager.isInOpenMenu()) {
             if (e.getView().getTopInventory() != null) {
@@ -83,7 +83,7 @@ public class InventoryActionListener implements Listener {
                 }
                 // Handle discover animation click
                 else if (pm.isInCrate()) {
-                    pm.getOpenCrate().getSettings().getAnimation().handleClick(pm.getCurrentAnimation(), slot);
+                    pm.getOpenCrate().getSettings().getCrateAnimation().handleClick(pm.getCurrentAnimation(), slot);
                 }
             }
         }
@@ -183,7 +183,7 @@ public class InventoryActionListener implements Listener {
         if (e.getPlayer() instanceof Player) {
             Player player = (Player) e.getPlayer();
             PlayerManager playerManager = PlayerManager.get(cc, player);
-            PlayerDataManager dataManager = playerManager.getPdm();
+            PlayerDataManager dataManager = playerManager.getPlayerDataManager();
 
             if (playerManager.isInCratesClaimMenu()) {
                 preventDupeReopen(player, e.getInventory(), false);
@@ -287,10 +287,10 @@ public class InventoryActionListener implements Listener {
     }
 
     public boolean isntPlayerInventory(InventoryClickEvent e, PlayerManager pm) {
-        cc.getDu().log("onInventoryClick - In crate or reward menu (" + pm.isInCrate() + " : " + pm.isInRewardMenu() +
+        cc.getDebugUtils().log("onInventoryClick - In crate or reward menu (" + pm.isInCrate() + " : " + pm.isInRewardMenu() +
                 ")", getClass());
         if (!(e.getClickedInventory() == null || e.getWhoClicked().getInventory() == null)) {
-            cc.getDu().log("onInventoryClick - Clicked inventory and clicker aren't null.");
+            cc.getDebugUtils().log("onInventoryClick - Clicked inventory and clicker aren't null.");
             return !e.getClickedInventory().equals(e.getWhoClicked().getInventory());
         }
         return false;

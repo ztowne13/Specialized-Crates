@@ -8,10 +8,10 @@ import org.bukkit.entity.Player;
  * Created by ztown on 2/14/2017.
  */
 public abstract class ActionEffect {
-    SpecializedCrates cc;
+    protected final SpecializedCrates instance;
 
-    public ActionEffect(SpecializedCrates cc) {
-        this.cc = cc;
+    public ActionEffect(SpecializedCrates instance) {
+        this.instance = instance;
     }
 
     public abstract ActionBar getActionBarExecutor();

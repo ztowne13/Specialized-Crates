@@ -17,42 +17,41 @@ public class LeftClickAction extends CrateAction {
 
     @Override
     public boolean run() {
-        PlayerManager pm = PlayerManager.get(cc, player);
-        if (PlacedCrate.crateExistsAt(cc, location)) {
-            PlacedCrate cm = PlacedCrate.get(cc, location);
+        if (!PlacedCrate.crateExistsAt(location)) {
+            return false;
+        }
 
-            // Code for deleting crates using command or the shift + click shortcut
-            if (pm.isDeleteCrate() ||
-                    (player.isSneaking() && (player.hasPermission("customcrates.admin") ||
-                            player.hasPermission("specializedcrates.admin")) &&
-                            player.getGameMode().equals(GameMode.CREATIVE))) {
-                cm.delete();
-                pm.setDeleteCrate(false);
-                Messages.SUCCESS_DELETE
-                        .msgSpecified(cc, player, new String[]{"%crate%"}, new String[]{cm.getCrate().getName()});
-                return true;
-            }
+        PlayerManager playerManager = PlayerManager.get(instance, player);
+        PlacedCrate placedCrate = PlacedCrate.get(instance, location);
 
-            // Preventing crates from being broken and displaying reward menu if need be
-            if (CrateUtils.isCrateUsable(cm)) {
-                if (!pm.isDeleteCrate() && (Boolean) SettingsValue.REWARD_DISPLAY_ENABLED.getValue(cc)) {
-                    if (!cm.getCrate().isMultiCrate())
-                        cm.getCrate().getSettings().getDisplayer().openFor(player);
-                    return true;
-                }
-            } else // Crate is disabled
-            {
-                Messages.CRATE_DISABLED.msgSpecified(cc, player);
-                if (player.hasPermission("customcrates.admin") || player.hasPermission("specializedcrates.admin") ||
-                        player.isOp()) {
-                    Messages.CRATE_DISABLED_ADMIN.msgSpecified(cc, player);
-                }
-                return true;
-            }
-
+        // Code for deleting crates using command or the shift + click shortcut
+        if (playerManager.isDeleteCrate() ||
+                (player.isSneaking() && (player.hasPermission("customcrates.admin") ||
+                        player.hasPermission("specializedcrates.admin")) &&
+                        player.getGameMode().equals(GameMode.CREATIVE))) {
+            placedCrate.delete();
+            playerManager.setDeleteCrate(false);
+            Messages.SUCCESS_DELETE
+                    .msgSpecified(instance, player, new String[]{"%crate%"}, new String[]{placedCrate.getCrate().getName()});
             return true;
         }
 
-        return false;
+        // Preventing crates from being broken and displaying reward menu if need be
+        if (!CrateUtils.isCrateUsable(placedCrate)) {
+            Messages.CRATE_DISABLED.msgSpecified(instance, player);
+            if (player.hasPermission("customcrates.admin") || player.hasPermission("specializedcrates.admin") ||
+                    player.isOp()) {
+                Messages.CRATE_DISABLED_ADMIN.msgSpecified(instance, player);
+            }
+            return true;
+        }
+
+        if (!playerManager.isDeleteCrate() && SettingsValue.REWARD_DISPLAY_ENABLED.getValue(instance).equals(Boolean.TRUE)) {
+            if (!placedCrate.getCrate().isMultiCrate())
+                placedCrate.getCrate().getSettings().getDisplayer().openFor(player);
+            return true;
+        }
+
+        return true;
     }
 }

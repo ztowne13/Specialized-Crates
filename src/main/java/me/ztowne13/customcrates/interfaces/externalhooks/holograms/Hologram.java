@@ -4,12 +4,12 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Location;
 
 public abstract class Hologram {
-    private final SpecializedCrates customCrates;
+    protected final SpecializedCrates instance;
 
     protected Location location;
 
-    public Hologram(SpecializedCrates customCrates, Location location) {
-        this.customCrates = customCrates;
+    public Hologram(SpecializedCrates instance, Location location) {
+        this.instance = instance;
         this.location = location;
     }
 
@@ -18,10 +18,6 @@ public abstract class Hologram {
     public abstract void setLine(int i, String line);
 
     public abstract void delete();
-
-    public SpecializedCrates getCustomCrates() {
-        return customCrates;
-    }
 
     public Location getLocation() {
         return location;

@@ -5,6 +5,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 
 public class LocationUtils {
+    private LocationUtils() {
+        // EMPTY
+    }
+
     public static String locToString(Location l) {
         return l.getWorld().getName() + ";" + l.getBlockX() + ";" + l.getBlockY() + ";" + l.getBlockZ();
     }

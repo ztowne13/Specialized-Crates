@@ -21,25 +21,25 @@ import java.util.Map;
 public class CustomRewardDisplayer extends RewardDisplayer {
     public static final String PREFIX = "reward-display.custom-display.items";
 
-    HashMap<Integer, DisplayPage> pages = new HashMap<>();
-    HashMap<String, SaveableItemBuilder> items = new HashMap<>();
-    String nextPageItem;
-    String prevPageItem;
+    private final HashMap<Integer, DisplayPage> pages = new HashMap<>();
+    private final HashMap<String, SaveableItemBuilder> items = new HashMap<>();
+    private String nextPageItem;
+    private String prevPageItem;
 
     public CustomRewardDisplayer(Crate crate) {
         super(crate);
     }
 
     @Override
-    public void open(Player p) {
-        createInventory(p);
-        PlayerManager.get(getCrate().getCc(), p).setInRewardMenu(true);
+    public void open(Player player) {
+        createInventory(player);
+        PlayerManager.get(getCrate().getInstance(), player).setInRewardMenu(true);
     }
 
     @Override
-    public InventoryBuilder createInventory(Player p) {
+    public InventoryBuilder createInventory(Player player) {
         if (pages.containsKey(1))
-            return pages.get(1).buildInventoryBuilder(p);
+            return pages.get(1).buildInventoryBuilder(player);
         return null;
     }
 

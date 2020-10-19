@@ -27,7 +27,7 @@ public class IGCCrateFireworks extends IGCTierMenu {
     public void openMenu() {
 
         InventoryBuilder ib = createDefault(InventoryUtils.getRowsFor(4,
-                (crates.getSettings().getFireworks().getFireworks().containsKey(tier) ? cs.getFireworks().getFireworks().get(tier).size() : 0)) +
+                (crates.getSettings().getFirework().getFireworks().containsKey(tier) ? cs.getFirework().getFireworks().get(tier).size() : 0)) +
                 9, 18);
 
         ib.setItem(0, IGCDefaultItems.EXIT_BUTTON.getIb());
@@ -38,9 +38,9 @@ public class IGCCrateFireworks extends IGCTierMenu {
 
         updateDeleteModeItem();
 
-        if (cs.getFireworks().getFireworks().containsKey(tier)) {
+        if (cs.getFirework().getFireworks().containsKey(tier)) {
             int i = 2;
-            for (FireworkData fd : cs.getFireworks().getFireworks().get(tier)) {
+            for (FireworkData fd : cs.getFirework().getFireworks().get(tier)) {
                 if (i % 9 == 7) {
                     i += 4;
                 }
@@ -74,7 +74,7 @@ public class IGCCrateFireworks extends IGCTierMenu {
         } else if (getIb().getInv().getItem(slot) != null &&
                 XMaterial.FIREWORK_ROCKET.isSimilar(getIb().getInv().getItem(slot))) {
             if (deleteMode) {
-                cs.getFireworks().removeFireworks(tier, cs.getFireworks().getByItemStack(tier, getIb().getInv().getItem(slot)));
+                cs.getFirework().removeFireworks(tier, cs.getFirework().getByItemStack(tier, getIb().getInv().getItem(slot)));
                 open();
             }
         }
@@ -93,7 +93,7 @@ public class IGCCrateFireworks extends IGCTierMenu {
                         return false;
                     }
 
-                    cs.getFireworks().addFirework(tier, fd);
+                    cs.getFirework().addFirework(tier, fd);
                     ChatUtils.msgSuccess(getP(),
                             "Added the firework you are holding to the crate. Please type 'add' to add another firework you are holding or 'done' to return to the menu.");
                     return true;

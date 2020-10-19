@@ -16,13 +16,12 @@ public class Help extends SubCommand {
     public boolean run(SpecializedCrates cc, Commands cmds, String[] args) {
         if (args.length == 2) {
             if (Utils.isInt(args[1])) {
-
                 cmds.msgPage(Integer.parseInt(args[1]));
                 return true;
             } else {
                 cmds.msgError(args[1] + " is not a valid page number.");
+                return false;
             }
-            return true;
         }
         cmds.msgPage(1);
         return true;

@@ -8,10 +8,10 @@ import org.bukkit.Location;
  * Created by ztowne13 on 6/25/16.
  */
 public class CirclePA extends ParticleAnimationEffect {
-    int updatesPerSec;
+    private final int updatesPerSec;
 
-    public CirclePA(SpecializedCrates cc, ParticleData particleData) {
-        super(cc, particleData);
+    public CirclePA(SpecializedCrates instance, ParticleData particleData) {
+        super(instance, particleData);
         this.updatesPerSec = (int) particleData.getSpeed();
     }
 

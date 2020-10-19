@@ -1,5 +1,6 @@
 package me.ztowne13.customcrates.utils;
 
+import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.SettingsValue;
 import me.ztowne13.customcrates.SpecializedCrates;
 import org.bukkit.Bukkit;
@@ -14,51 +15,59 @@ import java.util.*;
 
 public class Utils {
 
-    public static int cachedParticleDistance = -1;
-    static Random r = new Random();
+    private static final Random RANDOM = new Random();
+    private static int cachedParticleDistance = -1;
 
-    public static boolean hasItemInHand(Player p) {
-        return p.getItemInHand() != null && !p.getItemInHand().getType().equals(Material.AIR);
+    private Utils() {
+        // EMPTY
+    }
+
+    public static void setCachedParticleDistance(int cachedParticleDistance) {
+        Utils.cachedParticleDistance = cachedParticleDistance;
+    }
+
+    public static boolean hasItemInHand(Player player) {
+        return player.getItemInHand() != null && !player.getItemInHand().getType().equals(Material.AIR);
     }
 
     public static boolean itemHasName(ItemStack stack) {
         return stack.hasItemMeta() && stack.getItemMeta().hasDisplayName();
     }
 
-    public static String getStringFromColor(Color c) {
-        if (c.asRGB() == Color.AQUA.asRGB()) {
+    public static String getStringFromColor(Color color) {
+        if (color.asRGB() == Color.AQUA.asRGB()) {
             return "AQUA";
-        } else if (c.asRGB() == Color.BLACK.asRGB()) {
+        } else if (color.asRGB() == Color.BLACK.asRGB()) {
             return "BLACK";
-        } else if (c.asRGB() == Color.BLUE.asRGB()) {
+        } else if (color.asRGB() == Color.BLUE.asRGB()) {
             return "BLUE";
-        } else if (c.asRGB() == Color.FUCHSIA.asRGB()) {
+        } else if (color.asRGB() == Color.FUCHSIA.asRGB()) {
             return "FUCHSIA";
-        } else if (c.asRGB() == Color.GRAY.asRGB()) {
+        } else if (color.asRGB() == Color.GRAY.asRGB()) {
             return "GRAY";
-        } else if (c.asRGB() == Color.GREEN.asRGB()) {
+        } else if (color.asRGB() == Color.GREEN.asRGB()) {
             return "GREEN";
-        } else if (c.asRGB() == Color.LIME.asRGB()) {
+        } else if (color.asRGB() == Color.LIME.asRGB()) {
             return "LIME";
-        } else if (c.asRGB() == Color.MAROON.asRGB()) {
+        } else if (color.asRGB() == Color.MAROON.asRGB()) {
             return "MAROON";
-        } else if (c.asRGB() == Color.NAVY.asRGB()) {
+        } else if (color.asRGB() == Color.NAVY.asRGB()) {
             return "NAVY";
-        } else if (c.asRGB() == Color.OLIVE.asRGB()) {
+        } else if (color.asRGB() == Color.OLIVE.asRGB()) {
             return "OLIVE";
-        } else if (c.asRGB() == Color.ORANGE.asRGB()) {
+        } else if (color.asRGB() == Color.ORANGE.asRGB()) {
             return "ORANGE";
-        } else if (c.asRGB() == Color.PURPLE.asRGB()) {
+        } else if (color.asRGB() == Color.PURPLE.asRGB()) {
             return "PURPLE";
-        } else if (c.asRGB() == Color.RED.asRGB()) {
+        } else if (color.asRGB() == Color.RED.asRGB()) {
             return "RED";
-        } else if (c.asRGB() == Color.SILVER.asRGB()) {
+        } else if (color.asRGB() == Color.SILVER.asRGB()) {
             return "SILVER";
-        } else if (c.asRGB() == Color.TEAL.asRGB()) {
+        } else if (color.asRGB() == Color.TEAL.asRGB()) {
             return "TEAL";
-        } else if (c.asRGB() == Color.WHITE.asRGB()) {
+        } else if (color.asRGB() == Color.WHITE.asRGB()) {
             return "WHITE";
-        } else if (c.asBGR() == Color.YELLOW.asBGR()) {
+        } else if (color.asBGR() == Color.YELLOW.asBGR()) {
             return "YELLOW";
         }
         return null;
@@ -103,10 +112,11 @@ public class Utils {
         return null;
     }
 
-    public static int getOpenInventorySlots(Player p) {
+    public static int getOpenInventorySlots(Player player) {
         int slots = 0;
         for (int i = 0; i < 36; i++) {
-            if (p.getInventory().getItem(i) == null || p.getInventory().getItem(i).getType().equals(Material.AIR)) {
+            ItemStack itemStack = player.getInventory().getItem(i);
+            if (itemStack == null || XMaterial.AIR.isSimilar(itemStack)) {
                 slots++;
             }
         }
@@ -198,7 +208,7 @@ public class Utils {
     }
 
     public static int getRandomNumberExcluding(int limit, List<Integer> exclude) {
-        int generated = r.nextInt(limit);
+        int generated = RANDOM.nextInt(limit);
         return exclude.contains(generated) ? getRandomNumberExcluding(limit, exclude) : generated;
     }
 
@@ -220,7 +230,7 @@ public class Utils {
         return count;
     }
 
-    public static String[] convertSecondToHHMMString(int secondTime) {
+    public static String[] convertSecondToHHMMString(long secondTime) {
         TimeZone tz = TimeZone.getTimeZone("UTC");
         SimpleDateFormat df = new SimpleDateFormat("dd:HH:mm:ss");
         df.setTimeZone(tz);

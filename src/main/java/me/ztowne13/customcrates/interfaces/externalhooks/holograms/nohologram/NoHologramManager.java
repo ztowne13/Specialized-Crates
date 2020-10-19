@@ -8,9 +8,9 @@ import org.bukkit.Location;
 public class NoHologramManager extends HologramManager {
     private final Hologram noHologram;
 
-    public NoHologramManager(SpecializedCrates customCrates) {
-        super(customCrates);
-        this.noHologram = new Hologram(getCustomCrates(), null) {
+    public NoHologramManager(SpecializedCrates instance) {
+        super(instance);
+        this.noHologram = new Hologram(instance, null) {
             @Override
             public void addLine(String line) {
                 // EMPTY

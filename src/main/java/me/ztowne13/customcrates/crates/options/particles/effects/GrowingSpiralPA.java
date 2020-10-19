@@ -8,16 +8,15 @@ import org.bukkit.Location;
  * Created by ztowne13 on 6/26/16.
  */
 public class GrowingSpiralPA extends ParticleAnimationEffect {
-    static int degrees = 540;
-    int updatesPerSec;
+    private final int updatesPerSec;
 
-    double toChangeHeight = 0;
-    double currentYOffset = 0;
-    double toChangeRadius = 0;
-    double currentRadius = 0;
+    private double toChangeHeight = 0;
+    private double currentYOffset = 0;
+    private double toChangeRadius = 0;
+    private double currentRadius = 0;
 
-    public GrowingSpiralPA(SpecializedCrates cc, ParticleData particleData) {
-        super(cc, particleData);
+    public GrowingSpiralPA(SpecializedCrates instance, ParticleData particleData) {
+        super(instance, particleData);
         this.updatesPerSec = (int) particleData.getSpeed();
     }
 
@@ -32,6 +31,7 @@ public class GrowingSpiralPA extends ParticleAnimationEffect {
         double yOffset = particleData.getRangeY();
         double height = particleData.getRangeZ();
 
+        int degrees = 540; // MODIFY THIS
         if (toChangeHeight == 0 && height != 0) {
             toChangeHeight = height / degrees;
         }

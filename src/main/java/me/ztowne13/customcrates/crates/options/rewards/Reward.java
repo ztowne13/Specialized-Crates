@@ -4,7 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import me.ztowne13.customcrates.Messages;
 import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.crates.Crate;
-import me.ztowne13.customcrates.crates.options.CRewards;
+import me.ztowne13.customcrates.crates.options.CReward;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.items.ItemBuilder;
 import me.ztowne13.customcrates.interfaces.items.SaveableItemBuilder;
@@ -23,46 +23,45 @@ import java.util.List;
 import java.util.Random;
 
 public class Reward implements Comparable<Reward> {
-    SpecializedCrates cc;
-    FileConfiguration fc;
-    Random r;
+    private final SpecializedCrates instance;
+    private final Random random;
+    private FileConfiguration fileConfiguration;
+    private CReward rewards;
+    private String rewardName;
+    private String rarity = "default";
+    private boolean giveDisplayItem;
+    private boolean giveDisplayItemLore = true;
+    private boolean giveDisplayItemName = true;
 
-    CRewards cr;
-    String rewardName;
-    String rarity = "default";
-    boolean giveDisplayItem;
-    boolean giveDisplayItemLore = true;
-    boolean giveDisplayItemName = true;
+    private ItemBuilder displayBuilder;
+    private SaveableItemBuilder saveBuilder;
 
-    ItemBuilder displayBuilder;
-    SaveableItemBuilder saveBuilder;
+    private double chance;
+    private List<String> commands;
+    private int totalUses;
+    private boolean needsMoreConfig;
 
-    double chance;
-    List<String> commands;
-    int totalUses;
-    boolean needsMoreConfig;
+    private String fallbackRewardName = "";
+    private String fallbackPermission = "";
 
-    String fallbackRewardName = "";
-    String fallbackPermission = "";
+    private boolean toLog;
 
-    boolean toLog;
-
-    public Reward(SpecializedCrates cc, String rewardName) {
+    public Reward(SpecializedCrates instance, String rewardName) {
         init();
         needsMoreConfig = true;
-        this.cc = cc;
+        this.instance = instance;
         setRewardName(rewardName);
         saveBuilder = new SaveableItemBuilder(XMaterial.STONE, 1);
         saveBuilder.setDisplayName(rewardName);
         displayBuilder = new ItemBuilder(saveBuilder);
         giveDisplayItem = true;
-        this.r = new Random();
+        this.random = new Random();
     }
 
-    public Reward(SpecializedCrates cc, CRewards cr, String rewardName) {
-        this(cc, rewardName);
+    public Reward(SpecializedCrates instance, CReward rewards, String rewardName) {
+        this(instance, rewardName);
         init();
-        this.cr = cr;
+        this.rewards = rewards;
         toLog = true;
         loadChance();
     }
@@ -84,7 +83,7 @@ public class Reward implements Comparable<Reward> {
         if (!fallbackRewardName.equalsIgnoreCase("") && !fallbackPermission.equalsIgnoreCase("") &&
                 p.hasPermission(fallbackPermission)) {
             if (!p.hasPermission("customcrates.admin") && !p.hasPermission("specializedcrates.admin")) {
-                Reward fallbackReward = CRewards.getAllRewards().get(fallbackRewardName);
+                Reward fallbackReward = CReward.getAllRewards().get(fallbackRewardName);
                 if (fallbackReward == null) {
                     ChatUtils.msgError(p, "The reward " + rewardName + " has the fallback reward " + fallbackRewardName +
                             ", but that reward does not exist. This message is not configurable. If you would like there to be no reward" +
@@ -92,7 +91,7 @@ public class Reward implements Comparable<Reward> {
                             " the player any items. A reward must have a fallback reward IF it has a fallback permission.");
                 } else {
                     fallbackReward.giveRewardToPlayer(p);
-                    Messages.GIVEN_FALLBACK_REWARD.msgSpecified(cc, p, new String[]{"%reward%", "%fallbackreward%"},
+                    Messages.GIVEN_FALLBACK_REWARD.msgSpecified(instance, p, new String[]{"%reward%", "%fallbackreward%"},
                             new String[]{getDisplayBuilder().getDisplayName(true),
                                     fallbackReward.getDisplayBuilder().getDisplayName(true)});
                 }
@@ -175,7 +174,7 @@ public class Reward implements Comparable<Reward> {
                         second = first;
                         first = temp;
                     }
-                    int random = r.nextInt(second - first) + first;
+                    int random = this.random.nextInt(second - first) + first;
                     String toReplace = "%amount" + firstNum + "-" + secondNum + "%";
                     cmd = cmd.replaceAll(toReplace, random + "");
                 } catch (Exception exc) {
@@ -189,7 +188,7 @@ public class Reward implements Comparable<Reward> {
     }
 
     public void writeToFile() {
-        FileHandler fu = getCc().getRewardsFile();
+        FileHandler fu = getInstance().getRewardsFile();
         FileConfiguration fc = fu.get();
         fc.set(getPath("commands"), getCommands());
         fc.set(getPath("chance"), getChance());
@@ -201,7 +200,7 @@ public class Reward implements Comparable<Reward> {
         fc.set(getPath("fallback-reward.reward-name"), fallbackRewardName);
         fc.set(getPath("fallback-reward.permission"), fallbackPermission);
 
-        saveBuilder.saveItem(getCc().getRewardsFile(), getPath("display-item"), false);
+        saveBuilder.saveItem(getInstance().getRewardsFile(), getPath("display-item"), false);
 
         fu.save();
     }
@@ -211,7 +210,7 @@ public class Reward implements Comparable<Reward> {
             ArrayList<String> cratesThatUse = new ArrayList<>();
             for (Crate crate : Crate.getLoadedCrates().values()) {
                 if (!crate.isMultiCrate() && crate.isLoadedProperly()) {
-                    for (Reward r : crate.getSettings().getRewards().getCrateRewards()) {
+                    for (Reward r : crate.getSettings().getReward().getCrateRewards()) {
                         if (r.equals(this)) {
                             cratesThatUse.add(crate.getName());
                             break;
@@ -224,10 +223,10 @@ public class Reward implements Comparable<Reward> {
         } else {
             for (Crate crate : Crate.getLoadedCrates().values()) {
                 if (!crate.isMultiCrate() && crate.isLoadedProperly()) {
-                    for (Reward r : crate.getSettings().getRewards().getCrateRewards()) {
+                    for (Reward r : crate.getSettings().getReward().getCrateRewards()) {
                         if (r.equals(this)) {
-                            crate.getSettings().getRewards().removeReward(r.getRewardName());
-                            crate.getSettings().getRewards().saveToFile();
+                            crate.getSettings().getReward().removeReward(r.getRewardName());
+                            crate.getSettings().getReward().saveToFile();
                             crate.getSettings().getFileHandler().save();
                             break;
                         }
@@ -235,9 +234,9 @@ public class Reward implements Comparable<Reward> {
                 }
             }
 
-            getCc().getRewardsFile().get().set(getRewardName(), null);
-            getCc().getRewardsFile().save();
-            CRewards.getAllRewards().remove(getRewardName());
+            getInstance().getRewardsFile().get().set(getRewardName(), null);
+            getInstance().getRewardsFile().save();
+            CReward.getAllRewards().remove(getRewardName());
         }
         return "";
     }
@@ -252,7 +251,7 @@ public class Reward implements Comparable<Reward> {
 
     public String getFormattedChance() {
         if (toLog) {
-            double ch = getChance() / cr.getTotalOdds();
+            double ch = getChance() / rewards.getTotalOdds();
             ch = ch * 100;
 
             // If a chance is really small, this is so it doesn't show as 0.
@@ -285,39 +284,39 @@ public class Reward implements Comparable<Reward> {
 
     public void loadChance() {
         try {
-            setChance(getCc().getRewardsFile().get().getDouble(getPath("chance")));
+            setChance(getInstance().getRewardsFile().get().getDouble(getPath("chance")));
         } catch (Exception exc) {
             needsMoreConfig = true;
             if (toLog) {
                 setChance(-1);
-                StatusLoggerEvent.REWARD_CHANCE_NONEXISTENT.log(getCr().getCrate(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_CHANCE_NONEXISTENT.log(getRewards().getCrate(), this.toString());
             }
         }
     }
 
     @Deprecated
     public boolean loadFromConfig() {
-        setFc(getCc().getRewardsFile().get());
+        setFileConfiguration(getInstance().getRewardsFile().get());
         boolean success = true;
         needsMoreConfig = false;
 
-        if (fc.contains(getPath("item"))) {
+        if (fileConfiguration.contains(getPath("item"))) {
             ChatUtils.log("Converting " + getRewardName() + " to new reward format.");
             RewardConverter rewardConverter = new RewardConverter(this);
             rewardConverter.loadFromConfig();
             rewardConverter.saveAllAsNull();
 
-            saveBuilder.saveItem(cc.getRewardsFile(), getPath("display-item"), false);
-            cc.getRewardsFile().save();
+            saveBuilder.saveItem(instance.getRewardsFile(), getPath("display-item"), false);
+            instance.getRewardsFile().save();
         } else {
             if (toLog)
-                saveBuilder.loadItem(getCc().getRewardsFile(), getRewardName() + ".display-item",
-                        getCr().getCrate().getSettings().getStatusLogger(),
+                saveBuilder.loadItem(getInstance().getRewardsFile(), getRewardName() + ".display-item",
+                        getRewards().getCrate().getSettings().getStatusLogger(),
                         StatusLoggerEvent.REWARD_ITEM_FAILURE, StatusLoggerEvent.REWARD_ENCHANT_INVALID,
                         StatusLoggerEvent.REWARD_POTION_INVALID, StatusLoggerEvent.REWARD_GLOW_FAILURE,
                         StatusLoggerEvent.REWARD_AMOUNT_INVALID, StatusLoggerEvent.REWARD_FLAG_FAILURE);
             else
-                saveBuilder.loadItem(getCc().getRewardsFile(), getRewardName() + ".display-item");
+                saveBuilder.loadItem(getInstance().getRewardsFile(), getRewardName() + ".display-item");
         }
 
         if (!loadNonItemValsFromConfig())
@@ -341,57 +340,57 @@ public class Reward implements Comparable<Reward> {
     public boolean loadNonItemValsFromConfig() {
         boolean success = true;
         try {
-            setRarity(getFc().getString(getPath("rarity")));
+            setRarity(getFileConfiguration().getString(getPath("rarity")));
         } catch (Exception exc) {
             //needsMoreConfig = true;
             if (toLog) {
-                StatusLoggerEvent.REWARD_RARITY_NONEXISTENT.log(getCr().getCrate(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_RARITY_NONEXISTENT.log(getRewards().getCrate(), this.toString());
                 success = false;
             }
         }
 
         try {
-            setGiveDisplayItem(getFc().getBoolean(getPath("give-display-item.value")));
+            setGiveDisplayItem(getFileConfiguration().getBoolean(getPath("give-display-item.value")));
         } catch (Exception exc) {
             setGiveDisplayItem(false);
         }
 
         try {
-            setGiveDisplayItemLore(getFc().getBoolean(getPath("give-display-item.with-lore")));
+            setGiveDisplayItemLore(getFileConfiguration().getBoolean(getPath("give-display-item.with-lore")));
         } catch (Exception exc) {
             setGiveDisplayItemLore(true);
         }
 
         try {
-            if (getFc().contains(getPath("give-display-item.with-name")))
-                setGiveDisplayItemName(getFc().getBoolean(getPath("give-display-item.with-name")));
+            if (getFileConfiguration().contains(getPath("give-display-item.with-name")))
+                setGiveDisplayItemName(getFileConfiguration().getBoolean(getPath("give-display-item.with-name")));
         } catch (Exception exc) {
             setGiveDisplayItemName(true);
         }
 
         try {
-            setCommands(getFc().getStringList(getPath("commands")));
+            setCommands(getFileConfiguration().getStringList(getPath("commands")));
         } catch (Exception exc) {
             if (toLog) {
-                StatusLoggerEvent.REWARD_COMMAND_INVALID.log(getCr().getCrate(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_COMMAND_INVALID.log(getRewards().getCrate(), this.toString());
                 success = false;
             }
         }
 
-        if (getFc().contains(getPath("fallback-reward.reward-name"))) {
-            fallbackRewardName = getFc().getString(getPath("fallback-reward.reward-name"));
+        if (getFileConfiguration().contains(getPath("fallback-reward.reward-name"))) {
+            fallbackRewardName = getFileConfiguration().getString(getPath("fallback-reward.reward-name"));
         } else {
             fallbackRewardName = "";
         }
 
-        if (getFc().contains(getPath("fallback-reward.permission"))) {
-            fallbackPermission = getFc().getString(getPath("fallback-reward.permission"));
+        if (getFileConfiguration().contains(getPath("fallback-reward.permission"))) {
+            fallbackPermission = getFileConfiguration().getString(getPath("fallback-reward.permission"));
         } else {
             fallbackPermission = "";
         }
 
         try {
-            setTotalUses(getFc().getInt(getPath("receive-limit")));
+            setTotalUses(getFileConfiguration().getInt(getPath("receive-limit")));
         } catch (Exception exc) {
             setTotalUses(-1);
         }
@@ -473,12 +472,8 @@ public class Reward implements Comparable<Reward> {
         this.chance = chance;
     }
 
-    public SpecializedCrates getCc() {
-        return cc;
-    }
-
-    public void setCc(SpecializedCrates cc) {
-        this.cc = cc;
+    public SpecializedCrates getInstance() {
+        return instance;
     }
 
     public int getTotalUses() {
@@ -489,20 +484,20 @@ public class Reward implements Comparable<Reward> {
         this.totalUses = totalUses;
     }
 
-    public FileConfiguration getFc() {
-        return fc;
+    public FileConfiguration getFileConfiguration() {
+        return fileConfiguration;
     }
 
-    public void setFc(FileConfiguration fc) {
-        this.fc = fc;
+    public void setFileConfiguration(FileConfiguration fileConfiguration) {
+        this.fileConfiguration = fileConfiguration;
     }
 
-    public CRewards getCr() {
-        return cr;
+    public CReward getRewards() {
+        return rewards;
     }
 
-    public void setCr(CRewards cr) {
-        this.cr = cr;
+    public void setRewards(CReward rewards) {
+        this.rewards = rewards;
     }
 
     public boolean isNeedsMoreConfig() {
@@ -564,5 +559,9 @@ public class Reward implements Comparable<Reward> {
 
     public void setFallbackPermission(String fallbackPermission) {
         this.fallbackPermission = fallbackPermission;
+    }
+
+    public boolean isToLog() {
+        return toLog;
     }
 }

@@ -25,48 +25,48 @@ import java.util.ArrayList;
 
 public abstract class CrateAction {
 
-    SpecializedCrates cc;
-    Player player;
-    Location location;
+    protected final SpecializedCrates instance;
+    protected final Player player;
+    protected final Location location;
 
-    public CrateAction(SpecializedCrates cc, Player player, Location location) {
-        this.cc = cc;
+    public CrateAction(SpecializedCrates instance, Player player, Location location) {
+        this.instance = instance;
         this.player = player;
         this.location = location;
     }
 
-    public static boolean isInventoryTooEmpty(SpecializedCrates cc, Player p) {
-        return Utils.getOpenInventorySlots(p) >= ((Integer) SettingsValue.REQUIRED_SLOTS.getValue(cc));
+    public static boolean isInventoryTooEmpty(SpecializedCrates instance, Player player) {
+        return Utils.getOpenInventorySlots(player) >= ((Integer) SettingsValue.REQUIRED_SLOTS.getValue(instance));
     }
 
     public abstract boolean run();
 
-    public boolean useCrate(PlayerManager pm, PlacedCrate cm, boolean skipAnimation) {
-        return useCrate(pm, cm, skipAnimation, false);
+    public boolean useCrate(PlayerManager playerManager, PlacedCrate placedCrate, boolean skipAnimation) {
+        return useCrate(playerManager, placedCrate, skipAnimation, false);
     }
 
-    public boolean useCrateHelper(PlayerManager pm, PlacedCrate cm, boolean skipAnimation, boolean hasSkipped, int opened) {
-        if (opened < 300 && !useCrate(pm, cm, true, true, opened)) {
-            CrateOpenEvent crateOpenEvent = new CrateOpenEvent(player, null, cm.getCrate(), opened);
+    public boolean useCrateHelper(PlayerManager playerManager, PlacedCrate placedCrate, int opened) {
+        if (opened < 300 && !useCrate(playerManager, placedCrate, true, true, opened)) {
+            CrateOpenEvent crateOpenEvent = new CrateOpenEvent(player, null, placedCrate.getCrate(), opened);
             Bukkit.getPluginManager().callEvent(crateOpenEvent);
             return false;
         }
         return true;
     }
 
-    public boolean useCrate(PlayerManager pm, PlacedCrate cm, boolean skipAnimation, boolean hasSkipped) {
-        return useCrate(pm, cm, skipAnimation, hasSkipped, 0);
+    public boolean useCrate(PlayerManager playerManager, PlacedCrate placedCrate, boolean skipAnimation, boolean hasSkipped) {
+        return useCrate(playerManager, placedCrate, skipAnimation, hasSkipped, 0);
     }
 
-    public boolean useCrate(PlayerManager pm, PlacedCrate cm, boolean skipAnimation, boolean hasSkipped, int opened) {
-        Player player = pm.getP();
-        PlayerDataManager pdm = pm.getPdm();
-        Crate crate = cm.getCrate();
-        CrateSettings cs = crate.getSettings();
-        Location location = cm.getL();
+    public boolean useCrate(PlayerManager playerManager, PlacedCrate placedCrate, boolean skipAnimation, boolean hasSkipped, int opened) {
+        Player p = playerManager.getPlayer();
+        PlayerDataManager playerDataManager = playerManager.getPlayerDataManager();
+        Crate crate = placedCrate.getCrate();
+        CrateSettings crateSettings = crate.getSettings();
+        Location placedCrateLocation = placedCrate.getLocation();
 
         if (crate.isNeedsReload()) {
-            ChatUtils.msgInfo(player,
+            ChatUtils.msgInfo(p,
                     "Hey! It looks like you just created a new crate." +
                             " Whenever you edit something in the in-game config," +
                             " make sure to click the green '&asave&e' and pink '&dreload&e' button before testing it out!" +
@@ -75,93 +75,93 @@ public abstract class CrateAction {
             return true;
         }
 
-        // Player has correct permissions
-        if (player.hasPermission(cs.getPermission()) || cs.getPermission().equalsIgnoreCase("no permission")) {
-            // Player has enough inventory spaces (as defined by value in Config.YML)
-            if (isInventoryTooEmpty(cc, player)) {
-                // There is no cooldown or the previous cooldown is over
-                CrateCooldownEvent cce = pdm.getCrateCooldownEventByCrates(crate);
-                if (cce == null || cce.isCooldownOverAsBoolean()) {
-                    pm.setLastOpenedPlacedCrate(cm);
+        // Check permissions
+        if (!p.hasPermission(crateSettings.getPermission()) && !crateSettings.getPermission().equalsIgnoreCase("no permission")) {
+            Messages.NO_PERMISSION_CRATE.msgSpecified(instance, p);
+            crate.getSettings().getCrateAnimation().playFailToOpen(p, false, true);
+            return false;
+        }
 
-                    // SHIFT-CLICK OPEN
-                    // If the animation needs to be skipped (shift click). Also required to be a static crate
-                    if (skipAnimation && cs.getObtainType().equals(ObtainType.STATIC)) {
-                        if (pm.isConfirming() || !((Boolean) SettingsValue.SHIFT_CLICK_CONFIRM.getValue(cc))) {
-                            if (cs.getAnimation().canExecuteFor(player, !crate.isMultiCrate())) {
-                                if (cc.getEconomyHandler().handleCheck(player, crate.getSettings().getCost(), true)) {
-                                    Reward reward = cs.getRewards().getRandomReward();
-                                    ArrayList<Reward> rewards = new ArrayList<>();
-                                    rewards.add(reward);
-                                    reward.giveRewardToPlayer(player);
+        // Check inventory spaces (defined by value in Config.YML)
+        if (!isInventoryTooEmpty(instance, p)) {
+            Messages.INVENTORY_TOO_FULL.msgSpecified(instance, p);
+            crate.getSettings().getCrateAnimation().playFailToOpen(p, false, true);
+            return false;
+        }
+        // Check cooldown
+        CrateCooldownEvent cce = playerDataManager.getCrateCooldownEventByCrates(crate);
+        if (cce != null && !cce.isCooldownOverAsBoolean()) {
+            cce.playFailure(playerDataManager);
+            return false;
+        }
 
-                                    cs.getKeyItemHandler().takeKeyFromPlayer(player, false);
-                                    new HistoryEvent(Utils.currentTimeParsed(), crate, rewards, true)
-                                            .addTo(PlayerManager.get(cc, player).getPdm());
-                                    new CrateCooldownEvent(crate, System.currentTimeMillis(), true).addTo(pdm);
+        playerManager.setLastOpenedPlacedCrate(placedCrate);
 
-                                    useCrateHelper(pm, cm, true, true, opened + 1);
-
-                                    if (!hasSkipped) {
-                                        crate.tick(location, cm, CrateState.OPEN, player, new ArrayList<Reward>());
-                                        pm.setConfirming(false);
-                                    }
-
-                                    return true;
-                                } else
-                                    return false;
-                            }
-
-                            if (!hasSkipped)
-                                crate.getSettings().getAnimation().playFailToOpen(player, true, true);
-
-                            return false;
-                        } else {
-                            pm.setConfirming(true);
-                            Messages.CONFIRM_OPEN_ALL.msgSpecified(cc, player, new String[]{"%timeout%"}, new String[]{
-                                    SettingsValue.CONFIRM_TIMEOUT.getValue(cc) + ""});
-                        }
-                        return false;
-                    }
-                    // NORMAL OPEN
-                    else {
-                        if (pm.isConfirming() || !((Boolean) SettingsValue.CONFIRM_OPEN.getValue(cc))) {
-                            if (cc.getEconomyHandler().handleCheck(player, cs.getCost(), true)) {
-                                if (cs.getAnimation().startAnimation(player, location, !crate.isMultiCrate(), false)) {
-                                    // Crate isn't static but it ALSO isn't special handling (i.e. the BLOCK_ CrateTypes)
-                                    if (!cs.getObtainType().equals(ObtainType.STATIC) && !cs.getCrateType().isSpecialDynamicHandling()) {
-                                        cm.delete();
-                                        location.getBlock().setType(Material.AIR);
-                                    }
-                                    new CrateCooldownEvent(crate, System.currentTimeMillis(), true).addTo(pdm);
-                                    return !skipAnimation;
-                                }
-                                cc.getEconomyHandler().failSoReturn(player, cs.getCost());
-                                pm.setLastOpenedPlacedCrate(null);
-                                return false;
-                            } else {
-                                cs.getAnimation().playFailToOpen(player, false, true);
-                                return false;
-                            }
-                        } else {
-                            pm.setConfirming(true);
-                            Messages.CONFIRM_OPEN.msgSpecified(cc, player, new String[]{"%timeout%"}, new String[]{
-                                    SettingsValue.CONFIRM_TIMEOUT.getValue(cc) + ""});
-                        }
-                        return false;
-                    }
-                }
-                cce.playFailure(pdm);
+        // SHIFT-CLICK OPEN
+        // If the animation needs to be skipped (shift click). Also required to be a static crate
+        if (skipAnimation && crateSettings.getObtainType().equals(ObtainType.STATIC)) {
+            if (!playerManager.isConfirming() && SettingsValue.SHIFT_CLICK_CONFIRM.getValue(instance).equals(Boolean.TRUE)) {
+                playerManager.setConfirming(true);
+                Messages.CONFIRM_OPEN_ALL.msgSpecified(instance, p, new String[]{"%timeout%"}, new String[]{
+                        SettingsValue.CONFIRM_TIMEOUT.getValue(instance) + ""});
                 return false;
             }
-            Messages.INVENTORY_TOO_FULL.msgSpecified(cc, player);
-            crate.getSettings().getAnimation().playFailToOpen(player, false, true);
-            return false;
-        } else {
-            Messages.NO_PERMISSION_CRATE.msgSpecified(cc, player);
-            crate.getSettings().getAnimation().playFailToOpen(player, false, true);
+
+            if (!crateSettings.getCrateAnimation().canExecuteFor(p, !crate.isMultiCrate())) {
+                if (!hasSkipped)
+                    crate.getSettings().getCrateAnimation().playFailToOpen(p, true, true);
+                return false;
+            }
+
+            if (!instance.getEconomyHandler().handleCheck(p, crate.getSettings().getCost(), true)) {
+                return false;
+            }
+
+            Reward reward = crateSettings.getReward().getRandomReward();
+            ArrayList<Reward> rewards = new ArrayList<>();
+            rewards.add(reward);
+            reward.giveRewardToPlayer(p);
+
+            crateSettings.getKeyItemHandler().takeKeyFromPlayer(p, false);
+            new HistoryEvent(Utils.currentTimeParsed(), crate, rewards, true)
+                    .addTo(PlayerManager.get(instance, p).getPlayerDataManager());
+            new CrateCooldownEvent(crate, System.currentTimeMillis(), true).addTo(playerDataManager);
+
+            useCrateHelper(playerManager, placedCrate, opened + 1);
+
+            if (!hasSkipped) {
+                crate.tick(placedCrateLocation, placedCrate, CrateState.OPEN, p, new ArrayList<>());
+                playerManager.setConfirming(false);
+            }
+            return true;
         }
-        return false;
+
+        // NORMAL OPEN
+        if (!playerManager.isConfirming() && SettingsValue.CONFIRM_OPEN.getValue(instance).equals(Boolean.TRUE)) {
+            playerManager.setConfirming(true);
+            Messages.CONFIRM_OPEN.msgSpecified(instance, p, new String[]{"%timeout%"}, new String[]{
+                    SettingsValue.CONFIRM_TIMEOUT.getValue(instance) + ""});
+            return false;
+        }
+
+        if (!instance.getEconomyHandler().handleCheck(p, crateSettings.getCost(), true)) {
+            crateSettings.getCrateAnimation().playFailToOpen(p, false, true);
+            return false;
+        }
+
+        if (!crateSettings.getCrateAnimation().startAnimation(p, placedCrateLocation, !crate.isMultiCrate(), false)) {
+            instance.getEconomyHandler().failSoReturn(p, crateSettings.getCost());
+            playerManager.setLastOpenedPlacedCrate(null);
+            return false;
+        }
+
+        // Crate isn't static but it ALSO isn't special handling (i.e. the BLOCK_ CrateTypes)
+        if (!crateSettings.getObtainType().equals(ObtainType.STATIC) && !crateSettings.getCrateType().isSpecialDynamicHandling()) {
+            placedCrate.delete();
+            placedCrateLocation.getBlock().setType(Material.AIR);
+        }
+        new CrateCooldownEvent(crate, System.currentTimeMillis(), true).addTo(playerDataManager);
+        return !skipAnimation;
     }
 
     public boolean updateCooldown(PlayerManager pm) {
@@ -172,7 +172,7 @@ public abstract class CrateAction {
         long diff = ct - pm.getCmdCooldown();
 
         if (diff < 1000 && !pm.getLastCooldown().equalsIgnoreCase("crate")) {
-            Messages.WAIT_ONE_SECOND.msgSpecified(cc, pm.getP());
+            Messages.WAIT_ONE_SECOND.msgSpecified(instance, pm.getPlayer());
 
             b = true;
         }
@@ -182,7 +182,7 @@ public abstract class CrateAction {
     }
 
     public PlacedCrate createCrateAt(Crate crates, Location l) {
-        PlacedCrate cm = PlacedCrate.get(cc, l);
+        PlacedCrate cm = PlacedCrate.get(instance, l);
         cm.setup(crates, true);
 
         return cm;

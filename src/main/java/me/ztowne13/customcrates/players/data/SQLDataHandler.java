@@ -1,6 +1,5 @@
 package me.ztowne13.customcrates.players.data;
 
-import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
 import me.ztowne13.customcrates.interfaces.sql.SQL;
 import me.ztowne13.customcrates.interfaces.sql.SQLQueryThread;
@@ -9,31 +8,34 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class SQLDataHandler extends DataHandler {
-    public static String table = "scPlayerStats";
-    public static SQL sql;
-    public static boolean loaded = false;
-    static SQLQueryThread sqlQueryThread;
-    SpecializedCrates sc;
+    public static final String TABLE = "scPlayerStats";
+    private static SQL sql;
+    private static boolean loaded = false;
 
-    public SQLDataHandler(PlayerManager pm) {
-        super(pm);
-        cc.getDu().log("SQLDataHandler() - CALL", getClass());
-        sc = pm.getCc();
-
-
+    public SQLDataHandler(PlayerManager playerManager) {
+        super(playerManager);
+        instance.getDebugUtils().log("SQLDataHandler() - CALL", getClass());
         load();
+    }
+
+    public static SQL getSql() {
+        return sql;
+    }
+
+    public static boolean isLoaded() {
+        return loaded;
     }
 
     @Override
     public boolean load() {
         if (!loaded) {
-            Bukkit.getScheduler().runTaskLaterAsynchronously(cc, new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(instance, new Runnable() {
                 @Override
                 public void run() {
-                    cc.getDu().log("load() - CALL (Note: This is run synchronous not asynchronous)", getClass());
+                    instance.getDebugUtils().log("load() - CALL (Note: This is run synchronous not asynchronous)", getClass());
                     long curTime = System.currentTimeMillis();
 
-                    FileHandler sqlYml = sc.getSqlFile();
+                    FileHandler sqlYml = instance.getSqlFile();
                     FileConfiguration fc = sqlYml.get();
 
                     String dbName = fc.getString("database.name");
@@ -42,24 +44,24 @@ public class SQLDataHandler extends DataHandler {
                     String dbUsername = fc.getString("database.username");
                     String dbPassword = fc.getString("database.password");
 
-                    cc.getDu().log("load() - Opening connection and creating query thread.", getClass());
-                    sql = new SQL(sc, dbIp, dbName, dbPort, dbUsername, dbPassword);
-                    sqlQueryThread = new SQLQueryThread(sql);
+                    instance.getDebugUtils().log("load() - Opening connection and creating query thread.", getClass());
+                    sql = new SQL(instance, dbIp, dbName, dbPort, dbUsername, dbPassword);
+                    new SQLQueryThread(sql);
 
-                    cc.getDu().log("load() - Completed creating thread and opening connection in " +
+                    instance.getDebugUtils().log("load() - Completed creating thread and opening connection in " +
                             (System.currentTimeMillis() - curTime) + "ms.", getClass());
 
-                    cc.getDu().log("load() - Creating table & setting unique if it doesn't exist...", getClass());
+                    instance.getDebugUtils().log("load() - Creating table & setting unique if it doesn't exist...", getClass());
                     long createTime = System.currentTimeMillis();
 
-                    sql.create(table,
+                    sql.create(TABLE,
                             "uuid varchar(36), history longtext, crateCooldowns mediumtext, virtualCrates mediumtext, rewardLimits mediumtext",
                             true);
 
-                    cc.getDu().log("load() - Completed creating table & setting unique in " +
+                    instance.getDebugUtils().log("load() - Completed creating table & setting unique in " +
                                     (System.currentTimeMillis() - createTime) + "ms.",
                             getClass());
-                    cc.getDu().log("load() - Completed in  " + (System.currentTimeMillis() - curTime) + "ms.", getClass());
+                    instance.getDebugUtils().log("load() - Completed in  " + (System.currentTimeMillis() - curTime) + "ms.", getClass());
                     loaded = true;
                 }
             }, 0);
@@ -70,13 +72,13 @@ public class SQLDataHandler extends DataHandler {
     @Override
     public Object get(String value) {
         value = formatValue(value);
-        return sql.get(table, "uuid", pm.getP().getUniqueId().toString(), value);
+        return sql.get(TABLE, "uuid", playerManager.getPlayer().getUniqueId().toString(), value);
     }
 
     @Override
     public void write(String value, String toWrite) {
         value = formatValue(value);
-        sql.write(table, "uuid", pm.getP().getUniqueId().toString(), value, toWrite);
+        sql.write(TABLE, "uuid", playerManager.getPlayer().getUniqueId().toString(), value, toWrite);
     }
 
     public String formatValue(String value) {

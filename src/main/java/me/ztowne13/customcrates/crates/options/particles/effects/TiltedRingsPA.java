@@ -8,10 +8,10 @@ import org.bukkit.Location;
  * Created by ztowne13 on 6/26/16.
  */
 public class TiltedRingsPA extends ParticleAnimationEffect {
-    int updatesPerSec;
+    private final int updatesPerSec;
 
-    public TiltedRingsPA(SpecializedCrates cc, ParticleData particleData) {
-        super(cc, particleData);
+    public TiltedRingsPA(SpecializedCrates instance, ParticleData particleData) {
+        super(instance, particleData);
         this.updatesPerSec = (int) particleData.getSpeed();
     }
 

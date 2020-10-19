@@ -19,73 +19,73 @@ import java.util.Iterator;
  * Created by ztowne13 on 2/26/16.
  */
 public class NPCUtils {
-    static boolean failedLoad = false;
-    static boolean disabledMobReload = true;
+    private static final boolean DISABLED_MOB_RELOAD = true;
+    private static boolean failedLoad = false;
+
+    private NPCUtils() {
+        // EMPTY
+    }
 
     public static void checkUncheckMobs(boolean b) {
-        if (disabledMobReload)
+        if (DISABLED_MOB_RELOAD || !isCitizensInstalled())
             return;
 
-        if (isCitizensInstalled()) {
-            for (NPCRegistry npcr : CitizensAPI.getNPCRegistries()) {
-                Iterator<NPC> npcs = npcr.iterator();
+        for (NPCRegistry npcRegistry : CitizensAPI.getNPCRegistries()) {
+            Iterator<NPC> npcIterator = npcRegistry.iterator();
 
-                for (Object obj : Utils.iteratorToList(npcs)) {
-                    NPC npc = (NPC) obj;
-
-                    if (npc.hasTrait(IdentifierTrait.class) && npc.getTrait(IdentifierTrait.class).isCrate()) {
-                        if (!b) {
-                            b = true;
-                            for (NPC npck : MobPlaceholder.getMobs().values()) {
-                                if (npck.getUniqueId().equals(npc.getUniqueId())) {
-                                    b = false;
-                                }
-                            }
-
-                            for (NPC npck : Citizens2NPCPlaceHolder.getNpcs().values()) {
-                                if (npck.getUniqueId().equals(npc.getUniqueId())) {
-                                    b = false;
-                                }
+            for (NPC npc : Utils.iteratorToList(npcIterator)) {
+                if (npc.hasTrait(IdentifierTrait.class) && npc.getTrait(IdentifierTrait.class).isCrate()) {
+                    if (!b) {
+                        b = true;
+                        for (NPC npck : MobPlaceholder.getNpcMap().values()) {
+                            if (npck.getUniqueId().equals(npc.getUniqueId())) {
+                                b = false;
                             }
                         }
 
-                        if (b) {
-                            npc.destroy();
+                        for (NPC npck : Citizens2NPCPlaceHolder.getNpcMap().values()) {
+                            if (npck.getUniqueId().equals(npc.getUniqueId())) {
+                                b = false;
+                            }
                         }
+                    }
+
+                    if (b) {
+                        npc.destroy();
                     }
                 }
             }
         }
     }
 
-    public static void checkUncheckMobs(SpecializedCrates cc, final boolean bVal, long l) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(cc, () -> NPCUtils.checkUncheckMobs(bVal), l);
+    public static void checkUncheckMobs(SpecializedCrates instance, final boolean bVal, long l) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(instance, () -> NPCUtils.checkUncheckMobs(bVal), l);
     }
 
     public static NPC getNpcForCrate(PlacedCrate placedCrate) {
-        if (isCitizensInstalled()) {
-            for (NPCRegistry npcr : CitizensAPI.getNPCRegistries()) {
-                Iterator<NPC> npcs = npcr.iterator();
+        if (!isCitizensInstalled()) {
+            return null;
+        }
 
-                for (Object obj : Utils.iteratorToList(npcs)) {
-                    NPC npc = (NPC) obj;
+        for (NPCRegistry npcRegistry : CitizensAPI.getNPCRegistries()) {
+            Iterator<NPC> npcIterator = npcRegistry.iterator();
 
-                    if (!npc.isSpawned() || !npc.getName().equalsIgnoreCase("Specialized Crate - Crate"))
-                        continue;
+            for (NPC npc : Utils.iteratorToList(npcIterator)) {
+                if (!npc.isSpawned() || !npc.getName().equalsIgnoreCase("Specialized Crate - Crate"))
+                    continue;
 
-                    //if (npc.hasTrait(IdentifierTrait.class) && npc.getTrait(IdentifierTrait.class).isCrate())
-                    {
-                        Location storedLoc = npc.getStoredLocation();
-                        Location crateLoc = LocationUtils.getLocationCentered(placedCrate.getL());
-                        if (Math.abs(storedLoc.getX() - crateLoc.getX()) < .3 &&
-                                Math.abs(storedLoc.getY() - crateLoc.getY()) < 2 &&
-                                Math.abs(storedLoc.getZ() - crateLoc.getZ()) < .3 &&
-                                storedLoc.getWorld() == crateLoc.getWorld()) {
-                            return npc;
-                        }
+                //if (npc.hasTrait(IdentifierTrait.class) && npc.getTrait(IdentifierTrait.class).isCrate())
+                {
+                    Location storedLoc = npc.getStoredLocation();
+                    Location crateLoc = LocationUtils.getLocationCentered(placedCrate.getLocation());
+                    if (Math.abs(storedLoc.getX() - crateLoc.getX()) < .3 &&
+                            Math.abs(storedLoc.getY() - crateLoc.getY()) < 2 &&
+                            Math.abs(storedLoc.getZ() - crateLoc.getZ()) < .3 &&
+                            storedLoc.getWorld() == crateLoc.getWorld()) {
+                        return npc;
                     }
-
                 }
+
             }
         }
         return null;

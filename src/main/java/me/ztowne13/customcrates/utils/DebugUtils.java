@@ -12,39 +12,39 @@ public class DebugUtils {
     public static final boolean OUTPUT_PLAYER_DATA_LOAD_TIME = false;
 
     public static final boolean OUTPUT_AVERAGE_ANIMATION_TICK = false;
+    private static final boolean FORCE_DEBUG = false;
 
-    SpecializedCrates cc;
-    boolean forceDebug = false;
+    private final SpecializedCrates instance;
 
-    String[] sort = new String[]
+    private final String[] sort = new String[]
             {
                     ""
             };
 
-    public DebugUtils(SpecializedCrates cc) {
-        this.cc = cc;
+    public DebugUtils(SpecializedCrates instance) {
+        this.instance = instance;
     }
 
     public void log(String s) {
-        boolean debug = forceDebug || Boolean.parseBoolean(cc.getSettings().getConfigValues().get("debug").toString());
+        boolean debug = FORCE_DEBUG || Boolean.parseBoolean(instance.getSettings().getConfigValues().get("debug").toString());
         if (debug) {
-            Bukkit.getLogger().info("[DEBUG] " + s);
+            Bukkit.getLogger().info(() -> "[DEBUG] " + s);
         }
     }
 
-    public void log(String s, Class<?> clas) {
-        log(s, clas, false);
+    public void log(String s, Class<?> clazz) {
+        log(s, clazz, false);
     }
 
-    public void log(String s, Class<?> clas, boolean dumpStack) {
-        log(s, clas, dumpStack, false);
+    public void log(String s, Class<?> clazz, boolean dumpStack) {
+        log(s, clazz, dumpStack, false);
     }
 
-    public void log(String s, Class<?> clas, boolean dumpStack, boolean toChat) {
+    public void log(String s, Class<?> clazz, boolean dumpStack, boolean toChat) {
         try {
-            boolean debug = forceDebug || Boolean.parseBoolean(cc.getSettings().getConfigValues().get("debug").toString());
+            boolean debug = FORCE_DEBUG || Boolean.parseBoolean(instance.getSettings().getConfigValues().get("debug").toString());
 
-            String msg = clas.getName() + "." + s;
+            String msg = clazz.getName() + "." + s;
 
             boolean found = sort.length == 0;
             for (String toSort : sort) {
@@ -59,19 +59,19 @@ public class DebugUtils {
                     if (toChat)
                         Bukkit.broadcastMessage("[DEBUG] " + msg);
                     else
-                        Bukkit.getLogger().info("[DEBUG] " + msg);
+                        Bukkit.getLogger().info(() -> "[DEBUG] " + msg);
                 }
                 if (dumpStack) {
                     dumpStack();
                 }
             }
         } catch (Exception exc) {
-
+            // IGNORED
         }
     }
 
     public void dumpStack() {
-        boolean debug = forceDebug || Boolean.parseBoolean(cc.getSettings().getConfigValues().get("debug").toString());
+        boolean debug = FORCE_DEBUG || Boolean.parseBoolean(instance.getSettings().getConfigValues().get("debug").toString());
         if (debug)
             Thread.dumpStack();
     }

@@ -699,10 +699,10 @@ public enum StatusLoggerEvent {
             "It is either nonexistent or not a valid true/false value.");
 
 
-    boolean success;
-    String event;
-    String cause;
-    String section;
+    private final boolean success;
+    private final String event;
+    private final String cause;
+    private final String section;
 
     StatusLoggerEvent(boolean success, String section, String event, String cause) {
         this.success = success;
@@ -717,18 +717,14 @@ public enum StatusLoggerEvent {
     }
 
     public void log(Crate crate) {
-        log(crate.getSettings().getStatusLogger(), new String[]{});
+        log(crate.getSettings().getStatusLogger());
     }
 
-    public void log(Crate crate, String[] args) {
+    public void log(Crate crate, String... args) {
         log(crate.getSettings().getStatusLogger(), args);
     }
 
-    public void log(StatusLogger sl) {
-        log(sl, new String[]{});
-    }
-
-    public void log(StatusLogger sl, String[] args) {
+    public void log(StatusLogger statusLogger, String... args) {
         String eventDup = event;
         String causeDup = cause;
         int i = 0;
@@ -747,6 +743,6 @@ public enum StatusLoggerEvent {
             i++;
         }
 
-        sl.addEvent(success, section, eventDup, causeDup);
+        statusLogger.addEvent(success, section, eventDup, causeDup);
     }
 }

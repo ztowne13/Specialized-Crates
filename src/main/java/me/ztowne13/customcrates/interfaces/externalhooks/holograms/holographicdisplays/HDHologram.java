@@ -12,9 +12,9 @@ public class HDHologram extends Hologram {
     private final com.gmail.filoghost.holographicdisplays.api.Hologram hologram;
     private final HashMap<Integer, TextLine> lines = new HashMap<>();
 
-    public HDHologram(SpecializedCrates customCrates, Location location) {
-        super(customCrates, location);
-        this.hologram = HologramsAPI.createHologram(customCrates, location);
+    public HDHologram(SpecializedCrates instance, Location location) {
+        super(instance, location);
+        this.hologram = HologramsAPI.createHologram(instance, location);
 
         setLocation(location);
         hologram.setAllowPlaceholders(true);
@@ -43,8 +43,8 @@ public class HDHologram extends Hologram {
     }
 
     @Override
-    public void setLocation(Location l) {
-        super.setLocation(l);
-        hologram.teleport(l);
+    public void setLocation(Location location) {
+        super.setLocation(location);
+        hologram.teleport(location);
     }
 }

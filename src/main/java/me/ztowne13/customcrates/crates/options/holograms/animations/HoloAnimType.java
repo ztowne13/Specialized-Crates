@@ -17,7 +17,7 @@ public enum HoloAnimType {
 
     //MULTILINE_CHANGE;
 
-    String descriptor;
+    private final String descriptor;
 
     HoloAnimType(String descriptor) {
         this.descriptor = descriptor;

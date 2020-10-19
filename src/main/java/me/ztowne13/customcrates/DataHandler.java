@@ -10,17 +10,15 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.*;
 
 public class DataHandler {
-    String playerCmdsPath = "queued-player-commands";
+    private static final String PLAYER_CMDS_PATH = "queued-player-commands";
+    private static final int LOGIN_WAIT = 20;
 
-    int LOGIN_WAIT = 20;
+    private final SpecializedCrates instance;
+    private final FileHandler dataFile;
+    private final Map<UUID, List<QueuedGiveCommand>> queuedGiveCommands = new HashMap<>();
 
-    SpecializedCrates cc;
-    FileHandler dataFile;
-
-    Map<UUID, List<QueuedGiveCommand>> queuedGiveCommands = new HashMap<>();
-
-    public DataHandler(SpecializedCrates cc, FileHandler dataFile) {
-        this.cc = cc;
+    public DataHandler(SpecializedCrates instance, FileHandler dataFile) {
+        this.instance = instance;
         this.dataFile = dataFile;
     }
 
@@ -28,7 +26,7 @@ public class DataHandler {
         FileConfiguration fileConfig = dataFile.get();
 
         // Queued give commands
-        ConfigurationSection configSection = fileConfig.getConfigurationSection(playerCmdsPath);
+        ConfigurationSection configSection = fileConfig.getConfigurationSection(PLAYER_CMDS_PATH);
         if (configSection != null) {
 
             for (Object queuedCmd : configSection.getKeys(false)) {
@@ -59,7 +57,7 @@ public class DataHandler {
                 giveCmdsStr.add(cmd.toString());
             }
 
-            fileConfig.set(playerCmdsPath + "." + entry.getKey().toString(), giveCmdsStr.toArray());
+            fileConfig.set(PLAYER_CMDS_PATH + "." + entry.getKey().toString(), giveCmdsStr.toArray());
         }
 
         dataFile.save();
@@ -76,13 +74,13 @@ public class DataHandler {
     }
 
     public void playAllQueuedGiveCommands(final UUID uuid) {
-        Bukkit.getScheduler().runTaskLater(cc, () -> {
+        Bukkit.getScheduler().runTaskLater(instance, () -> {
             if (queuedGiveCommands.containsKey(uuid)) {
                 for (QueuedGiveCommand cmd : queuedGiveCommands.get(uuid))
                     cmd.run();
 
                 queuedGiveCommands.remove(uuid);
-                dataFile.get().set(playerCmdsPath + "." + uuid.toString(), null);
+                dataFile.get().set(PLAYER_CMDS_PATH + "." + uuid.toString(), null);
             }
         }, LOGIN_WAIT);
     }
@@ -107,7 +105,7 @@ public class DataHandler {
             this.amount = Integer.parseInt(args[3]);
             try {
                 if (Crate.existsNotCaseSensitive(args[4])) {
-                    this.crate = Crate.getCrate(cc, args[4], false);
+                    this.crate = Crate.getCrate(instance, args[4], false);
                 } else {
                     stillExists = false;
                 }
@@ -150,10 +148,10 @@ public class DataHandler {
 
                 if (key) {
                     ChatUtils.log("[SpecializedCrate] Executing givecrate command for player that was offline.");
-                    cc.getCommandCrate().getSubCommands().get(4).run(cc, cc.getCommandCrate(), args);
+                    instance.getCommandCrate().getSubCommands().get(4).run(instance, instance.getCommandCrate(), args);
                 } else {
                     ChatUtils.log("[SpecializedCrate] Executing givekey command for player that was offline.");
-                    cc.getCommandCrate().getSubCommands().get(3).run(cc, cc.getCommandCrate(), args);
+                    instance.getCommandCrate().getSubCommands().get(3).run(instance, instance.getCommandCrate(), args);
                 }
             } catch (Exception exc) {
                 ChatUtils

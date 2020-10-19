@@ -9,14 +9,14 @@ import org.bukkit.entity.Player;
  * Created by ztowne13 on 2/14/2017.
  */
 public class BukkitActionEffect extends ActionEffect {
-    String title;
-    String subtitle;
-    int fadeIn;
-    int stay;
-    int fadeOut;
+    private String title;
+    private String subtitle;
+    private int fadeIn;
+    private int stay;
+    private int fadeOut;
 
-    public BukkitActionEffect(SpecializedCrates cc) {
-        super(cc);
+    public BukkitActionEffect(SpecializedCrates instance) {
+        super(instance);
     }
 
     public ActionBar getActionBarExecutor() {
@@ -24,9 +24,9 @@ public class BukkitActionEffect extends ActionEffect {
     }
 
     public void newTitle() {
-        fadeIn = Integer.parseInt(SettingsValue.CA_FADE_IN.getValue(cc).toString());
-        stay = Integer.parseInt(SettingsValue.CA_STAY.getValue(cc).toString());
-        fadeOut = Integer.parseInt(SettingsValue.CA_FADE_OUT.getValue(cc).toString());
+        fadeIn = Integer.parseInt(SettingsValue.CA_FADE_IN.getValue(instance).toString());
+        stay = Integer.parseInt(SettingsValue.CA_STAY.getValue(instance).toString());
+        fadeOut = Integer.parseInt(SettingsValue.CA_FADE_OUT.getValue(instance).toString());
     }
 
     public void playTitle(Player p) {

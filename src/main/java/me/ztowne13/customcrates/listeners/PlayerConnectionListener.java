@@ -35,7 +35,7 @@ public class PlayerConnectionListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
-        cc.getDu().log("onQuit() - CALL (" + e.getPlayer().getName() + ")", getClass());
+        cc.getDebugUtils().log("onQuit() - CALL (" + e.getPlayer().getName() + ")", getClass());
         Player p = e.getPlayer();
         PlayerManager.get(cc, p).remove(20);
     }

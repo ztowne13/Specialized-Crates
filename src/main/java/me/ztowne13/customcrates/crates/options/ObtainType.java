@@ -12,9 +12,9 @@ public enum ObtainType {
 
     LUCKYCHEST(false, false, "The crate will spawn randomly when a player is mining according to the lucky chest settings.");
 
-    boolean isStatic;
-    boolean canPlace;
-    String descriptor;
+    private final boolean isStatic;
+    private final boolean canPlace;
+    private final String descriptor;
 
     ObtainType(boolean isStatic, boolean canPlace, String descriptor) {
         this.isStatic = isStatic;
@@ -39,16 +39,7 @@ public enum ObtainType {
         return isStatic;
     }
 
-    public void setStatic(boolean isStatic) {
-        this.isStatic = isStatic;
-    }
-
     public boolean isCanPlace() {
         return canPlace;
     }
-
-    public void setCanPlace(boolean canPlace) {
-        this.canPlace = canPlace;
-    }
-
 }
