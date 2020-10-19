@@ -9,44 +9,44 @@ import me.ztowne13.customcrates.utils.Utils;
  * Created by ztowne13 on 8/5/15.
  */
 public class CrateCooldownEvent extends DataEvent {
-    public Crate crates;
-    long startTime;
-    long cooldownTime;
-    boolean start;
+    private final Crate crate;
+    private final long cooldownTime;
+    private final boolean start;
+    private long startTime;
 
-    public CrateCooldownEvent(Crate crates, long startTime, boolean start) {
-        super(crates.getInstance());
+    public CrateCooldownEvent(Crate crate, long startTime, boolean start) {
+        super(crate.getInstance());
 
-        this.crates = crates;
+        this.crate = crate;
         this.startTime = startTime;
-        this.cooldownTime = crates.getSettings().getCooldown() * 1000L;
+        this.cooldownTime = crate.getSettings().getCooldown() * 1000L;
         this.start = start;
     }
 
     @Override
     public String getFormatted() {
-        return getCrates().getName() + ";" + getStartTime();
+        return getCrate().getName() + ";" + getStartTime();
     }
 
     @Override
-    public void addTo(PlayerDataManager pdm) {
+    public void addTo(PlayerDataManager playerDataManager) {
         if (getCooldownTime() > 0) {
             if (isStart()) {
-                int seconds = Math.round(getCooldownTime() / 1000);
+                long seconds = getCooldownTime() / 1000;
                 String[] values = Utils.convertSecondToHHMMString(seconds);
 
-                Messages.COOLDOWN_START.msgSpecified(cc, pdm.getDh().getPm().getP(),
+                Messages.COOLDOWN_START.msgSpecified(instance, playerDataManager.getDataHandler().getPlayerManager().getPlayer(),
                         new String[]{"%crate%", "%days%", "%hours%", "%minutes%", "%seconds%"},
-                        new String[]{getCrates().getDisplayName(), values[0], values[1], values[2], values[3]});
+                        new String[]{getCrate().getDisplayName(), values[0], values[1], values[2], values[3]});
             }
 
-            pdm.addCrateCooldowns(this, pdm.addStringToList(getFormatted(), pdm.getCrateCooldowns()));
+            playerDataManager.addCrateCooldowns(this, playerDataManager.addStringToList(getFormatted(), playerDataManager.getCrateCooldowns()));
         }
     }
 
-    public void tickSecond(PlayerDataManager pdm) {
+    public void tickSecond(PlayerDataManager playerDataManager) {
         if (isCooldownOverAsBoolean()) {
-            end(pdm);
+            end(playerDataManager);
         }
     }
 
@@ -59,36 +59,32 @@ public class CrateCooldownEvent extends DataEvent {
                 (getStartTime() + getCooldownTime() - System.currentTimeMillis()) / 1000L;
     }
 
-    public void end(PlayerDataManager pdm) {
-        int seconds = Math.round(getCooldownTime() / 1000);
+    public void end(PlayerDataManager playerDataManager) {
+        long seconds = getCooldownTime() / 1000;
         String[] values = Utils.convertSecondToHHMMString(seconds);
-        Messages.COOLDOWN_END.msgSpecified(getCc(), pdm.getDh().getPm().getP(),
+        Messages.COOLDOWN_END.msgSpecified(getInstance(), playerDataManager.getDataHandler().getPlayerManager().getPlayer(),
                 new String[]{"%crate%", "%days%", "%hours%", "%minutes%", "%seconds%"},
-                new String[]{getCrates().getDisplayName(), values[0], values[1], values[2], values[3]});
-        pdm.removeCrateCooldowns(this, pdm.removeStringFromList(getFormatted(), pdm.getCrateCooldowns()));
+                new String[]{getCrate().getDisplayName(), values[0], values[1], values[2], values[3]});
+        playerDataManager.removeCrateCooldowns(this, playerDataManager.removeStringFromList(getFormatted(), playerDataManager.getCrateCooldowns()));
     }
 
-    public boolean matches(CrateCooldownEvent cce) {
-        return getCrates().getName().equalsIgnoreCase(cce.getCrates().getName()) && getStartTime() == cce.getStartTime() &&
-                getCooldownTime() == cce.getCooldownTime();
+    public boolean matches(CrateCooldownEvent crateCooldownEvent) {
+        return getCrate().getName().equalsIgnoreCase(crateCooldownEvent.getCrate().getName()) && getStartTime() == crateCooldownEvent.getStartTime() &&
+                getCooldownTime() == crateCooldownEvent.getCooldownTime();
     }
 
-    public void playFailure(PlayerDataManager pdm) {
-        crates.getSettings().getCrateAnimation().playFailToOpen(pdm.getPm().getP(), false, true);
-        int seconds = Math.round(isCooldownOver());
+    public void playFailure(PlayerDataManager playerDataManager) {
+        crate.getSettings().getCrateAnimation().playFailToOpen(playerDataManager.getPlayerManager().getPlayer(), false, true);
+        long seconds = isCooldownOver();
         String[] values = Utils.convertSecondToHHMMString(seconds);
-        pdm.getPm().getP().sendMessage(Messages.CRATE_ON_COOLDOWN.getFromConf(cc).replace("%crate%", crates.getDisplayName())
+        playerDataManager.getPlayerManager().getPlayer().sendMessage(Messages.CRATE_ON_COOLDOWN.getFromConf(instance).replace("%crate%", crate.getDisplayName())
                 .replace("%days%", values[0]).replace("%hours%", values[1]).replace("%minutes%", values[2])
                 .replace("%seconds%", values[3]));
 
     }
 
-    public Crate getCrates() {
-        return crates;
-    }
-
-    public void setCrates(Crate crates) {
-        this.crates = crates;
+    public Crate getCrate() {
+        return crate;
     }
 
     public long getStartTime() {

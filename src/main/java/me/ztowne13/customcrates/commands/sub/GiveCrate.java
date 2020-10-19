@@ -55,7 +55,7 @@ public class GiveCrate extends SubCommand {
             if (args[2].equalsIgnoreCase("ALL")) {
                 if (isVirtual) {
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
+                        PlayerDataManager pdm = PlayerManager.get(cc, p).getPlayerDataManager();
                         pdm.setVirtualCrateCrates(crate, pdm.getVCCrateData(crate).getCrates() + amount);
                     }
                     cmds.msgSuccess("Given a virtual crate for " + args[1] + " to every online player.");
@@ -100,7 +100,7 @@ public class GiveCrate extends SubCommand {
             }
 
             Player toGive = op == null ? op2 : op;
-            PlayerDataManager pdm = PlayerManager.get(cc, toGive).getPdm();
+            PlayerDataManager pdm = PlayerManager.get(cc, toGive).getPlayerDataManager();
             if (isVirtual) {
                 pdm.setVirtualCrateCrates(crate, pdm.getVCCrateData(crate).getCrates() + amount);
                 cmds.msgSuccess("Given virtual crate for crate: " + args[1]);

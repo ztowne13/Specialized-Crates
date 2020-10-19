@@ -71,7 +71,7 @@ public class CommandCrate extends Commands implements CommandExecutor {
 
         if (args.length > 0 && args[0].equalsIgnoreCase("luckychest")) {
             if (canExecute(false, true, "customcrates.luckychestcommand", "specializedcrates.luckychestcommand")) {
-                PlayerDataManager pdm = PlayerManager.get(instance, (Player) sender).getPdm();
+                PlayerDataManager pdm = PlayerManager.get(instance, (Player) sender).getPlayerDataManager();
                 pdm.setActivatedLuckyChests(!pdm.isActivatedLuckyChests());
                 Messages.TOGGLE_LUCKYCRATE.msgSpecified(instance, (Player) sender, new String[]{"%state%"},
                         new String[]{pdm.isActivatedLuckyChests() + ""});

@@ -51,7 +51,7 @@ public class GiveKey extends SubCommand {
                     int count = Utils.addItemAndDropRest(p, toAdd, !toNotDrop);
 
                     if (toNotDrop) {
-                        PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
+                        PlayerDataManager pdm = PlayerManager.get(cc, p).getPlayerDataManager();
                         pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + count);
                         if (count != 0) {
                             Messages.RECEIVED_VIRTUAL_KEY
@@ -71,7 +71,7 @@ public class GiveKey extends SubCommand {
             if (args[2].equalsIgnoreCase("ALL")) {
                 if (isVirtual) {
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        PlayerDataManager pdm = PlayerManager.get(cc, p).getPdm();
+                        PlayerDataManager pdm = PlayerManager.get(cc, p).getPlayerDataManager();
                         pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + amount);
                         Messages.RECEIVED_VIRTUAL_KEY.msgSpecified(cc, p, new String[]{"%crate%", "%amount%"}, new String[]{crate.getDisplayName(), "" + amount});
                     }
@@ -120,7 +120,7 @@ public class GiveKey extends SubCommand {
             }
 
             Player toGive = op == null ? op2 : op;
-            PlayerDataManager pdm = PlayerManager.get(cc, toGive).getPdm();
+            PlayerDataManager pdm = PlayerManager.get(cc, toGive).getPlayerDataManager();
             if (isVirtual) {
                 pdm.setVirtualCrateKeys(crate, pdm.getVCCrateData(crate).getKeys() + amount);
                 cmds.msgSuccess("Given virtual key for crate: " + args[1]);

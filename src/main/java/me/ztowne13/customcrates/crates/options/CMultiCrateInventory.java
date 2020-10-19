@@ -280,7 +280,7 @@ public class CMultiCrateInventory extends CSetting {
             try {
                 Crate crate = entry.getValue();
                 instance.getDu().log(crate.getName());
-                VirtualCrateData vcd = PlayerManager.get(instance, player).getPdm().getVCCrateData(crate);
+                VirtualCrateData vcd = PlayerManager.get(instance, player).getPlayerDataManager().getVCCrateData(crate);
                 instance.getDu().log(vcd.toString());
                 ItemBuilder crateIb = new ItemBuilder(crate.getSettings().getCrateItemHandler().getItem(1));
 
@@ -332,7 +332,7 @@ public class CMultiCrateInventory extends CSetting {
     }
 
     public void checkClick(PlayerManager playerManager, int slot, ClickType clickType) {
-        final Player player = playerManager.getP();
+        final Player player = playerManager.getPlayer();
         Crate crate = playerManager.getOpenCrate();
 
         if (!crate.getSettings().getMultiCrateSettings().getCrateSpots().containsKey(slot) || playerManager.isInRewardMenu()) {
@@ -367,8 +367,8 @@ public class CMultiCrateInventory extends CSetting {
 
         // Virtual crates check
         if (SettingsValue.REQUIRE_VIRTUAL_CRATE_AND_KEY.getValue(instance).equals(Boolean.TRUE)
-                && playerManager.getPdm().getVCCrateData(clickedCrate).getCrates() <= 0) {
-            Messages.INSUFFICIENT_VIRTUAL_CRATES.msgSpecified(playerManager.getCc(), player);
+                && playerManager.getPlayerDataManager().getVCCrateData(clickedCrate).getCrates() <= 0) {
+            Messages.INSUFFICIENT_VIRTUAL_CRATES.msgSpecified(playerManager.getInstance(), player);
             return;
         }
 
@@ -398,10 +398,10 @@ public class CMultiCrateInventory extends CSetting {
         }
 
         // Cooldown check
-        CrateCooldownEvent cce = playerManager.getPdm().getCrateCooldownEventByCrates(clickedCrate);
+        CrateCooldownEvent cce = playerManager.getPlayerDataManager().getCrateCooldownEventByCrates(clickedCrate);
         if (cce != null && !cce.isCooldownOverAsBoolean()) {
             invCheck(player, playerManager);
-            cce.playFailure(playerManager.getPdm());
+            cce.playFailure(playerManager.getPlayerDataManager());
             return;
         }
 
@@ -427,11 +427,11 @@ public class CMultiCrateInventory extends CSetting {
             return;
         }
 
-        new CrateCooldownEvent(clickedCrate, System.currentTimeMillis(), true).addTo(playerManager.getPdm());
+        new CrateCooldownEvent(clickedCrate, System.currentTimeMillis(), true).addTo(playerManager.getPlayerDataManager());
         // Post Conditions
         if (playerManager.isUseVirtualCrate()) {
-            playerManager.getPdm().setVirtualCrateCrates(clickedCrate,
-                    playerManager.getPdm().getVCCrateData(clickedCrate).getCrates() - 1);
+            playerManager.getPlayerDataManager().setVirtualCrateCrates(clickedCrate,
+                    playerManager.getPlayerDataManager().getVCCrateData(clickedCrate).getCrates() - 1);
         } else if (!this.crate.getSettings().getObtainType().equals(ObtainType.STATIC)) {
             try {
                 PlacedCrate pc = PlacedCrate.get(instance, playerManager.getLastOpenCrate());

@@ -31,7 +31,7 @@ public class AttemptKeyUseAction extends CrateAction {
         pm.setLastClickedCrateTime(System.currentTimeMillis());
 
         // For SQL, to make sure the player data is loaded
-        if (!pm.getPdm().isLoaded()) {
+        if (!pm.getPlayerDataManager().isLoaded()) {
             Messages.LOADING_FROM_DATABASE.msgSpecified(instance, player);
             return true;
         }

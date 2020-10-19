@@ -5,25 +5,25 @@ import me.ztowne13.customcrates.players.PlayerManager;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class FlatFileDataHandler extends DataHandler {
-    static FileHandler fu = null;
-    static FileConfiguration fc;
-    static boolean toSave = false;
+    private static FileHandler fileHandler;
+    private static FileConfiguration fileConfiguration;
+    private static boolean toSave = false;
 
-    public FlatFileDataHandler(PlayerManager pm) {
-        super(pm);
-        cc.getDu().log("Loading flat file data handler for " + pm.getP().getName());
-        if (fu == null) {
-            fu = new FileHandler(getCc(), "PlayerData.db", false, false);
-            fc = getFileHandler().get();
+    public FlatFileDataHandler(PlayerManager playerManager) {
+        super(playerManager);
+        instance.getDu().log("Loading flat file data handler for " + playerManager.getPlayer().getName());
+        if (fileHandler == null) {
+            fileHandler = new FileHandler(instance, "PlayerData.db", false, false);
+            fileConfiguration = getFileHandler().get();
         }
     }
 
     public static FileHandler getFileHandler() {
-        return fu;
+        return fileHandler;
     }
 
-    public static FileConfiguration getFc() {
-        return fc;
+    public static FileConfiguration getFileConfiguration() {
+        return fileConfiguration;
     }
 
     public static boolean isToSave() {
@@ -41,26 +41,26 @@ public class FlatFileDataHandler extends DataHandler {
 
     @Override
     public Object get(String value) {
-        cc.getDu().log("FlatFileDataHandler.get() - CALL", getClass());
-        return getFc().get(toPath(value));
+        instance.getDu().log("FlatFileDataHandler.get() - CALL", getClass());
+        return getFileConfiguration().get(toPath(value));
     }
 
     @Override
     public void write(String value, String toWrite) {
-        cc.getDu().log("FlatFileDataHandler.write() - CALL", getClass());
-        getFc().set(toPath(value), toWrite);
+        instance.getDu().log("FlatFileDataHandler.write() - CALL", getClass());
+        getFileConfiguration().set(toPath(value), toWrite);
 
         toSave = true;
     }
 
     @Override
     public boolean hasDataPath() {
-        return getFc().contains(getUuid());
+        return getFileConfiguration().contains(getUuid());
     }
 
     @Override
     public boolean hasDataValue(String value) {
-        return getFc().contains(toPath(value));
+        return getFileConfiguration().contains(toPath(value));
     }
 
     public String toPath(String value) {

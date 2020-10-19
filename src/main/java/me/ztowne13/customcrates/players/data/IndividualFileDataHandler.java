@@ -5,20 +5,25 @@ import me.ztowne13.customcrates.players.PlayerManager;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class IndividualFileDataHandler extends DataHandler {
-    public static ArrayList<IndividualFileDataHandler> toSave = new ArrayList<>();
+    private static final List<IndividualFileDataHandler> toSave = new ArrayList<>();
 
-    FileHandler fu;
-    FileConfiguration fc;
+    private final FileHandler fileHandler;
+    private final FileConfiguration fileConfiguration;
 
-    public IndividualFileDataHandler(PlayerManager pm) {
-        super(pm);
-        cc.getDu().log("Loading individual file data handler for " + pm.getP().getName());
-        this.fu = new FileHandler(pm.getCc(), pm.getP().getUniqueId().toString() + ".stats", "/PlayerStats/", false, false,
+    public IndividualFileDataHandler(PlayerManager playerManager) {
+        super(playerManager);
+        instance.getDu().log("Loading individual file data handler for " + playerManager.getPlayer().getName());
+        this.fileHandler = new FileHandler(playerManager.getInstance(), playerManager.getPlayer().getUniqueId().toString() + ".stats", "/PlayerStats/", false, false,
                 false);
-        this.fc = getFileHandler().get();
-        cc.getDu().log(fu.getDataFile().getAbsolutePath());
+        this.fileConfiguration = getFileHandler().get();
+        instance.getDu().log(fileHandler.getDataFile().getAbsolutePath());
+    }
+
+    public static List<IndividualFileDataHandler> getToSave() {
+        return toSave;
     }
 
     @Override
@@ -28,12 +33,12 @@ public class IndividualFileDataHandler extends DataHandler {
 
     @Override
     public Object get(String value) {
-        return getFc().get(value);
+        return getFileConfiguration().get(value);
     }
 
     @Override
     public void write(String value, String toWrite) {
-        getFc().set(value, toWrite);
+        getFileConfiguration().set(value, toWrite);
 
         if (!toSave.contains(this))
             toSave.add(this);
@@ -41,7 +46,7 @@ public class IndividualFileDataHandler extends DataHandler {
 
     @Override
     public boolean hasDataValue(String value) {
-        return getFc().contains(value);
+        return getFileConfiguration().contains(value);
     }
 
     @Override
@@ -50,18 +55,10 @@ public class IndividualFileDataHandler extends DataHandler {
     }
 
     public FileHandler getFileHandler() {
-        return fu;
+        return fileHandler;
     }
 
-    public void setFu(FileHandler fu) {
-        this.fu = fu;
-    }
-
-    public FileConfiguration getFc() {
-        return fc;
-    }
-
-    public void setFc(FileConfiguration fc) {
-        this.fc = fc;
+    public FileConfiguration getFileConfiguration() {
+        return fileConfiguration;
     }
 }

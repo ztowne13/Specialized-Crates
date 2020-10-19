@@ -4,15 +4,15 @@ import me.ztowne13.customcrates.SpecializedCrates;
 import me.ztowne13.customcrates.players.PlayerManager;
 
 public abstract class DataHandler {
-    SpecializedCrates cc;
+    protected final SpecializedCrates instance;
 
-    PlayerManager pm;
-    String uuid;
+    protected final PlayerManager playerManager;
+    protected final String uuid;
 
-    public DataHandler(PlayerManager pm) {
-        this.cc = pm.getCc();
-        this.pm = pm;
-        this.uuid = pm.getP().getUniqueId().toString();
+    public DataHandler(PlayerManager playerManager) {
+        this.instance = playerManager.getInstance();
+        this.playerManager = playerManager;
+        this.uuid = playerManager.getPlayer().getUniqueId().toString();
     }
 
     public abstract boolean load();
@@ -25,29 +25,11 @@ public abstract class DataHandler {
 
     public abstract boolean hasDataValue(String value);
 
-    public SpecializedCrates getCc() {
-        return cc;
-    }
-
-    public void setCc(SpecializedCrates cc) {
-        this.cc = cc;
-    }
-
-    public PlayerManager getPm() {
-        return pm;
-    }
-
-    public void setPm(PlayerManager pm) {
-        this.pm = pm;
+    public PlayerManager getPlayerManager() {
+        return playerManager;
     }
 
     public String getUuid() {
         return uuid;
     }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-
 }

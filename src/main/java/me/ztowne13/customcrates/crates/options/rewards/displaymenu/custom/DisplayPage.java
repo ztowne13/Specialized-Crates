@@ -157,11 +157,11 @@ public class DisplayPage {
 
         if (builder == null && open) {
             final PlayerManager pm = PlayerManager.get(customRewardDisplayer.getCrate().getInstance(), player);
-            pm.setNextPageInventoryCloseGrace(pm.getCc().getTotalTicks() + 2L);
+            pm.setNextPageInventoryCloseGrace(pm.getInstance().getTotalTicks() + 2L);
 
             final Inventory inv = ib.getInv();
             final DisplayPage thisPage = this;
-            Bukkit.getScheduler().runTaskLater(pm.getCc(), () -> {
+            Bukkit.getScheduler().runTaskLater(pm.getInstance(), () -> {
                 player.openInventory(inv);
                 pm.setLastPage(thisPage);
                 pm.setInRewardMenu(true);

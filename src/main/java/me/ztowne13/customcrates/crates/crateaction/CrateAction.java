@@ -59,8 +59,8 @@ public abstract class CrateAction {
     }
 
     public boolean useCrate(PlayerManager playerManager, PlacedCrate placedCrate, boolean skipAnimation, boolean hasSkipped, int opened) {
-        Player p = playerManager.getP();
-        PlayerDataManager playerDataManager = playerManager.getPdm();
+        Player p = playerManager.getPlayer();
+        PlayerDataManager playerDataManager = playerManager.getPlayerDataManager();
         Crate crate = placedCrate.getCrate();
         CrateSettings crateSettings = crate.getSettings();
         Location placedCrateLocation = placedCrate.getLocation();
@@ -124,7 +124,7 @@ public abstract class CrateAction {
 
             crateSettings.getKeyItemHandler().takeKeyFromPlayer(p, false);
             new HistoryEvent(Utils.currentTimeParsed(), crate, rewards, true)
-                    .addTo(PlayerManager.get(instance, p).getPdm());
+                    .addTo(PlayerManager.get(instance, p).getPlayerDataManager());
             new CrateCooldownEvent(crate, System.currentTimeMillis(), true).addTo(playerDataManager);
 
             useCrateHelper(playerManager, placedCrate, opened + 1);
@@ -172,7 +172,7 @@ public abstract class CrateAction {
         long diff = ct - pm.getCmdCooldown();
 
         if (diff < 1000 && !pm.getLastCooldown().equalsIgnoreCase("crate")) {
-            Messages.WAIT_ONE_SECOND.msgSpecified(instance, pm.getP());
+            Messages.WAIT_ONE_SECOND.msgSpecified(instance, pm.getPlayer());
 
             b = true;
         }

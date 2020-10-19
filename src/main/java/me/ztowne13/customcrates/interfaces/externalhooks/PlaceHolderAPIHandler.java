@@ -70,7 +70,7 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion {
         String[] args = identifier.split("_");
 
         PlayerManager playerManager = PlayerManager.get(instance, player);
-        PlayerDataManager playerDataManager = playerManager.getPdm();
+        PlayerDataManager playerDataManager = playerManager.getPlayerDataManager();
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("placedcrates"))
@@ -148,7 +148,7 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion {
                 if (args[1].equalsIgnoreCase("crate") && args[2].equalsIgnoreCase("opened")) {
                     if (!playerDataManager.getHistoryEvents().isEmpty())
                         return playerDataManager.getHistoryEvents().get(playerDataManager.getHistoryEvents().size() - 1)
-                                .getCrates().getName();
+                                .getCrate().getName();
                     else
                         return "None";
                 }

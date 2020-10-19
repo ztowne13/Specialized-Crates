@@ -7,7 +7,7 @@ public enum StorageType {
 
     PLAYERFILES(true);
 
-    boolean enabled;
+    private final boolean enabled;
 
     StorageType(boolean enabled) {
         this.enabled = enabled;
@@ -15,9 +15,5 @@ public enum StorageType {
 
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 }

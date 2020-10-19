@@ -21,100 +21,92 @@ import java.util.Map;
 import java.util.UUID;
 
 public class PlayerManager {
-    static Map<UUID, PlayerManager> pManagers = new HashMap<>();
+    private static final Map<UUID, PlayerManager> playerManagerMap = new HashMap<>();
+    private final SpecializedCrates instance;
+    private final Player player;
+    private final DataHandler dataHandler;
+    private final PlayerDataManager playerDataManager;
 
-    SpecializedCrates cc;
+    private long lastClickedCrateTime = 0;
 
-    Player p;
-
-    DataHandler dh;
-    PlayerDataManager pdm;
-
-    long lastClickedCrateTime = 0;
-
-    PlacedCrate lastOpenedPlacedCrate = null;
-    Crate openCrate = null;
-    Location lastOpenCrate = null;
-    AnimationDataHolder currentAnimation;
-    boolean isInCratesClaimMenu = false;
-    boolean inRewardMenu = false;
-    DisplayPage lastPage;
+    private PlacedCrate lastOpenedPlacedCrate = null;
+    private Crate openCrate = null;
+    private Location lastOpenCrate = null;
+    private AnimationDataHolder currentAnimation;
+    private boolean isInCratesClaimMenu = false;
+    private boolean inRewardMenu = false;
+    private DisplayPage lastPage;
     // This is to allow the anti-dupe inventory reopen/close feature but prevent it when opening the next page of an inv
-    long nextPageInventoryCloseGrace = 0;
-    boolean deleteCrate = false;
-    boolean useVirtualCrate = false;
-    boolean confirming = false;
-    BukkitTask confirmingTask = null;
-    long cmdCooldown = 0;
-    String lastCooldown = "NONE";
+    private long nextPageInventoryCloseGrace = 0;
+    private boolean deleteCrate = false;
+    private boolean useVirtualCrate = false;
+    private boolean confirming = false;
+    private BukkitTask confirmingTask = null;
+    private long cmdCooldown = 0;
+    private String lastCooldown = "NONE";
     private IGCMenu openMenu = null;
     private IGCMenu lastOpenMenu = null;
 
-    public PlayerManager(SpecializedCrates cc, Player p) {
-        this.cc = cc;
-        this.p = p;
-        this.dh = getSpecifiedDataHandler();
-        this.pdm = new PlayerDataManager(this);
+    public PlayerManager(SpecializedCrates instance, Player player) {
+        this.instance = instance;
+        this.player = player;
+        this.dataHandler = getSpecifiedDataHandler();
+        this.playerDataManager = new PlayerDataManager(this);
 
-        getPdm().setDh(getDh());
-        getPdm().loadAllInformation();
-        getpManagers().put(p.getUniqueId(), this);
+        getPlayerDataManager().setDataHandler(getDataHandler());
+        getPlayerDataManager().loadAllInformation();
+        getPlayerManagerMap().put(player.getUniqueId(), this);
     }
 
-    public static PlayerManager get(SpecializedCrates cc, Player p) {
-        cc.getDu().log("PlayerManager.get() - CALL (contains: " + getpManagers().containsKey(p.getUniqueId()) + ")", PlayerManager.class);
-        return getpManagers().containsKey(p.getUniqueId()) ? getpManagers().get(p.getUniqueId()) : new PlayerManager(cc, p);
+    public static PlayerManager get(SpecializedCrates instance, Player player) {
+        instance.getDu().log("PlayerManager.get() - CALL (contains: " + getPlayerManagerMap().containsKey(player.getUniqueId()) + ")", PlayerManager.class);
+        return getPlayerManagerMap().containsKey(player.getUniqueId()) ? getPlayerManagerMap().get(player.getUniqueId()) : new PlayerManager(instance, player);
     }
 
     public static void clearLoaded() {
-        getpManagers().clear();
-        setpManagers(new HashMap<>());
+        playerManagerMap.clear();
     }
 
-    public static Map<UUID, PlayerManager> getpManagers() {
-        return pManagers;
-    }
-
-    public static void setpManagers(Map<UUID, PlayerManager> pManagers) {
-        PlayerManager.pManagers = pManagers;
+    public static Map<UUID, PlayerManager> getPlayerManagerMap() {
+        return playerManagerMap;
     }
 
     public void remove(int delay) {
-        cc.getDu().log("PlayerManager.remove() - CALL", getClass());
+        instance.getDu().log("PlayerManager.remove() - CALL", getClass());
 
         if (isInCrateAnimation()) {
             getCurrentAnimation().setFastTrack(true, true);
         }
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(getCc(), new Runnable() {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(getInstance(), new Runnable() {
             @Override
             public void run() {
-                getpManagers().remove(getP().getUniqueId());
-                cc.getDu().log("PlayerManager.remove() - Removed", getClass());
+                getPlayerManagerMap().remove(getPlayer().getUniqueId());
+                instance.getDu().log("PlayerManager.remove() - Removed", getClass());
             }
         }, delay);
 
-        ReflectionUtilities.cachedHandles.remove(getP());
+        ReflectionUtilities.cachedHandles.remove(getPlayer());
     }
 
     public DataHandler getSpecifiedDataHandler() {
         try {
             StorageType st = StorageType.valueOf(
-                    ChatUtils.stripFromWhitespace(SettingsValue.STORE_DATA.getValue(getCc()).toString().toUpperCase()));
+                    ChatUtils.stripFromWhitespace(SettingsValue.STORE_DATA.getValue(getInstance()).toString().toUpperCase()));
             switch (st) {
                 case MYSQL:
-                    Utils.addToInfoLog(cc, "Storage Type", "MYSQL");
+                    Utils.addToInfoLog(instance, "Storage Type", "MYSQL");
                     return new SQLDataHandler(this);
                 case FLATFILE:
-                    Utils.addToInfoLog(cc, "Storage Type", "FLATFILE");
+                    Utils.addToInfoLog(instance, "Storage Type", "FLATFILE");
                     return new FlatFileDataHandler(this);
                 case PLAYERFILES:
-                    Utils.addToInfoLog(cc, "Storage Type", "PLAYERFILES");
+                    Utils.addToInfoLog(instance, "Storage Type", "PLAYERFILES");
                     return new IndividualFileDataHandler(this);
                 default:
                     ChatUtils.log(new String[]{"store-data value in the config.YML is not a valid storage type.",
                             "  It must be: MYSQL, FLATFILE, PLAYERFILES"});
-                    Utils.addToInfoLog(cc, "StorageType", "FLATFILE");
+                    Utils.addToInfoLog(instance, "StorageType", "FLATFILE");
                     return new FlatFileDataHandler(this);
             }
         } catch (Exception exc) {
@@ -132,7 +124,7 @@ public class PlayerManager {
     public void setConfirming(final boolean confirming) {
         this.confirming = confirming;
         if (confirming) {
-            confirmingTask = Bukkit.getScheduler().runTaskLater(cc, () -> setConfirming(false), 20L * (int) SettingsValue.CONFIRM_TIMEOUT.getValue(cc));
+            confirmingTask = Bukkit.getScheduler().runTaskLater(instance, () -> setConfirming(false), 20L * (int) SettingsValue.CONFIRM_TIMEOUT.getValue(instance));
         } else {
             if (confirmingTask != null) {
                 confirmingTask.cancel();
@@ -174,32 +166,20 @@ public class PlayerManager {
         this.inRewardMenu = inRewardMenu;
     }
 
-    public Player getP() {
-        return p;
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setP(Player p) {
-        this.p = p;
+    public SpecializedCrates getInstance() {
+        return instance;
     }
 
-    public SpecializedCrates getCc() {
-        return cc;
+    public DataHandler getDataHandler() {
+        return dataHandler;
     }
 
-    public void setCc(SpecializedCrates cc) {
-        this.cc = cc;
-    }
-
-    public DataHandler getDh() {
-        return dh;
-    }
-
-    public PlayerDataManager getPdm() {
-        return pdm;
-    }
-
-    public void setPdm(PlayerDataManager pdm) {
-        this.pdm = pdm;
+    public PlayerDataManager getPlayerDataManager() {
+        return playerDataManager;
     }
 
     public long getCmdCooldown() {

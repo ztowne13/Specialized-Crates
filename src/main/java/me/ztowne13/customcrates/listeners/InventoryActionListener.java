@@ -183,7 +183,7 @@ public class InventoryActionListener implements Listener {
         if (e.getPlayer() instanceof Player) {
             Player player = (Player) e.getPlayer();
             PlayerManager playerManager = PlayerManager.get(cc, player);
-            PlayerDataManager dataManager = playerManager.getPdm();
+            PlayerDataManager dataManager = playerManager.getPlayerDataManager();
 
             if (playerManager.isInCratesClaimMenu()) {
                 preventDupeReopen(player, e.getInventory(), false);

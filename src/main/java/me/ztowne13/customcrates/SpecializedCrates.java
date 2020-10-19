@@ -166,8 +166,8 @@ public class SpecializedCrates extends JavaPlugin {
         NPCUtils.checkUncheckMobs(true);
         OpenChestAnimation.removeAllItems();
         Messages.clearCache();
-        SQLQueryThread.sql_query.clear();
-        SQLQueryThread.task_query.clear();
+        SQLQueryThread.stopRun();
+        SQLQueryThread.clearQuery();
 
         saveFilesTick(false);
     }
@@ -330,7 +330,7 @@ public class SpecializedCrates extends JavaPlugin {
                 saveFilesTick(true);
 
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    PlayerDataManager pdm = PlayerManager.get(this, p).getPdm();
+                    PlayerDataManager pdm = PlayerManager.get(this, p).getPlayerDataManager();
                     ArrayList<CrateCooldownEvent> list = new ArrayList<>(pdm.getCrateCooldownEvents());
 
                     for (CrateCooldownEvent cce : list) {
@@ -356,10 +356,10 @@ public class SpecializedCrates extends JavaPlugin {
             FlatFileDataHandler.resetToSave();
         }
 
-        for (IndividualFileDataHandler file : IndividualFileDataHandler.toSave) {
+        for (IndividualFileDataHandler file : IndividualFileDataHandler.getToSave()) {
             file.getFileHandler().save();
         }
-        IndividualFileDataHandler.toSave.clear();
+        IndividualFileDataHandler.getToSave().clear();
     }
 
     private long total = 0;

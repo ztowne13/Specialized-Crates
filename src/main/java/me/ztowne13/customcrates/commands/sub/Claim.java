@@ -23,7 +23,7 @@ public class Claim extends SubCommand {
 
         Player player = (Player) cmds.getCmdSender();
         PlayerManager playerManager = PlayerManager.get(cc, player);
-        PlayerDataManager dataManager = playerManager.getPdm();
+        PlayerDataManager dataManager = playerManager.getPlayerDataManager();
 
         int stacks = 0;
         for (VirtualCrateData vcd : dataManager.getVirtualCrateData().values()) {

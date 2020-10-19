@@ -38,7 +38,7 @@ public class CommandKey extends Commands implements CommandExecutor {
         }
 
         Player p = (Player) commandSender;
-        PlayerDataManager pdm = PlayerManager.get(instance, p).getPdm();
+        PlayerDataManager pdm = PlayerManager.get(instance, p).getPlayerDataManager();
         msg("&7&l> &b&lVirtual &f&lKeys / Crates");
         for (VirtualCrateData vcd : pdm.getVirtualCrateData().values()) {
             Crate crate = vcd.getCrate();

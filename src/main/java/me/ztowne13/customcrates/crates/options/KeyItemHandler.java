@@ -113,7 +113,7 @@ public class KeyItemHandler extends CSetting {
         CrateSettings settings = getCrate().getSettings();
         boolean passesKeyTest = !settings.isRequireKey() ||
                 (requireKeyInHand ? keyMatchesToStack(player.getItemInHand(), true) : hasKeyInInventory(player)) ||
-                PlayerManager.get(instance, player).getPdm().getVCCrateData(getCrate()).getKeys() > 0;
+                PlayerManager.get(instance, player).getPlayerDataManager().getVCCrateData(getCrate()).getKeys() > 0;
 
         instance.getDu().log("playerPasseysKeyTest() - return " + passesKeyTest);
         return passesKeyTest;
@@ -128,7 +128,7 @@ public class KeyItemHandler extends CSetting {
 
     public boolean takeKeyFromPlayer(Player player, boolean fromInv, boolean checkPhysical) {
         if (!checkPhysical) {
-            PlayerDataManager pdm = PlayerManager.get(instance, player).getPdm();
+            PlayerDataManager pdm = PlayerManager.get(instance, player).getPlayerDataManager();
             if (pdm.getVCCrateData(getCrate()).getKeys() > 0) {
                 pdm.setVirtualCrateKeys(getCrate(), pdm.getVCCrateData(getCrate()).getKeys() - 1);
                 return true;

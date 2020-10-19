@@ -50,7 +50,7 @@ public class BlockBreakListener implements Listener {
                 // Not in creative mode or creative mode is allowed
                 if (!p.getGameMode().equals(GameMode.CREATIVE) || (Boolean) SettingsValue.LUCKYCHEST_CREATIVE.getValue(cc)) {
                     // Luckychests enabled
-                    if (PlayerManager.get(cc, p).getPdm().isActivatedLuckyChests()) {
+                    if (PlayerManager.get(cc, p).getPlayerDataManager().isActivatedLuckyChests()) {
                         // Cycle through all potential crates
                         for (Crate crates : Crate.getLoadedCrates().values()) {
                             // Check if the crate is a lucky chest and if it is enabled

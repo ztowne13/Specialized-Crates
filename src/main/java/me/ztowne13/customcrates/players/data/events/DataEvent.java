@@ -7,21 +7,17 @@ import me.ztowne13.customcrates.players.PlayerDataManager;
  * Created by ztowne13 on 8/5/15.
  */
 public abstract class DataEvent {
-    SpecializedCrates cc;
+    protected final SpecializedCrates instance;
 
-    public DataEvent(SpecializedCrates cc) {
-        this.cc = cc;
+    public DataEvent(SpecializedCrates instance) {
+        this.instance = instance;
     }
 
-    public abstract void addTo(PlayerDataManager pdm);
+    public abstract void addTo(PlayerDataManager playerDataManager);
 
     public abstract String getFormatted();
 
-    public SpecializedCrates getCc() {
-        return cc;
-    }
-
-    public void setCc(SpecializedCrates cc) {
-        this.cc = cc;
+    public SpecializedCrates getInstance() {
+        return instance;
     }
 }

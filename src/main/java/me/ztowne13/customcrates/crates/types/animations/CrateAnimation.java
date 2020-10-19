@@ -132,7 +132,7 @@ public abstract class CrateAnimation {
         pm.setCurrentAnimation(null);
 
         new HistoryEvent(Utils.currentTimeParsed(), getCrate(), rewards, true)
-                .addTo(PlayerManager.get(instance, p).getPdm());
+                .addTo(PlayerManager.get(instance, p).getPlayerDataManager());
 
         for (Reward r : rewards) {
             r.giveRewardToPlayer(p);
