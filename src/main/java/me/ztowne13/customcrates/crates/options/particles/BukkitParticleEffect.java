@@ -14,8 +14,8 @@ import java.util.Random;
  * Created by ztowne13 on 6/24/16.
  */
 public class BukkitParticleEffect extends ParticleData {
-    private Particle particle;
     private final Random random;
+    private Particle particle;
 
     public BukkitParticleEffect(SpecializedCrates sc, String particleName, String name, boolean hasAnimation) {
         this(sc, Particle.valueOf(particleName.toUpperCase()), name, hasAnimation);

@@ -70,7 +70,7 @@ public class KeyItemHandler extends CSetting {
     public boolean hasKeyInInventory(Player player) {
         for (ItemStack stack : player.getInventory().getContents()) {
             if (keyMatchesToStack(stack, true)) {
-                instance.getDu().log("hasKeyInInventory() - return true", getClass());
+                instance.getDebugUtils().log("hasKeyInInventory() - return true", getClass());
                 return true;
             }
         }
@@ -115,7 +115,7 @@ public class KeyItemHandler extends CSetting {
                 (requireKeyInHand ? keyMatchesToStack(player.getItemInHand(), true) : hasKeyInInventory(player)) ||
                 PlayerManager.get(instance, player).getPlayerDataManager().getVCCrateData(getCrate()).getKeys() > 0;
 
-        instance.getDu().log("playerPasseysKeyTest() - return " + passesKeyTest);
+        instance.getDebugUtils().log("playerPasseysKeyTest() - return " + passesKeyTest);
         return passesKeyTest;
     }
 

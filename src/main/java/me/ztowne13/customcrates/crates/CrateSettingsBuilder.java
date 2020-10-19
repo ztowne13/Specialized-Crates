@@ -68,7 +68,7 @@ public class CrateSettingsBuilder {
                 StatusLoggerEvent.SETTINGS_OBTAINMETHOD_SUCCESS.log(getStatusLogger());
             } catch (Exception exc) {
                 StatusLoggerEvent.SETTINGS_OBTAINMETHOD_INVALID
-                        .log(getStatusLogger(), new String[]{getFileConfiguration().getString("obtain-method")});
+                        .log(getStatusLogger(), getFileConfiguration().getString("obtain-method"));
             }
             return;
         }
@@ -104,7 +104,7 @@ public class CrateSettingsBuilder {
             } catch (Exception exc) {
                 getSettings().setCrateType(CrateAnimationType.BLOCK_CRATEOPEN);
                 StatusLoggerEvent.SETTINGS_ANIMATION_INVALID
-                        .log(getStatusLogger(), new String[]{getFileConfiguration().getString("open.crate-animation")});
+                        .log(getStatusLogger(), getFileConfiguration().getString("open.crate-animation"));
             }
             return;
         }
@@ -164,7 +164,7 @@ public class CrateSettingsBuilder {
                     StatusLoggerEvent.SETTINGS_DISPLAYTYPE_SUCCESS.log(getStatusLogger());
                 } catch (Exception exc) {
                     StatusLoggerEvent.SETTINGS_DISPLAYTYPE_INVALID
-                            .log(getStatusLogger(), new String[]{getFileConfiguration().getString("display.type")});
+                            .log(getStatusLogger(), getFileConfiguration().getString("display.type"));
                 }
             }
 
@@ -187,7 +187,7 @@ public class CrateSettingsBuilder {
                     } catch (Exception exc) {
                         exc.printStackTrace();
                         StatusLoggerEvent.SETTINGS_DISPLAYTYPE_CREATURETYPE_INVALID
-                                .log(getStatusLogger(), new String[]{getFileConfiguration().getString("display.creature")});
+                                .log(getStatusLogger(), getFileConfiguration().getString("display.creature"));
                     }
                 } else {
                     StatusLoggerEvent.SETTINGS_DISPLAYTYPE_CREATURETYPE_NONEXISTENT.log(getStatusLogger());
@@ -267,7 +267,7 @@ public class CrateSettingsBuilder {
             } catch (Exception exc) {
                 getSettings().setRewardDisplayType(RewardDisplayType.IN_ORDER);
                 getSettings().setDisplayer(new SimpleRewardDisplayer(getSettings().getCrate()));
-                StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_INVALID.log(getStatusLogger(), new String[]{displayerString});
+                StatusLoggerEvent.SETTINGS_REWARD_DISPLAYER_INVALID.log(getStatusLogger(), displayerString);
             }
 
             getSettings().getDisplayer().load();

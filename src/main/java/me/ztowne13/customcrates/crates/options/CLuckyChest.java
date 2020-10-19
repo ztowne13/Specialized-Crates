@@ -90,7 +90,7 @@ public class CLuckyChest extends CSetting {
                 if (w != null) {
                     getWorlds().add(w);
                 } else {
-                    StatusLoggerEvent.LUCKYCHEST_WORLD_INVALID.log(getCrate(), new String[]{s});
+                    StatusLoggerEvent.LUCKYCHEST_WORLD_INVALID.log(getCrate(), s);
                 }
             }
         }
@@ -102,7 +102,7 @@ public class CLuckyChest extends CSetting {
                     if (optional.isPresent()) {
                         getWhiteList().add(optional.get().parseMaterial());
                     } else {
-                        StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALIDBLOCK.log(getCrate(), new String[]{mat});
+                        StatusLoggerEvent.LUCKYCHEST_BLOCKLIST_INVALIDBLOCK.log(getCrate(), mat);
                     }
                 }
             } catch (Exception exc) {

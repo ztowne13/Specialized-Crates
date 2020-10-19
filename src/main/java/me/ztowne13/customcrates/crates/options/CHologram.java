@@ -45,7 +45,7 @@ public class CHologram extends CSetting {
 
         if (crateSettingsBuilder.hasValue("hologram.reward-hologram")) {
             rewardHologram = fc.getString("hologram.reward-hologram");
-            StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM.log(getCrate(), new String[]{rewardHologram});
+            StatusLoggerEvent.HOLOGRAM_REWARD_HOLOGRAM.log(getCrate(), rewardHologram);
         }
 
         if (crateSettingsBuilder.hasValue("hologram.reward-hologram-duration")) {
@@ -82,7 +82,7 @@ public class CHologram extends CSetting {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_TYPE_FAILURE_NONEXISTENT.log(getCrate());
                 } else {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_TYPE_FAILURE_INVALID
-                            .log(getCrate(), new String[]{fc.getString("hologram.animation.type")});
+                            .log(getCrate(), fc.getString("hologram.animation.type"));
                 }
                 return;
             }
@@ -95,7 +95,7 @@ public class CHologram extends CSetting {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_SPEED_FAILURE_NONEXISTENT.log(getCrate());
                 } else {
                     StatusLoggerEvent.HOLOGRAM_ANIMATION_SPEED_FAILURE_INVALID
-                            .log(getCrate(), new String[]{fc.getString("hologram.animation.speed")});
+                            .log(getCrate(), fc.getString("hologram.animation.speed"));
                 }
                 return;
             }
@@ -169,7 +169,7 @@ public class CHologram extends CSetting {
             lines.add(line);
         } catch (Exception exc) {
             StatusLoggerEvent.HOLOGRAM_ADDLINE_FAIL_TOMANY
-                    .log(getCrate(), new String[]{line, (getLines().size() + 1) + ""});
+                    .log(getCrate(), line, (getLines().size() + 1) + "");
         }
     }
 

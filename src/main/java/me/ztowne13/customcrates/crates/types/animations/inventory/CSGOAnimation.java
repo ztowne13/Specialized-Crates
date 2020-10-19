@@ -234,15 +234,15 @@ public class CSGOAnimation extends InventoryCrateAnimation {
                     Optional<XMaterial> optional = XMaterial.matchXMaterial(unParsed);
                     if (!optional.isPresent()) {
                         StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_MATERIAL_INVALID
-                                .log(getStatusLogger(), new String[]{args[0]});
+                                .log(getStatusLogger(), args[0]);
                         continue;
                     }
                     getFillerBlocks().add(new ItemBuilder(optional.get(), 1).setDisplayName("&f"));
 
                     StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_MATERIAL_SUCCESS
-                            .log(getStatusLogger(), new String[]{unParsed});
+                            .log(getStatusLogger(), unParsed);
                 } catch (Exception exc) {
-                    StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_ITEM_INVALID.log(getStatusLogger(), new String[]{unParsed});
+                    StatusLoggerEvent.ANIMATION_CSGO_FILLERBLOCK_ITEM_INVALID.log(getStatusLogger(), unParsed);
                 }
             }
         } catch (Exception exc) {

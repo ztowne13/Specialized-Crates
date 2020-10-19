@@ -17,12 +17,12 @@ public class SQLQueryThread extends Thread {
         start();
         setName("SpecializedCrates-SQL");
 
-        sql.getInstance().getDu().log("SQLQueryThread() - Opening connection...", getClass());
+        sql.getInstance().getDebugUtils().log("SQLQueryThread() - Opening connection...", getClass());
         long curTime = System.currentTimeMillis();
 
         sql.getConnection().open();
 
-        sql.getInstance().getDu().log("SQLQueryThread() - Completed opening connection in " + (System.currentTimeMillis() - curTime) + "ms.", getClass());
+        sql.getInstance().getDebugUtils().log("SQLQueryThread() - Completed opening connection in " + (System.currentTimeMillis() - curTime) + "ms.", getClass());
     }
 
     public static void addQuery(String query) {
@@ -58,7 +58,7 @@ public class SQLQueryThread extends Thread {
 
             while (!sql_query.isEmpty()) {
                 String query = sql_query.remove();
-                sql.getInstance().getDu().log("run() - query: " + query, getClass());
+                sql.getInstance().getDebugUtils().log("run() - query: " + query, getClass());
                 try {
                     sql.getConnection().get().prepareStatement(query).executeUpdate();
                     tryReconnect = false;
@@ -66,9 +66,9 @@ public class SQLQueryThread extends Thread {
                     if (!tryReconnect) {
                         tryReconnect = true;
                         sql.getConnection().open();
-                        sql.getInstance().getDu().log("Trying to reconnect to SQL servers.");
+                        sql.getInstance().getDebugUtils().log("Trying to reconnect to SQL servers.");
                     } else {
-                        sql.getInstance().getDu().log("Failed to reconnect to SQL servers.");
+                        sql.getInstance().getDebugUtils().log("Failed to reconnect to SQL servers.");
                         exc.printStackTrace();
                     }
                 }
@@ -76,7 +76,7 @@ public class SQLQueryThread extends Thread {
 
             while (!task_query.isEmpty()) {
                 Runnable query = task_query.remove();
-                sql.getInstance().getDu().log("run() - query: " + query.toString(), getClass());
+                sql.getInstance().getDebugUtils().log("run() - query: " + query.toString(), getClass());
                 query.run();
             }
         }

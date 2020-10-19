@@ -90,7 +90,7 @@ public class CFirework extends CSetting {
         ArrayList<FireworkData> list = new ArrayList<>();
         list.add(s);
 
-        StatusLoggerEvent.FIREWORK_ADD.log(getCrate(), new String[]{s.getFeType().name(), id});
+        StatusLoggerEvent.FIREWORK_ADD.log(getCrate(), s.getFeType().name(), id);
         getFireworks().put(id, list);
     }
 

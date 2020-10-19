@@ -11,7 +11,7 @@ public class FlatFileDataHandler extends DataHandler {
 
     public FlatFileDataHandler(PlayerManager playerManager) {
         super(playerManager);
-        instance.getDu().log("Loading flat file data handler for " + playerManager.getPlayer().getName());
+        instance.getDebugUtils().log("Loading flat file data handler for " + playerManager.getPlayer().getName());
         if (fileHandler == null) {
             fileHandler = new FileHandler(instance, "PlayerData.db", false, false);
             fileConfiguration = getFileHandler().get();
@@ -41,13 +41,13 @@ public class FlatFileDataHandler extends DataHandler {
 
     @Override
     public Object get(String value) {
-        instance.getDu().log("FlatFileDataHandler.get() - CALL", getClass());
+        instance.getDebugUtils().log("FlatFileDataHandler.get() - CALL", getClass());
         return getFileConfiguration().get(toPath(value));
     }
 
     @Override
     public void write(String value, String toWrite) {
-        instance.getDu().log("FlatFileDataHandler.write() - CALL", getClass());
+        instance.getDebugUtils().log("FlatFileDataHandler.write() - CALL", getClass());
         getFileConfiguration().set(toPath(value), toWrite);
 
         toSave = true;

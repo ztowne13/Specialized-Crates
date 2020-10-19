@@ -3,8 +3,8 @@ package me.ztowne13.customcrates.utils;
 import org.bukkit.Bukkit;
 
 public class VersionUtils {
-    static String cachedVersionRaw = "";
-    static String cachedServerVersion = "";
+    private static String cachedVersionRaw = "";
+    private static String cachedServerVersion = "";
 
     public static String getVersionRaw() {
         if (cachedVersionRaw.equals("")) {
@@ -37,7 +37,7 @@ public class VersionUtils {
 
         public boolean isServerVersionOrEarlier() {
             for (Version version : Version.values()) {
-                if (VersionUtils.getServerVersion().contains(version.toString()))
+                if (VersionUtils.getServerVersion().contains(version.name()))
                     return true;
                 if (this == version)
                     break;
@@ -52,7 +52,7 @@ public class VersionUtils {
                 if (this == version && !found)
                     found = true;
 
-                if (found && VersionUtils.getServerVersion().contains(version.toString()))
+                if (found && VersionUtils.getServerVersion().contains(version.name()))
                     return true;
             }
             return false;

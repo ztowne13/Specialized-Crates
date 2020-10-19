@@ -117,12 +117,12 @@ public class CrateSettings {
     }
 
     public void loadAll() {
-        instance.getDu().log("loadAll() - CALL");
+        instance.getDebugUtils().log("loadAll() - CALL");
         // Crate Loging
         String toLog = SettingsValue.LOG_SUCCESSES.getValue(getCrate().getInstance()).toString();
-        instance.getDu().log("loadAll() - Preparing to load notice.");
+        instance.getDebugUtils().log("loadAll() - Preparing to load notice.");
         loadNotice(toLog);
-        instance.getDu().log("loadAll() - Loaded notice.");
+        instance.getDebugUtils().log("loadAll() - Loaded notice.");
 
         setParticle(new CParticle(getCrate()));
         setHologram(new CHologram(getCrate()));

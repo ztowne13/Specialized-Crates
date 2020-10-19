@@ -25,7 +25,7 @@ public class MaterialPlaceholder extends DynamicCratePlaceholder {
                 }
             } catch (Exception exc) {
                 StatusLoggerEvent.SETTINGS_CRATE_FAILURE_DISABLE.log(placedCrate.getCrate().getSettings().getStatusLogger(),
-                        new String[]{m.toString() + " is not a block and therefore cannot be used as a crate type!"});
+                        m.toString() + " is not a block and therefore cannot be used as a crate type!");
                 placedCrate.getCrate().setDisabledByError(false);
                 placedCrate.setCratesEnabled(false);
             }

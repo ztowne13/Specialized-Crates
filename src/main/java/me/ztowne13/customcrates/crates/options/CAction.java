@@ -81,7 +81,7 @@ public class CAction extends CSetting {
         list.add(action);
         map.put(type, list);
 
-        StatusLoggerEvent.ACTION_ADD.log(getCrate(), new String[]{action, tier});
+        StatusLoggerEvent.ACTION_ADD.log(getCrate(), action, tier);
         getActions().put(tier, map);
     }
 
@@ -125,7 +125,7 @@ public class CAction extends CSetting {
     }
 
     public void playAll(Player player, PlacedCrate placedCrate, List<Reward> rewards, boolean pre) {
-        instance.getDu().log("playAll() - CALL (pre: " + pre + ")", getClass());
+        instance.getDebugUtils().log("playAll() - CALL (pre: " + pre + ")", getClass());
 
         if (rewards.isEmpty() && !pre)
             return;

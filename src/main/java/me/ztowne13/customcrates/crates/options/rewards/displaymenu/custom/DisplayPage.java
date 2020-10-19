@@ -195,13 +195,13 @@ public class DisplayPage {
     public void handleInput(Player player, int slot) {
         SpecializedCrates sc = customRewardDisplayer.getCrate().getInstance();
         int x = slot / 9;
-        sc.getDu().log("handleInput() - x: " + x, getClass());
+        sc.getDebugUtils().log("handleInput() - x: " + x, getClass());
         int y = slot % 9;
-        sc.getDu().log("handleInput() - y: " + y, getClass());
+        sc.getDebugUtils().log("handleInput() - y: " + y, getClass());
         String symbolAt = unformattedInv[x][y];
-        sc.getDu().log("handleInput() - symbolAt: " + symbolAt, getClass());
-        sc.getDu().log("handleInput() - nextPageItem: " + customRewardDisplayer.getNextPageItem(), getClass());
-        sc.getDu().log("handleInput() - backpageitem: " + customRewardDisplayer.getPrevPageItem(), getClass());
+        sc.getDebugUtils().log("handleInput() - symbolAt: " + symbolAt, getClass());
+        sc.getDebugUtils().log("handleInput() - nextPageItem: " + customRewardDisplayer.getNextPageItem(), getClass());
+        sc.getDebugUtils().log("handleInput() - backpageitem: " + customRewardDisplayer.getPrevPageItem(), getClass());
 
         // There's no item in the display at the spot.
         if (symbolAt == null)

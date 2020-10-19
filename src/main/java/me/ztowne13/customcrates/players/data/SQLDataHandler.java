@@ -14,7 +14,7 @@ public class SQLDataHandler extends DataHandler {
 
     public SQLDataHandler(PlayerManager playerManager) {
         super(playerManager);
-        instance.getDu().log("SQLDataHandler() - CALL", getClass());
+        instance.getDebugUtils().log("SQLDataHandler() - CALL", getClass());
         load();
     }
 
@@ -32,7 +32,7 @@ public class SQLDataHandler extends DataHandler {
             Bukkit.getScheduler().runTaskLaterAsynchronously(instance, new Runnable() {
                 @Override
                 public void run() {
-                    instance.getDu().log("load() - CALL (Note: This is run synchronous not asynchronous)", getClass());
+                    instance.getDebugUtils().log("load() - CALL (Note: This is run synchronous not asynchronous)", getClass());
                     long curTime = System.currentTimeMillis();
 
                     FileHandler sqlYml = instance.getSqlFile();
@@ -44,24 +44,24 @@ public class SQLDataHandler extends DataHandler {
                     String dbUsername = fc.getString("database.username");
                     String dbPassword = fc.getString("database.password");
 
-                    instance.getDu().log("load() - Opening connection and creating query thread.", getClass());
+                    instance.getDebugUtils().log("load() - Opening connection and creating query thread.", getClass());
                     sql = new SQL(instance, dbIp, dbName, dbPort, dbUsername, dbPassword);
                     new SQLQueryThread(sql);
 
-                    instance.getDu().log("load() - Completed creating thread and opening connection in " +
+                    instance.getDebugUtils().log("load() - Completed creating thread and opening connection in " +
                             (System.currentTimeMillis() - curTime) + "ms.", getClass());
 
-                    instance.getDu().log("load() - Creating table & setting unique if it doesn't exist...", getClass());
+                    instance.getDebugUtils().log("load() - Creating table & setting unique if it doesn't exist...", getClass());
                     long createTime = System.currentTimeMillis();
 
                     sql.create(TABLE,
                             "uuid varchar(36), history longtext, crateCooldowns mediumtext, virtualCrates mediumtext, rewardLimits mediumtext",
                             true);
 
-                    instance.getDu().log("load() - Completed creating table & setting unique in " +
+                    instance.getDebugUtils().log("load() - Completed creating table & setting unique in " +
                                     (System.currentTimeMillis() - createTime) + "ms.",
                             getClass());
-                    instance.getDu().log("load() - Completed in  " + (System.currentTimeMillis() - curTime) + "ms.", getClass());
+                    instance.getDebugUtils().log("load() - Completed in  " + (System.currentTimeMillis() - curTime) + "ms.", getClass());
                     loaded = true;
                 }
             }, 0);

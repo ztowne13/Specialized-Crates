@@ -6,10 +6,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ReflectionUtilities {
-    public static final Map<Object, Object> cachedHandles = new HashMap<>();
+
+    private static final Map<Object, Object> cachedHandles = new HashMap<>();
     private static final HashMap<Class<?>, HashMap<String, Field>> cachedFields = new HashMap<>();
     private static final HashMap<String, Class<?>> cachedOBCClass = new HashMap<>();
     private static final HashMap<String, Class<?>> cachedNMSClass = new HashMap<>();
+
+    private ReflectionUtilities() {
+        // EMPTY
+    }
+
+    public static Map<Object, Object> getCachedHandles() {
+        return cachedHandles;
+    }
 
     public static void setValue(Object instance, String fieldName, Object value) throws Exception {
         Field field = instance.getClass().getDeclaredField(fieldName);

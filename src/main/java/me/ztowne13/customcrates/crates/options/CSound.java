@@ -60,7 +60,7 @@ public class CSound extends CSetting {
                 if (optional.isPresent()) {
                     sd = new SoundData(optional.get());
                 } else {
-                    StatusLoggerEvent.SOUND_NONEXISTENT.log(getCrate(), new String[]{sound, args[0]});
+                    StatusLoggerEvent.SOUND_NONEXISTENT.log(getCrate(), sound, args[0]);
                     continue;
                 }
 
@@ -69,9 +69,9 @@ public class CSound extends CSetting {
                     sd.setPitch(pitch);
                 } catch (Exception exc) {
                     if (args.length > 0) {
-                        StatusLoggerEvent.SOUND_PITCH_INVALID.log(getCrate(), new String[]{sd.getSound().name(), args[1]});
+                        StatusLoggerEvent.SOUND_PITCH_INVALID.log(getCrate(), sd.getSound().name(), args[1]);
                     } else {
-                        StatusLoggerEvent.SOUND_PITCH_NONEXISTENT.log(getCrate(), new String[]{sd.getSound().name()});
+                        StatusLoggerEvent.SOUND_PITCH_NONEXISTENT.log(getCrate(), sd.getSound().name());
                     }
                     continue;
                 }
@@ -82,17 +82,17 @@ public class CSound extends CSetting {
                 } catch (Exception exc) {
                     if (args.length > 1) {
                         StatusLoggerEvent.SOUND_VOLUME_INVALID
-                                .log(getCrate(), new String[]{sd.getSound().name(), args[2]});
+                                .log(getCrate(), sd.getSound().name(), args[2]);
                     } else {
-                        StatusLoggerEvent.SOUND_VOLUME_NONEXISTENT.log(getCrate(), new String[]{sd.getSound().name()});
+                        StatusLoggerEvent.SOUND_VOLUME_NONEXISTENT.log(getCrate(), sd.getSound().name());
                     }
                     continue;
                 }
 
                 addSound(id, sd);
-                StatusLoggerEvent.SOUND_ADD_SUCCESS.log(getCrate(), new String[]{sd.getSound().name()});
+                StatusLoggerEvent.SOUND_ADD_SUCCESS.log(getCrate(), sd.getSound().name());
             } catch (Exception exc) {
-                StatusLoggerEvent.SOUND_ADD_IMPROPER_SETUP.log(getCrate(), new String[]{sound});
+                StatusLoggerEvent.SOUND_ADD_IMPROPER_SETUP.log(getCrate(), sound);
                 exc.printStackTrace();
             }
         }

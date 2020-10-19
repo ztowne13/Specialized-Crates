@@ -95,15 +95,15 @@ public class PlaceHolderAPIHandler extends PlaceholderExpansion {
 
                     if (!values[0].equalsIgnoreCase("0"))
                         formatted =
-                                formatted + values[0] + " " + Messages.PLACEHOLDER_DAYS.getPropperMsg(crate.getInstance()) + ", ";
+                                formatted + values[0] + " " + Messages.PLACEHOLDER_DAYS.getProperMsg(crate.getInstance()) + ", ";
                     if (!values[1].equalsIgnoreCase("00"))
                         formatted =
-                                formatted + values[1] + " " + Messages.PLACEHOLDER_HOURS.getPropperMsg(crate.getInstance()) + ", ";
+                                formatted + values[1] + " " + Messages.PLACEHOLDER_HOURS.getProperMsg(crate.getInstance()) + ", ";
                     if (!values[2].equalsIgnoreCase("00"))
-                        formatted = formatted + values[2] + " " + Messages.PLACEHOLDER_MINUTES.getPropperMsg(crate.getInstance()) +
+                        formatted = formatted + values[2] + " " + Messages.PLACEHOLDER_MINUTES.getProperMsg(crate.getInstance()) +
                                 ", ";
                     if (!values[3].equalsIgnoreCase("00"))
-                        formatted = formatted + values[3] + " " + Messages.PLACEHOLDER_SECONDS.getPropperMsg(crate.getInstance());
+                        formatted = formatted + values[3] + " " + Messages.PLACEHOLDER_SECONDS.getProperMsg(crate.getInstance());
 //                    else
 //                        formatted = formatted.substring(0, formatted.length() - 2);
 

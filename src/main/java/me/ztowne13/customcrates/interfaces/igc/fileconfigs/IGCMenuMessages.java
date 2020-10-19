@@ -45,7 +45,7 @@ public class IGCMenuMessages extends IGCMenu {
                 i += 2;
             }
 
-            String properMsg = msg.getPropperMsg(getCc());
+            String properMsg = msg.getProperMsg(getCc());
 //            ib.setItem(i, new ItemBuilder(DynamicMaterial.BOOK, 1).setName("&a" + msg.toString().toLowerCase()).addLore(
 //                    properMsg.substring(0, properMsg.length() > msgLoreLength ? msgLoreLength : properMsg.length()) +
 //                            (properMsg.length() > msgLoreLength ? "..." : "")));
@@ -72,7 +72,7 @@ public class IGCMenuMessages extends IGCMenu {
         } else if (!(getIb().getInv().getItem(slot) == null)) {
             Messages msg = Messages.valueOf(
                     ChatUtils.removeColor(getIb().getInv().getItem(slot).getItemMeta().getDisplayName()).toUpperCase());
-            new InputMenu(getCc(), getP(), msg.name(), msg.getPropperMsg(getCc()), String.class, this);
+            new InputMenu(getCc(), getP(), msg.name(), msg.getProperMsg(getCc()), String.class, this);
         }
     }
 

@@ -13,9 +13,8 @@ import java.util.*;
 
 public class CReward extends CSetting {
     private static final Map<String, Reward> allRewards = new HashMap<>();
-
-    private Reward[] crateRewards;
     private final Random random = new Random();
+    private Reward[] crateRewards;
 
     public CReward(Crate crate) {
         super(crate, crate.getInstance());
@@ -149,7 +148,7 @@ public class CReward extends CSetting {
                 setReward(slot, reward);
 
                 getAllRewards().put(s, reward);
-                StatusLoggerEvent.REWARD_ADD_SUCCESS.log(getCrate(), new String[]{s});
+                StatusLoggerEvent.REWARD_ADD_SUCCESS.log(getCrate(), s);
 
                 slot++;
             }

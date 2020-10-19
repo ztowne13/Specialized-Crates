@@ -68,7 +68,7 @@ public class FileHandler {
     }
 
     public void loadFile() {
-        instance.getDu().log("loadFile() - CALL", getClass(), false);
+        instance.getDebugUtils().log("loadFile() - CALL", getClass(), false);
 
         if (getDataFile() == null) {
             setDataFile(new File(new File(instance.getDataFolder().getPath() + getDirectory()), getName()));
@@ -86,7 +86,7 @@ public class FileHandler {
     }
 
     public void reload() {
-        instance.getDu().log("reload() - CALL", getClass(), false);
+        instance.getDebugUtils().log("reload() - CALL", getClass(), false);
 
         loadFile();
 
@@ -125,7 +125,7 @@ public class FileHandler {
     }
 
     private void loadByByte() {
-        instance.getDu().log("loadByByte() - CALL", getClass(), false);
+        instance.getDebugUtils().log("loadByByte() - CALL", getClass(), false);
 
         if (saveWithCustomSave) {
             try {
@@ -160,7 +160,7 @@ public class FileHandler {
     }
 
     public void save() {
-        instance.getDu().log("save() - CALL", getClass(), false);
+        instance.getDebugUtils().log("save() - CALL", getClass(), false);
         long curTime = System.currentTimeMillis();
 
         if (getData() == null || getDataFile() == null) {
@@ -181,14 +181,14 @@ public class FileHandler {
             ex.printStackTrace();
             instance.getLogger().log(Level.SEVERE, ex, () -> "Could not save config to " + getDataFile());
         }
-        instance.getDu().log("save() - Time to complete: " + (System.currentTimeMillis() - curTime), getClass());
+        instance.getDebugUtils().log("save() - Time to complete: " + (System.currentTimeMillis() - curTime), getClass());
         if (DebugUtils.OUTPUT_FILE_SAVE_TIME) {
             ChatUtils.log("Time to save " + name + ": " + (System.currentTimeMillis() - curTime));
         }
     }
 
     private void saveByByte() {
-        instance.getDu().log("saveByByte() - CALL", getClass(), false);
+        instance.getDebugUtils().log("saveByByte() - CALL", getClass(), false);
         ArrayList<String> bukkitLoad = new ArrayList<>();
         for (String s : getData().saveToString().split("\n")) {
             if (!isCommentLine(s)) {
@@ -265,7 +265,7 @@ public class FileHandler {
     }
 
     public FileConfiguration get() {
-        instance.getDu().log("get() - CALL", getClass(), false);
+        instance.getDebugUtils().log("get() - CALL", getClass(), false);
         if (getData() == null) {
             reload();
         }
@@ -313,7 +313,7 @@ public class FileHandler {
     }
 
     public FileConfiguration getData() {
-        instance.getDu().log("getData() - CALL", getClass(), false);
+        instance.getDebugUtils().log("getData() - CALL", getClass(), false);
 
         return data;
     }

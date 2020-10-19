@@ -87,7 +87,7 @@ public class CMultiCrateInventory extends CSetting {
                             materialsWithID.put(s, item);
                         }
                     } catch (Exception exc) {
-                        StatusLoggerEvent.MULTICRATEINVENTORY_OBJECTS_INVALID.log(getCrate(), new String[]{s, cause});
+                        StatusLoggerEvent.MULTICRATEINVENTORY_OBJECTS_INVALID.log(getCrate(), s, cause);
                     }
                 }
             } catch (Exception exc) {
@@ -261,7 +261,7 @@ public class CMultiCrateInventory extends CSetting {
                     ChatUtils.msgError(player, "There are to many lines in the MultiCrate inventory");
                 }
             }
-            instance.getDu().log("CMultiCrateInventory.getInventory.if(ib == null)");
+            instance.getDebugUtils().log("CMultiCrateInventory.getInventory.if(ib == null)");
 
         } else if (toEdit) {
             InventoryBuilder newIb = new InventoryBuilder(player, inventoryBuilder.getInv().getSize(), invName);
@@ -273,15 +273,15 @@ public class CMultiCrateInventory extends CSetting {
             }
 
             inventoryBuilder = newIb;
-            instance.getDu().log("CMultiCrateInventory.getInventory.else");
+            instance.getDebugUtils().log("CMultiCrateInventory.getInventory.else");
         }
 
         for (Map.Entry<Integer, Crate> entry : crateSpots.entrySet()) {
             try {
                 Crate crate = entry.getValue();
-                instance.getDu().log(crate.getName());
+                instance.getDebugUtils().log(crate.getName());
                 VirtualCrateData vcd = PlayerManager.get(instance, player).getPlayerDataManager().getVCCrateData(crate);
-                instance.getDu().log(vcd.toString());
+                instance.getDebugUtils().log(vcd.toString());
                 ItemBuilder crateIb = new ItemBuilder(crate.getSettings().getCrateItemHandler().getItem(1));
 
                 if (instance.getSettings().getConfigValAsBoolean("virtual-crate-cratecount").equals(Boolean.TRUE)) {

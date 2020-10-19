@@ -59,7 +59,7 @@ public class PlayerManager {
     }
 
     public static PlayerManager get(SpecializedCrates instance, Player player) {
-        instance.getDu().log("PlayerManager.get() - CALL (contains: " + getPlayerManagerMap().containsKey(player.getUniqueId()) + ")", PlayerManager.class);
+        instance.getDebugUtils().log("PlayerManager.get() - CALL (contains: " + getPlayerManagerMap().containsKey(player.getUniqueId()) + ")", PlayerManager.class);
         return getPlayerManagerMap().containsKey(player.getUniqueId()) ? getPlayerManagerMap().get(player.getUniqueId()) : new PlayerManager(instance, player);
     }
 
@@ -72,7 +72,7 @@ public class PlayerManager {
     }
 
     public void remove(int delay) {
-        instance.getDu().log("PlayerManager.remove() - CALL", getClass());
+        instance.getDebugUtils().log("PlayerManager.remove() - CALL", getClass());
 
         if (isInCrateAnimation()) {
             getCurrentAnimation().setFastTrack(true, true);
@@ -82,11 +82,11 @@ public class PlayerManager {
             @Override
             public void run() {
                 getPlayerManagerMap().remove(getPlayer().getUniqueId());
-                instance.getDu().log("PlayerManager.remove() - Removed", getClass());
+                instance.getDebugUtils().log("PlayerManager.remove() - Removed", getClass());
             }
         }, delay);
 
-        ReflectionUtilities.cachedHandles.remove(getPlayer());
+        ReflectionUtilities.getCachedHandles().remove(getPlayer());
     }
 
     public DataHandler getSpecifiedDataHandler() {

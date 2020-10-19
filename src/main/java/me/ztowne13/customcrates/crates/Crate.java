@@ -38,7 +38,7 @@ public class Crate {
     }
 
     public Crate(SpecializedCrates instance, String name, boolean newFile, boolean isMultiCrate) {
-        instance.getDu().log("Crate() - new", getClass());
+        instance.getDebugUtils().log("Crate() - new", getClass());
         this.instance = instance;
         this.name = name;
 

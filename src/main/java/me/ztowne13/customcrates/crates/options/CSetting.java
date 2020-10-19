@@ -8,8 +8,8 @@ import me.ztowne13.customcrates.crates.CrateState;
 import me.ztowne13.customcrates.interfaces.files.FileHandler;
 
 public abstract class CSetting {
-    protected Crate crate;
     protected final SpecializedCrates instance;
+    protected Crate crate;
 
     public CSetting(Crate crate, SpecializedCrates instance) {
         this.crate = crate;

@@ -60,7 +60,7 @@ public class CParticle extends CSetting {
     public void addParticle(ParticleData particleData, String s) {
         List<ParticleData> plist = getParticles().getOrDefault(s, new ArrayList<>());
         plist.add(particleData);
-        StatusLoggerEvent.PARTICLE_ADD_SUCCESS.log(getCrate(), new String[]{particleData.getParticleName()});
+        StatusLoggerEvent.PARTICLE_ADD_SUCCESS.log(getCrate(), particleData.getParticleName());
         getParticles().put(s, plist);
     }
 
@@ -95,7 +95,7 @@ public class CParticle extends CSetting {
                         try {
                             pe = ParticleEffect.valueOf(particleTypeAS);
                         } catch (Exception exc) {
-                            StatusLoggerEvent.PARTICLE_INVALID.log(getCrate(), new String[]{parent, particleTypeAS});
+                            StatusLoggerEvent.PARTICLE_INVALID.log(getCrate(), parent, particleTypeAS);
                             continue;
                         }
                         pd = new NMSParticleEffect(instance, pe, parent, false);
@@ -103,7 +103,7 @@ public class CParticle extends CSetting {
                         try {
                             pd = new BukkitParticleEffect(instance, particleTypeAS, parent, false);
                         } catch (Exception exc) {
-                            StatusLoggerEvent.PARTICLE_INVALID.log(getCrate(), new String[]{parent, particleTypeAS});
+                            StatusLoggerEvent.PARTICLE_INVALID.log(getCrate(), parent, particleTypeAS);
                             continue;
                         }
                     }
@@ -207,13 +207,13 @@ public class CParticle extends CSetting {
                             pd.setHasAnimation(true);
                         }
                     } catch (Exception exc) {
-                        StatusLoggerEvent.PARTICLE_ANIMATION_INVALID.log(getCrate(), new String[]{animationAS});
+                        StatusLoggerEvent.PARTICLE_ANIMATION_INVALID.log(getCrate(), animationAS);
                     }
 
                     addParticle(pd, id);
                 } catch (Exception exc) {
                     exc.printStackTrace();
-                    StatusLoggerEvent.PARTICLE_STRING_INVALID.log(getCrate(), new String[]{parent});
+                    StatusLoggerEvent.PARTICLE_STRING_INVALID.log(getCrate(), parent);
                 }
             }
         } catch (Exception exc) {

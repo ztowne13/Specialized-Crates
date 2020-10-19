@@ -289,7 +289,7 @@ public class Reward implements Comparable<Reward> {
             needsMoreConfig = true;
             if (toLog) {
                 setChance(-1);
-                StatusLoggerEvent.REWARD_CHANCE_NONEXISTENT.log(getRewards().getCrate(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_CHANCE_NONEXISTENT.log(getRewards().getCrate(), this.toString());
             }
         }
     }
@@ -344,7 +344,7 @@ public class Reward implements Comparable<Reward> {
         } catch (Exception exc) {
             //needsMoreConfig = true;
             if (toLog) {
-                StatusLoggerEvent.REWARD_RARITY_NONEXISTENT.log(getRewards().getCrate(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_RARITY_NONEXISTENT.log(getRewards().getCrate(), this.toString());
                 success = false;
             }
         }
@@ -372,7 +372,7 @@ public class Reward implements Comparable<Reward> {
             setCommands(getFileConfiguration().getStringList(getPath("commands")));
         } catch (Exception exc) {
             if (toLog) {
-                StatusLoggerEvent.REWARD_COMMAND_INVALID.log(getRewards().getCrate(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_COMMAND_INVALID.log(getRewards().getCrate(), this.toString());
                 success = false;
             }
         }

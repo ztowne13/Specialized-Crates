@@ -158,15 +158,15 @@ public class RouletteAnimation extends InventoryCrateAnimation {
                     Optional<XMaterial> optional = XMaterial.matchXMaterial(s);
                     if (!optional.isPresent()) {
                         StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_NONEXISTENT
-                                .log(getStatusLogger(), new String[]{s});
+                                .log(getStatusLogger(), s);
                         continue;
                     }
 
                     getItems().add(new ItemBuilder(optional.get(), 1).setDisplayName("&f"));
                     StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_MATERIAL_SUCCESS
-                            .log(getStatusLogger(), new String[]{s});
+                            .log(getStatusLogger(), s);
                 } catch (Exception exc) {
-                    StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_ITEM_INVALID.log(getStatusLogger(), new String[]{s});
+                    StatusLoggerEvent.ANIMATION_ROULETTE_RANDOMBLOCK_ITEM_INVALID.log(getStatusLogger(), s);
                 }
             }
         } catch (Exception exc) {

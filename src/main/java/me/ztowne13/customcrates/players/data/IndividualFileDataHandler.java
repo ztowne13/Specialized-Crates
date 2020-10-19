@@ -15,11 +15,11 @@ public class IndividualFileDataHandler extends DataHandler {
 
     public IndividualFileDataHandler(PlayerManager playerManager) {
         super(playerManager);
-        instance.getDu().log("Loading individual file data handler for " + playerManager.getPlayer().getName());
+        instance.getDebugUtils().log("Loading individual file data handler for " + playerManager.getPlayer().getName());
         this.fileHandler = new FileHandler(playerManager.getInstance(), playerManager.getPlayer().getUniqueId().toString() + ".stats", "/PlayerStats/", false, false,
                 false);
         this.fileConfiguration = getFileHandler().get();
-        instance.getDu().log(fileHandler.getDataFile().getAbsolutePath());
+        instance.getDebugUtils().log(fileHandler.getDataFile().getAbsolutePath());
     }
 
     public static List<IndividualFileDataHandler> getToSave() {

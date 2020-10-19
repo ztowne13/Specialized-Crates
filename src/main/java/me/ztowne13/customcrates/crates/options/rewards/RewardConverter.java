@@ -47,7 +47,7 @@ public class RewardConverter {
             XMaterial m = optional.get();
 
             if (m.equals(XMaterial.AIR)) {
-                StatusLoggerEvent.REWARD_ITEM_AIR.log(reward.getRewards().getCrate(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_ITEM_AIR.log(reward.getRewards().getCrate(), this.toString());
                 return false;
             }
 
@@ -63,7 +63,7 @@ public class RewardConverter {
             reward.getSaveBuilder().setDisplayName(reward.getSaveBuilder().getStack().getType().name().toLowerCase());
             reward.setNeedsMoreConfig(true);
             if (reward.isToLog()) {
-                StatusLoggerEvent.REWARD_NAME_NONEXISTENT.log(reward.getRewards().getCrate(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_NAME_NONEXISTENT.log(reward.getRewards().getCrate(), this.toString());
                 success = false;
             }
         }
@@ -82,7 +82,7 @@ public class RewardConverter {
         } catch (Exception exc) {
             reward.setNeedsMoreConfig(true);
             if (reward.isToLog()) {
-                StatusLoggerEvent.REWARD_ITEM_NONEXISTENT.log(reward.getRewards().getCrate(), new String[]{this.toString()});
+                StatusLoggerEvent.REWARD_ITEM_NONEXISTENT.log(reward.getRewards().getCrate(), this.toString());
                 success = false;
             }
         }
@@ -129,7 +129,7 @@ public class RewardConverter {
                 int amnt = Integer.parseInt(reward.getFileConfiguration().getString(reward.getPath("amount")));
                 reward.getSaveBuilder().getStack().setAmount(amnt);
             } catch (Exception exc) {
-                StatusLoggerEvent.REWARD_AMOUNT_INVALID.log(reward.getRewards().getCrate(), new String[]{reward.getSaveBuilder().getDisplayName(true)});
+                StatusLoggerEvent.REWARD_AMOUNT_INVALID.log(reward.getRewards().getCrate(), reward.getSaveBuilder().getDisplayName(true));
             }
         }
 
@@ -148,7 +148,7 @@ public class RewardConverter {
                     reward.getSaveBuilder().addPotionEffect(compressedPotionEffect);
                 } catch (Exception exc) {
                     StatusLoggerEvent.REWARD_POTION_INVALID
-                            .log(reward.getRewards().getCrate(), new String[]{reward.getSaveBuilder().getDisplayName(true), unparsedPot});
+                            .log(reward.getRewards().getCrate(), reward.getSaveBuilder().getDisplayName(true), unparsedPot);
                 }
             }
         }
@@ -175,7 +175,7 @@ public class RewardConverter {
                 }
             } catch (Exception exc) {
                 StatusLoggerEvent.REWARD_ENCHANT_INVALID
-                        .log(reward.getRewards().getCrate(), new String[]{reward.getSaveBuilder().getDisplayName(true), cause});
+                        .log(reward.getRewards().getCrate(), reward.getSaveBuilder().getDisplayName(true), cause);
             }
         }
     }
