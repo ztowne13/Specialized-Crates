@@ -19,10 +19,7 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class ItemBuilder implements EditableItem {
     private ItemStack stack;
@@ -391,16 +388,17 @@ public class ItemBuilder implements EditableItem {
 
     @Override
     public void reapplyItemFlags() {
-        ItemStack stack = getStack();
-        ItemMeta im = stack.getItemMeta();
+        ItemMeta itemMeta = getItemMeta();
 
-        im.getItemFlags().clear();
+        for (ItemFlag flag : itemMeta.getItemFlags()) {
+            itemMeta.removeItemFlags(flag);
+        }
 
-        for (ItemFlag flag : getItemFlags())
-            im.addItemFlags(flag);
+        for (ItemFlag flag : getItemFlags()) {
+            itemMeta.addItemFlags(flag);
+        }
 
-        stack.setItemMeta(im);
-        setStack(stack);
+        setItemMeta(itemMeta);
     }
 
     @Override
@@ -498,13 +496,19 @@ public class ItemBuilder implements EditableItem {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(stack, glowing, rgbColor, enchantments, potionEffects, nbtTags, lore, flags);
+    }
+
+    @Override
     public boolean equals(Object obj) {
+        if (!(obj instanceof ItemBuilder)) {
+            return false;
+        }
+
         ItemBuilder compare = (ItemBuilder) obj;
 
         boolean loreEquals = true;
-
-        if (compare == null)
-            return false;
 
         if (getLore().size() == compare.getLore().size()) {
             for (int i = 0; i < getLore().size(); i++) {
