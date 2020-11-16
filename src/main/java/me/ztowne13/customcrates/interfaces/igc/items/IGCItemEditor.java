@@ -203,7 +203,7 @@ public class IGCItemEditor extends IGCMenu {
                 else
                     stack = getP().getItemInHand();
 
-                if (stack != null && !stack.getType().equals(Material.AIR)) {
+                if (!stack.getType().equals(Material.AIR)) {
                     editableItem.setStack(stack.clone());
                     editableItem.updateFromItem();
                     open();

@@ -19,10 +19,7 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class ItemBuilder implements EditableItem {
     private ItemStack stack;
@@ -104,18 +101,16 @@ public class ItemBuilder implements EditableItem {
                     // IGNORED
                 }
 
-                if (pot != null && pot.getType() != null) {
-                    addPotionEffect(new CompressedPotionEffect(pot.getType().getEffectType(), 1, 1));
+                addPotionEffect(new CompressedPotionEffect(pot.getType().getEffectType(), 1, 1));
 
-                    ArrayList<CompressedPotionEffect> toAdd = new ArrayList<>();
+                ArrayList<CompressedPotionEffect> toAdd = new ArrayList<>();
 
-                    for (PotionEffect pe : pot.getEffects()) {
-                        toAdd.add(new CompressedPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier()));
-                    }
+                for (PotionEffect pe : pot.getEffects()) {
+                    toAdd.add(new CompressedPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier()));
+                }
 
-                    for (CompressedPotionEffect effect : toAdd) {
-                        addPotionEffect(effect);
-                    }
+                for (CompressedPotionEffect effect : toAdd) {
+                    addPotionEffect(effect);
                 }
             }
         }
@@ -132,7 +127,7 @@ public class ItemBuilder implements EditableItem {
         }
 
         // Item Flags
-        if (stack.hasItemMeta() && stack.getItemMeta().getItemFlags() != null) {
+        if (stack.hasItemMeta()) {
             for (ItemFlag flag : stack.getItemMeta().getItemFlags())
                 addItemFlag(flag);
         }
@@ -391,16 +386,17 @@ public class ItemBuilder implements EditableItem {
 
     @Override
     public void reapplyItemFlags() {
-        ItemStack stack = getStack();
-        ItemMeta im = stack.getItemMeta();
+        ItemMeta itemMeta = getItemMeta();
 
-        im.getItemFlags().clear();
+        for (ItemFlag flag : itemMeta.getItemFlags()) {
+            itemMeta.removeItemFlags(flag);
+        }
 
-        for (ItemFlag flag : getItemFlags())
-            im.addItemFlags(flag);
+        for (ItemFlag flag : getItemFlags()) {
+            itemMeta.addItemFlags(flag);
+        }
 
-        stack.setItemMeta(im);
-        setStack(stack);
+        setItemMeta(itemMeta);
     }
 
     @Override
@@ -433,35 +429,37 @@ public class ItemBuilder implements EditableItem {
     public void reapplyPotionEffects() {
         boolean first = true;
 
-        if (stack.getItemMeta() instanceof PotionMeta) {
-            PotionMeta pm = (PotionMeta) getItemMeta();
-            pm.clearCustomEffects();
+        if (!(getItemMeta() instanceof PotionMeta)) {
+            return;
+        }
 
-            if (!getPotionEffects().isEmpty()) {
+        PotionMeta pm = (PotionMeta) getItemMeta();
+        pm.clearCustomEffects();
 
-                CompressedPotionEffect firstVal = getPotionEffects().get(0);
-                if (VersionUtils.Version.v1_9.isServerVersionOrLater()) {
-                    boolean isOld = (firstVal.getAmplifier() == 1 && firstVal.getDuration() == 1);
+        if (!getPotionEffects().isEmpty()) {
 
-                    PotionData potionData =
-                            new PotionData(PotionType.getByEffect(firstVal.getType()), firstVal.getDuration() == 1 && !isOld,
-                                    firstVal.getAmplifier() == 1 && !isOld);
-                    pm.setBasePotionData(potionData);
-                } else {
-                    Potion pot = new Potion(PotionType.getByEffect(firstVal.getType()), firstVal.getAmplifier() == 0 ? 1 : 2,
-                            XMaterial.SPLASH_POTION.isSimilar(stack));
-                    pot.apply(stack);
-                    first = false;
-                }
-            }
+            CompressedPotionEffect firstVal = getPotionEffects().get(0);
+            if (VersionUtils.Version.v1_9.isServerVersionOrLater()) {
+                boolean isOld = (firstVal.getAmplifier() == 1 && firstVal.getDuration() == 1);
 
-            stack.setItemMeta(pm);
-
-            for (CompressedPotionEffect compressedPotionEffect : getPotionEffects()) {
-                if (!first)
-                    stack = compressedPotionEffect.applyTo(stack);
+                PotionData potionData =
+                        new PotionData(PotionType.getByEffect(firstVal.getType()), firstVal.getDuration() == 1 && !isOld,
+                                firstVal.getAmplifier() == 1 && !isOld);
+                pm.setBasePotionData(potionData);
+            } else {
+                Potion pot = new Potion(PotionType.getByEffect(firstVal.getType()), firstVal.getAmplifier() == 0 ? 1 : 2,
+                        XMaterial.SPLASH_POTION.isSimilar(stack));
+                pot.apply(stack);
                 first = false;
             }
+        }
+
+        setItemMeta(pm);
+
+        for (CompressedPotionEffect compressedPotionEffect : getPotionEffects()) {
+            if (!first)
+                stack = compressedPotionEffect.applyTo(stack);
+            first = false;
         }
     }
 
@@ -498,13 +496,19 @@ public class ItemBuilder implements EditableItem {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(stack, glowing, rgbColor, enchantments, potionEffects, nbtTags, lore, flags);
+    }
+
+    @Override
     public boolean equals(Object obj) {
+        if (!(obj instanceof ItemBuilder)) {
+            return false;
+        }
+
         ItemBuilder compare = (ItemBuilder) obj;
 
         boolean loreEquals = true;
-
-        if (compare == null)
-            return false;
 
         if (getLore().size() == compare.getLore().size()) {
             for (int i = 0; i < getLore().size(); i++) {
