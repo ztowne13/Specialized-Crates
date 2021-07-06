@@ -1,16 +1,4 @@
-#### IntelliJ Recommended!
+# Please visit (and fork from) the new repository that's actually being maintained:
+## https://github.com/ThePM2/Specialized-Crates 
 
-# How to compile in IntelliJ directly
-1. File->New->Project from version control, input repo git url
-2. Once project is loaded simply press the "Maven" section on the right side
-3. Output is in Project/target/
-
-# How to compile
-1. Clone this repo
-2. Open the folder in the terminal
-3. Type `mvn clean package`
-4. Get the final file in `/target/`
-
-# Other notes
-
-This plugin has been worked on for nearly 5 years. Most of the code has been updated to be efficient, stable, and relevant. However, you will notice some places where code seems sloppy, or variables named poorly - those are from way long ago when I just didn't know how to code as well.
+This repository (https://github.com/ztowne13/Specialized-Crates) will no longer be updated or maintained: PM2 has taken over the project and will be updating it there! So please go check out the work that he's done and if you'd like to view the source code / fork it, do that from PM2's repository and not this one.
