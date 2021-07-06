@@ -1,5 +1,5 @@
 # Please visit (and fork from) the new repository that's actually being maintained:
-## https://github.com/ThePM2/Specialized-Crates 
+## ~https://github.com/ThePM2/Specialized-Crates~
 **Correction, this is no longer open-source as the new maintainer has decided to close-source the source-code.**
 
 
