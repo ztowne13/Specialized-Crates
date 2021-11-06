@@ -1,10 +1,10 @@
-name: ${project.name}
-author: ${project.author}
-version: ${project.version}
-main: ${project.mainClass}
+name: SpecialisedCrates
+author: [ztowne13, VQ9]
+version: @version@
+main: me.ztowne13.customcrates.SpecialisedCrates
 api-version: 1.13
 description: A 100% customizable crate plugin for your server.
-softdepend: [HolographicDisplays,IndividualHolograms,Holograms,Citizens,CMI,PlaceholderAPI,Multiverse-Core,Vault]
+softdepend: [HolographicDisplays,IndividualHolograms,Holograms,Citizens,PlaceholderAPI,Multiverse-Core,Vault]
 commands:
   scrates:
     description: All commands for the specialized crates plugin.

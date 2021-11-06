@@ -11,7 +11,7 @@
     <name>SpecializedCrates</name>
 
     <properties>
-        <project.mainClass>me.ztowne13.customcrates.SpecializedCrates</project.mainClass>
+        <project.mainClass>me.ztowne13.me.ztowne13.customcrates.SpecializedCrates</project.mainClass>
         <project.author>Ztowne13</project.author>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -93,7 +93,7 @@
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
-            <version>7.5.3</version>
+            <version>8.4.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -139,11 +139,11 @@
                             <relocations>
                                 <relocation>
                                     <pattern>org.bstats.bukkit</pattern>
-                                    <shadedPattern>me.ztowne13.customcrates.interfaces.externalhooks</shadedPattern>
+                                    <shadedPattern>me.ztowne13.me.ztowne13.customcrates.interfaces.externalhooks</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>com.cryptomorin.xseries</pattern>
-                                    <shadedPattern>me.ztowne13.customcrates.utils.xseries</shadedPattern>
+                                    <shadedPattern>me.ztowne13.me.ztowne13.customcrates.utils.xseries</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
